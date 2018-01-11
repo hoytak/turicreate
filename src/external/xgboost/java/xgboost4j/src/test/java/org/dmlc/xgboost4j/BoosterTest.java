@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -35,12 +35,12 @@ import org.junit.Test;
 public class BoosterTest {
     public static class EvalError implements IEvaluation {
         private static final Log logger = LogFactory.getLog(EvalError.class);
-        
+
         String evalMetric = "custom_error";
-        
+
         public EvalError() {
         }
-        
+
         @Override
         public String getMetric() {
             return evalMetric;
@@ -65,16 +65,16 @@ public class BoosterTest {
                     error++;
                 }
             }
-            
+
             return error/labels.length;
         }
     }
-    
+
     @Test
     public void testBoosterBasic() throws XGBoostError {
         DMatrix trainMat = new DMatrix("../../demo/data/agaricus.txt.train");
         DMatrix testMat = new DMatrix("../../demo/data/agaricus.txt.test");
-        
+
         //set params
         Map<String, Object> paramMap = new HashMap<String, Object>() {
             {
@@ -85,7 +85,7 @@ public class BoosterTest {
             }
         };
         Iterable<Entry<String, Object>> param = paramMap.entrySet();
-        
+
         //set watchList
         List<Entry<String, DMatrix>> watchs =  new ArrayList<>();
         watchs.add(new AbstractMap.SimpleEntry<>("train", trainMat));
@@ -93,13 +93,13 @@ public class BoosterTest {
 
          //set round
         int round = 2;
-        
+
         //train a boost model
         Booster booster = Trainer.train(param, trainMat, round, watchs, null, null);
-        
+
          //predict raw output
         float[][] predicts = booster.predict(testMat, true);
-        
+
         //eval
         IEvaluation eval = new EvalError();
         //error must be less than 0.1

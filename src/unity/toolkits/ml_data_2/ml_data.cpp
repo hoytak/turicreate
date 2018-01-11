@@ -346,14 +346,14 @@ void ml_data::fill() {
   ////////////////////////////////////////////////////////////////////////////////
   // Step 6.  Set up the untranslated columns
 
-  _setup_untranslated_columns(raw_data); 
-  
+  _setup_untranslated_columns(raw_data);
+
   ////////////////////////////////////////////////////////////////////////////////
   // Step 7.  Finalize the metadata stuff
 
   if(in_training_mode) {
     _metadata->set_training_index_sizes_to_current_column_sizes();
-    
+
     // Set up some of the cached values in the metadata
     _metadata->setup_cached_values();
   } else {
@@ -370,8 +370,8 @@ void ml_data::fill() {
   ////////////////////////////////////////////////////////////////////////////////
   // Step 8.  Set up the block manager
 
-  _create_block_manager(); 
-  
+  _create_block_manager();
+
   ////////////////////////////////////////////////////////////////////////////////
   // Step 9.  Clear out the incoming data.
 
@@ -391,7 +391,7 @@ void ml_data::fill() {
   const bool sort_by_first_two_columns
       = (sort_by_first_two_columns_always
          || (in_training_mode && sort_by_first_two_columns_on_train));
-  
+
   // Now sort all the data if needed.
   if(sort_by_first_two_columns)
     _sort_user_item_data_blocks();
@@ -596,7 +596,7 @@ void ml_data::load(turi::iarchive& iarc) {
     full_metadata.push_back(_metadata->target);
   }
 
-  if(has_untranslated_columns) { 
+  if(has_untranslated_columns) {
     iarc >> untranslated_columns;
   } else {
     untranslated_columns.clear();
@@ -607,7 +607,7 @@ void ml_data::load(turi::iarchive& iarc) {
   rm.setup(full_metadata, currently_using_target);
 
   // Set up the block manager
-  _create_block_manager(); 
+  _create_block_manager();
 }
 
 /**
@@ -621,7 +621,7 @@ void ml_data::load(turi::iarchive& iarc) {
  */
 ml_data ml_data::create_subsampled_copy(size_t n_rows, size_t random_seed) const{
   size_t data_size = num_rows();
-  
+
   if(n_rows >= num_rows())
     return *this;
 
@@ -641,7 +641,7 @@ ml_data ml_data::create_subsampled_copy(size_t n_rows, size_t random_seed) const
     size_t ub = (i < n_rows - 1) ? (samples[i + 1] - 1) : data_size - 1;
     samples[i] = random::fast_uniform<size_t>(lb, ub);
   }
-  
+
   // Break them up into groups
   DASSERT_TRUE(std::is_sorted(samples.begin(), samples.end()));
 
@@ -654,19 +654,19 @@ ml_data ml_data::create_subsampled_copy(size_t n_rows, size_t random_seed) const
  *
  *  \param selection_indices A vector of row indices that must be in
  *  sorted order.  Duplicates are allowed.  The returned ml_data
- *  contains all the rows given by selection_indices. 
+ *  contains all the rows given by selection_indices.
  *
  *  \return A new ml_data object with containing only the rows given
  *  by selection_indices.
  */
 ml_data ml_data::select_rows(const std::vector<size_t>& selection_indices) const{
-  
+
   if(!std::is_sorted(selection_indices.begin(), selection_indices.end())) {
-    ASSERT_MSG(false, "selection_indices argument needs to be in sorted order."); 
+    ASSERT_MSG(false, "selection_indices argument needs to be in sorted order.");
   }
-  
+
   size_t n_rows = selection_indices.size();
-  
+
   ml_data out = *this;
 
   const size_t n_full_blocks = n_rows / row_block_size;
@@ -679,17 +679,17 @@ ml_data ml_data::select_rows(const std::vector<size_t>& selection_indices) const
   out.data_blocks.reset(new sarray<row_data_block>);
   out.data_blocks->open_for_write(max_n_threads);
 
-  // Sample retreival function. 
+  // Sample retreival function.
   auto get_sample = [&](size_t idx) {
     DASSERT_LE(idx, n_rows);
     size_t sample_idx =  (idx < n_rows) ? selection_indices[idx] : data_size;
 
-    if(idx < n_rows) 
+    if(idx < n_rows)
       DASSERT_LT(sample_idx, data_size);
-    
-    return sample_idx; 
+
+    return sample_idx;
   };
-  
+
   // Break them up into groups
 
   in_parallel([&, selection_indices](size_t thread_idx, size_t num_threads) GL_GCC_ONLY(GL_HOT_NOINLINE_FLATTEN) {
@@ -708,7 +708,7 @@ ml_data ml_data::select_rows(const std::vector<size_t>& selection_indices) const
       size_t ml_data_row_end = std::min(this->size(), sample_end + 1);
 
       DASSERT_LE(ml_data_row_start, ml_data_row_end);
-      
+
       size_t n_rows_needed = samples_row_end - samples_row_start;
 
       DASSERT_TRUE(thread_idx + 1 == num_threads
@@ -743,7 +743,7 @@ ml_data ml_data::select_rows(const std::vector<size_t>& selection_indices) const
         if(row_count < n_rows_needed) {
 
           DASSERT_TRUE(!it.done());
-          
+
           if(selection_index > it.unsliced_row_index()
              && size_t(selection_index / row_block_size) > size_t(it.unsliced_row_index() / row_block_size)) {
             it.seek(it.row_index() + (selection_index - it.unsliced_row_index()));
@@ -756,13 +756,13 @@ ml_data ml_data::select_rows(const std::vector<size_t>& selection_indices) const
         } else {
           break;
         }
-        
+
         ////////////////////////////////////////////////////////////
         // Step 2: Write that row out.
 
         while(it.unsliced_row_index() == get_sample(sample_index)
               && row_count < n_rows_needed) {
-          
+
           entry_value_iterator row_start = it.current_data_iter();
 
           append_row_to_row_data_block(rm, block, row_start);
@@ -784,9 +784,9 @@ ml_data ml_data::select_rows(const std::vector<size_t>& selection_indices) const
 
   out.data_blocks->close();
 
-  // Set up the block manager in the target thing. 
-  out._create_block_manager(); 
-  
+  // Set up the block manager in the target thing.
+  out._create_block_manager();
+
   // Clean up some of the other things.
   out._row_start         = 0;
   out._row_end           = n_rows;

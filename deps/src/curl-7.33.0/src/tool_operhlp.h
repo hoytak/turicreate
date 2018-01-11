@@ -48,4 +48,3 @@ void memory_tracking_init(void);
 #endif
 
 #endif /* HEADER_CURL_TOOL_OPERHLP_H */
-

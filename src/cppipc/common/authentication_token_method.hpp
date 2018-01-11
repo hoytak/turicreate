@@ -13,7 +13,7 @@ namespace cppipc {
  *
  * The authentication token method is the simplest mode of authentication.
  * Both client and server knows a secret token value, then every message
- * between client and server must contain the token. Without additional 
+ * between client and server must contain the token. Without additional
  * safeguards, this authentication method does not provide any real security
  * aside from protecting against accidental connections, since any packet
  * sniffer will be able to obtain the token value.
@@ -23,7 +23,7 @@ class authentication_token_method : public authentication_base {
   std::string token_value;
  public:
   authentication_token_method(std::string token_value) : token_value(token_value) { }
-  inline ~authentication_token_method(){} 
+  inline ~authentication_token_method(){}
   inline void apply_auth(call_message& msg) {
     msg.properties["authtoken"] = token_value;
   }
@@ -32,11 +32,11 @@ class authentication_token_method : public authentication_base {
     msg.properties["authtoken"] = token_value;
   }
   inline bool validate_auth(call_message& msg) {
-    return msg.properties.count("authtoken") > 0 && 
+    return msg.properties.count("authtoken") > 0 &&
         msg.properties["authtoken"] == token_value;
   }
   inline bool validate_auth(reply_message& msg) {
-    return msg.properties.count("authtoken") > 0 && 
+    return msg.properties.count("authtoken") > 0 &&
         msg.properties["authtoken"] == token_value;
   }
 

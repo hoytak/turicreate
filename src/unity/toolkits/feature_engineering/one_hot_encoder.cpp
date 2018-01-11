@@ -17,7 +17,7 @@ namespace sdk_model {
 namespace feature_engineering {
 
 /**
- * Map a collection of categorical types to a sparse indexed representation. 
+ * Map a collection of categorical types to a sparse indexed representation.
  *
  * \param[in] input          Row of flexible types.
  * \param[in] index_map       index_map for each row.
@@ -26,7 +26,7 @@ namespace feature_engineering {
  * \returns  output Indexed flexible type (as dictionary).
  *
  */
-flexible_type one_hot_encoder_apply(const sframe_rows::row& inputs, 
+flexible_type one_hot_encoder_apply(const sframe_rows::row& inputs,
             const std::vector<std::shared_ptr<topk_indexer>>& index_map,
             const std::vector<size_t>& start_indices) {
   DASSERT_EQ(index_map.size(), inputs.size());
@@ -78,7 +78,7 @@ flexible_type one_hot_encoder_apply(const sframe_rows::row& inputs,
         size_t n_values = dv.size();
         for(size_t k = 0; k < n_values; ++k) {
           const std::pair<flexible_type, flexible_type>& kvp = dv[k];
-          flexible_type out_key = 
+          flexible_type out_key =
                     flex_string(kvp.first) + ":" + flex_string(kvp.second);
           index = indexer->lookup(out_key);
           if (index != (size_t)-1) {
@@ -102,7 +102,7 @@ flexible_type one_hot_encoder_apply(const sframe_rows::row& inputs,
 /**
  * Initialize the options
  */
-void one_hot_encoder::init_options(const std::map<std::string, 
+void one_hot_encoder::init_options(const std::map<std::string,
                                                    flexible_type>&_options){
   // Can only be called once.
   DASSERT_TRUE(options.get_option_info().size() == 0);
@@ -113,12 +113,12 @@ void one_hot_encoder::init_options(const std::map<std::string,
       "encoded_features");
 
   options.create_integer_option(
-      "max_categories", 
-      "Maximum categories per column (ordered by occurrence in the training set).", 
+      "max_categories",
+      "Maximum categories per column (ordered by occurrence in the training set).",
       FLEX_UNDEFINED,
       1,
       std::numeric_limits<int>::max(),
-      false); 
+      false);
 
   // Set options!
   options.set_options(_options);
@@ -152,9 +152,9 @@ void one_hot_encoder::save_impl(turi::oarchive& oarc) const {
  * Load the object using Turi's iarc.
  */
 void one_hot_encoder::load_version(turi::iarchive& iarc, size_t version){
-  // State  
+  // State
   variant_deep_load(state, iarc);
-  
+
   // Everything else
   iarc >> options
        >> feature_columns
@@ -168,13 +168,13 @@ void one_hot_encoder::load_version(turi::iarchive& iarc, size_t version){
 /**
  * Initialize the transformer.
  */
-void one_hot_encoder::init_transformer(const std::map<std::string, 
+void one_hot_encoder::init_transformer(const std::map<std::string,
                       flexible_type>& _options){
   DASSERT_TRUE(options.get_option_info().size() == 0);
 
   std::map<std::string, flexible_type> opts;
   for(const auto& k: _options){
-    if (k.first != "features" && k.first != "exclude"){ 
+    if (k.first != "features" && k.first != "exclude"){
       opts[k.first] = variant_get_value<flexible_type>(k.second);
     }
   }
@@ -187,7 +187,7 @@ void one_hot_encoder::init_transformer(const std::map<std::string,
 
   // Set features
   feature_columns = _options.at("features");
-  exclude = _options.at("exclude"); 
+  exclude = _options.at("exclude");
   if ((int) exclude == 1) {
     state["features"] = to_variant(FLEX_UNDEFINED);
     state["excluded_features"] = to_variant(feature_columns);
@@ -209,9 +209,9 @@ void one_hot_encoder::fit(gl_sframe data){
 
   // Select features of the right type.
   fit_features = transform_utils::select_valid_features(data, fit_features,
-                      {flex_type_enum::STRING, 
-                       flex_type_enum::INTEGER, 
-                       flex_type_enum::LIST, 
+                      {flex_type_enum::STRING,
+                       flex_type_enum::INTEGER,
+                       flex_type_enum::LIST,
                        flex_type_enum::DICT});
 
   // Validate the features.
@@ -242,17 +242,17 @@ void one_hot_encoder::fit(gl_sframe data){
     DASSERT_TRUE(index_map[feat] != NULL);
   }
 
-  gl_sframe_writer feature_encoding({"feature", "category", "index"}, 
-                             {flex_type_enum::STRING, flex_type_enum::STRING, 
+  gl_sframe_writer feature_encoding({"feature", "category", "index"},
+                             {flex_type_enum::STRING, flex_type_enum::STRING,
                              flex_type_enum::INTEGER}, 1);
   size_t i = 0;
   for (const auto& f:fit_features) {
     const auto& ind = index_map[f];
     for (const auto& val: ind->get_values()) {
       if (val != FLEX_UNDEFINED) {
-        feature_encoding.write({f, flex_string(val), i}, 0);  
+        feature_encoding.write({f, flex_string(val), i}, 0);
       } else {
-        feature_encoding.write({f, val, i}, 0);  
+        feature_encoding.write({f, val, i}, 0);
       }
       i++;
     }
@@ -270,7 +270,7 @@ gl_sframe one_hot_encoder::transform(gl_sframe data){
   }
 
   // Select and validate features.
-  std::vector<std::string> transform_features = 
+  std::vector<std::string> transform_features =
             variant_get_value<std::vector<std::string>>(state.at("features"));
   transform_features = transform_utils::select_feature_subset(
                                    data, transform_features);
@@ -292,18 +292,18 @@ gl_sframe one_hot_encoder::transform(gl_sframe data){
 
     // Check if output name exists. If not, get a valid one.
     std::string output_name = (std::string) options.value("output_column_name");
-    output_name = transform_utils::get_unique_feature_name(ret_sf.column_names(), 
+    output_name = transform_utils::get_unique_feature_name(ret_sf.column_names(),
                                                              output_name);
 
     // Error checking mode.
     selected_sf.head(10).apply([selected_indexers, selected_start_indices]
-                             (const sframe_rows::row& x)->flexible_type{ 
+                             (const sframe_rows::row& x)->flexible_type{
         return one_hot_encoder_apply(x, selected_indexers, selected_start_indices);
       }, flex_type_enum::DICT).materialize();
 
-    ret_sf[output_name] = 
+    ret_sf[output_name] =
           selected_sf.apply([selected_indexers, selected_start_indices]
-                            (const sframe_rows::row& x)->flexible_type{ 
+                            (const sframe_rows::row& x)->flexible_type{
         return one_hot_encoder_apply(x, selected_indexers, selected_start_indices);
     }, flex_type_enum::DICT);
   }

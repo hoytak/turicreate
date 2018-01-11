@@ -30,6 +30,3 @@ You can also live serve the book using:
 ```
 gitbook serve .
 ```
-
-
-

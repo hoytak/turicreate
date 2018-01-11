@@ -25,25 +25,25 @@ nuget {
         licenseUrl: "http://aws.amazon.com/apache2.0/";
 
         // URL to the project website (if any).
-        projectUrl: "http://github.com/aws/aws-sdk-cpp"; 
+        projectUrl: "http://github.com/aws/aws-sdk-cpp";
 
         // URL to an image to be used for package icons.
-        iconUrl: "http://media.amazonwebservices.com/aws_singlebox_01.png"; 
+        iconUrl: "http://media.amazonwebservices.com/aws_singlebox_01.png";
 
         // If the license this package is being released
         // under has use restrictions, set this to "true".
-        requireLicenseAcceptance:false; 
+        requireLicenseAcceptance:false;
 
-        summary: "v120 and v140 binary packages along with header files. No custom memory management. Standard Compiler flags used. For more info, see https://github.com/aws/aws-sdk-cpp/blob/master/README.md"; 
+        summary: "v120 and v140 binary packages along with header files. No custom memory management. Standard Compiler flags used. For more info, see https://github.com/aws/aws-sdk-cpp/blob/master/README.md";
 
-        // Extended description of the package contents.                                           
-        description: "The AWS SDK for C++ provides a modern C++ (version C++ 11 or later) interface for Amazon Web Services (AWS). It is meant to be performant and fully functioning with low- and high-level SDKs, while minimizing dependencies and providing platform portability (Windows, OSX, Linux, and mobile)."; 
+        // Extended description of the package contents.
+        description: "The AWS SDK for C++ provides a modern C++ (version C++ 11 or later) interface for Amazon Web Services (AWS). It is meant to be performant and fully functioning with low- and high-level SDKs, while minimizing dependencies and providing platform portability (Windows, OSX, Linux, and mobile).";
 
         // Copyright notice.
         copyright: Copyright 2016;
 
         tags: { AWS, Amazon, cloud, aws-sdk-cpp, native };
-    };   
+    };
 
     files {
         // All .h and .hpp  files in <src_root>\include, but not in subdirectories.
@@ -51,7 +51,7 @@ nuget {
         nestedInclude: {
             #destination = ${d_include}\aws\core;
              "..\include\aws\core\**\*.h"
-        }; 
+        };
 
         // Include these specific files in the libpath and "copy to output" path only
         // under these pivot conditions.
@@ -142,17 +142,16 @@ nuget {
         [x86,debug,v120,static] {  // x86, static linking
             lib+= { ..\lib\windows\ia32\vs2013\debug\aws-cpp-sdk-core.lib };
         }
-    };       
-    
+    };
+
     targets {
         [dynamic]
             Defines += USE_IMPORT_EXPORT;
-            
+
         Libraries += winhttp.lib;
         Libraries += wininet.lib;
         Libraries += bcrypt.lib;
         Libraries += userenv.lib;
         Libraries += Rpcrt4.lib;
     }
-}    
-     
+}

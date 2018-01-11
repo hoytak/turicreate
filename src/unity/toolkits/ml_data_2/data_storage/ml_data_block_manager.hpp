@@ -6,7 +6,7 @@
 #ifndef TURI_ML_DATA_BLOCK_MANAGER_H_
 #define TURI_ML_DATA_BLOCK_MANAGER_H_
 
-#include <unity/toolkits/ml_data_2/data_storage/ml_data_row_format.hpp> 
+#include <unity/toolkits/ml_data_2/data_storage/ml_data_row_format.hpp>
 
 
 namespace turi { namespace v2 { namespace ml_data_internal {
@@ -18,8 +18,8 @@ namespace turi { namespace v2 { namespace ml_data_internal {
  *  ml_data_row_format.hpp.
  *
  *  The second is the untranslated_columns list.  If there are
- *  untranslated columns, then this will hold those values. 
- * 
+ *  untranslated columns, then this will hold those values.
+ *
  */
 struct ml_data_block {
   std::shared_ptr<ml_metadata> metadata;
@@ -38,21 +38,21 @@ struct ml_data_block {
  */
 class ml_data_block_manager {
  public:
-  
+
   /** Constructor + opens the readers.
    */
   ml_data_block_manager(
       std::shared_ptr<ml_metadata> metadata,
       const row_metadata& rm,
-      size_t row_block_size, 
+      size_t row_block_size,
       const std::shared_ptr<sarray<ml_data_internal::row_data_block> >& data_blocks,
       const std::vector<std::shared_ptr<sarray<flexible_type> > >& untranslated_columns);
-  
+
   /** Returns a block corresponding to the block index.  Loads from
    *  disk if not in cache.
    */
   std::shared_ptr<ml_data_block> get_block(size_t block_index);
-  
+
  private:
 
   /**  The metadata associated with the current block.
@@ -63,22 +63,22 @@ class ml_data_block_manager {
    */
   row_metadata rm;
 
-  /** The number of rows in each block. 
+  /** The number of rows in each block.
    */
-  size_t row_block_size = -1; 
-  
+  size_t row_block_size = -1;
+
   /** A reader which is shared by any ml_data_iterators; thus it does
    *  not need to be opened multiple times.
    */
   std::shared_ptr<typename sarray<ml_data_internal::row_data_block>::reader_type> data_reader;
-  
+
   /** Readers for the storage containers that are shared by any of the
    *  ml_data_iterators; thus they do not need to be opened multiple
    *  times.
    */
   std::vector<std::shared_ptr<typename sarray<flexible_type>::reader_type> > untranslated_column_readers;
 
-  /** Lock for the cache. 
+  /** Lock for the cache.
    */
   turi::mutex cache_lock;
 
@@ -87,7 +87,7 @@ class ml_data_block_manager {
    */
   size_t num_accesses = 0;
 
-  /**  The map of cached blocks. 
+  /**  The map of cached blocks.
    */
   std::map<size_t, std::weak_ptr<ml_data_block> > row_block_cache;
 

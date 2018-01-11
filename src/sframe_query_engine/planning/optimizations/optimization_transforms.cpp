@@ -110,7 +110,7 @@ void populate_transforms(optimization_transform_registry *otr) {
 
   ////////////////////////////////////////////////////////////////////////////////
   // Adding metadata to nodes
-  
+
   otr->register_optimization({6}, std::make_shared<opt_project_add_direct_source_tags>());
 
 }

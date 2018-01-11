@@ -24,13 +24,13 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws;
 
-ListObjectVersionsResult::ListObjectVersionsResult() : 
+ListObjectVersionsResult::ListObjectVersionsResult() :
     m_isTruncated(false),
     m_maxKeys(0)
 {
 }
 
-ListObjectVersionsResult::ListObjectVersionsResult(const AmazonWebServiceResult<XmlDocument>& result) : 
+ListObjectVersionsResult::ListObjectVersionsResult(const AmazonWebServiceResult<XmlDocument>& result) :
     m_isTruncated(false),
     m_maxKeys(0)
 {

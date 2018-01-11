@@ -17,7 +17,7 @@ namespace query_eval {
 /**
  * \ingroup sframe_query_engine
  * A global lock around all external entry points to the query execution.
- * For now, 
+ * For now,
  * - materialize()
  * - infer_planner_node_type()
  * - infer_planner_node_length()

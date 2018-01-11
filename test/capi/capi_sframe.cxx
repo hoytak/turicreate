@@ -10,57 +10,57 @@ struct capi_test_sframe {
  public:
 
  void test_sframe_allocation() {
-    tc_error* error = NULL; 
+    tc_error* error = NULL;
 
-    tc_sframe* sf = tc_sframe_create_empty(&error); 
-      
-    TS_ASSERT(error == NULL); 
-    
+    tc_sframe* sf = tc_sframe_create_empty(&error);
+
+    TS_ASSERT(error == NULL);
+
     tc_sframe_destroy(sf);
   }
 
 void test_sframe_double() {
 
-std::vector<std::pair<std::string, std::vector<double> > > data 
+std::vector<std::pair<std::string, std::vector<double> > > data
   = { {"col1", {1.0, 2., 5., 0.5} },
       {"col2", {2.0, 2., 3., 0.5} },
       {"a",    {5.0, 2., 1., 0.5} },
       {"b",    {7.0, 2., 3., 1.5} } };
 
-    tc_error* error = NULL; 
+    tc_error* error = NULL;
 
-    tc_sframe* sf = tc_sframe_create_empty(&error); 
-      
-    TS_ASSERT(error == NULL); 
+    tc_sframe* sf = tc_sframe_create_empty(&error);
 
-    for(auto p : data) { 
+    TS_ASSERT(error == NULL);
 
-      tc_sarray* sa = make_sarray_double(p.second); 
+    for(auto p : data) {
 
-      tc_sframe_add_column(sf, p.first.c_str(), sa, &error); 
+      tc_sarray* sa = make_sarray_double(p.second);
 
-      TS_ASSERT(error == NULL); 
+      tc_sframe_add_column(sf, p.first.c_str(), sa, &error);
 
-      tc_sarray_destroy(sa); 
+      TS_ASSERT(error == NULL);
+
+      tc_sarray_destroy(sa);
     }
 
-    // Check everything 
-    for(auto p : data) { 
+    // Check everything
+    for(auto p : data) {
       // Make sure it gets out what we want it to.
-      tc_sarray* sa = tc_sframe_extract_column_by_name(sf, p.first.c_str(), &error); 
+      tc_sarray* sa = tc_sframe_extract_column_by_name(sf, p.first.c_str(), &error);
 
-      TS_ASSERT(error == NULL); 
+      TS_ASSERT(error == NULL);
 
       tc_sarray* ref_sa = make_sarray_double(p.second);
 
-      int is_equal = tc_sarray_equals(sa, ref_sa, &error);     
+      int is_equal = tc_sarray_equals(sa, ref_sa, &error);
       TS_ASSERT(is_equal);
 
-      TS_ASSERT(error == NULL); 
+      TS_ASSERT(error == NULL);
 
-      tc_sarray_destroy(sa); 
+      tc_sarray_destroy(sa);
     }
-    
+
     tc_sframe_destroy(sf);
   }
 };

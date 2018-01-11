@@ -24,14 +24,14 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws;
 
-ListObjectsV2Result::ListObjectsV2Result() : 
+ListObjectsV2Result::ListObjectsV2Result() :
     m_isTruncated(false),
     m_maxKeys(0),
     m_keyCount(0)
 {
 }
 
-ListObjectsV2Result::ListObjectsV2Result(const AmazonWebServiceResult<XmlDocument>& result) : 
+ListObjectsV2Result::ListObjectsV2Result(const AmazonWebServiceResult<XmlDocument>& result) :
     m_isTruncated(false),
     m_maxKeys(0),
     m_keyCount(0)

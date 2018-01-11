@@ -29,5 +29,3 @@ CMake(LANG)Information.cmake  -> set up rule variables for LANG :
    CMAKE_(LANG)_CREATE_STATIC_LIBRARY
    CMAKE_(LANG)_COMPILE_OBJECT
    CMAKE_(LANG)_LINK_EXECUTABLE
-
-

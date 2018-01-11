@@ -188,7 +188,7 @@ class opt_merge_generalized_union_projects : public opt_transform {
 };
 
 class opt_project_add_direct_source_tags : public opt_transform {
-  
+
   std::string description() { return "add_source_metadata(gen_union_proj(...))"; }
 
   bool transform_applies(planner_node_type t) {
@@ -197,7 +197,7 @@ class opt_project_add_direct_source_tags : public opt_transform {
 
   bool apply_transform(optimization_engine *opt_manager, cnode_info_ptr n) {
 
-    bool have_source = false; 
+    bool have_source = false;
     for(const auto& nn : n->inputs) {
       if(nn->type == planner_node_type::SFRAME_SOURCE_NODE
          || nn->type == planner_node_type::SARRAY_SOURCE_NODE) {
@@ -210,7 +210,7 @@ class opt_project_add_direct_source_tags : public opt_transform {
 
     if(n->has_any_p("direct_source_mapping"))
       return false;
-    
+
     std::map<size_t, std::shared_ptr<sarray<flexible_type> > > input_mapping;
 
     const flex_dict& index_map = n->p("index_map").get<flex_dict>();
@@ -220,7 +220,7 @@ class opt_project_add_direct_source_tags : public opt_transform {
       size_t idx_2 = index_map[i].second;
 
       auto nn = n->inputs[idx_1];
-      
+
       if(nn->type == planner_node_type::SFRAME_SOURCE_NODE) {
         auto sa = nn->any_p<sframe>("sframe").select_column(idx_2);
         if (nn->p("begin_index") == 0 && nn->p("end_index") == sa->size()) {
@@ -237,7 +237,7 @@ class opt_project_add_direct_source_tags : public opt_transform {
 
     auto new_pnode = pnode_ptr(new planner_node(*n->pnode));
     new_pnode->any_operator_parameters["direct_source_mapping"] = input_mapping;
-    
+
     opt_manager->replace_node(n, new_pnode);
   }
 };

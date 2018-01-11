@@ -60,7 +60,7 @@ StringValue = ([str('bork'), unicode('bork'), b'bork', b'']
                + [_dt('') for _dt in
                   [np.unicode, np.unicode_, str, unicode, np.str,
                    np.str_, np.string_]])
-                   
+
 special_types.add(id(StringValue))
 
 DictValue = [{'a' : 12}, dict()]
@@ -539,4 +539,3 @@ class FlexibleTypeTest(unittest.TestCase):
         self.assertEqual(pytype_from_type_name("undefined"), type(None))
 
         self.assertRaises(ValueError, lambda: pytype_from_type_name("happiness"))
-        

@@ -113,7 +113,7 @@ class gl_vector {
     gl_vector_internal::assign(info, v.begin(), v.end());
     return *this;
   }
-  
+
   operator std::vector<value_type>() const {
     return std::vector<value_type>(cbegin(), cend());
   }

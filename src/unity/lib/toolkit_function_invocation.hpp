@@ -15,7 +15,7 @@ namespace turi {
  * \ingroup unity
  * The arguments used to invoke the toolkit execution.
  * See \ref toolkit_function_specification for details.
- */ 
+ */
 struct toolkit_function_invocation {
   toolkit_function_invocation() {
     progress = [=](std::string s) {
@@ -24,7 +24,7 @@ struct toolkit_function_invocation {
   }
   /**
    * The parameters passed to the toolkit from the user.
-   * The options set will be cleaned: every option in 
+   * The options set will be cleaned: every option in
    * \ref toolkit_function_specification::default_options will show appear here,
    * and there will not be extraneous options.
    */

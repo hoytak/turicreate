@@ -37,7 +37,7 @@ void testNumberToString__areFloatsEqual::testCloseEnough(void){
 	//check the exact threshold
 	assertFalse(_floatsAreEqual( 0.0,  JSON_FLOAT_THRESHHOLD));
 	assertFalse(_floatsAreEqual( 0.0,  -JSON_FLOAT_THRESHHOLD));
-	
+
 	//check things beneath that threashold
 	assertTrue(_floatsAreEqual(0.0, JSON_FLOAT_THRESHHOLD / 2));
 	assertTrue(_floatsAreEqual(0.0,  JSON_FLOAT_THRESHHOLD / -2));

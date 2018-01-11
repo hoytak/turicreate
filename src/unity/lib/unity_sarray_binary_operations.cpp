@@ -69,13 +69,13 @@ void check_operation_feasibility(flex_type_enum left,
 
   if (!operation_is_feasible) {
     throw std::string("Unsupported type operation. cannot perform operation ") +
-          op + " between " + 
+          op + " between " +
           flex_type_enum_to_name(left) + " and " +
           flex_type_enum_to_name(right);
   }
 }
 
-flex_type_enum get_output_type(flex_type_enum left, 
+flex_type_enum get_output_type(flex_type_enum left,
                                flex_type_enum right,
                                std::string op) {
   if (op == "+" || op == "-" || op == "*") {
@@ -104,7 +104,7 @@ flex_type_enum get_output_type(flex_type_enum left,
       return flex_type_enum::VECTOR;
     } else if (left == flex_type_enum::FLOAT || right == flex_type_enum::FLOAT) {
       return flex_type_enum::FLOAT;
-    } else { 
+    } else {
       return flex_type_enum::INTEGER;
     }
   } else if (op == "%") {
@@ -116,7 +116,7 @@ flex_type_enum get_output_type(flex_type_enum left,
     } else {
       return flex_type_enum::FLOAT;
     }
-  } else if (op == "<" || op == ">" || op == "<=" || 
+  } else if (op == "<" || op == ">" || op == "<=" ||
              op == ">=" || op == "==" || op == "!=") {
     // comparison always returns integer
     return flex_type_enum::INTEGER;
@@ -133,7 +133,7 @@ flex_type_enum get_output_type(flex_type_enum left,
 }
 
 
-std::function<flexible_type(const flexible_type&, const flexible_type&)> 
+std::function<flexible_type(const flexible_type&, const flexible_type&)>
 get_binary_operator(flex_type_enum left, flex_type_enum right, std::string op) {
 /**************************************************************************/
 /*                                                                        */
@@ -333,12 +333,12 @@ get_binary_operator(flex_type_enum left, flex_type_enum right, std::string op) {
        }
        return flexible_type(std::move(ret));
      };
-    } else if (right == flex_type_enum::FLOAT || left == flex_type_enum::FLOAT) { 
+    } else if (right == flex_type_enum::FLOAT || left == flex_type_enum::FLOAT) {
       return [](const flexible_type& l, const flexible_type& r)->flexible_type {
        flex_float ld = l.to<flex_float>();
        flex_float rd = r.to<flex_float>();
        flex_float res = ld / rd;
-       
+
        return std::isfinite(res) ? std::floor(res) : res;
       };
     } else {
@@ -346,13 +346,13 @@ get_binary_operator(flex_type_enum left, flex_type_enum right, std::string op) {
        flex_float ld = l.to<flex_float>();
        flex_float rd = r.to<flex_float>();
        flex_float res = ld / rd;
-       
+
        return (std::isfinite(res)
                ? flexible_type(flex_int(std::floor(res)))
                : FLEX_UNDEFINED);
       };
     }
-    
+
 /**************************************************************************/
 /*                                                                        */
 /*                               Operator %                               */

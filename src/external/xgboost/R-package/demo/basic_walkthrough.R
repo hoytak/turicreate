@@ -25,7 +25,7 @@ bst <- xgboost(data = as.matrix(train$data), label = train$label, max.depth = 2,
 # you can also put in xgb.DMatrix object, which stores label, data and other meta datas needed for advanced features
 print("training xgboost with xgb.DMatrix")
 dtrain <- xgb.DMatrix(data = train$data, label = train$label)
-bst <- xgboost(data = dtrain, max.depth = 2, eta = 1, nround = 2, nthread = 2, 
+bst <- xgboost(data = dtrain, max.depth = 2, eta = 1, nround = 2, nthread = 2,
                objective = "binary:logistic")
 
 # Verbose = 0,1,2
@@ -45,7 +45,7 @@ bst <- xgboost(data = dtrain, max.depth = 2, eta = 1, nround = 2,
 
 #--------------------basic prediction using xgboost--------------
 # you can do prediction using the following line
-# you can put in Matrix, sparseMatrix, or xgb.DMatrix 
+# you can put in Matrix, sparseMatrix, or xgb.DMatrix
 pred <- predict(bst, test$data)
 err <- mean(as.numeric(pred > 0.5) != test$label)
 print(paste("test-error=", err))
@@ -75,7 +75,7 @@ dtest <- xgb.DMatrix(data = test$data, label=test$label)
 # watchlist is a list of xgb.DMatrix, each of them is tagged with name
 watchlist <- list(train=dtrain, test=dtest)
 # to train with watchlist, use xgb.train, which contains more advanced features
-# watchlist allows us to monitor the evaluation result on all data in the list 
+# watchlist allows us to monitor the evaluation result on all data in the list
 print ('train xgboost using xgb.train with watchlist')
 bst <- xgb.train(data=dtrain, max.depth=2, eta=1, nround=2, watchlist=watchlist,
                  nthread = 2, objective = "binary:logistic")

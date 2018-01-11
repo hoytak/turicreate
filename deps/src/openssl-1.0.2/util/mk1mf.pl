@@ -59,7 +59,7 @@ open(IN,"<Makefile") || die "unable to open Makefile!\n";
 while(<IN>) {
     my ($mf_opt, $mf_ref);
     while (($mf_opt, $mf_ref) = each %mf_import) {
-    	if (/^$mf_opt\s*=\s*(.*)$/ && !defined($$mfref)) {
+	if (/^$mf_opt\s*=\s*(.*)$/ && !defined($$mfref)) {
 	   $$mf_ref = $1;
 	}
     }
@@ -398,7 +398,7 @@ for (;;)
 	if ($key eq "LIBOBJ" && ($dir ne "engines" || !$no_static_engine))
 		{ $libobj=&var_add($dir,$val, 0); }
 	if ($key eq "LIBNAMES" && $dir eq "engines" && $no_static_engine)
- 		{ $engines.=$val }
+		{ $engines.=$val }
 
 	if (!($_=<IN>))
 		{ $_="RELATIVE_DIRECTORY=FINISHED\n"; }
@@ -530,7 +530,7 @@ CRYPTO=$crypto
 # ENG_D  - dynamic engine output directory
 # Note: if you change these point to different directories then uncomment out
 # the lines around the 'NB' comment below.
-# 
+#
 BIN_D=\$(OUT_D)
 TEST_D=\$(OUT_D)
 LIB_D=\$(OUT_D)
@@ -802,7 +802,7 @@ if ($fips)
 foreach (split(" ",$otherlibs))
 	{
 	my $uc = $_;
-	$uc =~ tr /a-z/A-Z/;	
+	$uc =~ tr /a-z/A-Z/;
 	$rules.= &do_lib_rule("\$(${uc}OBJ)","\$(ENG_D)$o$_$shlibp", "", $shlib, "");
 
 	}
@@ -938,7 +938,7 @@ sub do_defs
 	local(*OUT,$tmp,$t);
 
 	$files =~ s/\//$o/g if $o ne '/';
-	$ret="$var="; 
+	$ret="$var=";
 	$n=1;
 	$Vars{$var}.="";
 	foreach (split(/ /,$files))
@@ -1074,7 +1074,7 @@ sub cc_compile_target
 	{
 	local($target,$source,$ex_flags, $srcd)=@_;
 	local($ret);
-	
+
 	$ex_flags.=" -DMK1MF_BUILD -D$platform_cpp_symbol" if ($source =~ /cversion/);
 	$target =~ s/\//$o/g if $o ne "/";
 	$source =~ s/\//$o/g if $o ne "/";
@@ -1141,7 +1141,7 @@ sub do_copy_rule
 	{
 	local($to,$files,$p)=@_;
 	local($ret,$_,$n,$pp);
-	
+
 	$files =~ s/\//$o/g if $o ne '/';
 	foreach (split(/\s+/,$files))
 		{
@@ -1185,7 +1185,7 @@ sub read_options
 		"no-ripemd" => \$no_ripemd,
 		"no-mdc2" => \$no_mdc2,
 		"no-whirlpool" => \$no_whirlpool,
-		"no-patents" => 
+		"no-patents" =>
 			[\$no_rc2, \$no_rc4, \$no_rc5, \$no_idea, \$no_rsa],
 		"no-rsa" => \$no_rsa,
 		"no-dsa" => \$no_dsa,
@@ -1292,7 +1292,7 @@ sub read_options
 		($ALGO = $algo) =~ tr/[a-z]/[A-Z]/;
 
 		$xcflags="-DOPENSSL_EXPERIMENTAL_$ALGO $xcflags";
-		
+
 		}
 	elsif (/^--with-krb5-flavor=(.*)$/)
 		{
@@ -1304,7 +1304,7 @@ sub read_options
 		elsif ($krb5_flavor =~ /^MIT/i)
 			{
 			$xcflags="-DKRB5_MIT $xcflags";
-		 	if ($krb5_flavor =~ /^MIT[._-]*1[._-]*[01]/i)
+			if ($krb5_flavor =~ /^MIT[._-]*1[._-]*[01]/i)
 				{
 				$xcflags="-DKRB5_MIT_OLD11 $xcflags"
 				}

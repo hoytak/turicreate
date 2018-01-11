@@ -3,8 +3,8 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#ifndef FILEIO_TEMP_FILE_HPP 
-#define FILEIO_TEMP_FILE_HPP 
+#ifndef FILEIO_TEMP_FILE_HPP
+#define FILEIO_TEMP_FILE_HPP
 #include <string>
 #include <vector>
 
@@ -53,10 +53,10 @@ std::string get_temp_name_prefer_hdfs(const std::string& prefix="");
 
 /**
  * \ingroup fileio
- * Deletes the temporary file with the name s. 
- * Returns true on success, false on failure (file does not exist, 
+ * Deletes the temporary file with the name s.
+ * Returns true on success, false on failure (file does not exist,
  * or cannot be deleted). The file will only be deleted
- * if a prefix of s was previously returned by get_temp_name(). This is done 
+ * if a prefix of s was previously returned by get_temp_name(). This is done
  * for safety to prevent this function from being used to delete arbitrary files.
  *
  * For instance, if get_temp_name() previously returned /tmp/file51apTO ,

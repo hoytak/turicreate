@@ -30,7 +30,7 @@ table_printer::table_printer(const std::vector<std::pair<std::string, size_t> >&
   DASSERT_FALSE(format.empty());
 
   size_t total_size = 0;
-  
+
   // The column start.
   total_size += 2;
 
@@ -155,21 +155,21 @@ sframe table_printer::get_tracked_table() {
     tracking_out_iter = track_sframe.get_output_iterator(0);
     tracker_is_initialized = true;
   }
-  
+
   if(track_sframe.is_opened_for_write()) {
     track_sframe.close();
   }
 
   tracker_is_initialized = false;
-  
+
   return track_sframe;
 }
 
 /**  Sets up the time interval at which things are printed.
  */
 size_t table_printer::set_up_time_printing_interval(size_t tick) {
-    
-  DASSERT_EQ(size_t(next_tick_to_print), 0); 
+
+  DASSERT_EQ(size_t(next_tick_to_print), 0);
 
   double time_since_first_tick_registration
       = (tt.current_time() - time_of_first_tick);
@@ -181,8 +181,8 @@ size_t table_printer::set_up_time_printing_interval(size_t tick) {
   size_t _tick_interval = 1000000000;
 
   size_t tick_candidates[] = {1, 5, 10, 25};
-  bool tick_interval_set = false; 
-        
+  bool tick_interval_set = false;
+
   for(size_t magnitude = 0; !tick_interval_set && magnitude < 10; ++magnitude) {
 
     for(size_t itv_itvl : tick_candidates) {
@@ -199,7 +199,7 @@ size_t table_printer::set_up_time_printing_interval(size_t tick) {
       itv_itvl *= 10;
   }
 
-  return _tick_interval; 
+  return _tick_interval;
 }
 
 }

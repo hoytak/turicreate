@@ -31,4 +31,3 @@ std::shared_ptr<Aws::IOStream> AmazonSerializableWebServiceRequest::GetBody() co
 
     return payloadBody;
 }
-

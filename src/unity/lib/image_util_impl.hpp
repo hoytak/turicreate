@@ -13,7 +13,7 @@
 
 #ifndef int_p_NULL
 #define int_p_NULL (int*)NULL
-#endif 
+#endif
 
 #include <boost/gil/gil_all.hpp>
 #include <image/numeric_extension/sampler.hpp>
@@ -127,7 +127,7 @@ void decode_image_impl(image_type& image) {
 void encode_image_impl(image_type& image) {
   if (image.m_format != Format::RAW_ARRAY){
     return;
-  } 
+  }
 
   char* buf = NULL;
   size_t length = 0;

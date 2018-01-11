@@ -19,7 +19,7 @@ namespace evaluation {
 /**
  * Compute precision/recall for each user given a set of recommendations.
  * This is specific to the recommender toolkit.
- * See unity/toolkit/evaluation/metrics.hpp. 
+ * See unity/toolkit/evaluation/metrics.hpp.
  */
 toolkit_function_response_type precision_recall_by_user(toolkit_function_invocation& invoke);
 

@@ -134,11 +134,11 @@ am__v_P_1 = :
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN     " $@;
-am__v_GEN_1 = 
+am__v_GEN_1 =
 AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
-am__v_at_1 = 
+am__v_at_1 =
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
@@ -400,14 +400,14 @@ EXTRA_DIST = ftpserver.pl httpserver.pl secureserver.pl runtests.pl getpart.pm \
  CMakeLists.txt mem-include-scan.pl valgrind.supp http_pipe.py
 
 DISTCLEANFILES = configurehelp.pm
-@BUILD_UNITTESTS_FALSE@BUILD_UNIT = 
+@BUILD_UNITTESTS_FALSE@BUILD_UNIT =
 
 # we have two variables here to make sure DIST_SUBDIRS won't get 'unit'
 # added twice as then targets such as 'distclean' misbehave and try to
 # do things twice in that subdir at times (and thus fails).
 @BUILD_UNITTESTS_TRUE@BUILD_UNIT = unit
 @BUILD_UNITTESTS_FALSE@DIST_UNIT = unit
-@BUILD_UNITTESTS_TRUE@DIST_UNIT = 
+@BUILD_UNITTESTS_TRUE@DIST_UNIT =
 SUBDIRS = certs data server libtest $(BUILD_UNIT)
 DIST_SUBDIRS = $(SUBDIRS) $(DIST_UNIT)
 PERLFLAGS = -I$(srcdir)

@@ -46,7 +46,7 @@ class siterable {
 
   inline virtual ~siterable() { };
 
-  /// Return the number of segments in the collection. 
+  /// Return the number of segments in the collection.
   virtual size_t num_segments() const = 0;
 
   /// Return the number of rows in the segment.
@@ -60,12 +60,12 @@ class siterable {
 
   /**
    * Reads a collection of rows, storing the result in out_obj.
-   * This function is independent of the begin/end iterator 
-   * functions, and can be called anytime. This function is also fully 
+   * This function is independent of the begin/end iterator
+   * functions, and can be called anytime. This function is also fully
    * concurrent.
    * \param row_start First row to read
    * \param row_end one past the last row to read (i.e. EXCLUSIVE). row_end can
-   *                be beyond the end of the array, in which case, 
+   *                be beyond the end of the array, in which case,
    *                fewer rows will be read.
    * \param out_obj The output array
    * \returns Actual number of rows read. Return (size_t)(-1) on failure.
@@ -73,8 +73,8 @@ class siterable {
    * \note This function is not always efficient. Different file formats
    * implementations will have different characteristics.
    */
-  virtual size_t read_rows(size_t row_start, 
-                           size_t row_end, 
+  virtual size_t read_rows(size_t row_start,
+                           size_t row_end,
                            std::vector<typename Iterator::value_type>& out_obj) = 0;
 
 

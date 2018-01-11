@@ -29,7 +29,7 @@ EXPORT gl_sarray _to_sarray_of_flat_dictionaries(gl_sarray input,
                                                  const flex_string& undefined_string,
                                                  const std::string& image_policy,
                                                  const std::string& datetime_policy) {
-  
+
   return to_sarray_of_flat_dictionaries(input, sep, undefined_string,
                                         image_policy, datetime_policy);
 }

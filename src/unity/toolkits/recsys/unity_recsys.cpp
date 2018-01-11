@@ -374,7 +374,7 @@ toolkit_function_response_type train_test_split(toolkit_function_invocation& inv
   } catch (...) {
     throw std::string("Error interpreting random_seed as integer.");
   }
-  
+
   size_t max_users = size_t(-1);
   if (max_num_users.get_type() != flex_type_enum::UNDEFINED) {
     max_users = (size_t) max_num_users;
@@ -542,7 +542,7 @@ EXPORT toolkit_function_response_type get_data_schema(toolkit_function_invocatio
   toolkit_function_response_type ret_status;
   ret_status.params["schema"] = model->get_data_schema();
   ret_status.success = true;
-  
+
   return ret_status;
 }
 
@@ -618,7 +618,7 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
   toolkit_function_specification get_popularity_baseline_spec;
   get_popularity_baseline_spec.name = "recsys_get_popularity_baseline";
   get_popularity_baseline_spec.toolkit_execute_function = get_popularity_baseline;
-  
+
   toolkit_function_specification get_data_schema_spec;
   get_data_schema_spec.name = "recsys_get_data_schema";
   get_data_schema_spec.toolkit_execute_function = get_data_schema;
@@ -641,5 +641,3 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
 }
 
 }}
-
-

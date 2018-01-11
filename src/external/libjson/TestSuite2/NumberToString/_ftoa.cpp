@@ -29,7 +29,7 @@ void testNumberToString__ftoa::testSpecializedInts(void){
     assertEquals(NumberToString::_ftoa((json_number)-10.0),    JSON_TEXT("-10"));
     assertEquals(NumberToString::_ftoa((json_number)  0.0),    JSON_TEXT(  "0"));
 	assertEquals(NumberToString::_ftoa((json_number) -0.0),    JSON_TEXT(  "0"));
-	
+
 	//close enough to an int
 	assertEquals(NumberToString::_ftoa((json_number)  1.000000001),  JSON_TEXT( "1"));
 	assertEquals(NumberToString::_ftoa((json_number) -1.000000001), JSON_TEXT( "-1"));

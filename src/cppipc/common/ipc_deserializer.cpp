@@ -12,7 +12,7 @@ namespace detail {
 static __thread comm_server* thlocal_server = NULL;
 static __thread comm_client* thlocal_client = NULL;
 EXPORT void set_deserializer_to_server(comm_server* server) {
- thlocal_server = server; 
+ thlocal_server = server;
  thlocal_client = NULL;
 }
 EXPORT void set_deserializer_to_client(comm_client* client) {

@@ -40,17 +40,17 @@ Aws::String GetHomeDirectory()
     {
         AWS_LOG_WARN(FILE_SYSTEM_UTILS_LOG_TAG, "Home dir not stored in environment, trying to fetch manually from the OS.");
         HANDLE hToken;
-    
+
         if (OpenProcessToken(GetCurrentProcess(), TOKEN_READ, &hToken))
         {
             DWORD len = MAX_PATH;
             CHAR path[MAX_PATH];
             if (GetUserProfileDirectoryA(hToken, path, &len))
-            {                
+            {
                 homeDir = path;
             }
             CloseHandle(hToken);
-        }        
+        }
 
         AWS_LOGSTREAM_INFO(FILE_SYSTEM_UTILS_LOG_TAG, "Pulled " << homeDir << " as home directory from the OS.");
     }
@@ -64,7 +64,7 @@ Aws::String GetHomeDirectory()
             retVal += Aws::FileSystem::PATH_DELIM;
         }
     }
-    
+
     return retVal;
 }
 

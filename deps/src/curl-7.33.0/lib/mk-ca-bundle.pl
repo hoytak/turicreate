@@ -237,5 +237,3 @@ unlink $txt if ($opt_u);
 print STDERR "Done ($certnum CA certs processed, $skipnum untrusted skipped).\n" if (!$opt_q);
 
 exit;
-
-

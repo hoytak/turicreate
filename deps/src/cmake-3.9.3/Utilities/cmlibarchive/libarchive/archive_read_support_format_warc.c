@@ -244,7 +244,7 @@ start_over:
 		 * must be EOF therefore */
 		return (ARCHIVE_EOF);
 	}
- 	/* looks good so far, try and find the end of the header now */
+	/* looks good so far, try and find the end of the header now */
 	eoh = _warc_find_eoh(buf, nrd);
 	if (eoh == NULL) {
 		/* still no good, the header end might be beyond the

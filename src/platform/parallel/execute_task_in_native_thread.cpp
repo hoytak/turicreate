@@ -10,10 +10,10 @@
 namespace turi {
 /*
  * LIBHDFS is rather annoying in that it does not handle fibers/coroutines
- * correctly since libJVM's AttachCurrentThread() does not handle 
+ * correctly since libJVM's AttachCurrentThread() does not handle
  * fibers/coroutines correctly.
  *
- * The solution is to simply have a task queue model which allows the 
+ * The solution is to simply have a task queue model which allows the
  * readers from HDFS to redirect the read to some other thread for processing.
  */
 
@@ -52,7 +52,7 @@ std::exception_ptr execute_task_in_native_thread(const std::function<void(void)>
     } catch (...) {
       ret = std::current_exception();
     }
-    std::lock_guard<mutex> GUARD(lock); 
+    std::lock_guard<mutex> GUARD(lock);
     done = true;
     cond.signal();
   });
@@ -66,5 +66,3 @@ std::exception_ptr execute_task_in_native_thread(const std::function<void(void)>
 }
 
 } // turicreate
-
-

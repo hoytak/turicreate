@@ -75,8 +75,8 @@ class query_context {
   emit_state initial_state() const;
 
   /**
-   * Emits a collection of rows. The number of rows emitted 
-   * MUST be the same as block_size(), except for the very last block 
+   * Emits a collection of rows. The number of rows emitted
+   * MUST be the same as block_size(), except for the very last block
    * of rows.
    */
   emit_state emit(const std::shared_ptr<sframe_rows>& rows);
@@ -93,7 +93,7 @@ class query_context {
   size_t m_max_buffer_size = 256; // some arbitrary default
 
   // we only need 1 buffer and to cycle between both since the linear
-  // assumption means that at most one buffer may be used or given away at 
+  // assumption means that at most one buffer may be used or given away at
   // any one point.
   std::shared_ptr<sframe_rows> m_buffers;
 

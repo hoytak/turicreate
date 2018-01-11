@@ -382,7 +382,7 @@ SET(INCLUDES "")
 MACRO (LA_CHECK_INCLUDE_FILE header var)
       CHECK_INCLUDE_FILES("${INCLUDES};${header}" ${var})
       IF (${var})
-      	 SET(INCLUDES ${INCLUDES} ${header})
+	 SET(INCLUDES ${INCLUDES} ${header})
       ENDIF (${var})
 ENDMACRO (LA_CHECK_INCLUDE_FILE)
 
@@ -614,9 +614,9 @@ main(int argc, char **argv)
         ELSE (ARCHIVE_CRYPTO_${ALGORITHM}_${IMPLEMENTATION})
           MESSAGE(STATUS "Checking support for ARCHIVE_CRYPTO_${ALGORITHM}_${IMPLEMENTATION} -- not found")
           FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
-    	    "Checking support for ARCHIVE_CRYPTO_${ALGORITHM}_${IMPLEMENTATION} failed with the following output:\n"
-    	    "${OUTPUT}\n"
-    	    "Source file was:\n${SOURCE}\n")
+	    "Checking support for ARCHIVE_CRYPTO_${ALGORITHM}_${IMPLEMENTATION} failed with the following output:\n"
+	    "${OUTPUT}\n"
+	    "Source file was:\n${SOURCE}\n")
         ENDIF (ARCHIVE_CRYPTO_${ALGORITHM}_${IMPLEMENTATION})
       ENDIF(NOT DEFINED ARCHIVE_CRYPTO_${ALGORITHM}_${IMPLEMENTATION})
 
@@ -700,11 +700,11 @@ main(int argc, char **argv)
 	ELSE (ARCHIVE_CRYPTO_${CRYPTO}_WIN)
 	    MESSAGE(STATUS
 	         "Checking support for ARCHIVE_CRYPTO_${CRYPTO}_WIN -- not found")
-    	    FILE(APPEND
+	    FILE(APPEND
 	        ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
                 "Checking support for ARCHIVE_CRYPTO_${CRYPTO}_WIN failed with the following output:\n"
-        	"${OUTPUT}\n"
-        	"Source file was:\n${SOURCE}\n")
+		"${OUTPUT}\n"
+		"Source file was:\n${SOURCE}\n")
 	ENDIF (ARCHIVE_CRYPTO_${CRYPTO}_WIN)
 
       ENDIF(NOT DEFINED ARCHIVE_CRYPTO_${CRYPTO}_WIN)

@@ -30,7 +30,7 @@ inline void TestSum(size_t n) {
     ndata[i] = (i * (rank+1)) % z;
   }
   double tstart = utils::GetTime();
-  rabit::Allreduce<op::Sum>(&ndata[0], ndata.size());  
+  rabit::Allreduce<op::Sum>(&ndata[0], ndata.size());
   sum_tdiff += utils::GetTime() - tstart;
 }
 
@@ -45,9 +45,9 @@ inline void TestBcast(size_t n, int root) {
   if (root == rank) {
     res = s;
   }
-  double tstart = utils::GetTime();  
+  double tstart = utils::GetTime();
   rabit::Broadcast(&res[0], res.length(), root);
-  bcast_tdiff += utils::GetTime() - tstart;  
+  bcast_tdiff += utils::GetTime() - tstart;
 }
 
 inline void PrintStats(const char *name, double tdiff, int n, int nrep, size_t size) {

@@ -32,7 +32,7 @@ struct constraint_interface_test  {
   DenseVector ub;
 
   public:
-      
+
     constraint_interface_test() {
       size_t variables = 10;
 
@@ -69,12 +69,12 @@ struct constraint_interface_test  {
       std::shared_ptr<optimization::non_negative_orthant> non_negative;
       non_negative.reset(new optimization::non_negative_orthant(variables));
       DenseVector projected_point(variables);
-     
+
       // Projection
       projected_point = init_point;
       non_negative->project(projected_point);
       TS_ASSERT(arma::approx_equal(solution_orthant, projected_point,"absdiff", 1e-10));
-      
+
       // Not satisfied
       TS_ASSERT(not(non_negative->is_satisfied(init_point)));
 
@@ -92,12 +92,12 @@ struct constraint_interface_test  {
       std::shared_ptr<optimization::box_constraints> box;
       box.reset(new optimization::box_constraints(lb, ub));
       DenseVector projected_point(variables);
-      
+
       // Projection
       projected_point = init_point;
       box->project(projected_point);
       TS_ASSERT(arma::approx_equal(solution_box, projected_point,"absdiff", 1e-10));
-      
+
       // Not satisfied
       TS_ASSERT(not(box->is_satisfied(init_point)));
       DenseVector test_point(variables);
@@ -109,12 +109,12 @@ struct constraint_interface_test  {
       // Double init
       // -------------------------------------------------------
       box.reset(new optimization::box_constraints(lb_dbl, ub_dbl, variables));
-      
+
       // Projection
       projected_point = init_point;
       box->project(projected_point);
       TS_ASSERT(arma::approx_equal(solution_box, projected_point,"absdiff", 1e-10));
-      
+
       // Not satisfied
       TS_ASSERT(not(box->is_satisfied(init_point)));
       test_point.zeros(variables);
@@ -124,7 +124,7 @@ struct constraint_interface_test  {
 
 
     }
-    
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_constraint_interface_test, constraint_interface_test)

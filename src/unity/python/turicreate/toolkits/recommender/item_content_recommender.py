@@ -294,4 +294,3 @@ class ItemContentRecommender(_Recommender):
     @classmethod
     def _native_name(cls):
         return "item_content_recommender"
-

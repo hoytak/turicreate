@@ -25,7 +25,7 @@
 // 1. Sparse hessian newton method?
 
 namespace turi {
-  
+
 namespace optimization {
 
 
@@ -56,11 +56,11 @@ namespace optimization {
 */
 template <typename Vector = DenseVector>
 inline solver_return newton_method(second_order_opt_interface& model,
-    const DenseVector& init_point, 
+    const DenseVector& init_point,
     std::map<std::string, flexible_type>& opts,
-    const std::shared_ptr<smooth_regularizer_interface> reg=NULL){ 
+    const std::shared_ptr<smooth_regularizer_interface> reg=NULL){
 
-    // Benchmarking utils. 
+    // Benchmarking utils.
     timer t;
     double start_time = t.current_time();
     solver_return stats;
@@ -69,7 +69,7 @@ inline solver_return newton_method(second_order_opt_interface& model,
     logprogress_stream << "--------------------------------------------------------" << std::endl;
     std::stringstream ss;
     ss.str("");
-       
+
     // Step 1: Algorithm option init
     // ------------------------------------------------------------------------
     // Load options
@@ -85,7 +85,7 @@ inline solver_return newton_method(second_order_opt_interface& model,
 
     // First compute the gradient. Sometimes, you already have the solution
     // during the starting point. In these settings, you don't want to waste
-    // time performing a newton the step. 
+    // time performing a newton the step.
     DenseVector point = init_point;
     Vector gradient(point.size());
     DenseVector reg_gradient(point.size());
@@ -102,8 +102,8 @@ inline solver_return newton_method(second_order_opt_interface& model,
       gradient += reg_gradient;
     }
     double residual = compute_residual(gradient);
-    
-    // Keep track of previous point 
+
+    // Keep track of previous point
     DenseVector delta_point = point;
     delta_point.zeros();
 
@@ -133,12 +133,12 @@ inline solver_return newton_method(second_order_opt_interface& model,
         / std::max(arma::norm(gradient, 2), OPTIMIZATION_ZERO);
 
 
-      // LDLT Decomposition failed. 
+      // LDLT Decomposition failed.
       if (relative_error > convergence_threshold){
         logprogress_stream << "WARNING: Matrix is close to being singular or"
-          << " badly scaled. The solution is accurate only up to a tolerance of " 
+          << " badly scaled. The solution is accurate only up to a tolerance of "
           << relative_error << ". This typically happens when regularization"
-          << " is not sufficient. Consider increasing regularization." 
+          << " is not sufficient. Consider increasing regularization."
           << std::endl;
         stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_ERROR;
         break;
@@ -146,7 +146,7 @@ inline solver_return newton_method(second_order_opt_interface& model,
 
       // Update the new point and gradient
       point = point + delta_point;
-      
+
       // Numerical overflow. (Step size was too large)
       if (!delta_point.is_finite()) {
         stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_OVERFLOW;
@@ -161,12 +161,12 @@ inline solver_return newton_method(second_order_opt_interface& model,
       residual = compute_residual(gradient);
       stats.num_passes++;
       iters++;
-    
-      // Log info for debugging. 
-      logstream(LOG_INFO) << "Iters  (" << iters << ") " 
-                          << "Passes (" << stats.num_passes << ") " 
-                          << "Residual (" << residual << ") " 
-                          << "Loss (" << func_value << ") " 
+
+      // Log info for debugging.
+      logstream(LOG_INFO) << "Iters  (" << iters << ") "
+                          << "Passes (" << stats.num_passes << ") "
+                          << "Residual (" << residual << ") "
+                          << "Loss (" << func_value << ") "
                           << std::endl;
 
       // Check for nan's in the function value.
@@ -176,7 +176,7 @@ inline solver_return newton_method(second_order_opt_interface& model,
       }
 
       // Print progress
-      auto stat_info = {std::to_string(iters), 
+      auto stat_info = {std::to_string(iters),
                         std::to_string(stats.num_passes),
                         std::to_string(t.current_time())};
       auto row = model.get_status(point, stat_info);
@@ -206,7 +206,7 @@ inline solver_return newton_method(second_order_opt_interface& model,
     stats.gradient = gradient;
     stats.hessian = hessian;
     stats.progress_table = printer.get_tracked_table();
-    
+
     // Display solver stats
     log_solver_summary_stats(stats);
 
@@ -220,5 +220,4 @@ inline solver_return newton_method(second_order_opt_interface& model,
 /// \}
 } // turicreate
 
-#endif 
-
+#endif

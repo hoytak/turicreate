@@ -94,13 +94,13 @@ class TestSimple(Test):
     test_slice7 = simple_expr('a[...]')
 
     test_raise = simple_expr('raise Foo')
-    
+
     test_raise1 = py2only(simple_expr('raise Foo, bar'))
     test_raise2 = py2only(simple_expr('raise Foo, bar, baz'))
 
     test_raise_from = py3only(simple_expr('raise Foo() from bar'))
-    
-    
+
+
     test_call0 = simple_expr('foo()')
     test_call1 = simple_expr('a = foo()')
     test_call2 = simple_expr('foo(x)')
@@ -370,7 +370,7 @@ else:
     def test_class_def3(self):
         source = '''class A(object, foo):
     a = 1
-    def bar():    
+    def bar():
         pass'''
         self.assertSame(source)
 
@@ -379,4 +379,3 @@ if __name__ == "__main__":
     unittest.main(exit=False)
 
     print(tested.tested())
-

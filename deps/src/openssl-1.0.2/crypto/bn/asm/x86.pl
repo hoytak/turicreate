@@ -25,4 +25,3 @@ require("x86/comba.pl");
 &bn_sqr_comba("bn_sqr_comba4",4);
 
 &asm_finish();
-

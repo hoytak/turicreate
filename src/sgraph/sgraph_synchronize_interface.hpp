@@ -29,8 +29,8 @@ namespace sgraph_compute {
  * Storing a subset of vertex data of a subset of vertices from an sgraph partition.
  *
  * The vertex data can be a subset of fields, but all vertices
- * in the same exchange object must contain the same set of fields. 
- * 
+ * in the same exchange object must contain the same set of fields.
+ *
  * \note This really is implementation detail and is used to allow graph
  * computation methods that are implemented in Python
  */
@@ -73,7 +73,7 @@ struct vertex_partition_exchange {
  * as we process each edge partition, the associated vertex partition
  * are sparsely visited and updated.
  *
- * \ref sgraph_synchronize_interface is used for both ends of the communication 
+ * \ref sgraph_synchronize_interface is used for both ends of the communication
  * to deal with initialization, sending and receiving the vertex and edge exchange data.
  *
  * Example:
@@ -85,7 +85,7 @@ struct vertex_partition_exchange {
  * // initialize vertex data in partition 0, using all_vertices sent from server.
  * worker_graph_sync.load_vertex_partition(0, all_vertices_from_server);
  *
- * // recevie a vertex_exchange from server, let's update the local vertices 
+ * // recevie a vertex_exchange from server, let's update the local vertices
  * worker_graph_sync->update_vertex_partition(vexchange_from_server);
  *
  * // do some work to update vertex data in partition 0, and obtain a set of changed vertex data..

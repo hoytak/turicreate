@@ -98,7 +98,7 @@ void triple_apply_pagerank(sgraph& g, size_t& num_iter, double& total_pagerank, 
       target_data.inc(w * source_data / source_degree);
     };
 
-  table_printer table({{"Iteration", 0}, 
+  table_printer table({{"Iteration", 0},
                                 {"L1 change in pagerank", 0}});
   table.print_header();
 

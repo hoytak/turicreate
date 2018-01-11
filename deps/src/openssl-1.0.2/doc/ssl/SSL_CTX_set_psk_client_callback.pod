@@ -44,7 +44,7 @@ SSL_CTX_set_psk_client_callback, SSL_set_psk_client_callback - set PSK client ca
  void SSL_set_psk_client_callback(SSL *ssl,
 	unsigned int (*callback)(SSL *ssl, const char *hint,
 	char *identity, unsigned int max_identity_len,
- 	unsigned char *psk, unsigned int max_psk_len));
+	unsigned char *psk, unsigned int max_psk_len));
 
 
 =head1 DESCRIPTION

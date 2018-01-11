@@ -17,4 +17,3 @@ SOURCES
   Source/JSONAllocator.cpp
   Source/JSONIterators.cpp
 )
-

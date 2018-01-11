@@ -17,30 +17,30 @@ namespace turi {
  * functions.  It is designed as a robust key for hash tables.  The
  * difference between this class and the regular Token class is that
  * this one only stores the hash value, making it better suited for
- * querying over network connections. 
+ * querying over network connections.
  *
  */
 class hash_value : public turi::IS_POD_TYPE {
  public:
   /**
-   * Creates an empty WeakToken object with the 0 hash.  
+   * Creates an empty WeakToken object with the 0 hash.
    */
   hash_value()
       : h_128(0)
   {}
 
-  /// Redirect to the appropriate hash function. 
+  /// Redirect to the appropriate hash function.
   template <typename... Args>
   inline hash_value(Args... args)
       : h_128(hash128(args...))
   {}
-  
+
   /// Copy constructor
-  hash_value(const hash_value& t) : h_128(t.h_128) {} 
-  hash_value(hash_value&& t) : h_128(t.h_128) {} 
+  hash_value(const hash_value& t) : h_128(t.h_128) {}
+  hash_value(hash_value&& t) : h_128(t.h_128) {}
   hash_value& operator=(const hash_value& t) { h_128 = t.h_128; return *this; }
 
-  /// Explicit constructor from a hash value output 
+  /// Explicit constructor from a hash value output
   hash_value(uint128_t h) : h_128(h) {}
 
 

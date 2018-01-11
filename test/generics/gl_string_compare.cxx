@@ -49,7 +49,7 @@ int sign(int x) {
 struct test_string_compare  {
 
  public:
-  
+
   void _test_string(const gl_string& s, const gl_string& str, int x) {
     TS_ASSERT_EQUALS(sign(s.compare(str)), sign(x));
   }
@@ -72,9 +72,9 @@ struct test_string_compare  {
     _test_string(gl_string("abcdefghijklmnopqrst"), gl_string("abcdefghij"), 10);
     _test_string(gl_string("abcdefghijklmnopqrst"), gl_string("abcdefghijklmnopqrst"), 0);
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
-  
+
   void _test_pointer(const gl_string& s, const char* str, int x) {
     TS_ASSERT_EQUALS(sign(s.compare(str)), sign(x));
   }
@@ -97,7 +97,7 @@ struct test_string_compare  {
     _test_pointer(gl_string("abcdefghijklmnopqrst"), "abcdefghij", 10);
     _test_pointer(gl_string("abcdefghijklmnopqrst"), "abcdefghijklmnopqrst", 0);
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
 
   void _test_size_size_ptr(const gl_string& s, size_t pos1, size_t n1, const char* str, int x) {
@@ -107,11 +107,11 @@ struct test_string_compare  {
       auto f = [&](){s.compare(pos1, n1, str);};
       TS_ASSERT_THROWS_ANYTHING(f());
 #endif
-    } else {    
+    } else {
       TS_ASSERT_EQUALS(sign(s.compare(pos1, n1, str)), sign(x));
     }
   }
-  
+
   void test_size_size_ptr__0() {
     _test_size_size_ptr(gl_string(""), 0, 0, "", 0);
     _test_size_size_ptr(gl_string(""), 0, 0, "abcde", -5);
@@ -416,20 +416,20 @@ struct test_string_compare  {
     _test_size_size_ptr(gl_string("abcdefghijklmnopqrst"), 21, 0, "abcdefghij", 0);
     _test_size_size_ptr(gl_string("abcdefghijklmnopqrst"), 21, 0, "abcdefghijklmnopqrst", 0);
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
-  
+
   void _test_size_size_string(const gl_string& s, size_t pos1, size_t n1, const gl_string& str, int x) {
     if(pos1 > s.size()) {
 #ifndef NDEBUG
       auto f = [&](){s.compare(pos1, n1, str);};
       TS_ASSERT_THROWS_ANYTHING(f());
 #endif
-    } else {    
+    } else {
       TS_ASSERT_EQUALS(sign(s.compare(pos1, n1, str)), sign(x));
     }
   }
-  
+
   void test_size_size_string0() {
     _test_size_size_string(gl_string(""), 0, 0, gl_string(""), 0);
     _test_size_size_string(gl_string(""), 0, 0, gl_string("abcde"), -5);
@@ -741,12 +741,12 @@ struct test_string_compare  {
 
   void _test_size_size_ptr_size(const gl_string& s, size_t pos, size_t n1, const char* str, size_t n2, int x) {
     auto f = [&](){ return s.compare(pos, n1, str, n2);};
-      
+
     if(pos > s.size()) {
 #ifndef NDEBUG
       TS_ASSERT_THROWS_ANYTHING(f());
 #endif
-    } else {    
+    } else {
       TS_ASSERT_EQUALS(sign(f()), sign(x));
     }
   }
@@ -1985,14 +1985,14 @@ struct test_string_compare  {
 
   void _test_s_s_str_s_s(const gl_string& s, size_t pos1, size_t n1,
                          const gl_string& str, size_t pos2, size_t n2, int x) {
-    
+
     auto f = [&](){return s.compare(pos1, n1, str, pos2, n2);};
 
     if(pos1 > s.size() || pos2 > str.size()) {
 #ifndef NDEBUG
       TS_ASSERT_THROWS_ANYTHING(f());
 #endif
-    } else {    
+    } else {
       TS_ASSERT_EQUALS(sign(f()), sign(x));
     }
   }
@@ -2000,13 +2000,13 @@ struct test_string_compare  {
   void _test_s_s_str_s_s_npos(const gl_string& s, size_t pos1, size_t n1,
                               const gl_string& str, size_t pos2, int x) {
 
-    auto f = [&](){return s.compare(pos1, n1, str, pos2); }; 
+    auto f = [&](){return s.compare(pos1, n1, str, pos2); };
 
     if(pos1 > s.size() || pos2 > str.size()) {
 #ifndef NDEBUG
       TS_ASSERT_THROWS_ANYTHING(f());
 #endif
-    } else {    
+    } else {
       TS_ASSERT_EQUALS(sign(f()), sign(x));
     }
   }
@@ -7716,7 +7716,7 @@ struct test_string_compare  {
     _test_s_s_str_s_s_npos(gl_string("abcde"), 0, 0, gl_string("abcdefghij"), 1, -9);
     _test_s_s_str_s_s_npos(gl_string("abcde"), 0, 0, gl_string("abcdefghij"), 5, -5);
   }
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_test_string_compare, test_string_compare)

@@ -18,34 +18,34 @@ EXPORT size_t SGRAPH_DEFAULT_NUM_PARTITIONS = 8;
 EXPORT size_t SGRAPH_INGRESS_VID_BUFFER_SIZE = 1024 * 1024 * 1;
 EXPORT size_t SGRAPH_HILBERT_CURVE_PARALLEL_FOR_NUM_THREADS = thread::cpu_count();
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SGRAPH_TRIPLE_APPLY_LOCK_ARRAY_SIZE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SGRAPH_TRIPLE_APPLY_LOCK_ARRAY_SIZE,
+                            true,
                             +[](int64_t val){ return val >= 1; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SGRAPH_BATCH_TRIPLE_APPLY_LOCK_ARRAY_SIZE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SGRAPH_BATCH_TRIPLE_APPLY_LOCK_ARRAY_SIZE,
+                            true,
                             +[](int64_t val){ return val >= 1; });
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SGRAPH_TRIPLE_APPLY_EDGE_BATCH_SIZE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SGRAPH_TRIPLE_APPLY_EDGE_BATCH_SIZE,
+                            true,
                             +[](int64_t val){ return val >= 1; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SGRAPH_DEFAULT_NUM_PARTITIONS, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SGRAPH_DEFAULT_NUM_PARTITIONS,
+                            true,
                             +[](int64_t val){ return val >= 1 && is_power_of_2((uint64_t)val); });
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SGRAPH_INGRESS_VID_BUFFER_SIZE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SGRAPH_INGRESS_VID_BUFFER_SIZE,
+                            true,
                             +[](int64_t val){ return val >= 1; });
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SGRAPH_HILBERT_CURVE_PARALLEL_FOR_NUM_THREADS,
                             true,
                             +[](int64_t val){ return val >= 1; });

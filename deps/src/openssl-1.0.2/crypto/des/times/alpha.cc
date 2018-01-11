@@ -15,4 +15,3 @@ options    des ecb/s
  4 r1 i    146695.59  81.0%
 16 r1 i    144961.00  80.0%
 -DDES_RISC2 -DDES_PTR
-

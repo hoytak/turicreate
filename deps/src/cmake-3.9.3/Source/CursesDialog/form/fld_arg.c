@@ -35,13 +35,13 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_fieldtype_arg(
 |                            FIELDTYPE *typ,
 |                            void * (* const make_arg)(va_list *),
 |                            void * (* const copy_arg)(const void *),
 |                            void   (* const free_arg)(void *) )
-|   
+|
 |   Description   :  Connects to the type additional arguments necessary
 |                    for a set_field_type call. The various function pointer
 |                    arguments are:
@@ -76,9 +76,9 @@ int set_fieldtype_arg(FIELDTYPE * typ,
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  void *field_arg(const FIELD *field)
-|   
+|
 |   Description   :  Retrieve pointer to the fields argument structure.
 |
 |   Return Values :  Pointer to structure or NULL if none is defined.

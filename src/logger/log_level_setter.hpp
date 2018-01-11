@@ -42,4 +42,3 @@ class log_level_setter {
 
 
 #endif
-

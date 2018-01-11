@@ -28,4 +28,3 @@
 #define strnequal(a,b,c) curl_strnequal(a,b,c)
 
 #endif /* HEADER_CURL_STREQUAL_H */
-

@@ -126,7 +126,7 @@ struct cache_eviction_test {
       fsize *= 2;
     }
     // when I write 64K, 32K should be evicted, and 64K will also eventually be evicted.
-    // then when I write 128K, there is enough capacity to hold 1K -- 16K and to allocate 
+    // then when I write 128K, there is enough capacity to hold 1K -- 16K and to allocate
     //        a new 32K block. So nothing else is evicted
     // similarly for 256K
     TS_ASSERT_EQUALS(cache_instance.get_cache(size_to_file[1*1024])->is_pointer(), true);

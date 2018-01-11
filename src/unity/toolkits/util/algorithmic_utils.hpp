@@ -11,7 +11,7 @@
 
 namespace turi {
 
-/** 
+/**
  * \ingroup toolkit_util
  *
  * Calls an accumulator on all intersections in two sorted ranges.
@@ -50,14 +50,14 @@ static inline void accumulate_intersection(InputIterator1 first1, const InputIte
     } else if (less_than_operator(*first2, *first1) ) {
       ++first2;
     } else {
-      accumulate_matching_pair(*first1, *first2); 
+      accumulate_matching_pair(*first1, *first2);
       ++first1;
       ++first2;
     }
   }
 }
 
-/** 
+/**
  * \ingroup toolkit_util
  * Calls an accumulator on all intersections in two sorted ranges.
  * This behavior is analogous to std::set_intersection, except that
@@ -86,12 +86,12 @@ static inline void accumulate_intersection(InputIterator1 first1, const InputIte
 
   accumulate_intersection(first1, last1, first2, last2,
                           [](const value1_type& v1,
-                             const value2_type& v2) 
+                             const value2_type& v2)
                           { return v1 < v2; },
                           accumulate_matching_pair);
 }
 
-/** 
+/**
  * \ingroup toolkit_util
  * Counts the number of intersections in two sorted ranges.  This
  * behavior is analogous to std::set_intersection, except that the
@@ -122,11 +122,11 @@ static size_t count_intersection(InputIterator1 first1, const InputIterator1& la
                           [&](const value1_type&, const value2_type&)
                           { ++count; });
 
-  return count; 
+  return count;
 }
 
 
-/** 
+/**
  * \ingroup toolkit_util
  * Counts the number of intersections in two sorted ranges.  This
  * behavior is analogous to std::set_intersection, except that the
@@ -158,11 +158,11 @@ static inline size_t count_intersection(InputIterator1 first1, const InputIterat
 
   size_t count = 0;
   accumulate_intersection(first1, last1, first2, last2,
-                          less_than_operator, 
+                          less_than_operator,
                           [&](const value1_type&, const value2_type&)
                           { ++count; });
 
-  return count; 
+  return count;
 }
 
 }

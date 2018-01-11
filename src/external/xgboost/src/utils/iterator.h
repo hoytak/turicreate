@@ -39,4 +39,3 @@ class IIterator {
 }  // namespace utils
 }  // namespace xgboost
 #endif  // XGBOOST_UTILS_ITERATOR_H_
-

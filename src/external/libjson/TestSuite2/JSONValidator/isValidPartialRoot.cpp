@@ -8,4 +8,3 @@
  */
 
 #include "isValidPartialRoot.h"
-

@@ -55,7 +55,7 @@ std::tuple<std::string, std::string, std::string> parse_hdfs_url(std::string url
   auto warn_and_return_default = [=](const std::string& reason = ""){
     logstream(LOG_WARNING) << "Cannot parse hdfs url: " << url << ". " << reason << std::endl;
     return std::make_tuple(default_host, default_port, default_path);
-  }; 
+  };
 
   if (!boost::starts_with(url, "hdfs://")) {
     return warn_and_return_default();
@@ -417,7 +417,7 @@ std::string get_dirname(std::string path) {
   ret_path += fs::path(proto_removed).parent_path().string();
 
   // S3 is sensitive to trailing slashes, double slashes, etc.
-  
+
   if((ret_path.size() > 0) && (ret_path.at(ret_path.size()-1) == '/'))
     ret_path.pop_back();
   return ret_path;
@@ -512,14 +512,14 @@ EXPORT std::string make_absolute_path(std::string root_directory, std::string pa
   }
 }
 
-std::regex glob_to_regex(const std::string& glob) { 
+std::regex glob_to_regex(const std::string& glob) {
   // this is horribly incomplete. But works sufficiently
   std::string glob_pattern(glob);
   boost::replace_all(glob_pattern, "/", "\\/");
   boost::replace_all(glob_pattern, "?", ".");
   boost::replace_all(glob_pattern, "*", ".*");
   return std::regex(glob_pattern);
-} 
+}
 
 /**
  * Behaves like python os.path.split.
@@ -527,7 +527,7 @@ std::regex glob_to_regex(const std::string& glob) {
  * - if url is a file, return (directory path, filename)
  * - if url is a glob pattern, split into (directory, pattern)
  */
-std::pair<std::string, std::string> split_path_elements(const std::string& url, 
+std::pair<std::string, std::string> split_path_elements(const std::string& url,
                                                         file_status& status) {
   std::pair<std::string, std::string> res;
   if (status == file_status::DIRECTORY) {
@@ -567,7 +567,7 @@ EXPORT std::vector<std::pair<std::string, file_status>> get_glob_files(const std
       }
     }
   }
-  // unable to glob anything. 
+  // unable to glob anything.
   if (files.size() == 0) files.push_back({url, file_status::MISSING});
 
   return files;

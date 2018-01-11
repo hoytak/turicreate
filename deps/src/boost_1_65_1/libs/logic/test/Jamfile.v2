@@ -13,4 +13,3 @@
     [ run tribool_rename_test.cpp ]
     [ run tribool_io_test.cpp ]
    ;
-

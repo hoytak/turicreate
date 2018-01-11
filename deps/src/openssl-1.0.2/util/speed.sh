@@ -36,4 +36,3 @@ cat speed.1l >>speed.log
 perl util/sp-diff.pl speed.1l speed.2l >>speed.log
 perl util/sp-diff.pl speed.1l speed.3l >>speed.log
 perl util/sp-diff.pl speed.1l speed.4l >>speed.log
-

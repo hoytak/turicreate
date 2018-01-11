@@ -61,40 +61,40 @@ namespace Model
      */
     inline CreateBucketRequest& WithACL(BucketCannedACL&& value) { SetACL(value); return *this;}
 
-    
+
     inline const Aws::String& GetBucket() const{ return m_bucket; }
 
-    
+
     inline void SetBucket(const Aws::String& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(Aws::String&& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(const char* value) { m_bucketHasBeenSet = true; m_bucket.assign(value); }
 
-    
+
     inline CreateBucketRequest& WithBucket(const Aws::String& value) { SetBucket(value); return *this;}
 
-    
+
     inline CreateBucketRequest& WithBucket(Aws::String&& value) { SetBucket(value); return *this;}
 
-    
+
     inline CreateBucketRequest& WithBucket(const char* value) { SetBucket(value); return *this;}
 
-    
+
     inline const CreateBucketConfiguration& GetCreateBucketConfiguration() const{ return m_createBucketConfiguration; }
 
-    
+
     inline void SetCreateBucketConfiguration(const CreateBucketConfiguration& value) { m_createBucketConfigurationHasBeenSet = true; m_createBucketConfiguration = value; }
 
-    
+
     inline void SetCreateBucketConfiguration(CreateBucketConfiguration&& value) { m_createBucketConfigurationHasBeenSet = true; m_createBucketConfiguration = value; }
 
-    
+
     inline CreateBucketRequest& WithCreateBucketConfiguration(const CreateBucketConfiguration& value) { SetCreateBucketConfiguration(value); return *this;}
 
-    
+
     inline CreateBucketRequest& WithCreateBucketConfiguration(CreateBucketConfiguration&& value) { SetCreateBucketConfiguration(value); return *this;}
 
     /**

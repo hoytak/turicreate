@@ -8,11 +8,11 @@
 
 #include <string>
 #include <vector>
-#include <flexible_type/flexible_type.hpp> 
+#include <flexible_type/flexible_type.hpp>
 
 namespace turi { namespace option_handling {
 
-/**  
+/**
  * \ingroup toolkit_util
  * The primary structure for information regarding the possible
  *  parameters of the algorithm.  The values passed into the model are
@@ -53,7 +53,7 @@ struct option_info {
    * what is specified, a string error is raised detailing what's wrong.
    */
   void check_value(const flexible_type& value) const;
-  
+
   /// Serialization -- save
   void save(turi::oarchive& oarc) const;
 

@@ -202,8 +202,3 @@ class SFrameActivityIteratorTest(unittest.TestCase):
         ## ----- batch size 4 ------
         batch_0 = {'features' : expected_features_np[0:4] , 'target' : expected_target_np[0:4] , 'weights' : expected_weights_np[0:4]}
         self.expected_batches_4 = [batch_0]
-
-
-
-
-

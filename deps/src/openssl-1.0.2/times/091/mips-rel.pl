@@ -18,4 +18,3 @@ sub doit
 		}
 	printf("%s %6.1f %6.1f %6.1f %6.1f\n",$label,@data);
 	}
-

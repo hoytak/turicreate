@@ -24,7 +24,7 @@ cdef class UnitySArrayBuilderProxy:
     cdef unity_sarray_builder_base_ptr _base_ptr
     cdef unity_sarray_builder* thisptr
 
-    cpdef init(self, size_t num_segments, size_t history_size, type dtype) 
+    cpdef init(self, size_t num_segments, size_t history_size, type dtype)
 
     cpdef append(self, val, size_t segment)
 

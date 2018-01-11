@@ -42,7 +42,7 @@ void testNumberToString__uitoa::testInt(void){
 		assertEquals(NumberToString::_uitoa<unsigned int>((unsigned int)32767), JSON_TEXT("32767"));
 		assertEquals(NumberToString::_uitoa<unsigned int>((unsigned int)127), JSON_TEXT("127"));
 		assertEquals(NumberToString::_uitoa<unsigned int>((unsigned int)15), JSON_TEXT("15"));
-		assertEquals(NumberToString::_uitoa<unsigned int>((unsigned int)0), JSON_TEXT("0"));	
+		assertEquals(NumberToString::_uitoa<unsigned int>((unsigned int)0), JSON_TEXT("0"));
 	#endif
 }
 
@@ -56,7 +56,7 @@ void testNumberToString__uitoa::testLong(void){
 			if (sizeof(unsigned long) >= 8){
 				assertEquals(NumberToString::_uitoa<unsigned long>((unsigned long)18446744073709551615UL), JSON_TEXT("18446744073709551615"));
 				assertEquals(NumberToString::_uitoa<unsigned long>((unsigned long)9223372036854775807L), JSON_TEXT("9223372036854775807"));
-			}	
+			}
 		#endif
 		assertEquals(NumberToString::_uitoa<unsigned long>((unsigned long)2147483647), JSON_TEXT("2147483647"));
 		assertEquals(NumberToString::_uitoa<unsigned long>((unsigned long)32767), JSON_TEXT("32767"));
@@ -78,7 +78,7 @@ void testNumberToString__uitoa::testLongLong(void){
 					assertEquals(NumberToString::_uitoa<unsigned long>((unsigned long long)18446744073709551615UL), JSON_TEXT("18446744073709551615"));
 					assertEquals(NumberToString::_uitoa<unsigned long long>((unsigned long long)9223372036854775807L), JSON_TEXT("9223372036854775807"));
 					assertEquals(NumberToString::_uitoa<unsigned long long>((unsigned long long)-9223372036854775807L), JSON_TEXT("-9223372036854775807"));
-				}	
+				}
 			#endif
 			assertEquals(NumberToString::_uitoa<unsigned long long>((unsigned long long)2147483647), JSON_TEXT("2147483647"));
 			assertEquals(NumberToString::_uitoa<unsigned long long>((unsigned long long)32767), JSON_TEXT("32767"));

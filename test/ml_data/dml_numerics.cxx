@@ -282,7 +282,7 @@ struct numerics  {
   }
 
   void test_stats_nans_1() {
-    std::vector<std::vector<flexible_type> > data = 
+    std::vector<std::vector<flexible_type> > data =
         { { 1.0,            flex_vec{1.0, 2.4, 4}, flex_dict{ {"blah", 123}, {"rofl", 32} } },
           { 2.0,            flex_vec{2.0, 2, 3},   flex_dict{ {"foob", FLEX_UNDEFINED}, {"rofl", 32} } },
           { 2.0,            flex_vec{2.0, 2, 3},
@@ -290,12 +290,12 @@ struct numerics  {
           { 2.0,            flex_vec{2.0, 2, 3},
             flex_dict{ {"foob", FLEX_UNDEFINED}, {"boogie", FLEX_UNDEFINED}, {"rofl", FLEX_UNDEFINED} } },
           { FLEX_UNDEFINED, FLEX_UNDEFINED,        flex_dict{ {"blah", 123}, {"rofl", FLEX_UNDEFINED } } } };
-          
+
 
     sframe X = make_testing_sframe({"X1", "X2", "X3"}, data);
 
     ml_data mdata;
-    mdata.fill(X, "", ml_data::column_mode_map(), 
+    mdata.fill(X, "", ml_data::column_mode_map(),
                false, ml_missing_value_action::USE_NAN);
 
     TS_ASSERT(std::isfinite(mdata.metadata()->statistics(0)->mean(0)));
@@ -314,8 +314,8 @@ struct numerics  {
     TS_ASSERT(std::isfinite(mdata.metadata()->statistics(2)->stdev(1)));
     TS_ASSERT(std::isfinite(mdata.metadata()->statistics(2)->stdev(2)));
   }
-  
-  
+
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_numerics, numerics)

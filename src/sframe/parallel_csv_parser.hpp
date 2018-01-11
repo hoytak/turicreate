@@ -32,10 +32,10 @@ std::istream& eol_safe_getline(std::istream& is, std::string& t);
  */
 struct csv_file_handling_options {
   /// Whether the first (non-commented) line of the file is the column name header.
-  bool use_header = true; 
-  
+  bool use_header = true;
+
   /// Whether we should just skip line errors.
-  bool continue_on_failure = false; 
+  bool continue_on_failure = false;
 
   /// Whether failed parses will be stored in an sarray of strings and returned.
   bool store_errors = false;
@@ -47,7 +47,7 @@ struct csv_file_handling_options {
   std::vector<std::string> output_columns;
 
   /// The number of rows to read.  If 0, all lines are read
-  size_t row_limit = 0; 
+  size_t row_limit = 0;
 
   /// Number of rows at the start of each file to ignore
   size_t skip_rows = 0;
@@ -55,7 +55,7 @@ struct csv_file_handling_options {
 
 /**
  * Parses a CSV file / glob of CSV files to an SFrame.
- * 
+ *
  * \param url Path or Glob to read files
  * \param tokenizer CSV tokenization options
  * \param options Other file handling options

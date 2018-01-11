@@ -42,11 +42,11 @@ struct test_schema_errors  {
     ml_data data_2(mdata.metadata());
 
     TS_ASSERT_THROWS_ANYTHING(data_2.fill(X2));
-    
+
     sframe X3 = X.add_column(X.select_column(0), "My-column-lies-over-the-sea.");
-    
+
     ml_data data_3(mdata.metadata());
-    
+
     // Succeeds, but should print a warning.
     data_3.fill(X3);
 
@@ -70,14 +70,14 @@ struct test_schema_errors  {
     sframe X;
     ml_data mdata;
     ml_missing_value_action none_action = ml_missing_value_action::ERROR;
-        
+
     std::tie(X, mdata) = make_random_sframe_and_ml_data(
         5, "nnnn", target_column);
 
     {
       flex_dict row = { {mdata.metadata()->column_name(0), 0},
                         {mdata.metadata()->column_name(1), 0},
-                        {mdata.metadata()->column_name(2), 0} }; 
+                        {mdata.metadata()->column_name(2), 0} };
 
       // Doesn't have column 3
       TS_ASSERT_THROWS_ANYTHING(ml_data_row_reference::from_row(mdata.metadata(), row, none_action));
@@ -86,12 +86,12 @@ struct test_schema_errors  {
         TS_ASSERT_THROWS_ANYTHING(ml_data_row_reference::from_row(mdata.metadata(), row, none_action));
       }
     }
-      
+
     {
       flex_dict row = { {mdata.metadata()->column_name(0), 0},
                         {mdata.metadata()->column_name(1), 0},
                         {mdata.metadata()->column_name(2), 0},
-                        {mdata.metadata()->column_name(3), 0} }; 
+                        {mdata.metadata()->column_name(3), 0} };
 
       // Should succeed
       ml_data_row_reference::from_row(mdata.metadata(), row);
@@ -99,14 +99,14 @@ struct test_schema_errors  {
         row.push_back({mdata.metadata()->target_column_name(), 0});
         ml_data_row_reference::from_row(mdata.metadata(), row);
       }
-        
+
     }
 
     {
       flex_dict row = { {mdata.metadata()->column_name(0), 0},
                         {mdata.metadata()->column_name(1), 0},
                         {mdata.metadata()->column_name(2), 0},
-                        {"It's all about that column.", 0} }; 
+                        {"It's all about that column.", 0} };
 
       // Should succeed
       TS_ASSERT_THROWS_ANYTHING(ml_data_row_reference::from_row(mdata.metadata(), row, none_action));

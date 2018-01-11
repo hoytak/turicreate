@@ -25,7 +25,7 @@ foreach(item ${pythonfiles})
        "${fname}" MATCHES ".*\\.so\\..*$" OR
        "${fname}" MATCHES ".*\\.dylib$" OR
        "${fname}" MATCHES ".*\\.dll$" OR
-       "${fname}" MATCHES ".*\\.dll$" 
+       "${fname}" MATCHES ".*\\.dll$"
        )
     file(REMOVE ${item})
   endif()

@@ -447,7 +447,7 @@ _archive_read_close(struct archive *_a)
 }
 
 static void
-setup_symlink_mode(struct archive_read_disk *a, char symlink_mode, 
+setup_symlink_mode(struct archive_read_disk *a, char symlink_mode,
     int follow_symlinks)
 {
 	a->symlink_mode = symlink_mode;
@@ -778,7 +778,7 @@ next_entry(struct archive_read_disk *a, struct tree *t,
 				return (ARCHIVE_FAILED);
 			}
 			break;
-		}	
+		}
 	} while (lst == NULL);
 
 	archive_entry_copy_pathname_w(entry, tree_current_path(t));
@@ -1055,7 +1055,7 @@ setup_sparse(struct archive_read_disk *a, struct archive_entry *entry)
 		t->sparse_list[i].length = 0;
 		for (i = 0; i < last; i++) {
 			if ((t->sparse_list[i].offset +
-			       t->sparse_list[i].length) <= 
+			       t->sparse_list[i].length) <=
 					t->sparse_list[i+1].offset)
 				continue;
 			/*
@@ -1885,7 +1885,7 @@ tree_current_file_information(struct tree *t, BY_HANDLE_FILE_INFORMATION *st,
 	HANDLE h;
 	int r;
 	DWORD flag = FILE_FLAG_BACKUP_SEMANTICS;
-	
+
 	if (sim_lstat && tree_current_is_physical_link(t))
 		flag |= FILE_FLAG_OPEN_REPARSE_POINT;
 	h = CreateFileW(tree_current_access_path(t), 0, FILE_SHARE_READ, NULL,
@@ -2095,7 +2095,7 @@ archive_read_disk_entry_from_file(struct archive *_a,
 		} else {
 			WIN32_FIND_DATAW findData;
 			DWORD flag, desiredAccess;
-	
+
 			h = FindFirstFileW(path, &findData);
 			if (h == INVALID_HANDLE_VALUE) {
 				la_dosmaperr(GetLastError());

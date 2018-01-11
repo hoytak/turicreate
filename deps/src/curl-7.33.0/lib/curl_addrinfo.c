@@ -524,4 +524,3 @@ curl_dogetaddrinfo(const char *hostname,
   return res;
 }
 #endif /* defined(CURLDEBUG) && defined(HAVE_GETADDRINFO) */
-

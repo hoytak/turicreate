@@ -22,9 +22,9 @@ namespace turi{
 namespace transform_utils{
 
 /**
- * Validate if the set of columns provided by the user is present in the 
+ * Validate if the set of columns provided by the user is present in the
  * input SFrame.
- *  
+ *
  *  \param[in] data_column_names    Columns in the dataset.
  *  \param[in] feature_column_names Features provided by user.
  *
@@ -32,31 +32,31 @@ namespace transform_utils{
  *  non empty.
  */
 inline void validate_feature_columns(
-          const std::vector<std::string>& data_column_names, 
+          const std::vector<std::string>& data_column_names,
           const std::vector<std::string>& feature_column_names,
           bool verbose = true){
 
   if(feature_column_names.empty()) {
     log_and_throw("No input features are specified.");
   }
-  
-  std::set<std::string> data_column_set(data_column_names.begin(),  
+
+  std::set<std::string> data_column_set(data_column_names.begin(),
                                         data_column_names.end());
-  std::set<std::string> feature_column_set(feature_column_names.begin(), 
+  std::set<std::string> feature_column_set(feature_column_names.begin(),
                                            feature_column_names.end());
- 
+
   std::vector<std::string> result;
-  std::set_difference(feature_column_set.begin(), feature_column_set.end(), 
-      data_column_set.begin(), data_column_set.end(), 
+  std::set_difference(feature_column_set.begin(), feature_column_set.end(),
+      data_column_set.begin(), data_column_set.end(),
       inserter(result, result.end()));
 
-  if (result.size() > 0 && verbose){ 
+  if (result.size() > 0 && verbose){
     std::stringstream err_msg;
     err_msg << "Feature(s) ";
     for (size_t i=0; i < result.size()-1; i++) {
       err_msg << result[i] << ", ";
     }
-    err_msg << result[result.size()-1] 
+    err_msg << result[result.size()-1]
             << " are missing from the dataset." << std::endl;
     log_and_throw(err_msg.str());
   }
@@ -74,12 +74,12 @@ inline void validate_feature_columns(
  *  \note Assumes that feature_names is a subset of feature_types.keys().
  */
 inline std::string get_unique_feature_name(
-    const std::vector<std::string>& feature_columns, 
+    const std::vector<std::string>& feature_columns,
     const std::string& output_column_name) {
-  
+
   std::string output_name = output_column_name;
   int counter = 0;
-  while (std::find(feature_columns.begin(), feature_columns.end(), 
+  while (std::find(feature_columns.begin(), feature_columns.end(),
                           output_name) != feature_columns.end()) {
     counter++;
     output_name = output_column_name + "." + std::to_string(counter);
@@ -88,7 +88,7 @@ inline std::string get_unique_feature_name(
 }
 
 /**
- * Validate if the types of the features are compatible during fit and 
+ * Validate if the types of the features are compatible during fit and
  * transform mode.
  *
  *  \param[in] feature_columns  A list of feature_column names to check.
@@ -102,7 +102,7 @@ inline void validate_feature_types(
   const std::map<std::string, flex_type_enum>& feature_types,
   const gl_sframe& data) {
 
-  for (auto& col_name : feature_names){ 
+  for (auto& col_name : feature_names){
     DASSERT_TRUE(feature_types.count(col_name) > 0);
     auto fit_type = feature_types.at(col_name);
     auto transform_type = data[col_name].dtype();
@@ -111,8 +111,8 @@ inline void validate_feature_types(
      log_and_throw("Column '" + col_name + "' was of type " +
       flex_type_enum_to_name(fit_type) + " when fitted using .fit(), but is of type " +
       flex_type_enum_to_name(transform_type) + "during .transform()");
-    } 
-  } 
+    }
+  }
 }
 
 /**
@@ -139,7 +139,7 @@ inline bool is_categorical_type(flex_type_enum type) {
  *
  */
 inline std::vector<std::string> get_column_names(const gl_sframe& data,
-                   bool exclude,  
+                   bool exclude,
                    const flexible_type& feature_columns) {
 
   std::vector<std::string> feature_columns_vector;
@@ -151,16 +151,16 @@ inline std::vector<std::string> get_column_names(const gl_sframe& data,
     feature_columns_vector = variant_get_value<std::vector<std::string>>(
         to_variant(feature_columns));
   }
-  
+
   if (exclude){
     std::vector<std::string> data_column_names = data.column_names();
-    std::set<std::string> total_set(data_column_names.begin(), 
+    std::set<std::string> total_set(data_column_names.begin(),
                                                     data_column_names.end());
-    std::set<std::string> exclude_set(feature_columns_vector.begin(), 
+    std::set<std::string> exclude_set(feature_columns_vector.begin(),
         feature_columns_vector.end());
     std::set<std::string> result;
-    std::set_difference(total_set.begin(), total_set.end(), 
-                        exclude_set.begin(), exclude_set.end(), 
+    std::set_difference(total_set.begin(), total_set.end(),
+                        exclude_set.begin(), exclude_set.end(),
                         inserter(result, result.begin()));
     return std::vector<std::string>(result.begin(),result.end());
   } else {
@@ -179,36 +179,36 @@ inline std::vector<std::string> get_column_names(const gl_sframe& data,
  */
 inline std::vector<std::string> select_feature_subset(const gl_sframe& data,
                    const std::vector<std::string>& feature_columns) {
-  
+
   std::vector<std::string> data_column_names = data.column_names();
-  std::set<std::string> total_set(data_column_names.begin(), 
+  std::set<std::string> total_set(data_column_names.begin(),
                                   data_column_names.end());
-  std::set<std::string> feature_set(feature_columns.begin(), 
+  std::set<std::string> feature_set(feature_columns.begin(),
                                     feature_columns.end());
   std::set<std::string> result;
-  std::set_intersection(total_set.begin(), total_set.end(), 
+  std::set_intersection(total_set.begin(), total_set.end(),
                         feature_set.begin(), feature_set.end(),
                         inserter(result, result.begin()));
 
   if (result.size() != feature_columns.size()) {
     logprogress_stream << "Warning: The model was fit with "
-         << feature_columns.size() << " feature columns but only " 
-         << result.size() << " were present during transform(). " 
-         << "Proceeding with transform by ignoring the missing columns." 
+         << feature_columns.size() << " feature columns but only "
+         << result.size() << " were present during transform(). "
+         << "Proceeding with transform by ignoring the missing columns."
          << std::endl;
   }
-  
+
   // Need to preserve order.
   std::vector<std::string> ret;
   ret.reserve(result.size());
-  
+
   for(const auto& s : feature_columns) {
     if(result.count(s)) {
       ret.push_back(s);
     }
   }
-  
-  return ret; 
+
+  return ret;
 }
 
 /**
@@ -216,7 +216,7 @@ inline std::vector<std::string> select_feature_subset(const gl_sframe& data,
  * In flex_dict -> out same flex_dict
  * Flex dict output = input
  * In String "x" -> {"x":1}
- * String becomes key, 1 becomes value 
+ * String becomes key, 1 becomes value
  * In list/vec [1,2,3] -> {0:1, 1:2, 2:3}
  * Index becomes key, element becomes value
  * In numeric type ie. 5 -> {0:5}
@@ -237,7 +237,7 @@ inline flex_dict flexible_type_to_flex_dict(const flexible_type& in){
     flex_list list = in.get<flex_list>();
     out.resize(list.size());
     for (size_t i = 0 ; i < list.size(); i++){
-      out[i] = std::make_pair(i,list[i]); 
+      out[i] = std::make_pair(i,list[i]);
     }
   } else if (in.get_type() == flex_type_enum::VECTOR) {
     flex_vec vec = in.get<flex_vec>();
@@ -250,29 +250,29 @@ inline flex_dict flexible_type_to_flex_dict(const flexible_type& in){
     out[0] = std::make_pair(0, in);
   }
   return out;
-} 
+}
 
 /**
- * Takes training_data, feature columns to include/exclude, and exclude bool. 
+ * Takes training_data, feature columns to include/exclude, and exclude bool.
  * Returns columns to perform transformations on.
  */
-inline gl_sframe extract_columns(const gl_sframe& training_data, 
-                                 std::vector<std::string>& feature_columns, 
+inline gl_sframe extract_columns(const gl_sframe& training_data,
+                                 std::vector<std::string>& feature_columns,
                                  bool exclude) {
   if (!feature_columns.size()) {
     feature_columns = training_data.column_names();
   }
   if (exclude){
-    std::vector<std::string> training_data_column_names = 
+    std::vector<std::string> training_data_column_names =
                                             training_data.column_names();
-    std::set<std::string> total_set(training_data_column_names.begin(), 
+    std::set<std::string> total_set(training_data_column_names.begin(),
                                     training_data_column_names.end());
-    std::set<std::string> exclude_set(feature_columns.begin(), 
+    std::set<std::string> exclude_set(feature_columns.begin(),
                                       feature_columns.end());
 
     std::set<std::string> result;
-    std::set_difference(total_set.begin(), total_set.end(), 
-                        exclude_set.begin(), exclude_set.end(), 
+    std::set_difference(total_set.begin(), total_set.end(),
+                        exclude_set.begin(), exclude_set.end(),
                         inserter(result, result.begin()));
     return training_data.select_columns(
                     std::vector<std::string>(result.begin(),result.end()));
@@ -284,27 +284,27 @@ inline gl_sframe extract_columns(const gl_sframe& training_data,
 
 /**
  * Utility function for selecting columns of only valid feature types.
- * 
+ *
  * \param[in] dataset
  *     The input SFrame containing columns of potential features.
- * 
+ *
  * \param[in] features
  *     List of feature column names. The list cannot be empty.
- * 
+ *
  * \param[in] valid_feature_types
  *     List of Python types that represent valid features.  If type is array.array,
  *     then an extra check is done to ensure that the individual elements of the array
  *     are of numeric type.  If type is dict, then an extra check is done to ensure
  *     that dictionary values are numeric.
- * 
- * \returns 
+ *
+ * \returns
  *     List of valid feature column names.  Warnings are given for each candidate
  *     feature column that is excluded.
- * 
+ *
  */
 inline std::vector<std::string> select_valid_features_nothrow(const gl_sframe&
     dataset,
-                const std::vector<std::string>& features, 
+                const std::vector<std::string>& features,
                 const std::vector<flex_type_enum>& valid_feature_types,
                 bool verbose = true){
 
@@ -323,11 +323,11 @@ inline std::vector<std::string> select_valid_features_nothrow(const gl_sframe&
     auto coltype = col_types[i];
 
     // Not a valid type. Warn the user.
-    if (std::find(valid_feature_types.begin(), valid_feature_types.end(), 
+    if (std::find(valid_feature_types.begin(), valid_feature_types.end(),
                                    coltype) == valid_feature_types.end()) {
       if (verbose){
-        logprogress_stream << "WARNING: Column '" << col 
-           << "' is excluded due to invalid column type (" 
+        logprogress_stream << "WARNING: Column '" << col
+           << "' is excluded due to invalid column type ("
            << flex_type_enum_to_name(coltype) <<")." << std::endl;
       }
     // Valid type. Include.
@@ -376,7 +376,7 @@ inline std::vector<std::string> select_valid_features(const gl_sframe& dataset,
       " columns. This model only supports features of type: ";
     for (size_t k = 0; k < valid_feature_types.size() - 1; ++k){
       err_msg += std::string(
-          flex_type_enum_to_name(valid_feature_types[k])) + ", ";   
+          flex_type_enum_to_name(valid_feature_types[k])) + ", ";
     }
     err_msg += std::string(
         flex_type_enum_to_name(valid_feature_types.back())) + ".";
@@ -410,8 +410,8 @@ inline std::vector<std::string> select_valid_features(const gl_sframe& dataset,
  * \param[in,out] indexer Unique column indexer.
  *
  */
-inline void create_topk_index_mapping(const gl_sarray& src, 
-                               std::shared_ptr<topk_indexer> indexer) {       
+inline void create_topk_index_mapping(const gl_sarray& src,
+                               std::shared_ptr<topk_indexer> indexer) {
 
   // Get the column mode from the dtype.
   flex_type_enum run_mode = src.dtype();
@@ -427,7 +427,7 @@ inline void create_topk_index_mapping(const gl_sarray& src,
     size_t start_idx = src_size * thread_idx / num_threads;
     size_t end_idx = src_size * (thread_idx + 1) / num_threads;
 
-    for (const auto& v: src.range_iterator(start_idx, end_idx)) { 
+    for (const auto& v: src.range_iterator(start_idx, end_idx)) {
       switch(run_mode) {
         // Categorical cols.
         case flex_type_enum::INTEGER:
@@ -456,7 +456,7 @@ inline void create_topk_index_mapping(const gl_sarray& src,
 
           for(size_t k = 0; k < n_values; ++k) {
             const std::pair<flexible_type, flexible_type>& kvp = dv[k];
-            flexible_type out_key = 
+            flexible_type out_key =
                     flex_string(kvp.first) + ":" + flex_string(kvp.second);
             indexer->insert_or_update(out_key, thread_idx);
           }
@@ -477,20 +477,20 @@ inline void create_topk_index_mapping(const gl_sarray& src,
 
 /**
  * Calculates length of list/vectors in a column src. If not constant length,
- * errors out. 
+ * errors out.
  *
  * \param[in]      src    The SArray to computer mean of.
  * \param[in] column_name Name of column
  *
  */
 inline size_t validate_list_vec_length(const gl_sarray& src,const std::string& column_name){
-  
+
   size_t src_size = src.size();
   flex_list length_list;
   length_list.resize(thread::cpu_count());
 
   in_parallel([&](size_t thread_idx, size_t num_threads) {
-  
+
     size_t start_idx = src_size * thread_idx / num_threads;
     size_t end_idx = src_size * (thread_idx + 1) / num_threads;
 
@@ -511,7 +511,7 @@ inline size_t validate_list_vec_length(const gl_sarray& src,const std::string& c
 
     }
 
-    length_list[thread_idx] = length; 
+    length_list[thread_idx] = length;
   });
 
   flexible_type total_length = flex_undefined();
@@ -519,16 +519,16 @@ inline size_t validate_list_vec_length(const gl_sarray& src,const std::string& c
   for (const auto& l: length_list){
     if (l.get_type() != flex_type_enum::UNDEFINED){
       total_length = l;
-    }  
+    }
     if (old_total_length.get_type() != flex_type_enum::UNDEFINED && old_total_length != total_length){
         log_and_throw("All list/vectors in column" + column_name + "must be of same length or None.");
       } else {
         old_total_length = total_length;
       }
-  } 
+  }
 
   if (total_length.get_type() == flex_type_enum::UNDEFINED){
-    log_and_throw("At least one value in column_name" + column_name + "must have" 
+    log_and_throw("At least one value in column_name" + column_name + "must have"
         " a non-None value");
   }
   return total_length;
@@ -536,27 +536,27 @@ inline size_t validate_list_vec_length(const gl_sarray& src,const std::string& c
 }
 
 /**
- * Computes set of all features in a sparse dictionary column 
+ * Computes set of all features in a sparse dictionary column
  *
  * \param[in]      src    The SArray to computer mean of.
  * \param[in] column_name Name of column
- * \param[out] out_set The set that will contain all features 
+ * \param[out] out_set The set that will contain all features
  *
  */
 
 inline void num_sparse_features(const gl_sarray& src,const std::string& column_name, std::set<flexible_type>& out_set){
-  
+
   out_set.clear();
   size_t src_size = src.size();
   std::vector<std::set<flexible_type>> threadlocal_key_set;
   threadlocal_key_set.resize(thread::cpu_count());
 
   in_parallel([&](size_t thread_idx, size_t num_threads) {
-  
+
     size_t start_idx = src_size * thread_idx / num_threads;
     size_t end_idx = src_size * (thread_idx + 1) / num_threads;
 
-    
+
 
     for (const auto& d: src.range_iterator(start_idx, end_idx)){
       if(d.get_type() == flex_type_enum::DICT){
@@ -577,14 +577,14 @@ inline void num_sparse_features(const gl_sarray& src,const std::string& column_n
   if(out_set.size() == 0 ){
     log_and_throw("There must be at least one non-None value in dictionary"
         " column for mean imputation");
-  }  
+  }
 
 }
 
  /**
- * Computes mean of a column. Columns of recursive types have behaviour that 
+ * Computes mean of a column. Columns of recursive types have behaviour that
  * is equivalent to unpacking, computing means, then repacking(while preserving
- * sparse interpretation of dictionary columns). 
+ * sparse interpretation of dictionary columns).
  *
  * \param[in]      src    The SArray to computer mean of.
  * \param[in,out] tracker Unique statistics tracker.
@@ -592,8 +592,8 @@ inline void num_sparse_features(const gl_sarray& src,const std::string& column_n
  *
  */
 inline void create_mean_mapping(const gl_sarray& src,
-                               const std::string& column_name, 
-                               std::shared_ptr<statistics_tracker> tracker) {       
+                               const std::string& column_name,
+                               std::shared_ptr<statistics_tracker> tracker) {
 
   // Get the column mode from the dtype.
   flex_type_enum run_mode = src.dtype();
@@ -619,7 +619,7 @@ inline void create_mean_mapping(const gl_sarray& src,
     size_t start_idx = src_size * thread_idx / num_threads;
     size_t end_idx = src_size * (thread_idx + 1) / num_threads;
 
-    for (const auto& v: src.range_iterator(start_idx, end_idx)) { 
+    for (const auto& v: src.range_iterator(start_idx, end_idx)) {
       switch(run_mode) {
         // Numerical cols.
         case flex_type_enum::INTEGER:
@@ -638,7 +638,7 @@ inline void create_mean_mapping(const gl_sarray& src,
           size_t n_values = vec_list_length;
           for(size_t k = 0; k < n_values; ++k) {
             if (v.get_type() != flex_type_enum::UNDEFINED){
-              if (!transform_utils::is_numeric_type(vv[k].get_type()) 
+              if (!transform_utils::is_numeric_type(vv[k].get_type())
                   && vv[k].get_type() != flex_type_enum::UNDEFINED){
                   log_and_throw("All list elements must be numeric for mean"
                   " imputation");
@@ -678,19 +678,19 @@ inline void create_mean_mapping(const gl_sarray& src,
 
             for(size_t k = 0; k < n_values; ++k) {
               const std::pair<flexible_type, flexible_type>& kvp = dv[k];
-              if (!transform_utils::is_numeric_type(kvp.second.get_type()) 
+              if (!transform_utils::is_numeric_type(kvp.second.get_type())
                   && kvp.second.get_type() != flex_type_enum::UNDEFINED){
                 log_and_throw("All dictionary entries must be numeric for mean"
                     "imputation");
               }
               tracker->insert_or_update(kvp.first,kvp.second, thread_idx);
-            } 
+            }
           } else {
 
             for(const auto& v : sparse_features){
               tracker->insert_or_update(v, flex_undefined(), thread_idx);
             }
-          
+
           }
           break;
         }
@@ -718,8 +718,8 @@ typedef std::vector<std::pair<boost::regex, string_filter_condition> > string_fi
 
 /**
  * An approximate Penn Tree Bank tokenization filter.
- * 
- * TODO: this should 
+ *
+ * TODO: this should
  * 1) account for multi-word proper nouns
  * 2) separate scientific units from values
  * 3) keep periods at the end of abbreviations
@@ -743,23 +743,23 @@ static const string_filter_list ptb_filters = {
 };
 
 /**
- * Tokenizes the input string according to the input filtering patterns, 
+ * Tokenizes the input string according to the input filtering patterns,
  * returns a flex_list of the token strings.
- * 
+ *
  * \param[in]  to_tokenize    The string to tokenize.
  * \param[in]  filter_list    A list of regex patterns and string_filter_conditions.
  * \param[out] A list of string tokens, tokenized according to the tokenization patterns.
- * 
- * The filter_list offers a way to take some logic that might overcomplicate a 
- * regex and export it to a filter list comprehension. For each filter, 
- * for each item in the current token list (at the beginning, a singleton 
- * list with the full doc string), the filter condition is checked. If the 
- * condition is satisfied, the regex is applied, and the resulting list is 
- * inserted in place of the original token. Otherwise, the original token 
+ *
+ * The filter_list offers a way to take some logic that might overcomplicate a
+ * regex and export it to a filter list comprehension. For each filter,
+ * for each item in the current token list (at the beginning, a singleton
+ * list with the full doc string), the filter condition is checked. If the
+ * condition is satisfied, the regex is applied, and the resulting list is
+ * inserted in place of the original token. Otherwise, the original token
  * is placed back into the list.
  *
  */
-inline flex_list tokenize_string(const std::string& to_tokenize, 
+inline flex_list tokenize_string(const std::string& to_tokenize,
                                  const string_filter_list& filter_list,
                                  const bool to_lower) {
   flex_list previous = {to_tokenize};
@@ -806,7 +806,7 @@ inline flex_list tokenize_string(const std::string& to_tokenize,
         current.push_back(token);
       }
     }
-    
+
     previous = flex_list(current.begin(), current.end());
   }
 

@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-LifecycleExpiration::LifecycleExpiration() : 
+LifecycleExpiration::LifecycleExpiration() :
     m_dateHasBeenSet(false),
     m_days(0),
     m_daysHasBeenSet(false),
@@ -38,7 +38,7 @@ LifecycleExpiration::LifecycleExpiration() :
 {
 }
 
-LifecycleExpiration::LifecycleExpiration(const XmlNode& xmlNode) : 
+LifecycleExpiration::LifecycleExpiration(const XmlNode& xmlNode) :
     m_dateHasBeenSet(false),
     m_days(0),
     m_daysHasBeenSet(false),

@@ -144,4 +144,3 @@ sub parse_solaris
 		}
 	close(IN);
 	}
-

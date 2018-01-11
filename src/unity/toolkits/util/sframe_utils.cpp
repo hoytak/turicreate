@@ -72,7 +72,7 @@ std::pair<sframe,sframe> split_sframe_on_index(const sframe& src, std::function<
  * Write the provided matrix as an SArray, where each row is
  * an element in the SArray with vector type.
  */
-std::shared_ptr<sarray<flexible_type>> 
+std::shared_ptr<sarray<flexible_type>>
 matrix_to_sarray(const arma::mat& m) {
 
   // Write the probabilities to an SArray of vector type.
@@ -80,7 +80,7 @@ matrix_to_sarray(const arma::mat& m) {
   size_t num_segments = thread::cpu_count();
   sa->open_for_write(num_segments);
   sa->set_type(flex_type_enum::VECTOR);
- 
+
   size_t num_rows = m.n_rows;
   size_t num_cols = m.n_cols;
   in_parallel([&](size_t thread_idx, size_t num_threads) {
@@ -93,14 +93,14 @@ matrix_to_sarray(const arma::mat& m) {
     for (size_t i = segment_row_start; i < segment_row_end; ++i) {
       for (size_t j = 0; j < num_cols; ++j) {
         v[j] = m(i, j);
-      } 
+      }
       *it_out = v;
       ++it_out;
-    } 
+    }
   });
 
-  sa->close(); 
-  return sa; 
+  sa->close();
+  return sa;
 }
 
 

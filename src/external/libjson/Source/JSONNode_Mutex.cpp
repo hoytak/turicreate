@@ -98,31 +98,31 @@ void JSONNode::lock(int thread) json_nothrow {
 
 void JSONNode::unlock(int thread) json_nothrow{
     JSON_ASSERT_SAFE(json_unlock_callback != 0, JSON_TEXT("No unlocking callback"), return;);
-	
+
     AutoLock lockControl;
-	
+
     //first, figure out what needs to be locked
     void * thislock = getThisLock(this);
 	#ifdef JSON_SAFE
 		if (thislock == 0) return;
 	#endif
-	
+
     //get it out of the map
     JSON_MAP(int, JSON_MAP(void *, unsigned int) )::iterator it = json_global(THREAD_LOCKS).find(thread);
     JSON_ASSERT_SAFE(it != json_global(THREAD_LOCKS).end(), JSON_TEXT("thread unlocking something it didn't lock"), return;);
-	
+
     //get the mutex out of the thread
     JSON_MAP(void *, unsigned int) & newthread = it -> second;
     JSON_MAP(void *, unsigned int)::iterator locker = newthread.find(thislock);
     JSON_ASSERT_SAFE(locker != newthread.end(), JSON_TEXT("thread unlocking mutex it didn't lock"), return;);
-	
+
     //unlock it
     if (--(locker -> second)) return;  //other nodes is this same thread still have a lock on it
-	
+
     //if I need to, unlock it
     newthread.erase(locker);
     json_unlock_callback(thislock);
-	
+
 }
 
 #ifdef JSON_MUTEX_MANAGE

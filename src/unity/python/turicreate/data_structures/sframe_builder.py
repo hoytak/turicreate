@@ -11,7 +11,7 @@ from __future__ import division as _
 from __future__ import absolute_import as _
 
 from ..cython.cy_sframe_builder import UnitySFrameBuilderProxy
-from .sframe import SFrame 
+from .sframe import SFrame
 from ..util import _make_internal_url
 import logging as _logging
 
@@ -196,4 +196,3 @@ class SFrameBuilder(object):
         out : SFrame
         """
         return SFrame(_proxy=self._builder.close())
-

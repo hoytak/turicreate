@@ -40,7 +40,7 @@ std::map<std::string, variant_type> _toolkits_get_default_options(
  *
  * Base class for handling machine learning models written using the SDK.
  *
- * This is a temporary interface and will be replaced by an updated 
+ * This is a temporary interface and will be replaced by an updated
  * version of sdk_model_base.
  *
  * TODO: Port over ml_model_base to sdk_model_base
@@ -79,7 +79,7 @@ class EXPORT sdk_model_base: public toolkit_class_base {
    * Loads a model previously saved at a particular version number.
    * Should raise an exception on failure.
    */
-  virtual void load_version(iarchive& iarc, size_t version) = 0; 
+  virtual void load_version(iarchive& iarc, size_t version) = 0;
 
   /**
    * Set one of the options in the algorithm. Use the option manager to set
@@ -92,28 +92,28 @@ class EXPORT sdk_model_base: public toolkit_class_base {
 
   /**
    * function implemented by begin_class_member_registration
-   */ 
+   */
   virtual void perform_registration() = 0;
-  virtual std::string uid() = 0; 
+  virtual std::string uid() = 0;
 
   /**
    * Methods with already meaningful default implementations.
    * -------------------------------------------------------------------------
    */
-  
+
   /**
    * Lists all the keys accessible in the "model" map.
    *
    * \returns List of keys in the model map.
    * \ref model_base for details.
-   * 
+   *
    * Python side interface
    * ------------------------
    *
    * This is the function that the list_fields should call in python.
    */
   std::vector<std::string> list_fields();
- 
+
   /**
    * Returns the value of a particular key from the state.
    *
@@ -128,12 +128,12 @@ class EXPORT sdk_model_base: public toolkit_class_base {
    *
    */
   variant_type get_value_from_state(std::string key);
-  
+
   /**
    * Get current options.
    *
    * \returns Dictionary containing current options.
-   * 
+   *
    * Python side interface
    * ------------------------
    *  Interfaces with the get_current_options function in the Python side.
@@ -142,7 +142,7 @@ class EXPORT sdk_model_base: public toolkit_class_base {
 
   /**
    * Get default options.
-   * 
+   *
    * \returns Dictionary with default options.
    *
    * Python side interface
@@ -150,7 +150,7 @@ class EXPORT sdk_model_base: public toolkit_class_base {
    *  Interfaces with the get_default_options function in the Python side.
   */
   std::map<std::string, flexible_type> get_default_options() const;
-  
+
   /**
    * Returns the value of an option. Throws an error if the option does not
    * exist.
@@ -197,7 +197,7 @@ class EXPORT sdk_model_base: public toolkit_class_base {
   const std::vector<option_handling::option_info>& get_option_info() const;
 
  protected:
-  
+
   option_manager options;                                 /* Option manager */
   std::map<std::string, variant_type> state;         /**< All things python */
 

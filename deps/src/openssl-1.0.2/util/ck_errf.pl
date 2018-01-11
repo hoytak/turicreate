@@ -2,7 +2,7 @@
 #
 # This is just a quick script to scan for cases where the 'error'
 # function name in a XXXerr() macro is wrong.
-# 
+#
 # Run in the top level by going
 # perl util/ck_errf.pl */*.c */*/*.c
 #
@@ -61,4 +61,3 @@ if ($bad && $err_strict)
 	print STDERR "FATAL: error discrepancy\n";
 	exit 1;
 	}
-

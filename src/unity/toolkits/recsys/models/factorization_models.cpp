@@ -23,13 +23,13 @@ void recsys_factorization_model_base::init_options(const std::map<std::string,
   opt.description    = "The name of the column for user ids.";
   opt.default_value  = "user_id";
   opt.parameter_type = option_handling::option_info::STRING;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name           = "item_id";
   opt.description    = "The name of the column for item ids.";
   opt.default_value  = "item_id";
   opt.parameter_type = option_handling::option_info::STRING;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name           = "target";
   opt.description    = "The name of the column of target ratings to be predicted.";
@@ -41,7 +41,7 @@ void recsys_factorization_model_base::init_options(const std::map<std::string,
   opt.description    = "Include factors for side data.";
   opt.default_value  = true;
   opt.parameter_type = option_handling::option_info::BOOL;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name           = "random_seed";
   opt.description    = "Random seed to use for the model.";
@@ -67,14 +67,14 @@ void recsys_factorization_model_base::init_options(const std::map<std::string,
 }
 
 
-/** 
+/**
  * Takes two datasets for training.
  * \param[in] training_data_by_user ML-Data sorted by user
  * \param[in] training_data_by_item ML-Data sorted by item
  * \param[in] ranking (True/False)
  */
 std::map<std::string, flexible_type>
-recsys_factorization_model_base::train(const v2::ml_data& training_data_by_user, 
+recsys_factorization_model_base::train(const v2::ml_data& training_data_by_user,
                                        const v2::ml_data& training_data_by_item) {
 
   std::map<std::string, flexible_type> cur_options = get_current_options();
@@ -98,11 +98,11 @@ recsys_factorization_model_base::train(const v2::ml_data& training_data_by_user,
 
 
   // Solve by ALS
-  if (include_ranking_options()){ 
-    model = als::implicit_als(training_data_by_user, 
+  if (include_ranking_options()){
+    model = als::implicit_als(training_data_by_user,
                                 training_data_by_item, cur_options);
   } else {
-    model = als::als(training_data_by_user, 
+    model = als::als(training_data_by_user,
                                 training_data_by_item, cur_options);
   }
 
@@ -136,7 +136,7 @@ recsys_factorization_model_base::train(const v2::ml_data& training_data) {
       cur_options["solver"] = "adagrad";
     }
   }
-  
+
   logprogress_stream << "Training " << name() << " for recommendations." << std::endl;
 
   table_printer table( {{"Parameter", 30}, {"Description", 48}, {"Value", 8},  } );
@@ -175,7 +175,7 @@ recsys_factorization_model_base::train(const v2::ml_data& training_data) {
                       "Rank-based Regularization Weight",
                       double(cur_options.at("ranking_regularization")));
     }
-    
+
     if(force_print
        || (cur_options.at("unobserved_rating_value") != std::numeric_limits<double>::lowest()
            && training_data.has_target())) {
@@ -314,7 +314,7 @@ void recsys_factorization_model_base::get_item_similarity_scores(
 
 ////////////////////////////////////////////////////////////////////////////////
 
-  
+
 void recsys_factorization_model_base::score_all_items(
       std::vector<std::pair<size_t, double> >& scores,
       const std::vector<v2::ml_data_entry>& query_row,
@@ -344,7 +344,7 @@ void recsys_factorization_model_base::internal_load(turi::iarchive& iarc,
 
   bool has_nearest_items_model;
   iarc >> has_nearest_items_model;
-  
+
   if (has_nearest_items_model) {
     auto nearest_items_model = std::make_shared<nearest_neighbors::brute_force_neighbors>();
     iarc >> *nearest_items_model;
@@ -355,7 +355,7 @@ void recsys_factorization_model_base::internal_load(turi::iarchive& iarc,
   if(version == 0) {
 
     // Create a new option for solver
-    if (include_ranking_options() == true){ 
+    if (include_ranking_options() == true){
       option_handling::option_info opt;
       opt.name = "solver";
       opt.description = "The optimization to use for the problem.";

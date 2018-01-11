@@ -292,5 +292,3 @@ def FREQ_COUNT(src_column):
 
   """
   return ("__builtin__freq_count__", [src_column])
-
-

@@ -159,7 +159,7 @@ class column_unique_indexer final : public column_indexer {
    *  Load the object.
    */
   void load_version(turi::iarchive& iarc, size_t version);
-  
+
  private:
 
   std::vector<std::pair<simple_spinlock, hopscotch_map<hash_value, size_t> > >

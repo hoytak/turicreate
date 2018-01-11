@@ -189,7 +189,7 @@ namespace Aws
             bool operator!=(const Array& other) const
             {
                 return !(*this == other);
-            }           
+            }
 
             T const& GetItem(size_t index) const
             {

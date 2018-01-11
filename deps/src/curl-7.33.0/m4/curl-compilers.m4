@@ -1554,4 +1554,3 @@ AC_DEFUN([CURL_VAR_STRIP], [
   [$1]="$ac_var_stripped"
   squeeze [$1]
 ])
-

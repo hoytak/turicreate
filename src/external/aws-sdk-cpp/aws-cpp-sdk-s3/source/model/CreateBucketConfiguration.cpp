@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-CreateBucketConfiguration::CreateBucketConfiguration() : 
+CreateBucketConfiguration::CreateBucketConfiguration() :
     m_locationConstraintHasBeenSet(false)
 {
 }
 
-CreateBucketConfiguration::CreateBucketConfiguration(const XmlNode& xmlNode) : 
+CreateBucketConfiguration::CreateBucketConfiguration(const XmlNode& xmlNode) :
     m_locationConstraintHasBeenSet(false)
 {
   *this = xmlNode;

@@ -11,7 +11,7 @@ Compatibility user interface functions
 
  int des_read_password(DES_cblock *key,const char *prompt,int verify);
  int des_read_2passwords(DES_cblock *key1,DES_cblock *key2,
- 	const char *prompt,int verify);
+	const char *prompt,int verify);
 
  int des_read_pw_string(char *buf,int length,const char *prompt,int verify);
  int des_read_pw(char *buf,char *buff,int size,const char *prompt,int verify);

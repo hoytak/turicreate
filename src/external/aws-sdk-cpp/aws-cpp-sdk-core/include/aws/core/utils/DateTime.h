@@ -59,7 +59,7 @@ namespace Aws
         };
 
         /**
-         * Wrapper for all the weird crap we need to do with timestamps. 
+         * Wrapper for all the weird crap we need to do with timestamps.
          */
         class AWS_CORE_API DateTime
         {
@@ -75,7 +75,7 @@ namespace Aws
             DateTime(const std::chrono::system_clock::time_point& timepointToAssign);
 
             /**
-             * Initializes time point to millis Since epoch   
+             * Initializes time point to millis Since epoch
              */
             DateTime(int64_t millisSinceEpoch);
 
@@ -199,8 +199,8 @@ namespace Aws
             /**
              * Get an instance of DateTime representing this very instant.
              */
-            static DateTime Now(); 
-            
+            static DateTime Now();
+
             /**
              * Get the millis since epoch representing this very instant.
              */
@@ -229,11 +229,11 @@ namespace Aws
         private:
             std::chrono::system_clock::time_point m_time;
             bool m_valid;
-                        
+
             void ConvertTimestampStringToTimePoint(const char* timestamp, DateFormat format);
             tm GetTimeStruct(bool localTime) const;
             tm ConvertTimestampToLocalTimeStruct() const;
-            tm ConvertTimestampToGmtStruct() const;   
+            tm ConvertTimestampToGmtStruct() const;
         };
 
     } // namespace Utils

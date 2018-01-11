@@ -17,7 +17,7 @@ namespace turi {
 namespace sdk_model {
 namespace feature_engineering {
 
-void count_featurizer::init_options(const std::map<std::string, 
+void count_featurizer::init_options(const std::map<std::string,
                                         flexible_type>& _options) {
   DASSERT_TRUE(options.get_option_info().size() == 0);
 
@@ -162,7 +162,7 @@ void count_featurizer::fit(gl_sframe data) {
     m_state->y_values.push_back(y_value);
   }
 
-  // initialize the counter matrix. counter_matrix is 
+  // initialize the counter matrix. counter_matrix is
   // m_state_y_values.size() * feature_columns.size() worth of count min sketches
   counters.resize(m_state->y_values.size());
   for (auto& column_counters : counters) {
@@ -195,7 +195,7 @@ static inline double inv_laplace_cdf(double u, double laplace_scale) {
   // where u ~ U([-0.5, 0.5])
   // and b is laplace_scale
   // where X = -b sgn(u)ln(1-2|u|)
-  
+
   // shift it away from 0 to get u to (0, 1]
   u = std::max<double>(u, std::numeric_limits<double>::epsilon());
   // shift it to become (-0.5, 0.5]
@@ -208,7 +208,7 @@ static inline double inv_laplace_cdf(double u, double laplace_scale) {
  * Generates a SArray of vector type where each element has length 'vector_length'
  * and each element is a laplace value randomly generated from
  * Laplace(0, laplace_scale)
- * This procedure is set up to be determinisitic. i.e. fixing a seed, 
+ * This procedure is set up to be determinisitic. i.e. fixing a seed,
  * and an input sequential array, the output will always be consistent.
  * i.e. randomness is produced by hashing the input array.
  * The output is rounded up via std::ceil()
@@ -225,7 +225,7 @@ static gl_sarray make_random_integer_laplace_array(const gl_sarray& sequential_a
         auto valhash = hash64_combine(seed, val.hash());
         flex_vec ret(vector_length);
         for (size_t i = 0; i < vector_length; ++i) {
-          double u = double(hash64_combine(valhash, hash64(i))) / 
+          double u = double(hash64_combine(valhash, hash64(i))) /
                      double(std::numeric_limits<size_t>::max());
           double l = inv_laplace_cdf(u, laplace_scale);
           if (l >= 0) ret[i] = std::ceil(l);
@@ -240,7 +240,7 @@ static gl_sarray make_random_integer_laplace_array(const gl_sarray& sequential_a
  * Generates a SArray of vector type where each element has length 'vector_length'
  * and each element is a laplace value randomly generated from
  * Laplace(0, laplace_scale)
- * This procedure is set up to be determinisitic. i.e. fixing a seed, 
+ * This procedure is set up to be determinisitic. i.e. fixing a seed,
  * and an input sequential array, the output will always be consistent.
  * i.e. randomness is produced by hashing the input array.
  */
@@ -256,7 +256,7 @@ static gl_sarray make_random_real_laplace_array(const gl_sarray& sequential_arra
         auto valhash = hash64_combine(seed, val.hash());
         flex_vec ret(vector_length);
         for (size_t i = 0; i < vector_length; ++i) {
-          double u = double(hash64_combine(valhash, hash64(i))) / 
+          double u = double(hash64_combine(valhash, hash64(i))) /
                      double(std::numeric_limits<size_t>::max());
           ret[i] = inv_laplace_cdf(u, laplace_scale);
         }
@@ -302,8 +302,8 @@ gl_sframe count_featurizer::transform(gl_sframe raw) {
     sequential_array = gl_sarray::from_sequence(0, data.size());
   }
 
-  for (size_t column_number = 0; 
-       column_number < feature_columns.size(); 
+  for (size_t column_number = 0;
+       column_number < feature_columns.size();
        ++column_number) {
     auto column_name = feature_columns[column_number];
 
@@ -324,8 +324,8 @@ gl_sframe count_featurizer::transform(gl_sframe raw) {
     // and add the column to the output frame
     if (perform_laplace_smearing) {
       auto smear_seed = state->seed + 2 * column_number;
-      auto smeared_column = count_column + 
-          make_random_integer_laplace_array(sequential_array, 
+      auto smeared_column = count_column +
+          make_random_integer_laplace_array(sequential_array,
                                             smear_seed,
                                             laplace_smearing,
                                             num_classes);
@@ -342,7 +342,7 @@ gl_sframe count_featurizer::transform(gl_sframe raw) {
         [num_classes](const flexible_type& val)->flexible_type {
           DASSERT_TRUE(val.get_type() == flex_type_enum::VECTOR);
           const auto& count = val.get<flex_vec>();
-          DASSERT_EQ(count.size(), num_classes); 
+          DASSERT_EQ(count.size(), num_classes);
           double sum = 0;
           for (const auto& val: count) sum += std::max<double>(val, 0.0);
           if (sum < 1.0) sum = 1.0;
@@ -357,11 +357,11 @@ gl_sframe count_featurizer::transform(gl_sframe raw) {
     if (perform_laplace_smearing) {
       auto smear_seed = state->seed + 2 * column_number + 1;
       // note that this time we are scaling the laplace rng by the sum
-      auto smeared_column = prob_column + 
-          make_random_real_laplace_array(sequential_array, 
+      auto smeared_column = prob_column +
+          make_random_real_laplace_array(sequential_array,
                                          smear_seed,
                                          laplace_smearing,
-                                         num_classes - 1) / sum_column; 
+                                         num_classes - 1) / sum_column;
       output_frame[state->prob_column_prefix + column_name] = smeared_column;
     } else {
       output_frame[state->prob_column_prefix + column_name] = prob_column;
@@ -383,7 +383,7 @@ void count_featurizer::save_impl(turi::oarchive& oarc) const {
   variant_deep_save(state, oarc);
   //// Everything else
   oarc << feature_columns
-       << unprocessed_features 
+       << unprocessed_features
        << exclude
        << fitted;
   if (fitted) {
@@ -398,9 +398,9 @@ void count_featurizer::save_impl(turi::oarchive& oarc) const {
 void count_featurizer::load_version(turi::iarchive& iarc, size_t version){
   ASSERT_EQ(version, count_featurizer_VERSION);
   variant_deep_load(state, iarc);
-  
+
   iarc >> feature_columns
-       >> unprocessed_features 
+       >> unprocessed_features
        >> exclude
        >> fitted;
 

@@ -15,7 +15,7 @@
 
 namespace turi {
 
-/** 
+/**
  * \ingroup turi
  * A sparse 2d array structure for holding items accessed by multiple
  *  threads.  Besides metadata operations, this structure essentially

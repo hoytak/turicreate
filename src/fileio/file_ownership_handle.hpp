@@ -41,14 +41,14 @@ struct file_ownership_handle {
   }
 
   /// construct from one file
-  inline file_ownership_handle(const std::string& file, 
+  inline file_ownership_handle(const std::string& file,
                                bool delete_on_destruction = true,
                                bool recursive_deletion = false) {
     m_file = file;
     this->m_delete_on_destruction = delete_on_destruction;
     this->m_recursive_deletion = recursive_deletion;
   }
-  
+
   void delete_on_destruction() {
     m_delete_on_destruction =  true;
   }

@@ -18,7 +18,7 @@ static inline flexible_type get_index_key(const flex_int& key) {
 };
 
 /** The recursion function to actually add everything to the rest of
- *  new dictionary. 
+ *  new dictionary.
  *
  *  out -- the final dictionary.
  *  key -- the current key.  May be modified.
@@ -44,13 +44,13 @@ static void _to_flat_dict_recursion(
 
   ////////////////////////////////////////////////////////////////////////////////
 
-  /** Checks to error out if we go too deep. 
+  /** Checks to error out if we go too deep.
    */
   static constexpr size_t MAX_RECURSION_DEPTH = 64;
 
-  // Where we recurse on the value, along with error checking as well. 
+  // Where we recurse on the value, along with error checking as well.
   auto recurse_on_value = [&](const flexible_type& recurse_v) GL_GCC_ONLY(GL_HOT_INLINE) {
-    
+
     auto depth_overflow_error = [&]() GL_GCC_ONLY(GL_COLD_NOINLINE) {
 
       // Check to make sure we haven't reached our recursion depth limit.
@@ -71,9 +71,9 @@ static void _to_flat_dict_recursion(
 
     _to_flat_dict_recursion(out, key, recurse_v,
                             separator, undefined_string,
-                            process_image_value, process_datetime_value, depth + 1);  
+                            process_image_value, process_datetime_value, depth + 1);
   };
-  
+
   ////////////////////////////////////////////////////////////////////////////////
 
   /** Add a new sub-key to the current key string.  Put this in a
@@ -109,7 +109,7 @@ static void _to_flat_dict_recursion(
       }
     }
   };
-    
+
   ////////////////////////////////////////////////////////////////////////////////
   // Now, handle the value.
   size_t base_key_size = key.size();
@@ -121,8 +121,8 @@ static void _to_flat_dict_recursion(
       break;
     }
     case flex_type_enum::DICT: {
-      const flex_dict& d = v.get<flex_dict>(); 
-      
+      const flex_dict& d = v.get<flex_dict>();
+
       for(const auto& p : d) {
         add_to_key_string(p.first);
         recurse_on_value(p.second);
@@ -131,7 +131,7 @@ static void _to_flat_dict_recursion(
       break;
     }
 
-    case flex_type_enum::UNDEFINED: 
+    case flex_type_enum::UNDEFINED:
     case flex_type_enum::STRING: {
       add_to_key_string(v);
       out.push_back({key, 1});
@@ -141,7 +141,7 @@ static void _to_flat_dict_recursion(
 
     case flex_type_enum::LIST: {
       const flex_list& fl = v.get<flex_list>();
-      
+
       for(size_t i = 0; i < fl.size(); ++i) {
         add_to_key_string(i);
         recurse_on_value(fl[i]);
@@ -150,10 +150,10 @@ static void _to_flat_dict_recursion(
 
       break;
     }
-      
+
     case flex_type_enum::VECTOR: {
       const flex_vec& fv = v.get<flex_vec>();
-      
+
       for(size_t i = 0; i < fv.size(); ++i) {
         add_to_key_string(i);
         out.push_back({key, fv[i]});
@@ -163,7 +163,7 @@ static void _to_flat_dict_recursion(
       break;
     }
 
-    case flex_type_enum::IMAGE: { 
+    case flex_type_enum::IMAGE: {
       flexible_type ft_out = process_image_value(v.get<flex_image>());
 
       ASSERT_MSG(ft_out.get_type() != flex_type_enum::IMAGE,
@@ -174,13 +174,13 @@ static void _to_flat_dict_recursion(
       }
       break;
     }
-    case flex_type_enum::DATETIME: { 
+    case flex_type_enum::DATETIME: {
 
       flexible_type ft_out = process_datetime_value(v.get<flex_date_time>());
 
       ASSERT_MSG(ft_out.get_type() != flex_type_enum::DATETIME,
                  "Handling function for datetime types returned an datetime type.");
-      
+
       if(ft_out.get_type() != flex_type_enum::UNDEFINED) {
         recurse_on_value(ft_out);
       }
@@ -306,7 +306,7 @@ GL_HOT flex_dict to_flat_dict(
   }
 
   ////////////////////////////////////////////////////////////////////////////////
-  
+
   // Reserve the output container.
   flex_dict out;
   out.reserve(input.size());

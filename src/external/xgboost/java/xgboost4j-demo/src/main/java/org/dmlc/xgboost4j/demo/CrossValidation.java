@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -29,7 +29,7 @@ public class CrossValidation {
     public static void main(String[] args) throws IOException, XGBoostError {
          //load train mat
         DMatrix trainMat = new DMatrix("../../demo/data/agaricus.txt.train");
-        
+
         //set params
         Params param = new Params() {
             {
@@ -42,13 +42,13 @@ public class CrossValidation {
                 put("eval_metric", "error");
             }
         };
-        
+
         //do 5-fold cross validation
         int round = 2;
         int nfold = 5;
         //set additional eval_metrics
         String[] metrics = null;
-        
+
         String[] evalHist = Trainer.crossValiation(param, trainMat, round, nfold, metrics, null, null);
     }
 }

@@ -412,4 +412,3 @@ cleanup:
 	r1 = __archive_write_close_filter(f->next_filter);
 	return (r1 < ret ? r1 : ret);
 }
-

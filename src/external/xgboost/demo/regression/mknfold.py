@@ -26,4 +26,3 @@ for l in fi:
 fi.close()
 ftr.close()
 fte.close()
-

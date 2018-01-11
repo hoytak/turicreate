@@ -70,7 +70,7 @@ class Test(unittest.TestCase):
         simple_case(self, 'if x: a = 2\na = 1',
                            'if x: a = 2\na = 1')
 
-    def test_if_else(self): 
+    def test_if_else(self):
         simple_case(self, 'a = 1\nif x: a = 2\nelse: a = 3',
                                'pass\nif x: a = 2\nelse: a = 3')
 
@@ -98,7 +98,7 @@ class Test(unittest.TestCase):
         simple_case(self, 'a = 1\nwhile x: a = 2',
                              'a = 1\nwhile x: a = 2')
 
-    def test_while_else(self): 
+    def test_while_else(self):
         simple_case(self, 'a = 1\nwhile x: a = 2\nelse: a = 3',
                                   'pass\nwhile x: a = 2\nelse: a = 3')
 

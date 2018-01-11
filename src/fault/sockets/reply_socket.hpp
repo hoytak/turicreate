@@ -17,7 +17,7 @@
 namespace turi {
 namespace zookeeper_util {
 class key_value;
-} 
+}
 }
 
 namespace libfault {
@@ -39,7 +39,7 @@ namespace libfault {
  *  - start the pollset ( socket_receive_pollset::start_poll_thread() )
  *
  * \note
- * if zookeeper is enabled, The first part of the message must be a key. 
+ * if zookeeper is enabled, The first part of the message must be a key.
  * This must be a key the current client is registered for.
  */
 class EXPORT reply_socket {
@@ -59,7 +59,7 @@ class EXPORT reply_socket {
   /**
    * Constructs a reply socket.
    *
-   * If "keyval" is NULL, the alternate_bind_address MUST be a valid 
+   * If "keyval" is NULL, the alternate_bind_address MUST be a valid
    * zeromq endpoint address. In which case, the reply_socket will bind to that
    * address.
    * \param zmq_ctx A zeroMQ Context

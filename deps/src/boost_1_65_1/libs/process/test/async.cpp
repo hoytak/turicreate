@@ -180,4 +180,3 @@ BOOST_AUTO_TEST_CASE(async_error, *boost::unit_test::timeout(2))
     io_service.run();
     BOOST_CHECK(!exit_called);
 }
-

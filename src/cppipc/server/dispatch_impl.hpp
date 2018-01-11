@@ -34,7 +34,7 @@ namespace detail{
  */
 template <typename RetType, typename T, typename MemFn, typename... Args>
 struct exec_and_serialize_response {
-  static void exec(T* objectptr, 
+  static void exec(T* objectptr,
                    comm_server* server,
                    MemFn fn,
                    turi::oarchive& response,
@@ -67,12 +67,12 @@ struct exec_and_serialize_response<void, T, MemFn, Args...> {
  * \internal
  * \ingroup cppipc
  * Recursively extracts one argument at a time from the left, and calling
- * execute_disect again with one less element in the tuple. When the tuple is 
+ * execute_disect again with one less element in the tuple. When the tuple is
  * empty the second overload is called.
  */
 template <typename T, typename Memfn, typename ArgumentTuple, typename... Args>
 struct execute_disect {
-  static void exec(T* objectptr, 
+  static void exec(T* objectptr,
                    comm_server* server,
                    Memfn fn,
                    turi::iarchive& msg,
@@ -83,11 +83,11 @@ struct execute_disect {
     decayed_type arg = decayed_type();
     msg >> arg;
     typedef typename left_shift_tuple<ArgumentTuple>::type shifted_tuple;
-    execute_disect<T, Memfn, shifted_tuple, Args..., arg_type>::exec(objectptr, 
+    execute_disect<T, Memfn, shifted_tuple, Args..., arg_type>::exec(objectptr,
                                                                      server,
-                                                                     fn, 
-                                                                     msg, 
-                                                                     response, 
+                                                                     fn,
+                                                                     msg,
+                                                                     response,
                                                                      args...,
                                                                      arg);
   }
@@ -102,16 +102,16 @@ struct execute_disect {
  */
 template <typename T, typename Memfn, typename... Args>
 struct execute_disect<T, Memfn, std::tuple<>, Args...> {
-  static void exec(T* objectptr, 
-                   comm_server* server, 
+  static void exec(T* objectptr,
+                   comm_server* server,
                    Memfn fn,
                    turi::iarchive& msg,
                    turi::oarchive& response,
                    Args&... args) {
     typedef typename member_function_return_type<Memfn>::type return_type;
-    exec_and_serialize_response<return_type, 
-        T, 
-        Memfn, 
+    exec_and_serialize_response<return_type,
+        T,
+        Memfn,
         Args...>::exec(objectptr, server, fn, response, args...);
   }
 };
@@ -121,8 +121,8 @@ struct execute_disect<T, Memfn, std::tuple<>, Args...> {
 /**
  * \internal
  * \ingroup cppipc
- * A wrapper around the execute_disect call structs. 
- * Achieves the effect of call the member function pointer using the 
+ * A wrapper around the execute_disect call structs.
+ * Achieves the effect of call the member function pointer using the
  * objectptr as "this", and extracting the remaining arguments from the input
  * archive. The result will be written to the output archive.
  *
@@ -156,7 +156,7 @@ struct dispatch_impl: public dispatch {
   MemFn fn;
   dispatch_impl(MemFn fn): fn(fn) { }
 
-  void execute(void* objectptr, 
+  void execute(void* objectptr,
                comm_server* server,
                turi::iarchive& msg,
                turi::oarchive& response) {

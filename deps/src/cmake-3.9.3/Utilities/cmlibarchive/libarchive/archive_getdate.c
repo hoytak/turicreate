@@ -838,7 +838,7 @@ nexttoken(const char **in, time_t *value)
 					abbrev = strlen(tp->name);
 				if (strlen(buff) >= abbrev
 				    && strncmp(tp->name, buff, strlen(buff))
-				    	== 0) {
+					== 0) {
 					/* Skip over token. */
 					*in = src;
 					/* Return the match. */

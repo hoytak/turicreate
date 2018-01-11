@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-Condition::Condition() : 
+Condition::Condition() :
     m_httpErrorCodeReturnedEqualsHasBeenSet(false),
     m_keyPrefixEqualsHasBeenSet(false)
 {
 }
 
-Condition::Condition(const XmlNode& xmlNode) : 
+Condition::Condition(const XmlNode& xmlNode) :
     m_httpErrorCodeReturnedEqualsHasBeenSet(false),
     m_keyPrefixEqualsHasBeenSet(false)
 {

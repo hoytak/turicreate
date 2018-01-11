@@ -43,4 +43,3 @@ void FreeMultiInfo(struct multi_files **multi_first,
                    struct multi_files **multi_last);
 
 #endif /* HEADER_CURL_TOOL_MFILES_H */
-

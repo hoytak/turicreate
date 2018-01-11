@@ -152,7 +152,7 @@ struct gl_sarray_test {
       _assert_sarray_equals(sa.unique().sort(), {1,2,3});
     }
 
-    void test_sample() { 
+    void test_sample() {
       // This test does not check the sample fraction correctness
       // Even with seed, the answer could be non-deterministic across platform.
       gl_sarray sa({1,1,1,2,2,2,3,3,3,4,4,4});
@@ -164,7 +164,7 @@ struct gl_sarray_test {
       std::cout <<  sa2.sample(.3, 12345);
     }
 
-    void test_nnz_num_missing() { 
+    void test_nnz_num_missing() {
       gl_sarray sa({1,2,3,None,None});
       TS_ASSERT_EQUALS(sa.nnz(), 3);
       TS_ASSERT_EQUALS(sa.num_missing(), 2);
@@ -177,7 +177,7 @@ struct gl_sarray_test {
       _assert_sarray_equals(sa.clip_upper(3), {1,2,3,3,3,3});
     }
 
-    void test_dropna_fillna() { 
+    void test_dropna_fillna() {
       gl_sarray sa({1,2,3,None,None});
       _assert_sarray_equals(sa.dropna(), {1,2,3});
       _assert_sarray_equals(sa.fillna(0), {1,2,3,0,0});
@@ -188,7 +188,7 @@ struct gl_sarray_test {
       _assert_sarray_equals(sa.topk_index(3), {1,1,1,0,0,0});
     }
 
-    void test_dict_trim_by_keys_values() { 
+    void test_dict_trim_by_keys_values() {
       typedef flex_dict dict;
       std::vector<flexible_type> array;
       array.push_back(dict{ {"A", 65}, {"a",97} });
@@ -201,7 +201,7 @@ struct gl_sarray_test {
           { dict{{"a",97}}, dict{{"b",98}}, dict{{"c",99}} });
 
       _assert_sarray_equals(
-          sa.dict_trim_by_keys({"a", "b","c"}, true), // exclude 
+          sa.dict_trim_by_keys({"a", "b","c"}, true), // exclude
           { dict{{"A",65}}, dict{{"B",66}}, dict{{"C",67}} });
 
       _assert_sarray_equals(
@@ -245,7 +245,7 @@ struct gl_sarray_test {
       _assert_sarray_equals(sa.count_ngrams(2), { dict{}, dict{{"b b",1}}, dict{{"c c",2}} });
     }
 
-    void test_datetime() { 
+    void test_datetime() {
       boost::posix_time::ptime t(boost::gregorian::date(2011, 1, 1));
       boost::posix_time::ptime epoch(boost::gregorian::date(1970,1,1));
       auto x = (t - epoch).total_seconds();
@@ -257,7 +257,7 @@ struct gl_sarray_test {
       std::cout <<  sa2.str_to_datetime("%d-%b-%Y %H:%M:%S %ZP");
     }
 
-    void test_datetime_to_from_str() { 
+    void test_datetime_to_from_str() {
       typedef flex_date_time date_time;
       gl_sarray sa{ date_time(0, 0), date_time(1, 0), date_time(2, 0) };
       _assert_sarray_equals(sa.datetime_to_str(),
@@ -314,18 +314,18 @@ struct gl_sarray_test {
 
     void test_unpack2() {
       std::cout << "unpack2:\n\n";
-      auto sa = gl_sarray({flex_dict{{"word", "a"},{"count", 1}}, 
-        flex_dict{{"word", "cat"},{"count", 2}}, 
-        flex_dict{{"word", "is"},{"count", 3}}, 
+      auto sa = gl_sarray({flex_dict{{"word", "a"},{"count", 1}},
+        flex_dict{{"word", "cat"},{"count", 2}},
+        flex_dict{{"word", "is"},{"count", 3}},
         flex_dict{{"word", "coming"},{"count", 4}}});
       std::cout <<  sa.unpack("");
       std::cout <<  sa.unpack("X", {}, FLEX_UNDEFINED, {"word"});
 
-      auto  sa2 = gl_sarray({flex_vec{1, 0, 1}, 
-        flex_vec{1, 1, 1}, 
+      auto  sa2 = gl_sarray({flex_vec{1, 0, 1},
+        flex_vec{1, 1, 1},
         flex_vec{0, 1}});
-      std::cout <<  sa2.unpack("X", {flex_type_enum::INTEGER, 
-                flex_type_enum::INTEGER, 
+      std::cout <<  sa2.unpack("X", {flex_type_enum::INTEGER,
+                flex_type_enum::INTEGER,
                 flex_type_enum::INTEGER}, 0);
     }
 
@@ -335,7 +335,7 @@ struct gl_sarray_test {
       a += 1;
       auto t = a[a > 2 && a <= 8];
 
-      std::cout << a << "\n" 
+      std::cout << a << "\n"
                 << t << "\n";
 
       t = t + 1;
@@ -360,7 +360,7 @@ struct gl_sarray_test {
       in_parallel([&](size_t thread_idx, size_t num_threads) {
         size_t start_idx = src_size * thread_idx / num_threads;
         size_t end_idx = src_size * (thread_idx + 1) / num_threads;
-        for (const auto& v: src.range_iterator(start_idx, end_idx)) { 
+        for (const auto& v: src.range_iterator(start_idx, end_idx)) {
           TS_ASSERT_EQUALS((int)v, 0);
         }
       });
@@ -433,13 +433,13 @@ struct gl_sarray_test {
       _assert_sarray_equals(result,{flex_undefined(),
         flex_undefined(),flex_undefined(),1.5,2.5,3.5,4.5,5.5,6.5,7.5});
     }
-   
+
     void test_sarray() {
       gl_sarray sa{1,2,3,4,5,6};
-    
+
       auto sa2 = sa.materialize_to_sarray();
       gl_sarray sa3 = sa2;
-    
+
       _assert_sarray_equals(sa, _to_vec(sa3));
     }
 
@@ -453,14 +453,14 @@ struct gl_sarray_test {
         //            << " ans = " << ans[i] << std::endl;
         //}
         _assert_sarray_equals(out, _to_vec(ans));
-      }; 
-      
+      };
+
       single_test(
-          gl_sarray{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 
-          gl_sarray{0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55} 
+          gl_sarray{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+          gl_sarray{0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55}
       );
       single_test(
-          gl_sarray{0.1, 1.1, 2.1, 3.1, 4.1, 5.1, 6.1, 7.1}, 
+          gl_sarray{0.1, 1.1, 2.1, 3.1, 4.1, 5.1, 6.1, 7.1},
           gl_sarray{0.1, 1.2, 3.3, 6.4, 10.5, 15.6, 21.7, 28.8}
       );
       single_test(
@@ -468,12 +468,12 @@ struct gl_sarray_test {
           gl_sarray{{11.0, 2.0}, {33.0, 3.0}, {36.0, 7.0}, {40.0, 11.0}}
       );
       single_test(
-          gl_sarray{FLEX_UNDEFINED, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 
-          gl_sarray{FLEX_UNDEFINED, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55} 
+          gl_sarray{FLEX_UNDEFINED, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+          gl_sarray{FLEX_UNDEFINED, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55}
       );
       single_test(
-          gl_sarray{FLEX_UNDEFINED, 1, FLEX_UNDEFINED, 3, FLEX_UNDEFINED, 5}, 
-          gl_sarray{FLEX_UNDEFINED, 1, 1, 4, 4, 9} 
+          gl_sarray{FLEX_UNDEFINED, 1, FLEX_UNDEFINED, 3, FLEX_UNDEFINED, 5},
+          gl_sarray{FLEX_UNDEFINED, 1, 1, 4, 4, 9}
       );
       single_test(
           gl_sarray{{33.0, 3.0}, FLEX_UNDEFINED, {3.0, 4.0}, {4.0, 4.0}},
@@ -485,19 +485,19 @@ struct gl_sarray_test {
       );
 
     }
-    
+
     void test_cumulative_avg() {
       auto single_test = [&](const gl_sarray& in, const gl_sarray& ans) {
         gl_sarray out = in.cumulative_avg();
         _assert_sarray_equals(out, _to_vec(ans));
-      }; 
-      
+      };
+
       single_test(
-          gl_sarray{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 
-          gl_sarray{0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0} 
+          gl_sarray{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+          gl_sarray{0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0}
       );
       single_test(
-          gl_sarray{0.1, 1.1, 2.1, 3.1, 4.1, 5.1, 6.1, 7.1}, 
+          gl_sarray{0.1, 1.1, 2.1, 3.1, 4.1, 5.1, 6.1, 7.1},
           gl_sarray{0.1, 0.6, 1.1, 1.6, 2.1, 2.6, 3.1, 3.6}
       );
       single_test(
@@ -505,13 +505,13 @@ struct gl_sarray_test {
           gl_sarray{{11.0, 22.0}, {22.0, 44.0}, {16.0, 30.0}, {13.0, 23.0}}
       );
     }
-    
+
     void test_cumulative_min() {
       auto single_test = [&](const gl_sarray& in, const gl_sarray& ans) {
         gl_sarray out = in.cumulative_min();
         _assert_sarray_equals(out, _to_vec(ans));
-      }; 
-      
+      };
+
       single_test(
           gl_sarray{0, 1, 2, 3, 4, 5, -1, 7, 8, -2, 10},
           gl_sarray{0, 0, 0, 0, 0, 0, -1, -1, -1, -2, -2}
@@ -521,13 +521,13 @@ struct gl_sarray_test {
           gl_sarray{7.1, 6.1, 3.1, 3.1, 3.1, 2.1, 2.1, 0.1}
       );
     }
-    
+
     void test_cumulative_max() {
       auto single_test = [&](const gl_sarray& in, const gl_sarray& ans) {
         gl_sarray out = in.cumulative_max();
         _assert_sarray_equals(out, _to_vec(ans));
-      }; 
-      
+      };
+
       single_test(
           gl_sarray{0, 1, 0, 3, 5, 4, 1, 7, 6, 2, 10},
           gl_sarray{0, 1, 1, 3, 5, 5, 5, 7, 7, 7, 10}
@@ -537,7 +537,7 @@ struct gl_sarray_test {
           gl_sarray{2.1, 6.1, 6.1, 6.1, 6.1, 8.1, 8.9, 10.1}
       );
     }
-    
+
 
     std::vector<flexible_type> _to_vec(gl_sarray sa) {
       std::vector<flexible_type> ret;

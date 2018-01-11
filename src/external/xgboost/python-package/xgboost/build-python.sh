@@ -7,7 +7,7 @@
 # See additional instruction in doc/build.md
 
 # note: this script is build for python package only, and it might have some filename
-#       conflict with build.sh which is for everything. 
+#       conflict with build.sh which is for everything.
 
 
 pushd xgboost

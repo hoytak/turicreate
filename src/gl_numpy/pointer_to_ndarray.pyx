@@ -5,12 +5,12 @@
 # be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
 _numpy_imported = False
 try:
-    import numpy 
+    import numpy
     _numpy_imported = True
 except:
     pass
 
-# code adapted from 
+# code adapted from
 # http://stackoverflow.com/questions/23872946/force-numpy-ndarray-to-take-ownership-of-its-memory-in-cython
 # cdef data_to_int_numpy_array(void* ptr, np.npy_intp N):
 #     if _numpy_imported == False:

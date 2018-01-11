@@ -1085,7 +1085,7 @@ FAQ
   immediately if its lone network connection goes down.  That can be achieved
   by having the application monitor the network connection on its own using an
   OS-specific mechanism, then signalling libcurl to abort (see also item 5.13).
-  
+
 
 5. libcurl Issues
 

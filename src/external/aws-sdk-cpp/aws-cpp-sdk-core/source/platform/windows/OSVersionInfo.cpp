@@ -25,7 +25,7 @@ namespace Aws
 namespace OSVersionInfo
 {
 
-Aws::String ComputeOSVersionString() 
+Aws::String ComputeOSVersionString()
 {
     OSVERSIONINFOA versionInfo;
     ZeroMemory(&versionInfo, sizeof(OSVERSIONINFOA));

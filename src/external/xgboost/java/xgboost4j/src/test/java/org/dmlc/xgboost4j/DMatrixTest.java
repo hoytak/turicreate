@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -26,7 +26,7 @@ import org.junit.Test;
  * @author hzx
  */
 public class DMatrixTest {
-    
+
     @Test
     public void testCreateFromFile() throws XGBoostError {
          //create DMatrix from file
@@ -41,7 +41,7 @@ public class DMatrixTest {
         float[] dweights = dmat.getWeight();
         TestCase.assertTrue(Arrays.equals(weights, dweights));
     }
-    
+
     @Test
     public void testCreateFromCSR() throws XGBoostError {
         //create Matrix from csr format sparse Matrix and labels
@@ -64,7 +64,7 @@ public class DMatrixTest {
         float[] label2  = dmat1.getLabel();
         TestCase.assertTrue(Arrays.equals(label1, label2));
     }
-    
+
     @Test
     public void testCreateFromDenseMatrix() throws XGBoostError {
          //create DMatrix from 10*5 dense matrix
@@ -76,27 +76,27 @@ public class DMatrixTest {
         for(int i=0; i<nrow*ncol; i++) {
             data0[i] = random.nextFloat();
         }
-        
+
         //create label
         float[] label0 = new float[nrow];
         for(int i=0; i<nrow; i++) {
             label0[i] = random.nextFloat();
         }
-        
+
         DMatrix dmat0 = new DMatrix(data0, nrow, ncol);
         dmat0.setLabel(label0);
-        
+
         //check
         TestCase.assertTrue(dmat0.rowNum()==10);
         TestCase.assertTrue(dmat0.getLabel().length==10);
-        
+
         //set weights for each instance
         float[] weights = new float[nrow];
         for(int i=0; i<nrow; i++) {
             weights[i] = random.nextFloat();
         }
         dmat0.setWeight(weights);
-        
+
         TestCase.assertTrue(Arrays.equals(weights, dmat0.getWeight()));
     }
 }

@@ -6,7 +6,7 @@
 #ifndef TURI_LAMBDA_PYLAMBDA_WORKER_H_
 #define TURI_LAMBDA_PYLAMBDA_WORKER_H_
 
-#include <string> 
+#include <string>
 
 namespace turi { namespace lambda {
 

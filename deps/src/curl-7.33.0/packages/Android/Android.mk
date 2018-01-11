@@ -109,4 +109,3 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/include $(LOCAL_PATH)/lib
 LOCAL_CFLAGS += $(common_CFLAGS)
 
 include $(BUILD_EXECUTABLE)
-

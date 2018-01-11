@@ -39,11 +39,11 @@ static void read_one_chunk(
 }
 
 /*
- * When sorting, we organize the data as a pair of 
+ * When sorting, we organize the data as a pair of
  * {sort_keys, string of serialized values}.
  * But when writing we need to convert it back to a vector<flexible_type>
  *
- * This function destructively modifies sort_row to turn it into a 
+ * This function destructively modifies sort_row to turn it into a
  * vector<flexible_type>.
  */
 static void sort_row_to_output_row(std::pair<flex_list, std::string>& sort_row,
@@ -121,7 +121,7 @@ static void write_one_chunk(
  * condition that there is enough memory for the segment they are assigned.
  * If a thread's segment is too large for our buffer, that thread must wait
  * until no other threads are running, and then it will take up the whole
- * buffer to sort...hopefully not allocating too much memory :/. 
+ * buffer to sort...hopefully not allocating too much memory :/.
  */
 std::shared_ptr<sframe> sort_and_merge(
     const std::shared_ptr<sarray<std::pair<flex_list, std::string>>>& partition_array,

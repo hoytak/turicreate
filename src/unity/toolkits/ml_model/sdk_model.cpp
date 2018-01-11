@@ -28,7 +28,7 @@ std::map<std::string, variant_type> _toolkits_sdk_get_default_options(
   }
 
   // Empty options
-  std::map<std::string, flexible_type> empty_opts = 
+  std::map<std::string, flexible_type> empty_opts =
                                       std::map<std::string, flexible_type>();
   model->init_options(empty_opts);
   std::vector<option_handling::option_info> options = model->get_option_info();
@@ -74,7 +74,7 @@ const std::map<std::string, flexible_type>& sdk_model_base::get_current_options(
  */
 std::map<std::string, flexible_type> sdk_model_base::get_default_options()
   const{
-  return options.get_default_options(); 
+  return options.get_default_options();
 }
 
 /**
@@ -103,7 +103,7 @@ std::map<std::string, variant_type> sdk_model_base::get_state() const{
  */
 variant_type sdk_model_base::get_value_from_state(std::string key){
 
-  // Field does not exist 
+  // Field does not exist
   if(state.count(key) == 0){
     std::stringstream ss;
     ss << "Field '" << key << "' does not exist. Use list_fields() for a "
@@ -118,10 +118,10 @@ variant_type sdk_model_base::get_value_from_state(std::string key){
 
 
 /**
- * Check if trained. 
+ * Check if trained.
  *
  * \note For now, trained is always returned to True. This will change
- * when we move to async models. 
+ * when we move to async models.
  */
 bool sdk_model_base::is_trained() const{
   return true;

@@ -19,4 +19,3 @@ train <- agaricus.train
 dtrain <- xgb.DMatrix(train$data, label=train$label)
 stopifnot(nrow(dtrain) == nrow(train$data))
 }
-

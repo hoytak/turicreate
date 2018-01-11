@@ -10,7 +10,7 @@ class JSONBase64 {
 public:
     inline static json_string json_encode64(const unsigned char * binary, size_t bytes) json_nothrow json_cold;
     inline static std::string json_decode64(const json_string & encoded) json_nothrow json_cold;
-private: 
+private:
     JSONBase64(void);
 };
 
@@ -26,7 +26,7 @@ std::string JSONBase64::json_decode64(const json_string & encoded) json_nothrow 
     #if defined JSON_DEBUG || defined JSON_SAFE
         return libbase64::decode<json_string, json_char, json_uchar, true>(encoded);
     #else
-    	return libbase64::decode<json_string, json_char, json_uchar, false>(encoded);
+	return libbase64::decode<json_string, json_char, json_uchar, false>(encoded);
     #endif
 }
 

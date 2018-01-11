@@ -157,7 +157,7 @@ std::map<std::string, variant_type> sgd_solver_base::run() {
 
   // Set up the model.
   setup(model_interface.get());
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Run the relevant solver.
 
@@ -195,7 +195,7 @@ std::map<std::string, variant_type>
 sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Step 1: pull in intial values. 
+  // Step 1: pull in intial values.
 
   std::map<std::string, variant_type> ret;
 
@@ -220,7 +220,7 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
   // Also consider the hard limit on the step size bound for numeric
   // stability as given by the interface.
   step_size_bound = std::min(model_interface->max_step_size(), step_size_bound);
-  
+
   if(initial_sgd_step_size > step_size_bound) {
     logprogress_stream
         << "WARNING: Fixed specified step size is too large to be "
@@ -245,23 +245,23 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
   // In the middle of running it, sometimes the state needs to be reset.
   size_t num_resets = 0;
 
-  double initial_objective_value = NAN, initial_loss = NAN; 
+  double initial_objective_value = NAN, initial_loss = NAN;
 
   double step_size_decrease_rate = options.at("step_size_decrease_rate");
   bool track_exact_loss          = options.at("track_exact_loss");
 
   std::string stopping_condition;
-  
+
   /** Begin by reseting the state to the correct value.
    */
   model_interface->setup_optimization(options.at("random_seed"), /*in_trial_mode*/ false);
-  
+
   std::tie(initial_objective_value, initial_loss) = get_initial_objective_value(train_data);
 
   sgd_objective_path = {initial_objective_value};
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Step 3: Set up all the return stuff and storage. 
+  // Step 3: Set up all the return stuff and storage.
 
   std::vector<std::pair<std::string, size_t> > row_spec;
 
@@ -314,8 +314,8 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
   table.print_line_break();
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Step 4: Declare the reset function. 
-  
+  // Step 4: Declare the reset function.
+
   /** The reset function.  This gets called to reset an unhealthy
    *  state.
    */
@@ -341,10 +341,10 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
     // Set the "soft" iteration limit back to the start
     iteration_index = 0;
   };
-  
+
   ////////////////////////////////////////////////////////////////////////////////
-  // Step 5: Go for it. 
-  
+  // Step 5: Go for it.
+
   while(true) {
 
     // Have this at the top so that even if the model diverges, we still stop
@@ -375,7 +375,7 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
       ret["num_healthy_iterations"] = to_variant(0UL);
       break;
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     // Step 2.2: Get the local step size for this pass through the
     // data.
@@ -433,7 +433,7 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
       // have an issue.
 
       if(sgd_objective_path.size() >= 5) {
-        
+
         bool gone_up = true;
         for(size_t i = sgd_objective_path.size() - 4; i < sgd_objective_path.size(); ++i) {
           if(sgd_objective_path[i - 1] > sgd_objective_path[i]) {
@@ -442,14 +442,14 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
           }
         }
 
-        bool all_greater_than_initial = true; 
+        bool all_greater_than_initial = true;
         for(size_t i = sgd_objective_path.size() - 5; i < sgd_objective_path.size(); ++i) {
           if(sgd_objective_path[i] < initial_objective_value) {
             all_greater_than_initial = false;
             break;
           }
         }
-        
+
         if(gone_up && all_greater_than_initial) {
 
           double exact_objective_value, exact_loss;
@@ -470,13 +470,13 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
             logstream(LOG_INFO) << "SGD: Objective value estimate increasing over the last 5 iterations "
                                 << "and greater than initial; resetting."
                                 << std::endl;
-            
+
             objective_value_estimate = NAN;
           }
         }
       }
     }
-    
+
     if(!model_interface->state_is_numerically_stable()) {
       logstream(LOG_INFO) << "SGD: model failed numerical stability test." << std::endl;
       objective_value_estimate = NAN;
@@ -502,7 +502,7 @@ sgd_solver_base::run_fixed_sgd_step_size(double initial_sgd_step_size) {
       ret["sgd_step_size"] = to_variant(base_sgd_step_size);
 
       reset_unhealthy_state();
-      
+
       continue;
 
     } else {
@@ -749,7 +749,7 @@ double sgd_solver_base::compute_initial_sgd_step_size() {
   double step_size_bound_theory = 0.5 / std::max(size_t(1), train_data.num_columns());
 
   double theory_suggested_step_size_bound = std::max(1.0, 100*step_size_bound_theory);
-  
+
 
   // The other bound that we consider is based on the step size.
   // Based on the regularization value, we do not want the sgd scaling
@@ -764,15 +764,15 @@ double sgd_solver_base::compute_initial_sgd_step_size() {
      / (std::max(1e-32, l2_regularization)));
 
   // Also consider the hard limit on the step size bound for numeric
-  // stability as given by the interface. 
+  // stability as given by the interface.
   step_size_bound_numerical_stability = std::min(model_interface->max_step_size(),
-                                                 step_size_bound_numerical_stability); 
+                                                 step_size_bound_numerical_stability);
 
-  
+
   // Give it a little extra room just in case -- usually, in the case
   // of numerical failure from too large a step size, it fails
   // quickly.
-  double step_size_search_start_point  = std::min(theory_suggested_step_size_bound, 
+  double step_size_search_start_point  = std::min(theory_suggested_step_size_bound,
                                                   step_size_bound_numerical_stability);
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -804,7 +804,7 @@ double sgd_solver_base::compute_initial_sgd_step_size() {
    */
   size_t random_seed = options.at("random_seed");
   model_interface->setup_optimization(random_seed, /*in_trial_mode*/ true);
-  
+
   double test_initial_objective_value, test_initial_loss;
   std::tie(test_initial_objective_value, test_initial_loss)
       = get_initial_objective_value(trial_data);
@@ -818,7 +818,7 @@ double sgd_solver_base::compute_initial_sgd_step_size() {
   double best_sgd_step_size    = step_size_search_start_point;
 
   size_t minimum_is_at_try_index = 0;
-  
+
   table_printer sgd_table( {{"Attempt", 0}, {"Initial Step Size", 0}, {"Estimated Objective Value", 40}});
 
   sgd_table.print_header();
@@ -867,7 +867,7 @@ double sgd_solver_base::compute_initial_sgd_step_size() {
         ss << "No Decrease ("
            << trial_objective_value << " >= "
            << test_initial_objective_value << ")";
-        
+
         sgd_table.print_row(try_index, current_sgd_step_size, ss.str());
         current_sgd_step_size *= 0.25;
         step_size_is_viable = false;

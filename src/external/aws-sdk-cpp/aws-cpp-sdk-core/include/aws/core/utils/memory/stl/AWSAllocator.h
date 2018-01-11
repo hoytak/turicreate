@@ -29,7 +29,7 @@ namespace Aws
 #ifdef USE_AWS_MEMORY_MANAGEMENT
     /**
      * Std allocator interface that is used for all STL types in the event that Custom Memory Management is being used.
-     */  
+     */
     template <typename T>
     class Allocator : public std::allocator<T>
     {
@@ -90,7 +90,7 @@ namespace Aws
 #endif // __ANDROID__
 
 #else
-    
+
     template< typename T > using Allocator = std::allocator<T>;
 
 #endif // USE_AWS_MEMORY_MANAGEMENT

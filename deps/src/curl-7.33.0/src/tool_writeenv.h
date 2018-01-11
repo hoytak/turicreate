@@ -32,4 +32,3 @@ void ourWriteEnv(CURL *curl);
 #endif
 
 #endif /* HEADER_CURL_TOOL_WRITEENV_H */
-

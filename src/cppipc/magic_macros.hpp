@@ -66,12 +66,12 @@
  * \code
  * (return_type, function_name, (arg1type)(arg2type)(arg3type))
  * \endcode
- * To get a function with no arguments simply have an empty 3rd argument. 
- * (the 3rd argument is still needed. Observe the comma. It is just empty.) 
+ * To get a function with no arguments simply have an empty 3rd argument.
+ * (the 3rd argument is still needed. Observe the comma. It is just empty.)
  * \code
  * (return_type, function_name, )
  * \endcode
- * For instance, 
+ * For instance,
  * \code
  * GENERATE_INTERFACE(object_base, object_proxy,
  *                     (std::string, ping, (std::string))
@@ -79,7 +79,7 @@
  *                     (int, add, (int)(int))
  *                   )
  * \endcode
- * will create a base class called object_base with 3 functions, ping, 
+ * will create a base class called object_base with 3 functions, ping,
  * add_one, and add, with the appropriate registration functions.
  *
  * The above macro generates the following code:
@@ -91,10 +91,10 @@
  *   virtual std::string ping(std::string) = 0;
  *   virtual int add_one(int) = 0;
  *   virtual int add_one(int, int) = 0;
- * 
+ *
  *   virtual void save(turi::oarchive& oarc) const {}
  *   virtual void load(turi::iarchive& iarc) {}
- * 
+ *
  *   REGISTRATION_BEGIN(test_object_base)
  *   REGISTER(test_object_base::ping)
  *   REGISTER(test_object_base::add)
@@ -114,7 +114,7 @@
        REGISTRATION_BEGIN(base_name) \
        BOOST_PP_SEQ_FOR_EACH(__GENERATE_REGISTRATION__, base_name, __ADD_PARENS__(functions)) \
        REGISTRATION_END \
-    }; 
+    };
 
 
 
@@ -131,13 +131,13 @@
  * \code
  * (return_type, function_name, (arg1type)(arg2type)(arg3type))
  * \endcode
- * To get a function with no arguments simply have an empty 3rd argument. 
- * (the 3rd argument is still needed. Observe the comma. It is just empty.) 
+ * To get a function with no arguments simply have an empty 3rd argument.
+ * (the 3rd argument is still needed. Observe the comma. It is just empty.)
  * \code
  * (return_type, function_name, )
  * \endcode
  *
- * For instance, 
+ * For instance,
  * \code
  * GENERATE_PROXY(object_base, object_proxy,
  *                               (std::string, ping, (std::string))
@@ -145,30 +145,30 @@
  *                               (int, add, (int)(int))
  *                             )
  * \endcode
- * will create a base class called object_base with 3 functions, ping, 
+ * will create a base class called object_base with 3 functions, ping,
  * add_one, and add, with the appropriate registration functions, as well as
  * a proxy object with the appropriate proxy forwarding calls.
  *
  * The above macro generates all of the following code:
  * \code
- * class object_proxy : public object_base { 
+ * class object_proxy : public object_base {
  *  public:
  *   cppipc::object_proxy<object_base> proxy;
  *
- *   inline test_object_proxy(cppipc::comm_client& comm, 
+ *   inline test_object_proxy(cppipc::comm_client& comm,
  *                            bool auto_create = true,
  *                            size_t object_id = (size_t)(-1)):
- *                                proxy(comm, auto_create, object_id){ } 
+ *                                proxy(comm, auto_create, object_id){ }
  *
- *   inline test_object_proxy(cppipc::comm_client& comm):proxy(comm){ } 
+ *   inline test_object_proxy(cppipc::comm_client& comm):proxy(comm){ }
  *
- *   inline std::string ping(std::string arg_0) { 
- *     return proxy.call(&object_base::ping, arg_0) 
- *   } 
- *   inline int add_one(int arg_0) { 
- *     return proxy.call(&object_base::add_one, arg_0) 
- *   } 
- *   inline int add(int arg_0, int arg_1) { 
+ *   inline std::string ping(std::string arg_0) {
+ *     return proxy.call(&object_base::ping, arg_0)
+ *   }
+ *   inline int add_one(int arg_0) {
+ *     return proxy.call(&object_base::add_one, arg_0)
+ *   }
+ *   inline int add(int arg_0, int arg_1) {
  *     return proxy.call(&object_base::add, arg_0 , arg_1);
  *   }
  *   inline void save(turi::oarchive& oarc) const {
@@ -214,13 +214,13 @@
  * \code
  * (return_type, function_name, (arg1type)(arg2type)(arg3type))
  * \endcode
- * To get a function with no arguments simply have an empty 3rd argument. 
- * (the 3rd argument is still needed. Observe the comma. It is just empty.) 
+ * To get a function with no arguments simply have an empty 3rd argument.
+ * (the 3rd argument is still needed. Observe the comma. It is just empty.)
  * \code
  * (return_type, function_name, )
  * \endcode
  *
- * For instance, 
+ * For instance,
  * \code
  * GENERATE_INTERFACE_AND_PROXY(object_base, object_proxy,
  *                               (std::string, ping, (std::string))
@@ -228,7 +228,7 @@
  *                               (int, add, (int)(int))
  *                             )
  * \endcode
- * will create a base class called object_base with 3 functions, ping, 
+ * will create a base class called object_base with 3 functions, ping,
  * add_one, and add, with the appropriate registration functions, as well as
  * a proxy object with the appropriate proxy forwarding calls.
  *
@@ -242,10 +242,10 @@
  *   virtual std::string ping(std::string) = 0;
  *   virtual int add_one(int) = 0;
  *   virtual int add_one(int, int) = 0;
- * 
+ *
  *   virtual void save(turi::oarchive& oarc) const {}
  *   virtual void load(turi::iarchive& iarc) {}
- * 
+ *
  *   REGISTRATION_BEGIN(test_object_base)
  *   REGISTER(test_object_base::ping)
  *   REGISTER(test_object_base::add)
@@ -253,22 +253,22 @@
  *   REGISTRATION_END
  * };
  *
- * class object_proxy : public object_base { 
+ * class object_proxy : public object_base {
  *  public:
  *   cppipc::object_proxy<object_base> proxy;
  *
- *   inline test_object_proxy(cppipc::comm_client& comm, 
+ *   inline test_object_proxy(cppipc::comm_client& comm,
  *                            bool auto_create = true,
  *                            size_t object_id = (size_t)(-1)):
- *                                proxy(comm, auto_create, object_id){ } 
+ *                                proxy(comm, auto_create, object_id){ }
  *
- *   inline std::string ping(std::string arg_0) { 
- *     return proxy.call(&object_base::ping, arg_0) 
- *   } 
- *   inline int add_one(int arg_0) { 
- *     return proxy.call(&object_base::add_one, arg_0) 
- *   } 
- *   inline int add(int arg_0, int arg_1) { 
+ *   inline std::string ping(std::string arg_0) {
+ *     return proxy.call(&object_base::ping, arg_0)
+ *   }
+ *   inline int add_one(int arg_0) {
+ *     return proxy.call(&object_base::add_one, arg_0)
+ *   }
+ *   inline int add(int arg_0, int arg_1) {
  *     return proxy.call(&object_base::add, arg_0 , arg_1);
  *   }
  *   inline void save(turi::oarchive& oarc) const {
@@ -293,7 +293,7 @@
 #define GENERATE_INTERFACE_AND_PROXY(base_name, proxy_name, functions) \
     class proxy_name; \
     GENERATE_INTERFACE(base_name, proxy_name, functions) \
-    GENERATE_PROXY(base_name, proxy_name, functions) 
+    GENERATE_PROXY(base_name, proxy_name, functions)
 
 #endif
 

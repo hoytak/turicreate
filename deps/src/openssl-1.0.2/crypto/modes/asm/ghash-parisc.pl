@@ -701,7 +701,7 @@ my $depd = sub {
     # I only have ",z" completer, it's impicitly encoded...
     if ($args =~ /%r([0-9]+),([0-9]+),([0-9]+),%r([0-9]+)/)	# format 16
     {	my $opcode=(0x3c<<26)|($4<<21)|($1<<16);
-    	my $cpos=63-$2;
+	my $cpos=63-$2;
 	my $len=32-$3;
 	$opcode |= (($cpos&0x20)<<6)|(($cpos&0x1f)<<5);		# encode pos
 	$opcode |= (($len&0x20)<<7)|($len&0x1f);		# encode len

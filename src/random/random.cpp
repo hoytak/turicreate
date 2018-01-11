@@ -37,13 +37,13 @@ namespace turi {
       }
 
       typedef size_t result_type;
-      BOOST_STATIC_CONSTANT(result_type, min_value = 
+      BOOST_STATIC_CONSTANT(result_type, min_value =
                             boost::integer_traits<result_type>::const_min);
-      BOOST_STATIC_CONSTANT(result_type, max_value = 
+      BOOST_STATIC_CONSTANT(result_type, max_value =
                             boost::integer_traits<result_type>::const_max);
       result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return min_value; }
       result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return max_value; }
-      
+
       nondet_generator() {
 #ifndef _WIN32
         rnd_dev.open("/dev/urandom", std::ios::binary | std::ios::in);
@@ -96,7 +96,7 @@ namespace turi {
         mut.unlock();
         return result;
 #endif
-      }      
+      }
     private:
 #ifndef _WIN32
       std::ifstream rnd_dev;
@@ -147,14 +147,14 @@ namespace turi {
         get_source().time_seed();
       }
 
-      
+
       /**
        *  Seed all threads with a fixed number
-       */     
+       */
       void seed(const size_t number) {
-        get_source().seed(number); 
+        get_source().seed(number);
       }
-      
+
       /**
        * Register a source with the registry and seed it based on the
        * master.
@@ -168,7 +168,7 @@ namespace turi {
         // __print_back_trace();
         mut.unlock();
       }
-      
+
       /**
        * Unregister a source from the registry
        */
@@ -195,12 +195,12 @@ namespace turi {
      * generators
      */
     void destroy_tls_data(void* ptr) {
-      generator* tls_rnd_ptr = 
+      generator* tls_rnd_ptr =
         reinterpret_cast<generator*>(ptr);
-      if(tls_rnd_ptr != NULL) { 
+      if(tls_rnd_ptr != NULL) {
         /// TOFIX: This has issues... The global may have been destroyed already
         //source_registry::global().unregister_source(tls_rnd_ptr);
-        delete tls_rnd_ptr; 
+        delete tls_rnd_ptr;
       }
     }
 
@@ -231,26 +231,26 @@ namespace turi {
   // 2: before any use of random by global variables.
   // KNOWN_ISSUE: if a global variable (initialized before main)
   //               spawns threads which then call random. Things explode.
-  
-    
+
+
     /////////////////////////////////////////////////////////////
     //// Implementation of header functions
-    
-       
- 
+
+
+
     generator& get_source() {
       // get the thread local storage
-      generator* tls_rnd_ptr = 
+      generator* tls_rnd_ptr =
         reinterpret_cast<generator*>
         (pthread_getspecific(get_random_source_key()));
       // Create a tls_random_source if none was provided
       if(tls_rnd_ptr == NULL) {
-        tls_rnd_ptr = new generator();      
+        tls_rnd_ptr = new generator();
         assert(tls_rnd_ptr != NULL);
         // This will seed it with the master rng
         source_registry::global().register_generator(tls_rnd_ptr);
-        pthread_setspecific(get_random_source_key(), 
-                            tls_rnd_ptr);      
+        pthread_setspecific(get_random_source_key(),
+                            tls_rnd_ptr);
       }
       // assert(tls_rnd_ptr != NULL);
       return *tls_rnd_ptr;
@@ -258,15 +258,15 @@ namespace turi {
 
 
 
-    void seed() { source_registry::global().seed();  } 
+    void seed() { source_registry::global().seed();  }
 
-    void nondet_seed() { source_registry::global().nondet_seed(); } 
+    void nondet_seed() { source_registry::global().nondet_seed(); }
 
-    void time_seed() { source_registry::global().time_seed(); } 
+    void time_seed() { source_registry::global().time_seed(); }
 
-    void seed(const size_t seed_value) { 
-      source_registry::global().seed(seed_value);  
-    } 
+    void seed(const size_t seed_value) {
+      source_registry::global().seed(seed_value);
+    }
 
 
     void generator::nondet_seed() {
@@ -292,8 +292,7 @@ namespace turi {
 
 
 
-  
+
   }; // end of namespace random
 
 };// end of namespace turi
-

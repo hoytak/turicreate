@@ -28,33 +28,33 @@ namespace turi {
 namespace nearest_neighbors {
 
 
-/** 
- * Check if the data is empty! 
- */  
-void check_empty_data(const sframe& X) {  
-  if (X.num_rows() == 0) { 
-    log_and_throw("Input SFrame does not contain any rows.");     
-  } 
-    
-  if (X.num_columns() == 0) {  
-    log_and_throw("Input SFrame does not contain any columns."); 
-  } 
-} 
-        
+/**
+ * Check if the data is empty!
+ */
+void check_empty_data(const sframe& X) {
+  if (X.num_rows() == 0) {
+    log_and_throw("Input SFrame does not contain any rows.");
+  }
+
+  if (X.num_columns() == 0) {
+    log_and_throw("Input SFrame does not contain any columns.");
+  }
+}
+
 
 /**
 * Get the list of options that are relevant to each model.
-*/ 
+*/
 std::vector<std::string> get_model_option_keys(std::string model_name) {
- 
+
   // Brute-force
-  if (model_name == "nearest_neighbors_brute_force") { 
+  if (model_name == "nearest_neighbors_brute_force") {
     return {"label"};
   } else if (model_name == "nearest_neighbors_ball_tree") {
     return {"leaf_size", "label"};
   } else if (model_name == "nearest_neighbors_lsh") {
-    return {"num_tables", "num_projections_per_table", "label"}; 
-  } else { // Not a nearest neighbors model. This should never happen. 
+    return {"num_tables", "num_projections_per_table", "label"};
+  } else { // Not a nearest neighbors model. This should never happen.
     log_and_throw(model_name + " is not a nearest neighbors model.");
     return {};
   }
@@ -69,7 +69,7 @@ toolkit_function_response_type get_current_options(toolkit_function_invocation& 
   toolkit_function_response_type ret_status;
 
   // get the name of the model to query
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "model_name");
 
   // retrieve the correct model
@@ -99,7 +99,7 @@ toolkit_function_response_type training_stats(toolkit_function_invocation& invok
   toolkit_function_response_type ret_status;
 
   // get the name of the model to query
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "model_name");
 
   // retrieve the correct model
@@ -129,7 +129,7 @@ toolkit_function_response_type get_value(toolkit_function_invocation& invoke) {
   toolkit_function_response_type ret_status;
 
   // get the name of the model to query
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "model_name");
 
   // retrieve the correct model
@@ -159,7 +159,7 @@ toolkit_function_response_type list_keys(toolkit_function_invocation& invoke) {
   toolkit_function_response_type ret_status;
 
   // get the name of the model to query
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "model_name");
 
   // retrieve the correct model
@@ -192,7 +192,7 @@ variant_map_type train(variant_map_type& params) {
   /*** Unpack the inputs ***/
 
   // Model name and model
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
 
   // Construct a model
@@ -216,15 +216,15 @@ variant_map_type train(variant_map_type& params) {
     = *(safe_varmap_get<std::shared_ptr<unity_sframe>>(
     params, "sf_features")->get_underlying_sframe());
 
-  std::shared_ptr<sarray<flexible_type>> sa_ref_labels = 
+  std::shared_ptr<sarray<flexible_type>> sa_ref_labels =
     safe_varmap_get<std::shared_ptr<unity_sarray>>
     (params, "ref_labels")->get_underlying_sarray();
 
   std::vector<flexible_type> ref_labels(X.num_rows(), flexible_type(0));
   sa_ref_labels->get_reader()->read_rows(0, X.num_rows(), ref_labels);
-  
+
   // Composite distances
-  std::vector<dist_component_type> composite_distance_params = 
+  std::vector<dist_component_type> composite_distance_params =
     safe_varmap_get<std::vector<dist_component_type> >(params,
                                                        "composite_params");
 
@@ -238,7 +238,7 @@ variant_map_type train(variant_map_type& params) {
       opts[key] = safe_varmap_get<flexible_type>(params, key);
     }
   }
-  
+
   /*** Initialize and train the model ***/
   model->train(X, ref_labels, composite_distance_params, opts);
 
@@ -249,8 +249,8 @@ variant_map_type train(variant_map_type& params) {
 }
 
 
-/** 
- * Query function for the nearest neighbors toolkit. 
+/**
+ * Query function for the nearest neighbors toolkit.
  */
 toolkit_function_response_type query(toolkit_function_invocation& invoke) {
 
@@ -261,9 +261,9 @@ toolkit_function_response_type query(toolkit_function_invocation& invoke) {
 
   // Make sure the model exists
   // ---------------------------------------------------------------------------
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "model_name");
- 
+
 
   // retrieve the correct model
   std::shared_ptr<nearest_neighbors_model> model
@@ -272,7 +272,7 @@ toolkit_function_response_type query(toolkit_function_invocation& invoke) {
   if (model == NULL) {
     log_and_throw(model_name + " is not a nearest neighbors model.");
   }
- 
+
 
   // Get features and label, validate, and remove unneeded columns
   // ---------------------------------------------------------------------------
@@ -280,7 +280,7 @@ toolkit_function_response_type query(toolkit_function_invocation& invoke) {
     = *((safe_varmap_get<std::shared_ptr<unity_sframe>>(
         invoke.params, "features"))->get_underlying_sframe());
 
-  std::shared_ptr<sarray<flexible_type>> sa_query_labels = 
+  std::shared_ptr<sarray<flexible_type>> sa_query_labels =
     safe_varmap_get<std::shared_ptr<unity_sarray>>(
     invoke.params, "query_labels")->get_underlying_sarray();
 
@@ -295,7 +295,7 @@ toolkit_function_response_type query(toolkit_function_invocation& invoke) {
   sframe result = model->query(Q, query_labels, k, radius);
   std::shared_ptr<unity_sframe> neighbors(new unity_sframe());
   neighbors->construct_from_sframe(result);
-  
+
   /*
   if (model_name == "nearest_neighbors_lsh") {
     neighbors = std::dynamic_pointer_cast<unity_sframe>(
@@ -312,8 +312,8 @@ toolkit_function_response_type query(toolkit_function_invocation& invoke) {
 
 
 
-/** 
- * Similarity graph function for the nearest neighbors toolkit. 
+/**
+ * Similarity graph function for the nearest neighbors toolkit.
  */
 toolkit_function_response_type similarity_graph(toolkit_function_invocation& invoke) {
 
@@ -324,23 +324,23 @@ toolkit_function_response_type similarity_graph(toolkit_function_invocation& inv
 
   // Make sure the model exists and retrieve it
   // ------------------------------------------
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "model_name");
- 
+
   std::shared_ptr<nearest_neighbors_model> model
       = safe_varmap_get<std::shared_ptr<nearest_neighbors_model>>(invoke.params, "model");
 
   if (model == NULL) {
     log_and_throw(model_name + " is not a nearest neighbors model.");
   }
- 
+
 
   // Get method inputs.
   // ------------------
   size_t k = (size_t)safe_varmap_get<flexible_type>(invoke.params, "k");
   double radius = (double)safe_varmap_get<flexible_type>(invoke.params, "radius");
   bool include_self_edges = (bool)safe_varmap_get<flexible_type>(invoke.params, "include_self_edges");
-  
+
 
   // Run the query and return results
   // --------------------------------

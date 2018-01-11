@@ -35,14 +35,14 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
-|   Function      :  FIELD *link_field(FIELD *field, int frow, int fcol)  
-|   
+|   Facility      :  libnform
+|   Function      :  FIELD *link_field(FIELD *field, int frow, int fcol)
+|
 |   Description   :  Duplicates the field at the specified position. The
 |                    new field shares its buffers with the original one,
 |                    the attributes are independent.
 |                    If an error occurs, errno is set to
-|                    
+|
 |                    E_BAD_ARGUMENT - invalid argument
 |                    E_SYSTEM_ERROR - system error
 |
@@ -76,11 +76,11 @@ FIELD *link_field(FIELD * field, int frow, int fcol)
       New_Field->pad    = field->pad;
       New_Field->opts   = field->opts;
       New_Field->usrptr = field->usrptr;
-      if (_nc_Copy_Type(New_Field,field)) 
+      if (_nc_Copy_Type(New_Field,field))
 	return New_Field;
     }
 
-  if (New_Field) 
+  if (New_Field)
     free_field(New_Field);
 
   SET_ERROR( err );

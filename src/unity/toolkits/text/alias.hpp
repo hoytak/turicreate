@@ -173,13 +173,13 @@ class EXPORT alias_topic_model : public topic_model {
   // Constants
   size_t TARGET_BLOCK_NUM_ELEMENTS = 1000000000/16; // approx 1gb in memory per block
 
- public: 
+ public:
 
   // TODO: convert interface above to use the extensions methods here
   BEGIN_CLASS_MEMBER_REGISTRATION("alias_topic_model")
   END_CLASS_MEMBER_REGISTRATION
 
-}; 
+};
 }
 }
 #endif

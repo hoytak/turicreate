@@ -48,7 +48,7 @@ static lambda_master* instance_ptr = nullptr;
     }
 
     boost::optional<std::string> disable_smh = turi::getenv_str("TURI_DISABLE_LAMBDA_SHM");
-    
+
     if(! (disable_smh && *disable_smh == "1") ) {
       /*
        * Create an interprocess shared memory connection if possible.
@@ -56,7 +56,7 @@ static lambda_master* instance_ptr = nullptr;
       auto shared_memory_setup = [](std::unique_ptr<lambda_evaluator_proxy>& proxy) {
         return std::make_pair((void*)(proxy.get()), proxy->initialize_shared_memory_comm());
       };
-      std::vector<std::pair<void*, std::string>> shared_memory_addresses = 
+      std::vector<std::pair<void*, std::string>> shared_memory_addresses =
           m_worker_pool->call_all_workers<std::pair<void*, std::string>>(shared_memory_setup);
 
       for (auto shared_memory_address: shared_memory_addresses) {
@@ -143,7 +143,7 @@ static lambda_master* instance_ptr = nullptr;
    * Performs a remote call to an interprocess shared memory server
    * deserializing the response to RetType.
    *
-   * Note that this is not a general purpose function and only works 
+   * Note that this is not a general purpose function and only works
    * with pylambda_master and pylambda_evaluator.
    *
    * Performs a remote call for bulk_eval_rows and bulk_eval_dict_rows.
@@ -172,7 +172,7 @@ static lambda_master* instance_ptr = nullptr;
     size_t buflen = arguments.len;
     size_t receivelen = 0;
     arguments.buf = nullptr;
-    shmok = shmipc::large_receive(*shmclient, &buf, &buflen, 
+    shmok = shmipc::large_receive(*shmclient, &buf, &buflen,
                                   receivelen, (size_t)(-1));
     if (shmok == false) {
       free(buf);
@@ -222,18 +222,18 @@ static lambda_master* instance_ptr = nullptr;
              << skip_undefined
              << seed;
         bool good = shm_call(shmclient, oarc, out);
-        // if shmcall was good, return. 
+        // if shmcall was good, return.
         if (good) return;
 
         // otherwise shmcall was bad. reset the client so we don't ever use
         // it again and fall back to regular IPC.
         // (note. we cannot delete it from the
-        // m_shared_memory_worker_connections map because of concurency 
-        // issues. There may be parallel access to it and locking seems 
+        // m_shared_memory_worker_connections map because of concurency
+        // issues. There may be parallel access to it and locking seems
         // overkill.
         shmclient.reset();
         logstream(LOG_WARNING) << "Unexpected SHMIPC failure. Falling back to CPPIPC" << std::endl;
-      } 
+      }
       out = worker->proxy->bulk_eval_rows(lambda_hash, args, skip_undefined, seed);
     } catch (cppipc::ipcexception e) {
       throw reinterpret_comm_failure(e);
@@ -273,7 +273,7 @@ static lambda_master* instance_ptr = nullptr;
         oarchive oarc;
         oarc << (char)(bulk_eval_serialized_tag::BULK_EVAL_DICT_ROWS)
              << lambda_hash
-             << keys 
+             << keys
              << rows
              << skip_undefined
              << seed;
@@ -286,7 +286,7 @@ static lambda_master* instance_ptr = nullptr;
         // and fall back to regular IPC
         shmclient.reset();
         logstream(LOG_WARNING) << "Unexpected SHMIPC failure. Falling back to CPPIPC" << std::endl;
-      } 
+      }
       out = worker->proxy->bulk_eval_dict_rows(lambda_hash, keys, rows, skip_undefined, seed);
     } catch (cppipc::ipcexception e) {
       throw reinterpret_comm_failure(e);
@@ -321,7 +321,7 @@ void set_pylambda_worker_binary_from_environment_variables() {
       pylambda_worker_script = *pylambda_worker_script_env;
       ASSERT_MSG(fs::exists(fs::path(pylambda_worker_script)), "PyLambda worker script not valid.");
     } else {
-      logstream(LOG_WARNING) << "Python lambda worker script not set. Python lambdas may not be available" 
+      logstream(LOG_WARNING) << "Python lambda worker script not set. Python lambdas may not be available"
                              << std::endl;
     }
   }

@@ -26,7 +26,7 @@ using namespace sframe_saving_impl;
 
 /**
  * This is the most naive of all saving strategies.
- * 
+ *
  */
 void sframe_save_naive(const sframe& sf_source,
                        std::string index_file) {
@@ -42,7 +42,7 @@ void sframe_save_naive(const sframe& sf_source,
   size_t num_write_segments = SFRAME_DEFAULT_NUM_SEGMENTS;
   if (sf_source.num_segments() == 0) num_write_segments = 0;
 
-  new_sf.open_for_write(my_names, my_types, 
+  new_sf.open_for_write(my_names, my_types,
                         index_file, SFRAME_DEFAULT_NUM_SEGMENTS);
   if (sf_source.num_segments() == 0) {
     new_sf.close();
@@ -79,12 +79,12 @@ void sframe_save_blockwise(const sframe& sf_source,
   // this will hit the sframe at a lower level
   // This is slightly complicated and slightly annoying.
   //
-  // SFrame: 
+  // SFrame:
   // An SFrame is an arbitrary collection of columns listed in a
   // sframe_index_file_information datastructure.
   // Each column is denoted by a column file (it may not be a real file)
   //
-  // Column file: This may not be a real file. Each column is made up of 
+  // Column file: This may not be a real file. Each column is made up of
   // a collection of segments.
   //
   // Segments : Each segment is made up of a collection of blocks.
@@ -93,7 +93,7 @@ void sframe_save_blockwise(const sframe& sf_source,
   // Essentially, we are going to maintain a collection of columns and advance
   // each column through their segments and blocks.
   //
-  // Now, the input number of segments may not match the output number of 
+  // Now, the input number of segments may not match the output number of
   // segments and so we probably need to do some shuffling around here.
   // Also, while we are here, it might be nice to reorder the blocks a bit
 
@@ -102,19 +102,19 @@ void sframe_save_blockwise(const sframe& sf_source,
   v2_block_impl::block_writer writer;
 
   // call it indexfile.0000
-  std::string base_name; 
+  std::string base_name;
   size_t last_dot = index_file.find_last_of(".");
   if (last_dot != std::string::npos) {
     base_name = index_file.substr(0, last_dot);
   } else {
     base_name = index_file;
-  } 
+  }
   auto index = base_name + ".sidx";
   auto segment_file = base_name + ".0000";
   // we are going to emit only 1 segment. We should be rather IO bound anyway
   writer.init(index, 1, sf_source.num_columns());
   writer.open_segment(0, segment_file);
-  
+
 
   // this is going to be a max heap with each entry referencing a column.
   std::vector<column_blocks> cols;
@@ -124,13 +124,13 @@ void sframe_save_blockwise(const sframe& sf_source,
       auto cur_column = sf_source.select_column(i);
       col.column_index = cur_column->get_index_info();
       if (col.column_index.segment_files.size() > 0) {
-        col.segment_address = 
+        col.segment_address =
             block_manager.open_column(col.column_index.segment_files[0]);
-        // the block address is basically a tuple beginning with 
+        // the block address is basically a tuple beginning with
         // the column address
-        col.num_blocks_in_current_segment = 
+        col.num_blocks_in_current_segment =
             block_manager.num_blocks_in_column(col.segment_address);
-        col.next_row = 0; 
+        col.next_row = 0;
         col.column_number = i;
         col.num_segments = col.column_index.segment_files.size();
         if (col.current_block_number >= col.num_blocks_in_current_segment) {
@@ -163,13 +163,13 @@ void sframe_save_blockwise(const sframe& sf_source,
                            cur.current_block_number};
       auto data = block_manager.read_block(block_address , &infoptr);
       info = *infoptr;
-      // write to segment 0. We have only 1 segment 
+      // write to segment 0. We have only 1 segment
       writer.write_block(0, cur.column_number, data->data(), info);
       // increment the block number
       advance_column_blocks_to_next_block(block_manager, cur);
       // increment the row number
       cur.next_row += info.num_elem;
-      // if there are still blocks. push it back 
+      // if there are still blocks. push it back
       if (!cur.eof) {
         cols.push_back(cur);
         std::push_heap(cols.begin(), cols.end(), comparator);
@@ -211,7 +211,7 @@ void sframe_save(const sframe& sf_source,
   }
 
   if (has_legacy_sframe) {
-    sframe_save_naive(sf_source, index_file); 
+    sframe_save_naive(sf_source, index_file);
   } else {
     sframe_save_blockwise(sf_source, index_file);
   }
@@ -232,7 +232,7 @@ void sframe_save_weak_reference(const sframe& sf_source,
    *    Action: We need to relocate the segment.
    *    This is a little annoying.
    *
-   * The difficulty with relocating segments is that 
+   * The difficulty with relocating segments is that
    * the many-to-many relationship between columns in an SFrame,
    * and columns in a segment makes things slightly annoying.
    *  - There may be a lot more columns in the segment than we need.
@@ -242,28 +242,28 @@ void sframe_save_weak_reference(const sframe& sf_source,
    * So, we are not going to to this. We are going to do something simpler
    * Instead, we are going to implement a slightly simpler version.
    *
-   * We look at the sframe one entire column at a time. 
-   *  - If the entire column is already on the right protocol, Do nothing. 
-   *  - Else If only part or none of the column is on the right protocol, 
+   * We look at the sframe one entire column at a time.
+   *  - If the entire column is already on the right protocol, Do nothing.
+   *  - Else If only part or none of the column is on the right protocol,
    *  we add the column to a temporary SFrame.
    *
    * Finally,
    * If the temporary SFrame is non-empty, we use the full sframe_save to
    * save it to the target in temp directory provided.
-   * Now, everything we need should be on the target protocol, and we rebuild 
+   * Now, everything we need should be on the target protocol, and we rebuild
    * the index files.
    */
-  std::string base_name; 
+  std::string base_name;
   size_t last_dot = index_file.find_last_of(".");
   if (last_dot != std::string::npos) {
     base_name = index_file.substr(0, last_dot);
   } else {
     base_name = index_file;
-  } 
+  }
 
   std::string output_protocol = fileio::get_protocol(index_file);
 
-  // column_segment_to_be_relocated[column_number of sframe][segment_number] 
+  // column_segment_to_be_relocated[column_number of sframe][segment_number]
   // is true if the segment is to be relocated
   std::vector<std::vector<bool> > column_segment_to_be_relocated;
   // column_was_relocated[i] is true if column i was relocated
@@ -276,7 +276,7 @@ void sframe_save_weak_reference(const sframe& sf_source,
   column_was_relocated.resize(num_columns, false);
   column_index_files.resize(num_columns);
   auto uuid_generator = boost::uuids::random_generator();
-  // go through all the columns collect the metadata I need (fill in the 
+  // go through all the columns collect the metadata I need (fill in the
   // structures above)
   {
     auto sf_source_index_info = sf_source.get_index_info();
@@ -293,7 +293,7 @@ void sframe_save_weak_reference(const sframe& sf_source,
   }
   // done!
   // now to perform all relocations
-  sframe temp_sf;  
+  sframe temp_sf;
   for (size_t i = 0;i < num_columns; ++i) {
     bool to_relocate = std::any_of(column_segment_to_be_relocated[i].begin(),
                                    column_segment_to_be_relocated[i].end(),
@@ -304,7 +304,7 @@ void sframe_save_weak_reference(const sframe& sf_source,
                                    sf_source.column_name(i));
     } else {
       // we prefer the column to hang around after termination.
-      // if they were marked for deletion (for instance, overwriting an 
+      // if they were marked for deletion (for instance, overwriting an
       // existing dir archive, unmark them.
       if (!column_index_files[i].empty()) {
         auto index = parse_v2_segment_filename(column_index_files[i]).first;
@@ -319,7 +319,7 @@ void sframe_save_weak_reference(const sframe& sf_source,
       }
 
       // convert to a group index of 1 column
-      group_index_file_information group_index; 
+      group_index_file_information group_index;
       group_index.version = 2;
       group_index.nsegments = column_index.segment_files.size();
       group_index.segment_files = column_index.segment_files;
@@ -356,8 +356,8 @@ void sframe_save_weak_reference(const sframe& sf_source,
   //  relocation complete. column_index_filesnow contains everything I care about
   //  on the target protocol.  now we can generate the frame index.
   //
-  // The convenience of handling it column by column is that we have all the 
-  // array "sidx" files in place. We just need to build a frame index that 
+  // The convenience of handling it column by column is that we have all the
+  // array "sidx" files in place. We just need to build a frame index that
   // references them.
   // we get the root sframe's frame index rewrite it and save it
 
@@ -366,7 +366,7 @@ void sframe_save_weak_reference(const sframe& sf_source,
   // arrays)
   std::map<std::string, std::string> target;
   for (size_t i = 0;i < num_columns; ++i) {
-    std::pair<std::string, size_t> column_index_and_subcolumn = 
+    std::pair<std::string, size_t> column_index_and_subcolumn =
         parse_v2_segment_filename(column_index_files[i]);
     if (column_index_and_subcolumn.second == (size_t)(-1)) {
       column_index_and_subcolumn.second = 0;
@@ -384,7 +384,7 @@ void sframe_save_weak_reference(const sframe& sf_source,
       target[column_index_and_subcolumn.first] = column_index_and_subcolumn.first;
     }
 
-    column_index_files[i] = target[column_index_and_subcolumn.first] + ":" + 
+    column_index_files[i] = target[column_index_and_subcolumn.first] + ":" +
         boost::lexical_cast<std::string>(column_index_and_subcolumn.second);
   }
 
@@ -394,7 +394,7 @@ void sframe_save_weak_reference(const sframe& sf_source,
     new_frame_index_info.column_files[i] = column_index_files[i];
   }
   write_sframe_index_file(index_file, new_frame_index_info);
-  
+
 }
 
 }

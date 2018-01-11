@@ -29,7 +29,7 @@ GetObjectTorrentResult::GetObjectTorrentResult()
 {
 }
 
-GetObjectTorrentResult::GetObjectTorrentResult(GetObjectTorrentResult&& toMove) : 
+GetObjectTorrentResult::GetObjectTorrentResult(GetObjectTorrentResult&& toMove) :
     m_body(std::move(toMove.m_body)),
     m_requestCharged(toMove.m_requestCharged)
 {

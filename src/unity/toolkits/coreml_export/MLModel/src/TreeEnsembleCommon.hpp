@@ -50,7 +50,7 @@ namespace TreeEnsembles {
         uint64_t node_id = 0;
         uint64_t true_child_node_id = 0;
         uint64_t false_child_node_id = 0;
-        
+
         // Missing value behavior.
         bool missing_value_tracks_true_child = false;
 
@@ -101,13 +101,13 @@ namespace TreeEnsembles {
          */
         PostEvaluationTransform post_processing_transform;
     };
-    
+
     /** If the model is a tree, then it will have tree ensemble
      *  tendencies.
      */
     std::shared_ptr<_TreeEnsemble>
     constructAndValidateTreeEnsembleFromSpec(const Specification::Model& tes);
-    
+
 }}
 
 #endif /* _MLTREEENSEMBLECOMMONSTRUCTURES_H_ */

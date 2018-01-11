@@ -114,7 +114,7 @@ __archive_rb_tree_find_node(struct archive_rb_tree *rbt, const void *key)
 
 	return NULL;
 }
- 
+
 struct archive_rb_node *
 __archive_rb_tree_find_node_geq(struct archive_rb_tree *rbt, const void *key)
 {
@@ -133,7 +133,7 @@ __archive_rb_tree_find_node_geq(struct archive_rb_tree *rbt, const void *key)
 
 	return last;
 }
- 
+
 struct archive_rb_node *
 __archive_rb_tree_find_node_leq(struct archive_rb_tree *rbt, const void *key)
 {
@@ -566,7 +566,7 @@ __archive_rb_tree_removal_rebalance(struct archive_rb_tree *rbt,
 			if (RB_RED_P(brother)) {
 				/*
 				 * Case 1: Our brother is red, swap its
-				 * position (and colors) with our parent. 
+				 * position (and colors) with our parent.
 				 * This should now be case 2b (unless C or E
 				 * has a red child which is case 3; thus no
 				 * explicit branch to case 2b).
@@ -627,7 +627,7 @@ __archive_rb_tree_removal_rebalance(struct archive_rb_tree *rbt,
 				/*
 				 * Case 3: our brother is black, our near
 				 * nephew is red, and our far nephew is black.
-				 * Swap our brother with our near nephew.  
+				 * Swap our brother with our near nephew.
 				 * This result in a tree that matches case 4.
 				 * (Our father could be red or black).
 				 *
@@ -660,7 +660,7 @@ __archive_rb_tree_removal_rebalance(struct archive_rb_tree *rbt,
 			 *	|      n  ->      N  -->         |
 			 *
 			 * If we had two red nephews, then after the swap,
-			 * our former father would have a red grandson. 
+			 * our former father would have a red grandson.
 			 */
 			if (brother->rb_nodes[other] == NULL)
 				return;/* The tree may be broken. */

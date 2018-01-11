@@ -33,7 +33,7 @@ namespace CoreML {
             existing = v;
         }
     }
-   
+
     template <typename T>
     static inline Result saveSpecification(const T& formatObj,
                                            std::ostream& out) {
@@ -67,10 +67,10 @@ namespace CoreML {
             return Result(ResultType::FAILED_TO_DESERIALIZE,
                           "unable to deserialize object");
         }
-        
+
         return Result();
     }
-    
+
     static inline Result loadSpecificationPath(Specification::Model& formatObj,
                                                const std::string& path) {
         Model m;

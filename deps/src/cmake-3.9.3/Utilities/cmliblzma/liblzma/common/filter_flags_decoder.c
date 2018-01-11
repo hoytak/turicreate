@@ -20,7 +20,7 @@ lzma_filter_flags_decode(
 {
 	lzma_vli props_size;
 	lzma_ret ret;
-	
+
 	// Set the pointer to NULL so the caller can always safely free it.
 	filter->options = NULL;
 

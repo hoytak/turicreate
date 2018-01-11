@@ -29,14 +29,14 @@ namespace S3
 namespace Model
 {
 
-LoggingEnabled::LoggingEnabled() : 
+LoggingEnabled::LoggingEnabled() :
     m_targetBucketHasBeenSet(false),
     m_targetGrantsHasBeenSet(false),
     m_targetPrefixHasBeenSet(false)
 {
 }
 
-LoggingEnabled::LoggingEnabled(const XmlNode& xmlNode) : 
+LoggingEnabled::LoggingEnabled(const XmlNode& xmlNode) :
     m_targetBucketHasBeenSet(false),
     m_targetGrantsHasBeenSet(false),
     m_targetPrefixHasBeenSet(false)

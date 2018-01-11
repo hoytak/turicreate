@@ -60,7 +60,7 @@ class EXPORT bm25 : public transformer_base {
   /**
    * Initialize the transformer.
    */
-  void init_transformer(const std::map<std::string, 
+  void init_transformer(const std::map<std::string,
                         flexible_type>& _options);
 
   /**
@@ -74,7 +74,7 @@ class EXPORT bm25 : public transformer_base {
    * Transform the given data.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "transform" in python.
@@ -82,19 +82,19 @@ class EXPORT bm25 : public transformer_base {
    */
   gl_sframe transform(gl_sframe data);
 
-  /** 
-   * Fit and transform the given data. Intended as an optimization because 
-   * fit and transform are usually always called together. The default 
+  /**
+   * Fit and transform the given data. Intended as an optimization because
+   * fit and transform are usually always called together. The default
    * implementaiton calls fit and then transform.
-   * 
+   *
    * \param[in] data  (SFrame of data)
-   */ 
-  gl_sframe fit_transform(gl_sframe data) { 
-    data.materialize(); 
+   */
+  gl_sframe fit_transform(gl_sframe data) {
+    data.materialize();
     fit(data);
     return transform(data);
   }
-  
+
   // Functions that all transformers need to register. Can be copied verbatim
   // for other classes.
   // --------------------------------------------------------------------------
@@ -105,9 +105,9 @@ class EXPORT bm25 : public transformer_base {
   REGISTER_CLASS_MEMBER_FUNCTION(bm25::transform, "data");
   REGISTER_CLASS_MEMBER_FUNCTION(bm25::get_current_options);
   REGISTER_CLASS_MEMBER_FUNCTION(bm25::list_fields);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options",
                                      bm25::get_default_options);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get",
                                      bm25::get_value_from_state,
                                      "key");
   END_CLASS_MEMBER_REGISTRATION

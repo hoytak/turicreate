@@ -60,22 +60,22 @@ class unity_sgraph_base;
  * the \ref vertices and \ref edges.
  * Both functions return a GFrame (\ref gl_gframe) object. GFrame is
  * like SFrame but is bound to the host SGraph,
- * so that modification to GFrame is applied to SGraph, and vice versa. 
- * 
- * For instance, the following code shows how to add/remove columns 
+ * so that modification to GFrame is applied to SGraph, and vice versa.
+ *
+ * For instance, the following code shows how to add/remove columns
  * to/from the vertex data. The change is applied to SGraph.
  * \code
  * // add a new edge attribute with const value.
  * g.edges().add_column("likes", 0);
- * 
+ *
  * // remove a vertex attribute.
  * g.vertices().remove_column("age");
  *
  * // transforms one attribute to the other
  * g.vertices()["likes_fish"] = g.vertices()["__id"] == "cat";
  * \endcode
- * 
- * You can also query for specific vertices and edges using the 
+ *
+ * You can also query for specific vertices and edges using the
  * \ref get_vertices and \ref get_edges functionality.
  *
  * For instance,
@@ -88,7 +88,7 @@ class unity_sgraph_base;
  * the edge attribute "like_fish" evaluates to 1.
  *
  * In addition, you can perform other non-mutating \ref gl_sframe operations like
- * groupby, join, logical_filter in the same way, and the returned object will 
+ * groupby, join, logical_filter in the same way, and the returned object will
  * be \ref gl_sframe.
  *
  * In the case where you want to perform vertex-specified operations,
@@ -96,7 +96,7 @@ class unity_sgraph_base;
  * we provide \ref triple_apply which is essentially a
  * "parallel for" over (Vertex, Edge, Vertex) triplets.
  *
- * For instance, the following code shows how to implement the update function 
+ * For instance, the following code shows how to implement the update function
  * for synchronous pagerank.
  *
  * \code
@@ -192,7 +192,7 @@ class gl_sgraph {
    * Produces output:
    *
    * \code{.txt}
-   * 
+   *
    * vertices of the gl_sgraph
    * +-------+
    * |  __id |
@@ -274,11 +274,11 @@ class gl_sgraph {
    * std::cout << g.get_edges({}, { {"rating": 5} }) << std::endl;
    * std::cout << g.get_edges({ {0, 1}, {1, 2} }) << std::endl;
    * \endcode
-   * 
-   * Produces output: 
+   *
+   * Produces output:
    * \code{.txt}
    * Return all edges in the graph.
-   * 
+   *
    * +----------+----------+--------+
    * | __src_id | __dst_id | rating |
    * +----------+----------+--------+
@@ -286,17 +286,17 @@ class gl_sgraph {
    * |    0     |    1     |   5    |
    * |    1     |    2     |  None  |
    * +----------+----------+--------+
-   * 
+   *
    * Return edges with the attribute "rating" of 5.
-   * 
+   *
    * +----------+----------+--------+
    * | __src_id | __dst_id | rating |
    * +----------+----------+--------+
    * |    0     |    1     |   5    |
    * +----------+----------+--------+
-   * 
+   *
    * Return edges 0 --> 1 and 1 --> 2 (if present in the graph).
-   * 
+   *
    * +----------+----------+--------+
    * | __src_id | __dst_id | rating |
    * +----------+----------+--------+
@@ -304,7 +304,7 @@ class gl_sgraph {
    * |    1     |    2     |  None  |
    * +----------+----------+--------+
    * \endcode
-   * 
+   *
    * \see edges
    * \see get_vertices
    */
@@ -336,11 +336,11 @@ class gl_sgraph {
    * std::cout << g.get_vertices({}, { {"gender", "M"} }) << std::endl;
    *
    * \endcode
-   * 
+   *
    * Produces output:
    * \code{.txt}
    * Return all vertices in the graph.
-   * 
+   *
    * +------+--------+
    * | __id | gender |
    * +------+--------+
@@ -348,25 +348,25 @@ class gl_sgraph {
    * |  2   |   F    |
    * |  1   |   F    |
    * +------+--------+
-   * 
+   *
    * Return vertices 0 and 2.
-   * 
+   *
    * +------+--------+
    * | __id | gender |
    * +------+--------+
    * |  0   |   M    |
    * |  2   |   F    |
    * +------+--------+
-   * 
+   *
    * Return vertices with the vertex attribute "gender" equal to "M".
-   * 
+   *
    * +------+--------+
    * | __id | gender |
    * +------+--------+
    * |  0   |   M    |
    * +------+--------+
    * \endcode
-   * 
+   *
    * \see vertices
    * \see get_edges
    */
@@ -381,7 +381,7 @@ class gl_sgraph {
    *
    * \code
    * g = gl_sgraph();
-   * std::cout << g.summary()['num_vertices'] << "\n" 
+   * std::cout << g.summary()['num_vertices'] << "\n"
    *           << g.summary()['num_edges'] << std::endl;;
    * \endcode
    *
@@ -446,11 +446,11 @@ class gl_sgraph {
    * attributes are not already present in the graph's vertex data, they are
    * added, with existing vertices acquiring the missing value FLEX_UNDEFINED.
    *
-   * \param vertices Vertex data. An \ref gl_sframe whose 
+   * \param vertices Vertex data. An \ref gl_sframe whose
    *     "vid_field" column contains the vertex IDs.
    *     Additional columns are treated as vertex attributes.
    *
-   * \param vid_field Optional. Specifies the vertex id column in the vertices 
+   * \param vid_field Optional. Specifies the vertex id column in the vertices
    *     gl_sframe.
    *
    * Example:
@@ -510,7 +510,7 @@ class gl_sgraph {
    *
    * \endcode
    *
-   * \note The column specified by vid_field will be renamed to "__id" 
+   * \note The column specified by vid_field will be renamed to "__id"
    *    as the special vertex attribute.
    *
    * \note If a vertex id already exists in the graph, adding a new vertex
@@ -591,13 +591,13 @@ class gl_sgraph {
    *
    * \endcode
    *
-   * \note The columns specified by "src_id" and "dst_id" will be renamed to 
+   * \note The columns specified by "src_id" and "dst_id" will be renamed to
    *    "__src_id", and "__dst_id" respectively as the special edge attributes.
    *
    * \note If an edge (identified by src and dst id) already exists in the graph,
    *    adding a new edge with the same src and dst will NOT overwrite the existing
    *    edge. The same edge is DUPLICATED.
-   *    
+   *
    * \note If an edge contains new vertices, the new vertices will be automatically
    *    added to the graph with all attributes default to FLEX_UNDEFINED.
    *
@@ -802,7 +802,7 @@ class gl_sgraph {
    * |  cat  |  1.0   | NA   |     1      |
    * | hippo |  NA    | NA   |     0      |
    * +-------+--------+------+------------+
-   * 
+   *
    * Replace missing values with zeros:
    * +-------+--------+------+------------+
    * |  __id | fluffy | bark | likes_fish |
@@ -950,7 +950,7 @@ class gl_sgraph {
    *
    * \endcode
    *
-   * \note mutated fields must be pre-allocated before triple_apply. 
+   * \note mutated fields must be pre-allocated before triple_apply.
    *
    * \see edge_triple
    * \see lambda_triple_apply_fn

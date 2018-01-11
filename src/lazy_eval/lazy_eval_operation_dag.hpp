@@ -26,8 +26,8 @@ class lazy_eval_operation_dag;
 
 /**
  * \ingroup lazy_eval
- * The lazy_eval_future<T> is the key object managed by the 
- * lazy_eval_operation_dag. All operations issued to the dag returns a 
+ * The lazy_eval_future<T> is the key object managed by the
+ * lazy_eval_operation_dag. All operations issued to the dag returns a
  * future object. Evaluating the future (using operator()) will evaluate
  * the DAG allowing the object to be accessed efficiently.
  */
@@ -42,7 +42,7 @@ class lazy_eval_future {
   lazy_eval_future() = delete;
   /// default copy constructor
   lazy_eval_future(const lazy_eval_future& other) = default;
-  /// default assignment operator 
+  /// default assignment operator
   lazy_eval_future& operator=(const lazy_eval_future& other) = default;
 
   /**
@@ -67,8 +67,8 @@ class lazy_eval_future {
 
   /**
    * Evaluates the dependencies of this object, caches the result, and returns a
-   * a shared pointer to the computed value. If the value has already been 
-   * cached, no further computation is performed. 
+   * a shared pointer to the computed value. If the value has already been
+   * cached, no further computation is performed.
    */
   std::shared_ptr<value_type> get_ptr() {
     if (!object) make_eager();
@@ -99,7 +99,7 @@ class lazy_eval_future {
   std::shared_ptr<value_type> object;
 
   /// private constructor
-  lazy_eval_future(dag_type* owner, size_t vertex_idx): 
+  lazy_eval_future(dag_type* owner, size_t vertex_idx):
       owner(owner), vertex_idx(vertex_idx) { log_func_entry(); }
 
   /// Forces the object to be fully instantiated
@@ -113,13 +113,13 @@ class lazy_eval_future {
 
 /**
  * \ingroup lazy_eval
- * The Lazy Evaluation Operation DAG is a directed acyclic graph 
+ * The Lazy Evaluation Operation DAG is a directed acyclic graph
  * connecting immutable objects of type T with operations, and also provide
  * lazy evaluation primitives to provide object computation at any point
  * in the tree.
  *
- * Using the lazy_eval_operation_dag system simply requires the user to 
- * implement a collection of operations, each inheriting from 
+ * Using the lazy_eval_operation_dag system simply requires the user to
+ * implement a collection of operations, each inheriting from
  * lazy_eval_operation_base<T>. For instance, we can define the following
  * multiply, increment, and set_val lazy operations on integers.
  *
@@ -146,13 +146,13 @@ class lazy_eval_future {
  *    virtual size_t num_arguments() { return 0; }
  *    virtual void execute(int& output,
  *                         const std::vector<int*>& parents) {
- *      output = val; 
+ *      output = val;
  *    }
  *  };
  * \endcode
  *
  * To create a sequence of lazy operations simply involves the use of the
- * add_operation() function. Each call to add_operation is lazy, and 
+ * add_operation() function. Each call to add_operation is lazy, and
  * returns a future object.
  * \code
  *  lazy_eval_operation_dag<int> dag;
@@ -173,18 +173,18 @@ class lazy_eval_operation_dag {
   typedef T value_type;
   typedef lazy_eval_operation_base<value_type> operation_type;
   typedef lazy_eval_future<value_type> future_type;
-  
-  lazy_eval_operation_dag(std::function<value_type*()> 
+
+  lazy_eval_operation_dag(std::function<value_type*()>
                             allocator = [](){return new value_type;},
-                          std::function<void(value_type& dest, value_type& src)> 
-                            copier = [](value_type& dest, value_type& src){dest = src;}) 
+                          std::function<void(value_type& dest, value_type& src)>
+                            copier = [](value_type& dest, value_type& src){dest = src;})
       :next_vid(0), allocator(allocator), copier(copier) { log_func_entry(); }
 
 
   /**
    * Adds a fixed value to the DAG.
    * The returned future pointer will always be available efficiently,
-   * Deleting the returned future pointer will mark the corresponding entry 
+   * Deleting the returned future pointer will mark the corresponding entry
    * in the DAG for deletion.
    */
   future_type* add_value(value_type* value) {
@@ -207,10 +207,10 @@ class lazy_eval_operation_dag {
    * Creates a new entry in the dependency tree by creating a future which
    * corresponds to calling the provided operation on the parents.
    *
-   * Deleting the returned future pointer will mark the corresponding entry 
+   * Deleting the returned future pointer will mark the corresponding entry
    * in the DAG for deletion.
    */
-  future_type* add_operation(operation_type* operation, 
+  future_type* add_operation(operation_type* operation,
                             const std::vector<future_type*>& parents) {
     ASSERT_TRUE(operation != NULL);
     ASSERT_EQ(operation->num_arguments(), parents.size());
@@ -231,13 +231,13 @@ class lazy_eval_operation_dag {
   }
 
   /**
-   * Computes and caches a particular entry in the graph 
+   * Computes and caches a particular entry in the graph
    */
   std::shared_ptr<value_type> make_eager(size_t vertex_id) {
     log_func_entry();
     // check that we do have the vertex ID in question
     ASSERT_EQ(vertices.count(vertex_id), 1);
-    // this is now the main evaluation logic 
+    // this is now the main evaluation logic
     // first check if we have a pointer to it
     vertex* vtx = vertices.at(vertex_id);
     // ok, the object is around! lets return that.
@@ -265,7 +265,7 @@ class lazy_eval_operation_dag {
   }
 
   /**
-   * Marks the vertex for deletion. Deletion will only occur on a call to 
+   * Marks the vertex for deletion. Deletion will only occur on a call to
    * cleanup()
    */
   void mark_for_deletion(size_t vertex_id) {
@@ -290,11 +290,11 @@ class lazy_eval_operation_dag {
   }
 
   /**
-   * Attempts to delete all vertices that were marked for deletion 
+   * Attempts to delete all vertices that were marked for deletion
    * (see mark_for_deletion()). Note that not all marked vertices may be deleted
    * as some vertices (for instance, in the middle of a chain of operations)
    * cannot be deleted safely. This may result in the making eager of
-   * certain vertices to ensure that referenced vertices can always be 
+   * certain vertices to ensure that referenced vertices can always be
    * constructed.
    *
    * \param avoid_instantiation Cancel the deletion if it involves instantiating
@@ -304,7 +304,7 @@ class lazy_eval_operation_dag {
     log_func_entry();
     // delete vertices from bottom up
     // sort the range of keys
-    std::vector<size_t> ids_to_delete; 
+    std::vector<size_t> ids_to_delete;
     for(auto vertex: vertices) {
       if (vertex.second->to_delete) ids_to_delete.push_back(vertex.first);
     }
@@ -331,14 +331,14 @@ class lazy_eval_operation_dag {
        if (!vertex.second->object.expired()) {
          value_type* v = vertex.second->object.lock().get();
          out << "\\nptr=" << v;
-       } 
+       }
        out << "\"";
 
        // print allocated objects in bold border
        // print deleted objects in red
        if (!vertex.second->object.expired()) {
          out << ",style=bold";
-       } 
+       }
        if (vertex.second->to_delete) {
          out << ",color=red";
        }
@@ -362,7 +362,7 @@ class lazy_eval_operation_dag {
   }
  private:
   /// ID to assign to next vertex in the DAG
-  size_t next_vid; 
+  size_t next_vid;
 
   /// A vertex in the DAG
   struct vertex {
@@ -370,21 +370,21 @@ class lazy_eval_operation_dag {
         : operation(NULL), to_delete(false), vertex_id(vertex_id) { }
     ~vertex() { if (operation) delete operation; }
     /// The value of the vertex
-    std::weak_ptr<value_type> object; 
+    std::weak_ptr<value_type> object;
     /**
      * This is used to the store the value of the vertex when it is truly
      * necessary to do so. i.e. sometimes when vertices are deleted, their
      * children must be evaluated to keep the tree evaluatable.
      */
-    std::shared_ptr<value_type> object_cache; 
+    std::shared_ptr<value_type> object_cache;
     /** The operation to evaluate on this vertex
      * If this is NULL, this is a value vertex
      */
-    operation_type* operation;        
+    operation_type* operation;
     /// parent vertices
-    std::vector<size_t> parents; 
+    std::vector<size_t> parents;
     /// child vertices
-    std::vector<size_t> children; 
+    std::vector<size_t> children;
     /// Marked for deletion
     bool to_delete;
     /// vertex ID
@@ -400,7 +400,7 @@ class lazy_eval_operation_dag {
     }
   };
 
-  /// A map from vertex ID to the vertex 
+  /// A map from vertex ID to the vertex
   std::unordered_map<size_t, vertex*> vertices;
   /// Used to allocate values
   std::function<value_type*()> allocator;
@@ -408,11 +408,11 @@ class lazy_eval_operation_dag {
   std::function<void(value_type& dest, value_type& src)> copier;
 
   /**
-   * Returns a map of all ancestor vertices that have to be computed for this 
-   * vertex to be computed, as well as their children. 
+   * Returns a map of all ancestor vertices that have to be computed for this
+   * vertex to be computed, as well as their children.
    *  - halts at non-expired nodes
-   *  - halts at vertices with two or more children which the current vertex 
-   *    depends on 
+   *  - halts at vertices with two or more children which the current vertex
+   *    depends on
    */
   std::unordered_map<size_t, std::vector<size_t> > list_ancestors(size_t vertex) {
     std::unordered_map<size_t, std::vector<size_t> > ret;
@@ -430,7 +430,7 @@ class lazy_eval_operation_dag {
     // have all of its children listed
     vqueue.push(vertex, vertex);
     while(!vqueue.empty()) {
-      size_t curvtx = vqueue.pop().first; 
+      size_t curvtx = vqueue.pop().first;
       if (ret.count(curvtx) && ret[curvtx].size() >= 2) continue;
       for (size_t parent: vertices.at(curvtx)->parents) {
         if (vertices.at(curvtx)->object.expired()) {
@@ -445,16 +445,16 @@ class lazy_eval_operation_dag {
 
   /**
    * Computes the value of the vertex, assuming certain preconditions
-   * are satisfied: i.e. All dependent ancestors in the DAG with multiple 
+   * are satisfied: i.e. All dependent ancestors in the DAG with multiple
    * children are fully evaluated.
    */
-  std::shared_ptr<value_type> preorder_compute(size_t vertex_id, 
+  std::shared_ptr<value_type> preorder_compute(size_t vertex_id,
                                                bool make_copy = true) {
     // do a recursive backtrack through the vertices in ancestor_forward_edges
     vertex* vtx = vertices.at(vertex_id);
 
     if (!vtx->object.expired()) {
-      // we hit a fully instantiated object. Return a copy of it. 
+      // we hit a fully instantiated object. Return a copy of it.
       if (make_copy) {
         // if it is a value _vertex, we must always copy
         std::shared_ptr<value_type> ret;
@@ -492,13 +492,13 @@ class lazy_eval_operation_dag {
       // we are not making a copy, so it is safe to remember the weak pointer
       if (!make_copy) vtx->object = ret;
       return ret;
-    } else { 
+    } else {
       // compute all parents
       // also extract raw pointers from all parents except the first
       std::vector<std::shared_ptr<value_type> > parents_shared_ptr(vtx->parents.size());
       std::vector<value_type*> other_parents_raw_ptr;
       for (size_t i = 0;i < vtx->parents.size(); ++i) {
-        // compute parent, we need to make a copy of only the left side of the 
+        // compute parent, we need to make a copy of only the left side of the
         // tree. This can be optimized.
         parents_shared_ptr[i] = preorder_compute(vtx->parents[i], i == 0);
         if (i > 0) other_parents_raw_ptr.push_back(parents_shared_ptr[i].get());
@@ -521,7 +521,7 @@ class lazy_eval_operation_dag {
    * Tries to delete a given vertex. This may result in the making eager of
    * certain vertices to ensure that referenced vertices can always
    * be constructed. A vertex is only uncached if it can be deleted.
-   * 
+   *
    * \param vertex_id Vertex to delete
    * \param avoid_instantiation Cancel the deletion if it involves instantiating
    *                            an as yet, uninstantiated vertex.
@@ -535,22 +535,22 @@ class lazy_eval_operation_dag {
       for (size_t parentid: vtx->parents) {
         vertex* parent= vertices.at(parentid);
         // delete myself from the parent
-        parent->children.erase(std::find(parent->children.begin(), 
-                                         parent->children.end(), 
+        parent->children.erase(std::find(parent->children.begin(),
+                                         parent->children.end(),
                                          vertex_id));
       }
       // now we can clear the current object
       delete vtx;
       vertices.erase(vertex_id);
     } else if (vtx->parents.size() == 0 && vtx->children.size() == 1) {
-      // ok. we can actually delete this now. 
-      // But we would preferably like to avoid "splits" where I have to 
+      // ok. we can actually delete this now.
+      // But we would preferably like to avoid "splits" where I have to
       // instantiate many children.
       // keep going downwards until I find a split, or a not deleted vertex
       // nd make that eager.
       size_t deepest_child = vertex_id;
       vertex* deepest_child_vtx = vtx;
-      while(deepest_child_vtx->to_delete && 
+      while(deepest_child_vtx->to_delete &&
             deepest_child_vtx->children.size() == 1) {
         deepest_child = deepest_child_vtx->children[0];
         deepest_child_vtx= vertices.at(deepest_child);
@@ -560,7 +560,7 @@ class lazy_eval_operation_dag {
       auto deepest_child_value = make_eager(deepest_child);
       deepest_child_vtx->object_cache = deepest_child_value;
       deepest_child_vtx->object = deepest_child_value;
-      
+
       // now we can delete every vertex up to the deepest child
       size_t deletion_cur_id = vertex_id;
       vertex* deletion_cur_vtx = vtx;
@@ -577,14 +577,14 @@ class lazy_eval_operation_dag {
         deletion_cur_id = next_child;
         deletion_cur_vtx = next_child_vtx;
       }while(deletion_cur_vtx->to_delete && deletion_cur_vtx->children.size() == 1);
-    } 
+    }
   }
 };
 
 } // turicreate
 
 template <typename T>
-std::ostream& operator<<(std::ostream& out, 
+std::ostream& operator<<(std::ostream& out,
                          const turi::lazy_eval_operation_dag<T>& dag) {
   dag.print(out);
   return out;

@@ -41,67 +41,67 @@ namespace Model
     CompleteMultipartUploadResult(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
     CompleteMultipartUploadResult& operator=(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
 
-    
+
     inline const Aws::String& GetLocation() const{ return m_location; }
 
-    
+
     inline void SetLocation(const Aws::String& value) { m_location = value; }
 
-    
+
     inline void SetLocation(Aws::String&& value) { m_location = value; }
 
-    
+
     inline void SetLocation(const char* value) { m_location.assign(value); }
 
-    
+
     inline CompleteMultipartUploadResult& WithLocation(const Aws::String& value) { SetLocation(value); return *this;}
 
-    
+
     inline CompleteMultipartUploadResult& WithLocation(Aws::String&& value) { SetLocation(value); return *this;}
 
-    
+
     inline CompleteMultipartUploadResult& WithLocation(const char* value) { SetLocation(value); return *this;}
 
-    
+
     inline const Aws::String& GetBucket() const{ return m_bucket; }
 
-    
+
     inline void SetBucket(const Aws::String& value) { m_bucket = value; }
 
-    
+
     inline void SetBucket(Aws::String&& value) { m_bucket = value; }
 
-    
+
     inline void SetBucket(const char* value) { m_bucket.assign(value); }
 
-    
+
     inline CompleteMultipartUploadResult& WithBucket(const Aws::String& value) { SetBucket(value); return *this;}
 
-    
+
     inline CompleteMultipartUploadResult& WithBucket(Aws::String&& value) { SetBucket(value); return *this;}
 
-    
+
     inline CompleteMultipartUploadResult& WithBucket(const char* value) { SetBucket(value); return *this;}
 
-    
+
     inline const Aws::String& GetKey() const{ return m_key; }
 
-    
+
     inline void SetKey(const Aws::String& value) { m_key = value; }
 
-    
+
     inline void SetKey(Aws::String&& value) { m_key = value; }
 
-    
+
     inline void SetKey(const char* value) { m_key.assign(value); }
 
-    
+
     inline CompleteMultipartUploadResult& WithKey(const Aws::String& value) { SetKey(value); return *this;}
 
-    
+
     inline CompleteMultipartUploadResult& WithKey(Aws::String&& value) { SetKey(value); return *this;}
 
-    
+
     inline CompleteMultipartUploadResult& WithKey(const char* value) { SetKey(value); return *this;}
 
     /**
@@ -288,19 +288,19 @@ namespace Model
      */
     inline CompleteMultipartUploadResult& WithSSEKMSKeyId(const char* value) { SetSSEKMSKeyId(value); return *this;}
 
-    
+
     inline const RequestCharged& GetRequestCharged() const{ return m_requestCharged; }
 
-    
+
     inline void SetRequestCharged(const RequestCharged& value) { m_requestCharged = value; }
 
-    
+
     inline void SetRequestCharged(RequestCharged&& value) { m_requestCharged = value; }
 
-    
+
     inline CompleteMultipartUploadResult& WithRequestCharged(const RequestCharged& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline CompleteMultipartUploadResult& WithRequestCharged(RequestCharged&& value) { SetRequestCharged(value); return *this;}
 
   private:

@@ -38,7 +38,7 @@ cdef extern from "<sframe/sframe_rows.hpp>" namespace "turi":
 
     cdef struct row "sframe_rows::row":
         const flexible_type& at "operator[]"(size_t col)
-        
+
     cdef struct sframe_rows:
         row at "operator[]"(size_t row)
 
@@ -73,7 +73,7 @@ cdef extern from "<lambda/pylambda.hpp>" namespace "turi::lambda":
         const sframe_rows* input_rows
 
         flexible_type* output_values
-        
+
     ################################################################################
     # Graph Pylambda stuff
     cdef struct lambda_graph_triple_apply_data:
@@ -83,12 +83,12 @@ cdef extern from "<lambda/pylambda.hpp>" namespace "turi::lambda":
 
         vector[vector[flexible_type]]* source_partition
         vector[vector[flexible_type]]* target_partition
-        
+
         const vector[string]* vertex_keys
         const vector[string]* edge_keys
         const vector[string]* mutated_edge_keys
         size_t srcid_column, dstid_column
-    
+
     cdef struct pylambda_evaluation_functions:
         void (*set_random_seed)(size_t seed)
         size_t (*init_lambda)(const string&)
@@ -101,9 +101,9 @@ cdef extern from "<lambda/pylambda.hpp>" namespace "turi::lambda":
     # The function to call to set everything up.
     void set_pylambda_evaluation_functions(pylambda_evaluation_functions* eval_function_struct)
 
-    
+
 ################################################################################
-# Lambda evaluation class. 
+# Lambda evaluation class.
 
 cdef class lambda_evaluator(object):
     """
@@ -115,7 +115,7 @@ cdef class lambda_evaluator(object):
     cdef object lambda_function
     cdef list output_buffer
     cdef list keys
-    cdef dict arg_dict_base 
+    cdef dict arg_dict_base
     cdef bytes lambda_string
 
     def __init__(self, bytes lambda_string):
@@ -152,24 +152,24 @@ cdef class lambda_evaluator(object):
 
         # Now, build the base arg_dict_base
         self.arg_dict_base = {k : None for k in self.keys}
-                
+
     @cython.boundscheck(False)
     cdef eval_simple(self, lambda_call_data* lcd):
-        
+
         cdef const flexible_type* v_in = lcd.input_values
         cdef long n = lcd.n_inputs
-        
+
         if len(self.output_buffer) != n:
             self.output_buffer = [None]*n
-            
+
         cdef long i
         cdef object x
-        
+
         for i in range(0, n):
             if v_in[i].get_type() == UNDEFINED and lcd.skip_undefined:
                 self.output_buffer[i] = None
                 continue
-            
+
             x = pyobject_from_flexible_type(v_in[i])
             self.output_buffer[i] = self.lambda_function(x)
 
@@ -194,7 +194,7 @@ cdef class lambda_evaluator(object):
                                  % (i, lcd.input_keys[0][i].size(), n))
 
             arg_dict = self.arg_dict_base.copy()
-            
+
             for j in range(n_keys):
                 arg_dict[self.keys[j]] = pyobject_from_flexible_type(lcd.input_rows[0][i][j])
 
@@ -234,7 +234,7 @@ cdef class lambda_evaluator(object):
         ret_dict with values from ref_dict as needed.  Puts the resulting values
         in ret_dict into the position of output_values corresponding to the
         location in mut_keys.  Furthermore, if any values are mutated in mut_keys,
-        then they are checked for equality. 
+        then they are checked for equality.
         """
 
         cdef long j
@@ -247,10 +247,10 @@ cdef class lambda_evaluator(object):
             try:
                 src_val = ret_dict[k.decode()]
                 src_key_count += 1
-                
-            except KeyError:                
+
+            except KeyError:
                 src_val = ref_dict[k.decode()]
-                 
+
             output_values[j] = flexible_type_from_pyobject(src_val)
 
         if src_key_count != len(ret_dict):
@@ -290,24 +290,24 @@ cdef class lambda_evaluator(object):
 
         cdef dict edge_object = {}, source_object = {}, target_object = {}
         cdef dict edge_object_param, source_object_param, target_object_param
-        
+
         cdef flex_int srcid, dstid
 
         cdef dict ret_source_dict, ret_edge_dict, ret_target_dict
 
         cdef tuple ret
-        
+
         for i in range(n_edges):
-            
+
             srcid = lcg.all_edge_data[0][i][lcg.srcid_column].get_int()
             dstid = lcg.all_edge_data[0][i][lcg.dstid_column].get_int()
 
-            # Set the edge update object. 
+            # Set the edge update object.
             for j in range(n_edge_keys):
                 edge_object[edge_keys[j].decode()] = pyobject_from_flexible_type(lcg.all_edge_data[0][i][j]);
-                
+
             edge_object_param = edge_object.copy()
-                
+
             # Set the vertex data
             for j in range(n_vertex_keys):
                 source_object[vertex_keys[j].decode()] = pyobject_from_flexible_type(lcg.source_partition[0][srcid][j])
@@ -315,7 +315,7 @@ cdef class lambda_evaluator(object):
 
             source_object_param = source_object.copy()
             target_object_param = target_object.copy()
-                
+
             _ret = self.lambda_function(source_object_param, edge_object_param, target_object_param)
 
             if _ret is None or type(_ret) is not tuple or len(<tuple>_ret) != 3:
@@ -348,9 +348,9 @@ cdef class lambda_evaluator(object):
                 ret_target_dict = <dict>(ret[2])
                 self.process_output_dict(lcg.target_partition[0][dstid].data(), vertex_keys,
                                          target_object, ret_target_dict)
-            
+
         # And we're done!
-    
+
 
 ################################################################################
 # Wrapping functions
@@ -469,7 +469,7 @@ cdef void _eval_graph_triple_apply(size_t lmfunc_id, lambda_graph_triple_apply_d
 
 eval_functions.eval_graph_triple_apply = _eval_graph_triple_apply
 
-# Finally, set pylambda evaluation functions in the 
+# Finally, set pylambda evaluation functions in the
 set_pylambda_evaluation_functions(&eval_functions)
 
 ################################################################################

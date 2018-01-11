@@ -49,7 +49,7 @@ static inline bool _floatsAreEqual(const json_number & one, const json_number & 
 class NumberToString {
 public:
     template<typename T>
-    static json_string _itoa(T val) json_nothrow {		
+    static json_string _itoa(T val) json_nothrow {
 	   #ifdef JSON_LESS_MEMORY
 		  json_auto<json_char> s(getLenSize<sizeof(T)>::GETLEN);
 	   #else
@@ -164,9 +164,9 @@ public:
 		  const json_char * p = str.c_str();
 		  bool decimal = false;
 		  bool scientific = false;
-		   
+
 			#ifdef JSON_STRICT
-		   bool leadingzero = false;	   
+		   bool leadingzero = false;
 			#endif
 
 		  //first letter is weird
@@ -194,7 +194,7 @@ public:
 							  case JSON_TEXT('E'):
 								  leadingzero = false;
 								  break;
-							  case JSON_TEXT('\0'): 
+							  case JSON_TEXT('\0'):
 								  return true;
 							  default:
 								  leadingzero = true;
@@ -220,7 +220,7 @@ public:
 			 case JSON_TEXT('0'):
 				++p;
 				#ifdef JSON_STRICT
-				leadingzero = true;	   
+				leadingzero = true;
 				#endif
 				switch(*p){
 				    case JSON_TEXT('.'):
@@ -285,7 +285,7 @@ public:
 					 if (json_unlikely(decimal)){
 						 return false; //multiple decimals
 					 }
-					 
+
 					 if (json_unlikely(scientific)){
 						 return false;
 					 }
@@ -306,7 +306,7 @@ public:
 							if (!isdigit(*(p + 1))){
 								return false;
 							}
-							
+
 							#ifdef JSON_STRICT
 								if (*(p + 1) == JSON_TEXT('0')){  //no leading zeros on scientific notations
 									return false;
@@ -348,7 +348,7 @@ public:
 		  }
 		#ifdef JSON_STRICT
 		   if (leadingzero && !decimal){
-			   return false;	  
+			   return false;
 		   }
 		#endif
 		  return true;
@@ -380,7 +380,7 @@ public:
 				return std::numeric_limits<json_number>::signaling_NaN();
 			}
 		  #endif
-		   
+
 		   JSON_ASSERT_SAFE(*num != JSON_TEXT('0'), JSON_TEXT("multiple leading zeros"), return std::numeric_limits<json_number>::signaling_NaN(); );
 
 		  // Number
@@ -410,7 +410,7 @@ public:
 				n = (n * 10.0) + (*num++ - JSON_TEXT('0'));
 				--scale;
 			  };
-		  } else {  
+		  } else {
 			  JSON_ASSERT_SAFE(!_leadingzeros || n == 0, JSON_TEXT("leading zero on an int"), return std::numeric_limits<json_number>::signaling_NaN(); );
 			  JSON_ASSERT_SAFE(
 							   (*num) == JSON_TEXT('e') ||	 //0Exxx
@@ -440,7 +440,7 @@ public:
 				subscale=(subscale * 10) + (*num++ - JSON_TEXT('0'));
 			 }
 		  }
-		   
+
 		  JSON_ASSERT_SAFE(*num == JSON_TEXT('\0'), JSON_TEXT("done with number, not at terminator"), return std::numeric_limits<json_number>::signaling_NaN(); );
 		  return sign * n * pow((json_number)10.0, scale + subscale * signsubscale);	// number = +/- number.fraction * 10^+/- exponent
 	   }

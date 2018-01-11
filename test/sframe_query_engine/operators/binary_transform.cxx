@@ -25,7 +25,7 @@ struct binary_transform_test {
     sa_right->open_for_write();
     turi::copy(data.begin(), data.end(), *sa_right);
     sa_right->close();
-    typedef std::function<flexible_type(const sframe_rows::row&, 
+    typedef std::function<flexible_type(const sframe_rows::row&,
                                     const sframe_rows::row&)> binary_transform_type;
 
     binary_transform_type fn = [](const sframe_rows::row& left, const sframe_rows::row& right) {

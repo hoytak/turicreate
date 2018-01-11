@@ -22,7 +22,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-PutBucketAccelerateConfigurationRequest::PutBucketAccelerateConfigurationRequest() : 
+PutBucketAccelerateConfigurationRequest::PutBucketAccelerateConfigurationRequest() :
     m_bucketHasBeenSet(false),
     m_accelerateConfigurationHasBeenSet(false)
 {
@@ -43,5 +43,3 @@ Aws::String PutBucketAccelerateConfigurationRequest::SerializePayload() const
 
   return "";
 }
-
-

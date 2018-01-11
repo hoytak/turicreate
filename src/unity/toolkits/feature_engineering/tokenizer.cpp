@@ -24,15 +24,15 @@ void tokenizer::init_options(const std::map<std::string,
   DASSERT_TRUE(options.get_option_info().size() == 0);
 
   options.create_boolean_option(
-      "to_lower", 
-      "Convert all capitalized letters to lower case", 
+      "to_lower",
+      "Convert all capitalized letters to lower case",
       false,
       false);
 
   options.create_string_option(
      "output_column_prefix",
      "Prefix of word_counter output column",
-      flex_undefined()); 
+      flex_undefined());
 
   options.create_flexible_type_option(
      "delimiters",
@@ -76,7 +76,7 @@ void tokenizer::save_impl(turi::oarchive& oarc) const {
 void tokenizer::load_version(turi::iarchive& iarc, size_t version){
 
   if (version == 0) { // version 0 save & load is broken, warn and exit
-    log_and_throw("Known issue: Version 0 of Tokenizer cannot be loaded. " 
+    log_and_throw("Known issue: Version 0 of Tokenizer cannot be loaded. "
       "Please update the object using the latest version of Turi Create.");
     return;
   }
@@ -105,14 +105,14 @@ void tokenizer::fit(gl_sframe data){
   // Get the set of features to work with.
   feature_columns = transform_utils::get_column_names(
                             data, exclude, unprocessed_features);
-  
+
 
   // Select the features of the right type.
   feature_columns = transform_utils::select_valid_features(data, feature_columns,
                       {flex_type_enum::STRING});
 
   transform_utils::validate_feature_columns(data.column_names(), feature_columns);
-  
+
   // Store feature types and cols.
   feature_types.clear();
   for (const auto& f: feature_columns) {
@@ -139,7 +139,7 @@ void tokenizer::set_string_filters(){
       string_filters = transform_utils::ptb_filters;
       break;
     }
-    
+
     case flex_type_enum::LIST: {
       // Tokenize using custom delimiters list
       flex_list delimiter_list = delimiters.get<flex_list>();
@@ -147,7 +147,7 @@ void tokenizer::set_string_filters(){
       for (auto elem = delimiter_list.begin(); elem != delimiter_list.end(); ++elem) {
         if (elem->get_type() != flex_type_enum::STRING)
           log_and_throw("Invalid type. Tokenizer delimiters must be strings.");
-        
+
         all_delims += elem->get<flex_string>().substr(0,1);
       }
 
@@ -188,7 +188,7 @@ void tokenizer::init_transformer(
   to_lower = _options.at("to_lower");
 
   unprocessed_features = _options.at("features");
-  exclude = _options.at("exclude"); 
+  exclude = _options.at("exclude");
   if (int(exclude) == 1) {
     state["features"] = to_variant(FLEX_UNDEFINED);
     state["excluded_features"] = to_variant(unprocessed_features);
@@ -208,7 +208,7 @@ void tokenizer::init_transformer(
 gl_sframe tokenizer::transform(gl_sframe data){
   DASSERT_TRUE(options.get_option_info().size() > 0);
 
-  //Check if fitting has already ocurred. 
+  //Check if fitting has already ocurred.
   if (!fitted){
     log_and_throw("The Tokenizer must be fitted before .transform() is called.");
   }

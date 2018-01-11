@@ -99,4 +99,3 @@ CURL_HFILES = \
 	tool_xattr.h
 
 curl_SOURCES = $(CURL_CFILES) $(CURLX_ONES) $(CURL_HFILES)
-

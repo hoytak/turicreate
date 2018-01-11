@@ -14,18 +14,18 @@ namespace turi {
 namespace sketches {
 /**
  * \ingroup sketching
- * An implementation of the hyperloglog sketch for estimating the number of 
+ * An implementation of the hyperloglog sketch for estimating the number of
  * unique elements in a datastream.
  *
  * Implements the hyperloglog sketch algorithm as described in:
- *   Philippe Flajolet, Eric Fusy, Olivier Gandouet and Frederic Meunier. 
- *   HyperLogLog: the analysis of a near-optimal cardinality 
+ *   Philippe Flajolet, Eric Fusy, Olivier Gandouet and Frederic Meunier.
+ *   HyperLogLog: the analysis of a near-optimal cardinality
  *   estimation algorithm. Conference on Analysis of Algorithms (AofA) 2007.
  *
  * with further reference from:
  *   Stefan Heule, Marc Nunkesser and Alexander Hall.
  *   HyperLogLog in Practice: Algorithmic Engineering of a State of The
- *   Art Cardinality Estimation Algorithm. 
+ *   Art Cardinality Estimation Algorithm.
  *   Proceedings of the EDBT 2013 Conference.
  *
  *
@@ -33,7 +33,7 @@ namespace sketches {
  * \code
  *   hyperloglog hll;
  *   // repeatedly call
- *   hll.add(stuff) // this is a templatized function. 
+ *   hll.add(stuff) // this is a templatized function.
  *                  // will accept anything it can hash using std::hash.
  *   hll.estimate() // will return an estimate of the number of unique element
  *   hll.error_bound() // will return the standard deviation on the estimate
@@ -49,7 +49,7 @@ class hyperloglog {
  public:
   /**
    * Constructs a hyperloglog sketch using 2^b buckets.
-   * The resultant hyperloglog datastructure will require 
+   * The resultant hyperloglog datastructure will require
    * 2^b bytes of memory. b must be at least 4. (i.e. 2^4 buckets).
    */
   explicit inline hyperloglog(size_t b = 16):
@@ -60,10 +60,10 @@ class hyperloglog {
       case 16:
        m_alpha = 0.673;
        break;
-      case 32: 
+      case 32:
        m_alpha = 0.697;
        break;
-      case 64: 
+      case 64:
        m_alpha = 0.709;
        break;
       default:
@@ -126,11 +126,11 @@ class hyperloglog {
       for(auto i: m_buckets) zero_count += (i == 0);
       if (zero_count != 0) E = m_m * std::log((double)m_m / zero_count);
     }
-    // we do not need correction for large values 64-bit hash, assume 
+    // we do not need correction for large values 64-bit hash, assume
     // collisions are unlikely
     return E;
   }
 }; // hyperloglog
-} // namespace sketch 
+} // namespace sketch
 } // namespace turi
 #endif

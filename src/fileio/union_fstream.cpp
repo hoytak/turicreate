@@ -147,4 +147,3 @@ std::string union_fstream::get_name() const {
 }
 
 } // namespace turi
-

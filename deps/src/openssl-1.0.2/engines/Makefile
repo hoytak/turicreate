@@ -53,7 +53,7 @@ LIBOBJ= e_4758cca.o \
 
 SRC= $(LIBSRC)
 
-EXHEADER= 
+EXHEADER=
 HEADER=	e_4758cca_err.c e_4758cca_err.h \
 	e_aep_err.c e_aep_err.h \
 	e_atalla_err.c e_atalla_err.h \

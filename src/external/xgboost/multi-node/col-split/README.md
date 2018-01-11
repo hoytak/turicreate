@@ -7,7 +7,7 @@ Distributed XGBoost: Column Split Version
 
 How to Use
 ====
-* First split the data by column, 
+* First split the data by column,
 * In the config, specify data file as containing a wildcard %d, where %d is the rank of the node, each node will load their part of data
 * Enable column split mode by ```dsplit=col```
 

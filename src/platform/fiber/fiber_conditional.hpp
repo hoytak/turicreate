@@ -13,12 +13,12 @@ namespace turi {
 /**
  * \ingroup util
  * Wrapper around pthread's condition variable, that can work with both
- * fibers and threads simultaneously, but at a cost of much greater memory 
+ * fibers and threads simultaneously, but at a cost of much greater memory
  * requirements.
  *
  * Limitations.
  *  - Does not support timed wait
- *  - threads and fibers are not queued perfectly. fibers are preferentially 
+ *  - threads and fibers are not queued perfectly. fibers are preferentially
  *    signaled.
  *
  * \ingroup threading
@@ -40,7 +40,7 @@ class fiber_conditional {
 
    /** Copy constructor which does not copy. Do not use!
      Required for compatibility with some STL implementations (LLVM).
-     which use the copy constructor for vector resize, 
+     which use the copy constructor for vector resize,
      rather than the standard constructor.    */
    fiber_conditional(const fiber_conditional &) {
      int error = pthread_cond_init(&m_cond, NULL);
@@ -98,6 +98,6 @@ class fiber_conditional {
      int error = pthread_cond_destroy(&m_cond);
      ASSERT_TRUE(!error);
    }
-}; 
+};
 }
 #endif

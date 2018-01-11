@@ -114,7 +114,7 @@ void TestSuite::TestStreams(void){
 	   json_stream_push(test, JSON_TEXT("}"));
 	   assertEquals(5, counter);
 	   assertEquals(0, errorCounter);
-	
+
 		#ifdef JSON_SAFE
 			json_stream_push(test, JSON_TEXT("{\"hello\":12keaueuataueaouhe"));
 			assertEquals(1, errorCounter);
@@ -140,12 +140,12 @@ void TestSuite::TestStreams(void){
 	   test << JSON_TEXT("}");
 	   assertEquals(5, counter);
 	   assertEquals(0, errorCounter);
-	
+
 		#ifdef JSON_SAFE
 			test << JSON_TEXT("{\"hello\":12keaueuataueaouhe");
 			assertEquals(1, errorCounter);
 		#endif
-	
+
 		#ifdef JSON_SECURITY_MAX_STREAM_OBJECTS
 			test.reset();
 			unsigned int currentCount = errorCounter;
@@ -156,7 +156,7 @@ void TestSuite::TestStreams(void){
 			test << safe;
 			assertEquals(133, counter);
 			assertEquals(currentCount, errorCounter);
-	
+
 			test.reset();
 			json_string unsafe;
 			for(int i = 0; i <= JSON_SECURITY_MAX_STREAM_OBJECTS + 1; ++i){

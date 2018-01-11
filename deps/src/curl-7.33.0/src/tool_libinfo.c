@@ -97,4 +97,3 @@ CURLcode get_libcurl_info(void)
 
   return CURLE_OK;
 }
-

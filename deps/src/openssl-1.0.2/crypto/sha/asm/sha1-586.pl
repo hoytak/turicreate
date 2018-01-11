@@ -123,7 +123,7 @@ $ymm=1 if ($xmm &&
 			=~ /GNU assembler version ([2-9]\.[0-9]+)/ &&
 		$1>=2.19);	# first version supporting AVX
 
-$ymm=1 if ($xmm && !$ymm && $ARGV[0] eq "win32n" && 
+$ymm=1 if ($xmm && !$ymm && $ARGV[0] eq "win32n" &&
 		`nasm -v 2>&1` =~ /NASM version ([2-9]\.[0-9]+)/ &&
 		$1>=2.03);	# first version supporting AVX
 
@@ -166,7 +166,7 @@ sub BODY_00_15
 	 &xor($f,$d);
 	&add($tmp1,$e);			# tmp1+=e;
 	 &mov($e,&swtmp($n%16));	# e becomes volatile and is loaded
-	 				# with xi, also note that e becomes
+					# with xi, also note that e becomes
 					# f in next round...
 	&and($f,$b);
 	&rotr($b,2);			# b=ROTATE(b,30)

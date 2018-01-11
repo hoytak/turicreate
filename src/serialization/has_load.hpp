@@ -12,10 +12,10 @@
 namespace turi {
   namespace archive_detail {
 
-    /** SFINAE method to detect if a class T 
+    /** SFINAE method to detect if a class T
      * implements a function void T::load(ArcType&)
-     * 
-     * If T implements the method, has_load_method<ArcType,T>::value will be 
+     *
+     * If T implements the method, has_load_method<ArcType,T>::value will be
      * true. Otherwise it will be false
      */
     template<typename ArcType, typename T>
@@ -33,12 +33,12 @@ namespace turi {
      *  T implements void T::load(ArcType&).
      *
      * load_or_fail<ArcType, T>(arc, t) will therefore load the class successfully
-     * if T implements the load function correctly. Otherwise, calling 
+     * if T implements the load function correctly. Otherwise, calling
      * load_or_fail will print an error message.
      */
     template <typename ArcType, typename ValueType>
-    typename std::enable_if<has_load_method<ArcType, ValueType>::value, void>::type 
-    load_or_fail(ArcType& o, ValueType &t) { 
+    typename std::enable_if<has_load_method<ArcType, ValueType>::value, void>::type
+    load_or_fail(ArcType& o, ValueType &t) {
       t.load(o);
     }
 
@@ -47,18 +47,17 @@ namespace turi {
      *  will call this version of the function if
      *
      * load_or_fail<ArcType, T>(arc, t) will therefore load the class successfully
-     * if T implements the load function correctly. Otherwise, calling 
+     * if T implements the load function correctly. Otherwise, calling
      * load_or_fail will print an error message.
      * T does not implement void T::load(ArcType&).
      */
     template <typename ArcType, typename ValueType>
-    typename std::enable_if<!has_load_method<ArcType, ValueType>::value, void>::type 
-    load_or_fail(ArcType& o, ValueType &t) { 
-      ASSERT_MSG(false, "Trying to deserializable type %s without valid load method.", typeid(ValueType).name()); 
+    typename std::enable_if<!has_load_method<ArcType, ValueType>::value, void>::type
+    load_or_fail(ArcType& o, ValueType &t) {
+      ASSERT_MSG(false, "Trying to deserializable type %s without valid load method.", typeid(ValueType).name());
     }
-  
+
   }  // archive_detail
 }  // turicreate
 
 #endif
-

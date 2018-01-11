@@ -17,18 +17,18 @@ std::vector<std::pair<flexible_type, flexible_type>> degree_count_fn (
   sgraph_compute::sgraph_engine<flexible_type> ga;
   typedef sgraph_compute::sgraph_engine<flexible_type>::graph_data_type graph_data_type;
   typedef sgraph::edge_direction edge_direction;
-  std::vector<std::shared_ptr<sarray<flexible_type>>> 
+  std::vector<std::shared_ptr<sarray<flexible_type>>>
       gather_results = ga.gather(g,
-                                 [](const graph_data_type& center, 
-                                    const graph_data_type& edge, 
-                                    const graph_data_type& other, 
+                                 [](const graph_data_type& center,
+                                    const graph_data_type& edge,
+                                    const graph_data_type& other,
                                     edge_direction edgedir,
                                     flexible_type& combiner) {
                                    combiner = combiner + 1;
                                  },
                                  flexible_type(0),
                                  dir);
-  std::vector<std::shared_ptr<sarray<flexible_type>>> vertex_ids 
+  std::vector<std::shared_ptr<sarray<flexible_type>>> vertex_ids
       = g.fetch_vertex_data_field(sgraph::VID_COLUMN_NAME);
 
   TS_ASSERT_EQUALS(gather_results.size(), vertex_ids.size());
@@ -54,9 +54,9 @@ void pagerank_fn(sgraph& g,  size_t num_iterations) {
   typedef sgraph::edge_direction edge_direction;
   // count the outgoing degree
   std::vector<std::shared_ptr<sarray<flexible_type>>> vertex_combine = ga.gather(g,
-                                                      [](const graph_data_type& center, 
-                                                         const graph_data_type& edge, 
-                                                         const graph_data_type& other, 
+                                                      [](const graph_data_type& center,
+                                                         const graph_data_type& edge,
+                                                         const graph_data_type& other,
                                                          edge_direction edgedir,
                                                          flexible_type& combiner) {
                                                       combiner = combiner + 1;

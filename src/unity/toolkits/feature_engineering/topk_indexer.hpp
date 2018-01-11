@@ -17,7 +17,7 @@
 
 namespace turi {
 
-/**  
+/**
  *
  * Parallel top-k indexer for categorical variables (uses one-hot-encoding)
  *
@@ -35,7 +35,7 @@ namespace turi {
  * for (const flexible_type& v: sa.range_iterator() {
  *   indexer.insert_or_update(v);
  * }
- * 
+ *
  * // Finalize mapping (drops elements by frequency/threshold)
  * indexer.finalize();
  *
@@ -46,7 +46,7 @@ namespace turi {
  *  size_t counts = indexer.lookup_counts(v); // Returns 0 if not present.
  *
  *  flexible_type v = indexer.inverse_lookup(1) // Fails if index doesn't exist.
- * 
+ *
  * Parallel construction
  * -----------------------
  *
@@ -62,8 +62,8 @@ namespace turi {
  *    for (const flexible_type& v: sa.range_iterator(start_idx, end_idx) {
  *      indexer.insert_or_update(v, thread_id);
  *    }
- * 
- * // Finalize 
+ *
+ * // Finalize
  * indexer.finalize();
  *
  *
@@ -80,10 +80,10 @@ class EXPORT topk_indexer {
    * \param[in] column_name Column name for display.
    *
    */
-  topk_indexer(const size_t& _topk = (size_t)-1, 
+  topk_indexer(const size_t& _topk = (size_t)-1,
                const size_t& _threshold = 1,
-               const size_t& _max_threshold = (size_t) -1, 
-               const std::string _column_name = "") : topk(_topk), 
+               const size_t& _max_threshold = (size_t) -1,
+               const std::string _column_name = "") : topk(_topk),
                     threshold(_threshold), max_threshold(_max_threshold),column_name(_column_name) {
   }
 
@@ -94,24 +94,24 @@ class EXPORT topk_indexer {
   topk_indexer(const topk_indexer&) = delete;
 
 
-  /** 
-   * Initialize the index mapping and setup. Should be called before 
+  /**
+   * Initialize the index mapping and setup. Should be called before
    * starting the map.
    */
   void initialize();
 
-  /** 
-   * Insert 
+  /**
+   * Insert
    *
    * \param[in] value       Flexible type.
    * \param[in] thread_idx  Thread id  (For parallel insertion).
    * \param[in] count       Amount to increment for this value.
    *
    */
-  void insert_or_update(const flexible_type& value, size_t thread_idx = 0, 
+  void insert_or_update(const flexible_type& value, size_t thread_idx = 0,
                         size_t count = 1) GL_HOT;
 
-  /** 
+  /**
    * Returns the index associated with the value.
    *
    *  \param[in] value Search for the value.
@@ -119,7 +119,7 @@ class EXPORT topk_indexer {
    */
   size_t lookup(const flexible_type& value) const;
 
-  /** 
+  /**
    * Returns the counts associated with the value.
    *
    *  \param[in] value Search for the value.
@@ -128,14 +128,14 @@ class EXPORT topk_indexer {
   size_t lookup_counts(const flexible_type& value) const;
 
 
-  /** 
-   * Finalize by dropping indices that dont meet 
+  /**
+   * Finalize by dropping indices that dont meet
    * - Count requirement i.e count >= threshold.
    * - Topk requirement.
    */
   void finalize();
 
-  /** 
+  /**
    * Returns the "value" associated with the index.
    *
    * \param[\in] idx  Index associated with the feature value.
@@ -143,7 +143,7 @@ class EXPORT topk_indexer {
    */
   flexible_type inverse_lookup(size_t idx) const;
 
-  /** 
+  /**
    * Returns the values (ordered by indices)
    */
   std::vector<flexible_type> get_values() const {
@@ -159,7 +159,7 @@ class EXPORT topk_indexer {
     return index_lookup.size();
   }
 
-  /** 
+  /**
    * Returns the current version used for the serialization.
    */
   size_t get_version() const;
@@ -183,7 +183,7 @@ class EXPORT topk_indexer {
   std::string column_name = "";
 
   // List of Map(hash : (value, count)) per thread.
-  std::vector<hopscotch_map<hash_value, std::pair<flexible_type, size_t>>> 
+  std::vector<hopscotch_map<hash_value, std::pair<flexible_type, size_t>>>
                                                     threadlocal_accumulator;
 
   // Index -> value/cound
@@ -196,30 +196,30 @@ class EXPORT topk_indexer {
   // Private helper functions.
   // ------------------------------------------------------------------------
 
-  /** 
+  /**
    * Retain only top_k values (by counts). Only call after finalize.
    */
   void retain_only_top_k_values();
 
-  /** 
+  /**
    * Retain values with counts >= threshold. Only call after finalize.
    */
   void retain_min_count_values();
 
   /**
-   * Retain values with count <= max_threshold. Only call after finalize. 
+   * Retain values with count <= max_threshold. Only call after finalize.
    */
   void delete_min_count_values();
-  /** 
+  /**
    * Delete everything associated with an index in the lookup.
    */
   void mark_for_deletion(size_t index);
-  /** 
+  /**
    * Delete everything associated with an index in the lookup.
    */
   void delete_all_marked();
 
-  /** 
+  /**
    * Validate feature types.
    */
   void valdidate_types(const flexible_type& value) const;

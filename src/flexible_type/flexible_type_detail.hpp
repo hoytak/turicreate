@@ -14,7 +14,7 @@
 #include <util/cityhash_tc.hpp>
 #include <serialization/serialization_includes.hpp>
 #include <flexible_type/flexible_type_base_types.hpp>
-namespace boost { namespace posix_time { 
+namespace boost { namespace posix_time {
 class ptime;
 } }
 
@@ -23,14 +23,14 @@ namespace turi {
 namespace flexible_type_impl {
 
 /**
- * custom implementation of conversion of ptime to time_t that handles  
+ * custom implementation of conversion of ptime to time_t that handles
  * time_t's that does not fit in int32_t integers.
  */
 boost::posix_time::ptime ptime_from_time_t(std::time_t offset, int32_t microseconds = 0);
 
 /**
  * Function that takes a ptime argument and generates _
- * its corresponding time_t. 
+ * its corresponding time_t.
  */
 flex_int ptime_to_time_t(const boost::posix_time::ptime & time);
 
@@ -165,11 +165,11 @@ struct equality_operator {
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_date_time t, const flex_date_time u) const { return t == u; }
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_date_time t, const flex_int u) const { return t.posix_timestamp() == u && t.microsecond() == 0; }
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_int t, const flex_date_time u) const { return t == u.posix_timestamp() && u.microsecond() == 0; }
-  inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_date_time t, const flex_float u) const { 
-    return std::fabs(t.microsecond_res_timestamp() - u) < flex_date_time::MICROSECOND_EPSILON; 
+  inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_date_time t, const flex_float u) const {
+    return std::fabs(t.microsecond_res_timestamp() - u) < flex_date_time::MICROSECOND_EPSILON;
   }
-  inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_float t, const flex_date_time u) const { 
-    return std::fabs(t - u.microsecond_res_timestamp()) < flex_date_time::MICROSECOND_EPSILON; 
+  inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_float t, const flex_date_time u) const {
+    return std::fabs(t - u.microsecond_res_timestamp()) < flex_date_time::MICROSECOND_EPSILON;
   }
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_int t, const flex_int u) const { return t == u; }
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_float t, const flex_float u) const { return t == u; }
@@ -206,11 +206,11 @@ struct approx_equality_operator {
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_date_time t, const flex_date_time u) const { return t == u; }
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_date_time t, const flex_int u) const { return t.posix_timestamp() == u && t.microsecond() == 0; }
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_int t, const flex_date_time u) const { return t == u.posix_timestamp() && u.microsecond() == 0; }
-  inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_date_time t, const flex_float u) const { 
-    return std::fabs(t.microsecond_res_timestamp() - u) < flex_date_time::MICROSECOND_EPSILON; 
+  inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_date_time t, const flex_float u) const {
+    return std::fabs(t.microsecond_res_timestamp() - u) < flex_date_time::MICROSECOND_EPSILON;
   }
-  inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_float t, const flex_date_time u) const { 
-    return std::fabs(t - u.microsecond_res_timestamp()) < flex_date_time::MICROSECOND_EPSILON; 
+  inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_float t, const flex_date_time u) const {
+    return std::fabs(t - u.microsecond_res_timestamp()) < flex_date_time::MICROSECOND_EPSILON;
   }
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_int t, const flex_int u) const { return t == u; }
   inline FLEX_ALWAYS_INLINE_FLATTEN bool operator()(const flex_float t, const flex_float u) const {
@@ -447,14 +447,14 @@ struct multiply_equal_operator{
 /**
  * \ingroup group_gl_flexible_type
  * \internal
- * Converts the stored value to a flex_date_time format 
+ * Converts the stored value to a flex_date_time format
  */
 struct get_datetime_visitor {
   template <typename T>
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_date_time operator()(T t) const { FLEX_TYPE_ASSERT(false); return flex_date_time(); }
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_date_time operator()(flex_undefined t) const { return flex_date_time(); }
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_date_time operator()(flex_int i) const {
-    return flex_date_time(i); 
+    return flex_date_time(i);
   }
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_date_time operator()(const flex_date_time& dt) const {
     return dt;
@@ -477,7 +477,7 @@ struct get_int_visitor {
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_int operator()(T t) const { FLEX_TYPE_ASSERT(false); return 0; }
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_int operator()(flex_undefined t) const { return 0; }
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_int operator()(flex_int i) const {return i; }
-  inline FLEX_ALWAYS_INLINE_FLATTEN flex_int operator()(flex_date_time dt) const { 
+  inline FLEX_ALWAYS_INLINE_FLATTEN flex_int operator()(flex_date_time dt) const {
     return dt.posix_timestamp();
   }
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_int operator()(flex_float i) const {return i; }
@@ -493,7 +493,7 @@ struct get_float_visitor {
   template <typename T>
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_float operator()(T t) const { FLEX_TYPE_ASSERT(false); return 0.0; }
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_float operator()(flex_undefined t) const { return 0.0; }
-  inline FLEX_ALWAYS_INLINE_FLATTEN flex_float operator()(flex_date_time dt) const { 
+  inline FLEX_ALWAYS_INLINE_FLATTEN flex_float operator()(flex_date_time dt) const {
     return dt.microsecond_res_timestamp();
   }
   inline FLEX_ALWAYS_INLINE_FLATTEN flex_float operator()(flex_int i) const {return i; }
@@ -602,13 +602,13 @@ struct get_img_visitor {
 struct soft_assignment_visitor {
   template <typename T, typename U>
   inline FLEX_ALWAYS_INLINE_FLATTEN void operator()(T& t, const U& u) const { FLEX_TYPE_ASSERT(false); }
-  
+
   inline FLEX_ALWAYS_INLINE_FLATTEN void operator()(flex_date_time& t, const flex_int u) const {
     t = flex_date_time(u);
   }
   inline FLEX_ALWAYS_INLINE_FLATTEN void operator()(flex_int& t, const flex_date_time u) const { t = get_int_visitor()(u); }
   inline FLEX_ALWAYS_INLINE_FLATTEN void operator()(flex_float& t, const flex_date_time u) const { t = get_float_visitor()(u); }
-  inline FLEX_ALWAYS_INLINE_FLATTEN void operator()(flex_date_time& t, const flex_float u) const { 
+  inline FLEX_ALWAYS_INLINE_FLATTEN void operator()(flex_date_time& t, const flex_float u) const {
     flex_date_time dt;
     dt.set_microsecond_res_timestamp(u);
     t = dt;

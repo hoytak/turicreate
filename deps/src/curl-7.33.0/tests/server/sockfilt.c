@@ -1403,4 +1403,3 @@ sockfilt_cleanup:
   logmsg("============> sockfilt quits");
   return 0;
 }
-

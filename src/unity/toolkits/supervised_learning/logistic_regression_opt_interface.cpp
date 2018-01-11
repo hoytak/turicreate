@@ -51,14 +51,14 @@ namespace supervised {
 
 
 /**
-* Perform a specialized operation of a outer product between a sparse 
+* Perform a specialized operation of a outer product between a sparse
 * vector and a dense vector and flatten the result.
 *
 * out = a * b.t()
 * out.resize(9,1);
 *
 */
-void flattened_sparse_vector_outer_prod(const SparseVector& a, 
+void flattened_sparse_vector_outer_prod(const SparseVector& a,
                                         const DenseVector& b,
                                         SparseVector& out) {
   DASSERT_TRUE(out.size() == a.size() * b.size());
@@ -76,9 +76,9 @@ void flattened_sparse_vector_outer_prod(const SparseVector& a,
 * Constructor for logistic regression solver object
 */
 logistic_regression_opt_interface::logistic_regression_opt_interface(
-    const ml_data& _data, 
-    const ml_data& _valid_data, 
-    logistic_regression& _sp_model) {  
+    const ml_data& _data,
+    const ml_data& _valid_data,
+    logistic_regression& _sp_model) {
 
   data = _data;
   if (_valid_data.num_rows() > 0) valid_data = _valid_data;
@@ -86,7 +86,7 @@ logistic_regression_opt_interface::logistic_regression_opt_interface(
 
   // Initialize reader and other data
   examples = data.num_rows();
-#ifdef HAS_DISTRIBUTED 
+#ifdef HAS_DISTRIBUTED
   auto dc = distributed_control_global::get_instance();
   dc->all_reduce(examples);
 #endif
@@ -182,10 +182,10 @@ size_t logistic_regression_opt_interface::num_classes() const{
 /**
  * Get strings needed to print the header for the progress table.
  */
-std::vector<std::pair<std::string, size_t>> 
+std::vector<std::pair<std::string, size_t>>
 logistic_regression_opt_interface::get_status_header(const std::vector<std::string>& stat_headers) {
   bool has_validation_data = (valid_data.num_rows() > 0);
-  auto header = make_progress_header(smodel, stat_headers, has_validation_data); 
+  auto header = make_progress_header(smodel, stat_headers, has_validation_data);
   return header;
 }
 
@@ -193,15 +193,15 @@ logistic_regression_opt_interface::get_status_header(const std::vector<std::stri
  * Get strings needed to print a row of the progress table.
  */
 std::vector<std::string> logistic_regression_opt_interface::get_status(
-    const DenseVector& coefs, 
+    const DenseVector& coefs,
     const std::vector<std::string>& stats) {
 
   DenseVector coefs_tmp = coefs;
   rescale_solution(coefs_tmp);
-  smodel.set_coefs(coefs_tmp); 
+  smodel.set_coefs(coefs_tmp);
 
   auto ret = make_progress_row_string(smodel, data, valid_data, stats);
-  return ret; 
+  return ret;
 }
 
 /**
@@ -225,9 +225,9 @@ void logistic_regression_opt_interface::compute_first_order_statistics(const
   DASSERT_TRUE(dc != NULL);
   logstream(LOG_INFO) << "Worker (" << dc->procid() << ") ";
 #endif
-  logstream(LOG_INFO) << "Starting first order stats computation" << std::endl; 
+  logstream(LOG_INFO) << "Starting first order stats computation" << std::endl;
 
-  // Dense data. 
+  // Dense data.
   if (this->is_dense) {
     in_parallel([&](size_t thread_idx, size_t num_threads) {
       DenseVector x(variables_per_class);
@@ -237,7 +237,7 @@ void logistic_regression_opt_interface::compute_first_order_statistics(const
       pointMat.reshape(variables_per_class, classes-1);
       size_t class_idx = 0;
       double kernel_sum = 0;
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
+      for(auto it = data.get_iterator(thread_idx, num_threads);
                                                               !it.done(); ++it) {
         fill_reference_encoding(*it, x);
         x(variables_per_class - 1) = 1;
@@ -248,7 +248,7 @@ void logistic_regression_opt_interface::compute_first_order_statistics(const
         class_idx = it->target_index();
         margin = pointMat.t() * x;
         margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
-   
+
         kernel =  arma::exp(margin);
         kernel_sum = arma::sum(kernel);
         row_func = log1p(kernel_sum) - margin_dot_class;
@@ -271,7 +271,7 @@ void logistic_regression_opt_interface::compute_first_order_statistics(const
       arma::mat pointMatT = pointMat.t();
       size_t class_idx = 0;
       double kernel_sum = 0;
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
+      for(auto it = data.get_iterator(thread_idx, num_threads);
                                                               !it.done(); ++it) {
         fill_reference_encoding(*it, x);
         x(variables_per_class - 1) = 1;
@@ -282,7 +282,7 @@ void logistic_regression_opt_interface::compute_first_order_statistics(const
         class_idx = it->target_index();
         margin = pointMatT * x;
         margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
-   
+
         kernel =  exp(margin);
         kernel_sum = arma::sum(kernel);
         row_func = log1p(kernel_sum) - margin_dot_class;
@@ -308,17 +308,17 @@ void logistic_regression_opt_interface::compute_first_order_statistics(const
   }
 
 #ifdef HAS_DISTRIBUTED
-  logstream(LOG_INFO) << "Worker (" << dc->procid() << ") Computation done at " 
-                      << (t.current_time() - start_time) << "s" << std::endl; 
+  logstream(LOG_INFO) << "Worker (" << dc->procid() << ") Computation done at "
+                      << (t.current_time() - start_time) << "s" << std::endl;
 
   dc->all_reduce(gradient, true);
   dc->all_reduce(function_value, true);
 
-  logstream(LOG_INFO) << "Worker (" << dc->procid() << ") All-reduce done at " 
-                      << (t.current_time() - start_time) << "s" << std::endl; 
+  logstream(LOG_INFO) << "Worker (" << dc->procid() << ") All-reduce done at "
+                      << (t.current_time() - start_time) << "s" << std::endl;
 #else
-  logstream(LOG_INFO) << "Computation done at " 
-                      << (t.current_time() - start_time) << "s" << std::endl; 
+  logstream(LOG_INFO) << "Computation done at "
+                      << (t.current_time() - start_time) << "s" << std::endl;
 #endif
 
 }
@@ -329,7 +329,7 @@ void logistic_regression_opt_interface::compute_first_order_statistics(const
 void logistic_regression_opt_interface::compute_second_order_statistics( const
     DenseVector& point, DenseMatrix& hessian, DenseVector& gradient, double&
     function_value) {
-    
+
   timer t;
   double start_time = t.current_time();
 #ifdef HAS_DISTRIBUTED
@@ -337,9 +337,9 @@ void logistic_regression_opt_interface::compute_second_order_statistics( const
   DASSERT_TRUE(dc != NULL);
   logstream(LOG_INFO) << "Worker (" << dc->procid() << ") ";
 #endif
-  logstream(LOG_INFO) << "Starting second order stats computation" << std::endl; 
+  logstream(LOG_INFO) << "Starting second order stats computation" << std::endl;
 
-  // Init  
+  // Init
   std::vector<DenseMatrix> H(n_threads, arma::zeros(variables, variables));
   std::vector<DenseVector> G(n_threads, arma::zeros(variables));
   std::vector<double> f(n_threads, 0.0);
@@ -358,7 +358,7 @@ void logistic_regression_opt_interface::compute_second_order_statistics( const
 
       DenseMatrix A(classes-1, classes-1);
 
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
+      for(auto it = data.get_iterator(thread_idx, num_threads);
                                                               !it.done(); ++it) {
         fill_reference_encoding(*it, x);
         x(variables_per_class - 1) = 1;
@@ -378,7 +378,7 @@ void logistic_regression_opt_interface::compute_second_order_statistics( const
 
         row_func = log1p(kernel_sum) - margin_dot_class;
         if (class_idx > 0) row_prob(class_idx - 1) -= 1;
-        
+
         f[thread_idx] += class_weights[class_idx] * row_func;
         DenseMatrix G_tmp = class_weights[class_idx] * (x * row_prob.t());
         G[thread_idx] += arma::vectorise(G_tmp);
@@ -392,10 +392,10 @@ void logistic_regression_opt_interface::compute_second_order_statistics( const
                       += class_weights[class_idx] * A(a,b) * XXT;
           }
         }
-      }  
+      }
     });
-  
-  // Sparse data. 
+
+  // Sparse data.
   } else {
     in_parallel([&](size_t thread_idx, size_t num_threads) {
       SparseVector x(variables_per_class);
@@ -406,7 +406,7 @@ void logistic_regression_opt_interface::compute_second_order_statistics( const
       pointMat.reshape(variables_per_class, classes-1);
       arma::mat pointMatT = pointMat.t();
       DenseMatrix A(classes-1, classes-1);
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
+      for(auto it = data.get_iterator(thread_idx, num_threads);
                                                               !it.done(); ++it) {
         fill_reference_encoding(*it, x);
         x(variables_per_class - 1) = 1;
@@ -432,8 +432,8 @@ void logistic_regression_opt_interface::compute_second_order_statistics( const
         G[thread_idx] += G_tmp;
         f[thread_idx] += class_weights[class_idx] * row_func;
 
-        // Sadly, this is the fastest way to do this in Eigen. It can be done 
-        // in block mode if x is dense, but when x is sparse, this seems to be 
+        // Sadly, this is the fastest way to do this in Eigen. It can be done
+        // in block mode if x is dense, but when x is sparse, this seems to be
         // faster (much faster).
         for(size_t a = 0; a < classes - 1; a++){
           for(size_t b = 0; b < classes - 1; b++){
@@ -463,18 +463,18 @@ void logistic_regression_opt_interface::compute_second_order_statistics( const
   }
 
 #ifdef HAS_DISTRIBUTED
-  logstream(LOG_INFO) << "Worker (" << dc->procid() << ") Computation done at " 
-                      << (t.current_time() - start_time) << "s" << std::endl; 
+  logstream(LOG_INFO) << "Worker (" << dc->procid() << ") Computation done at "
+                      << (t.current_time() - start_time) << "s" << std::endl;
 
   dc->all_reduce(hessian, true);
   dc->all_reduce(gradient, true);
   dc->all_reduce(function_value, true);
 
-  logstream(LOG_INFO) << "Worker (" << dc->procid() << ") All-reduce done at " 
-                      << (t.current_time() - start_time) << "s" << std::endl; 
+  logstream(LOG_INFO) << "Worker (" << dc->procid() << ") All-reduce done at "
+                      << (t.current_time() - start_time) << "s" << std::endl;
 #else
-  logstream(LOG_INFO) << "Computation done at " 
-                      << (t.current_time() - start_time) << "s" << std::endl; 
+  logstream(LOG_INFO) << "Computation done at "
+                      << (t.current_time() - start_time) << "s" << std::endl;
 #endif
 
 }

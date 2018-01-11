@@ -7,7 +7,7 @@
 		#ifdef JSON_LIBRARY
 			static void callback(const json_char * p){ last = p; }
 		#else
-			static void callback(const json_string & p){ last = p; }	
+			static void callback(const json_string & p){ last = p; }
 		#endif
 	#endif
 #endif
@@ -45,7 +45,7 @@ void testJSONDebug_JSON_ASSERT_SAFE::testPass(void){
 	int i = 0;
 	JSON_ASSERT_SAFE(1 == 1, fail_const, i = 1;);
 	assertEquals(i, 0);
-	
+
 	#if defined JSON_DEBUG
 		#ifndef JSON_STDERROR
 			assertEquals(last, null_const);  //make sure the callback was not called
@@ -65,7 +65,7 @@ void testJSONDebug_JSON_ASSERT_SAFE::testFail(void){
 	#else
 		assertEquals(i, 0);  //fell through because no safety catch
 	#endif
-	
+
 	#if defined JSON_DEBUG
 		#ifndef JSON_STDERROR
 			assertEquals(last, fail_const);  //make sure the callback was actually called

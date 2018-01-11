@@ -33,4 +33,3 @@ $CC -c $CFLAGS -o ssl.o ssl/ssl.c
 
 echo building $slib.so
 gcc $CFLAGS -shared -o $slib.so ssl.o -L. -lcrypto
-

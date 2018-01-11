@@ -3,12 +3,12 @@
 #include <capi/impl/capi_flexible_type.hpp>
 #include <capi/impl/capi_flex_list.hpp>
 
-#include <flexible_type/flexible_type.hpp> 
+#include <flexible_type/flexible_type.hpp>
 #include <capi/impl/capi_sarray.hpp>
 #include <export.hpp>
 #include <sstream>
 
-extern "C" { 
+extern "C" {
 
 EXPORT tc_sarray* tc_sarray_create(const tc_flex_list* data, tc_error** error) {
   ERROR_HANDLE_START();
@@ -26,9 +26,9 @@ EXPORT tc_sarray* tc_sarray_create_from_sequence(
 
   ERROR_HANDLE_START();
 
-  uint64_t _start = std::min(start, end); 
+  uint64_t _start = std::min(start, end);
   uint64_t _end = std::max(start, end);
-  bool reverse = (start > end); 
+  bool reverse = (start > end);
 
   return new_tc_sarray(turi::gl_sarray::from_sequence(size_t(_start), size_t(_end), reverse));
 
@@ -64,7 +64,7 @@ EXPORT tc_sarray* tc_sarray_create_from_list(
     set_error(error, "flex_list instance null.");
     return NULL;
   }
- 
+
   return new_tc_sarray(turi::gl_sarray(fl->value));
 
   ERROR_HANDLE_END(error, NULL);
@@ -90,20 +90,20 @@ EXPORT tc_flexible_type* tc_sarray_extract_element(
   ERROR_HANDLE_END(error, NULL);
 }
 
-// Gets the sarry size. 
+// Gets the sarry size.
 EXPORT uint64_t tc_sarray_size(const tc_sarray* sa) {
   return (sa != NULL) ? sa->value.size() : 0;
 }
 
 
-// Gets the type of the sarray. 
+// Gets the type of the sarray.
 EXPORT tc_ft_type_enum tc_sarray_type(const tc_sarray* sa) {
   return (sa != NULL) ? static_cast<tc_ft_type_enum>(sa->value.dtype()) : FT_TYPE_UNDEFINED;
 }
 
 /*******************************************************************************/
 
-// Gets the type of the sarray. 
+// Gets the type of the sarray.
 EXPORT tc_sarray* tc_op_sarray_plus_sarray(
     const tc_sarray* sa1, const tc_sarray* sa2, tc_error** error) {
 
@@ -185,13 +185,13 @@ EXPORT tc_sarray* tc_op_sarray_mult_ft(
 }
 
 // Call sum on the tc_sarray
-EXPORT tc_flexible_type* tc_sarray_sum(const tc_sarray* sa, tc_error** error) { 
+EXPORT tc_flexible_type* tc_sarray_sum(const tc_sarray* sa, tc_error** error) {
 
   ERROR_HANDLE_START();
 
-  if(sa == NULL) { 
+  if(sa == NULL) {
     set_error(error, "SArray passed in is null.");
-    return NULL; 
+    return NULL;
   }
 
   return new_tc_flexible_type(sa->value.sum());
@@ -204,14 +204,14 @@ EXPORT int tc_sarray_equals(const tc_sarray* sa1, const tc_sarray* sa2, tc_error
 
   ERROR_HANDLE_START();
 
-  if(sa1 == NULL) { 
+  if(sa1 == NULL) {
     set_error(error, "SArray passed in is null.");
-    return sa2 != NULL; 
+    return sa2 != NULL;
   }
 
-  if(sa2 == NULL) { 
+  if(sa2 == NULL) {
     set_error(error, "SArray passed in is null.");
-    return sa1 != NULL; 
+    return sa1 != NULL;
   }
 
   return (sa1->value == sa2->value).all();
@@ -224,12 +224,12 @@ EXPORT int tc_sarray_equals(const tc_sarray* sa1, const tc_sarray* sa2, tc_error
 EXPORT tc_flexible_type* tc_sarray_text_summary(const tc_sarray* sa, tc_error** error) {
   ERROR_HANDLE_START();
 
-  if(sa == NULL) { 
+  if(sa == NULL) {
     set_error(error, "SArray passed in to summarize is null.");
-    return NULL; 
+    return NULL;
   }
 
-  std::ostringstream ss; 
+  std::ostringstream ss;
   ss << sa->value;
 
   return new_tc_flexible_type(ss.str());
@@ -282,12 +282,8 @@ EXPORT tc_sarray* tc_sarray_apply(const tc_sarray* sa,
   ERROR_HANDLE_END(error, NULL);
 }
 
-EXPORT void tc_sarray_destroy(tc_sarray* sa) { 
-  delete sa; 
+EXPORT void tc_sarray_destroy(tc_sarray* sa) {
+  delete sa;
 }
 
 }
-
-
-
-

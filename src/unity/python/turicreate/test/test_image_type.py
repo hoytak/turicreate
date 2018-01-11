@@ -240,5 +240,3 @@ class ImageClassTest(unittest.TestCase):
         self.assertEqual(len(pixel_data), len(fifties))
         for p in range(len(pixel_data)):
             self.assertEqual(pixel_data[p], 50)
-
-

@@ -137,7 +137,7 @@ public:
 
     JSONNode(const JSONNode & orig) json_nothrow json_hot;
     ~JSONNode(void) json_nothrow json_hot;
-    
+
     #if (defined(JSON_PREPARSE) && defined(JSON_READ_PRIORITY))
         static JSONNode stringType(const json_string & str);
         void set_name_(const json_string & newname) json_nothrow json_write_priority;
@@ -163,13 +163,13 @@ public:
     json_int_t as_int(void) const json_nothrow json_read_priority;
     json_number as_float(void) const json_nothrow json_read_priority;
     bool as_bool(void) const json_nothrow json_read_priority;
-    
+
     #ifdef JSON_CASTABLE
 	   JSONNode as_node(void) const json_nothrow json_read_priority;
 	   JSONNode as_array(void) const json_nothrow json_read_priority;
 	   void cast(char newtype) json_nothrow;
     #endif
-    
+
     #ifdef JSON_BINARY
 	   std::string as_binary(void) const json_nothrow json_cold;
 	   void set_binary(const unsigned char * bin, size_t bytes) json_nothrow json_cold;

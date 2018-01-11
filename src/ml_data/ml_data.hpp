@@ -36,13 +36,13 @@ class ml_data_reconciler;
  * \ingroup mldata
  * Row based, SFrame-Like Data storage for Learning and Optimization tasks.
  *
- *  `ml_data` is a data normalization datastructure that translates user input tables 
+ *  `ml_data` is a data normalization datastructure that translates user input tables
  *  (which can contain arbitrary types like strings, lists, dictionaries, etc) into
- *  sparse and dense numeric vectors. This allows toolkits to be implemented in a 
+ *  sparse and dense numeric vectors. This allows toolkits to be implemented in a
  *  way that operates on fully mathematical, numeric assumptions, but support a
  *  much richer surface area outside.
  *
- *  To support this, `ml_data` is kind of a complicated datastructure that 
+ *  To support this, `ml_data` is kind of a complicated datastructure that
  *  performs several things.
  *   - interpret string columns as categorical onto a sparse vector representation,
  *     using either one-hot encoding or reference encoding.
@@ -50,17 +50,17 @@ class ml_data_reconciler;
  *   - map dictionary columns onto a sparse vector representation.
  *   - map dense numeric arrays onto a dense vector representation.
  *   - etc.
- *  Each row of a user input table is hence translated into a mixed 
- *  dense-sparse vector. This vector then has to be materialized as an SFrame 
+ *  Each row of a user input table is hence translated into a mixed
+ *  dense-sparse vector. This vector then has to be materialized as an SFrame
  *  (allowing it to scale to datasets larger than memory).
  *
  *  This can then be used to train other Machine Learning models with.
  *
  *  Finally, the `ml_data` datastructure has to remember and store the translation
- *  mappings so that the exact procedure can be performed later on new data 
- *  (when using the trained model) 
+ *  mappings so that the exact procedure can be performed later on new data
+ *  (when using the trained model)
  *
- *  Additionally `ml_data` also implement strategies for automatic imputation of missing 
+ *  Additionally `ml_data` also implement strategies for automatic imputation of missing
  *  data. For instance, missing numeric columns can be imputed with the mean,
  *  missing categorical columns can be imputed with the most common value, etc.
  *
@@ -300,7 +300,7 @@ class ml_data {
    * Use NAN as value for missing values.
    */
 
-  /** Fills the data from an SFrame.  
+  /** Fills the data from an SFrame.
    *
    *  \param data The data sframe.
    *
@@ -317,7 +317,7 @@ class ml_data {
    *  categorical columns will be mapped to size_t(-1) and not
    *  indexed.
    *
-   *  \param mva The behavior when missing values are present. 
+   *  \param mva The behavior when missing values are present.
    */
   void fill(const sframe& data,
             const std::string& target_column = "",
@@ -325,7 +325,7 @@ class ml_data {
             bool immutable_metadata = false,
             ml_missing_value_action mva = ml_missing_value_action::ERROR);
 
-  /** Fills the data from an SFrame.  
+  /** Fills the data from an SFrame.
    *
    *  \param data The data sframe.
    *
@@ -346,7 +346,7 @@ class ml_data {
    *  categorical columns will be mapped to size_t(-1) and not
    *  indexed.
    *
-   *  \param mva The behavior when missing values are present. 
+   *  \param mva The behavior when missing values are present.
    */
   void fill(const sframe& data,
             const std::pair<size_t, size_t>& row_bounds,

@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -42,9 +42,9 @@ import org.dmlc.xgboost4j.wrapper.XgboostJNI;
  */
 public final class Booster {
     private static final Log logger = LogFactory.getLog(Booster.class);
-    
+
     long handle = 0;
-    
+
     //load native library
     static {
         try {
@@ -54,7 +54,7 @@ public final class Booster {
             logger.error(ex);
         }
     }
-    
+
     /**
      * init Booster from dMatrixs
      * @param params parameters
@@ -66,9 +66,9 @@ public final class Booster {
         setParam("seed","0");
         setParams(params);
     }
-    
 
-    
+
+
     /**
      * load model from modelPath
      * @param params parameters
@@ -84,10 +84,10 @@ public final class Booster {
         setParam("seed","0");
         setParams(params);
     }
-    
- 
-    
-    
+
+
+
+
     private void init(DMatrix[] dMatrixs) throws XGBoostError {
         long[] handles = null;
         if(dMatrixs != null) {
@@ -98,7 +98,7 @@ public final class Booster {
 
         handle = out[0];
     }
-    
+
     /**
      * set parameter
      * @param key param name
@@ -108,11 +108,11 @@ public final class Booster {
     public final void setParam(String key, String value) throws XGBoostError {
         ErrorHandle.checkCall(XgboostJNI.XGBoosterSetParam(handle, key, value));
     }
-    
+
     /**
      * set parameters
-     * @param params parameters key-value map 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @param params parameters key-value map
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public void setParams(Iterable<Entry<String, Object>> params) throws XGBoostError {
         if(params!=null) {
@@ -121,8 +121,8 @@ public final class Booster {
             }
         }
     }
-    
-    
+
+
     /**
      * Update (one iteration)
      * @param dtrain training data
@@ -132,7 +132,7 @@ public final class Booster {
     public void update(DMatrix dtrain, int iter) throws XGBoostError {
         ErrorHandle.checkCall(XgboostJNI.XGBoosterUpdateOneIter(handle, iter, dtrain.getHandle()));
     }
-    
+
     /**
      * update with customize obj func
      * @param dtrain training data
@@ -145,7 +145,7 @@ public final class Booster {
         List<float[]> gradients = obj.getGradient(predicts, dtrain);
         boost(dtrain, gradients.get(0), gradients.get(1));
     }
-    
+
     /**
      * update with give grad and hess
      * @param dtrain training data
@@ -159,7 +159,7 @@ public final class Booster {
         }
         ErrorHandle.checkCall(XgboostJNI.XGBoosterBoostOneIter(handle, dtrain.getHandle(), grad, hess));
     }
-    
+
     /**
      * evaluate with given dmatrixs.
      * @param evalMatrixs dmatrixs for evaluation
@@ -174,7 +174,7 @@ public final class Booster {
         ErrorHandle.checkCall(XgboostJNI.XGBoosterEvalOneIter(handle, iter, handles, evalNames, evalInfo));
         return evalInfo[0];
     }
-    
+
     /**
      * evaluate with given customized Evaluation class
      * @param evalMatrixs
@@ -195,10 +195,10 @@ public final class Booster {
         }
         return evalInfo;
     }
-    
+
      /**
      * evaluate with given dmatrix handles;
-     * @param dHandles evaluation data handles 
+     * @param dHandles evaluation data handles
      * @param evalNames name for eval dmatrixs, used for check results
      * @param iter current eval iteration
      * @return eval information
@@ -209,8 +209,8 @@ public final class Booster {
         ErrorHandle.checkCall(XgboostJNI.XGBoosterEvalOneIter(handle, iter, dHandles, evalNames, evalInfo));
         return evalInfo[0];
     }
-    
-    
+
+
     /**
      * evaluate with given dmatrix, similar to evalSet
      * @param evalMat
@@ -224,7 +224,7 @@ public final class Booster {
         String[] evalNames = new String[] {evalName};
         return  evalSet(evalMats, evalNames, iter);
     }
-    
+
     /**
      * base function for Predict
      * @param data
@@ -253,18 +253,18 @@ public final class Booster {
             predicts[r][c] = rawPredicts[0][i];
         }
         return predicts;
-    } 
-    
+    }
+
     /**
      * Predict with data
      * @param data dmatrix storing the input
-     * @return predict result 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @return predict result
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public float[][] predict(DMatrix data) throws XGBoostError {
         return pred(data, false, 0, false);
     }
-    
+
     /**
      * Predict with data
      * @param data dmatrix storing the input
@@ -275,7 +275,7 @@ public final class Booster {
     public float[][] predict(DMatrix data, boolean outPutMargin) throws XGBoostError {
         return pred(data, outPutMargin, 0, false);
     }
-    
+
     /**
      * Predict with data
      * @param data dmatrix storing the input
@@ -287,9 +287,9 @@ public final class Booster {
     public float[][] predict(DMatrix data, boolean outPutMargin, long treeLimit) throws XGBoostError {
         return pred(data, outPutMargin, treeLimit, false);
     }
-    
+
     /**
-     * Predict with data 
+     * Predict with data
      * @param data dmatrix storing the input
      * @param treeLimit Limit number of trees in the prediction; defaults to 0 (use all trees).
      * @param predLeaf When this option is on, the output will be a matrix of (nsample, ntrees), nsample = data.numRow
@@ -302,19 +302,19 @@ public final class Booster {
     public float[][] predict(DMatrix data , long treeLimit, boolean predLeaf) throws XGBoostError {
         return pred(data, false, treeLimit, predLeaf);
     }
-    
+
     /**
      * save model to modelPath
-     * @param modelPath 
+     * @param modelPath
      */
     public void saveModel(String modelPath) {
         XgboostJNI.XGBoosterSaveModel(handle, modelPath);
     }
-    
+
     private void loadModel(String modelPath) {
         XgboostJNI.XGBoosterLoadModel(handle, modelPath);
     }
-    
+
     /**
      * get the dump of the model as a string array
      * @param withStats Controls whether the split statistics are output.
@@ -330,7 +330,7 @@ public final class Booster {
         ErrorHandle.checkCall(XgboostJNI.XGBoosterDumpModel(handle, "", statsFlag, modelInfos));
         return modelInfos[0];
     }
-    
+
     /**
      * get the dump of the model as a string array
      * @param featureMap featureMap file
@@ -347,7 +347,7 @@ public final class Booster {
         ErrorHandle.checkCall(XgboostJNI.XGBoosterDumpModel(handle, featureMap, statsFlag, modelInfos));
         return modelInfos[0];
     }
-    
+
     /**
      * Dump model into a text file.
      * @param modelPath file to save dumped model info
@@ -355,25 +355,25 @@ public final class Booster {
             Controls whether the split statistics are output.
      * @throws FileNotFoundException
      * @throws UnsupportedEncodingException
-     * @throws IOException 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @throws IOException
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public void dumpModel(String modelPath, boolean withStats) throws FileNotFoundException, UnsupportedEncodingException, IOException, XGBoostError {
         File tf = new File(modelPath);
         FileOutputStream out = new FileOutputStream(tf);
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
         String[] modelInfos = getDumpInfo(withStats);
-        
+
         for(int i=0; i<modelInfos.length; i++) {
             writer.write("booster [" + i +"]:\n");
             writer.write(modelInfos[i]);
         }
-        
+
         writer.close();
         out.close();
     }
-    
-    
+
+
     /**
      * Dump model into a text file.
      * @param modelPath file to save dumped model info
@@ -382,25 +382,25 @@ public final class Booster {
             Controls whether the split statistics are output.
      * @throws FileNotFoundException
      * @throws UnsupportedEncodingException
-     * @throws IOException 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @throws IOException
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public void dumpModel(String modelPath, String featureMap, boolean withStats) throws FileNotFoundException, UnsupportedEncodingException, IOException, XGBoostError {
         File tf = new File(modelPath);
         FileOutputStream out = new FileOutputStream(tf);
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
         String[] modelInfos = getDumpInfo(featureMap, withStats);
-        
+
         for(int i=0; i<modelInfos.length; i++) {
             writer.write("booster [" + i +"]:\n");
             writer.write(modelInfos[i]);
         }
-        
+
         writer.close();
         out.close();
     }
-    
-    
+
+
     /**
      * get importance of each feature
      * @return featureMap  key: feature index, value: feature importance score
@@ -427,8 +427,8 @@ public final class Booster {
         }
         return featureScore;
     }
-    
-    
+
+
     /**
      * get importance of each feature
      * @param featureMap file to save dumped model info
@@ -456,7 +456,7 @@ public final class Booster {
         }
         return featureScore;
     }
-    
+
     /**
      * transfer DMatrix array to handle array (used for native functions)
      * @param dmatrixs
@@ -469,12 +469,12 @@ public final class Booster {
         }
         return handles;
     }
-    
+
     @Override
     protected void finalize() {
         delete();
     }
-    
+
     public synchronized void delete() {
         if(handle != 0l) {
             XgboostJNI.XGBoosterFree(handle);

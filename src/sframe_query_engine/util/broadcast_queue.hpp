@@ -38,14 +38,14 @@ struct broadcast_queue_serializer {
  *
  * \tparam T Datatype to be saved. Must be serializable
  *
- * This class guarantees very high efficiency if the total number 
+ * This class guarantees very high efficiency if the total number
  * of elements do not exceed the cache limit.
  *
  * The key design constraint are that files are either open for reading
  * or writing, but not both simultaneously. Random writes are prohibited, but
  * random reads are allowed.
  *
- * Single consumer queue 
+ * Single consumer queue
  * ---------------------
  * The single consumer case is easy to understand so we will explain that first.
  *
@@ -53,7 +53,7 @@ struct broadcast_queue_serializer {
  * 2. center queue
  * 3. pop file
  *
- * Elements enter at the top and leave from the bottom. 
+ * Elements enter at the top and leave from the bottom.
  *
  * When data is pushed, we push directly into the center queue. But if the
  * center queue is full, we start writing to the push_file.
@@ -63,7 +63,7 @@ struct broadcast_queue_serializer {
  * it closes the push and swaps it to a pop file and starts reading from the pop
  * file.
  *
- * Thus there can be at most one pop file. 
+ * Thus there can be at most one pop file.
  *
  * There are two interesting properties.
  * Where n is the total number of elements, and k is the limit on the size
@@ -80,14 +80,14 @@ struct broadcast_queue_serializer {
  * producing 'q' elements and consuming 'q' elements. At most a proportion of
  * (q - k)/q elements will be written to or read from disk.
  *
- * Multiple consumer queue 1 
+ * Multiple consumer queue 1
  * -------------------------
  * In the multiple consumer case, every consumer must see every element. This
  * makes the datastructure substantially trickier. Specifically you want to make
  * sure the setting where there are 2 or more consumers and all consumers are
  * very slow except for one which is as fast as the producer, do not result in:
  *  - producer writes a single element write to a push file
- *  - fast consumer needs the element, closes that push file turns it into a 
+ *  - fast consumer needs the element, closes that push file turns it into a
  *  pop file and reads it.
  *  - This results in one file per element.
  *
@@ -104,16 +104,16 @@ struct broadcast_queue_serializer {
  * When we push:
  *  - It goes into the memory queue
  *  - When memory queue exceeds some threshold, it gets written to disk
- *    and a new memory queue is started. 
+ *    and a new memory queue is started.
  *
- * Every consumer remembers a current file position pointer, and 
+ * Every consumer remembers a current file position pointer, and
  *  - pops from file
  *  - or reads from the in memory queue. (a little bit of bookkeeping
- *    is needed since the queue may get flushed to disk)  
+ *    is needed since the queue may get flushed to disk)
  *
  * While this satisfies the property (1), this does not satisfy property (2).
  * i.e. Assuming producer and consumer rates match. i.e. we alternate
- * producing 'q' elements and every consumer consuming 'q' elements. 
+ * producing 'q' elements and every consumer consuming 'q' elements.
  * When q > k, This procedure will write every element to file.
  *
  *
@@ -139,21 +139,21 @@ struct broadcast_queue_serializer {
  *
  * On push:
  *  - push into memory_queue
- *  - if memory_queue size exceeds 2k, 
+ *  - if memory_queue size exceeds 2k,
  *       - flush first k into a new push_file
  *       - If there is a consumer reading from the memory queue, flip push file
  *       to a pop file. (make the
  *         push file into a pop file and update all consumers so that
  *         they are reading from the pop file.)
- *  - else if push file exists, 
+ *  - else if push file exists,
  *       - pop first element of memory_queue to push_file
  *
  * On pop:
  *  - If I am reading from pop file just read next element from pop file
  *    advancing to next pop file if necessary
  *  - If there are no more pop files, but if there is a push file, flip push
- *    file to a pop file.  
- *  - If I am reading from memory queue, advance to the 
+ *    file to a pop file.
+ *  - If I am reading from memory queue, advance to the
  *    next memory queue element
  *
  * Optimizations
@@ -167,7 +167,7 @@ struct broadcast_queue_serializer {
  *  gets written to disk, as one element gets inserted. Only when the file must
  *  be read by a consumer, then it gets flushed.
  *
- * 3. Delay the creation of the "pop file" from the "push file" as late as we 
+ * 3. Delay the creation of the "pop file" from the "push file" as late as we
  * can. i.e. we only create the pop file when there is a consumer who needs to
  * read from the data just written to the push file
  */
@@ -179,9 +179,9 @@ class broadcast_queue {
    * \param cache limit Number of elements to cache
    */
   explicit broadcast_queue(size_t num_consumers,
-                           size_t cache_limit = 128, 
+                           size_t cache_limit = 128,
                            const Serializer& serializer = Serializer()):
-      m_cache_limit(cache_limit), m_serializer(serializer), m_consumers(num_consumers) { 
+      m_cache_limit(cache_limit), m_serializer(serializer), m_consumers(num_consumers) {
     if (m_cache_limit == 0) m_cache_limit = 1;
   }
   void reset() {
@@ -225,7 +225,7 @@ class broadcast_queue {
         if (c.reading_from_push_queue() && c.element_offset == 0) {
           flip_queues();
           break;
-        } 
+        }
       }
     }
     if (!m_push_queue.write_handle) {
@@ -264,10 +264,10 @@ class broadcast_queue {
     DASSERT_LT(consumer, m_consumers.size());
     // current consumer
     auto& cc = m_consumers[consumer];
-    
+
     if (!cc.reading_from_push_queue()) {
       if(cc.file_offset >= cc.current_pop_queue->file_length) {
-        if (cc.current_pop_queue->next_queue == nullptr && 
+        if (cc.current_pop_queue->next_queue == nullptr &&
             m_push_queue.write_handle) {
           flip_queues();
         }
@@ -308,7 +308,7 @@ class broadcast_queue {
       m_allocated_filenames.pop();
     }
   }
- 
+
  private:
 
   size_t m_cache_limit = 0;
@@ -340,15 +340,15 @@ class broadcast_queue {
    *   All data is in element_cache
    *   write_handle is nullptr
    * When there are >= 2 * cache_limit elements:
-   *   The first nelements - cache_limit elements are 
-   *      stored in the file using write_handle 
+   *   The first nelements - cache_limit elements are
+   *      stored in the file using write_handle
    *   element_cache contains the most recently inserted cache_limit elements
    */
   struct push_queue {
     std::string file_name;
     std::shared_ptr<general_ofstream> write_handle;
     std::deque<T> element_cache;
-    /// The total number of elements stored 
+    /// The total number of elements stored
     size_t nelements = 0;
   };
 
@@ -364,8 +364,8 @@ class broadcast_queue {
    *
    * Global Invariant
    * ----------------
-   * When current_pop_queue is nullptr, push_queue.nelements cannot be 
-   * greater than 2 * cache_limit_elements. (we cannot maintain the 
+   * When current_pop_queue is nullptr, push_queue.nelements cannot be
+   * greater than 2 * cache_limit_elements. (we cannot maintain the
    * element_offset index correctly when the rolling cache is used).
    */
   struct consumer {
@@ -373,7 +373,7 @@ class broadcast_queue {
     size_t element_offset = 0;
     size_t file_offset = 0;
     /// total elements popped so far
-    size_t nelements_popped = 0; 
+    size_t nelements_popped = 0;
 
     bool reading_from_push_queue() const {
       return current_pop_queue == nullptr;
@@ -427,10 +427,10 @@ class broadcast_queue {
       m_push_queue.element_cache.erase(m_push_queue.element_cache.begin(),
                                        end);
     }
-  } 
+  }
 
   bool has_push_queue_reader() {
-    return std::any_of(m_consumers.begin(), 
+    return std::any_of(m_consumers.begin(),
                     m_consumers.end(),
                     [](const consumer& c) {
                       return c.reading_from_push_queue();
@@ -446,13 +446,13 @@ class broadcast_queue {
     auto start = m_push_queue.element_cache.begin();
     auto end = m_push_queue.element_cache.begin() + m_cache_limit;
 
-    // if there is a consumer reading from the push_queue, we need to 
+    // if there is a consumer reading from the push_queue, we need to
     // completely close the file and shift it to the pull queue.
     // this requires a whole bunch of datastructure updates to be
     // performed by flip_queues
     if (has_push_queue_reader()) {
       m_push_queue.file_name = get_cache_file();
-      m_push_queue.write_handle = 
+      m_push_queue.write_handle =
           std::make_shared<general_ofstream>(m_push_queue.file_name);
       // remember the offset of each element
       std::vector<size_t> file_offsets;
@@ -496,7 +496,7 @@ class broadcast_queue {
     } else {
       // no push queue reader. open a push file and just dump
       m_push_queue.file_name = get_cache_file();
-      m_push_queue.write_handle = 
+      m_push_queue.write_handle =
           std::make_shared<general_ofstream>(m_push_queue.file_name);
       oarchive oarc(*m_push_queue.write_handle);
       for(; start != end; ++start) {
@@ -506,7 +506,7 @@ class broadcast_queue {
 
     // remove those m_cache_limit elements from the in memory cache
     m_push_queue.element_cache.erase(m_push_queue.element_cache.begin(),
-                                     end); 
+                                     end);
 
   }
 
@@ -524,7 +524,7 @@ class broadcast_queue {
     m_push_queue.write_handle.reset();
     // make a new pop queue
     auto pq = std::make_shared<pop_queue>();
-    pq->file_name = std::move(m_push_queue.file_name); 
+    pq->file_name = std::move(m_push_queue.file_name);
     m_push_queue.file_name.clear();
     pq->read_handle = std::make_shared<general_ifstream>(pq->file_name);
     pq->file_length = pq->read_handle->file_size();
@@ -534,7 +534,7 @@ class broadcast_queue {
     if (!m_pop_queues.empty()) {
       auto last_elem = m_pop_queues.back();
       last_elem->next_queue = pq;
-    } 
+    }
     m_pop_queues.push_back(pq);
     // update the nelement counter in the push_queue
     m_push_queue.nelements = m_push_queue.element_cache.size();
@@ -554,4 +554,3 @@ class broadcast_queue {
 /// \}
 } // turicreate
 #endif
-

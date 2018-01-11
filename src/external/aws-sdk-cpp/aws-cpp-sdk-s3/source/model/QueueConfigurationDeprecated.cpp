@@ -29,14 +29,14 @@ namespace S3
 namespace Model
 {
 
-QueueConfigurationDeprecated::QueueConfigurationDeprecated() : 
+QueueConfigurationDeprecated::QueueConfigurationDeprecated() :
     m_idHasBeenSet(false),
     m_eventsHasBeenSet(false),
     m_queueHasBeenSet(false)
 {
 }
 
-QueueConfigurationDeprecated::QueueConfigurationDeprecated(const XmlNode& xmlNode) : 
+QueueConfigurationDeprecated::QueueConfigurationDeprecated(const XmlNode& xmlNode) :
     m_idHasBeenSet(false),
     m_eventsHasBeenSet(false),
     m_queueHasBeenSet(false)

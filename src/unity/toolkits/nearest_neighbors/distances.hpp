@@ -123,7 +123,7 @@ double compute_distance(std::string distance_name, const flexible_type& a, const
     DASSERT_TRUE(a.size() > 0);
     const auto& a_vec = a.get<flex_vec>();
     const auto& b_vec = b.get<flex_vec>();
-    
+
     arma::vec av(const_cast<double*>(a_vec.data()), a_vec.size(), false, false);
     arma::vec bv(const_cast<double*>(b_vec.data()), b_vec.size(), false, false);
 
@@ -300,6 +300,3 @@ std::vector<turi::toolkit_function_specification> get_toolkit_function_registrat
 
 
 #endif /* TURI_DISTANCES_H_ */
-
-
-

@@ -43,7 +43,7 @@ if ($FLAVOR =~ /WIN64/)
     # own desing and limiting its return value to 2GB-1 (see e_os.h). As
     # per 0.9.8 release remaining warnings were explicitly examined and
     # considered safe to ignore.
-    # 
+    #
     $base_cflags= " $mf_cflag";
     my $f = $shlib || $fips ?' /MD':' /MT';
     $opt_cflags=$f.' /Ox';
@@ -327,7 +327,7 @@ sub do_lib_rule
 		local($ex)=($target =~ /O_CRYPTO/)?'':' $(L_CRYPTO)';
 		$ex.=" $zlib_lib" if $zlib_opt == 1 && $target =~ /O_CRYPTO/;
 
- 		if ($fips && $target =~ /O_CRYPTO/)
+		if ($fips && $target =~ /O_CRYPTO/)
 			{
 			$ret.="$target: $objs \$(PREMAIN_DSO_EXE)";
 			$ret.="\n\tSET FIPS_LINK=\$(LINK)\n";
@@ -382,7 +382,7 @@ sub do_link_rule
 		$ret.="\t\$(LINK) \$(LFLAGS) $efile$target @<<\n";
 		$ret.="\t\$(APP_EX_OBJ) $files $libs\n<<\n";
 		}
-    	$ret.="\tIF EXIST \$@.manifest mt -nologo -manifest \$@.manifest -outputresource:\$@;1\n\n";
+	$ret.="\tIF EXIST \$@.manifest mt -nologo -manifest \$@.manifest -outputresource:\$@;1\n\n";
 	return($ret);
 	}
 

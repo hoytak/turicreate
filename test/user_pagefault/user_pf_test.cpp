@@ -78,7 +78,7 @@ void test_reads() {
 
 void test_writes() {
   size_t nlen = NUM_VIRTUAL_VALUES;
-  auto ps = allocate(nlen * sizeof(size_t), handler_callback, 
+  auto ps = allocate(nlen * sizeof(size_t), handler_callback,
                      nullptr, true /*write enable*/);
   size_t* begin = (size_t*)ps->begin;
 

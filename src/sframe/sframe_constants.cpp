@@ -35,71 +35,71 @@ EXPORT size_t SFRAME_SORT_MAX_SEGMENTS = 128;
 EXPORT const size_t SFRAME_IO_LOCK_FILE_SIZE_THRESHOLD = 4 * 1024 * 1024;
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SFRAME_DEFAULT_NUM_SEGMENTS, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SFRAME_DEFAULT_NUM_SEGMENTS,
+                            true,
                             +[](int64_t val){ return val >= 1; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SFRAME_FILE_HANDLE_POOL_SIZE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SFRAME_FILE_HANDLE_POOL_SIZE,
+                            true,
                             +[](int64_t val){ return val >= 64; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SFRAME_DEFAULT_BLOCK_SIZE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SFRAME_DEFAULT_BLOCK_SIZE,
+                            true,
                             +[](int64_t val){ return val >= 1024; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SFRAME_MAX_BLOCKS_IN_CACHE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SFRAME_MAX_BLOCKS_IN_CACHE,
+                            true,
                             +[](int64_t val){ return val >= 1; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SFRAME_CSV_PARSER_READ_SIZE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SFRAME_CSV_PARSER_READ_SIZE,
+                            true,
                             +[](int64_t val){ return val >= 1024; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SFRAME_GROUPBY_BUFFER_NUM_ROWS,
-                            true, 
+                            true,
                             +[](int64_t val){ return val >= 64; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SFRAME_JOIN_BUFFER_NUM_CELLS,
-                            true, 
+                            true,
                             +[](int64_t val){ return val >= 1024; });
 
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SFRAME_WRITER_MAX_BUFFERED_CELLS,
-                            true, 
+                            true,
                             +[](int64_t val){ return val >= 1024; });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SFRAME_WRITER_MAX_BUFFERED_CELLS_PER_BLOCK,
-                            true, 
+                            true,
                             +[](int64_t val){ return val >= 1024; });
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SFRAME_IO_READ_LOCK,
-                            true, 
+                            true,
                             +[](int64_t val){ return val == 0 || val == 1 ; });
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SFRAME_SORT_PIVOT_ESTIMATION_SAMPLE_SIZE,
-                            true, 
+                            true,
                             +[](int64_t val){ return val > 128 ; });
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SFRAME_SORT_MAX_SEGMENTS,
                             true,
                             +[](int64_t val){ return val > 1; });

@@ -68,4 +68,3 @@ CURLcode Curl_axtls_random(struct Curl_easy *data,
 
 #endif /* USE_AXTLS */
 #endif /* HEADER_CURL_AXTLS_H */
-

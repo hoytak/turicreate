@@ -469,7 +469,7 @@ label:									   \\
 
 RC4:
 	{
-	  	.mmi
+		.mmi
 		alloc	r2 = ar.pfs, _NINPUTS, _NLOCALS, _NOUTPUT, _NROTATE
 
 		.rotr Data[4], I[2], IPr[3], SI[3], JP[2], SJ[2], T[2], \\
@@ -492,21 +492,21 @@ RC4:
 		ADDP		OutPrefetch = 0, OutputBuffer
 	}
 	{               // Return 0 if the input length is nonsensical
-        	.mib
+		.mib
 		ADDP		StateTable = 0, StateTable
-        	cmp.ge.unc  	L_NOK, L_OK = r0, DataLen
+		cmp.ge.unc  	L_NOK, L_OK = r0, DataLen
 	(L_NOK) br.ret.sptk.few rp
 	}
 	;;
 	{
-        	.mib
-        	cmp.eq.or  	L_NOK, L_OK = r0, InPtr
-        	cmp.eq.or  	L_NOK, L_OK = r0, OutPtr
+		.mib
+		cmp.eq.or  	L_NOK, L_OK = r0, InPtr
+		cmp.eq.or  	L_NOK, L_OK = r0, OutPtr
 		nop		0x0
 	}
 	{
 		.mib
-        	cmp.eq.or  	L_NOK, L_OK = r0, StateTable
+		cmp.eq.or  	L_NOK, L_OK = r0, StateTable
 		nop		0x0
 	(L_NOK) br.ret.sptk.few rp
 	}

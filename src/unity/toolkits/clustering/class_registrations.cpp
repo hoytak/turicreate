@@ -1,6 +1,6 @@
 #include <unity/toolkits/clustering/kmeans.hpp>
 
-namespace turi { namespace kmeans { 
+namespace turi { namespace kmeans {
 
 BEGIN_CLASS_REGISTRATION
 REGISTER_CLASS(kmeans_model)

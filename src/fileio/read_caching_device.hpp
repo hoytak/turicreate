@@ -13,16 +13,16 @@
 #include <map>
 namespace turi {
 
-// private namespace 
+// private namespace
 namespace {
 const size_t READ_CACHING_BLOCK_SIZE = 64*1024*1024; // 64 MB
-} // end private namespace 
+} // end private namespace
 
 /**
  * \ingroup fileio
  * Can be wrapped around any device implement to provide read caching. This
  * should be used only when the filesystem we are accessing is rather remote.
- * It uses the \ref block_cache to cache large blocks on the cache:// file 
+ * It uses the \ref block_cache to cache large blocks on the cache:// file
  * system.
  *
  * Before:
@@ -66,7 +66,7 @@ class read_caching_device {
     m_writing = write;
   }
 
-  // Because the device has bidirectional tag, close will be called 
+  // Because the device has bidirectional tag, close will be called
   // twice, one with the std::ios_base::in, followed by out.
   // Only close the file when the close tag matches the actual file type.
   void close(std::ios_base::openmode mode = std::ios_base::openmode()) {
@@ -133,10 +133,10 @@ class read_caching_device {
   }
 
   /**
-   * Seeks to a different location. 
+   * Seeks to a different location.
    */
-  std::streampos seek(std::streamoff off, 
-                      std::ios_base::seekdir way, 
+  std::streampos seek(std::streamoff off,
+                      std::ios_base::seekdir way,
                       std::ios_base::openmode openmode) {
     if (openmode == std::ios_base::in) {
       if (way == std::ios_base::beg) {
@@ -192,9 +192,9 @@ class read_caching_device {
    * Fetches the contents of a block.
    * Returns true on success and false on failure.
    */
-  bool fetch_block(char* output, 
+  bool fetch_block(char* output,
                    size_t block_number,
-                   size_t startpos, 
+                   size_t startpos,
                    size_t length) {
     auto& bc = block_cache::get_instance();
     std::string key = get_key_name(block_number);

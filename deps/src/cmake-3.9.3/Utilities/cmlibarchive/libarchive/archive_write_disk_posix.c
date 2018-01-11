@@ -1787,7 +1787,7 @@ archive_write_disk_gid(struct archive *_a, const char *name, int64_t id)
                return (a->lookup_gid)(a->lookup_gid_data, name, id);
        return (id);
 }
- 
+
 int64_t
 archive_write_disk_uid(struct archive *_a, const char *name, int64_t id)
 {
@@ -2640,7 +2640,7 @@ check_symlinks_fsobj(char *path, int *a_eno, struct archive_string *a_estr,
 				/*
 				 * We are not the last element and we want to
 				 * follow symlinks if they are a directory.
-				 * 
+				 *
 				 * This is needed to extract hardlinks over
 				 * symlinks.
 				 */
@@ -4240,4 +4240,3 @@ older(struct stat *st, struct archive_entry *entry)
 }
 
 #endif /* !_WIN32 || __CYGWIN__ */
-

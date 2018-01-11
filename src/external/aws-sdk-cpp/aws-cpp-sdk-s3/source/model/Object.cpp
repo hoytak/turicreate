@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-Object::Object() : 
+Object::Object() :
     m_keyHasBeenSet(false),
     m_lastModifiedHasBeenSet(false),
     m_eTagHasBeenSet(false),
@@ -40,7 +40,7 @@ Object::Object() :
 {
 }
 
-Object::Object(const XmlNode& xmlNode) : 
+Object::Object(const XmlNode& xmlNode) :
     m_keyHasBeenSet(false),
     m_lastModifiedHasBeenSet(false),
     m_eTagHasBeenSet(false),

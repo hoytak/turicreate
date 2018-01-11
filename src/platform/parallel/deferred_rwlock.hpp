@@ -12,11 +12,11 @@ namespace turi {
 /**
  * \ingroup threading
  * The deferred rwlock is a variant of a regular rwlock which is completely
- * non-blocking. 
+ * non-blocking.
  *
  * The user creates request objects:
  * \code
- * // we use new here, but it is preferable that you have a big statically 
+ * // we use new here, but it is preferable that you have a big statically
  * // allocated pool of request objects
  * deferred_rwlock::request* request = new deferred_rwlock::request;
  * // request->id can be used here to associate additional information with the
@@ -36,8 +36,8 @@ namespace turi {
  * rwlock.complete_rdlock(&released);
  * \endcode
  *
- * All operations are \b non-blocking, meaning that the lock request you 
- * issued/completed, need not be the set of requests that are satisfied. 
+ * All operations are \b non-blocking, meaning that the lock request you
+ * issued/completed, need not be the set of requests that are satisfied.
  * The set of released locks returned is a linked list of locks
  * that are satisfied at completion of the operation.
  *
@@ -49,7 +49,7 @@ namespace turi {
  *
  * // we are going to acquire a write lock
  * // this will be successful if rwlock is a fresh lock
- * bool success = rwlock.writelock(writelock); 
+ * bool success = rwlock.writelock(writelock);
  *
  * // acquire 4 read locks consecutively. Note that this does not block.
  * // but since a write lock has already been acquired, all of these will
@@ -63,7 +63,7 @@ namespace turi {
  * // release the write lock we acquired earlier.
  * num_released = rwlock.wrunlock(writelock, &released);
  *
- * // since the write lock is released, all readers can proceed and 
+ * // since the write lock is released, all readers can proceed and
  * // num_released will be 4 here. released now is a linked list of read requests.
  * // For instance, the following may be true:
  * released == &(readlocks[0]);
@@ -71,10 +71,10 @@ namespace turi {
  * released->next->next == &(readlocks[2]);
  * released->next->next->next == &(readlocks[3]);
  * released->next->next->next->next == nullptr;
- * // strictly the implementation need not have this particular linked list 
+ * // strictly the implementation need not have this particular linked list
  * // ordering, though that is indeed currently the case since it maintains
  * // a strict queue.
- * 
+ *
  * // At some point in the future you do need to call rdunlock() as many times
  * // as there are read requests completed.
  * rwlock.rdunlock();
@@ -82,9 +82,9 @@ namespace turi {
  * rwlock.rdunlock();
  * rwlock.rdunlock();
  * \endcode
- * 
+ *
  * This deferred_rwlock is tricky and not easy to use. You need to manage
- * the request objects carefully and it is easy to get into inconsistent 
+ * the request objects carefully and it is easy to get into inconsistent
  * scenarios.
  */
 class deferred_rwlock{
@@ -92,7 +92,7 @@ class deferred_rwlock{
 
   struct request{
     char lockclass : 2;
-    __attribute__((may_alias)) uint64_t id : 62; 
+    __attribute__((may_alias)) uint64_t id : 62;
     request* next;
   };
  private:
@@ -137,13 +137,13 @@ class deferred_rwlock{
       head = I;
     }
   }
-  
+
   /**
    * Tries to acquire a high priority writelock.
-   * Returns true if the write lock is available immediately. 
-   * False otherwise, in which case the request object may be returned in a 
+   * Returns true if the write lock is available immediately.
+   * False otherwise, in which case the request object may be returned in a
    * released linked list via another complete lock operation.
-   */ 
+   */
   inline bool writelock_priority(request *I) {
     I->next = NULL;
     I->lockclass = QUEUED_RW_LOCK_REQUEST_WRITE;
@@ -163,10 +163,10 @@ class deferred_rwlock{
 
   /**
    * Tries to acquire a writelock.
-   * Returns true if the write lock is available immediately. 
-   * False otherwise, in which case the request object may be returned in a 
+   * Returns true if the write lock is available immediately.
+   * False otherwise, in which case the request object may be returned in a
    * released linked list via another complete lock operation.
-   */ 
+   */
   inline bool writelock(request *I) {
     I->next = NULL;
     I->lockclass = QUEUED_RW_LOCK_REQUEST_WRITE;
@@ -184,7 +184,7 @@ class deferred_rwlock{
     }
   }
 
-  /** 
+  /**
    * \internal
    * completes the write lock on the head. lock must be acquired
    * head must be a write lock
@@ -213,12 +213,12 @@ class deferred_rwlock{
     }
     reader_count += numcompleted;
     if (head == NULL) tail = NULL;
-    
+
     // now released is the head to a reader list
     // and head is the head of a writer list
     // I want to go through the writer list and extract all the readers
-    // this essentially 
-    // splits the list into two sections, one containing only readers, and 
+    // this essentially
+    // splits the list into two sections, one containing only readers, and
     // one containing only writers.
     // (reader biased locking)
     if (head != NULL) {
@@ -241,11 +241,11 @@ class deferred_rwlock{
     }
     return numcompleted;
   }
-  
+
   /**
    * Released a currently acquired write lock.
-   * Returns the number of new locks acquired, and the output argument 
-   * 'released' contains a linked list of locks next acquired, 
+   * Returns the number of new locks acquired, and the output argument
+   * 'released' contains a linked list of locks next acquired,
    */
   inline size_t wrunlock(request* &released) {
     released = NULL;
@@ -270,8 +270,8 @@ class deferred_rwlock{
 
   /**
    * Tries to acquire a readlock.
-   * Returns the number of locks now released. 
-   * 'released' contains a linked list of locks next acquired, 
+   * Returns the number of locks now released.
+   * 'released' contains a linked list of locks next acquired,
    */
   inline size_t readlock(request *I, request* &released)  {
     released = NULL;
@@ -300,9 +300,9 @@ class deferred_rwlock{
 
   /**
    * Tries to acquire a high priority readlock.
-   * Returns the number of locks now released. 
-   * 'released' contains a linked list of locks next acquired, 
-   */ 
+   * Returns the number of locks now released.
+   * 'released' contains a linked list of locks next acquired,
+   */
   inline size_t readlock_priority(request *I, request* &released)  {
     released = NULL;
     size_t ret = 0;
@@ -330,8 +330,8 @@ class deferred_rwlock{
 
   /**
    * Released a currently acquired read lock.
-   * Returns the number of new locks acquired, and the output argument 
-   * 'released' contains a linked list of locks next acquired, 
+   * Returns the number of new locks acquired, and the output argument
+   * 'released' contains a linked list of locks next acquired,
    */
   inline size_t rdunlock(request* &released)  {
     released = NULL;
@@ -362,4 +362,3 @@ class deferred_rwlock{
 
 }
 #endif
-

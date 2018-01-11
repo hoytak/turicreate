@@ -10,7 +10,7 @@ as specified in the documentation.
 From the section 2.6 Server Only Protocol Messages
 
 If the SESSION-ID-HIT flag is non-zero then the CERTIFICATE-TYPE,
-CERTIFICATE-LENGTH and CIPHER-SPECS-LENGTH fields will be zero. 
+CERTIFICATE-LENGTH and CIPHER-SPECS-LENGTH fields will be zero.
 
 This is not true for https://www.netscape.com.  The CERTIFICATE-TYPE
 is returned as 1.
@@ -23,4 +23,3 @@ client-finished.  Besides this not being evident from the examples in
 reading.  SSLeay was waiting in the server to recieve a client-finish
 before sending the server-verify :-).  I have changed SSLeay to send a
 server-verify before trying to read the client-finished.
-

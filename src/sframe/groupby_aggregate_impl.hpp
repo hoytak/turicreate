@@ -178,7 +178,7 @@ namespace groupby_aggregate_impl {
  *
  * This class essentially implements the entire groupby aggregation algorithm.
  * Aggregation groups are defined using \ref define_group.
- * After which, rows are inserted using the add method. 
+ * After which, rows are inserted using the add method.
  *
  * num_segments is the maximum degree of parallelism permissible. This is
  * the number of segments of the output SFrame.
@@ -189,7 +189,7 @@ namespace groupby_aggregate_impl {
  * exceed the max_buffer_size number of keys stored in memory. If more keys are
  * needed the existing keys are all sorted and flushed out to disk. This
  * process repeats until all data is read.
- * 
+ *
  * Then when \ref group_and_write is called, a k-way merge is performed across
  * all the sorted ranges of keys on disk to write the final output.
  */

@@ -12,7 +12,7 @@ set CAcert=certCA.ss
 set CAserial=certCA.srl
 set CAreq=reqCA.ss
 set CAconf=..\test\CAss.cnf
-set CAreq2=req2CA.ss	
+set CAreq2=req2CA.ss
 
 set Uconf=..\test\Uss.cnf
 set Ukey=keyU.ss

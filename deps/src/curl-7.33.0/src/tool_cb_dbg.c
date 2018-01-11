@@ -272,4 +272,3 @@ static void dump(const char *timebuf, const char *text,
   }
   fflush(stream);
 }
-

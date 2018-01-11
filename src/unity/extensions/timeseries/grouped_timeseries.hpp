@@ -23,7 +23,7 @@ class EXPORT gl_grouped_timeseries : public turi::toolkit_class_base {
    * new TimeSeries' all have the same number of columns as the original
    * TimeSeries.  These are accessed through the interface of this data
    * structure.
-   * 
+   *
    * \param sf The underlying SFrame of the TimeSeries.
    * \param index_col_name The index column of the TimeSeries.
    * \param column_names List of column names to group by.
@@ -43,7 +43,7 @@ class EXPORT gl_grouped_timeseries : public turi::toolkit_class_base {
    * 2s, the name of the group with ones is the integer 1, not the string '1'.
    * The key is given as a vector because more than one columns can be used to
    * group.
-   * 
+   *
    * \param key Name of group to retrieve.
    * \returns An SFrame that can immediately be interpreted as a TimeSeries
    * (i.e. it is sorted by its time index column.)
@@ -56,10 +56,10 @@ class EXPORT gl_grouped_timeseries : public turi::toolkit_class_base {
   size_t num_groups() const {
     return m_grouped_sframe.num_groups();
   }
-  
+
   /**
    * Return an SFrame with group_info i.e key columns + number of rows in each
-   * key column. 
+   * key column.
    */
   gl_sframe group_info() const {
     return m_grouped_sframe.group_info();
@@ -80,7 +80,7 @@ class EXPORT gl_grouped_timeseries : public turi::toolkit_class_base {
 
   /**
    * Return the index column name of the time series (not the same as the group
-   * column) 
+   * column)
   */
   gl_sframe get_sframe() const {
     return m_grouped_sframe.get_sframe();
@@ -88,19 +88,19 @@ class EXPORT gl_grouped_timeseries : public turi::toolkit_class_base {
 
   /**
    * Return the index column name of the time series (not the same as the group
-   * column) 
+   * column)
   */
   std::string get_index_column_name() const {
     return m_time_index_name;
   }
-  
+
   /**
-   * Return the value columns in the timeseries. 
+   * Return the value columns in the timeseries.
   */
   std::vector<std::string> get_value_col_names() const {
     return m_value_col_names;
   }
-  
+
   /**
    * Return the list of columns on which the data is grouped.
    */
@@ -116,7 +116,7 @@ class EXPORT gl_grouped_timeseries : public turi::toolkit_class_base {
 
  public:
   BEGIN_CLASS_MEMBER_REGISTRATION("_GroupedTimeseries")
-  
+
     REGISTER_CLASS_MEMBER_FUNCTION(gl_grouped_timeseries::group, "data",
       "index_name", "column_names")
   REGISTER_CLASS_MEMBER_FUNCTION(gl_grouped_timeseries::num_groups)
@@ -126,13 +126,13 @@ class EXPORT gl_grouped_timeseries : public turi::toolkit_class_base {
   REGISTER_CLASS_MEMBER_FUNCTION(gl_grouped_timeseries::iterator_get_next,
       "num_items")
   REGISTER_CLASS_MEMBER_FUNCTION(gl_grouped_timeseries::get_group, "key")
-  
+
   REGISTER_GETTER("sframe", gl_grouped_timeseries::get_sframe)
   REGISTER_GETTER("index_column_name",
       gl_grouped_timeseries::get_index_column_name)
   REGISTER_GETTER("value_col_names", gl_grouped_timeseries::get_value_col_names)
   REGISTER_GETTER("key_columns", gl_grouped_timeseries::get_key_col_names)
-  
+
   END_CLASS_MEMBER_REGISTRATION
 };
 

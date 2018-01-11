@@ -25,7 +25,7 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws::Http;
 
-ListObjectVersionsRequest::ListObjectVersionsRequest() : 
+ListObjectVersionsRequest::ListObjectVersionsRequest() :
     m_bucketHasBeenSet(false),
     m_delimiterHasBeenSet(false),
     m_encodingTypeHasBeenSet(false),
@@ -88,4 +88,3 @@ void ListObjectVersionsRequest::AddQueryStringParameters(URI& uri) const
     }
 
 }
-

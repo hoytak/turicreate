@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-VersioningConfiguration::VersioningConfiguration() : 
+VersioningConfiguration::VersioningConfiguration() :
     m_mFADeleteHasBeenSet(false),
     m_statusHasBeenSet(false)
 {
 }
 
-VersioningConfiguration::VersioningConfiguration(const XmlNode& xmlNode) : 
+VersioningConfiguration::VersioningConfiguration(const XmlNode& xmlNode) :
     m_mFADeleteHasBeenSet(false),
     m_statusHasBeenSet(false)
 {

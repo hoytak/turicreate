@@ -33,7 +33,7 @@ evalerror <- function(preds, dtrain) {
   return(list(metric = "error", value = err))
 }
 
-param <- list(max.depth=2, eta=1, nthread = 2, silent=1, 
+param <- list(max.depth=2, eta=1, nthread = 2, silent=1,
               objective=logregobj, eval_metric=evalerror)
 print ('start training with user customized objective')
 # training with customized objective, we can also do step by step training
@@ -41,11 +41,11 @@ print ('start training with user customized objective')
 bst <- xgb.train(param, dtrain, num_round, watchlist)
 
 #
-# there can be cases where you want additional information 
+# there can be cases where you want additional information
 # being considered besides the property of DMatrix you can get by getinfo
 # you can set additional information as attributes if DMatrix
 
-# set label attribute of dtrain to be label, we use label as an example, it can be anything 
+# set label attribute of dtrain to be label, we use label as an example, it can be anything
 attr(dtrain, 'label') <- getinfo(dtrain, 'label')
 # this is new customized objective, where you can access things you set
 # same thing applies to customized evaluation function
@@ -57,7 +57,7 @@ logregobjattr <- function(preds, dtrain) {
   hess <- preds * (1 - preds)
   return(list(grad = grad, hess = hess))
 }
-param <- list(max.depth=2, eta=1, nthread = 2, silent=1, 
+param <- list(max.depth=2, eta=1, nthread = 2, silent=1,
               objective=logregobjattr, eval_metric=evalerror)
 print ('start training with user customized objective, with additional attributes in DMatrix')
 # training with customized objective, we can also do step by step training

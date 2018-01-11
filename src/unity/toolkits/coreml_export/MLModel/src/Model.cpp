@@ -14,22 +14,22 @@
 #include <iostream>
 
 namespace CoreML {
-    
+
     Model::Model() {
         m_spec = std::make_shared<Specification::Model>();
         m_spec->set_specificationversion(MLMODEL_SPECIFICATION_VERSION);
     }
-    
+
     Model::Model(const Specification::Model& proto) {
         m_spec = std::make_shared<Specification::Model>(proto);
     }
-    
+
     Model::Model(const std::string& description)
     : Model::Model() {
         Specification::Metadata* metadata = m_spec->mutable_description()->mutable_metadata();
         metadata->set_shortdescription(description);
     }
-    
+
     Model::Model(const Model& other) = default;
     Model::~Model() = default;
 
@@ -103,14 +103,14 @@ namespace CoreML {
     Result Model::validate() const {
         return Model::validate(*m_spec);
     }
-    
+
     Result Model::load(std::istream& in, Model& out) {
         if (!in.good()) {
             return Result(ResultType::UNABLE_TO_OPEN_FILE,
                           "unable to open file for read");
         }
 
-        
+
         Result r = loadSpecification(*(out.m_spec), in);
         if (!r.good()) { return r; }
         // validate on load
@@ -118,12 +118,12 @@ namespace CoreML {
 
         return r;
     }
-    
+
     Result Model::load(const std::string& path, Model& out) {
         std::ifstream in(path, std::ios::binary);
         return load(in, out);
     }
-    
+
     Result Model::save(std::ostream& out) {
         if (!out.good()) {
             return Result(ResultType::UNABLE_TO_OPEN_FILE,
@@ -138,7 +138,7 @@ namespace CoreML {
 
         return saveSpecification(*m_spec, out);
     }
-    
+
     Result Model::save(const std::string& path) {
 
 
@@ -147,12 +147,12 @@ namespace CoreML {
 
 
         if(r.good()) {
-          std::cout << "Saving valid model to path " << path << std::endl; 
+          std::cout << "Saving valid model to path " << path << std::endl;
         } else {
-          std::cout << "Error in saving model to path " << path << std::endl; 
+          std::cout << "Error in saving model to path " << path << std::endl;
         }
 
-        return r; 
+        return r;
     }
 
     const std::string& Model::shortDescription() const {
@@ -170,7 +170,7 @@ namespace CoreML {
         }
         return inputs;
     }
-    
+
     SchemaType Model::outputSchema() const {
         SchemaType outputs;
         const Specification::ModelDescription& interface = m_spec->description();
@@ -182,7 +182,7 @@ namespace CoreML {
         }
         return outputs;
     }
-    
+
     Result Model::addInput(const std::string& featureName,
                            FeatureType featureType) {
         Specification::ModelDescription* interface = m_spec->mutable_description();
@@ -191,7 +191,7 @@ namespace CoreML {
         arg->set_allocated_type(featureType.allocateCopy());
         return Result();
     }
-    
+
     Result Model::addOutput(const std::string& targetName,
                             FeatureType targetType) {
         Specification::ModelDescription* interface = m_spec->mutable_description();
@@ -200,7 +200,7 @@ namespace CoreML {
         arg->set_allocated_type(targetType.allocateCopy());
         return Result();
     }
-    
+
     MLModelType Model::modelType() const {
         return static_cast<MLModelType>(m_spec->Type_case());
     }
@@ -208,36 +208,36 @@ namespace CoreML {
     std::string Model::modelTypeName() const {
         return MLModelType_Name(modelType());
     }
-    
+
     const Specification::Model& Model::getProto() const {
         return *m_spec;
     }
-    
+
     Specification::Model& Model::getProto() {
         return *m_spec;
     }
-    
+
     Result Model::enforceTypeInvariant(const std::vector<FeatureType>& allowedFeatureTypes,
                                        FeatureType featureType) {
-        
+
         for (const FeatureType& t : allowedFeatureTypes) {
             if (featureType == t) {
                 // no invariant broken -- type matches one of the allowed types
                 return Result();
             }
         }
-        
+
         return Result::featureTypeInvariantError(allowedFeatureTypes, featureType);
     }
-    
+
     bool Model::operator==(const Model& other) const {
         return *m_spec == *(other.m_spec);
     }
-    
+
     bool Model::operator!=(const Model& other) const {
         return !(*this == other);
     }
-    
+
     static void writeFeatureDescription(std::stringstream& ss,
                                         const Specification::FeatureDescription& feature) {
         ss  << "\t\t"
@@ -250,7 +250,7 @@ namespace CoreML {
         }
         ss << "\n";
     }
-    
+
     void Model::toStringStream(std::stringstream& ss) const {
         ss << "Spec version: " << m_spec->specificationversion() << "\n";
         ss << "Model type: " << MLModelType_Name(static_cast<MLModelType>(m_spec->Type_case())) << "\n";
@@ -270,7 +270,7 @@ namespace CoreML {
             ss << "\t" << "Predicted probability name: " << m_spec->description().predictedprobabilitiesname() << "\n";
         }
     }
-    
+
     std::string Model::toString() const {
         std::stringstream ss;
         toStringStream(ss);
@@ -295,16 +295,16 @@ _MLModelSpecification::_MLModelSpecification()
     _MLModelSpecification::_MLModelSpecification(const CoreML::Model& te) {
   cppFormat.reset(new CoreML::Specification::Model(te.getProto()));
 }
-    
+
 _MLModelMetadataSpecification::_MLModelMetadataSpecification() : cppMetadata(new CoreML::Specification::Metadata())
 {
 }
-    
+
 _MLModelMetadataSpecification::_MLModelMetadataSpecification(const CoreML::Specification::Metadata& meta)
 : cppMetadata(new CoreML::Specification::Metadata(meta))
 {
 }
-    
+
 _MLModelDescriptionSpecification::_MLModelDescriptionSpecification() : cppInterface(new CoreML::Specification::ModelDescription())
 {
 }

@@ -89,7 +89,7 @@ struct lzh_dec {
 	struct lzh_br {
 #define CACHE_TYPE		uint64_t
 #define CACHE_BITS		(8 * sizeof(CACHE_TYPE))
-	 	/* Cache buffer. */
+		/* Cache buffer. */
 		CACHE_TYPE	 cache_buffer;
 		/* Indicates how many bits avail in cache_buffer. */
 		int		 cache_avail;
@@ -151,7 +151,7 @@ struct lha {
 	int64_t                  entry_bytes_remaining;
 	int64_t			 entry_unconsumed;
 	uint16_t		 entry_crc_calculated;
- 
+
 	size_t			 header_size;	/* header size		    */
 	unsigned char		 level;		/* header level		    */
 	char			 method[3];	/* compress type	    */
@@ -479,7 +479,7 @@ archive_read_format_lha_read_header(struct archive_read *a,
 	const unsigned char *p;
 	const char *signature;
 	int err;
-	
+
 	lha_crc16_init();
 
 	a->archive.archive_format = ARCHIVE_FORMAT_LHA;
@@ -603,12 +603,12 @@ archive_read_format_lha_read_header(struct archive_read *a,
 
 	if ((lha->mode & AE_IFMT) == AE_IFLNK) {
 		/*
-	 	 * Extract the symlink-name if it's included in the pathname.
-	 	 */
+		 * Extract the symlink-name if it's included in the pathname.
+		 */
 		if (!lha_parse_linkname(&linkname, &pathname)) {
 			/* We couldn't get the symlink-name. */
 			archive_set_error(&a->archive,
-		    	    ARCHIVE_ERRNO_FILE_FORMAT,
+			    ARCHIVE_ERRNO_FILE_FORMAT,
 			    "Unknown symlink-name");
 			archive_string_free(&pathname);
 			archive_string_free(&linkname);
@@ -1208,11 +1208,11 @@ lha_read_file_extended_header(struct archive_read *a, struct lha *lha,
 				goto invalid;
 
 			archive_strncpy(&lha->dirname,
-		  	    (const char *)extdheader, datasize);
+			    (const char *)extdheader, datasize);
 			/*
 			 * Convert directory delimiter from 0xFF
 			 * to '/' for local system.
-	 		 */
+			 */
 			for (i = 0; i < lha->dirname.length; i++) {
 				if ((unsigned char)lha->dirname.s[i] == 0xFF)
 					lha->dirname.s[i] = '/';
@@ -1459,7 +1459,7 @@ lha_read_data_lzh(struct archive_read *a, const void **buff,
 		case ARCHIVE_OK:
 			break;
 		case ARCHIVE_FAILED:
-        		/* Unsupported compression. */
+			/* Unsupported compression. */
 			*buff = NULL;
 			*size = 0;
 			*offset = 0;
@@ -1906,7 +1906,7 @@ lzh_br_fillup(struct lzh_stream *strm, struct lzh_br *br)
 				return (1);
 			case 7:
 				br->cache_buffer =
-		 		   (br->cache_buffer << 56) |
+				   (br->cache_buffer << 56) |
 				    ((uint64_t)strm->next_in[0]) << 48 |
 				    ((uint64_t)strm->next_in[1]) << 40 |
 				    ((uint64_t)strm->next_in[2]) << 32 |
@@ -1920,7 +1920,7 @@ lzh_br_fillup(struct lzh_stream *strm, struct lzh_br *br)
 				return (1);
 			case 6:
 				br->cache_buffer =
-		 		   (br->cache_buffer << 48) |
+				   (br->cache_buffer << 48) |
 				    ((uint64_t)strm->next_in[0]) << 40 |
 				    ((uint64_t)strm->next_in[1]) << 32 |
 				    ((uint32_t)strm->next_in[2]) << 24 |
@@ -2333,7 +2333,7 @@ lzh_decode_blocks(struct lzh_stream *strm, int last)
 			/* FALL THROUGH */
 		case ST_GET_POS_1:
 			/*
-			 * Get a reference position. 
+			 * Get a reference position.
 			 */
 			if (!lzh_br_read_ahead(strm, &bre, pt_max_bits)) {
 				if (!last) {
@@ -2726,7 +2726,7 @@ lzh_make_huffman_table(struct huffman *hf)
 		bitptn[len] = ptn + cnt;
 		bit = 1U << (diffbits -1);
 		extlen = len - HTBL_BITS;
-		
+
 		p = &(tbl[ptn >> diffbits]);
 		if (*p == 0) {
 			*p = len_avail + hf->tree_used;
@@ -2814,4 +2814,3 @@ lzh_decode_huffman(struct huffman *hf, unsigned rbits)
 	/* This bit pattern needs to be found out at a huffman tree. */
 	return (lzh_decode_huffman_tree(hf, rbits, c));
 }
-

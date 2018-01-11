@@ -1,15 +1,15 @@
 From: Paco Garcia <pgarcia@cam.es>
 
 This machine is a Bull Estrella  Minitower Model MT604-100
-Processor        : PPC604 
-P.Speed          : 100Mhz 
+Processor        : PPC604
+P.Speed          : 100Mhz
 Data/Instr Cache :    16 K
 L2 Cache         :   256 K
 PCI BUS Speed    :    33 Mhz
 TransfRate PCI   :   132 MB/s
 Memory           :    96 MB
 
-options    des ecb/s       
+options    des ecb/s
  4  c p    275118.61 100.0%
  4  c i    273545.07  99.4%
  4 r2 p    270441.02  98.3%
@@ -23,4 +23,3 @@ options    des ecb/s
 16 r1 i    199206.50  72.4%
 16 r2 i    198963.70  72.3%
 -DDES_PTR
-

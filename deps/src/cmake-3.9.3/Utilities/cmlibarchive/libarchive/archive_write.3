@@ -192,7 +192,7 @@ write_archive(const char *outname, const char **filename)
   if (archive_write_set_format_filter_by_ext(a, outname) != ARCHIVE_OK)  {
     archive_write_add_filter_gzip(a);
     archive_write_set_format_ustar(a);
-  }  
+  }
   archive_write_open(a, mydata, myopen, mywrite, myclose);
   while (*filename) {
     stat(*filename, &st);

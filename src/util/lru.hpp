@@ -21,12 +21,12 @@ template <typename Key, typename Value>
 struct lru_cache {
   typedef std::pair<Key, Value> value_type;
 
-  typedef boost::multi_index_container <value_type, 
+  typedef boost::multi_index_container <value_type,
       boost::multi_index::indexed_by <
           boost::multi_index::hashed_unique<BOOST_MULTI_INDEX_MEMBER(value_type, Key, first)>,
           boost::multi_index::sequenced<>
-          > 
-      > cache_type; 
+          >
+      > cache_type;
 
   typedef typename cache_type::template nth_index<1>::type::const_iterator iterator;
   typedef iterator const_iterator;
@@ -41,7 +41,7 @@ struct lru_cache {
   lru_cache& operator=(lru_cache&&) = default;
 
   /**
-   * queries for a particular key. If it does not exist {false, Value()} is 
+   * queries for a particular key. If it does not exist {false, Value()} is
    * returned. If it exists {true, value} is returned and the key is bumped
    * to the front of the cache.
    */

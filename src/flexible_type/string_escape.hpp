@@ -11,14 +11,14 @@ namespace turi {
 /**
  * Unescapes a string inplace
  */
-void unescape_string(std::string& cal, char escape_char, 
+void unescape_string(std::string& cal, char escape_char,
                      char quote_char, bool double_quote);
 
 /**
  * Unescapes a string inplace, returning the new length
  */
-size_t unescape_string(char* cal, 
-                       size_t length, char escape_char, 
+size_t unescape_string(char* cal,
+                       size_t length, char escape_char,
                        char quote_char, bool double_quote);
 /**
  * Escapes a string from val into output.
@@ -33,13 +33,13 @@ size_t unescape_string(char* cal,
  * \param use_quote_char If the output string should be quoted
  * \param double_quote If double quotes are converted to single quotes.
  */
-void escape_string(const std::string& val, 
+void escape_string(const std::string& val,
                    char escape_char,
                    bool use_escape_char,
                    char quote_char,
                    bool use_quote_char,
                    bool double_quote,
-                   std::string& output, 
+                   std::string& output,
                    size_t& output_len);
 
 } // namespace turi

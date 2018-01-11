@@ -170,7 +170,7 @@ void ml_data::_setup_ml_metadata() {
           p.forced_join_column);
     }
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Step 7:  Nothing more.
 
@@ -271,7 +271,7 @@ void ml_data::_fill_data_blocks(bool in_training_mode) {
     data_blocks.reset(new sarray<row_data_block>);
     data_blocks->open_for_write(1);
     data_blocks->close();
-    
+
     _max_row_size = 0;
 
     return;

@@ -53,7 +53,7 @@ To use your dev build export these environment variables:
 
     source <repo root>/scripts/python_env.sh debug
 
-or 
+or
 
     source <repo root>/scripts/python_env.sh release
 
@@ -73,5 +73,3 @@ From the repo root:
     cd debug/test
     make
     ctest .
-
-

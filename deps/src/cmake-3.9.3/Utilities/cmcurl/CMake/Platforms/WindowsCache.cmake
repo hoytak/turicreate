@@ -119,4 +119,3 @@ if(NOT UNIX)
     message("This file should be included on Windows platform only")
   endif(WIN32)
 endif(NOT UNIX)
-

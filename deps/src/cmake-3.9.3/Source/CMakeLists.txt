@@ -111,7 +111,7 @@ set(SRCS
   LexerParser/cmCommandArgumentParserTokens.h
   LexerParser/cmCommandArgumentParser.y
 
-  # These don't compile without GPL code. 
+  # These don't compile without GPL code.
   # LexerParser/cmDependsJavaLexer.cxx
   # LexerParser/cmDependsJavaLexer.h
   # LexerParser/cmDependsJavaLexer.in.l

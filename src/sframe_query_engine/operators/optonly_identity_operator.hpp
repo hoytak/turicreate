@@ -57,7 +57,7 @@ class operator_impl<planner_node_type::IDENTITY_NODE> : public query_operator {
     ASSERT_EQ(pnode->inputs.size(), 1);
     return infer_planner_node_length(pnode->inputs[0]);
   }
-  
+
 };
 
 typedef operator_impl<planner_node_type::IDENTITY_NODE> optonly_identity_operator;

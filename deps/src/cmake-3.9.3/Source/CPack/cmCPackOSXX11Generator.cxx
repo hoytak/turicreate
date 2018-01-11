@@ -109,7 +109,7 @@ int cmCPackOSXX11Generator::PackageFiles()
 //      !this->CopyResourcePlistFile("OSXScriptLauncher", appdir,
 //                                   this->GetOption("CPACK_PACKAGE_FILE_NAME"),
 //                                   true)) {
-    cmCPackLogger(cmCPackLog::LOG_ERROR, 
+    cmCPackLogger(cmCPackLog::LOG_ERROR,
         "Problem copying the resource files: CPack OSX bundle not present due to B&I binary compatibility."
                     << std::endl);
     return 0;

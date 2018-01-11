@@ -226,4 +226,3 @@ Stream *Stream::Create(const char *fname, const char * const mode, bool allow_nu
   }
 }
 }  // namespace dmlc
-

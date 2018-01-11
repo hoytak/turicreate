@@ -76,7 +76,7 @@ namespace CoreML {
         if (interface.output_size() < 1) {
             return Result(ResultType::INVALID_MODEL_INTERFACE, "Models must have one or more outputs.");
         }
-        
+
         /*
         for (const auto& input : interface.input()) {
             Result r = validateFeatureDescription(input);
@@ -106,12 +106,12 @@ namespace CoreML {
 
 
     Result validateRegressorInterface(const Specification::ModelDescription& description) {
-        
+
         if (description.predictedfeaturename() == "") {
             return Result(ResultType::INVALID_MODEL_INTERFACE,
                           "Specification is missing regressor predictedFeatureName.");
         }
-        
+
         // Validate feature descriptions
         Result result = validateFeatureDescriptions(description);
         if (!result.good()) {
@@ -149,11 +149,11 @@ namespace CoreML {
         }
         return validateOptionalOutputs(interface);
     }
-    
+
     inline Result validateOptionalTree(const Specification::ModelDescription& interface) {
         return validateOptionalOutputs(interface);
     }
-    
+
     inline Result validateOptionalNN(const Specification::ModelDescription& description) {
         // just need to check that not all inputs are optional
         bool hasNotOptional = false;

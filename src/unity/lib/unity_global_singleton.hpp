@@ -16,7 +16,7 @@ class unity_global;
 
 
 /**
- * Creates the unity_global singleton, passing in the arguments into the 
+ * Creates the unity_global singleton, passing in the arguments into the
  * unity_global constructor
  */
 void create_unity_global_singleton(toolkit_function_registry* _toolkit_functions,
@@ -30,4 +30,3 @@ std::shared_ptr<unity_global> get_unity_global_singleton();
 
 }
 #endif // TURI_UNITY_GLOBAL_SINGLETON_HPP
-

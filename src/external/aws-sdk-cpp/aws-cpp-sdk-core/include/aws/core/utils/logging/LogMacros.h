@@ -1,12 +1,12 @@
 /*
   * Copyright 2010-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-  * 
+  *
   * Licensed under the Apache License, Version 2.0 (the "License").
   * You may not use this file except in compliance with the License.
   * A copy of the License is located at
-  * 
+  *
   *  http://aws.amazon.com/apache2.0
-  * 
+  *
   * or in the "license" file accompanying this file. This file is distributed
   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
   * express or implied. See the License for the specific language governing
@@ -30,15 +30,15 @@
 
 #ifdef DISABLE_AWS_LOGGING
 
-    #define AWS_LOG(level, tag, ...) 
-    #define AWS_LOG_FATAL(tag, ...) 
-    #define AWS_LOG_ERROR(tag, ...) 
-    #define AWS_LOG_WARN(tag, ...) 
-    #define AWS_LOG_INFO(tag, ...) 
-    #define AWS_LOG_DEBUG(tag, ...) 
-    #define AWS_LOG_TRACE(tag, ...) 
+    #define AWS_LOG(level, tag, ...)
+    #define AWS_LOG_FATAL(tag, ...)
+    #define AWS_LOG_ERROR(tag, ...)
+    #define AWS_LOG_WARN(tag, ...)
+    #define AWS_LOG_INFO(tag, ...)
+    #define AWS_LOG_DEBUG(tag, ...)
+    #define AWS_LOG_TRACE(tag, ...)
 
-    #define AWS_LOGSTREAM(level, tag, streamExpression) 
+    #define AWS_LOGSTREAM(level, tag, streamExpression)
     #define AWS_LOGSTREAM_FATAL(tag, streamExpression)
     #define AWS_LOGSTREAM_ERROR(tag, streamExpression)
     #define AWS_LOGSTREAM_WARN(tag, streamExpression)

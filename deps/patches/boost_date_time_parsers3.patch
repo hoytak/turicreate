@@ -1,7 +1,7 @@
 --- a/boost/date_time/time_facet.hpp
 +++ b/boost/date_time/time_facet.hpp
 @@ -971,6 +971,8 @@ namespace date_time {
- 
+
          // time elements
          hour_type hour = 0;
 +        hour_type base_hour = 0; // used for AM/PM

@@ -28,7 +28,7 @@ namespace cppipc {
  * this will return tcp://address:*
  *
  * This is used to generate a publish address when none is provided
- */ 
+ */
 std::string generate_aux_address(std::string addr, std::string addon) {
   // generate a address where the status will be published
   std::string status_address;
@@ -45,8 +45,8 @@ std::string generate_aux_address(std::string addr, std::string addon) {
   return status_address;
 }
 
-comm_server::comm_server(std::vector<std::string> zkhosts, 
-                         std::string name, 
+comm_server::comm_server(std::vector<std::string> zkhosts,
+                         std::string name,
                          std::string alternate_bind_address,
                          std::string alternate_control_address,
                          std::string alternate_publish_address,
@@ -76,18 +76,18 @@ comm_server::comm_server(std::vector<std::string> zkhosts,
   get_cancel_bit_checked().store(false);
 
 
-  logstream(LOG_EMPH) << "Server listening on: " 
+  logstream(LOG_EMPH) << "Server listening on: "
                       << object_socket->get_bound_address() << std::endl;
-  logstream(LOG_INFO) << "Server Control listening on: " 
+  logstream(LOG_INFO) << "Server Control listening on: "
                       << control_socket->get_bound_address() << std::endl;
-  logstream(LOG_INFO) << "Server status published on: " 
+  logstream(LOG_INFO) << "Server status published on: "
                       << publishsock->get_bound_address() << std::endl;
 
-  // there is a chicken and egg problem here. We can't use the object 
-  // factory to create the object factory. So, here it is: manual construction 
+  // there is a chicken and egg problem here. We can't use the object
+  // factory to create the object factory. So, here it is: manual construction
   // and registration of the object factory
   object_factory = new object_factory_impl(*this);
-  register_type<object_factory_base>([&]() { 
+  register_type<object_factory_base>([&]() {
                                      return new object_factory_impl(*this); } );
   auto deleter = +[](void* v) {
                     if (v != NULL) {
@@ -162,7 +162,7 @@ void comm_server::stop() {
   }
 
   // Attempt to cancel any currently running command
-  get_srv_running_command().store((unsigned long long)uint64_t(-1));  
+  get_srv_running_command().store((unsigned long long)uint64_t(-1));
 }
 
 
@@ -171,7 +171,7 @@ void comm_server::report_status(std::string status_type, std::string message) {
   publishsock->send(combined);
 }
 
-bool comm_server::callback(nanosockets::zmq_msg_vector& recv, 
+bool comm_server::callback(nanosockets::zmq_msg_vector& recv,
                            nanosockets::zmq_msg_vector& reply) {
   // construct a call message from the received block
   call_message call;
@@ -198,7 +198,7 @@ bool comm_server::callback(nanosockets::zmq_msg_vector& recv,
     }
   }
   //
-  // find the function 
+  // find the function
   if (dispatch_map.count(call.function_name) == 0) {
     std::string ret = "No such function " + call.function_name;
     logstream(LOG_ERROR) << ret << std::endl;
@@ -214,7 +214,7 @@ bool comm_server::callback(nanosockets::zmq_msg_vector& recv,
             std::find(call.function_name.begin(), call.function_name.end(), ' '),
             std::inserter(trimmed_function_name, trimmed_function_name.end()));
 
-  std::string message = "Calling object " + std::to_string(call.objectid) 
+  std::string message = "Calling object " + std::to_string(call.objectid)
                         + " function: " + trimmed_function_name;
 
   if(comm_server_debug_mode) {
@@ -224,7 +224,7 @@ bool comm_server::callback(nanosockets::zmq_msg_vector& recv,
   /*
    * if (trimmed_function_name == "object_factory_base::ping" || call.objectid == 0) {
    *   logstream(LOG_DEBUG) << message << "\n";
-   * } else { 
+   * } else {
    *   logstream(LOG_INFO) << message << "\n";
    * }
    */
@@ -337,7 +337,7 @@ void comm_server::register_constructor(std::string type_name,
  object_factory->add_constructor(type_name, constructor_call);
 }
 
-void comm_server::delete_unused_objects(std::vector<size_t> object_ids, 
+void comm_server::delete_unused_objects(std::vector<size_t> object_ids,
                                         bool active_list) {
 
   std::sort(object_ids.begin(), object_ids.end());

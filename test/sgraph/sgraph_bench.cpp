@@ -35,9 +35,9 @@ void compute_pagerank(sgraph& g, size_t num_iter) {
   typedef sgraph::edge_direction edge_direction;
   // count the outgoing degree
   std::vector<std::shared_ptr<sarray<flexible_type>>> ret = ga.gather(g,
-                                                      [](const graph_data_type& center, 
-                                                         const graph_data_type& edge, 
-                                                         const graph_data_type& other, 
+                                                      [](const graph_data_type& center,
+                                                         const graph_data_type& edge,
+                                                         const graph_data_type& other,
                                                          edge_direction edgedir,
                                                          flexible_type& combiner) {
                                                       combiner = combiner + 1;
@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
   }
 
   char* graph_file = argv[1];
-  std::cerr << "Loading sframe from " << graph_file << std::endl; 
+  std::cerr << "Loading sframe from " << graph_file << std::endl;
   csv_line_tokenizer snap_parser;
   snap_parser.delimiter = '\t';
   sframe sf;

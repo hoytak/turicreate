@@ -44,7 +44,7 @@ struct rem_mem_pointer_impl<R (T::* volatile)> { typedef R type; };
 template <class R, class T >
 struct rem_mem_pointer_impl<R (T::* const volatile)> { typedef R type; };
 
-// pre-processed code, don't edit, try GNU cpp with 
+// pre-processed code, don't edit, try GNU cpp with
 // cpp -I../../../ -DBOOST_TT_PREPROCESSING_MODE -x c++ -P filename
 template <class R, class T >
 struct rem_mem_pointer_impl<R (T::*)() > { typedef R type(); };
@@ -3178,4 +3178,3 @@ struct rem_mem_pointer_impl<R (T::*volatile)(BOOST_PP_ENUM_PARAMS(BOOST_PP_COUNT
 
 #undef BOOST_PP_COUNTER
 #endif // BOOST_PP_IS_ITERATING
-

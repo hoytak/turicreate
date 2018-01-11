@@ -17,16 +17,16 @@
 /*                         Function Registration                          */
 /*                                                                        */
 /**************************************************************************/
-/** 
+/**
  * \defgroup group_gl_function_ffi Function Extension Interface
  * \ingroup group_gl_ffi
  *
- * The Function Extension Interface provides a collection of macros that automate 
+ * The Function Extension Interface provides a collection of macros that automate
  * the process of exporting a function to Python. The macros are located in
  * sdk/toolkit_function_macros.hpp .
  *
  * For detailed usage descriptions, see page_turicreate_extension_interface .
- *  
+ *
  * Example:
  * \code
  *  #include <string>
@@ -70,13 +70,13 @@
  *
  *  Registers a function with no arguments.
  *  \code
- *  REGISTER_FUNCTION(function) 
+ *  REGISTER_FUNCTION(function)
  *  \endcode
  *
  *  Registers a function with 3 input arguments. The first input argument shall
  *  be named "a", the second named "b" and the 3rd named "c"
  *  \code
- *  REGISTER_FUNCTION(function, "a", "b", "c") 
+ *  REGISTER_FUNCTION(function, "a", "b", "c")
  *  \endcode
  *
  * Example:
@@ -103,11 +103,11 @@
  *  REGISTER_FUNCTION(example::demo_to_string, "in");
  *  END_FUNCTION_REGISTRATION
  * \endcode
- * 
+ *
  * Both will be published as "demo_to_string"; the namespacing is ignored.
  *
  * The return value of the function will be returned to Python. The function
- * can return void. If the function fails, it should throw an exception which 
+ * can return void. If the function fails, it should throw an exception which
  * will be forward back to Python as RuntimeError.
  */
 #define REGISTER_FUNCTION(function, ...) \
@@ -152,14 +152,14 @@
       i.description["documentation"] = docstring; \
     } \
   }
-     
+
 
 
 /**
  * Ends a toolkit registration block.
  *
  * \see BEGIN_FUNCTION_REGISTRATION.
- * \see REGISTER_FUNCTION_FUNCTION 
+ * \see REGISTER_FUNCTION_FUNCTION
  *
  * The basic usage is:
  *  \code

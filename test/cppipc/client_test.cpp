@@ -11,17 +11,17 @@ int main(int argc, char** argv) {
 //   cppipc::comm_client client({"localhost:2181"}, "test");
   cppipc::comm_client client({}, "tcp://127.0.0.1:19000");
   /*
-  cppipc::comm_client client({}, 
+  cppipc::comm_client client({},
                              "ipc:///tmp/cppipc_server_test");
                              */
   client.start();
-  client.add_status_watch(WATCH_COMM_SERVER_INFO, 
+  client.add_status_watch(WATCH_COMM_SERVER_INFO,
                           [](std::string message) {
                           std::cout << message << "\n";
                           });
 
   for (size_t i = 0;i < 100; ++i) {
-  try { 
+  try {
     test_object_proxy test_object(client);
     std::cout << test_object.ping("hello world") << "\n";
 

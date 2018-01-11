@@ -15,7 +15,7 @@
 #define GIL_NUMERIC_ALGORITHM_HPP
 
 /*!
-/// \file               
+/// \file
 /// \brief Numeric algorithms
 /// \author Hailin Jin and Lubomir Bourdev \n
 ///         Adobe Systems Incorporated
@@ -49,7 +49,7 @@ BinaryFunction for_each(Iterator1 first1,Iterator1 last1,Iterator2 first2,Binary
 template <typename SrcIterator,typename DstIterator>
 inline DstIterator assign_pixels(SrcIterator src,SrcIterator src_end,DstIterator dst) {
     for_each(src,src_end,dst,pixel_assigns_t<typename pixel_proxy<typename std::iterator_traits<SrcIterator>::value_type>::type,
-                                             typename pixel_proxy<typename std::iterator_traits<DstIterator>::value_type>::type>());             
+                                             typename pixel_proxy<typename std::iterator_traits<DstIterator>::value_type>::type>());
     return dst+(src_end-src);
 }
 
@@ -58,8 +58,8 @@ template <std::size_t Size>
 struct inner_product_k_t {
     template <class _InputIterator1, class _InputIterator2, class _Tp,
               class _BinaryOperation1, class _BinaryOperation2>
-    static _Tp apply(_InputIterator1 __first1, 
-                     _InputIterator2 __first2, _Tp __init, 
+    static _Tp apply(_InputIterator1 __first1,
+                     _InputIterator2 __first2, _Tp __init,
                      _BinaryOperation1 __binary_op1,
                      _BinaryOperation2 __binary_op2) {
         __init = __binary_op1(__init, __binary_op2(*__first1, *__first2));
@@ -72,8 +72,8 @@ template <>
 struct inner_product_k_t<0> {
     template <class _InputIterator1, class _InputIterator2, class _Tp,
               class _BinaryOperation1, class _BinaryOperation2>
-    static _Tp apply(_InputIterator1 __first1, 
-                     _InputIterator2 __first2, _Tp __init, 
+    static _Tp apply(_InputIterator1 __first1,
+                     _InputIterator2 __first2, _Tp __init,
                      _BinaryOperation1 __binary_op1,
                      _BinaryOperation2 __binary_op2) {
         return __init;
@@ -86,9 +86,9 @@ template <std::size_t Size,
           class _InputIterator1, class _InputIterator2, class _Tp,
           class _BinaryOperation1, class _BinaryOperation2>
 GIL_FORCEINLINE
-_Tp inner_product_k(_InputIterator1 __first1, 
+_Tp inner_product_k(_InputIterator1 __first1,
                     _InputIterator2 __first2,
-                    _Tp __init, 
+                    _Tp __init,
                     _BinaryOperation1 __binary_op1,
                     _BinaryOperation2 __binary_op2) {
     return detail::inner_product_k_t<Size>::template apply(__first1,__first2,__init,

@@ -3,7 +3,7 @@
 
 #ifdef __GNUC__
 
-    #if defined(JSON_INT_TYPE) 
+    #if defined(JSON_INT_TYPE)
         #if (JSON_INT_TYPE == long long) && defined(JSON_ISO_STRICT)
 	        #error, JSON_INT_TYPE cant be a long long unless JSON_ISO_STRICT is off
         #endif

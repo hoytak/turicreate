@@ -84,19 +84,19 @@ namespace Model
      */
     inline UploadPartCopyResult& WithCopySourceVersionId(const char* value) { SetCopySourceVersionId(value); return *this;}
 
-    
+
     inline const CopyPartResult& GetCopyPartResult() const{ return m_copyPartResult; }
 
-    
+
     inline void SetCopyPartResult(const CopyPartResult& value) { m_copyPartResult = value; }
 
-    
+
     inline void SetCopyPartResult(CopyPartResult&& value) { m_copyPartResult = value; }
 
-    
+
     inline UploadPartCopyResult& WithCopyPartResult(const CopyPartResult& value) { SetCopyPartResult(value); return *this;}
 
-    
+
     inline UploadPartCopyResult& WithCopyPartResult(CopyPartResult&& value) { SetCopyPartResult(value); return *this;}
 
     /**
@@ -262,19 +262,19 @@ namespace Model
      */
     inline UploadPartCopyResult& WithSSEKMSKeyId(const char* value) { SetSSEKMSKeyId(value); return *this;}
 
-    
+
     inline const RequestCharged& GetRequestCharged() const{ return m_requestCharged; }
 
-    
+
     inline void SetRequestCharged(const RequestCharged& value) { m_requestCharged = value; }
 
-    
+
     inline void SetRequestCharged(RequestCharged&& value) { m_requestCharged = value; }
 
-    
+
     inline UploadPartCopyResult& WithRequestCharged(const RequestCharged& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline UploadPartCopyResult& WithRequestCharged(RequestCharged&& value) { SetRequestCharged(value); return *this;}
 
   private:

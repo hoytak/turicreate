@@ -260,13 +260,13 @@ csv_test interesting() {
 csv_test excess_white_space() {
   // tests a basic parse of one of every CSV parseable type
   csv_test ret;
-  ret.tokenizer.delimiter = " "; 
+  ret.tokenizer.delimiter = " ";
   std::stringstream strm;
   std::string dlm = " ";
   // interestingly.... we do not correctly handle excess spaces in the header?
-  strm << "float" << dlm << "int" << dlm << "str " << dlm << "vec   " << dlm << "dict" << dlm << "rec" << "\n" 
-       << "  1.1" << dlm << " 1" << dlm << "one  " << dlm << "[1,1,1] " << dlm << " {1 : 1 , \"a\"  : \"a\"}   " << dlm << "[a,a]" << "\n" 
-       << " 2.2" << dlm << "2" << dlm << "two" << dlm << "  [2,2,2]" << dlm << "{2:2,\"b\":\"b\"}" << dlm << "[b,b]" << "\n" 
+  strm << "float" << dlm << "int" << dlm << "str " << dlm << "vec   " << dlm << "dict" << dlm << "rec" << "\n"
+       << "  1.1" << dlm << " 1" << dlm << "one  " << dlm << "[1,1,1] " << dlm << " {1 : 1 , \"a\"  : \"a\"}   " << dlm << "[a,a]" << "\n"
+       << " 2.2" << dlm << "2" << dlm << "two" << dlm << "  [2,2,2]" << dlm << "{2:2,\"b\":\"b\"}" << dlm << "[b,b]" << "\n"
        << "3.3" << dlm << "3" << dlm << "three" << dlm << "[3,3,3]" << dlm << " {3:3,  \"c\":\"c\"}" << dlm << "[c,c]  \t" << "\n";
   ret.file = strm.str();
   ret.values.push_back({1.1,1,"one",flex_vec{1,1,1},flex_dict{{1,1},{"a","a"}},flex_list{"a","a"}});
@@ -279,8 +279,8 @@ csv_test excess_white_space() {
               {"dict",flex_type_enum::DICT},
               {"rec",flex_type_enum::LIST}};
   // this test actually does not stand up to subsetting. The reason
-  // is that if the dict column is not selected in the subset, we are unaware 
-  // that it is a dict column and will try to slice it based on the space 
+  // is that if the dict column is not selected in the subset, we are unaware
+  // that it is a dict column and will try to slice it based on the space
   // separators in it, and that will implode. It is not clear that there is
   // a good strategy here...
   // The problem is in getting this to behave, as well as issue 1514.
@@ -545,9 +545,9 @@ csv_test unicode_surrogate_pairs() {
   ret.file = strm.str();
   ret.tokenizer.delimiter = "\n";
   ret.values.push_back({flex_dict{{"good_surrogates", "𝄞"}}});
-  // that quote there is a special apostrophe character inserted by some 
+  // that quote there is a special apostrophe character inserted by some
   // text editors when you type it's
-  ret.values.push_back({flex_dict{{"bad_surrogates", "\\uD834’"}}}); 
+  ret.values.push_back({flex_dict{{"bad_surrogates", "\\uD834’"}}});
   ret.values.push_back({flex_dict{{"bad_surrogates2", "\\uD834"}}});
   ret.values.push_back({flex_dict{{"bad_surrogates3", "\\uD834\\uDD"}}});
   ret.values.push_back({flex_dict{{"bad_json", "\\u442G"}}});
@@ -596,24 +596,24 @@ struct test_equality_visitor {
   void operator()(flex_int t, flex_int u) const { TS_ASSERT_EQUALS(t, u); }
   void operator()(flex_float t, flex_float u) const { TS_ASSERT_DELTA(t, u, 1E-5); }
   void operator()(flex_string t, flex_string u) const { TS_ASSERT_EQUALS(t, u); }
-  void operator()(flex_date_time t, flex_date_time u) const { 
-    TS_ASSERT_EQUALS(t.posix_timestamp(), u.posix_timestamp()); 
-    TS_ASSERT_EQUALS(t.time_zone_offset(), u.time_zone_offset()); 
-    TS_ASSERT_EQUALS(t.microsecond(), u.microsecond()); 
+  void operator()(flex_date_time t, flex_date_time u) const {
+    TS_ASSERT_EQUALS(t.posix_timestamp(), u.posix_timestamp());
+    TS_ASSERT_EQUALS(t.time_zone_offset(), u.time_zone_offset());
+    TS_ASSERT_EQUALS(t.microsecond(), u.microsecond());
   }
-  void operator()(flex_vec t, flex_vec u) const { 
+  void operator()(flex_vec t, flex_vec u) const {
     TS_ASSERT_EQUALS(t.size(), u.size());
     for (size_t i = 0;i < t.size(); ++i) {
       TS_ASSERT_DELTA(t[i], u[i], 1E-5);
     }
   }
-  void operator()(flex_list t, flex_list u) const { 
+  void operator()(flex_list t, flex_list u) const {
     TS_ASSERT_EQUALS(t.size(), u.size());
     for (size_t i = 0;i < t.size(); ++i) {
       t[i].apply_visitor(*this, u[i]);
     }
   }
-  void operator()(flex_dict t, flex_dict u) const { 
+  void operator()(flex_dict t, flex_dict u) const {
     TS_ASSERT_EQUALS(t.size(), u.size());
     for (size_t i = 0;i < t.size(); ++i) {
       t[i].first.apply_visitor(*this, u[i].first);
@@ -625,7 +625,7 @@ struct test_equality_visitor {
 struct sframe_test  {
  public:
    // helper for the test below.
-   // Makes sure the parsed data matches up with the file, then 
+   // Makes sure the parsed data matches up with the file, then
    // writes the file to a new csv file and attempts to parse it again.
    void evaluate(const csv_test& data) {
      std::string filename = get_temp_name() + ".csv";
@@ -670,7 +670,7 @@ struct sframe_test  {
      }
      return ret;
    }
-   csv_test make_csv_test_subset(csv_test data, 
+   csv_test make_csv_test_subset(csv_test data,
                                std::vector<std::string> column_subset) {
      data.parse_column_subset = column_subset;
      // permute order is the same length as the input
@@ -691,13 +691,13 @@ struct sframe_test  {
      return data;
    }
 
-   sframe validate_file(const csv_test& data, 
+   sframe validate_file(const csv_test& data,
                         std::string filename) {
      csv_line_tokenizer tokenizer = data.tokenizer;
      tokenizer.init();
      sframe frame;
      std::map<std::string, flex_type_enum> typelist(data.types.begin(), data.types.end());
-  
+
      frame.init_from_csvs(filename,
                           tokenizer,
                           data.header,

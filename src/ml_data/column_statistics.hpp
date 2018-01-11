@@ -475,8 +475,8 @@ class column_statistics {
   void adjust_global_array_size(size_t idx, std::vector<T>& v) {
 
     // If needed, increase the value of global_size.
-    atomic_set_max(global_size, idx + 1); 
-    
+    atomic_set_max(global_size, idx + 1);
+
     // See if a resize is needed.
     if(UNLIKELY(idx >= v.size() )) {
 

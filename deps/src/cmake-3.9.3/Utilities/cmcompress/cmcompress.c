@@ -548,4 +548,3 @@ static void prratio(FILE *stream, long int num, long int den)
   fprintf(stream, "%d.%02d%%", q / 100, q % 100);
 }
 #endif
-

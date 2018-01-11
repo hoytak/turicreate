@@ -101,7 +101,7 @@ void subscribe_socket::thread_function() {
 
     if (rc <= 0) continue;
 
-    char* buf = NULL; 
+    char* buf = NULL;
     size_t len = NN_MSG;
     rc = nn_recv(z_socket, reinterpret_cast<void*>(&buf), len, 0);
     if (rc < 0) continue;

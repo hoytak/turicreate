@@ -38,7 +38,7 @@ namespace detail {
  * \ingroup cppipc
  * \internal
  * Internal utility function.
- * Deserialized an object of a specific type from a reply message, 
+ * Deserialized an object of a specific type from a reply message,
  * and returns the result, clearing the message object.
  * Works correctly for void types.
  */
@@ -77,14 +77,14 @@ class object_factory_proxy;
  * zookeeper host, and on construction are provided the same "name", they are
  * connected.
  *
- * The comm_client provides communication capability for the \ref object_proxy 
+ * The comm_client provides communication capability for the \ref object_proxy
  * objects. Here, we will go through an example of proxying the file_write class
  * described in the \ref comm_server documentation.
  *
  * Basic Utilization
  * -----------------
  * Given a base class file_write_base, which is implemented on the server side,
- * we can construct on the client side, an \ref object_proxy object which 
+ * we can construct on the client side, an \ref object_proxy object which
  * creates and binds to an implementation of file_write_base on the server side,
  * and allows function calls across the network.
  *
@@ -105,7 +105,7 @@ class object_factory_proxy;
  * };
  * \endcode
  *
- * We can create an object_proxy by templating over the base class, and 
+ * We can create an object_proxy by templating over the base class, and
  * providing the comm_client object in the constructor.
  * \code
  * object_proxy<file_write_base> proxy(client);
@@ -120,16 +120,16 @@ class object_factory_proxy;
  * proxy.call(&file_write_base::write, "world");
  * proxy.call(&file_write_base::close);
  * \endcode
- * The return type of the proxy.call function will match the return type of the 
- * member function pointer provided. For instance, &file_write_base::open 
- * returns an integer, and the result is forwarded across the network and 
- * returned. 
- * 
+ * The return type of the proxy.call function will match the return type of the
+ * member function pointer provided. For instance, &file_write_base::open
+ * returns an integer, and the result is forwarded across the network and
+ * returned.
+ *
  * On destruction of the proxy object, the remote object is also deleted.
  *
  * Wrapping the Proxy Object
  * -------------------------
- * It might be convenient in many ways to wrap the object_proxy in a way to 
+ * It might be convenient in many ways to wrap the object_proxy in a way to
  * make it easy to use. This is a convenient pattern that is very useful.
  *
  * For instance, a proxy wrapper for the file_write_base object might look like:
@@ -153,11 +153,11 @@ class object_factory_proxy;
  * Preprocessor Magic
  * ------------------
  * To facilitate the creation of base interfaces, calling REGISTER macros
- * appropriately, and implementing the proxy wrapper, we provide the 
- * \ref GENERATE_INTERFACE, \ref GENERATE_PROXY and 
+ * appropriately, and implementing the proxy wrapper, we provide the
+ * \ref GENERATE_INTERFACE, \ref GENERATE_PROXY and
  * \ref GENERATE_INTERFACE_AND_PROXY magic macros.
- * 
- * For instance, to generate the proxy and the base class for the above 
+ *
+ * For instance, to generate the proxy and the base class for the above
  * file_write_base object, we can write
  *
  * \code
@@ -172,27 +172,27 @@ class object_factory_proxy;
  * allows a collection of interesting functionality to be injected.
  * For instance, this will allow functions to take base pointers as arguments
  * and return base pointers (for instance file_write_base*). On the client side,
- * proxy objects are serialized in a way so that the server side uses the 
+ * proxy objects are serialized in a way so that the server side uses the
  * matching implementation instance. When an object is returned, the object
  * is registered on the server side and converted to a new proxy object
  * on the client side. a
  *
  * Implementation Details
  * ----------------------
- * Many other details regarding safety when interfaces, or interface argument 
+ * Many other details regarding safety when interfaces, or interface argument
  * type modifications are described in the \ref comm_server documentation.
  *
- * The comm client internally maintains the complete mapping of all member 
+ * The comm client internally maintains the complete mapping of all member
  * function pointers to strings. The object_proxy class then has the simple
  * task of just maintaining the object_ids: i.e. what remote object does it
  * connect to.
  *
- * There is a special "root object" which manages all "special" tasks that 
+ * There is a special "root object" which manages all "special" tasks that
  * operate on the comm_server itself. This root object always has object ID 0
  * and is the object_factory_base. This is implemented on the server side by
  * object_factory_impl, and on the client side as object_factory_proxy.
- * The comm_client exposes the object_factory functionality as member functions 
- * in the comm_client itself. These are make_object(), ping() and 
+ * The comm_client exposes the object_factory functionality as member functions
+ * in the comm_client itself. These are make_object(), ping() and
  * delete_object()
  */
 class EXPORT comm_client {
@@ -203,8 +203,8 @@ class EXPORT comm_client {
   nanosockets::async_request_socket *control_socket = NULL;
   nanosockets::subscribe_socket subscribesock;
   turi::atomic<size_t> m_command_id;
-  
-  // a map of a string representation of the function pointer 
+
+  // a map of a string representation of the function pointer
   // to the name. Why a string representation of a function pointer you ask.
   // That is because a member function pointer is not always 8 bytes long.
   // It can be 16 bytes long. Without any other knowledge, it is safer to keep it
@@ -212,7 +212,7 @@ class EXPORT comm_client {
   std::map<std::string, std::string> memfn_pointer_to_string;
 
   // status callbacks. Pairs of registered prefixes to the callback function
-  std::vector<std::pair<std::string, 
+  std::vector<std::pair<std::string,
       std::function<void(std::string)> > > prefix_to_status_callback;
 
   boost::mutex status_callback_lock;
@@ -229,8 +229,8 @@ class EXPORT comm_client {
    */
   int internal_call(call_message& call, reply_message& reply, bool control=false);
 
-  int internal_call_impl(call_message& call, 
-                         nanosockets::zmq_msg_vector& ret, 
+  int internal_call_impl(call_message& call,
+                         nanosockets::zmq_msg_vector& ret,
                          bool control,
                          size_t timeout = 0);
 
@@ -251,7 +251,7 @@ class EXPORT comm_client {
    * The root object (always object 0)
    */
   object_factory_proxy* object_factory;
-  
+
   /**
    * This thread repeatedly pings the server every 3 seconds, setting
    * and clearing the flag server_alive as appropriate.
@@ -269,11 +269,11 @@ class EXPORT comm_client {
    */
   volatile bool ping_thread_done = false;
 
-  /** 
-   * Server alive is true if the server is reachable some time in the 
+  /**
+   * Server alive is true if the server is reachable some time in the
    * last 3 pings. Server_alive is true on startup.
    */
-  volatile bool server_alive = true; 
+  volatile bool server_alive = true;
 
   /**
    * True if the socket is closed
@@ -289,7 +289,7 @@ class EXPORT comm_client {
 
   /**
    * Callback issued when server reports status
-   */ 
+   */
   void subscribe_callback(const std::string& msg);
 
   /**
@@ -332,13 +332,13 @@ class EXPORT comm_client {
 
   /**
    * Constructs a comm client which uses remote communication
-   * via zookeeper/zeromq. The client may find the remote server via either 
+   * via zookeeper/zeromq. The client may find the remote server via either
    * zookeeper (in which case zkhosts must be a list of zookeeper servers, and
-   * name must be a unique key value), or you can provide the address 
+   * name must be a unique key value), or you can provide the address
    * explicitly. Note that if a server is listening via zookeeper, the client
-   * MUST connect via zookeeper; providing the server's actual tcp bind address 
+   * MUST connect via zookeeper; providing the server's actual tcp bind address
    * will not work. And similarly if the server is listening on an explicit
-   * zeromq endpoint address and not using zookeeper, the client must connect 
+   * zeromq endpoint address and not using zookeeper, the client must connect
    * directly also without using zookeeper.
    *
    * After construction, authentication methods can be added then \ref start()
@@ -348,29 +348,29 @@ class EXPORT comm_client {
    *                the "name" parameter must be a zeromq endpoint address to
    *                bind to.
    * \param name The key name to connect to. This must match the "name" argument
-   *             on construction of the remote's comm_server. If zkhosts is 
+   *             on construction of the remote's comm_server. If zkhosts is
    *             empty, this must be a valid zeromq endpoint address.
    * \param num_tolerable_ping_failures The number of allowable consecutive ping
    *        failures before the server is considered dead.
-   * \param alternate_publish_address This should match the 
+   * \param alternate_publish_address This should match the
    *        "alternate_publish_address" argument on construction of the
    *        remote's comm_server. If zkhosts is empty, this must be a valid
    *        zeromq endpoint address. This can be empty, in which case the client
    *        will ask the server for the appropriate address. It is recommended
    *        that this is not specified.
    */
-  comm_client(std::vector<std::string> zkhosts, 
+  comm_client(std::vector<std::string> zkhosts,
               std::string name,
               size_t num_tolerable_ping_failures = (size_t)(-1),
               std::string alternate_control_address="",
-              std::string alternate_publish_address="", 
+              std::string alternate_publish_address="",
               const std::string public_key = "",
               const std::string secret_key = "",
               const std::string server_public_key = "",
               bool ops_interruptible = false);
 
   /**
-   * Constructs an inproc comm_client. The inproc comm_client 
+   * Constructs an inproc comm_client. The inproc comm_client
    * and comm_server are required to have the same zmq_ctx.
    *
    * \param name The inproc socket address, must start with inproc://
@@ -392,7 +392,7 @@ class EXPORT comm_client {
   /**
    * Initializes connections with the servers
    * Must be called prior to creation of any client objects.
-   * Returns reply_status::OK on success, and an error code failure. 
+   * Returns reply_status::OK on success, and an error code failure.
    * Failure could be caused by an inability to connect to the server, or
    * could also be due to authentication errors.
    */
@@ -417,7 +417,7 @@ class EXPORT comm_client {
   size_t make_object(std::string object_type_name);
 
   /**
-   * Ping test. Sends a string to the remote system, 
+   * Ping test. Sends a string to the remote system,
    * and replies with the same string.
    *
    * \note This call redirects to the object_factory_proxy
@@ -451,7 +451,7 @@ class EXPORT comm_client {
   boost::mutex status_buffer_mutex;
   boost::condition_variable status_buffer_cond;
   std::vector<std::string> status_buffer;
-  bool status_callback_thread_done = false; 
+  bool status_callback_thread_done = false;
 
   /** The function which implements the thread which
    * issues the messages to
@@ -483,15 +483,15 @@ class EXPORT comm_client {
    * server.report_status("A", "hello world"); // emits A: hello world
    * server.report_status("ABC", "hello again"); // emits ABC: hello again
    * \endcode
-   * 
+   *
    * On the other hand
    * \code
    * client.add_status_watch("A:", callback);
    * \endcode
    * will only match the first.
    *
-   * Callbacks should be processed relatively quickly and should be thread 
-   * safe. Multiple callbacks may be processed simultaneously in different 
+   * Callbacks should be processed relatively quickly and should be thread
+   * safe. Multiple callbacks may be processed simultaneously in different
    * threads. Callback function also should not call \ref add_status_watch
    * or \ref remove_status_watch, or a deadlock may result.
    *
@@ -499,28 +499,28 @@ class EXPORT comm_client {
    * last callback is recorded.
    *
    * \note The current prefix checking implementation is not fast, and is
-   * simply linear in the number of callbacks registered. 
+   * simply linear in the number of callbacks registered.
    */
-  void add_status_watch(std::string watch_prefix, 
+  void add_status_watch(std::string watch_prefix,
                            std::function<void(std::string)> callback);
 
   /**
    * Removes a status callback for a given prefix. Note that the function
    * associated with the prefix may still be called even after this function
-   * returns. To ensure complete removal of the function, 
+   * returns. To ensure complete removal of the function,
    * stop_status_callback_thread() and start_status_callback_thread()
    * must be called.
    */
-  void remove_status_watch(std::string watch_prefix); 
+  void remove_status_watch(std::string watch_prefix);
 
   /**
    * Clears all status callbacks.
    * Note that status callbacks may still be called even after this function
-   * returns. To ensure complete removal of the function, 
+   * returns. To ensure complete removal of the function,
    * stop_status_callback_thread() and start_status_callback_thread()
    * must be called.
    */
-  void clear_status_watch(); 
+  void clear_status_watch();
 
   /**
    * Stops the ping thread.
@@ -537,7 +537,7 @@ class EXPORT comm_client {
 
   /**
    * \internal
-   * Registers a member function which then can be used in the \ref call() 
+   * Registers a member function which then can be used in the \ref call()
    * function
    */
   template <typename MemFn>
@@ -582,7 +582,7 @@ class EXPORT comm_client {
    * currently running command).
    */
   template <typename MemFn, typename... Args>
-  typename detail::member_function_return_type<MemFn>::type 
+  typename detail::member_function_return_type<MemFn>::type
   call(size_t objectid, MemFn f, const Args&... args) {
     if (!started) {
       throw ipcexception(reply_status::COMM_FAILURE, 0, "Client not started");
@@ -687,7 +687,7 @@ class EXPORT comm_client {
       }
     } else {
       detail::set_deserializer_to_client(this);
-      return detail::deserialize_return_and_clear<return_type, 
+      return detail::deserialize_return_and_clear<return_type,
              std::is_convertible<return_type, ipc_object_base*>::value>::exec(*this, reply);
     }
   }

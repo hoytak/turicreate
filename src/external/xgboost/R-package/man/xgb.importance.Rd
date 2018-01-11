@@ -67,4 +67,3 @@ xgb.importance(train$data@Dimnames[[2]], model = bst)
 # Same thing with co-occurence computation this time
 xgb.importance(train$data@Dimnames[[2]], model = bst, data = train$data, label = train$label)
 }
-

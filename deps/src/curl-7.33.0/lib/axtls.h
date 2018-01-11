@@ -65,4 +65,3 @@ int Curl_axtls_check_cxn(struct connectdata *conn);
 
 #endif /* USE_AXTLS */
 #endif /* HEADER_CURL_AXTLS_H */
-

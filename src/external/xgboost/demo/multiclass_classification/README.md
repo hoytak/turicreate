@@ -6,5 +6,3 @@ Make sure you make make xgboost python module in ../../python
 ```bash
 ./runexp.sh
 ```
-
-

@@ -11,7 +11,7 @@ ENDIF (LIBGCC_LIBRARY)
 
 FIND_LIBRARY(LIBGCC_LIBRARY NAMES gcc libgcc)
 
-# handle the QUIETLY and REQUIRED arguments and set LIBGCC_FOUND to TRUE if 
+# handle the QUIETLY and REQUIRED arguments and set LIBGCC_FOUND to TRUE if
 # all listed variables are TRUE
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBGCC DEFAULT_MSG LIBGCC_LIBRARY)

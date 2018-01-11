@@ -14,13 +14,13 @@ namespace text {
 /**
  * Compute perplexity, a measure of the likelihood of data given
  * the current parameters of the model.
- 
+
  *  Then for each word in each document, we compute
- *  \f[ \Pr(word | theta[doc_id,:], phi[word,:]) = 
+ *  \f[ \Pr(word | theta[doc_id,:], phi[word,:]) =
  *     \sum_k theta[doc_id, k] * phi[word_id, k] \f]
- *  
+ *
  *  We compute loglikelihood to be:
- *  \f[l(D) = \sum_{i \in D} \sum_{j in D_i} count_{i,j} * 
+ *  \f[l(D) = \sum_{i \in D} \sum_{j in D_i} count_{i,j} *
  *   log Pr(word_{i,j} | \theta, \phi)\f]
  *
  *  and perplexity to be
@@ -29,11 +29,11 @@ namespace text {
  *  For more information, see http://en.wikipedia.org/wiki/Perplexity.
  */
 double perplexity(std::shared_ptr<sarray<flexible_type>> documents,
-    const std::shared_ptr<sarray<flexible_type>> doc_topic_prob, 
+    const std::shared_ptr<sarray<flexible_type>> doc_topic_prob,
     const std::shared_ptr<sarray<flexible_type>> word_topic_prob,
     const std::shared_ptr<sarray<flexible_type>> vocabulary);
 
-} // text 
+} // text
 } // turicreate
 
 #endif

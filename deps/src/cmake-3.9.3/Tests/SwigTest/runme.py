@@ -48,4 +48,3 @@ del s
 s = 3
 print example.cvar.Shape_nshapes,"shapes remain"
 print "Goodbye"
-

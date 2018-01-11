@@ -14,7 +14,7 @@
 
 namespace turi {
 
-/**  
+/**
  * \ingroup util
  * A class that gives highly optimized version of the power function
  *  for when a^b needs to be computed for many different values of b.

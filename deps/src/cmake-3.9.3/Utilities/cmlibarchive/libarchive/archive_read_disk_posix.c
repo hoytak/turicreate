@@ -892,7 +892,7 @@ next_entry(struct archive_read_disk *a, struct tree *t,
 				return (ARCHIVE_FAILED);
 			}
 			break;
-		}	
+		}
 	} while (lst == NULL);
 
 #ifdef __APPLE__

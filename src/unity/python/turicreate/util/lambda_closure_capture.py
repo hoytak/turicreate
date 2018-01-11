@@ -26,14 +26,14 @@ class expression_validator(ast.NodeVisitor):
         x = 10
         lambda x: fn(x+15, x)
 
-    Really, the "x+15" expression is invalid since the expression uses an 
+    Really, the "x+15" expression is invalid since the expression uses an
     lambda argument. However, it does evaluate correctly in the scope
     since "x" also exists in the function scope.
 
     We thus need to validate the expression before attempting to evaluate it
     so that the expression must not contain a lambda argument.
 
-    This validator here is a lot stricter than it should since it will also 
+    This validator here is a lot stricter than it should since it will also
     prevent all cases where something with the same name as the lambda argument
     is created in an inner scope. For instance:
 
@@ -53,19 +53,19 @@ class expression_validator(ast.NodeVisitor):
 class attribute_reader(ast.NodeVisitor):
     """
     Things like tc.extensions._demo_add
-    get parsed as 
+    get parsed as
 
-        Attribute(value=Attribute(value=Name(id='gl', ctx=Load()), 
+        Attribute(value=Attribute(value=Name(id='gl', ctx=Load()),
         attr='extensions', ctx=Load()), attr='_demo_add', ctx=Load())
 
-    This causes problems for  
+    This causes problems for
 
         lambda x: tc.extensions._demo_add(x, 5)
-    
+
     We need to breakdown the attribute into the original string
     """
     def default(self, node):
-        raise NotImplementedError("Cannot process token at " + 
+        raise NotImplementedError("Cannot process token at " +
                 str(node.lineno) + ":" + str(node.col_offset))
 
     def visit_Name(self, node):
@@ -89,22 +89,22 @@ class Parameter(object):
 class lambda_closure_visitor(ast.NodeVisitor):
     """
     This implements a *very* limited decompiler. It only handles cases of
-    lambda x: fn(a, b, x, ...) 
-    where a,b, etc are variables captured from the surrounding scope, and there 
+    lambda x: fn(a, b, x, ...)
+    where a,b, etc are variables captured from the surrounding scope, and there
     may be some occurrences of x.
     No additional statements or expressions are permitted
     """
     FUNCTION = 0 # I am translating the wrapping lambda function
     INNER_CALL = 1 # I am translating the function call inside
-    PARAMETER = 2 # I am just translating a function parameter 
+    PARAMETER = 2 # I am just translating a function parameter
     def __init__(self):
         # The fn
         self.closure_fn_name = ""
 
-        # A list of captured positional arguments 
+        # A list of captured positional arguments
         # lambda parameters are denoted by being of type Parameter
         self.positional_args = []
-        # A dictionary of captured named arguments 
+        # A dictionary of captured named arguments
         # lambda parameters are denoted by being of type Parameter
         self.named_args = {}
 
@@ -116,14 +116,14 @@ class lambda_closure_visitor(ast.NodeVisitor):
         self.state = self.FUNCTION
 
     def default(self, node):
-        raise NotImplementedError("Cannot process token at " + 
+        raise NotImplementedError("Cannot process token at " +
                 str(node.lineno) + ":" + str(node.col_offset))
-    
+
     def __repr__(self):
         return str(self)
 
     def __str__(self):
-        ret = self.closure_fn_name + "(" 
+        ret = self.closure_fn_name + "("
         comma = False
         for i in self.positional_args:
             if comma:
@@ -145,20 +145,20 @@ class lambda_closure_visitor(ast.NodeVisitor):
 
     def visit_Module(self, node):
         if (self.state != self.FUNCTION):
-            raise NotImplementedError("Unexpected module in position " + 
+            raise NotImplementedError("Unexpected module in position " +
                     str(node.lineno) + ":" + str(node.col_offset))
         for line in node.body:
             self.visit(line)
 
     def visit_Call(self, node):
         if (self.state != self.INNER_CALL):
-            raise NotImplementedError("Unexpected call in position " + 
+            raise NotImplementedError("Unexpected call in position " +
                     str(node.lineno) + ":" + str(node.col_offset))
         self.state = self.INNER_CALL
 
         # this is the main closure function call
         if self.closure_fn_name != "":
-            raise NotImplementedError("Cannot translate function call " + 
+            raise NotImplementedError("Cannot translate function call " +
                     str(node.lineno) + ":" + str(node.col_offset))
         elif type(node.func) is ast.Name:
             self.closure_fn_name = node.func.id
@@ -182,7 +182,7 @@ class lambda_closure_visitor(ast.NodeVisitor):
                     raise NotImplementedError("Only simple expressions not using the function arguments are permitted")
                 self.positional_args += [result]
 
-        # keyword arguments next 
+        # keyword arguments next
         keywordargs = {i.arg:i.value for i in node.keywords}
         for i in keywordargs:
             arg = keywordargs[i]
@@ -198,7 +198,7 @@ class lambda_closure_visitor(ast.NodeVisitor):
                 self.named_args[i] = result
 
 
-            
+
     def visit_arguments(self, node):
         if (self.state != self.FUNCTION):
             raise NotImplementedError("Unexpected function")
@@ -212,7 +212,7 @@ class lambda_closure_visitor(ast.NodeVisitor):
 
     def visit_Return(self, node):
         if (self.state != self.INNER_CALL):
-            raise NotImplementedError("Unexpected return") 
+            raise NotImplementedError("Unexpected return")
         return self.visit(node.value)
 
     def visit_Lambda(self, node):
@@ -221,7 +221,7 @@ class lambda_closure_visitor(ast.NodeVisitor):
 
     def visit_FunctionDef(self, node):
         if (self.state != self.FUNCTION):
-            raise NotImplementedError("Unexpected function") 
+            raise NotImplementedError("Unexpected function")
 
         self.visit(node.args)
 
@@ -237,7 +237,7 @@ class lambda_closure_visitor(ast.NodeVisitor):
                 next_node = node.body[1]
             except:
                 # just in case the above fails for various reasons like say...
-                # there is *only* a doc string. We still fail with the 
+                # there is *only* a doc string. We still fail with the
                 # appropriate error
                 pass
         else:
@@ -267,7 +267,7 @@ def translate(fn):
         visitor.caller_globals = fn.__globals__.copy()
         func_closure = fn.__closure__
         co_freevars = fn.__code__.co_freevars
-    # now. annoyingly enough certain captures are not here. We need to 
+    # now. annoyingly enough certain captures are not here. We need to
     # look in func_closures for it
     if func_closure:
         closure = dict(zip(co_freevars, (c.cell_contents for c in func_closure)))

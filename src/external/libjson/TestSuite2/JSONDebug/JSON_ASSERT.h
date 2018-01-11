@@ -11,5 +11,5 @@ public:
 	void testPass(void);
 	void testFail(void);
 };
-	
+
 #endif

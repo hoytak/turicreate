@@ -6,7 +6,7 @@
 #include <shmipc/shmipc.hpp>
 #include <parallel/pthread_tools.hpp>
 using namespace turi;
-// 16 byte buffer 
+// 16 byte buffer
 const size_t BUFFER_SIZE = 16;
 struct shmipc_test {
  public:
@@ -34,7 +34,7 @@ struct shmipc_test {
       }
       if (receivelen >= 3) {
         if (strncmp(c, "end", 3) == 0) break;
-      } 
+      }
       TS_ASSERT(server.send(c, receivelen));
     }
     server.shutdown();
@@ -47,7 +47,7 @@ struct shmipc_test {
     for (auto message: messages) {
       TS_ASSERT(client.send(message.c_str(), message.length()));
       char *c = nullptr;
-      size_t len = 0;  
+      size_t len = 0;
       size_t receivelen = 0;
       TS_ASSERT(client.receive_direct(&c, &len, receivelen, 10));
       std::string s(c, receivelen);
@@ -56,7 +56,7 @@ struct shmipc_test {
 
     // too large buffer
     std::string bigger_than_buffer(BUFFER_SIZE + 1, 'a');
-    TS_ASSERT_EQUALS(client.send(bigger_than_buffer.c_str(), BUFFER_SIZE + 1), 
+    TS_ASSERT_EQUALS(client.send(bigger_than_buffer.c_str(), BUFFER_SIZE + 1),
                      false);
     // send the termination call
     client.send("end", 3);
@@ -65,7 +65,7 @@ struct shmipc_test {
   void test_connect() {
     TS_ASSERT(server.bind("", BUFFER_SIZE));
     server_address = server.get_shared_memory_name();
-    
+
     thread_group group;
     group.launch([=](){ this->server_process();});
     group.launch([=](){ this->client_process();});
@@ -87,7 +87,7 @@ struct shmipc_test {
       }
       if (receivelen >= 3) {
         if (strncmp(c, "end", 3) == 0) break;
-      } 
+      }
       TS_ASSERT(large_send(large_server, c, receivelen));
       free(c);
     }
@@ -108,7 +108,7 @@ struct shmipc_test {
     for (auto message: messages) {
       TS_ASSERT(large_send(large_client, message.c_str(),message.length()));
       char *c = nullptr;
-      size_t len = 0;  
+      size_t len = 0;
       size_t receivelen = 0;
       TS_ASSERT(large_receive(large_client, &c, &len, receivelen, 10));
       std::string s(c, receivelen);
@@ -123,7 +123,7 @@ struct shmipc_test {
   void test_large_comm() {
     TS_ASSERT(large_server.bind("", BUFFER_SIZE));
     large_server_address = large_server.get_shared_memory_name();
-    
+
     thread_group group;
     group.launch([=](){ this->large_server_process();});
     group.launch([=](){ this->large_client_process();});

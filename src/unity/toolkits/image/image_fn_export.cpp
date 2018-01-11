@@ -24,5 +24,5 @@ END_FUNCTION_REGISTRATION
 
 
 
-} //namespace image_util 
+} //namespace image_util
 } //namespace turi

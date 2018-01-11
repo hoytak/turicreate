@@ -20,7 +20,7 @@ namespace libfault {
 
 
 void query_object_message::parse(zmq_msg_vector& data) {
-  // there should be 2 parts. A header 
+  // there should be 2 parts. A header
   // then the actual data
   assert(data.num_unread_msgs() >= 2);
   zmq_msg_t* zhead = data.read_next();
@@ -33,7 +33,7 @@ void query_object_message::parse(zmq_msg_vector& data) {
 }
 
 void query_object_message::write(zmq_msg_vector& outdata) {
-  // create 2 message part. One with the header 
+  // create 2 message part. One with the header
   // then the actual data.
   zmq_msg_t* zhead = outdata.insert_back();
   zmq_msg_init_size(zhead, sizeof(header_type));
@@ -52,7 +52,7 @@ void query_object_message::write(zmq_msg_vector& outdata) {
 /**************************************************************************/
 
 void query_object_reply::parse(zmq_msg_vector& data) {
-  // there should be 2 parts. A header 
+  // there should be 2 parts. A header
   // then the actual data
   assert(data.num_unread_msgs() >= 2);
   zmq_msg_t* zhead = data.read_next();
@@ -66,7 +66,7 @@ void query_object_reply::parse(zmq_msg_vector& data) {
 
 
 void query_object_reply::write(zmq_msg_vector& outdata) {
-  // create 2 message part. One with the header 
+  // create 2 message part. One with the header
   // then the actual data.
   zmq_msg_t* zhead = outdata.insert_back();
   zmq_msg_init_size(zhead, sizeof(header_type));

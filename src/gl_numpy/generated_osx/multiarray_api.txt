@@ -2439,4 +2439,3 @@ Convert object to select kind
   PyDataMem_NEW_ZEROED(size_t size, size_t elsize)
 
 Allocates zeroed memory for array data.
-

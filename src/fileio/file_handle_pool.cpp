@@ -24,16 +24,16 @@ EXPORT std::shared_ptr<file_ownership_handle> file_handle_pool::register_file(
     const std::string& file_name) {
   std::lock_guard<turi::mutex> guard(this->m_mutex);
   std::shared_ptr<file_ownership_handle> ret = get_file_handle(file_name);
-  logstream(LOG_DEBUG) << "register_file_handle for file " 
+  logstream(LOG_DEBUG) << "register_file_handle for file "
                       << sanitize_url(file_name) << std::endl;
 
   if (!ret) {
-    logstream(LOG_DEBUG) << "register_file_handle for file " 
+    logstream(LOG_DEBUG) << "register_file_handle for file "
                          << sanitize_url(file_name) << std::endl;
 
-    
+
     ret = std::make_shared<file_ownership_handle>
-        (file_name, 
+        (file_name,
          boost::algorithm::starts_with(file_name, "cache://"));
     m_file_handles[file_name] = ret;
   }
@@ -42,12 +42,12 @@ EXPORT std::shared_ptr<file_ownership_handle> file_handle_pool::register_file(
    *   like file_ownership_handle to take care of this.  However, it
    *   is not certain that the pool will be around when that object is
    *   destroyed, so that brings up a number of possible rare corner
-   *   cases to check for.  Doing this is simplest for now. 
+   *   cases to check for.  Doing this is simplest for now.
    */
   if( (++this->num_file_registers) % (16*1024) == 0) {
     for(auto it = m_file_handles.begin(); it != m_file_handles.end();) {
       if(it->second.expired()) {
-        // Advances to the next element, or m_file_handles.end(); 
+        // Advances to the next element, or m_file_handles.end();
         it = m_file_handles.erase(it);
       } else {
         ++it;

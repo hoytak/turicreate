@@ -3,7 +3,7 @@ CFLAGS= -g -I../../include
 LIBS= -L../.. ../../libssl.a ../../libcrypto.a -ldl
 EXAMPLES=saccept sconnect client-arg client-conf
 
-all: $(EXAMPLES) 
+all: $(EXAMPLES)
 
 saccept: saccept.o
 	$(CC) -o saccept saccept.o $(LIBS)
@@ -17,6 +17,5 @@ client-arg: client-arg.o
 client-conf: client-conf.o
 	$(CC) -o client-conf client-conf.o $(LIBS)
 
-clean:	
+clean:
 	rm -f $(EXAMPLES) *.o
-

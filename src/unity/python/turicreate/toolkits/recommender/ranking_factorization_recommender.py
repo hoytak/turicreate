@@ -553,4 +553,3 @@ class RankingFactorizationRecommender(_Recommender):
     @classmethod
     def _native_name(cls):
         return "ranking_factorization_recommender"
-

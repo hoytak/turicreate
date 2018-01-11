@@ -42,7 +42,7 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
   size_t num_classes = 0;                      /**< fast access: num classes */
   size_t num_coefficients= 0;                  /**< fast access: num coefs   */
   public:
-  
+
   static constexpr size_t LOGISTIC_REGRESSION_MODEL_VERSION = 6;
 
   public:
@@ -52,30 +52,30 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    */
   ~logistic_regression();
 
-  
+
   /**
    * Set the default evaluation metric during model evaluation..
    */
   void set_default_evaluation_metric(){
     set_evaluation_metric({
-        "accuracy", 
-        "auc", 
+        "accuracy",
+        "auc",
         "confusion_matrix",
-        "f1_score", 
+        "f1_score",
         "log_loss",
-        "precision", 
-        "recall",  
+        "precision",
+        "recall",
         "roc_curve",
-        }); 
+        });
   }
-  
+
   /**
    * Set the default evaluation metric for progress tracking.
    */
   void set_default_tracking_metric(){
     set_tracking_metric({
-        "accuracy", 
-       }); 
+        "accuracy",
+       });
   }
 
   /**
@@ -85,14 +85,14 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    *
    */
   void model_specific_init(const ml_data& data, const ml_data& valid_data);
-  
+
   /**
    * Initialize the options.
    *
    * \param[in] _options Options to set
    */
   void init_options(const std::map<std::string,flexible_type>& _options);
-  
+
   /**
    * Gets the model version number
    */
@@ -108,7 +108,7 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    * Setter for model coefficieints.
    */
   void set_coefs(const DenseVector& _coefs);
-  
+
   /**
    * Serialize the object.
    */
@@ -118,9 +118,9 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    * Load the object
    */
   void load_version(turi::iarchive& iarc, size_t version);
-  
+
   /**
-   * Predict for a single example. 
+   * Predict for a single example.
    *
    * \param[in] x  Single example.
    * \param[in] output_type Type of prediction.
@@ -128,23 +128,23 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    * \returns Prediction for a single example.
    *
    */
-  flexible_type predict_single_example(const DenseVector& x, 
+  flexible_type predict_single_example(const DenseVector& x,
           const prediction_type_enum& output_type=prediction_type_enum::NA);
-  
+
   /**
    * Fast path predictions given a row of flexible_types.
    *
    * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] output_type Output type. 
+   * \param[in] output_type Output type.
    */
   gl_sframe fast_predict_topk(
       const std::vector<flexible_type>& rows,
-      const std::string& output_type="", 
+      const std::string& output_type="",
       const std::string& missing_value_action ="error",
       const size_t topk = 5) override;
-  
+
   /**
-   * Predict for a single example. 
+   * Predict for a single example.
    *
    * \param[in] x  Single example.
    * \param[in] output_type Type of prediction.
@@ -152,7 +152,7 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    * \returns Prediction for a single example.
    *
    */
-  flexible_type predict_single_example(const SparseVector& x, 
+  flexible_type predict_single_example(const SparseVector& x,
           const prediction_type_enum& output_type=prediction_type_enum::NA);
 
   /**
@@ -162,7 +162,7 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
     _coefs.resize(coefs.size());
     _coefs = coefs;
   }
-  
+
   void export_to_coreml(const std::string& filename);
 
   SUPERVISED_LEARNING_METHODS_REGISTRATION(
@@ -173,4 +173,3 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
 } // turicreate
 
 #endif
-

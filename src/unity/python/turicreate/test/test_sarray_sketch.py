@@ -232,7 +232,7 @@ class SArraySketchTest(unittest.TestCase):
 
     def test_dict_many_nones(self):
         sa = SArray([None] * 200 + [{'a':'b'}])
-        self.assertEqual(sa.summary().num_elements_processed(), 201) 
+        self.assertEqual(sa.summary().num_elements_processed(), 201)
 
     def test_str_sketch(self):
         str_data = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", None]

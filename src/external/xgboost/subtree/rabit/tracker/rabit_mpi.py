@@ -33,7 +33,7 @@ def mpi_submit(nslave, worker_args, worker_envs):
     worker_args += ['%s=%s' % (k, str(v)) for k, v in worker_envs.items()]
     sargs = ' '.join(args.command + worker_args)
     if args.hostfile is None:
-        cmd = ' '.join(['mpirun -n %d' % (nslave)] + args.command + worker_args) 
+        cmd = ' '.join(['mpirun -n %d' % (nslave)] + args.command + worker_args)
     else:
         cmd = ' '.join(['mpirun -n %d --hostfile %s' % (nslave, args.hostfile)] + args.command + worker_args)
     print cmd

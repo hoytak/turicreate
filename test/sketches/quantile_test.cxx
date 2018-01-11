@@ -29,11 +29,11 @@ struct quantile_sketch_test {
     TS_ASSERT_LESS_THAN_EQUALS(lower, query);
     TS_ASSERT_LESS_THAN_EQUALS(query, upper);
     TS_ASSERT_EQUALS(query, sketch.query_quantile(quantile));
-    TS_ASSERT_EQUALS(sketch.fast_query(index), 
+    TS_ASSERT_EQUALS(sketch.fast_query(index),
                      sketch.fast_query_quantile(quantile));
 
-    std::cout << quantile*100 << "% : " << values[index] << " vs " 
-              << sketch.query_quantile(quantile) 
+    std::cout << quantile*100 << "% : " << values[index] << " vs "
+              << sketch.query_quantile(quantile)
               << " true epsilon interval:[" << lower << ", " << upper << "]  "
               << "(fast query: " << sketch.fast_query_quantile(quantile) << ")\n";
   }
@@ -67,7 +67,7 @@ struct quantile_sketch_test {
       for (size_t i = 0;i < values.size(); ++i) {
         sketches[i % sketches.size()].add(values[i]);
       }
-      sketch_type final_sketch(values.size(), epsilon); 
+      sketch_type final_sketch(values.size(), epsilon);
       for (size_t i = 0;i < sketches.size(); ++i) {
         final_sketch.combine(sketches[i]);
       }
@@ -110,7 +110,7 @@ struct quantile_sketch_test {
       for (size_t i = 0;i < values.size(); ++i) {
         sketches[i % sketches.size()].add(values[i]);
       }
-      streaming_sketch_type final_sketch(epsilon); 
+      streaming_sketch_type final_sketch(epsilon);
       for (size_t i = 0;i < sketches.size(); ++i) {
         sketches[i].substream_finalize();
         final_sketch.combine(sketches[i]);

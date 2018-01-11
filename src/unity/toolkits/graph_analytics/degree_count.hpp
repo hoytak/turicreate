@@ -18,7 +18,7 @@ namespace degree_count {
  * Accepted Parameters: None
  *
  * Returned Parameters:
- * \li \b training_time (flexible_type: float). The training time of the algorithm in seconds 
+ * \li \b training_time (flexible_type: float). The training time of the algorithm in seconds
  * excluding all other preprocessing stages.
  *
  * \li \b __graph__ (unity_graph). The graph object with the field "in_degree",

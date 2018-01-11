@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-ObjectVersion::ObjectVersion() : 
+ObjectVersion::ObjectVersion() :
     m_eTagHasBeenSet(false),
     m_size(0),
     m_sizeHasBeenSet(false),
@@ -43,7 +43,7 @@ ObjectVersion::ObjectVersion() :
 {
 }
 
-ObjectVersion::ObjectVersion(const XmlNode& xmlNode) : 
+ObjectVersion::ObjectVersion(const XmlNode& xmlNode) :
     m_eTagHasBeenSet(false),
     m_size(0),
     m_sizeHasBeenSet(false),

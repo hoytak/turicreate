@@ -16,7 +16,7 @@ FIND_PATH(PCRE_INCLUDE_DIR pcreposix.h)
 FIND_LIBRARY(PCREPOSIX_LIBRARY NAMES pcreposix libpcreposix)
 FIND_LIBRARY(PCRE_LIBRARY NAMES pcre libpcre)
 
-# handle the QUIETLY and REQUIRED arguments and set PCREPOSIX_FOUND to TRUE if 
+# handle the QUIETLY and REQUIRED arguments and set PCREPOSIX_FOUND to TRUE if
 # all listed variables are TRUE
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(PCREPOSIX DEFAULT_MSG PCREPOSIX_LIBRARY PCRE_INCLUDE_DIR)

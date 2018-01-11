@@ -770,7 +770,7 @@ class LogisticClassifier(_Classifier):
                   'supervised_learning_predict_topk', options)
         return _map_unity_proxy_to_object(target['predicted'])
 
-    
+
     def evaluate(self, dataset, metric='auto', missing_value_action='auto'):
         """
         Evaluate the model by making predictions of target values and comparing

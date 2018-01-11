@@ -48,7 +48,7 @@ namespace supervised {
  * Constructor for Linear regression solver object.dual_linear_svm_dual_opt_interface
  */
 linear_regression_opt_interface::linear_regression_opt_interface(
-    const ml_data& _ml_data, const ml_data& _valid_data, 
+    const ml_data& _ml_data, const ml_data& _valid_data,
     linear_regression& _model, bool _feature_rescaling) {
 
   data = _ml_data;
@@ -57,7 +57,7 @@ linear_regression_opt_interface::linear_regression_opt_interface(
 
   // Initialize reader and other data
   examples = data.num_rows();
-#ifdef HAS_DISTRIBUTED 
+#ifdef HAS_DISTRIBUTED
   auto dc = distributed_control_global::get_instance();
   dc->all_reduce(examples);
 #endif
@@ -117,10 +117,10 @@ size_t linear_regression_opt_interface::num_examples() const{
 /**
  * Get strings needed to print the header for the progress table.
  */
-std::vector<std::pair<std::string, size_t>> 
+std::vector<std::pair<std::string, size_t>>
 linear_regression_opt_interface::get_status_header(const std::vector<std::string>& stat_headers) {
   bool has_validation_data = (valid_data.num_rows() > 0);
-  auto header = make_progress_header(smodel, stat_headers, has_validation_data); 
+  auto header = make_progress_header(smodel, stat_headers, has_validation_data);
   return header;
 }
 
@@ -128,16 +128,16 @@ linear_regression_opt_interface::get_status_header(const std::vector<std::string
  * Get strings needed to print a row of the progress table.
  */
 std::vector<std::string> linear_regression_opt_interface::get_status(
-    const DenseVector& coefs, 
+    const DenseVector& coefs,
     const std::vector<std::string>& stats) {
 
   // Copy coefficients, rescale, and update the model.
   DenseVector coefs_tmp = coefs;
   rescale_solution(coefs_tmp);
-  smodel.set_coefs(coefs_tmp); 
+  smodel.set_coefs(coefs_tmp);
 
   auto ret = make_progress_row_string(smodel, data, valid_data, stats);
-  return ret; 
+  return ret;
 }
 
 
@@ -154,7 +154,7 @@ void linear_regression_opt_interface::compute_first_order_statistics(const
   std::vector<DenseVector> G(n_threads, arma::zeros(variables));
   std::vector<double> f(n_threads, 0.0);
 
-  // Dense data. 
+  // Dense data.
   if (this->is_dense) {
       in_parallel([&](size_t thread_idx, size_t num_threads) {
         DenseMatrix x(LINEAR_REGRESSION_BATCH_SIZE, variables);
@@ -179,7 +179,7 @@ void linear_regression_opt_interface::compute_first_order_statistics(const
           if(feature_rescaling){
             scaler->transform(x);
           }
-          
+
           // Compute
           DenseVector r = x * point - y;
           G[thread_idx] += 2 * x.t() * r;
@@ -232,20 +232,20 @@ void linear_regression_opt_interface::compute_first_order_statistics(const
 void linear_regression_opt_interface::compute_second_order_statistics(const
     DenseVector& point, DenseMatrix& hessian, DenseVector& gradient, double&
     function_value) {
-  
-  std::vector<DenseMatrix> H(n_threads, 
+
+  std::vector<DenseMatrix> H(n_threads,
                         arma::zeros(variables,variables));
-  std::vector<DenseVector> G(n_threads, 
+  std::vector<DenseVector> G(n_threads,
                         arma::zeros(variables));
   std::vector<double> f(n_threads, 0.0);
-  
-  // Dense data. 
+
+  // Dense data.
   if (this->is_dense) {
     in_parallel([&](size_t thread_idx, size_t num_threads) {
       DenseMatrix x(LINEAR_REGRESSION_BATCH_SIZE, variables);
       DenseVector y(LINEAR_REGRESSION_BATCH_SIZE);
       size_t row_id = 0;
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
+      for(auto it = data.get_iterator(thread_idx, num_threads);
                                                                 !it.done();) {
         row_id = 0;
         while( (row_id < LINEAR_REGRESSION_BATCH_SIZE) && !(it.done())) {
@@ -276,7 +276,7 @@ void linear_regression_opt_interface::compute_second_order_statistics(const
       in_parallel([&](size_t thread_idx, size_t num_threads) {
         SparseVector x(variables);
         double y = 0, r = 0;
-        for(auto it = data.get_iterator(thread_idx, num_threads); 
+        for(auto it = data.get_iterator(thread_idx, num_threads);
                                !it.done(); ++it) {
           // Fill.
           fill_reference_encoding(*it, x);
@@ -285,8 +285,8 @@ void linear_regression_opt_interface::compute_second_order_statistics(const
           if(feature_rescaling){
             scaler->transform(x);
           }
-                            
-          // Compute.       
+
+          // Compute.
           r = dot(x, point) - y;
           for(auto p : x) {
             G[thread_idx][p.first]  += 2 * r * p.second;
@@ -312,7 +312,7 @@ void linear_regression_opt_interface::compute_second_order_statistics(const
     gradient += G[i];
     function_value += f[i];
   }
- 
+
 #ifdef HAS_DISTRIBUTED
   auto dc = distributed_control_global::get_instance();
   DASSERT_TRUE(dc != NULL);

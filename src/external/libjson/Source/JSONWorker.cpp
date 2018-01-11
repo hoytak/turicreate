@@ -188,7 +188,7 @@ inline void SingleLineComment(const json_char * & p, const json_char * const end
 				   if (T) COMMENT_DELIMITER();
 				   while ((*(++p) != JSON_TEXT('*')) || (*(p + 1) != JSON_TEXT('/'))){
 					  if(p == end){
-							COMMENT_DELIMITER(); 
+							COMMENT_DELIMITER();
 							goto endofrunner;
 						}
 					  if (T) *runner++ = *p;
@@ -238,7 +238,7 @@ inline void SingleLineComment(const json_char * & p, const json_char * const end
 
 #ifdef JSON_READ_PRIORITY
     json_char * JSONWorker::RemoveWhiteSpace(const json_string & value_t, size_t & len, bool escapeQuotes) json_nothrow  {
-		json_char * result = PRIVATE_REMOVEWHITESPACE(true, value_t, escapeQuotes, len); 
+		json_char * result = PRIVATE_REMOVEWHITESPACE(true, value_t, escapeQuotes, len);
 		result[len] = JSON_TEXT('\0');
 		return result;
     }
@@ -254,7 +254,7 @@ json_char * JSONWorker::RemoveWhiteSpaceAndCommentsC(const json_string & value_t
 json_string JSONWorker::RemoveWhiteSpaceAndComments(const json_string & value_t, bool escapeQuotes) json_nothrow {
 	json_auto<json_char> s;
     size_t len;
-	s.set(PRIVATE_REMOVEWHITESPACE(false, value_t, escapeQuotes, len)); 
+	s.set(PRIVATE_REMOVEWHITESPACE(false, value_t, escapeQuotes, len));
 	return json_string(s.ptr, len);
 }
 
@@ -600,7 +600,7 @@ inline void JSONWorker::NewNode(const internalJSONNode * parent, const json_stri
 	   const_cast<internalJSONNode*>(parent) -> CHILDREN -> push_back(child);   //attach it to the parent node
     #else
 	if (name.empty()){
-	   	const_cast<internalJSONNode*>(parent) -> CHILDREN -> push_back(JSONNode::newJSONNode(internalJSONNode::newInternal(name, value)));	    //attach it to the parent node
+		const_cast<internalJSONNode*>(parent) -> CHILDREN -> push_back(JSONNode::newJSONNode(internalJSONNode::newInternal(name, value)));	    //attach it to the parent node
 	} else {
 		const_cast<internalJSONNode*>(parent) -> CHILDREN -> push_back(JSONNode::newJSONNode(internalJSONNode::newInternal(json_string(name.begin() + 1, name.end()), value)));	    //attach it to the parent node
 	}
@@ -613,17 +613,17 @@ void JSONWorker::DoArray(const internalJSONNode * parent, const json_string & va
 	JSON_ASSERT(!value_t.empty(), JSON_TEXT("DoArray is empty"));
 	JSON_ASSERT_SAFE(value_t[0] == JSON_TEXT('['), JSON_TEXT("DoArray is not an array"), parent -> Nullify(); return;);
 	if (json_unlikely(value_t.length() <= 2)) return;  // just a [] (blank array)
-	
+
 	#ifdef JSON_SAFE
 		json_string newValue;  //share this so it has a reserved buffer
 	#endif
 	size_t starting = 1;  //ignore the [
-	
+
 	//Not sure what's in the array, so we have to use commas
 	for(size_t ending = FIND_NEXT_RELEVANT(JSON_TEXT(','), value_t, 1);
 		ending != json_string::npos;
 		ending = FIND_NEXT_RELEVANT(JSON_TEXT(','), value_t, starting)){
-		
+
 		#ifdef JSON_SAFE
 			newValue.assign(value_t.begin() + starting, value_t.begin() + ending);
 			JSON_ASSERT_SAFE(FIND_NEXT_RELEVANT(JSON_TEXT(':'), newValue, 0) == json_string::npos, JSON_TEXT("Key/Value pairs are not allowed in arrays"), parent -> Nullify(); return;);
@@ -634,7 +634,7 @@ void JSONWorker::DoArray(const internalJSONNode * parent, const json_string & va
 		starting = ending + 1;
 	}
 	//since the last one will not find the comma, we have to add it here, but ignore the final ]
-	
+
 	#ifdef JSON_SAFE
 		newValue.assign(value_t.begin() + starting, value_t.end() - 1);
 		JSON_ASSERT_SAFE(FIND_NEXT_RELEVANT(JSON_TEXT(':'), newValue, 0) == json_string::npos, JSON_TEXT("Key/Value pairs are not allowed in arrays"), parent -> Nullify(); return;);
@@ -646,12 +646,12 @@ void JSONWorker::DoArray(const internalJSONNode * parent, const json_string & va
 
 
 //Create all child nodes
-void JSONWorker::DoNode(const internalJSONNode * parent, const json_string & value_t) json_nothrow {	
+void JSONWorker::DoNode(const internalJSONNode * parent, const json_string & value_t) json_nothrow {
 	//This take a node and creates its members and such
 	JSON_ASSERT(!value_t.empty(), JSON_TEXT("DoNode is empty"));
 	JSON_ASSERT_SAFE(value_t[0] == JSON_TEXT('{'), JSON_TEXT("DoNode is not an node"), parent -> Nullify(); return;);
 	if (json_unlikely(value_t.length() <= 2)) return;  // just a {} (blank node)
-	
+
 	size_t name_ending = FIND_NEXT_RELEVANT(JSON_TEXT(':'), value_t, 1);  //find where the name ends
 	JSON_ASSERT_SAFE(name_ending != json_string::npos, JSON_TEXT("Missing :"), parent -> Nullify(); return;);
 	json_string name(value_t.begin() + 1, value_t.begin() + name_ending - 1);	  //pull the name out
@@ -659,7 +659,7 @@ void JSONWorker::DoNode(const internalJSONNode * parent, const json_string & val
 		 name_starting = 1;  //ignore the {
 		 value_ending != json_string::npos;
 		 value_ending = FIND_NEXT_RELEVANT(JSON_TEXT(','), value_t, name_ending)){
-		
+
 		NewNode(parent, name, json_string(value_t.begin() + name_ending + 1, value_t.begin() + value_ending), false);
 		name_starting = value_ending + 1;
 		name_ending = FIND_NEXT_RELEVANT(JSON_TEXT(':'), value_t, name_starting);

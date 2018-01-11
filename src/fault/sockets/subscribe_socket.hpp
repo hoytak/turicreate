@@ -17,7 +17,7 @@
 namespace turi {
 namespace zookeeper_util {
 class key_value;
-} 
+}
 }
 
 namespace libfault {
@@ -30,7 +30,7 @@ namespace libfault {
  *  - Create a subscribe_socket
  *  - Create a socket_receive_pollset
  *  - start the pollset ( socket_receive_pollset::start_poll_thread()
- *  - subscribe to a prefix. (Can be the empty string). It is important to at 
+ *  - subscribe to a prefix. (Can be the empty string). It is important to at
  *    least subscribe to the empty string, or nothing will ever be received.
  *
  * \code
@@ -53,7 +53,7 @@ class EXPORT subscribe_socket {
    * \param keyval A zookeeper key_value object to bind to
    * \param callback The function used to process replies.
    *
-   * keyval can be NULL in which case all "connect/disconnect" calls 
+   * keyval can be NULL in which case all "connect/disconnect" calls
    * must refer to a ZeroMQ endpoints.
    */
   subscribe_socket(void* zmq_ctx,
@@ -66,8 +66,8 @@ class EXPORT subscribe_socket {
   void close();
 
   /**
-   * If Zookeeper is used, this connects to receive broadcasts on a given 
-   * object key. Otherwise, the argument must be a ZeroMQ endpoint to 
+   * If Zookeeper is used, this connects to receive broadcasts on a given
+   * object key. Otherwise, the argument must be a ZeroMQ endpoint to
    * connect to.
    */
   void connect(std::string objectkey);

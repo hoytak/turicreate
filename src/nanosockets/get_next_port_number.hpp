@@ -15,4 +15,3 @@ size_t get_next_port_number();
 } // namespace nanosockets
 }
 #endif
-

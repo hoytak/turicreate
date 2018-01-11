@@ -26,7 +26,7 @@ namespace ini {
  * \ingroup groupini
  *
  * Reads a key in an ini/json file as a sequence of values. In the ini file
- * this will be represented as 
+ * this will be represented as
  *
  * [key]
  * 0000 = "hello"
@@ -35,17 +35,17 @@ namespace ini {
  *
  * But in a JSON file this could be
  * {"0000":"hello","0001":"pika","0002":"chu"}
- * or 
+ * or
  * ["hello","pika","chu"]
- * depending on which writer is used. (The boost property tree writer will 
+ * depending on which writer is used. (The boost property tree writer will
  * create the first, a regular JSON writer will create the second).
- * 
+ *
  * This will return a 3 element vector containing {"hello", "pika", "chu"}
  *
  * \see write_sequence_section
  */
 template <typename T>
-std::vector<T> read_sequence_section(const boost::property_tree::ptree& data, 
+std::vector<T> read_sequence_section(const boost::property_tree::ptree& data,
                                      std::string key,
                                      size_t expected_elements) {
   std::vector<T> ret;
@@ -80,23 +80,23 @@ std::vector<T> read_sequence_section(const boost::property_tree::ptree& data,
 /**
  * \ingroup groupini
  * Reads a key in an ini/json file as a dictionary of values. In the ini file
- * this will be represented as 
+ * this will be represented as
  *
  * [key]
  * fish = "hello"
  * and = "pika"
  * chips = "chu"
  *
- * In a JSON file this will be represented as 
+ * In a JSON file this will be represented as
  * {"fish":"hello", "and":"pika", "chips":"chu"}
  *
- * This will return a 3 element map containing 
+ * This will return a 3 element map containing
  * {"fish":"hello", "and":"pika", "chips":"chu"}.
  *
  * \see write_dictionary_section
  */
 template <typename T>
-std::map<std::string, T> read_dictionary_section(const boost::property_tree::ptree& data, 
+std::map<std::string, T> read_dictionary_section(const boost::property_tree::ptree& data,
                                                  std::string key) {
   std::map<std::string, T> ret;
   // no section found
@@ -116,10 +116,10 @@ std::map<std::string, T> read_dictionary_section(const boost::property_tree::ptr
 
 /**
  * \ingroup groupini
- * Writes a vector of values into an ini file as a section. 
+ * Writes a vector of values into an ini file as a section.
  *
  * For instance, given a 3 element vector containing {"hello", "pika", "chu"}
- * The vector be represented as 
+ * The vector be represented as
  *
  * [key]
  * 0000 = "hello"
@@ -127,10 +127,10 @@ std::map<std::string, T> read_dictionary_section(const boost::property_tree::ptr
  * 0002 = "chu"
  *
  * \see read_sequence_section
- * 
+ *
  */
 template <typename T>
-void write_sequence_section(boost::property_tree::ptree& data, 
+void write_sequence_section(boost::property_tree::ptree& data,
                             const std::string& key,
                             const std::vector<T>& values) {
   for (size_t i = 0; i < values.size(); ++i) {
@@ -143,8 +143,8 @@ void write_sequence_section(boost::property_tree::ptree& data,
 
 /**
  * \ingroup groupini
- * Writes a dictionary of values into an ini file as a section. 
- * For instance, given a 3 element map containing 
+ * Writes a dictionary of values into an ini file as a section.
+ * For instance, given a 3 element map containing
  * {"fish":"hello", "and":"pika", "chips":"chu"}.
  *
  * In the ini file this will be represented as:
@@ -158,7 +158,7 @@ void write_sequence_section(boost::property_tree::ptree& data,
  *
  */
 template <typename T>
-void write_dictionary_section(boost::property_tree::ptree& data, 
+void write_dictionary_section(boost::property_tree::ptree& data,
                             const std::string& key,
                             const std::map<std::string, T>& values) {
   // Write out metadata

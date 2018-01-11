@@ -47,7 +47,7 @@ class union_fstream {
   std::string get_name() const;
 
   /**
-   * Returns the file size of the opened file. 
+   * Returns the file size of the opened file.
    * Returns (size_t)(-1) if there is no file opened, or if there is an
    * error obtaining the file size.
    */

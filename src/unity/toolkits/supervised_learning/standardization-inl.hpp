@@ -433,6 +433,6 @@ class l2_rescaling: public standardization_interface {
 };
 
 
-} // supervised 
+} // supervised
 } // turicreate
 #endif

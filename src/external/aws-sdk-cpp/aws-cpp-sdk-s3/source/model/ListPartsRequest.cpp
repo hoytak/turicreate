@@ -25,7 +25,7 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws::Http;
 
-ListPartsRequest::ListPartsRequest() : 
+ListPartsRequest::ListPartsRequest() :
     m_bucketHasBeenSet(false),
     m_keyHasBeenSet(false),
     m_maxParts(0),

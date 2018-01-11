@@ -15,10 +15,10 @@
 #include <sframe_query_engine/operators/operator_properties.hpp>
 
 namespace turi {
-namespace query_eval { 
+namespace query_eval {
 
 class query_operator;
-struct qp_info; 
+struct qp_info;
 
 /**
  * \ingroup sframe_query_engine
@@ -35,7 +35,7 @@ struct qp_info;
  *  \arg \c operator_parameters (map of string->flexible_type>: The parameters for
  *  the operator. This is operator
  *  dependent and is defined by the operator itself. Generally, user's of
- *  the planner node should not need this, and should just call 
+ *  the planner node should not need this, and should just call
  *  planner_node_traits<...>::make_plan() to create an operator node.
  *  key names begining with "__" are reserved (for instance, for memoizations, etc)
  *  \arg \c any_operator_parameters (map of string->any): Non-portable parameters.
@@ -46,51 +46,51 @@ struct qp_info;
  */
 struct planner_node {
   planner_node(planner_node_type operator_type,
-               const std::map<std::string, flexible_type>& operator_parameters 
+               const std::map<std::string, flexible_type>& operator_parameters
                = std::map<std::string, flexible_type>(),
-               const std::map<std::string, any>& any_operator_parameters 
+               const std::map<std::string, any>& any_operator_parameters
                = std::map<std::string, any>(),
-               const std::vector<std::shared_ptr<planner_node> >& inputs 
+               const std::vector<std::shared_ptr<planner_node> >& inputs
                = std::vector<std::shared_ptr<planner_node> >()):
       operator_type(operator_type),
       operator_parameters(operator_parameters),
     any_operator_parameters(any_operator_parameters),
     inputs(inputs) { }
-  
+
   planner_node(planner_node&&) = default;
   planner_node(const planner_node&) = default;
   planner_node& operator=(const planner_node&) = default;
   planner_node& operator=(planner_node&&) = default;
 
-  /** The name of the operator. 
+  /** The name of the operator.
    */
-  planner_node_type operator_type = planner_node_type::INVALID; 
+  planner_node_type operator_type = planner_node_type::INVALID;
 
-  /**  
+  /**
    * A generic field for holding the parameters of the operator.
    */
   std::map<std::string, flexible_type> operator_parameters;
 
   /**
-   * This field holds all other non-portable parameters. For instance, 
+   * This field holds all other non-portable parameters. For instance,
    * function pointers, etc. Operators / Planner nodes which depend on this
    * will generally, not work for going distributed.
    */
   std::map<std::string, any> any_operator_parameters;
 
-  /**  The inputs to the operator. 
+  /**  The inputs to the operator.
    */
   std::vector<std::shared_ptr<planner_node> > inputs;
 
-  /** A struct to hold the accompaning info for the node.  
+  /** A struct to hold the accompaning info for the node.
    */
-  std::shared_ptr<qp_info> qpi; 
-  
+  std::shared_ptr<qp_info> qpi;
+
   /**
    * Makes copy of the node.
    */
   std::shared_ptr<planner_node> clone() {
-    return make_shared(operator_type, operator_parameters, 
+    return make_shared(operator_type, operator_parameters,
                        any_operator_parameters, inputs);
   }
 
@@ -99,22 +99,22 @@ struct planner_node {
    */
   static inline std::shared_ptr<planner_node> make_shared(
       planner_node_type operator_type,
-      const std::map<std::string, flexible_type>& operator_parameters 
+      const std::map<std::string, flexible_type>& operator_parameters
       = std::map<std::string, flexible_type>(),
-      const std::map<std::string, any>& any_operator_parameters 
+      const std::map<std::string, any>& any_operator_parameters
       = std::map<std::string, any>(),
-      const std::vector<std::shared_ptr<planner_node>>& inputs 
+      const std::vector<std::shared_ptr<planner_node>>& inputs
       = std::vector<std::shared_ptr<planner_node>>()) {
-    return std::make_shared<planner_node>(operator_type, operator_parameters, 
+    return std::make_shared<planner_node>(operator_type, operator_parameters,
                                           any_operator_parameters, inputs);
   }
 
   ////////////////////////////////////////////////////////////////////////////////
-  
+
 };
 
-/// A handy typedef 
-typedef std::shared_ptr<planner_node> pnode_ptr; 
+/// A handy typedef
+typedef std::shared_ptr<planner_node> pnode_ptr;
 
 /// \}
 

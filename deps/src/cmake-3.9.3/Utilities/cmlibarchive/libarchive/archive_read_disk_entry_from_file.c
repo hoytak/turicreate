@@ -1811,7 +1811,7 @@ setup_sparse_fiemap(struct archive_read_disk *a,
 	for (iters = 0; ; ++iters) {
 		int i, r;
 
-		r = ioctl(*fd, FS_IOC_FIEMAP, fm); 
+		r = ioctl(*fd, FS_IOC_FIEMAP, fm);
 		if (r < 0) {
 			/* When something error happens, it is better we
 			 * should return ARCHIVE_OK because an earlier
@@ -1916,7 +1916,7 @@ setup_sparse(struct archive_read_disk *a,
 		path = archive_entry_sourcepath(entry);
 		if (path == NULL)
 			path = archive_entry_pathname(entry);
-			
+
 #ifdef _PC_MIN_HOLE_SIZE
 		if (pathconf(path, _PC_MIN_HOLE_SIZE) <= 0)
 			return (ARCHIVE_OK);
@@ -2011,4 +2011,3 @@ setup_sparse(struct archive_read_disk *a,
 #endif
 
 #endif /* !defined(_WIN32) || defined(__CYGWIN__) */
-

@@ -115,7 +115,7 @@ void async_reply_socket::poll_function() {
     hdr.msg_iovlen = 1;
     hdr.msg_control = reinterpret_cast<void*>(&(j.control));
     hdr.msg_controllen = NN_MSG;
-    { 
+    {
       std::unique_lock<mutex> socklock(socketlock);
       int rc = nn_recvmsg(z_socket, &hdr, 0);
       if (rc == -1) {
@@ -155,7 +155,7 @@ void async_reply_socket::process_job(job j) {
   hdr.msg_iovlen = 1;
   hdr.msg_control = reinterpret_cast<void*>(&(j.control));
   hdr.msg_controllen = NN_MSG;
-  
+
   std::lock_guard<mutex> socklock(socketlock);
   int rc = nn_sendmsg(z_socket, &hdr, 0);
   free(oarc.buf);

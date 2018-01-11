@@ -83,7 +83,7 @@ struct broadcast_queue_test {
      size_t max_writeval = 10000;
      auto seed = time(NULL);
      std::cout << "Seed: " << seed << "\n";
-     srand(seed); 
+     srand(seed);
      while(1) {
        size_t n_to_push = rand() % 100;
        n_to_push = std::min(n_to_push, max_writeval - writeval);

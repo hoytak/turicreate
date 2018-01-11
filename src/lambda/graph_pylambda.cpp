@@ -79,7 +79,7 @@ graph_pylambda_evaluator::graph_pylambda_evaluator() {
 
 graph_pylambda_evaluator::~graph_pylambda_evaluator() {
   if(m_lambda_id != size_t(-1)) {
-    release_lambda(m_lambda_id); 
+    release_lambda(m_lambda_id);
   }
 }
 
@@ -98,9 +98,9 @@ void graph_pylambda_evaluator::init(const std::string& lambda,
   if(m_lambda_id != size_t(-1) && new_lambda_id != m_lambda_id) {
     release_lambda(m_lambda_id);
   }
-  
-  m_lambda_id = new_lambda_id; 
-  
+
+  m_lambda_id = new_lambda_id;
+
   m_vertex_keys = vertex_fields;
   m_edge_keys = edge_fields;
   m_srcid_column = src_column_id;
@@ -122,10 +122,10 @@ std::vector<sgraph_edge_data> graph_pylambda_evaluator::eval_triple_apply(
     const std::vector<size_t>& mutated_edge_field_ids) {
 
   std::lock_guard<mutex> lg(m_mutex);
-  
-  logstream(LOG_INFO) << "graph_lambda_worker eval triple apply " << src_partition 
+
+  logstream(LOG_INFO) << "graph_lambda_worker eval triple apply " << src_partition
                       << ", " << dst_partition << std::endl;
-  
+
   DASSERT_TRUE(is_loaded(src_partition));
   DASSERT_TRUE(is_loaded(dst_partition));
 
@@ -153,7 +153,7 @@ std::vector<sgraph_edge_data> graph_pylambda_evaluator::eval_triple_apply(
 
   evaluation_functions.eval_graph_triple_apply(m_lambda_id, &lgt);
   python::check_for_python_exception();
-  
+
   return ret;
 }
 

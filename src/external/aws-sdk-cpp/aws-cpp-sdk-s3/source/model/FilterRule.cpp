@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-FilterRule::FilterRule() : 
+FilterRule::FilterRule() :
     m_nameHasBeenSet(false),
     m_valueHasBeenSet(false)
 {
 }
 
-FilterRule::FilterRule(const XmlNode& xmlNode) : 
+FilterRule::FilterRule(const XmlNode& xmlNode) :
     m_nameHasBeenSet(false),
     m_valueHasBeenSet(false)
 {

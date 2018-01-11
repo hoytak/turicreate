@@ -27,7 +27,7 @@ struct function_args_to_tuple {
 
 
 template<typename T>
-struct left_shift_tuple { 
+struct left_shift_tuple {
   typedef std::tuple<> type;
 };
 

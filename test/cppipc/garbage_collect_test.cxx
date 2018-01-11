@@ -44,14 +44,14 @@ struct garbage_collect_test  {
 
       pester_server_with_new_friends(client, 14);
 
-      std::this_thread::sleep_for(std::chrono::seconds(2)); 
+      std::this_thread::sleep_for(std::chrono::seconds(2));
       test_object_proxy thing(client);
       TS_ASSERT_EQUALS(server.num_registered_objects(), 2); // client and thing
 
       std::shared_ptr<test_object_proxy> thing2 = std::make_shared<test_object_proxy>(client);
 
       // Test to see if server-created objects are created and deleted correctly
-      std::shared_ptr<test_object_proxy> p = 
+      std::shared_ptr<test_object_proxy> p =
           std::dynamic_pointer_cast<test_object_proxy>(thing - thing2);
       ASSERT_NE(p.get(), NULL);
       TS_ASSERT_EQUALS(server.num_registered_objects(), 4); // client, thing, thing2, and p
@@ -70,7 +70,7 @@ struct garbage_collect_test  {
       // Failed client and reconnect
       client.stop();
 
-      cppipc::comm_client next_client({}, server_ipc_file); 
+      cppipc::comm_client next_client({}, server_ipc_file);
 
       // New client
       next_client.start();

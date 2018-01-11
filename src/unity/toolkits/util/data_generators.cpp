@@ -49,7 +49,7 @@ lm_data_generator::lm_data_generator(
   dim = 0;
   for(int ncv : n_categorical_values)
     dim += ((ncv == 0) ? 1 : ncv);
-  
+
   w.resize(dim);
   V.resize(dim, n_factors);
   V.zeros();
@@ -99,23 +99,23 @@ sframe lm_data_generator::generate(size_t n_observations,
                                    double noise_sd) const {
 
   size_t n_columns = n_categorical_values.size();
-  DASSERT_EQ(n_categorical_values.size(), column_names.size()); 
+  DASSERT_EQ(n_categorical_values.size(), column_names.size());
 
   ////////////////////////////////////////////////////////////
   // Now go through and generate things
-      
+
   sframe out;
-  
+
   std::vector<flex_type_enum> types(n_columns);
-  
+
   for(size_t i = 0; i < n_columns; ++i)
     types[i] = (n_categorical_values[i] == 0) ? flex_type_enum::FLOAT : flex_type_enum::INTEGER;
 
   types.push_back(flex_type_enum::FLOAT);
-  
+
   std::vector<std::string> names = column_names;
   names.push_back(target_column_name);
-  
+
 
   //////////////////////////////
 
@@ -125,7 +125,7 @@ sframe lm_data_generator::generate(size_t n_observations,
   out.open_for_write(names, types, "", num_segments);
 
   in_parallel([&](size_t sidx, size_t num_threads) {
-    
+
       auto it_out = out.get_output_iterator(sidx);
 
       size_t start_idx = (sidx * n_observations) / num_threads;
@@ -156,7 +156,7 @@ sframe lm_data_generator::generate(size_t n_observations,
   out.close();
 
   ASSERT_EQ(out.num_rows(), n_observations);
-  
+
   return out;
 }
 
@@ -251,21 +251,21 @@ double lm_data_generator::evaluate(const std::vector<flexible_type>& x, double n
   double y = w0;
 
   size_t idx_start = 0;
-  size_t n_columns = n_categorical_values.size(); 
+  size_t n_columns = n_categorical_values.size();
 
   Vtemp.zeros();
 
-  double vcenter = 0; 
+  double vcenter = 0;
 
   for(size_t j = 0; j < n_columns; ++j) {
-    
+
     double v = x[j];
 
     if(n_categorical_values[j] == 0) {
       y += v * w[idx_start];
       Vtemp += v * V.row(idx_start);
       vcenter += arma::norm(v * V.row(idx_start), 2);
-      idx_start += 1; 
+      idx_start += 1;
     } else {
       y += w[idx_start + x[j]];
       Vtemp += V.row(idx_start + x[j]);

@@ -9,11 +9,11 @@ namespace turi {
 toolkit_class_base::~toolkit_class_base() { }
 
 std::vector<std::string> toolkit_class_base::list_keys() {
-  return {"list_functions", 
-    "call_function", 
+  return {"list_functions",
+    "call_function",
     "list_get_properties",
     "list_set_properties",
-    "set_property", 
+    "set_property",
     "get_property",
     "get_docstring",
     "__name__",
@@ -93,7 +93,7 @@ std::vector<std::string> toolkit_class_base::list_set_properties() {
   return ret;
 }
 
-variant_type toolkit_class_base::call_function(std::string function, 
+variant_type toolkit_class_base::call_function(std::string function,
                                                variant_map_type argument) {
   perform_registration();
   if (m_function_list.count(function)) {
@@ -121,8 +121,8 @@ variant_type toolkit_class_base::get_property(std::string property,
 
 /**
  * Sets a property.
- */ 
-variant_type toolkit_class_base::set_property(std::string property, 
+ */
+variant_type toolkit_class_base::set_property(std::string property,
                                                       variant_map_type argument) {
   perform_registration();
   if (m_set_property_list.count(property)) {
@@ -141,7 +141,7 @@ std::string toolkit_class_base::get_docstring(std::string symbol) {
 }
 
 
-void toolkit_class_base::register_function(std::string fnname, 
+void toolkit_class_base::register_function(std::string fnname,
                                            std::vector<std::string> arguments,
                                            std::function<variant_type(toolkit_class_base*, variant_map_type)> fn) {
 
@@ -152,7 +152,7 @@ void toolkit_class_base::register_function(std::string fnname,
   m_function_list[fnname] = fn;
 }
 
-void toolkit_class_base::register_defaults(std::string fnname, 
+void toolkit_class_base::register_defaults(std::string fnname,
                                            const variant_map_type& arguments) {
   m_function_default_args[fnname] = arguments;
 }
@@ -160,7 +160,7 @@ void toolkit_class_base::register_defaults(std::string fnname,
 /**
  * Adds a property setter with the specified name.
  */
-void toolkit_class_base::register_setter(std::string propname, 
+void toolkit_class_base::register_setter(std::string propname,
                                          std::function<variant_type(toolkit_class_base*, variant_map_type)> setfn) {
   m_set_property_list[propname] = setfn;
 }
@@ -168,7 +168,7 @@ void toolkit_class_base::register_setter(std::string propname,
 /**
  * Adds a property getter with the specified name.
  */
-void toolkit_class_base::register_getter(std::string propname, 
+void toolkit_class_base::register_getter(std::string propname,
                                          std::function<variant_type(toolkit_class_base*, variant_map_type)> getfn) {
   m_get_property_list[propname] = getfn;
 }

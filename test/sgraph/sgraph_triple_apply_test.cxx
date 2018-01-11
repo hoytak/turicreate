@@ -11,7 +11,7 @@
 
 using namespace turi;
 
-// Implement degree count function using triple_apply 
+// Implement degree count function using triple_apply
 std::vector<std::pair<flexible_type, flexible_type>> triple_apply_degree_count(
   sgraph& g, sgraph::edge_direction dir, bool use_batch_triple_apply_mock) {
 

@@ -46,7 +46,7 @@ class join_hash_table {
  public:
   typedef hash_join_row_t value_type;
 
-  /** 
+  /**
    * Constructor.  Takes a vector of hash positions, which are the column
    * numbers in each row that represent the values the join is on (or the join
    * keys).  These hash positions are for the frame that each row is added from.
@@ -102,7 +102,7 @@ class join_hash_table {
  * The hash_join_executor class executes a hash join.  It is only meant
  * to perform one join.  Could eventually inherit from a generic join class
  * and have further OOP design patterns to choose the algorithm (or just
- * different function calls).  Only one algorithm implemented thus far, 
+ * different function calls).  Only one algorithm implemented thus far,
  * so no need for that yet.
  */
 class hash_join_executor {

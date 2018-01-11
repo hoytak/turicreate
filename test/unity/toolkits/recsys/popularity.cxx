@@ -216,10 +216,10 @@ struct recsys_popularity_test  {
         {
           exclude_training_interactions = false;
 
-          sframe all_out = test_model->recommend(users_query, num_items, 
-                                                 restriction_sf, exclusion_sf, 
-                                                 new_observation_sf, 
-                                                 new_user_data, new_item_data, 
+          sframe all_out = test_model->recommend(users_query, num_items,
+                                                 restriction_sf, exclusion_sf,
+                                                 new_observation_sf,
+                                                 new_user_data, new_item_data,
                                                  exclude_training_interactions);
 
           std::vector<std::vector<flexible_type> > recommend_out = testing_extract_sframe_data(all_out);
@@ -245,10 +245,10 @@ struct recsys_popularity_test  {
         {
           sframe exclusion_sf = data;
 
-          sframe all_out = test_model->recommend(users_query, num_items, 
-                                                 restriction_sf, exclusion_sf, 
-                                                 new_observation_sf, 
-                                                 new_user_data, new_item_data, 
+          sframe all_out = test_model->recommend(users_query, num_items,
+                                                 restriction_sf, exclusion_sf,
+                                                 new_observation_sf,
+                                                 new_user_data, new_item_data,
                                                  exclude_training_interactions);
 
           std::vector<std::vector<flexible_type> > recommend_out = testing_extract_sframe_data(all_out);
@@ -276,12 +276,12 @@ struct recsys_popularity_test  {
         // training data, but still pass in the training data as "new"
         // data
         {
-          sframe new_observation_sf = data; 
+          sframe new_observation_sf = data;
           exclude_training_interactions = false;
 
-          sframe all_out = test_model->recommend(users_query, num_items, 
-                                                 restriction_sf, exclusion_sf, new_observation_sf, 
-                                                 new_user_data, new_item_data, 
+          sframe all_out = test_model->recommend(users_query, num_items,
+                                                 restriction_sf, exclusion_sf, new_observation_sf,
+                                                 new_user_data, new_item_data,
                                                  exclude_training_interactions);
 
           std::vector<std::vector<flexible_type> > recommend_out = testing_extract_sframe_data(all_out);
@@ -317,10 +317,10 @@ struct recsys_popularity_test  {
           {
 
             exclude_training_interactions = true;
-            sframe all_out = test_model->recommend(users_query, num_items, 
-                                                   inclusion_sf, exclusion_sf, 
-                                                   new_observation_sf, 
-                                                   new_user_data, new_item_data, 
+            sframe all_out = test_model->recommend(users_query, num_items,
+                                                   inclusion_sf, exclusion_sf,
+                                                   new_observation_sf,
+                                                   new_user_data, new_item_data,
                                                    exclude_training_interactions);
 
 
@@ -351,10 +351,10 @@ struct recsys_popularity_test  {
           /// Do it while not excluding the training data
           {
             exclude_training_interactions = false;
-            sframe all_out = test_model->recommend(users_query, num_items, 
-                                                   inclusion_sf, exclusion_sf, 
-                                                   new_observation_sf, 
-                                                   new_user_data, new_item_data, 
+            sframe all_out = test_model->recommend(users_query, num_items,
+                                                   inclusion_sf, exclusion_sf,
+                                                   new_observation_sf,
+                                                   new_user_data, new_item_data,
                                                    exclude_training_interactions);
 
             std::vector<std::vector<flexible_type> > recommend_out = testing_extract_sframe_data(all_out);
@@ -408,10 +408,10 @@ struct recsys_popularity_test  {
         sframe new_item_data = sframe();
         bool exclude_training_interactions = false;
 
-        sframe ranked_items = test_model->recommend(user_sf, k, 
-                                                    restriction_sf, exclusion_sf, 
-                                                    new_observation_sf, 
-                                                    new_user_data, new_item_data, 
+        sframe ranked_items = test_model->recommend(user_sf, k,
+                                                    restriction_sf, exclusion_sf,
+                                                    new_observation_sf,
+                                                    new_user_data, new_item_data,
                                                     exclude_training_interactions);
 
         sframe unindexed_ranked_items = v2::map_from_custom_indexed_sframe(

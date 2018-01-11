@@ -16,5 +16,3 @@ while (<>)
 $out =~ s/\s//g;
 $out =~ s/(.{64})/$1\n/g;
 print "$first$out\n$last\n";
-
-

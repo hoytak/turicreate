@@ -26,12 +26,12 @@ namespace CoreML {
     Result validate<MLModelType_treeEnsembleRegressor>(const Specification::Model& format) {
         try {
             TreeEnsembles::constructAndValidateTreeEnsembleFromSpec(format);
-            
+
         } catch (const std::logic_error& error) {
             return Result(ResultType::INVALID_MODEL_INTERFACE, error.what());
         }
-        
+
         return Result();
     }
-    
+
 }

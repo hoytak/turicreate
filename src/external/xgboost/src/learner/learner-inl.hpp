@@ -18,7 +18,7 @@
 #include "./objective.h"
 #include "./evaluation.h"
 
-// GLC parallel lambda premitive 
+// GLC parallel lambda premitive
 #include <parallel/lambda_omp.hpp>
 #include <parallel/pthread_tools.hpp>
 
@@ -235,7 +235,7 @@ class BoostLearner : public rabit::Serializable {
   inline void LoadLegacyModel(utils::IStream &fi,  // NOLINT(*)
                               bool calc_num_feature = true) {
 
-    LegacyModelParam legacy_model_param; 
+    LegacyModelParam legacy_model_param;
     utils::Check(fi.Read(&legacy_model_param, sizeof(LegacyModelParam)) != 0,
                  "BoostLearner: wrong model format");
     mparam.base_score = (float)(legacy_model_param.base_score);

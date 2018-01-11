@@ -14,7 +14,7 @@ static size_t cur_port = ZSOCKET_DYNFROM;
 
 EXPORT size_t get_next_port_number() {
   size_t ret = cur_port;
-  cur_port = (cur_port + 1) <= ZSOCKET_DYNTO ? 
+  cur_port = (cur_port + 1) <= ZSOCKET_DYNTO ?
                                 (cur_port + 1) : ZSOCKET_DYNFROM;
   return ret;
 }

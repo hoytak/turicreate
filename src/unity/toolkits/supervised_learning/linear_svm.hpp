@@ -39,7 +39,7 @@ class EXPORT linear_svm: public supervised_learning_model_base {
   arma::vec  coefs;    /**< Primal sol */
   std::shared_ptr<linear_svm_scaled_logistic_opt_interface>
                                           scaled_logistic_svm_interface;
-  
+
   public:
 
   static constexpr size_t SVM_MODEL_VERSION = 5;
@@ -47,29 +47,29 @@ class EXPORT linear_svm: public supervised_learning_model_base {
    * Destructor. Make sure bad things don't happen
    */
   virtual ~linear_svm();
-  
+
   /**
    * Set the default evaluation metric during model evaluation..
    */
   void set_default_evaluation_metric(){
     set_evaluation_metric({
-        "accuracy", 
+        "accuracy",
         "confusion_matrix",
-        "f1_score", 
-        "precision", 
-        "recall",  
-        }); 
+        "f1_score",
+        "precision",
+        "recall",
+        });
   }
-  
+
   /**
    * Set the default evaluation metric for progress tracking.
    */
   void set_default_tracking_metric(){
     set_tracking_metric({
-        "accuracy", 
-       }); 
+        "accuracy",
+       });
   }
-  
+
   /**
    * Internal init after the ml_data is built.
    *
@@ -77,7 +77,7 @@ class EXPORT linear_svm: public supervised_learning_model_base {
    * \param[in] valid_data  Validation data
    *
    */
-  void model_specific_init(const ml_data& data, 
+  void model_specific_init(const ml_data& data,
                            const ml_data& valid_data);
 
   /**
@@ -115,7 +115,7 @@ class EXPORT linear_svm: public supervised_learning_model_base {
 
 
   /**
-   * Predict for a single example. 
+   * Predict for a single example.
    *
    * \param[in] x  Single example.
    * \param[in] output_type Type of prediction.
@@ -123,11 +123,11 @@ class EXPORT linear_svm: public supervised_learning_model_base {
    * \returns Prediction for a single example.
    *
    */
-  flexible_type predict_single_example(const DenseVector& x, 
+  flexible_type predict_single_example(const DenseVector& x,
           const prediction_type_enum& output_type=prediction_type_enum::NA);
-  
+
   /**
-   * Predict for a single example. 
+   * Predict for a single example.
    *
    * \param[in] x  Single example.
    * \param[in] output_type Type of prediction.
@@ -135,7 +135,7 @@ class EXPORT linear_svm: public supervised_learning_model_base {
    * \returns Prediction for a single example.
    *
    */
-  flexible_type predict_single_example(const SparseVector& x, 
+  flexible_type predict_single_example(const SparseVector& x,
           const prediction_type_enum& output_type=prediction_type_enum::NA);
 
   /**
@@ -147,14 +147,14 @@ class EXPORT linear_svm: public supervised_learning_model_base {
    *
    * \note Already assumes that data is of the right shape.
    */
-  sframe classify(const ml_data& test_data, 
+  sframe classify(const ml_data& test_data,
                   const std::string& output_type="");
 
   /**
    * Fast path predictions given a row of flexible_types
    *
    * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] output_type Output type. 
+   * \param[in] output_type Output type.
    */
   gl_sframe fast_classify(
       const std::vector<flexible_type>& rows,
@@ -167,16 +167,15 @@ class EXPORT linear_svm: public supervised_learning_model_base {
     _coefs.resize(coefs.size());
     _coefs = coefs;
   }
-  
+
   void export_to_coreml(const std::string& filename);
 
   SUPERVISED_LEARNING_METHODS_REGISTRATION(
-      "classifier_svm", linear_svm); 
- 
+      "classifier_svm", linear_svm);
+
 };
 
 } // supervised
 } // turicreate
 
 #endif
-

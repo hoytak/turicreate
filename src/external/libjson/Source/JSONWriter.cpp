@@ -128,9 +128,9 @@ void internalJSONNode::WriteChildren(unsigned int indent, json_string & output) 
 	   if (indent == 0xFFFFFFFF) return;
 	   if (json_likely(_comment.empty())) return;
 	   size_t pos = _comment.find(JSON_TEXT('\n'));
-		
+
 	   const json_string current_indent(json_global(NEW_LINE) + makeIndent(indent));
-		
+
 	   if (json_likely(pos == json_string::npos)){  //Single line comment
 		   output += current_indent;
 		   output += json_global(SINGLELINE_COMMENT);
@@ -155,7 +155,7 @@ void internalJSONNode::WriteChildren(unsigned int indent, json_string & output) 
 			 output += json_global(SINGLELINE_COMMENT);
 		  #endif
 		  output.append(_comment.begin() + old, _comment.begin() + pos);
-		  
+
 		  #if defined(JSON_WRITE_BASH_COMMENTS) || defined(JSON_WRITE_SINGLE_LINE_COMMENTS)
 			 output += current_indent;
 		  #else
@@ -195,7 +195,7 @@ void internalJSONNode::DumpRawString(json_string & output) const json_nothrow {
 void internalJSONNode::Write(unsigned int indent, bool arrayChild, json_string & output) const json_nothrow {
     const bool formatted = indent != 0xFFFFFFFF;
 	WriteComment(indent, output);
-	
+
     #if !defined(JSON_PREPARSE) && defined(JSON_READ_PRIORITY)
 	   if (!(formatted || fetched)){  //It's not formatted or fetched, just do a raw dump
 		   WriteName(false, arrayChild, output);
@@ -242,7 +242,7 @@ void internalJSONNode::Write(unsigned int indent, bool arrayChild, json_string &
 	#endif
 			output += JSON_TEXT("\"");
 			JSONWorker::UnfixString(_string, _string_encoded, output);  //It's already been fetched, meaning that it's unescaped
-			output += JSON_TEXT("\"");  
+			output += JSON_TEXT("\"");
 	#if !defined(JSON_PREPARSE) && defined(JSON_READ_PRIORITY)
 		} else {
 			DumpRawString(output);  //it hasn't yet been fetched, so it's already unescaped, just do a dump

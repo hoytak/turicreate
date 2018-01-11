@@ -10,10 +10,10 @@
 namespace turi {
 namespace archive_detail {
 
-  /** SFINAE method to detect if a class T 
+  /** SFINAE method to detect if a class T
    * implements a function void T::save(ArcType&) const
-   * 
-   * If T implements the method, has_save_method<ArcType,T>::value will be 
+   *
+   * If T implements the method, has_save_method<ArcType,T>::value will be
    * true. Otherwise it will be false
    */
   template<typename ArcType, typename T>
@@ -29,34 +29,33 @@ namespace archive_detail {
    *  save_or_fail<ArcType, T>(arc, t)
    *  will call this version of the function if
    *  T implements void T::save(ArcType&) const.
-   *  
+   *
    * save_or_fail<ArcType, T>(arc, t) will therefore save the class successfully
-   * if T implements the save function correctly. Otherwise, calling 
+   * if T implements the save function correctly. Otherwise, calling
    * save_or_fail will print an error message.
    */
   template <typename ArcType, typename ValueType>
-  typename std::enable_if<has_save_method<ArcType, ValueType>::value, void>::type 
-  save_or_fail(ArcType& o, const ValueType &t) { 
+  typename std::enable_if<has_save_method<ArcType, ValueType>::value, void>::type
+  save_or_fail(ArcType& o, const ValueType &t) {
     t.save(o);
   }
- 
+
   /**
    *  save_or_fail<ArcType, T>(arc, t)
    *  will call this version of the function if
-   *  
+   *
    * save_or_fail<ArcType, T>(arc, t) will therefore save the class successfully
-   * if T implements the save function correctly. Otherwise, calling 
+   * if T implements the save function correctly. Otherwise, calling
    * save_or_fail will print an error message.
    * T does not implement void T::save(ArcType&) const.
    */
   template <typename ArcType, typename ValueType>
-  typename std::enable_if<!has_save_method<ArcType, ValueType>::value, void>::type 
-  save_or_fail(ArcType& o, const ValueType &t) { 
-    ASSERT_MSG(false,"Trying to serializable type %s without valid save method.", typeid(ValueType).name()); 
+  typename std::enable_if<!has_save_method<ArcType, ValueType>::value, void>::type
+  save_or_fail(ArcType& o, const ValueType &t) {
+    ASSERT_MSG(false,"Trying to serializable type %s without valid save method.", typeid(ValueType).name());
   }
- 
+
 }  // archive_detail
 }  // turicreate
 
 #endif
-

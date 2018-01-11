@@ -1,12 +1,12 @@
-# Decision Tree Regression 
-The decision tree is a simple machine learning model for getting started 
-with regression tasks. 
+# Decision Tree Regression
+The decision tree is a simple machine learning model for getting started
+with regression tasks.
 
 ##### Background
 A decision tree is a flow-chart-like structure, where each internal (non-leaf)
 node denotes a test on an attribute, each branch represents the outcome of a
 test, and each leaf (or terminal) node holds a class label. The topmost node
-in a tree is the root node. (see [here](https://en.wikipedia.org/wiki/Decision_tree_learning) 
+in a tree is the root node. (see [here](https://en.wikipedia.org/wiki/Decision_tree_learning)
 for more details).
 
 ##### Introductory Example

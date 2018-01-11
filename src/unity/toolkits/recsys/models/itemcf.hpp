@@ -10,7 +10,7 @@
 #include <string>
 #include <unity/toolkits/recsys/recsys_model_base.hpp>
 #include <generics/symmetric_2d_array.hpp>
-#include <unity/toolkits/options/option_manager.hpp> 
+#include <unity/toolkits/options/option_manager.hpp>
 
 #include <numerics/armadillo.hpp>
 #include <limits>
@@ -52,15 +52,15 @@ namespace recsys {
  * {\sqrt{\sum_{k} r_{ka}^2} \sqrt{\sum_{k} r_{kb}^2}} \f]
  *
  * Pearson Correlation similarity:
- * A problem with Cosine similarity measure is that it does not consider the 
+ * A problem with Cosine similarity measure is that it does not consider the
  * differences in the mean and variance of the ratings of items a and b.
  * Pearson Correlation is a popular measure where the effects of mean and variance
- * have been removed. 
- * Let \f$ u(a,b) = \{k: (k,a) \in E and (k,b) \in E\} \f$ denote the set of users who 
+ * have been removed.
+ * Let \f$ u(a,b) = \{k: (k,a) \in E and (k,b) \in E\} \f$ denote the set of users who
  * rated both items a and b.
  * \f[ d(a,b) = \frac{\sum_{k \in u(a,b)} (r_{ka} - \bar{r}_a) * (r_{kb} - \bar{r}_b)}
  * {\sqrt{\sum_{k \in u(a,b)} (r_{ka} - \bar{r}_a)^2} \sqrt{\sum_{k \in u(a,b)} (r_{kb} - \bar{r}_b)^2}} \f]
- * 
+ *
  * =============================================================
  * Implementation details:
  *
@@ -77,15 +77,15 @@ namespace recsys {
  *    The distance is computed as: \f$ d(i,j) = \frac{C(i,j)}{\sqrt{C(i)C(j)}} \f$
  *
  * - Pearson Correlation similarity is implemented using three statistics.
- *   -# C(i) : the variance of ratings given to item i. 
+ *   -# C(i) : the variance of ratings given to item i.
  *   -# C(i,j) : the sum of correlation score by all users who rated both items i and j
- *   . 
+ *   .
  *    The final similarity is computed by: \f$ d(i,j) = \frac{C(i,j)}{\sqrt{C(i)C(j)}} \f$
- * 
+ *
  * Details of computing item similarities:
  *
  * 1. Get the individual statistics of items C(i)
- * 2. For each pair of items i and j that both rated by user u, update the overlapping 
+ * 2. For each pair of items i and j that both rated by user u, update the overlapping
  *    statistics C(i,j).
  * 3. Get the final score matrix by normalizing C(i,j) with individual statistics
  * 4. Sort each row of the score matrix to get top-k similar items
@@ -132,7 +132,7 @@ class recsys_itemcf : public recsys_model_base {
    * item in question.
    */
   sframe predict(const v2::ml_data& test_data) const;
-  
+
   std::vector<double> predict_all_items(
       const std::vector<flexible_type>& base_observation) const;
 
@@ -141,10 +141,10 @@ private:
   mutable std::vector<std::vector<std::pair<size_t, double> > > user_item_buffers_by_thread;
   mutable mutex init_user_item_buffers_lock;
 
-  // The internal function for calling the score. 
-  void _score_items(std::vector<std::pair<size_t, double> >& item_scores, 
+  // The internal function for calling the score.
+  void _score_items(std::vector<std::pair<size_t, double> >& item_scores,
                     const std::vector<std::pair<size_t, double> >& user_scores) const;
-  
+
 public:
   /** For a given base observation, predict the score for all the
    * items with all non-item columns replaced by the values in the
@@ -163,7 +163,7 @@ public:
       const std::vector<std::pair<size_t, double> >& new_user_item_data,
       const std::vector<v2::ml_data_row_reference>& new_observation_data,
       const std::shared_ptr<v2::ml_data_side_features>& known_side_features) const;
-  
+
  /**
    * Utilities
    */
@@ -184,16 +184,16 @@ public:
 
   // For completely new users, keep track of some of the popular items
   // and use these to seed predictions for them.  in addition, the
-  // mean score is also dealt with. 
+  // mean score is also dealt with.
   std::vector<std::pair<size_t, double> > new_user_seed_items;
   std::vector<double> item_mean_score;
-  double item_mean_min=0, item_mean_max=0; 
-  
+  double item_mean_min=0, item_mean_max=0;
+
  public:
 
   /**
    *  Get the nearest neighbors of a set of items.
-   *  
+   *
    *  \param[in] indexed_items A SArray of items in flexible_type
    *  \param[in] topk Number of neighbors returned for each item
    *  \returns A SFrame with columns {"item", "similar", "score", "rank"}
@@ -211,26 +211,24 @@ public:
     log_and_throw("get_similar_users currently not supported for item similarity models. "
                   "To get the neighborhood of users, train a model with the items and users reversed, "
                   "then call get_similar_items.");
-    
+
     return sframe();
   }
-  
+
  private:
-  
+
   void make_user_item_graph(const v2::ml_data& data,
                             const std::shared_ptr<sarray<flex_dict> >& user_item_lists,
                             sgraph& g);
 
   std::shared_ptr<sparse_similarity_lookup> create_similarity_lookup() const;
- 
- public: 
+
+ public:
   // TODO: convert interface above to use the extensions methods here
   BEGIN_CLASS_MEMBER_REGISTRATION("item_similarity")
   END_CLASS_MEMBER_REGISTRATION
-}; 
+};
 
 }}
 
 #endif
-
-

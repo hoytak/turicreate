@@ -34,8 +34,8 @@ struct issue_test {
     // intentionally write a wrong type. It should cast correctly
     // by the issuer
     cppipc::issue(message, &test::add, (char)20);
-    
-    // parse the issued message 
+
+    // parse the issued message
     turi::iarchive read_message(message_stream);
     size_t arg1;
     read_message >> arg1;
@@ -51,8 +51,8 @@ struct issue_test {
     // by the issuer
     cppipc::issue(message, &test::add_more, (char)20, int(20), long(30), (unsigned int)(40));
 
-    
-    // parse the issued message 
+
+    // parse the issued message
     turi::iarchive read_message(message_stream);
     size_t arg1, arg2, arg3, arg4;
     read_message >> arg1 >> arg2 >> arg3 >> arg4;
@@ -71,8 +71,8 @@ struct issue_test {
     // by the issuer
     cppipc::issue(message, &test::add_one, "hello");
 
-    
-    // parse the issued message 
+
+    // parse the issued message
     turi::iarchive read_message(message_stream);
     std::string s;
     read_message >> s;

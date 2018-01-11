@@ -31,7 +31,6 @@ namespace archive_detail {
     deserialize_iterator<InArcType, T>(iarc, std::inserter(vec,vec.end()));
   }
   };
-} // archive_detail  
+} // archive_detail
 } // turicreate
-#endif 
-
+#endif

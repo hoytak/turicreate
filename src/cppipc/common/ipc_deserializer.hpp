@@ -23,10 +23,10 @@ extern std::shared_ptr<void> get_server_object_ptr(comm_server* server, size_t o
 } // cppipc
 
 
-// This is using an undocumented feature of the serializer to overwrite the 
+// This is using an undocumented feature of the serializer to overwrite the
 // deserializer for when attempting to deserialize T where T inherits from
 // ipc_object_base. This will allow me to transport proxied objects
-// across the network, even if the proxied object is stored inside another 
+// across the network, even if the proxied object is stored inside another
 // object.
 namespace turi {
 namespace archive_detail {
@@ -46,7 +46,7 @@ template <typename OutArcType, typename T>
 struct serialize_impl<OutArcType, std::shared_ptr<T>, false,
     typename std::enable_if<std::is_convertible<T*, cppipc::ipc_object_base*>::value>::type
     > {
-  inline static 
+  inline static
       void
       exec(OutArcType& oarc, const std::shared_ptr<T> value) {
     // check that the object has been registered on the server size
@@ -67,7 +67,7 @@ template <typename InArcType, typename T>
 struct deserialize_impl<InArcType, std::shared_ptr<T>, false,
     typename std::enable_if<std::is_convertible<T*, cppipc::ipc_object_base*>::value>::type
     > {
-  inline static 
+  inline static
       void exec(InArcType& iarc, std::shared_ptr<T>& value) {
     cppipc::comm_server* server;
     cppipc::comm_client* client;

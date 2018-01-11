@@ -105,7 +105,7 @@ The next example digests data by reading through a chain instead:
  BIO_set_md(mdtmp, EVP_md5());
  bio = BIO_push(mdtmp, bio);
  do {
- 	rdlen = BIO_read(bio, buf, sizeof(buf));
+	rdlen = BIO_read(bio, buf, sizeof(buf));
         /* Might want to do something with the data here */
  } while(rdlen > 0);
 
@@ -119,7 +119,7 @@ outputs them. This could be used with the examples above.
  mdtmp = bio;	/* Assume bio has previously been set up */
  do {
 	EVP_MD *md;
- 	mdtmp = BIO_find_type(mdtmp, BIO_TYPE_MD);
+	mdtmp = BIO_find_type(mdtmp, BIO_TYPE_MD);
         if(!mdtmp) break;
 	BIO_get_md(mdtmp, &md);
         printf("%s digest", OBJ_nid2sn(EVP_MD_type(md)));

@@ -31,7 +31,7 @@ namespace sgraph_compute {
  * This performs a parallel sweep over an n*n grid following the Hilbert
  * curve ordering. The parallel sweep is broken into two parts. A "preamble"
  * callback which is called sequentially, which contains a list of all the
- * coordinates to be executed in the next pass, and a function which is 
+ * coordinates to be executed in the next pass, and a function which is
  * executed on every coordinate in the pass.
  *
  * The function abstractly implements the following:
@@ -42,17 +42,17 @@ namespace sgraph_compute {
  *   std::vector<pair<size_t, size_t> > coordinates
  *   for j = i to min(i + parallel_limit, n*n)
  *      coordinates.push_back(convert_hilbert_curve_to_coordinates(j))
- *   // run the preamble   
+ *   // run the preamble
  *   preamble(coordinates)
  *
  *   parallel for over coordinate in coordinates:
  *      fn(coordinate)
- * \endcode  
+ * \endcode
  *
  * n must be at least 2 and a power of 2.
  */
 inline void hilbert_blocked_parallel_for(size_t n,
-                                  std::function<void(std::vector<std::pair<size_t, size_t> >) > preamble, 
+                                  std::function<void(std::vector<std::pair<size_t, size_t> >) > preamble,
                                   std::function<void(std::pair<size_t, size_t>)> fn,
                                   size_t parallel_limit = SGRAPH_HILBERT_CURVE_PARALLEL_FOR_NUM_THREADS) {
   for (size_t i = 0;i < n*n; i += parallel_limit) {
@@ -71,7 +71,7 @@ inline void hilbert_blocked_parallel_for(size_t n,
  * Non blocking version.
  */
 inline void hilbert_parallel_for(size_t n,
-                                 std::function<void(std::vector<std::pair<size_t, size_t> >) > preamble, 
+                                 std::function<void(std::vector<std::pair<size_t, size_t> >) > preamble,
                                  std::function<void(std::pair<size_t, size_t>)> fn) {
 
   blocking_queue<std::pair<size_t, size_t> > coordinates_queue;

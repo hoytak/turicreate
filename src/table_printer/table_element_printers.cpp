@@ -162,21 +162,21 @@ void _print_flexible_type(std::ostringstream& ss, size_t width, const flexible_t
 
     case flex_type_enum::FLOAT:
       _print_double(ss, width, t.get<double>());
-      return; 
+      return;
 
     case flex_type_enum::INTEGER:
       _print_long(ss, width, t.get<flex_int>());
-      return; 
+      return;
 
     case flex_type_enum::STRING:
       _print_string(ss, width, t.get<flex_string>());
       return;
-      
+
     default:
       _print_string(ss, width, std::string(t));
       return;
   }
 }
 
-  
+
 }}

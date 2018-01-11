@@ -138,7 +138,7 @@ void subscribe_socket::connect(std::string objectkey) {
     // TODO check return value
     std::string local_address = normalize_address(pi.server);
     zmq_connect(z_socket, local_address.c_str());
-  } 
+  }
   publishers.push_back(pi);
 }
 
@@ -224,4 +224,3 @@ void subscribe_socket::remove_from_pollset() {
 }
 
 } // namespace libfault
-

@@ -28,7 +28,7 @@
 // 1. Performance improvement for Sparse gradients.
 
 namespace turi {
-  
+
 namespace optimization {
 
 
@@ -42,7 +42,7 @@ namespace optimization {
  *
  * Solve a first_order_optimization_iterface model with an LBFGS
  * implementation.
- * 
+ *
  * The implementation is based on Algorithm 7.4 (pg 178) of [1].
  *
  *  This subroutine solves an unconstrained minimization problem
@@ -57,18 +57,18 @@ namespace optimization {
  *  The algorithm is described in [2].
  *
  *  The user is required to calculate the function value and its
- *  gradient. 
+ *  gradient.
  *
  *  The steplength is determined at each iteration by means of the
  *  line search routine MCVSRCH, which is a slight modification of
  *  the routine CSRCH written by More' and Thuente.
  *
- * 
+ *
  * References:
  *
- * (1) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2. 
+ * (1) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2.
  *                         New York: Springer, 1999.
- *  
+ *
  * (2) "On the limited memory BFGS method for large scale optimization", by D.
  * Liu and J. Nocedal, Mathematical Programming B 45 (1989) 503-528.
  *
@@ -81,22 +81,22 @@ namespace optimization {
  *
 */
 template <typename Vector = DenseVector>
-inline solver_return lbfgs(first_order_opt_interface& model, 
-    const DenseVector& init_point, 
+inline solver_return lbfgs(first_order_opt_interface& model,
+    const DenseVector& init_point,
     std::map<std::string, flexible_type>& opts,
-    const std::shared_ptr<smooth_regularizer_interface> reg=NULL){ 
+    const std::shared_ptr<smooth_regularizer_interface> reg=NULL){
 
-    // Benchmarking utils. 
+    // Benchmarking utils.
     timer t;
     double start_time = t.current_time();
 
     logprogress_stream << "Starting L-BFGS " << std::endl;
-    logprogress_stream 
-         << "--------------------------------------------------------" 
+    logprogress_stream
+         << "--------------------------------------------------------"
          << std::endl;
     std::stringstream ss;
     ss.str("");
-    
+
     // Step 1: Algorithm init
     // ------------------------------------------------------------------------
     // Check that all solver options are present.
@@ -105,7 +105,7 @@ inline solver_return lbfgs(first_order_opt_interface& model,
     double step_size = 1.0 / model.num_examples(); // Esimate of Lipshipz
     int iters = 0;
 
-    // Print status 
+    // Print status
     table_printer printer(
         model.get_status_header({"Iteration", "Passes", "Step size", "Elapsed Time"}));
     printer.print_header();
@@ -115,14 +115,14 @@ inline solver_return lbfgs(first_order_opt_interface& model,
 
     solver_return stats;
 
-    // Keep track of previous point 
+    // Keep track of previous point
     DenseVector point = init_point;
     DenseVector delta_point = point;
     delta_point.zeros();
-    
+
     // First compute the gradient. Sometimes, you already have the solution
     // during the starting point. In these settings, you don't want to waste
-    // time performing the step. 
+    // time performing the step.
     Vector gradient(point.size());
     DenseVector reg_gradient(point.size());
     DenseVector delta_grad = gradient;
@@ -142,16 +142,16 @@ inline solver_return lbfgs(first_order_opt_interface& model,
     bool tune_step_size = true;
 
     // LBFGS storage
-    // The search steps and gradient differences are stored in a order 
+    // The search steps and gradient differences are stored in a order
     // controlled by the start point.
-    DenseMatrix y(n,m);          // Step difference (prev m iters) 
-    DenseMatrix s(n,m);          // Gradient difference (prev m iters) 
+    DenseMatrix y(n,m);          // Step difference (prev m iters)
+    DenseMatrix s(n,m);          // Gradient difference (prev m iters)
     DenseVector H0(n);           // Init Diagonal matrix (stores as a vector)
     DenseVector q(n);            // Storage required for the 2-loop recursion
     DenseVector r(n);            // Storage required for the 2-loop recursion
     double beta;                 // Storage required for the 2-loop recursion
     double gamma;                // Scaling factor of Initial hessian
-    DenseVector rho(m);          // Scaling factors (prev m iters) 
+    DenseVector rho(m);          // Scaling factors (prev m iters)
     DenseVector alpha(m);        // Step sizes (prev m iters)
 
     int start_point = -1;
@@ -164,7 +164,7 @@ inline solver_return lbfgs(first_order_opt_interface& model,
     alpha.zeros();
     beta = 0;
     gamma = 0;
-    
+
 
     // Nan Checking!
     if (!std::isfinite(residual)) {
@@ -173,8 +173,8 @@ inline solver_return lbfgs(first_order_opt_interface& model,
 
     // Step 2: Algorithm starts here
     // ------------------------------------------------------------------------
-    // While not converged  
-    ls_return ls_stats; 
+    // While not converged
+    ls_return ls_stats;
     while((residual >= convergence_threshold) && (size_t(iters) < iter_limit)){
 
       // Perform gradient descent in the first iteration
@@ -185,15 +185,15 @@ inline solver_return lbfgs(first_order_opt_interface& model,
         if (reg != NULL)
           reg_func = reg->compute_function_value(point);
 
-        ls_stats = more_thuente(model, 
+        ls_stats = more_thuente(model,
                                 step_size,
-                                func_value + reg_func, 
-                                point, 
-                                gradient, 
+                                func_value + reg_func,
+                                point,
+                                gradient,
                                 -gradient,
                                 reg);
 
-        // Add info from line search 
+        // Add info from line search
         stats.func_evals += ls_stats.func_evals;
         stats.gradient_evals += ls_stats.gradient_evals;
         stats.num_passes += ls_stats.num_passes;
@@ -210,27 +210,27 @@ inline solver_return lbfgs(first_order_opt_interface& model,
       // Two loop recursion to compute the direction
       // Algorithm 7.4 of Reference [1]
       }else{
-        
+
         q = gradient;
-        
+
         /**
-         *  Data is stored in a cyclic format using the following indexiing:  
-         * 
+         *  Data is stored in a cyclic format using the following indexiing:
+         *
          *   Iteration              Storage location
          *  *****************************************************
          *     iter-1               start_point
          *     iter-2               (start_point + 1) % m
          *      ...                  ...
          *     iter-m               (start_point + m - 1) % m
-         * 
+         *
         **/
         for (int j = 0; j <= std::min(iters, m-1); j++){
           int i = (start_point + j) % m;
           alpha(i) = rho(i) * dot(s.col(i),q);
           q = q - alpha(i) * y.col(i);
         }
-        
-        // Scaling factor according to Pg 178 of [1]. This ensures that the 
+
+        // Scaling factor according to Pg 178 of [1]. This ensures that the
         // problem is better scaled and that a step size of 1 is mostly accepted.
         gamma = 1 / (squared_norm(y.col(start_point)) * rho(start_point));
         r = gamma * (arma::diagmat(H0) * q);
@@ -246,18 +246,18 @@ inline solver_return lbfgs(first_order_opt_interface& model,
           reg_func = reg->compute_function_value(point);
 
         if (tune_step_size == true){
-          ls_stats = more_thuente(model, 
+          ls_stats = more_thuente(model,
                                  1,
-                                 func_value + reg_func, 
-                                 point, 
-                                 gradient, 
+                                 func_value + reg_func,
+                                 point,
+                                 gradient,
                                  -r,
                                  reg);
-          // Add info from line search 
+          // Add info from line search
           stats.func_evals += ls_stats.func_evals;
           stats.gradient_evals += ls_stats.gradient_evals;
           stats.num_passes += ls_stats.num_passes;
-          
+
           // Line search failed
           if (ls_stats.status == false){
             stats.status = OPTIMIZATION_STATUS::OPT_LS_FAILURE;
@@ -270,7 +270,7 @@ inline solver_return lbfgs(first_order_opt_interface& model,
         point = point + delta_point;
 
       }
-      
+
       // Numerical error: Insufficient progress.
       if (arma::norm(delta_point, 2) <= OPTIMIZATION_ZERO){
         stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_ERROR;
@@ -298,32 +298,32 @@ inline solver_return lbfgs(first_order_opt_interface& model,
         stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_ERROR;
         break;
       }
-      
-          
+
+
       if(func_value > fprevious){
         tune_step_size = true;
       }
       fprevious = func_value;
 
-      
+
       // Store the previous gradient difference, step difference and rho
       start_point = (start_point + 1) % m;
       s.col(start_point) = delta_point;
       y.col(start_point) = delta_grad;
       rho(start_point) = 1/ (dot(delta_point, delta_grad));
       iters++;
-      
-      // Log info for debugging. 
-      logstream(LOG_INFO) << "Iters  (" << iters << ") " 
-                          << "Passes (" << stats.num_passes << ") " 
-                          << "Residual (" << residual << ") " 
-                          << "Loss (" << func_value << ") " 
+
+      // Log info for debugging.
+      logstream(LOG_INFO) << "Iters  (" << iters << ") "
+                          << "Passes (" << stats.num_passes << ") "
+                          << "Residual (" << residual << ") "
+                          << "Loss (" << func_value << ") "
                           << std::endl;
 
       // Print progress
-      auto stat_info = {std::to_string(iters), 
+      auto stat_info = {std::to_string(iters),
                         std::to_string(stats.num_passes),
-                        std::to_string(ls_stats.step_size), 
+                        std::to_string(ls_stats.step_size),
                         std::to_string(t.current_time())};
 
       auto row = model.get_status(point, stat_info);
@@ -353,7 +353,7 @@ inline solver_return lbfgs(first_order_opt_interface& model,
     stats.solve_time = t.current_time() - start_time;
     stats.solution = point;
     stats.progress_table = printer.get_tracked_table();
-    
+
     // Display solver stats
     log_solver_summary_stats(stats);
 
@@ -366,5 +366,4 @@ inline solver_return lbfgs(first_order_opt_interface& model,
 /// \}
 } // turicreate
 
-#endif 
-
+#endif

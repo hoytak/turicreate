@@ -9,7 +9,7 @@
 #include <numerics/armadillo.hpp>
 // ML-Data & options manager
 #include <unity/toolkits/ml_data_2/ml_data.hpp>
-#include <unity/toolkits/options/option_manager.hpp> 
+#include <unity/toolkits/options/option_manager.hpp>
 #include <table_printer/table_printer.hpp>
 
 // Factorization model impl
@@ -25,7 +25,7 @@ namespace recsys {
 namespace als {
 
 // Typedefs
-typedef factorization::factorization_model_impl 
+typedef factorization::factorization_model_impl
    <factorization::model_factor_mode::matrix_factorization, factorization::DYNAMIC> model_type;
 typedef row_major_matrix<float> DenseMatrix;
 typedef arma::fvec DenseVector;
@@ -37,17 +37,17 @@ typedef arma::fvec DenseVector;
 * user_mapping creates a mapping from the user-id of the second metadata
 * to the user-id of the first metadata. Likewise, the item-mapping does
 * the same.
-* 
+*
 * This is required because there are 2 ml_data objects needed for this method.
 * The first is sorted by user, while the second is sorted by item. However,
 * they do not share the same metadata. We need to make sure that the index
-* for each user and item are the same when iterating over both the 
+* for each user and item are the same when iterating over both the
 * ml_datas.
-* 
+*
 * The master metadata is the one saved in ml_data_sorted_by_user, the
 * item_mapping and user_mapping map the indices from ml_data_sorted_by_index
 * to the ml_data_sorted_by_user
-* 
+*
 *
 * \param[in] training_data_by_user  ml-data sorted by user
 * \param[in] training_data_by_item  ml-data sorted by item
@@ -56,30 +56,30 @@ typedef arma::fvec DenseVector;
 *
 */
 void get_common_user_item_local_index_mapping(
-                                  const v2::ml_data& training_data_by_user,  
-                                  const v2::ml_data& training_data_by_item,  
+                                  const v2::ml_data& training_data_by_user,
+                                  const v2::ml_data& training_data_by_item,
                                   std::vector<size_t>& user_mapping,
                                   std::vector<size_t>& item_mapping) {
 
   size_t num_users = training_data_by_user.metadata()->column_size(0);
   size_t num_items = training_data_by_user.metadata()->column_size(1);
-  std::shared_ptr<v2::ml_data_internal::column_indexer> user_index_sorted_by_user = 
+  std::shared_ptr<v2::ml_data_internal::column_indexer> user_index_sorted_by_user =
                              training_data_by_user.metadata()->indexer(0);
-  std::shared_ptr<v2::ml_data_internal::column_indexer> item_index_sorted_by_user = 
+  std::shared_ptr<v2::ml_data_internal::column_indexer> item_index_sorted_by_user =
                              training_data_by_user.metadata()->indexer(1);
-  std::shared_ptr<v2::ml_data_internal::column_indexer> user_index_sorted_by_item = 
+  std::shared_ptr<v2::ml_data_internal::column_indexer> user_index_sorted_by_item =
                              training_data_by_item.metadata()->indexer(1);
-  std::shared_ptr<v2::ml_data_internal::column_indexer> item_index_sorted_by_item = 
+  std::shared_ptr<v2::ml_data_internal::column_indexer> item_index_sorted_by_item =
                              training_data_by_item.metadata()->indexer(0);
 
   user_mapping.resize(num_users);
   item_mapping.resize(num_items);
   for(size_t u = 0; u < num_users; u++){
-    user_mapping[u] = user_index_sorted_by_user->immutable_map_value_to_index( 
+    user_mapping[u] = user_index_sorted_by_user->immutable_map_value_to_index(
                        user_index_sorted_by_item->map_index_to_value(u));
   }
   for(size_t i = 0; i < num_items; i++){
-    item_mapping[i] = item_index_sorted_by_user->immutable_map_value_to_index( 
+    item_mapping[i] = item_index_sorted_by_user->immutable_map_value_to_index(
                        item_index_sorted_by_item->map_index_to_value(i));
   }
 
@@ -88,7 +88,7 @@ void get_common_user_item_local_index_mapping(
 /**
  *
  * Solve a recommender problem with ALS.
- * 
+ *
  * \param[in] training_data_by_user  ml-data sorted by user
  * \param[in] training_data_by_item  ml-data sorted by item
  * \param[in] options                List of options provided by the user
@@ -105,25 +105,25 @@ void get_common_user_item_local_index_mapping(
  * W = Q>0.5
  * W[W == True] = 1
  * W[W == False] = 0
- * 
+ *
  * X = 5 * np.random.rand(m, n_factors)
  * Y = 5 * np.random.rand(n_factors, n)
- * 
+ *
  * def get_error(Q, X, Y):
  *     return np.sum((Q - np.dot(X, Y))**2)
- * 
+ *
  * weighted_errors = []
  * for ii in range(n_iterations):
  *
- *  X = np.linalg.solve(np.dot(Y, Y.T) + lambda_ * np.eye(n_factors), 
+ *  X = np.linalg.solve(np.dot(Y, Y.T) + lambda_ * np.eye(n_factors),
  *                      np.dot(Y, Q.T)).T
  *  Y = np.linalg.solve(np.dot(X.T, X) + lambda_ * np.eye(n_factors),
  *                      np.dot(X.T, Q))
  *
 */
 inline std::shared_ptr<factorization::factorization_model> als(
-                const v2::ml_data& training_data_by_user,  
-                const v2::ml_data& training_data_by_item,  
+                const v2::ml_data& training_data_by_user,
+                const v2::ml_data& training_data_by_item,
                 const std::map<std::string, flexible_type>& options){
 
 
@@ -137,7 +137,7 @@ inline std::shared_ptr<factorization::factorization_model> als(
   size_t num_items = training_data_by_user.metadata()->column_size(1);
   size_t num_factors = model->num_factors();
   size_t num_ratings = training_data_by_user.num_rows();
-  double lambda = std::max<double>(1e-6, 
+  double lambda = std::max<double>(1e-6,
                 num_ratings * (double) options.at("regularization"));
   size_t max_iters = (size_t) options.at("max_iterations");
   size_t seed = (size_t) options.at("random_seed");
@@ -146,11 +146,11 @@ inline std::shared_ptr<factorization::factorization_model> als(
   // Make sure that the two meta-data's have the same mappings.
   std::vector<size_t> user_mapping;
   std::vector<size_t> item_mapping;
-  get_common_user_item_local_index_mapping(training_data_by_user, training_data_by_item, 
+  get_common_user_item_local_index_mapping(training_data_by_user, training_data_by_item,
                                user_mapping, item_mapping);
 
   // Global variables needed
-  // auto eye = arma::diagmat(arma::ones<arma::fvec>(num_factors)); 
+  // auto eye = arma::diagmat(arma::ones<arma::fvec>(num_factors));
   double rmse, best_rmse = 1e20;
   bool reset_model = false;
 
@@ -162,18 +162,18 @@ inline std::shared_ptr<factorization::factorization_model> als(
   table.print_header();
   table.print_row("Initial", progress_time(), "NA");
   table.print_line_break();
-  
+
   // Init the model
   model->reset_state(seed, init_rand_sigma);
   model->w.zeros();
-  
+
   double reset_fraction = 1;
   double reset_fraction_reduction_rate = 1e-2;
 
   // Each iteration of ALS
   // --------------------------------------------------------------------------
   size_t iter = 0;
-  for (iter = 0; iter < max_iters; iter++){ 
+  for (iter = 0; iter < max_iters; iter++){
 
     // Step 1: User step
     // ------------------------------------------------------------------------
@@ -185,8 +185,8 @@ inline std::shared_ptr<factorization::factorization_model> als(
     double rating = 0;
     A = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors));
     b.zeros();
-    for(auto it = 
-        training_data_by_user.get_block_iterator(thread_idx, num_threads); 
+    for(auto it =
+        training_data_by_user.get_block_iterator(thread_idx, num_threads);
                                                                 !it.done();) {
 
       it.fill_observation(x);
@@ -197,8 +197,8 @@ inline std::shared_ptr<factorization::factorization_model> als(
 #ifndef NDEBUG
       {
         arma::fmat Ad = model->V.row(item_id).t() * model->V.row(item_id);
-        DASSERT_EQ(Ad.n_rows, A.n_rows); 
-        DASSERT_EQ(Ad.n_cols, A.n_cols); 
+        DASSERT_EQ(Ad.n_rows, A.n_rows);
+        DASSERT_EQ(Ad.n_cols, A.n_cols);
       }
 #endif
       A += (model->V.row(item_id).t() * model->V.row(item_id));
@@ -211,11 +211,11 @@ inline std::shared_ptr<factorization::factorization_model> als(
         if (it.done()) break;
 
         // Reset for the next user
-        A = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors)); 
+        A = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors));
         b.zeros();
       }
     }});
-  
+
     // Step 2: Item Step
     // ------------------------------------------------------------------------
     // Compute Yt C Y using equation (4) of [1]
@@ -225,11 +225,11 @@ inline std::shared_ptr<factorization::factorization_model> als(
     std::vector<v2::ml_data_entry> x;
     size_t user_id, item_id = 0;
     double rating = 0.0;
-    A = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors)); 
+    A = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors));
     b.zeros();
-    
-    for(auto it = 
-        training_data_by_item.get_block_iterator(thread_idx, num_threads); 
+
+    for(auto it =
+        training_data_by_item.get_block_iterator(thread_idx, num_threads);
                                                                 !it.done();) {
 
       // Update equations
@@ -239,7 +239,7 @@ inline std::shared_ptr<factorization::factorization_model> als(
       rating = it.target_value() - model->w0;
 
       A += (model->V.row(user_id).t() * model->V.row(user_id));
-      b += rating * model->V.row(user_id).t(); 
+      b += rating * model->V.row(user_id).t();
       ++it;
 
       // Solve the system
@@ -249,7 +249,7 @@ inline std::shared_ptr<factorization::factorization_model> als(
         if (it.done()) break;
 
         // Reset for the next item
-        A = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors)); 
+        A = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors));
         b.zeros();
       }
     }});
@@ -291,14 +291,14 @@ inline std::shared_ptr<factorization::factorization_model> als(
   training_stats["final_objective_value"] = to_variant(rmse);
   model->_training_stats = training_stats;
   return model;
-} 
+}
 
 
 
 /**
  *
  * Solve a recommender problem with Implcit ALS [1]
- * 
+ *
  * \param[in] training_data_by_user  ml-data sorted by user
  * \param[in] training_data_by_item  ml-data sorted by item
  * \param[in] options                List of options provided by the user
@@ -314,28 +314,28 @@ inline std::shared_ptr<factorization::factorization_model> als(
  * n_factors = 8
  * m, n = Q.shape
  * n_iterations = 20
- * 
+ *
  * X = 5 * np.random.rand(m, n_factors)
  * Y = 5 * np.random.rand(n_factors, n)
- * 
+ *
  * def get_error(Q, X, Y, W):
  *     return np.sum((W * (Q - np.dot(X, Y)))**2)
- * 
+ *
  * weighted_errors = []
  * for ii in range(n_iterations):
  *     for u, Wu in enumerate(W):
- *         X[u] = np.linalg.solve(np.dot(Y, np.dot(np.diag(Wu), Y.T)) + 
+ *         X[u] = np.linalg.solve(np.dot(Y, np.dot(np.diag(Wu), Y.T)) +
  *                                lambda_ * np.eye(n_factors),
  *                                np.dot(Y, np.dot(np.diag(Wu), Q[u].T))).T
  *     for i, Wi in enumerate(W.T):
- *         Y[:,i] = np.linalg.solve(np.dot(X.T, np.dot(np.diag(Wi), X)) + 
+ *         Y[:,i] = np.linalg.solve(np.dot(X.T, np.dot(np.diag(Wi), X)) +
  *                                  lambda_ * np.eye(n_factors),
  *                                  np.dot(X.T, np.dot(np.diag(Wi), Q[:, i])))
  *
 */
 inline std::shared_ptr<factorization::factorization_model> implicit_als(
-                const v2::ml_data& training_data_by_user,  
-                const v2::ml_data& training_data_by_item,  
+                const v2::ml_data& training_data_by_user,
+                const v2::ml_data& training_data_by_item,
                 const std::map<std::string, flexible_type>& options){
 
 
@@ -348,7 +348,7 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
   size_t num_items = training_data_by_user.metadata()->column_size(1);
   size_t num_factors = model->num_factors();
   size_t num_ratings = training_data_by_user.num_rows();
-  double lambda = std::max<double>(1e-6, 
+  double lambda = std::max<double>(1e-6,
                 num_ratings * (double) options.at("regularization"));
   size_t max_iters = (size_t) options.at("max_iterations");
   size_t seed = (size_t) options.at("random_seed");
@@ -357,7 +357,7 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
   // Make sure that the two meta-data's have the same mappings.
   std::vector<size_t> user_mapping;
   std::vector<size_t> item_mapping;
-  get_common_user_item_local_index_mapping(training_data_by_user, training_data_by_item, 
+  get_common_user_item_local_index_mapping(training_data_by_user, training_data_by_item,
                                user_mapping, item_mapping);
 
 
@@ -391,17 +391,17 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
   // Each iteration of ALS
   // --------------------------------------------------------------------------
   size_t iter = 0;
-  for (iter = 0; iter < max_iters; iter++){ 
+  for (iter = 0; iter < max_iters; iter++){
 
-    // Calcuate the common base matrix to use. 
+    // Calcuate the common base matrix to use.
     DenseMatrix A_cached(num_factors, num_factors);
     // EIGEN VERSION:
     // A_cached.triangularView<armadillo>() = lambda * eye +
     //      model->V.bottomRows(num_items).t() * model->V.bottomRows(num_items);
-    
+
     A_cached = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors)) +
           model->V.tr_tail_rows(num_items) * model->V.tr_tail_rows(num_items).t();
-    
+
     // Step 1: User step
     // ------------------------------------------------------------------------
     in_parallel([&](size_t thread_idx, size_t num_threads) {
@@ -412,11 +412,11 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
     double scaling = 0.0;
     size_t user_id, item_id = 0;
     A = A_cached;
-    
+
     b.zeros();
-    
-    for(auto it = 
-        training_data_by_user.get_block_iterator(thread_idx, num_threads); 
+
+    for(auto it =
+        training_data_by_user.get_block_iterator(thread_idx, num_threads);
                                                                 !it.done();) {
       it.fill_observation(x);
       user_id = x[0].index;
@@ -429,16 +429,16 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
 #ifndef NDEBUG
       {
         arma::fmat Ad = scaling * model->V.row(item_id).t() * model->V.row(item_id);
-        DASSERT_EQ(Ad.n_cols, A.n_cols); 
+        DASSERT_EQ(Ad.n_cols, A.n_cols);
         DASSERT_EQ(Ad.n_rows, A.n_rows);
-      } 
-#endif 
+      }
+#endif
 
       A += scaling * model->V.row(item_id).t() * model->V.row(item_id);
-      b += (1 + scaling) * model->V.row(item_id).t(); 
+      b += (1 + scaling) * model->V.row(item_id).t();
       ++it;
 
-      // Update user factor 
+      // Update user factor
       if(it.is_start_of_new_block() || it.done()){
         model->V.set_row(user_id, solve_ldlt(A.t(), b).t());
         if (it.done()) break;
@@ -448,7 +448,7 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
         b.zeros();
       }
     }});
-  
+
     // Step 2: Item Step
     // ------------------------------------------------------------------------
     // Compute Yt C Y using equation (4) of [1]
@@ -463,7 +463,7 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
     // EIGEN VERSION
     // A_cached.triangularView<armadillo>() = lambda * eye +
     //       model->V.topRows(num_users).t() * model->V.topRows(num_users);
-    
+
     A_cached = lambda * arma::diagmat(arma::ones<arma::fvec>(num_factors)) +
           model->V.tr_head_rows(num_users) * model->V.tr_head_rows(num_users).t();
 
@@ -471,9 +471,9 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
     // A.triangularView() = A_cached;
     A = A_cached;
     b.zeros();
-    
-    for(auto it = 
-        training_data_by_item.get_block_iterator(thread_idx, num_threads); 
+
+    for(auto it =
+        training_data_by_item.get_block_iterator(thread_idx, num_threads);
                                                                 !it.done();) {
       // Update equations
       it.fill_observation(x);
@@ -491,7 +491,7 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
 
       A += scaling * model->V.row(user_id).t() * model->V.row(user_id);
 
-      b += (1 + scaling) * model->V.row(user_id).t(); 
+      b += (1 + scaling) * model->V.row(user_id).t();
       ++it;
 
       // Solve the system
@@ -545,7 +545,7 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
   training_stats["final_objective_value"] = to_variant(rmse);
   model->_training_stats = training_stats;
   return model;
-} 
+}
 
 
 } // namespace als
@@ -553,4 +553,4 @@ inline std::shared_ptr<factorization::factorization_model> implicit_als(
 } // namespace turi
 
 
-#endif 
+#endif

@@ -27,7 +27,7 @@ void uniform_speed(const size_t max_iter) {
     sum += (NumType)(turi::random::fast_uniform<NumType>(0, 10));
   }
   double fast_time = ti.current_time();
-  std::cout << slow_time << ", " << fast_time << std::endl; 
+  std::cout << slow_time << ", " << fast_time << std::endl;
 }
 
 
@@ -53,7 +53,7 @@ std::ostream& operator<<(std::ostream& out, const std::vector<T>& values) {
 }
 
 
-std::vector<int> operator+(const std::vector<int>& v1, 
+std::vector<int> operator+(const std::vector<int>& v1,
                            const std::vector<int>& v2) {
   assert(v1.size() == v2.size());
   std::vector<int> result(v1.size());
@@ -89,7 +89,7 @@ struct RandomTestSuite {
 
     const size_t num_iterations(20);
     std::vector<thread_worker> workers(10);
-    for(size_t i = 0; i < workers.size(); ++i) 
+    for(size_t i = 0; i < workers.size(); ++i)
       workers[i].values.resize(num_iterations);
     turi::thread_group threads;
     for(size_t i = 0; i < workers.size(); ++i) {
@@ -119,8 +119,8 @@ struct RandomTestSuite {
   }
 
 };
-  
-BOOST_FIXTURE_TEST_SUITE(_RandomTestSuite, RandomTestSuite) 
+
+BOOST_FIXTURE_TEST_SUITE(_RandomTestSuite, RandomTestSuite)
   BOOST_AUTO_TEST_CASE(test_nondet_generator) {
     RandomTestSuite::test_nondet_generator();
   }
@@ -134,30 +134,30 @@ BOOST_AUTO_TEST_SUITE_END()
   //   namespace random = turi::random;
   //   std::cout << "speed test run: " << std::endl;
   //   const size_t MAX_ITER(10000);
-  //   std::cout << "size_t:   "; 
+  //   std::cout << "size_t:   ";
   //   uniform_speed<size_t>(MAX_ITER);
-  //   std::cout << "int:      "; 
+  //   std::cout << "int:      ";
   //   uniform_speed<int>(MAX_ITER);
-  //   std::cout << "uint32_t: "; 
+  //   std::cout << "uint32_t: ";
   //   uniform_speed<uint32_t>(MAX_ITER);
-  //   std::cout << "uint16_t: "; 
+  //   std::cout << "uint16_t: ";
   //   uniform_speed<uint16_t>(MAX_ITER);
-  //   std::cout << "char:     "; 
+  //   std::cout << "char:     ";
   //   uniform_speed<char>(MAX_ITER);
-  //   std::cout << "float:    "; 
+  //   std::cout << "float:    ";
   //   uniform_speed<float>(MAX_ITER);
-  //   std::cout << "double:   "; 
+  //   std::cout << "double:   ";
   //   uniform_speed<double>(MAX_ITER);
-    
+
   //   std::cout << "gaussian: ";
   //   double sum = 0;
   //   turi::timer time;
   //   time.start();
-  //   for(size_t i = 0; i < MAX_ITER; ++i) 
+  //   for(size_t i = 0; i < MAX_ITER; ++i)
   //     sum += random::gaussian();
   //   std::cout << time.current_time() << std::endl;
-    
-  //   std::cout << "shuffle:  "; 
+
+  //   std::cout << "shuffle:  ";
   //   std::vector<int> numbers(6);
   //   for(size_t i = 0; i < numbers.size(); ++i) numbers[i] = (int)i + 1;
   //   time.start();
@@ -171,8 +171,5 @@ BOOST_AUTO_TEST_SUITE_END()
   //     // shuffle the numbers
   //     std::random_shuffle(numbers.begin(), numbers.end());
   //   }
-  //   std::cout << time.current_time() << std::endl;    
+  //   std::cout << time.current_time() << std::endl;
   // }
-
-
-  

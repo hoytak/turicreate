@@ -113,4 +113,3 @@ BOOST_AUTO_TEST_CASE(cmd, *boost::unit_test::timeout(2))
 
     BOOST_CHECK_EQUAL(s, "  spa ce  ");
 }
-

@@ -91,13 +91,13 @@ int main(int argc, char **argv) {
   {
     table_printer table( { {"Iteration", 0}, {"Kitten Now Being Shaved", 0}, {"Percent Complete", 8} } );
 
-    table.set_output_stream(std::cout); 
-    
+    table.set_output_stream(std::cout);
+
     table.print_header();
 
     for(size_t i = 0; i < 20; ++i) {
       std::vector<flexible_type> v{i, std::string("K-") + std::to_string(i), double(i) / 20};
-          
+
       table.print_row(v);
       usleep(8000); // Sleep for 8 milliseconds
     }

@@ -12,5 +12,3 @@ from ._activity_classifier import create, ActivityClassifier
 from .import util
 
 __all__ = ['create', 'ActivityClassifier', 'util']
-
-

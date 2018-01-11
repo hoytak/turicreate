@@ -99,7 +99,7 @@ class EXPORT grouped_sframe: public turi::toolkit_class_base {
    *
    * This function will always return a vector of length 'len' unless
    * at the end of the array, or if an error has occured.
-   * 
+   *
    * The element value is a pair of <group name, SFrame>.
    *
    * \param len The number of elements to return
@@ -109,22 +109,22 @@ class EXPORT grouped_sframe: public turi::toolkit_class_base {
   std::vector<std::pair<flexible_type,gl_sframe>> iterator_get_next(size_t len);
 
   /**
-   * Returns a single SFrame which contains all the data. 
+   * Returns a single SFrame which contains all the data.
    */
   gl_sframe get_sframe() const {
     return m_grouped_sf;
   }
-  
+
   /**
    * Return an SFrame with group_info i.e key columns + number of rows in each
-   * key column. 
+   * key column.
    */
   gl_sframe group_info() const;
 
  protected:
  private:
   /// Methods
-  
+
   /**
    * Get a group by its index in the range directory.
    *
@@ -163,7 +163,7 @@ class EXPORT grouped_sframe: public turi::toolkit_class_base {
   REGISTER_CLASS_MEMBER_FUNCTION(grouped_sframe::groups)
   REGISTER_CLASS_MEMBER_FUNCTION(grouped_sframe::begin_iterator)
   REGISTER_CLASS_MEMBER_FUNCTION(grouped_sframe::iterator_get_next, "num_items")
-  
+
   REGISTER_GETTER("sframe", grouped_sframe::get_sframe)
   END_CLASS_MEMBER_REGISTRATION
 };

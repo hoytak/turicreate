@@ -23,7 +23,7 @@ single:
 	../Source/JSONWorker.cpp ../Source/JSONWriter.cpp \
 	../Source/libjson.cpp ../Source/JSONValidator.cpp \
 	../Source/JSONStream.cpp ../Source/JSONAllocator.cpp \
-    	../Source/JSONPreparse.cpp \
+	../Source/JSONPreparse.cpp \
 	../TestSuite2/JSON_Base64/json_decode64.cpp \
 	../TestSuite2/JSON_Base64/json_encode64.cpp \
 	../TestSuite2/JSONDebug/JSON_ASSERT_SAFE.cpp \
@@ -65,7 +65,7 @@ debug:
 	../Source/JSONWorker.cpp ../Source/JSONWriter.cpp \
 	../Source/libjson.cpp ../Source/JSONValidator.cpp \
 	../Source/JSONStream.cpp ../Source/JSONAllocator.cpp \
-    	../Source/JSONPreparse.cpp \
+	../Source/JSONPreparse.cpp \
 	../TestSuite2/JSON_Base64/json_decode64.cpp \
 	../TestSuite2/JSON_Base64/json_encode64.cpp \
 	../TestSuite2/JSONDebug/JSON_ASSERT_SAFE.cpp \
@@ -107,7 +107,7 @@ small:
 	../Source/JSONWorker.cpp ../Source/JSONWriter.cpp \
 	../Source/libjson.cpp ../Source/JSONValidator.cpp \
 	../Source/JSONStream.cpp ../Source/JSONAllocator.cpp \
-    	../Source/JSONPreparse.cpp \
+	../Source/JSONPreparse.cpp \
 	../TestSuite2/JSON_Base64/json_decode64.cpp \
 	../TestSuite2/JSON_Base64/json_encode64.cpp \
 	../TestSuite2/JSONDebug/JSON_ASSERT_SAFE.cpp \

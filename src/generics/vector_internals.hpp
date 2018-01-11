@@ -56,7 +56,7 @@ static constexpr size_t _empty_gl_vector_element_size() {
 }
 
 template <typename T>
-GL_HOT_INLINE_FLATTEN 
+GL_HOT_INLINE_FLATTEN
 static inline size_t _round_up_to_stride(size_t n) {
 
   switch(sizeof(T)) {
@@ -86,8 +86,8 @@ static inline _vstruct<T>* _allocate_vstruct(size_t n) {
 
   const bool allocate_with_calloc = std::is_trivial<T>::value;
 
-  n = _round_up_to_stride<T>(n); 
-  
+  n = _round_up_to_stride<T>(n);
+
   _vstruct<T>* info = (allocate_with_calloc
                        ? (_vstruct<T>*) calloc(sizeof(_vstruct<T>) + n*sizeof(T), 1)
                        : (_vstruct<T>*) malloc(sizeof(_vstruct<T>) + n*sizeof(T)));
@@ -215,7 +215,7 @@ static inline void _extend_range(_vstruct<T>*& info, size_t n, bool extend_extra
   size_t new_capacity = std::max<size_t>(_empty_gl_vector_element_size<T>(), extend_extra ? (5 * n) / 4 : n);
 
   new_capacity = _round_up_to_stride<T>(new_capacity);
-  
+
   if(info == nullptr) {
     info = (_vstruct<T>*) malloc(sizeof(_vstruct<T>) + new_capacity*sizeof(T));
     if(UNLIKELY(info == nullptr)) throw std::bad_alloc();
@@ -224,7 +224,7 @@ static inline void _extend_range(_vstruct<T>*& info, size_t n, bool extend_extra
     info = (_vstruct<T>*) realloc(info, sizeof(_vstruct<T>) + new_capacity*sizeof(T));
     if(UNLIKELY(info == nullptr)) throw std::bad_alloc();
   }
-  
+
   info->capacity = new_capacity;
 }
 
@@ -241,7 +241,7 @@ static inline void _extend_range(_vstruct<T>*& info, size_t n, bool extend_extra
 template <typename T>
 GL_HOT_INLINE
 static inline _vstruct<T>* construct() {
-  return nullptr; 
+  return nullptr;
 }
 
 ////////////////////////////////////////////////////////////
@@ -323,7 +323,7 @@ static inline void resize (_vstruct<T>*& info, size_t n) {
 
   if(info->size == n)
     return;
-  
+
   if(n < info->size) {
     _destroy_range(info->data + n, info->data + info->size);
   } else {
@@ -332,7 +332,7 @@ static inline void resize (_vstruct<T>*& info, size_t n) {
     }
     uninitialized_construct(info->data + info->size, info->data + n);
   }
-  
+
   info->size = n;
 }
 
@@ -355,7 +355,7 @@ static inline void resize (_vstruct<T>*& info, size_t n, const T& val) {
     }
     std::uninitialized_fill(info->data + info->size, info->data + n, val);
   }
-  
+
   info->size = n;
 }
 
@@ -412,7 +412,7 @@ static inline void assign(_vstruct<T>*& info, size_t n, const T& val) {
     info = construct(n, val);
     return;
   }
-  
+
   _destroy_range(info->data, info->data + info->size);
 
   if(n > info->capacity)
@@ -460,7 +460,7 @@ static inline void push_back(_vstruct<T>*& info, T&& val) {
   } else if(info->size == info->capacity) {
     _extend_range(info, info->size + 1, true);
   }
-  
+
   new (&info->data[info->size]) T (std::forward<T>(val));
   ++info->size;
 }
@@ -491,17 +491,17 @@ T* emplace (_vstruct<T>*& info, const T* position, Args&&... args) {
   _check_pointer_valid(info, position, true);
 
   size_t idx;
-  
+
   if(info == nullptr) {
     info = construct_uninitialized<T>(_empty_gl_vector_element_size<T>());
     idx = 0;
-  } else { 
+  } else {
     idx = std::distance((const T*)(info->data), position);
-    
+
     if(info->capacity == info->size)
       _extend_range(info, info->size + 1, true);
   }
-  
+
   T* ptr = info->data + idx;
 
   uninitialized_move_backward(ptr, info->data + info->size, info->data + info->size + 1);
@@ -568,17 +568,17 @@ template <typename T>
 GL_HOT_INLINE
 T* insert (_vstruct<T>*& info,  const T* position, size_t n, const T& val) {
   _check_pointer_valid(info, position, true);
-  
+
   if(info == nullptr) {
     assign(info, n, val);
     return (UNLIKELY(info == nullptr)) ? nullptr : info->data;
   }
 
   size_t idx = std::distance((const T*)(info->data), position);
-  
+
   if(n == 0)
     return info->data + idx;
-  
+
   //  if(info->capacity < info->size + n)
   if(info->size + n > info->capacity)
     _extend_range(info, info->size + n, true);
@@ -597,7 +597,7 @@ T* insert (_vstruct<T>*& info,  const T* position, size_t n, const T& val) {
 
 ////////////////////////////////////////////////////////////
 
-// Do this to properly handle, e.g. x + x in the string case. 
+// Do this to properly handle, e.g. x + x in the string case.
 template <typename T, class InputIterator>
 GL_HOT_INLINE
 T* insert (_vstruct<T>*& info,  const T* position,
@@ -613,7 +613,7 @@ T* insert (_vstruct<T>*& info,  const T* position,
   return _insert(info, position, start, end);
 }
 
-// The general case. 
+// The general case.
 template <typename T, class InputIterator>
 GL_HOT_INLINE
 T* insert (_vstruct<T>*& info,  const T* position,
@@ -676,19 +676,19 @@ T* _insert (_vstruct<T>*& info,  const T* position,
            _VEC_ENABLE_IF_ITERATOR(InputIterator, T)) {
 
   _check_pointer_valid(info, position, true);
-  
+
   if(info == nullptr) {
     assign(info, start, end);
     return (UNLIKELY(info == nullptr)) ? nullptr : info->data;
   }
-  
+
   size_t idx = std::distance((const T*)(info->data), position);
 
   if(start == end)
     return info->data + idx;
 
   size_t n = std::distance(start, end);
-  
+
   if(info->size + n > capacity(info)) {
     // Need to check that extending the range
     // does not invalidate the iterators for start and end.
@@ -716,11 +716,11 @@ T* _insert (_vstruct<T>*& info,  const T* position,
 template <typename T>
 GL_HOT_INLINE
 T* erase (_vstruct<T>*& info,  const T* position) {
-  
+
   _check_pointer_valid(info, position, false);
-  
+
   size_t idx = std::distance((const T*)(info->data), position);
-  
+
   _destroy_element(position);
 
   T* ptr = info->data + idx;
@@ -735,10 +735,10 @@ T* erase (_vstruct<T>*& info,  const T* position) {
 template <typename T>
 GL_HOT_INLINE
 static inline T* erase(_vstruct<T>*& info,  const T* start, const T* end) {
-  
+
   _check_pointer_valid(info, start, true);
   _check_pointer_valid(info, end, true);
-  if(UNLIKELY(info == nullptr)) return nullptr; 
+  if(UNLIKELY(info == nullptr)) return nullptr;
 
   if(start > end)
     throw std::out_of_range("Start and ending iterators out of order.");
@@ -771,7 +771,7 @@ static inline void _make_uninitialized_section (
     _vstruct<T>*& info, size_t idx_start, size_t idx_end, ptrdiff_t n) {
 
   DASSERT_LT(idx_start, idx_end);
-  
+
   ptrdiff_t extend_amount = (ptrdiff_t(n) - (ptrdiff_t(idx_end) - ptrdiff_t(idx_start)));
   size_t new_size = size(info) + extend_amount;
 
@@ -785,16 +785,16 @@ static inline void _make_uninitialized_section (
     if(idx_end != info->size) {
       uninitialized_move_backward(info->data + idx_end, info->data + info->size, info->data + new_size);
     }
-    
-  } else if(extend_amount < 0) { 
+
+  } else if(extend_amount < 0) {
 
     DASSERT_TRUE(idx_end + extend_amount >= 0);
-    
+
     uninitialized_move(info->data + idx_end,
                        info->data + info->size,
                        info->data + idx_end + extend_amount);
   }
-  
+
   info->size = new_size;
 }
 
@@ -809,8 +809,8 @@ static inline void replace (_vstruct<T>*& info,
 
   _check_pointer_valid(info, position_start, true);
   _check_pointer_valid(info, position_end, true);
-  DASSERT_TRUE(position_start <= position_end); 
-  
+  DASSERT_TRUE(position_start <= position_end);
+
   if(UNLIKELY(info == nullptr)) {
     DASSERT_TRUE(position_start == nullptr);
     DASSERT_TRUE(position_end == nullptr);
@@ -822,12 +822,12 @@ static inline void replace (_vstruct<T>*& info,
     insert(info, position_start, start, end);
     return;
   }
-  
+
   size_t idx_start = std::distance((const T*)(info->data), position_start);
   size_t idx_end = std::distance((const T*)(info->data), position_end);
   ptrdiff_t n = std::distance(start, end);
 
-  _make_uninitialized_section(info, idx_start, idx_end, n); 
+  _make_uninitialized_section(info, idx_start, idx_end, n);
 
   std::uninitialized_copy(start, end, info->data + idx_start);
 }
@@ -837,12 +837,12 @@ GL_HOT_INLINE
 static inline void replace (_vstruct<T>*& info,
                             const T* position_start,
                             const T* position_end,
-                            size_t n, const T& val) { 
+                            size_t n, const T& val) {
 
   _check_pointer_valid(info, position_start, true);
   _check_pointer_valid(info, position_end, true);
-  DASSERT_TRUE(position_start <= position_end); 
-  
+  DASSERT_TRUE(position_start <= position_end);
+
   if(UNLIKELY(info == nullptr)) {
     DASSERT_TRUE(position_start == nullptr);
     DASSERT_TRUE(position_end == nullptr);
@@ -854,11 +854,11 @@ static inline void replace (_vstruct<T>*& info,
     insert(info, position_start, n, val);
     return;
   }
-  
+
   size_t idx_start = std::distance((const T*)(info->data), position_start);
   size_t idx_end = std::distance((const T*)(info->data), position_end);
 
-  _make_uninitialized_section(info, idx_start, idx_end, ptrdiff_t(n)); 
+  _make_uninitialized_section(info, idx_start, idx_end, ptrdiff_t(n));
 
   std::uninitialized_fill(info->data + idx_start, info->data + idx_start + n, val);
 }
@@ -869,7 +869,7 @@ template <typename T>
 void clear(_vstruct<T>*& info) noexcept {
   if(size(info) == 0)
     return;
-  
+
   _destroy_range(info->data, info->data + info->size);
   info->size = 0;
 }

@@ -100,14 +100,14 @@ static const char *request_names[ MAX_FORM_COMMAND - MIN_FORM_COMMAND + 1 ] = {
 
   "VALIDATION"	 ,
   "NEXT_CHOICE"	 ,
-  "PREV_CHOICE"	 
+  "PREV_CHOICE"
 };
 #define A_SIZE (sizeof(request_names)/sizeof(request_names[0]))
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  const char * form_request_name (int request);
-|   
+|
 |   Description   :  Get the external name of a form request.
 |
 |   Return Values :  Pointer to name      - on success
@@ -126,22 +126,22 @@ const char *form_request_name( int request )
 
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int form_request_by_name (const char *str);
-|   
+|
 |   Description   :  Search for a request with this name.
 |
 |   Return Values :  Request Id       - on success
 |                    E_NO_MATCH       - request not found
 +--------------------------------------------------------------------------*/
 int form_request_by_name( const char *str )
-{ 
+{
   /* because the table is so small, it doesn't really hurt
      to run sequentially through it.
   */
   unsigned int i = 0;
   char buf[16];
-  
+
   if (str)
     {
       strncpy(buf,str,sizeof(buf));
@@ -150,12 +150,12 @@ int form_request_by_name( const char *str )
 	  buf[i] = toupper((int)(buf[i]));
 	  i++;
 	}
-      
+
       for (i=0; i < A_SIZE; i++)
 	{
 	  if (strncmp(request_names[i],buf,sizeof(buf))==0)
 	    return MIN_FORM_COMMAND + i;
-	} 
+	}
     }
   RETURN(E_NO_MATCH);
 }

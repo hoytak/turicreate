@@ -10,7 +10,7 @@ BOOST_AUTO_TEST_CASE(test_boosted_trees_double) {
 
 
   tc_error* error = NULL;
-  
+
   tc_initialize("/tmp/", &error);
   TS_ASSERT(error == NULL);
 
@@ -117,8 +117,8 @@ BOOST_AUTO_TEST_CASE(test_boosted_trees_double) {
       TS_ASSERT_DELTA(v, target_values[i], 0.5);
     }
 
-    { 
-      tc_parameters* export_args = tc_parameters_create_empty(&error); 
+    {
+      tc_parameters* export_args = tc_parameters_create_empty(&error);
       TS_ASSERT(error == NULL);
 
       // Set the l2 regression
@@ -136,4 +136,3 @@ BOOST_AUTO_TEST_CASE(test_boosted_trees_double) {
     }
   }
 }
-

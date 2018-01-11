@@ -28,12 +28,12 @@ namespace turi {
  * We first install a segfault_handler.
  *
  * When you ask for some memory, we use mmap to allocate a region, but set
- * memory protection on it to PROT_NONE (disable both read and writes to the 
+ * memory protection on it to PROT_NONE (disable both read and writes to the
  * region). This way, every memory access to the region will trigger a segfault.
  *
  * When the memory is accessed, the segfault handler (segv_handler()) is
  * triggered, and try to fill in the data in the page.
- * To do so, (fill_pages()) we set the protection on the page to 
+ * To do so, (fill_pages()) we set the protection on the page to
  * PROT_READ | PROT_WRITE (enable read + write), call a callback function to
  * fill in the data, then sets the protection on the page to PROT_READ. Then we
  * return from the segfault handler which allows the program to resume
@@ -50,8 +50,8 @@ namespace turi {
  *    to permit fast binary searches).  this is used to figure out the mapping
  *    between address and callback.
  *
- * One key design consideration is the careful use of mmap. The way the 
- * procedure is defined above only calls mmap once for the entire region. 
+ * One key design consideration is the careful use of mmap. The way the
+ * procedure is defined above only calls mmap once for the entire region.
  * decommitting and committing memory is done by use of memory protection
  * and madvise. Alternate implementation built entirely around mmap is possible
  * where we use completely unallocated memory addresses, and use mmap to map
@@ -61,9 +61,9 @@ namespace turi {
  *
  * Also, with regards to parallelism, the kernel API does not quite provide
  * sufficient capability to handle parallel accesses correctly. What is missing
- * is an atomic "fill and enable page read/write" function. Essentially, while 
+ * is an atomic "fill and enable page read/write" function. Essentially, while
  * the callback function is filling in the pages for a particular memory address,
- * some other thread can read from the same memory addresses and get erroneous 
+ * some other thread can read from the same memory addresses and get erroneous
  * values. mremap could in theory be used to enable this by having the callback
  * fill to alternate pages, and using mremap to atomically swap those pages in.
  * However, see the design consideration above regarding excessive use of mmap.
@@ -77,7 +77,7 @@ struct userpf_page_set;
  *  Page filling callback
  */
 typedef std::function<size_t (userpf_page_set* pageset,
-                              char* address, 
+                              char* address,
                               size_t fill_length)> userpf_handler_callback;
 
 
@@ -99,10 +99,10 @@ struct userpf_page_set {
    * "page". The size of the page is predefined at compile time.
    * \ref PAGE_SIZE.
    */
-  size_t num_large_pages = 0; 
+  size_t num_large_pages = 0;
 
   bool writable = false;
-                              
+
   /**
    * Internal datastructures. Should not touch.
    */
@@ -133,7 +133,7 @@ struct userpf_page_set {
   userpf_release_callback release_callback;
 
   /**
-   * pagefile_allocation[i] is the handle to the pagefile storing the disk 
+   * pagefile_allocation[i] is the handle to the pagefile storing the disk
    * backed memory. (size_t)(-1) if not allocated.
    */
   std::vector<size_t> pagefile_allocations;
@@ -142,7 +142,7 @@ struct userpf_page_set {
 
 /**
  * The page size we operate at. see user_pagefault.cpp for the actual value.
- * generally, we want to avoid working at the granularity of single system 
+ * generally, we want to avoid working at the granularity of single system
  * pages. While that is going to be faster for random access, that will trigger
  * a very large number of segfaults and will also require quite a lot of kernel
  * datastructures.
@@ -152,14 +152,14 @@ extern const size_t TURI_PAGE_SIZE;
 
 
 /**
- * Initializes the on-demand paging handlers. 
+ * Initializes the on-demand paging handlers.
  *
  * \ref max_resident_memory The maximum amount of resident memory to be used
  * before memory is decommited. If not provided (-1), the environment variable
  * TURI_DEFAULT_PAGEFAULT_RESIDENT_LIMIT is read. If not available a
  * default value corresponding to half of total memory size is used.
  *
- * Returns true if the pagefault handler was installed successfully, 
+ * Returns true if the pagefault handler was installed successfully,
  * and false otherwise.
  */
 bool setup_pagefault_handler(size_t max_resident_memory = (size_t)(-1));
@@ -182,17 +182,17 @@ size_t get_max_resident();
 void set_max_resident(size_t max_resident_memory);
 
 /**
- * Allocates a block of memory of a certain length, where the contents of 
+ * Allocates a block of memory of a certain length, where the contents of
  * the memory are to be filled using the specified callback function.
  *
  * Returns a page_set pointer where page_set->begin is the memory address
- * at which on-demand paging will be performed. The callback is triggered 
+ * at which on-demand paging will be performed. The callback is triggered
  * to fill in the pages on demand.
  *
  * The pagefault handler is an std::function object of the form:
  * \code
  * size_t fill_callback(userpf_page_set* ps,
- *                      char* address, 
+ *                      char* address,
  *                      size_t fill_length) {
  *   // MUST fill in the contents of address to address + fill_length
  *   // most not write out of the bounds of [address, address+fill_length)
@@ -216,7 +216,7 @@ void set_max_resident(size_t max_resident_memory);
  * The release_callback is an std::function object of the form:
  * \code
  * size_t release_callback(userpf_page_set* ps) {
- *   // for instance, we may write out the contents of 
+ *   // for instance, we may write out the contents of
  *   // ps->begin to ps->end to disk here.
  * }
  * \endcode
@@ -228,7 +228,7 @@ void set_max_resident(size_t max_resident_memory);
  * automatic read/write/eviction.
  *
  * \param length The number of bytes to allocate
- * \param fill_callback The callback to be triggered when a page range needs 
+ * \param fill_callback The callback to be triggered when a page range needs
  *                      to be filled.
  * \param release_callback The callback to be triggered the the memory is
  *                         released, i.e. release(pf) is called.
@@ -236,13 +236,13 @@ void set_max_resident(size_t max_resident_memory);
  *                 will handle paging.
  * The returned object MUST NOT be freed or deallocated. use \ref release.
  */
-userpf_page_set* allocate(size_t length, 
+userpf_page_set* allocate(size_t length,
                           userpf_handler_callback fill_callback,
                           userpf_release_callback release_callback = nullptr,
                           bool writable = true);
 
 /**
- * Releases the pageset. The caller must ensure that there are no other 
+ * Releases the pageset. The caller must ensure that there are no other
  * memory accesses for this allocation.
  */
 void release(userpf_page_set* pageset);
@@ -250,13 +250,13 @@ void release(userpf_page_set* pageset);
  * Disables the on-demand paging handlers.
  *
  * Releases the pagefault handler, reverting it to the previous handler if any.
- * Returns true if the pagefault handler was disabled successfully, 
+ * Returns true if the pagefault handler was disabled successfully,
  * false otherwise.
  */
 bool revert_pagefault_handler();
 
 /**
- * Returns the number of allocations made 
+ * Returns the number of allocations made
  */
 size_t get_num_allocations();
 

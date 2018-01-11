@@ -170,7 +170,7 @@ struct unity_sframe_test {
     tmp_vec.clear();
 
     // Filter by all 0's
-    res_ptr = sf->logical_filter(unity_zero); 
+    res_ptr = sf->logical_filter(unity_zero);
     sa_res_ptr = sa->logical_filter(unity_zero);
     TS_ASSERT_EQUALS(res_ptr->size(), 0);
     TS_ASSERT_EQUALS(sa_res_ptr->size(), 0);
@@ -329,7 +329,7 @@ struct unity_sframe_test {
 
     TS_ASSERT_THROWS_ANYTHING(sf1->append(sf2));
   }
-  
+
   void test_append_type_mismatch() {
     std::vector<flexible_type> test_data1;
     std::vector<flexible_type> test_data2;
@@ -350,7 +350,7 @@ struct unity_sframe_test {
 
     TS_ASSERT_THROWS_ANYTHING(sf1->append(sf2));
   }
-  
+
   void test_append() {
     dataframe_t testdf = _create_test_dataframe();
 
@@ -377,7 +377,7 @@ struct unity_sframe_test {
       TS_ASSERT_EQUALS(sf3_value.values["c"][i], testdf.values["c"][i - sf1->size()]);
     }
   }
-  
+
   void test_append_empty() {
     auto sf1 = std::make_shared<unity_sframe>();
     auto sf2 = std::make_shared<unity_sframe>();

@@ -204,7 +204,7 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
   fast_integer_power s_w_factor_pow, s_V_factor_pow;
   bool s_w_identically_1 = true, s_V_identically_1 = true;
   std::atomic<size_t> iteration_sample_count;
-  
+
 
   // Variables needed for the on-the-fly (aka weighted) regularization.  This vector
   // is of length n_total_dimensions, and is equal to the number of
@@ -373,16 +373,16 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
   ////////////////////////////////////////////////////////////////////////////////
   // Functions to help with the SGD stuff.
 
-  /**  Returns the l2 regularization coefficient.  
+  /**  Returns the l2 regularization coefficient.
    *
    */
   double l2_regularization_factor() const {
     return (regularization_type == model_regularization_type::L2
             ? std::max(_lambda_w, _lambda_V)
-            : 0); 
+            : 0);
   }
 
-  /**  Returns an upper bound on the sgd step size.  
+  /**  Returns an upper bound on the sgd step size.
    *
    */
   double max_step_size() const {
@@ -391,8 +391,8 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
       case model_regularization_type::ON_THE_FLY:
 
         // This ensures that (1 - step_size * lambda) > 0, a very
-        // important requirement for numerical stability. 
-        
+        // important requirement for numerical stability.
+
         return 0.9 / (1e-16 + std::max(current_lambda_w(0), current_lambda_V(0)));
 
       case model_regularization_type::NONE:
@@ -434,7 +434,7 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
           if(V_adagrad_g.n_rows != 0)
             V_step_size /= std::max(1.0, std::sqrt(double(arma::mean(arma::mean(V_adagrad_g.X())))));
         }
-        
+
         s_w_factor = 1.0 - w_step_size * lambda_w;
         s_w_factor_pow.set_base(s_w_factor);
         s_w_identically_1 = (s_w_factor == 1.0);
@@ -458,7 +458,7 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
         s_V_factor_pow.set_base(s_V_factor);
         s_V_identically_1 = true;
         break;
-        
+
       case model_regularization_type::NONE:
 
         w_shrinkage = 1.0;
@@ -495,7 +495,7 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
       if(w_adagrad_g.size() != 0) {
         w_adagrad_g = rho * w_adagrad_g + (1 - rho) * arma::mean(w_adagrad_g);
       }
-      
+
       if(V_adagrad_g.n_rows != 0) {
         V_adagrad_g = rho * V_adagrad_g.X() + (1 - rho) * arma::mean(arma::mean(V_adagrad_g.X()));
       }
@@ -554,7 +554,7 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
         break;
     }
 
-    unset_denormal_are_zero(); 
+    unset_denormal_are_zero();
   }
 
   /// Test whether the current state is numerically stable or not; if
@@ -866,13 +866,13 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
           // Get the global index
           const size_t global_idx = (j == 0 ? 0 : model->index_offsets[1]) + v.index;
           b.index = global_idx;
-          
+
           DASSERT_EQ(b.V_row.n_cols, num_factors());
 
           b.V_row = model->V.row(global_idx);
 
           DASSERT_EQ(b.V_row.n_cols, num_factors());
-          
+
           // No column scaling on the first two dimensions under MF model.
           DASSERT_EQ(v.value, 1);
           b.xv = 1.0;
@@ -1136,7 +1136,7 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
               b.xV_row *= step_V_scale;
 
               // Clip for stability.
-              model->V.add_row(b.index, -s_V_new_inv * arma::clamp(b.xV_row, -1, 1)); 
+              model->V.add_row(b.index, -s_V_new_inv * arma::clamp(b.xV_row, -1, 1));
             }
           }
         }
@@ -1195,10 +1195,10 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
 
         // Clip for stability; apply to the temporary buffer.
         b0.xV_row *= step_size;
-        b0.xV_row = arma::clamp(b0.xV_row, -1, 1); 
+        b0.xV_row = arma::clamp(b0.xV_row, -1, 1);
 
         b1.xV_row *= step_size;
-        b1.xV_row = arma::clamp(b1.xV_row, -1, 1); 
+        b1.xV_row = arma::clamp(b1.xV_row, -1, 1);
 
         // Apply the gradient to the temporary buffer
         b0.V_row -= s_V_new_inv * b0.xV_row;
@@ -1210,7 +1210,7 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
         }
 
         if(nmf_mode) {
-          for(size_t i = 0; i < model->num_factors(); ++i) { 
+          for(size_t i = 0; i < model->num_factors(); ++i) {
             model->V(b0.index, i) = std::max<float>(0, b0.V_row(i));
             model->V(b1.index, i) = std::max<float>(0, b1.V_row(i));
           }
@@ -1279,8 +1279,8 @@ class factorization_sgd_interface final : public sgd::sgd_interface_base {
       case model_regularization_type::L2: {
         size_t n = iteration_sample_count;
 
-        double s_w, s_V; 
-        
+        double s_w, s_V;
+
         if(n == 0) {
           s_w = s_V = 1;
         } else {

@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-AccessControlPolicy::AccessControlPolicy() : 
+AccessControlPolicy::AccessControlPolicy() :
     m_grantsHasBeenSet(false),
     m_ownerHasBeenSet(false)
 {
 }
 
-AccessControlPolicy::AccessControlPolicy(const XmlNode& xmlNode) : 
+AccessControlPolicy::AccessControlPolicy(const XmlNode& xmlNode) :
     m_grantsHasBeenSet(false),
     m_ownerHasBeenSet(false)
 {

@@ -44,4 +44,3 @@ def check_output(command_args):
     except CalledProcessError as e:
         logging.warning("Failed call with Output: %s" % e.output)
         raise e
-

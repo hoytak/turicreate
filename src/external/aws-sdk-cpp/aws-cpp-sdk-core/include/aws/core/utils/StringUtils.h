@@ -122,7 +122,7 @@ namespace Aws
             static long ConvertToInt32(const char* source);
 
 
-            /** 
+            /**
              * convert to bool
              */
             static bool ConvertToBool(const char* source);
@@ -148,7 +148,7 @@ namespace Aws
 
             /**
              * not all platforms (Android) have std::to_string
-             */ 
+             */
             template< typename T >
             static Aws::String to_string(T value)
             {
@@ -162,5 +162,3 @@ namespace Aws
 
     } // namespace Utils
 } // namespace Aws
-
-

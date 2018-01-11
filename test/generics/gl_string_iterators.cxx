@@ -94,7 +94,7 @@ struct test_string_iterators  {
     _test_crbegin(gl_string());
     _test_crbegin(gl_string("123"));
   }
-  
+
   void _test_crend(const gl_string& s) {
     gl_string::const_reverse_iterator ce = s.crend();
     TS_ASSERT(ce == s.rend());
@@ -104,7 +104,7 @@ struct test_string_iterators  {
     _test_crend(gl_string());
     _test_crend(gl_string("123"));
   }
-  
+
   void _test_end(gl_string s) {
     const gl_string& cs = s;
     gl_string::iterator e = s.end();
@@ -122,8 +122,8 @@ struct test_string_iterators  {
     _test_end(gl_string());
     _test_end(gl_string("123"));
   }
-  
-  void test_iterator_traits() { 
+
+  void test_iterator_traits() {
     typedef gl_string C;
     C::iterator ii1{}, ii2{};
     C::iterator ii4 = ii1;
@@ -150,7 +150,7 @@ struct test_string_iterators  {
     _test_rbegin(gl_string());
     _test_rbegin(gl_string("123"));
   }
-  
+
 
   void _test_rend(gl_string s) {
     const gl_string& cs = s;
@@ -170,7 +170,7 @@ struct test_string_iterators  {
     _test_rend(gl_string("123"));
   }
 
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_test_string_iterators, test_string_iterators)

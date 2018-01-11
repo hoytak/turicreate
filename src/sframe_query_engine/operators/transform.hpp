@@ -14,7 +14,7 @@
 namespace turi {
 namespace query_eval {
 
-typedef std::function<flexible_type(const sframe_rows::row&)> transform_type; 
+typedef std::function<flexible_type(const sframe_rows::row&)> transform_type;
 
 /**
  * \ingroup sframe_query_engine
@@ -23,7 +23,7 @@ typedef std::function<flexible_type(const sframe_rows::row&)> transform_type;
  */
 
 /**
- * A "transform" operator applys a transform function on a 
+ * A "transform" operator applys a transform function on a
  * stream of input.
  */
 template<>
@@ -42,12 +42,12 @@ class operator_impl<planner_node_type::TRANSFORM_NODE> : public query_operator {
 
   ////////////////////////////////////////////////////////////////////////////////
 
-  inline operator_impl(const transform_type& f, 
-                       flex_type_enum output_type, 
+  inline operator_impl(const transform_type& f,
+                       flex_type_enum output_type,
                        int random_seed=-1)
       : m_transform_fn(f), m_output_type(output_type), m_random_seed(random_seed)
   { }
-  
+
   inline std::shared_ptr<query_operator> clone() const {
     return std::make_shared<operator_impl>(*this);
   }
@@ -67,8 +67,8 @@ class operator_impl<planner_node_type::TRANSFORM_NODE> : public query_operator {
       auto output_iter = output->begin();
       while(iter != rows->cend()) {
         auto outval = m_transform_fn((*iter));
-        if (m_output_type == flex_type_enum::UNDEFINED || 
-            outval.get_type() == m_output_type || 
+        if (m_output_type == flex_type_enum::UNDEFINED ||
+            outval.get_type() == m_output_type ||
             outval.get_type() == flex_type_enum::UNDEFINED) {
           (*output_iter)[0] = outval;
         } else {
@@ -88,7 +88,7 @@ class operator_impl<planner_node_type::TRANSFORM_NODE> : public query_operator {
       transform_type fn,
       flex_type_enum output_type,
       int random_seed=-1) {
-    return planner_node::make_shared(planner_node_type::TRANSFORM_NODE, 
+    return planner_node::make_shared(planner_node_type::TRANSFORM_NODE,
                                      {{"output_type", (int)(output_type)},
                                       {"random_seed", random_seed}},
                                      {{"function", any(fn)}},
@@ -102,7 +102,7 @@ class operator_impl<planner_node_type::TRANSFORM_NODE> : public query_operator {
     ASSERT_TRUE(pnode->operator_parameters.count("output_type"));
     ASSERT_TRUE(pnode->any_operator_parameters.count("function"));
     transform_type fn;
-    flex_type_enum output_type = 
+    flex_type_enum output_type =
         (flex_type_enum)(flex_int)(pnode->operator_parameters["output_type"]);
     fn = pnode->any_operator_parameters["function"].as<transform_type>();
     int random_seed = (int)(flex_int)(pnode->operator_parameters["random_seed"]);
@@ -119,14 +119,14 @@ class operator_impl<planner_node_type::TRANSFORM_NODE> : public query_operator {
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::TRANSFORM_NODE);
     return infer_planner_node_length(pnode->inputs[0]);
   }
-  
+
  private:
   transform_type m_transform_fn;
   flex_type_enum m_output_type;
   int m_random_seed;
 };
 
-typedef operator_impl<planner_node_type::TRANSFORM_NODE> op_transform; 
+typedef operator_impl<planner_node_type::TRANSFORM_NODE> op_transform;
 
 /// \}
 } // query_eval

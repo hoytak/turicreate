@@ -148,7 +148,7 @@ bool process::popen(const std::string &cmd,
       "from child on Windows." << std::endl;
     return false;
   }
-  
+
   SECURITY_ATTRIBUTES sa_attr;
   sa_attr.nLength=sizeof(SECURITY_ATTRIBUTES);
   // Allow handles to be inherited when process created

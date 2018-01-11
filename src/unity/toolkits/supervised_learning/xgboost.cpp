@@ -297,7 +297,7 @@ void xgboost_model::_restore_from_checkpoint(const std::string& path) {
   load_version(iarc, XGBOOST_MODEL_VERSION);
   dir.close();
 
-  // If user input a parameter different from the the checkpoint, warn that we will ignore the new parameter 
+  // If user input a parameter different from the the checkpoint, warn that we will ignore the new parameter
   for (auto kv: new_option_values) {
     if ((kv.first != "model_checkpoint_path") && (kv.first != "resume_from_checkpoint")) {
       if (this->options.value(kv.first) != kv.second) {
@@ -840,7 +840,7 @@ table_printer xgboost_model::_init_progress_printer(bool has_validation_data) {
 }
 
 /**
- * Helper datastructure to keep track of training and validation metrics. 
+ * Helper datastructure to keep track of training and validation metrics.
  */
 class metric_tracker {
  public:
@@ -940,7 +940,7 @@ void xgboost_model::train(void) {
   }
 
   /** Prepare for training:
-   * - Initialize training and validation data structure: ptrain, pvalid 
+   * - Initialize training and validation data structure: ptrain, pvalid
    * - Initialize boost learner
    * - Initialize the progress printer
    * - Initialize the evaluator
@@ -952,7 +952,7 @@ void xgboost_model::train(void) {
   this->_init_learner(ptrain, pvalid,
                       restore_from_checkpoint, checkpoint_restore_path);
   bool has_validation_data = pvalid != nullptr;
-  // Progress printer 
+  // Progress printer
   table_printer printer = this->_init_progress_printer(has_validation_data);
   std::shared_ptr<unity_sframe> progress_table = std::make_shared<unity_sframe>();
   if (restore_from_checkpoint) {
@@ -1390,14 +1390,14 @@ std::shared_ptr<sarray<flexible_type>> xgboost_model::extract_features(
     const sframe& test_data,
     const std::map<std::string, flexible_type>& _options) {
 
-  // For those that call this function from the C++ side, assume missing 
+  // For those that call this function from the C++ side, assume missing
   // value action is none.
   std::string missing_value_action_str = "none";
   auto it = _options.find("missing_value_action");
   if (it != _options.end()) {
     missing_value_action_str = (it->second).get<flex_string>();
   }
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
 
@@ -1782,7 +1782,7 @@ static double hexadecimal_to_float(std::string hex) {
     is_little_endian = ((unsigned char*)(&test))[0] != 0;
   }
 
-  auto char_ptr = [&p](int i) { return reinterpret_cast<unsigned int*>(&(p[i])); }; 
+  auto char_ptr = [&p](int i) { return reinterpret_cast<unsigned int*>(&(p[i])); };
 
 
   if (is_little_endian) {

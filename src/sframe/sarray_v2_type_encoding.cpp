@@ -15,8 +15,8 @@ namespace turi {
 namespace v2_block_impl {
 using namespace turi::integer_pack;
 
-void encode_number(block_info& info, 
-                   oarchive& oarc, 
+void encode_number(block_info& info,
+                   oarchive& oarc,
                    const std::vector<flexible_type>& data) {
   for (size_t i = 0;i < data.size(); ) {
     uint64_t encode_buf[MAX_INTEGERS_PER_BLOCK];
@@ -74,15 +74,15 @@ void decode_number(iarchive& iarc,
 
 /**
  * Encodes a collection of doubles in data, skipping all UNDEFINED values.
- * It simply loops through the data, collecting a block of up to 
+ * It simply loops through the data, collecting a block of up to
  * MAX_INTEGERS_PER_BLOCK numbers and calls frame_of_reference_encode_128()
  * on it.
  *
  * \note The coding does not store the number of values stored. The decoder
  * \ref decode_number() requires the number of values to decode correctly.
  */
-void encode_double_legacy(block_info& info, 
-                          oarchive& oarc, 
+void encode_double_legacy(block_info& info,
+                          oarchive& oarc,
                           const std::vector<flexible_type>& data) {
   for (size_t i = 0;i < data.size(); ) {
     uint64_t encode_buf[MAX_INTEGERS_PER_BLOCK];
@@ -98,7 +98,7 @@ void encode_double_legacy(block_info& info,
     if (encode_buflen == 0) break;
     // perform a left rotate on all the numbers.
     // Basically, doubles are stored as sign-and-magnitude. This means
-    // that -1.0 looks *very* different from -1. 
+    // that -1.0 looks *very* different from -1.
     for (size_t j = 0;j < encode_buflen; ++j) {
       encode_buf[j] = (encode_buf[j] << 1) | (encode_buf[j] >> 63);
     }
@@ -107,8 +107,8 @@ void encode_double_legacy(block_info& info,
 }
 
 
-void encode_double(block_info& info, 
-                   oarchive& oarc, 
+void encode_double(block_info& info,
+                   oarchive& oarc,
                    const std::vector<flexible_type>& data) {
   // we reserve one character so we can add new encoders as needed in the future
   char reserved = 0;
@@ -142,7 +142,7 @@ void encode_double(block_info& info,
     }
     encode_number(info, oarc, copy);
     return;
-  } 
+  }
 }
 
 
@@ -198,16 +198,16 @@ void decode_double(iarchive& iarc,
       }
     }
     return;
-  } 
+  }
 }
 
 /**
  * Encodes a collection of strings in data, skipping all UNDEFINED values.
  *
  * Two encoding strategies are used.
- * Strategy 1: 
+ * Strategy 1:
  * Dictionary encode:
- *  - A dictionary of unique strings are built, and an array of numbers 
+ *  - A dictionary of unique strings are built, and an array of numbers
  *    mapping to the string values are constructed.
  *     - variable_encode(dictionary length)
  *     - for each entry in dictionary:
@@ -223,8 +223,8 @@ void decode_double(iarchive& iarc,
  * \note The coding does not store the number of values stored. The decoder
  * \ref decode_string() requires the number of values to decode correctly.
  */
-static void encode_string(block_info& info, 
-                          oarchive& oarc, 
+static void encode_string(block_info& info,
+                          oarchive& oarc,
                           const std::vector<flexible_type>& data) {
   bool use_dictionary_encoding = true;
   std::unordered_map<std::string, size_t> unique_values;
@@ -261,7 +261,7 @@ static void encode_string(block_info& info,
     }
     encode_number(info, oarc, idx_values);
   } else {
-    // encode all the lengths 
+    // encode all the lengths
     idxctr = 0;
     for (auto& f: data) {
       if (f.get_type() != flex_type_enum::UNDEFINED) {
@@ -279,18 +279,18 @@ static void encode_string(block_info& info,
 }
 
 /**
- * Decodes a collection of strings into 'data'. Entries in data which are 
+ * Decodes a collection of strings into 'data'. Entries in data which are
  * of type flex_type_enum::UNDEFINED will be skipped, and there must be exactly
  * num_undefined number of them. It simply decodes a block using
  * frame_of_reference_decode_128() and fills in data with it.
  */
-static void decode_string(iarchive& iarc, 
+static void decode_string(iarchive& iarc,
                           std::vector<flexible_type>& ret,
                           size_t num_undefined) {
   unsigned int last_id = 0;
-  decode_string_stream(ret.size() - num_undefined, iarc, 
+  decode_string_stream(ret.size() - num_undefined, iarc,
                        [&](flexible_type val) {
-                         while(last_id < ret.size() && 
+                         while(last_id < ret.size() &&
                                ret[last_id].get_type() == flex_type_enum::UNDEFINED) {
                            ++last_id;
                          }
@@ -309,8 +309,8 @@ static void decode_string(iarchive& iarc,
  * \note The coding does not store the number of values stored. The decoder
  * \ref decode_vector() requires the number of values to decode correctly.
  */
-static void encode_vector(block_info& info, 
-                          oarchive& oarc, 
+static void encode_vector(block_info& info,
+                          oarchive& oarc,
                           const std::vector<flexible_type>& data) {
   char reserved = VECTOR_RESERVED_FLAGS::NEW_ENCODING;
   oarc.write(&(reserved), sizeof(reserved));
@@ -336,14 +336,14 @@ static void encode_vector(block_info& info,
  * Decodes a collection of vectors in data, skipping all UNDEFINED values.
  * Wrapper around decode_number_stream
  */
-static void decode_vector(iarchive& iarc, 
+static void decode_vector(iarchive& iarc,
                           std::vector<flexible_type>& ret,
-                          size_t num_undefined, 
+                          size_t num_undefined,
                           bool new_format) {
   unsigned int last_id = 0;
-  decode_vector_stream(ret.size() - num_undefined, iarc, 
+  decode_vector_stream(ret.size() - num_undefined, iarc,
                        [&](flexible_type val) {
-                         while(last_id < ret.size() && 
+                         while(last_id < ret.size() &&
                                ret[last_id].get_type() == flex_type_enum::UNDEFINED) {
                            ++last_id;
                          }
@@ -353,13 +353,13 @@ static void decode_vector(iarchive& iarc,
                        }, new_format);
 }
 
-void typed_encode(const std::vector<flexible_type>& data, 
+void typed_encode(const std::vector<flexible_type>& data,
                   block_info& block,
                   oarchive& oarc) {
   block.flags |= IS_FLEXIBLE_TYPE;
   block.num_elem = data.size();
- 
-  // figure out how many types there are in the array 
+
+  // figure out how many types there are in the array
   turi::fixed_dense_bitset<16> types_appeared;
   types_appeared.clear();
   for (size_t i = 0;i < data.size(); ++i) {
@@ -490,7 +490,7 @@ bool typed_decode(const block_info& info,
     } else if (column_type == flex_type_enum::STRING) {
       decode_string(iarc, ret, num_undefined);
     } else if (column_type == flex_type_enum::VECTOR) {
-      decode_vector(iarc, ret, num_undefined, 
+      decode_vector(iarc, ret, num_undefined,
                     info.flags & BLOCK_ENCODING_EXTENSION);
     } else {
       flexible_type_impl::deserializer s{iarc};
@@ -504,7 +504,7 @@ bool typed_decode(const block_info& info,
 
   if (ret.size() != info.num_elem) {
     logstream(LOG_ERROR) << "Unexpected number of elements read. "
-                         << "Read " << ret.size() 
+                         << "Read " << ret.size()
                          << ". Expecting " << info.num_elem << std::endl;
     return false;
   }

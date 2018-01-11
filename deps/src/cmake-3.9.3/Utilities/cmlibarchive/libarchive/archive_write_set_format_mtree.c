@@ -1200,7 +1200,7 @@ write_mtree_entry_tree(struct archive_write *a)
 				break;
 			}
 		}
-	} while (np != np->parent); 
+	} while (np != np->parent);
 
 	return (ARCHIVE_OK);
 }

@@ -89,7 +89,7 @@ struct hash_function_test  {
       htest.check_and_add(s, s);
     }
   }
-  
+
   void test_string_hashes_64() {
     hash_tracker<uint64_t, std::string> htest;
 
@@ -120,14 +120,14 @@ struct hash_function_test  {
       htest.check_and_add(v, v);
     }
   }
-  
+
   void test_integer_hashes_64() {
     hash_tracker<uint64_t, long> htest;
 
     for(long v : values) {
       htest.check_and_add(hash64(v), v);
     }
-  }  
+  }
 
   void test_reversible_hashes() {
     // Test the reversable hash functions.
@@ -135,11 +135,11 @@ struct hash_function_test  {
     for(size_t i = 0; i < 5000; ++i) {
       DASSERT_EQ(i, reverse_index_hash(index_hash(i)));
     }
-    
+
     for(long i : values) {
       DASSERT_EQ(i, long(reverse_index_hash(index_hash(size_t(i)))));
     }
-  }  
+  }
 
   void test_hash64_cutoff() {
     // Test the reversable hash functions.
@@ -153,7 +153,7 @@ struct hash_function_test  {
       DASSERT_DELTA(prop, double(cutoff) / std::numeric_limits<uint64_t>::max(), 1e-6);
     }
   }
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_hash_function_test, hash_function_test)

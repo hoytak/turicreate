@@ -16,7 +16,7 @@
 # Apple A7	1.97		10.5 (+33%)	6.73 (-1%(**))
 # Cortex-A53	2.38		15.6 (+110%)	10.1 (+190%(***))
 # Cortex-A57	2.31		11.6 (+86%)	7.51 (+260%(***))
-# 
+#
 # (*)	Software SHA256 results are of lesser relevance, presented
 #	mostly for informational purposes.
 # (**)	The result is a trade-off: it's possible to improve it by

@@ -17,7 +17,7 @@ namespace turi {
  * \ingroup sframe_physical
  * \addtogroup Join Join
  *
- * Joins two SFrames. 
+ * Joins two SFrames.
  *
  * \param sf_left Left side of the join
  * \param sfr_right Right side of the join

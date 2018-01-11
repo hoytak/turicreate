@@ -31,11 +31,11 @@ namespace supervised {
  /**
  * Solver interface for logistic regression.
  *
- * Let J denote the number of classes, K the number of features, and N the 
+ * Let J denote the number of classes, K the number of features, and N the
  * number of examples.
  *
  * coefs = [coef_1 ... coef_{J-1}] := (K * (J-1)) x 1 column vector
- * where each 
+ * where each
  * coef_j for j = 1 .. J-1 is a K x 1 column vector representing coefficients
  * for the class j.
  *
@@ -72,8 +72,8 @@ class logistic_regression_opt_interface: public
   * \note Default options are used when the interface is called from the
   * logistic regression class.
   */
-  logistic_regression_opt_interface(const ml_data& _data, 
-                                    const ml_data& _valid_data, 
+  logistic_regression_opt_interface(const ml_data& _data,
+                                    const ml_data& _valid_data,
                                     logistic_regression& _model);
 
   /**
@@ -85,8 +85,8 @@ class logistic_regression_opt_interface: public
    * Set feature scaling
    */
   void init_feature_rescaling();
-  
-  
+
+
   /**
    * Transform the final solution back to the original scale.
    *
@@ -100,7 +100,7 @@ class logistic_regression_opt_interface: public
   * \param[in] _n_threads Number of threads
   */
   void set_threads(size_t _n_threads);
-  
+
   /**
   * Set the class weights (as a flex_dict which is already validated)
   *
@@ -123,7 +123,7 @@ class logistic_regression_opt_interface: public
   * \returns Number of variables
   */
   size_t num_variables() const;
-  
+
   /**
   * Get the number of classes in the model
   *
@@ -137,7 +137,7 @@ class logistic_regression_opt_interface: public
    *
    * \param[in] a vector of strings to print at the beginning of the header.
    */
-  std::vector<std::pair<std::string, size_t>> 
+  std::vector<std::pair<std::string, size_t>>
       get_status_header(const std::vector<std::string>& stat_names);
 
   /**
@@ -146,7 +146,7 @@ class logistic_regression_opt_interface: public
    * \param[in] a vector of model coefficients.
    * \param[in] a vector of stats to print at the beginning of each row
    */
-  std::vector<std::string> get_status(const DenseVector& coefs, 
+  std::vector<std::string> get_status(const DenseVector& coefs,
                                       const std::vector<std::string>& stats);
 
   /**
@@ -181,4 +181,3 @@ class logistic_regression_opt_interface: public
 } // turicreate
 
 #endif
-

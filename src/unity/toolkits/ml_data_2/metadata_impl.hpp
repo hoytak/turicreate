@@ -36,17 +36,17 @@ inline size_t ml_metadata::column_index(const std::string& _column_name) const {
     log_and_throw((std::string("Column ") + _column_name + " not found in model metadata.").c_str());
 
   DASSERT_TRUE(column_name(it->second) == _column_name);
-  
+
   return it->second;
 }
 
 /**
  * Returns true if the metadata contains the given column.
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline bool ml_metadata::contains_column(const std::string& column_name) const {
-  return (_column_name_to_index_map.find(column_name) != _column_name_to_index_map.end()); 
+  return (_column_name_to_index_map.find(column_name) != _column_name_to_index_map.end());
 }
 
 
@@ -60,10 +60,10 @@ inline bool ml_metadata::has_target() const {
 /** Returns the metadata for a particular column, even if that
  *  column is a side feature.
  *
- *  \param column_index The index of the column. 
+ *  \param column_index The index of the column.
  */
 inline const std::shared_ptr<ml_data_internal::column_indexer>&
-ml_metadata::indexer(size_t column_index) const { 
+ml_metadata::indexer(size_t column_index) const {
   return get_column_metadata(column_index)->indexer;
 }
 
@@ -72,7 +72,7 @@ ml_metadata::indexer(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline const std::shared_ptr<ml_data_internal::column_indexer>&
 ml_metadata::indexer(const std::string& column_name) const {
@@ -86,7 +86,7 @@ ml_metadata::indexer(const std::string& column_name) const {
 /** Returns the metadata for a particular column, even if that
  *  column is a side feature.
  *
- *  \param column_index The index of the column. 
+ *  \param column_index The index of the column.
  */
 inline const std::shared_ptr<ml_data_internal::column_statistics>&
 ml_metadata::statistics(size_t column_index) const {
@@ -98,7 +98,7 @@ ml_metadata::statistics(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline const std::shared_ptr<ml_data_internal::column_statistics>&
 ml_metadata::statistics(const std::string& column_name) const {
@@ -114,17 +114,17 @@ inline size_t ml_metadata::num_columns(bool include_side_columns_if_present,
   size_t nc = (include_side_columns_if_present && (side_features != nullptr)
                ? side_features->get_full_column_metadata().size()
                : columns.size());
-  
+
   if(!include_untranslated_columns)
-    nc -= num_untranslated_columns(); 
-  
-  return nc; 
+    nc -= num_untranslated_columns();
+
+  return nc;
 }
 
 /** Returns the number of columns present, including any possible
  *  side columns.
  */
-inline size_t ml_metadata::num_untranslated_columns() const { 
+inline size_t ml_metadata::num_untranslated_columns() const {
   DASSERT_NE(_num_untranslated_columns, size_t(-1));
   return _num_untranslated_columns;
 }
@@ -133,14 +133,14 @@ inline size_t ml_metadata::num_untranslated_columns() const {
  *  otherwise.
  */
 inline bool ml_metadata::has_translated_columns() const {
-  return num_untranslated_columns() != columns.size(); 
+  return num_untranslated_columns() != columns.size();
 }
 
 /** Returns true if there are untranslated columns present, and false
  *  otherwise.
  */
 inline bool ml_metadata::has_untranslated_columns() const {
-  return num_untranslated_columns() != 0; 
+  return num_untranslated_columns() != 0;
 }
 
 /** Returns the number of distinct dimensions, including all
@@ -213,7 +213,7 @@ inline size_t ml_metadata::index_size(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline size_t ml_metadata::index_size(const std::string& column_name) const {
   return index_size(column_index(column_name));
@@ -244,7 +244,7 @@ inline size_t ml_metadata::global_index_offset(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline size_t ml_metadata::global_index_offset(const std::string& column_name) const {
   return global_index_offset(column_index(column_name));
@@ -253,7 +253,7 @@ inline size_t ml_metadata::global_index_offset(const std::string& column_name) c
 /**  Returns the mode of the column.  See ml_data_column_modes.hpp
  *  for details on the column modes.
  *
- *  \param column_index The index of the column. 
+ *  \param column_index The index of the column.
  */
 inline ml_column_mode ml_metadata::column_mode(size_t column_index) const {
   return get_column_metadata(column_index)->mode;
@@ -264,10 +264,10 @@ inline ml_column_mode ml_metadata::column_mode(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
-inline ml_column_mode ml_metadata::column_mode(const std::string& column_name) const { 
-  return column_mode(column_index(column_name)); 
+inline ml_column_mode ml_metadata::column_mode(const std::string& column_name) const {
+  return column_mode(column_index(column_name));
 }
 
 /**  Returns the mode of the target column.  See
@@ -281,7 +281,7 @@ inline ml_column_mode ml_metadata::target_column_mode() const {
 /** Returns the size of the columns in the metadata that were
  *  present at train time.
  *
- *  \param column_index The index of the column. 
+ *  \param column_index The index of the column.
  */
 inline flex_type_enum ml_metadata::column_type(size_t column_index) const {
   return get_column_metadata(column_index)->original_column_type;
@@ -292,10 +292,10 @@ inline flex_type_enum ml_metadata::column_type(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline flex_type_enum ml_metadata::column_type(const std::string& column_name) const {
-  return column_type(column_index(column_name)); 
+  return column_type(column_index(column_name));
 }
 
 
@@ -310,7 +310,7 @@ inline flex_type_enum ml_metadata::target_column_type() const {
 /** Returns true if the underlying type is treated as a categorical
  *  variable, and false otherwise.
  *
- *  \param column_index The index of the column. 
+ *  \param column_index The index of the column.
  */
 inline bool ml_metadata::is_categorical(size_t column_index) const {
   ml_column_mode mode = get_column_metadata(column_index)->mode;
@@ -322,10 +322,10 @@ inline bool ml_metadata::is_categorical(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline bool ml_metadata::is_categorical(const std::string& column_name) const {
-  return is_categorical(column_index(column_name)); 
+  return is_categorical(column_index(column_name));
 }
 
 /** Returns true if the underlying column type is indexed, and false
@@ -333,7 +333,7 @@ inline bool ml_metadata::is_categorical(const std::string& column_name) const {
  *  dictionaries are not treated as pure categorical variables, as
  *  they have values associated with them, but they are indexed.
  *
- *  \param column_index The index of the column. 
+ *  \param column_index The index of the column.
  */
 inline bool ml_metadata::is_indexed(size_t column_index) const {
   ml_column_mode mode = get_column_metadata(column_index)->mode;
@@ -347,7 +347,7 @@ inline bool ml_metadata::is_indexed(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline bool ml_metadata::is_indexed(const std::string& column_name) const {
   return is_indexed(column_index(column_name));
@@ -356,7 +356,7 @@ inline bool ml_metadata::is_indexed(const std::string& column_name) const {
 /** Returns true if the underlying column type is untranslated.
  *  This means it will only be available as flexible_type later on.
  *
- *  \param column_index The index of the column. 
+ *  \param column_index The index of the column.
  */
 inline bool ml_metadata::is_untranslated_column(size_t column_index) const {
   return get_column_metadata(column_index)->is_untranslated_column();
@@ -367,29 +367,29 @@ inline bool ml_metadata::is_untranslated_column(size_t column_index) const {
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline bool ml_metadata::is_untranslated_column(const std::string& column_name) const {
-  return is_untranslated_column(column_index(column_name)); 
+  return is_untranslated_column(column_index(column_name));
 }
 
 /** Returns true if the underlying column is a side column handled
- *  by an implicit join, and false otherwise.  
+ *  by an implicit join, and false otherwise.
  *
- *  \param column_index The index of the column. 
+ *  \param column_index The index of the column.
  */
 inline bool ml_metadata::is_side_column(size_t column_index) const {
-  DASSERT_LT(column_index, num_columns()); 
+  DASSERT_LT(column_index, num_columns());
   return column_index >= columns.size();
 }
-  
+
 
 /** Returns true if the underlying column is a side column handled
- *  by an implicit join, and false otherwise.  
+ *  by an implicit join, and false otherwise.
  *
  *  \overload
  *
- *  \param column_name The name of the column. 
+ *  \param column_name The name of the column.
  */
 inline bool ml_metadata::is_side_column(const std::string& column_name) const {
   return is_side_column(column_index(column_name));

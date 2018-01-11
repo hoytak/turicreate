@@ -7,4 +7,3 @@ bf-686.pl.  When using a bf-686.pl, the pentium is %16 slower
 than bf-586.pl
 
 So the default is bf-586.pl
-

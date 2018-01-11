@@ -19,4 +19,3 @@ rc2 cbc        295.47k      321.57k      324.76k      324.76k      320.00k
 rsa  512 bits   0.084s
 rsa 1024 bits   0.495s
 rsa 2048 bits   3.435s
-

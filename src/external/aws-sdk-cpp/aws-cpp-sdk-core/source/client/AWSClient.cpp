@@ -57,15 +57,15 @@ void AWSClient::InitializeGlobalStatics()
 {
     int currentRefCount = s_refCount.load();
     if (!currentRefCount)
-    {      
-        int expectedRefCount = 0;    
+    {
+        int expectedRefCount = 0;
         Utils::EnumParseOverflowContainer* expectedPtrValue = nullptr;
         Utils::EnumParseOverflowContainer* container = Aws::New<Utils::EnumParseOverflowContainer>(AWS_CLIENT_LOG_TAG);
         if (!s_refCount.compare_exchange_strong(expectedRefCount, 1) ||
              !Aws::CheckAndSwapEnumOverflowContainer(expectedPtrValue, container))
         {
             Aws::Delete(container);
-        }        
+        }
     }
     else
     {
@@ -75,7 +75,7 @@ void AWSClient::InitializeGlobalStatics()
 
 void AWSClient::CleanupGlobalStatics()
 {
-    int currentRefCount = s_refCount.load(); 
+    int currentRefCount = s_refCount.load();
     Utils::EnumParseOverflowContainer* expectedPtrValue = Aws::GetEnumOverflowContainer();
 
     if (currentRefCount == 1)
@@ -83,9 +83,9 @@ void AWSClient::CleanupGlobalStatics()
         if (s_refCount.compare_exchange_strong(currentRefCount, 0) &&
             Aws::CheckAndSwapEnumOverflowContainer(expectedPtrValue, nullptr))
         {
-            Aws::Delete(expectedPtrValue);           
+            Aws::Delete(expectedPtrValue);
             return;
-        }        
+        }
     }
 
     --s_refCount;
@@ -111,13 +111,13 @@ AWSClient::~AWSClient()
     CleanupGlobalStatics();
 }
 
-void AWSClient::DisableRequestProcessing() 
-{ 
-    m_httpClient->DisableRequestProcessing(); 
+void AWSClient::DisableRequestProcessing()
+{
+    m_httpClient->DisableRequestProcessing();
 }
 
-void AWSClient::EnableRequestProcessing() 
-{ 
+void AWSClient::EnableRequestProcessing()
+{
     m_httpClient->EnableRequestProcessing();
 }
 
@@ -273,8 +273,8 @@ void AWSClient::AddContentBodyToRequest(const std::shared_ptr<Aws::Http::HttpReq
         httpRequest->DeleteHeader(Http::CONTENT_TYPE_HEADER);
 
         if(httpRequest->GetMethod() == HttpMethod::HTTP_POST || httpRequest->GetMethod() == HttpMethod::HTTP_PUT)
-        {        
-            httpRequest->SetHeaderValue(Http::CONTENT_LENGTH_HEADER, "0");        
+        {
+            httpRequest->SetHeaderValue(Http::CONTENT_LENGTH_HEADER, "0");
         }
         else
         {

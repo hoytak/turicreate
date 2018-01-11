@@ -31,7 +31,7 @@ namespace lambda {
  * std::string lambda_string="some pickled str"
  * pylambda_function f(lambda_string);
  *
- * // (optional) Set options such as random_seed or skip_undefined. 
+ * // (optional) Set options such as random_seed or skip_undefined.
  * f.set_skip_undefined(true);
  * f.set_random_seed(0);
  *
@@ -78,14 +78,14 @@ class pylambda_function {
   void set_skip_undefined(bool value);
   void set_random_seed(int value);
 
-  //// Evaluating Interface 
+  //// Evaluating Interface
 
   /* One to one */
-  void eval(const sframe_rows& rows, 
+  void eval(const sframe_rows& rows,
             std::vector<flexible_type>& out);
 
   /* Many to one */
-  void eval(const std::vector<std::string>& keys, 
+  void eval(const std::vector<std::string>& keys,
             const sframe_rows& rows,
             std::vector<flexible_type>& out);
 

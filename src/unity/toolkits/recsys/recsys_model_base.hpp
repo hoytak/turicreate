@@ -287,7 +287,7 @@ public:
   std::shared_ptr<recsys_popularity> get_popularity_baseline() const;
 
   flex_dict get_data_schema() const;
-  
+
 private:
 
   /** Choose some things diversely.
@@ -478,5 +478,3 @@ sframe recsys_model_base::_create_similar_sframe(
 }}
 
 #endif /* TURI_RECSYS_ALGORITHM_TEMPLATE_H_ */
-
-

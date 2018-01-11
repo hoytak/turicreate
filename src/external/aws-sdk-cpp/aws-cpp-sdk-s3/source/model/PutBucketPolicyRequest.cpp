@@ -23,7 +23,7 @@ using namespace Aws::Utils::Stream;
 using namespace Aws::Utils;
 using namespace Aws;
 
-PutBucketPolicyRequest::PutBucketPolicyRequest() : 
+PutBucketPolicyRequest::PutBucketPolicyRequest() :
     m_bucketHasBeenSet(false),
     m_contentMD5HasBeenSet(false)
 {

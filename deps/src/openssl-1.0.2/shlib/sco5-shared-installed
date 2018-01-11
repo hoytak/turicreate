@@ -25,4 +25,3 @@ rm -f $INSTALLTOP/$slib.so
 ln -s $INSTALLTOP/$sh_slib $slib.so
 
 cd $PWD
-

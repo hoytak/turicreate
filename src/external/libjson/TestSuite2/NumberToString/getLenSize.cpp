@@ -3,7 +3,7 @@
 
 
 /**
- *	Make sure the specialized template returns the right 
+ *	Make sure the specialized template returns the right
  *	number of bytes required
  */
 void testNumberToString__getLenSize::testStruct(void){

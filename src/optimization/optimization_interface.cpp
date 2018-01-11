@@ -7,7 +7,7 @@
 
 namespace turi {
 
-namespace optimization { 
+namespace optimization {
 
 /**************************************************************************/
 /*                                                                        */
@@ -16,7 +16,7 @@ namespace optimization {
 /**************************************************************************/
 
 /**
- * Desctuctor 
+ * Desctuctor
  */
 first_order_opt_interface::~first_order_opt_interface(){
 }
@@ -64,20 +64,20 @@ void first_order_opt_interface::reset(int seed) {
 /**
  * Get strings needed to print the header for the progress table.
  */
-std::vector<std::pair<std::string, size_t>> 
+std::vector<std::pair<std::string, size_t>>
   first_order_opt_interface::get_status_header(const std::vector<std::string>& stats) {
   auto header = std::vector<std::pair<std::string, size_t>>();
   for (const auto& s : stats) {
     header.push_back({s, 8});
   }
-  return header; 
+  return header;
 }
 
 /**
  * Get strings needed to print a row of the progress table.
  */
-std::vector<std::string> 
-  first_order_opt_interface::get_status(const DenseVector& coefs, 
+std::vector<std::string>
+  first_order_opt_interface::get_status(const DenseVector& coefs,
                                         const std::vector<std::string>& stats) {
   return stats;
 }
@@ -90,7 +90,7 @@ std::vector<std::string>
 /**************************************************************************/
 
 /**
- * Destructor 
+ * Destructor
  */
 second_order_opt_interface::~second_order_opt_interface(){
 }
@@ -115,5 +115,3 @@ void second_order_opt_interface::compute_hessian(
 } // optimization
 
 } // turicreate
-
-

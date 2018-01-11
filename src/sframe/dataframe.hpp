@@ -23,7 +23,7 @@ typedef uint32_t field_id_type;
  */
 
 /**
- * Type that represents a Pandas-like dataframe: 
+ * Type that represents a Pandas-like dataframe:
  * A in memory column-wise representation of a table.
  * The dataframe_t is simply a map from column name to a column of records,
  * where every column is the same length, and all values within a column
@@ -33,9 +33,9 @@ typedef uint32_t field_id_type;
  * Each cell in the dataframe is represented by a \ref flexible_type object,
  * while this technically allows every cell to be an arbitrary type, we do not
  * permit that behavior. We require and assume that every cell in a column be of
- * the same type. This is with the exception of empty cells (NaNs in Pandas) 
+ * the same type. This is with the exception of empty cells (NaNs in Pandas)
  * which are of type UNDEFINED.
- */ 
+ */
 struct dataframe_t {
   /// A vector storing the name of columns
   std::vector<std::string> names;
@@ -43,7 +43,7 @@ struct dataframe_t {
   /// A map from the column name to the type of the column
   std::map<std::string, flex_type_enum> types;
 
-  /** A map from the column name to the values of the column. 
+  /** A map from the column name to the values of the column.
    * Every column must have the same length, and all values within a column
    * must be of the same type. The UNDEFINED type is an exception to the rule
    * and may be used anywhere to designate an empty entry.
@@ -53,12 +53,12 @@ struct dataframe_t {
   /**
    * Fill the dataframe with the content from a csv file.
    *
-   * \param: path. Path to the csv file. 
-   * \param: delimiter. User defined csv sepearator. 
-   * \param: use_header. If true, the first line is treated as column header. 
+   * \param: path. Path to the csv file.
+   * \param: delimiter. User defined csv sepearator.
+   * \param: use_header. If true, the first line is treated as column header.
    *         Otherwise, X0, X1,... will be used.
    *
-   * Note: This function will infer and unify the most proper type for each 
+   * Note: This function will infer and unify the most proper type for each
    * column.
    */
   void read_csv(const std::string& path, char delimiter, bool use_header);
@@ -67,7 +67,7 @@ struct dataframe_t {
    * Returns the number of rows in the dataframe
    */
   inline size_t nrows() const {
-    return (values.begin() == values.end()) ? 0 
+    return (values.begin() == values.end()) ? 0
            : values.begin()->second.size();
   }
 
@@ -79,8 +79,8 @@ struct dataframe_t {
   }
 
   /**
-   * Convert the values in the column into the specified type. 
-   * Throws an exception if the column is not found, or the conversion 
+   * Convert the values in the column into the specified type.
+   * Throws an exception if the column is not found, or the conversion
    * cannot be made.
    */
   void set_type(std::string key, flex_type_enum type);
@@ -138,16 +138,16 @@ struct dataframe_t {
   /**
    * Sets the value of a column of the dataframe.
    */
-  void set_column(std::string key, 
-                  const std::vector<flexible_type>& val, 
+  void set_column(std::string key,
+                  const std::vector<flexible_type>& val,
                   flex_type_enum type);
 
 
   /**
    * Sets the value of a column of the dataframe, consuming the vector value
    */
-  void set_column(std::string key, 
-                  std::vector<flexible_type>&& val, 
+  void set_column(std::string key,
+                  std::vector<flexible_type>&& val,
                   flex_type_enum type);
 
   /**
@@ -168,15 +168,15 @@ struct dataframe_t {
   /// Clears the contents of the dataframe
   inline void clear() {
     names.clear();
-    types.clear(); 
+    types.clear();
     values.clear();
   }
 };
 
 /**
  * \ingroup unity
- * The dataframe is a column-wise representation. This provides iteration over 
- * the dataframe in a row-wise representation. Incrementing the iterator 
+ * The dataframe is a column-wise representation. This provides iteration over
+ * the dataframe in a row-wise representation. Incrementing the iterator
  * advances the iterator element by element by across rows.
  *
  * Usage:
@@ -205,26 +205,26 @@ struct dataframe_t {
 class dataframe_row_iterator {
  private:
   /// The names of each column of the dataframe
-  std::vector<std::string> names; 
+  std::vector<std::string> names;
 
   /// The types of each column of the dataframe
-  std::vector<flex_type_enum> types; 
+  std::vector<flex_type_enum> types;
 
   /// The list of iterators over each column
   std::vector<std::pair<std::vector<flexible_type>::const_iterator,
-                        std::vector<flexible_type>::const_iterator> > iterators; 
+                        std::vector<flexible_type>::const_iterator> > iterators;
   /// Number of rows in the dataframe
-  size_t num_rows; 
+  size_t num_rows;
   /// Number of columns in the dataframe
-  size_t num_columns; 
-  ///The current column pointed to 
-  size_t current_column; 
+  size_t num_columns;
+  ///The current column pointed to
+  size_t current_column;
   /// The current row pointed to
-  size_t current_row;  
+  size_t current_row;
   /// The total number of entries: num_rows * num_column
-  size_t num_el;       
+  size_t num_el;
   /// The entry index pointed to.
-  size_t idx;          
+  size_t idx;
  public:
 
   typedef flexible_type value_type;
@@ -261,14 +261,14 @@ class dataframe_row_iterator {
       ++current_row;
     }
     ++idx;
-    return *this; 
+    return *this;
   }
 
   /// post-increments to the next entry of the dataframe row-wise
   inline dataframe_row_iterator& operator++(int) {
     dataframe_row_iterator ret = (*this);
     ++ret;
-    return *this; 
+    return *this;
   }
 
   /// Returns the index of the current row
@@ -316,13 +316,13 @@ class dataframe_row_iterator {
     return types[idx];
   }
 
-  /// Returns the list of all column types 
+  /// Returns the list of all column types
   inline const std::vector<flex_type_enum>& column_types() const {
     return types;
   }
 
   /**
-   * Advances the iterator by this number of rows. 
+   * Advances the iterator by this number of rows.
    * Current column does not change. If the number of rows to skip causes
    * the iterator to go past the end of the dataframe, the resultant
    * iterator is equivalent to the end iterator of the dataframe.
@@ -334,7 +334,7 @@ class dataframe_row_iterator {
     return num_el == other.num_el && idx < other.idx;
   }
 
-  /// Returns true if both iterators are not equal 
+  /// Returns true if both iterators are not equal
   inline bool operator!=(const dataframe_row_iterator& other) {
     return !((*this) == other);
   }
@@ -368,8 +368,8 @@ class dataframe_row_iterator {
  * lambda with a new iterator and the range of rows it is meant to process.
  */
 void parallel_dataframe_iterate(const dataframe_t& df,
-                                std::function<void(dataframe_row_iterator& iter, 
-                                                   size_t startrow, 
+                                std::function<void(dataframe_row_iterator& iter,
+                                                   size_t startrow,
                                                    size_t endrow)> partialrowfn);
 /// \}
 } // namespace turi

@@ -136,7 +136,7 @@ def test_pylambda_worker():
     import os
 
     environment = os.environ.copy()
-    
+
     from os.path import join
     from os.path import exists
     import tempfile
@@ -154,7 +154,7 @@ def test_pylambda_worker():
     temp_dir = tempfile.mkdtemp()
 
     temp_dir_sim = join(temp_dir, "simulated")
-    os.mkdir(temp_dir_sim)    
+    os.mkdir(temp_dir_sim)
     lambda_log_file_sym = join(temp_dir_sim, "lambda_log")
 
     # Dump the directory structure.
@@ -163,17 +163,17 @@ def test_pylambda_worker():
     dir_structure_out = open(dir_structure_file, "w")
     dump_directory_structure(dir_structure_out)
     dir_structure_out.close()
-    
+
     print("\nRunning simulation.")
-    
+
     env=make_unity_server_env()
     env["TURI_LAMBDA_WORKER_DEBUG_MODE"] = "1"
     env["TURI_LAMBDA_WORKER_LOG_FILE"] = lambda_log_file_sym
-    
+
     proc = subprocess.Popen(
             [sys.executable, os.path.abspath(_pylambda_worker.__file__)],
             env = env)
-    
+
     proc.wait()
 
     ################################################################################
@@ -188,12 +188,12 @@ def test_pylambda_worker():
     trial_temp_dir = join(temp_dir, "full_run")
     os.mkdir(trial_temp_dir)
     lambda_log_file_run = join(trial_temp_dir, "lambda_log.log")
-    
+
     run_temp_dir = join(trial_temp_dir, "run_temp_dir")
     os.mkdir(run_temp_dir)
 
     run_temp_dir_copy = join(temp_dir, "run_temp_dir_copy")
-    
+
     run_info_dict = {
         "lambda_log" : lambda_log_file_run,
         "temp_dir" : trial_temp_dir,
@@ -201,7 +201,7 @@ def test_pylambda_worker():
         "preserved_temp_dir" : run_temp_dir_copy,
         "runtime_log" : join(trial_temp_dir, "runtime.log"),
         "sys_path_log" : join(trial_temp_dir, "sys_path_2.log")}
-        
+
     run_script = r"""
 import os
 import traceback
@@ -266,7 +266,7 @@ try:
     sa = sframe.SArray(range(1000))
 except Exception as e:
     write_exception(e)
-    
+
 try:
     print("Sum = %%d" %% (sa.apply(lambda x: x).sum()))
 except Exception as e:
@@ -288,7 +288,7 @@ for d in new_dirs:
     except Exception as e:
         sys.stderr.write("Error with: " + d)
         write_exception(e)
-    
+
 for f in copy_files:
     try:
         shutil.copy(f, translate_name(f))
@@ -305,7 +305,7 @@ for f in server_logs:
     except Exception as e:
         sys.stderr.write("Error with: " + f)
         write_exception(e)
-               
+
     """ % run_info_dict
 
     run_script_file = join(temp_dir, "run_script.py")
@@ -322,7 +322,7 @@ for f in server_logs:
             stdout = open(log_file_stdout, "w"),
             stderr = open(log_file_stderr, "w"),
             env = env)
-    
+
     proc.wait()
 
     # Now zip up the output data into a package we can access.
@@ -335,7 +335,7 @@ for f in server_logs:
 
     for root, dirs, files in os.walk(temp_dir):
         save_files += [join(root, name) for name in files]
-    
+
     with zipfile.ZipFile(zipfile_name, 'w') as logzip:
         error_logs = []
         for f in save_files:
@@ -362,7 +362,7 @@ for f in server_logs:
             os.remove(f)
         except Exception:
             pass
- 
+
 
 def dump_directory_structure(out = sys.stdout):
     """

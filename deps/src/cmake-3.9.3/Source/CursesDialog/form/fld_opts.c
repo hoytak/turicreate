@@ -38,9 +38,9 @@ MODULE_ID("$Id$")
   --------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_field_opts(FIELD *field, Field_Options opts)
-|   
+|
 |   Description   :  Turns on the named options for this field and turns
 |                    off all the remaining options.
 |
@@ -59,9 +59,9 @@ int set_field_opts(FIELD * field, Field_Options opts)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  Field_Options field_opts(const FIELD *field)
-|   
+|
 |   Description   :  Retrieve the fields options.
 |
 |   Return Values :  The options.
@@ -72,10 +72,10 @@ Field_Options field_opts(const FIELD * field)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int field_opts_on(FIELD *field, Field_Options opts)
-|   
-|   Description   :  Turns on the named options for this field and all the 
+|
+|   Description   :  Turns on the named options for this field and all the
 |                    remaining options are unchanged.
 |
 |   Return Values :  E_OK            - success
@@ -97,10 +97,10 @@ int field_opts_on(FIELD * field, Field_Options opts)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int field_opts_off(FIELD *field, Field_Options opts)
-|   
-|   Description   :  Turns off the named options for this field and all the 
+|
+|   Description   :  Turns off the named options for this field and all the
 |                    remaining options are unchanged.
 |
 |   Return Values :  E_OK            - success
@@ -119,6 +119,6 @@ int field_opts_off(FIELD  * field, Field_Options opts)
       res = _nc_Synchronize_Options( field, field->opts & ~opts );
     }
   RETURN(res);
-}	
+}
 
 /* fld_opts.c ends here */

@@ -23,13 +23,13 @@ namespace turi {
  * "sframe_builder" class, but provides the implementation. This is because it
  * is a slightly embellished wrapper around the SArray's output iterator, so
  * there is no further functionality that needs to be available for the C++
- * side. 
+ * side.
  *
  * The unity_sframe_builder is designed to append values until \ref close is
  * called, which returns the SArray. No "reopening" is allowed, and no
  * operations in that instance of unity_sframe_builder will work after close is
  * called.
- * 
+ *
  * This also doesn't wrap the already existing \ref unity_sarray_builder
  * despite its similarity, because using the sframe output iterator allows for
  * multiple columns to be kept in the same file.
@@ -59,7 +59,7 @@ class unity_sframe_builder: public unity_sframe_builder_base {
    * The \p segment number allows the user to use the parallel interface provided
    * by the underlying output_iterator.
    *
-   * Throws if: 
+   * Throws if:
    *  - init hasn't been called or close has been called
    *  - segment number is invalid
    *  - the type of \p row differs from the type of the elements already
@@ -71,7 +71,7 @@ class unity_sframe_builder: public unity_sframe_builder_base {
   /**
    * A wrapper of \ref append which adds multiple rows to SFrame.
    *
-   * Throws if: 
+   * Throws if:
    *  - init hasn't been called or close has been called
    *  - segment number is invalid
    *  - the type of any values in \p rows differs from the type of the

@@ -9,4 +9,4 @@ python predict_leaf_indices.py
 python sklearn_examples.py
 python sklearn_parallel.py
 python external_memory.py
-rm -rf *~ *.model *.buffer 
+rm -rf *~ *.model *.buffer

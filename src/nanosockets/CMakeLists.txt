@@ -13,7 +13,7 @@ make_library(nanosockets
   subscribe_socket.cpp
   publish_socket.cpp
   get_next_port_number.cpp
-  REQUIRES 
+  REQUIRES
   network
   util
   timer

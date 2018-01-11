@@ -153,7 +153,7 @@ sub ::public_label
 sub ::file_end
 {   if ($::macosx)
     {	if (%non_lazy_ptr)
-    	{   push(@out,".section __IMPORT,__pointers,non_lazy_symbol_pointers\n");
+	{   push(@out,".section __IMPORT,__pointers,non_lazy_symbol_pointers\n");
 	    foreach $i (keys %non_lazy_ptr)
 	    {	push(@out,"$non_lazy_ptr{$i}:\n.indirect_symbol\t$i\n.long\t0\n");   }
 	}

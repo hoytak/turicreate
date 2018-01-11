@@ -39,4 +39,3 @@ CURLcode Curl_http2_request(Curl_send_buffer *req,
 #endif
 
 #endif /* HEADER_CURL_HTTP2_H */
-

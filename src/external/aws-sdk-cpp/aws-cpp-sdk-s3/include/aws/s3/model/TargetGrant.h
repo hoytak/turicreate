@@ -40,19 +40,19 @@ namespace Model
 
     void AddToNode(Aws::Utils::Xml::XmlNode& parentNode) const;
 
-    
+
     inline const Grantee& GetGrantee() const{ return m_grantee; }
 
-    
+
     inline void SetGrantee(const Grantee& value) { m_granteeHasBeenSet = true; m_grantee = value; }
 
-    
+
     inline void SetGrantee(Grantee&& value) { m_granteeHasBeenSet = true; m_grantee = value; }
 
-    
+
     inline TargetGrant& WithGrantee(const Grantee& value) { SetGrantee(value); return *this;}
 
-    
+
     inline TargetGrant& WithGrantee(Grantee&& value) { SetGrantee(value); return *this;}
 
     /**

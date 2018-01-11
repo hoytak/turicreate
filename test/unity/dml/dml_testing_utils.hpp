@@ -16,7 +16,7 @@ namespace dml_testing_utils {
    * in the shared library.
    */
   std::function<std::string(std::string)> get_distributed_function(
-      std::string function_name, 
+      std::string function_name,
       size_t num_workers = 1,
       std::string shared_lib="./dml_toolkits.so") {
 

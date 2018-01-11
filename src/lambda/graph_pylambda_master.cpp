@@ -28,7 +28,7 @@ void graph_pylambda_master::shutdown_instance() {
     delete instance_ptr;
     instance_ptr = nullptr;
   }
-} 
+}
 
 graph_pylambda_master::graph_pylambda_master(size_t nworkers) {
   m_worker_pool.reset(

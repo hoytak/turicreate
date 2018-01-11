@@ -214,7 +214,7 @@ bid_get_line(struct archive_read_filter *filter,
 {
 	ssize_t len;
 	int quit;
-	
+
 	quit = 0;
 	if (*avail == 0) {
 		*nl = 0;
@@ -418,7 +418,7 @@ ensure_in_buff_size(struct archive_read_filter *self,
 			free(ptr);
 			archive_set_error(&self->archive->archive,
 			    ENOMEM,
-    			    "Can't allocate data for uudecode");
+			    "Can't allocate data for uudecode");
 			return (ARCHIVE_FATAL);
 		}
 		/* Move the remaining data in in_buff into the new buffer. */
@@ -684,4 +684,3 @@ uudecode_filter_close(struct archive_read_filter *self)
 
 	return (ARCHIVE_OK);
 }
-

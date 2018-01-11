@@ -29,14 +29,14 @@ struct raii_deleter;
  * users of the server/client implementations have to be careful about who
  * is sending and who is receiving.
  *
- * The class uses Posix Shared Memory segments. Essentially you define a 
+ * The class uses Posix Shared Memory segments. Essentially you define a
  * "name" (on Linux this name shows up in /dev/shm, on Mac this is unfortunately
- * not enumerable). 
+ * not enumerable).
  *
  * Within the shared memory segment is essentially a buffer, and a pair of
  * condition variables used to wake a client receiver, or a server receiver.
  *
- * The server creates a name, and a size and waits for a client to connect to 
+ * The server creates a name, and a size and waits for a client to connect to
  * it. Once a client connects, the shared memory segment is deleted (unlink).
  * This means that once both server and client terminate (or crash), the shared
  * memory segment is released. (otherwise the named segment will hang around
@@ -51,7 +51,7 @@ class server {
   server() = default;
   ~server();
   /**
-   * Binds a server to an ipc name. This SHM name will show up in 
+   * Binds a server to an ipc name. This SHM name will show up in
    * /dev/shm on linux machines. Every server must bind to a different file.
    * If ipcfile is an empty string, a file is automatically constructed and
    * \ref get_shared_memory_name() can be used to get the shared memory name.
@@ -81,7 +81,7 @@ class server {
 
   /**
    * Receives a bunch of bytes into (*c) and (*clen). (*c) and (*clen)
-   * may be resized as required to fit the data. if c == nullptr and 
+   * may be resized as required to fit the data. if c == nullptr and
    * clen == nullptr, the return data is discarded.
    */
   bool receive(char** c, size_t* clen, size_t& receivelen, size_t timeout);
@@ -140,7 +140,7 @@ class client{
 
   /**
    * Receives a bunch of bytes into (*c) and (*clen). (*c) and (*clen)
-   * may be resized as required to fit the data. if c == nullptr and 
+   * may be resized as required to fit the data. if c == nullptr and
    * clen == nullptr, the return data is discarded.
    */
   bool receive(char**c, size_t* len, size_t& receivelen, size_t timeout);
@@ -210,10 +210,10 @@ bool large_send(T& shm, const char *c, size_t len) {
  * Receiver must use the matching large_receive function.
  */
 template <typename T>
-bool large_receive(T& shm, char **c, size_t* clen, 
+bool large_receive(T& shm, char **c, size_t* clen,
                    size_t& receivelen, size_t timeout) {
   /*
-   * Essentially, we keep receiving as long as we are getting full buffers. 
+   * Essentially, we keep receiving as long as we are getting full buffers.
    * timeout only applies to the first receive.
    */
   size_t buffer_size = shm.buffer_size();
@@ -225,7 +225,7 @@ bool large_receive(T& shm, char **c, size_t* clen,
   while(1) {
     char* recv_buffer;
     size_t recvlen;
-    bool ret = shm.receive_direct(&recv_buffer, &recvlen, 
+    bool ret = shm.receive_direct(&recv_buffer, &recvlen,
                                   last_receivelen, cur_timeout);
     if (ret == false) return false;
     // make sure we have room to receive an entire full buffer

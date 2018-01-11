@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-Destination::Destination() : 
+Destination::Destination() :
     m_bucketHasBeenSet(false),
     m_storageClassHasBeenSet(false)
 {
 }
 
-Destination::Destination(const XmlNode& xmlNode) : 
+Destination::Destination(const XmlNode& xmlNode) :
     m_bucketHasBeenSet(false),
     m_storageClassHasBeenSet(false)
 {

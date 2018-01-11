@@ -22,15 +22,15 @@ struct has_get_reader_function {
 
 /**
  * \ingroup sframe_physical
- * is_sarray_like<T>::value is true if T inherits from swriter_base and 
+ * is_sarray_like<T>::value is true if T inherits from swriter_base and
  * has a get_reader() function implemented which returns an
  * std::unique_ptr<T::reader_type>
  */
-template <typename T, 
+template <typename T,
           typename DecayedT = typename std::decay<T>::type,
-          typename Iterator = typename DecayedT::iterator> 
+          typename Iterator = typename DecayedT::iterator>
 struct is_sarray_like {
-  static constexpr bool value = is_swriter_base<T>::value && 
+  static constexpr bool value = is_swriter_base<T>::value &&
       has_get_reader_function<DecayedT>::value;
 };
 

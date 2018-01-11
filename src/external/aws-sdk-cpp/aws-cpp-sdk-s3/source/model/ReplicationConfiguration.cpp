@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-ReplicationConfiguration::ReplicationConfiguration() : 
+ReplicationConfiguration::ReplicationConfiguration() :
     m_roleHasBeenSet(false),
     m_rulesHasBeenSet(false)
 {
 }
 
-ReplicationConfiguration::ReplicationConfiguration(const XmlNode& xmlNode) : 
+ReplicationConfiguration::ReplicationConfiguration(const XmlNode& xmlNode) :
     m_roleHasBeenSet(false),
     m_rulesHasBeenSet(false)
 {

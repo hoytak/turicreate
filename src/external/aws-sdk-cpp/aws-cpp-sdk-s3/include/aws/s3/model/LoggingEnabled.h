@@ -111,25 +111,25 @@ namespace Model
      */
     inline LoggingEnabled& WithTargetBucket(const char* value) { SetTargetBucket(value); return *this;}
 
-    
+
     inline const Aws::Vector<TargetGrant>& GetTargetGrants() const{ return m_targetGrants; }
 
-    
+
     inline void SetTargetGrants(const Aws::Vector<TargetGrant>& value) { m_targetGrantsHasBeenSet = true; m_targetGrants = value; }
 
-    
+
     inline void SetTargetGrants(Aws::Vector<TargetGrant>&& value) { m_targetGrantsHasBeenSet = true; m_targetGrants = value; }
 
-    
+
     inline LoggingEnabled& WithTargetGrants(const Aws::Vector<TargetGrant>& value) { SetTargetGrants(value); return *this;}
 
-    
+
     inline LoggingEnabled& WithTargetGrants(Aws::Vector<TargetGrant>&& value) { SetTargetGrants(value); return *this;}
 
-    
+
     inline LoggingEnabled& AddTargetGrants(const TargetGrant& value) { m_targetGrantsHasBeenSet = true; m_targetGrants.push_back(value); return *this; }
 
-    
+
     inline LoggingEnabled& AddTargetGrants(TargetGrant&& value) { m_targetGrantsHasBeenSet = true; m_targetGrants.push_back(value); return *this; }
 
     /**

@@ -241,8 +241,8 @@ static std::shared_ptr<sarray<std::pair<flex_list, std::string> >> scatter_parti
       // Calculate roughly how much memory each partition will take up when
       // loaded to be sorted
       // say that each row adds 32 bytes and each cell adds 64 bytes
-      partition_size_in_bytes[partition_id] += 
-          oarc.off + (num_sort_columns * CELL_SIZE_ESTIMATE) + ROW_SIZE_ESTIMATE; 
+      partition_size_in_bytes[partition_id] +=
+          oarc.off + (num_sort_columns * CELL_SIZE_ESTIMATE) + ROW_SIZE_ESTIMATE;
       ++partition_size_in_rows[partition_id];
 
       *(outiter_vector[partition_id]) = {sort_keys, arcout};
@@ -313,7 +313,7 @@ std::shared_ptr<sframe> sort(
    */
   size_t num_rows = infer_planner_node_length(sframe_planner_node);
   size_t num_columns = column_types.size();
-  std::set<size_t> sort_column_indices_set(sort_column_indices.begin(), 
+  std::set<size_t> sort_column_indices_set(sort_column_indices.begin(),
                                            sort_column_indices.end());
 
   std::vector<size_t> value_column_indices;
@@ -322,7 +322,7 @@ std::shared_ptr<sframe> sort(
   }
   auto key_columns = op_project::make_planner_node(sframe_planner_node, sort_column_indices);
 
-  // now. Annoyingly enough, I can't project an empty column. 
+  // now. Annoyingly enough, I can't project an empty column.
   std::shared_ptr<planner_node> value_columns;
   if (!value_column_indices.empty()) {
     value_columns = op_project::make_planner_node(sframe_planner_node, value_column_indices);
@@ -405,7 +405,7 @@ std::shared_ptr<sframe> sort(
 
   // We perform the scatter.
   // rebuild the sframe so that the key columns are the lowest column indices
-  
+
   std::shared_ptr<planner_node> key_and_value_columns;
   if (value_columns) {
     // reproject the key columns. It is more efficient to keep the query plan
@@ -423,7 +423,7 @@ std::shared_ptr<sframe> sort(
   }
   ti.start();
   auto partition_array = scatter_partition(
-    key_and_value_columns, 
+    key_and_value_columns,
     sort_orders.size(),
     sort_orders,
     partition_keys, partition_sizes, partition_sorted);
@@ -431,9 +431,9 @@ std::shared_ptr<sframe> sort(
 
   ti.start();
   // the partition process reorganizes the sframe so that all the key columns
-  // come first, than all the value columns. But when we write it out, we want 
+  // come first, than all the value columns. But when we write it out, we want
   // it back in the original ordering.
-  // permute_ordering[i] is the reverse permutation. i.e. 
+  // permute_ordering[i] is the reverse permutation. i.e.
   // column {permute_ordering[i]} is going to be placed in column i.
   std::vector<size_t> permute_ordering(num_columns);
   size_t value_column_counter = 0;
@@ -445,7 +445,7 @@ std::shared_ptr<sframe> sort(
       // number of value columns seen so far.
       permute_ordering[i]  = sort_column_indices.size() + value_column_counter;
       ++value_column_counter;
-    }   
+    }
   }
   // key columns are different.
   // In the intermediate SFrame, all key columns

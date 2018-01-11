@@ -14,7 +14,7 @@
 namespace turi {
 pagefile::pagefile() { }
 
-pagefile::~pagefile() { 
+pagefile::~pagefile() {
   reset();
 }
 
@@ -43,13 +43,13 @@ void pagefile::init(const std::vector<size_t>& _arena_sizes) {
     m_max_arena_size = std::max(m_max_arena_size, arena_sizes[i]);
     // try to allocate the pagefile first
     std::string pagefile_name = get_temp_name();
-    // unfortunately we have to go one level lower here 
+    // unfortunately we have to go one level lower here
     // since we need ftruncate. So unfortunately we have to use the POSIX
     // apis instead of the C file or the C++ APIS.
     m_arenas[i].pagefile_handle = open(pagefile_name.c_str(), O_CREAT | O_RDWR | O_TRUNC, 0600);
     // unlink it immediately so we don't leak
     delete_temp_file(pagefile_name);
-    // unable to open pagefile 
+    // unable to open pagefile
     if (m_arenas[i].pagefile_handle == -1) {
       log_and_throw("Unable to create pagefile");
     }
@@ -70,10 +70,10 @@ size_t pagefile::allocate() {
 static std::pair<size_t, size_t> compress(char* start, size_t len, char** out) {
   char* type_encode = nullptr;
   size_t type_encode_length = 0;
-  type_heuristic_encode::compress(start, len, 
+  type_heuristic_encode::compress(start, len,
                                   &type_encode, type_encode_length);
   (*out) = (char*)malloc(LZ4_compressBound(type_encode_length));
-  size_t final_length = (size_t)LZ4_compress(type_encode, 
+  size_t final_length = (size_t)LZ4_compress(type_encode,
                                              (*out), type_encode_length);
   free(type_encode);
   return {type_encode_length, final_length};
@@ -111,23 +111,23 @@ bool pagefile::write(size_t handle, char* start, size_t len) {
 #define TRIAL_COMPRESS_SIZE 65536
 #define TRIAL_COMPRESS_OK_SIZE (TRIAL_COMPRESS_SIZE / 4) * 3
   char* trial_compressed_buffer = nullptr;
-  auto trial_compressed_size = 
+  auto trial_compressed_size =
       compress(start, std::min<size_t>(len, TRIAL_COMPRESS_SIZE),
                &trial_compressed_buffer);
   free(trial_compressed_buffer);
 
   if (trial_compressed_size.second <= TRIAL_COMPRESS_OK_SIZE) {
-    std::tie(compressed_prelz4_size, compressed_size) = 
+    std::tie(compressed_prelz4_size, compressed_size) =
         compress(start, len, &compressed_buffer);
   }
   if (compressed_size == 0 && compressed_buffer != nullptr) {
     // failed compression? why?
     free(compressed_buffer);
     compressed_buffer = nullptr;
-  } 
+  }
 
   // the buffer to store.
-  // we need to decide if we are going to be using the compressed version or 
+  // we need to decide if we are going to be using the compressed version or
   // not. Since compression might actually increase the size if data
   // is non-compressible.
   char* stored_buffer = nullptr;
@@ -148,7 +148,7 @@ bool pagefile::write(size_t handle, char* start, size_t len) {
     compressed = true;
   }
 
-  
+
   // ok see if I can store it back in the same place
   std::lock_guard<simple_spinlock> guard(allocation_ptr->allocation_lock);
   if (allocation_ptr->arena_number_and_offset.first == (size_t)(-1) ||
@@ -211,7 +211,7 @@ bool pagefile::read(size_t handle, char* start, size_t len) {
     stored_size = len;
     compressed_buffer = nullptr;
   }
-  read_arena(allocation_ptr->arena_number_and_offset, 
+  read_arena(allocation_ptr->arena_number_and_offset,
              stored_buffer, stored_size);
 
   if (allocation_ptr->compressed) {
@@ -304,12 +304,12 @@ std::pair<size_t, size_t> pagefile::allocate_arena(size_t size) {
 
   // acquire lock on the arena
   std::lock_guard<turi::mutex> guard(cur_arena.pagefile_lock);
-  // find a free bit if there is one 
+  // find a free bit if there is one
   size_t b = 0;
   if (cur_arena.allocations.first_zero_bit(b) == false) {
     // insufficient space. extend the file
-    int fret = ftruncate(cur_arena.pagefile_handle, 
-                         cur_arena.current_pagefile_length + 
+    int fret = ftruncate(cur_arena.pagefile_handle,
+                         cur_arena.current_pagefile_length +
                          cur_arena.arena_size);
     ASSERT_EQ(fret, 0);
     // extend the allocations datastructure
@@ -317,7 +317,7 @@ std::pair<size_t, size_t> pagefile::allocate_arena(size_t size) {
     cur_arena.current_pagefile_length += cur_arena.arena_size;
     b = cur_arena.allocations.size() - 1;
   }
-  cur_arena.allocations.set_bit(b);  
+  cur_arena.allocations.set_bit(b);
   return {arena_number, b};
 }
 
@@ -337,20 +337,20 @@ void pagefile::deallocate_arena(std::pair<size_t, size_t> arena_number_and_offse
   cur_arena.allocations.clear_bit(offset);
 }
 
-void pagefile::read_arena(std::pair<size_t, size_t> arena_number_and_offset, 
+void pagefile::read_arena(std::pair<size_t, size_t> arena_number_and_offset,
                           char* data, size_t len) {
   size_t arena_number;
   size_t offset;
   std::tie(arena_number, offset) = arena_number_and_offset;
   ASSERT_LT(arena_number, m_max_arena_size);
-  
+
   auto& cur_arena = m_arenas[arena_number];
   std::lock_guard<turi::mutex> guard(cur_arena.pagefile_lock);
 #if __APPLE__
   off_t ret = lseek(cur_arena.pagefile_handle, offset * cur_arena.arena_size, SEEK_SET);
 #else
   off64_t ret = lseek64(cur_arena.pagefile_handle, offset * cur_arena.arena_size, SEEK_SET);
-  posix_fadvise(cur_arena.pagefile_handle, offset * cur_arena.arena_size, 
+  posix_fadvise(cur_arena.pagefile_handle, offset * cur_arena.arena_size,
                 cur_arena.arena_size, POSIX_FADV_NOREUSE);
 #endif
   ASSERT_GE(ret, 0);
@@ -358,20 +358,20 @@ void pagefile::read_arena(std::pair<size_t, size_t> arena_number_and_offset,
   ASSERT_GE(read_ret, 0);
 }
 
-void pagefile::write_arena(std::pair<size_t, size_t> arena_number_and_offset, 
+void pagefile::write_arena(std::pair<size_t, size_t> arena_number_and_offset,
                           char* data, size_t len) {
   size_t arena_number;
   size_t offset;
   std::tie(arena_number, offset) = arena_number_and_offset;
   ASSERT_LT(arena_number, m_max_arena_size);
-  
+
   auto& cur_arena = m_arenas[arena_number];
   std::lock_guard<turi::mutex> guard(cur_arena.pagefile_lock);
 #if __APPLE__
   off_t ret = lseek(cur_arena.pagefile_handle, offset * cur_arena.arena_size, SEEK_SET);
 #else
   off64_t ret = lseek64(cur_arena.pagefile_handle, offset * cur_arena.arena_size, SEEK_SET);
-  posix_fadvise(cur_arena.pagefile_handle, offset * cur_arena.arena_size, 
+  posix_fadvise(cur_arena.pagefile_handle, offset * cur_arena.arena_size,
           cur_arena.arena_size, POSIX_FADV_NOREUSE);
 #endif
   ASSERT_GE(ret, 0);

@@ -6,13 +6,13 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-    
+
     @IBOutlet weak var save_image_object: NSMenuItem!
     @IBOutlet weak var save_vega_object: NSMenuItem!
     @IBOutlet weak var print_vega_image: NSMenuItem!
     @IBOutlet weak var page_setup_object: NSMenuItem!
-    
-    
+
+
     @IBAction func print_vega(_ sender: Any) {
         SharedData.shared.vegaContainer?.get_image {image in
             let nsImage = NSImageView(image: image)
@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             nsImage.setFrameOrigin(NSPoint(x: 0.0, y: 0.0))
             nsImage.setFrameSize(NSSize(width: image.size.width, height: image.size.height))
             let print_info = NSPrintInfo()
-        
+
             let print_image = NSPrintOperation(view: nsImage, printInfo: print_info)
             print_image.canSpawnSeparateThread = true
             print_image.printPanel.options.insert(NSPrintPanelOptions.showsOrientation)
@@ -28,20 +28,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print_image.run()
         }
     }
-    
+
     @IBAction func save_image(_ sender: Any) {
         SharedData.shared.vegaContainer?.save_image()
     }
-    
+
     @IBAction func save_vega(_ sender: Any) {
         SharedData.shared.vegaContainer?.save_vega()
     }
-    
+
     @IBAction func save_data(_ sender: Any) {
         SharedData.shared.vegaContainer?.save_data()
     }
-    
-    
+
+
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         SharedData.shared.save_image = save_image_object
         SharedData.shared.save_vega = save_vega_object
@@ -53,4 +53,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
 }
-

@@ -16,7 +16,7 @@ fos = []
 
 for i in range(k):
     fos.append(open( sys.argv[2]+'.col%d' % i, 'w' ))
-    
+
 for l in open(sys.argv[1]):
     arr = l.split()
     for f in fos:
@@ -28,5 +28,5 @@ for l in open(sys.argv[1]):
         fos[fmap[fid]].write(' '+it)
     for f in fos:
         f.write('\n')
-for f in fos:    
+for f in fos:
     f.close()

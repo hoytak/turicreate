@@ -6,7 +6,7 @@
  *
  *	!!! ATTENTION !!!
  *
- *	libjson currently has three number parsing methods, they are being merged 
+ *	libjson currently has three number parsing methods, they are being merged
  *	behind the scenes, but all three interfaces must be consistent, so every set
  *	of numbers need to be tested in all three spots
  *
@@ -66,7 +66,7 @@ void testJSONValidator__isValidNumber::testPositive_ScientificNotation(void){
 		assertNotValid("1.e12.3,\"next\"", isValidNumber, ',');
 		assertValid("1.0e123,\"next\"", isValidNumber, ',');
 		assertNotValid("1.0e12.3,\"next\"", isValidNumber, ',');
-		
+
 		assertValid("0e2,\"next\"", isValidNumber, ',');
 		assertValid("1e2,\"next\"", isValidNumber, ',');
 		assertValid("0.e2,\"next\"", isValidNumber, ',');
@@ -88,7 +88,7 @@ void testJSONValidator__isValidNumber::testNegative_ScientificNotation(void){
 		assertNotValid("-1.e12.3,\"next\"", isValidNumber, ',');
 		assertValid("-1.0e123,\"next\"", isValidNumber, ',');
 		assertNotValid("-1.0e12.3,\"next\"", isValidNumber, ',');
-	
+
 		assertValid("-0e2,\"next\"", isValidNumber, ',');
 		assertValid("-1e2,\"next\"", isValidNumber, ',');
 		assertValid("-0.e2,\"next\"", isValidNumber, ',');
@@ -116,7 +116,7 @@ void testJSONValidator__isValidNumber::testPositive_SignedScientificNotation(voi
 		assertValid("1.0e+123,\"next\"", isValidNumber, ',');
 		assertNotValid("1.0e-12.3,\"next\"", isValidNumber, ',');
 		assertNotValid("1.0e+12.3,\"next\"", isValidNumber, ',');
-	
+
 		assertValid("0e2,\"next\"", isValidNumber, ',');
 		assertValid("1e2,\"next\"", isValidNumber, ',');
 		assertValid("0.e2,\"next\"", isValidNumber, ',');
@@ -148,7 +148,7 @@ void testJSONValidator__isValidNumber::testNegative_SignedScientificNotation(voi
 		assertValid("-1.0e+123,\"next\"", isValidNumber, ',');
 		assertNotValid("-1.0e-12.3,\"next\"", isValidNumber, ',');
 		assertNotValid("-1.0e+12.3,\"next\"", isValidNumber, ',');
-	
+
 		assertValid("-0e-2,\"next\"", isValidNumber, ',');
 		assertValid("-1e-2,\"next\"", isValidNumber, ',');
 		assertValid("-0.e-2,\"next\"", isValidNumber, ',');
@@ -197,7 +197,7 @@ void testJSONValidator__isValidNumber::testStrict(void){
 			assertNotValid("+1.0e12.3,\"next\"", isValidNumber, ',');
 			assertNotValid("+1.0e-12.3,\"next\"", isValidNumber, ',');
 			assertNotValid("+1.0e+12.3,\"next\"", isValidNumber, ',');
-	
+
 			assertNotValid("0x12FF,\"next\"", isValidNumber, ',');
 			assertValid("0128,\"next\"", isValidNumber, ',');  //legal because in STRICT mode, this is not octal, leading zero is ignored
 
@@ -223,7 +223,7 @@ void testJSONValidator__isValidNumber::testStrict(void){
 			assertNotValid("+1.e+2,\"next\"", isValidNumber, ',');
 			assertNotValid("+0.0e+2,\"next\"", isValidNumber, ',');
 			assertNotValid("+1.0e+2,\"next\"", isValidNumber, ',');
-	
+
 			assertNotValid("1e-0123,\"next\"", isValidNumber, ',');  //not valid because of negative and leading zero
 		#endif
 	#endif
@@ -264,7 +264,7 @@ void testJSONValidator__isValidNumber::testNotStrict(void){
 			assertValid("+1.0e12.3,\"next\"", isValidNumber, ',');
 			assertValid("+1.0e-12.3,\"next\"", isValidNumber, ',');
 			assertValid("+1.0e+12.3,\"next\"", isValidNumber, ',');
-	
+
 			assertValid("0x12FF,\"next\"", isValidNumber, ',');
 			#ifdef JSON_OCTAL
 				assertNotValid("0128,\"next\"", isValidNumber, ',');  //because of the 8
@@ -277,8 +277,8 @@ void testJSONValidator__isValidNumber::testNotStrict(void){
 				assertValid("-0128,\"next\"", isValidNumber, ',');
 				assertValid("-0123,\"next\"", isValidNumber, ',');
 			#endif
-	
-	
+
+
 			assertValid("0xABCD,\"next\"", isValidNumber, ',');
 			assertValid("0124,\"next\"", isValidNumber, ',');
 			assertValid("+1,\"next\"", isValidNumber, ',');
@@ -301,7 +301,7 @@ void testJSONValidator__isValidNumber::testNotStrict(void){
 			assertValid("+1.e+2,\"next\"", isValidNumber, ',');
 			assertValid("+0.0e+2,\"next\"", isValidNumber, ',');
 			assertValid("+1.0e+2,\"next\"", isValidNumber, ',');
-	
+
 			assertValid("1e-0123,\"next\"", isValidNumber, ',');
 		#endif
 	#endif
@@ -335,7 +335,7 @@ void testJSONValidator__isValidNumber::testNotNumbers(void){
 void testJSONValidator__isValidNumber::testSuddenEnd(void){
 	#ifdef JSON_VALIDATE
 		assertNotValid("", isValidNumber, ',');
-	
+
 		//--- void testJSONValidator__isValidNumber::testPositive(void){
 		assertNotValid("123", isValidNumber, ',');
 		assertNotValid("12.3", isValidNumber, ',');
@@ -348,7 +348,7 @@ void testJSONValidator__isValidNumber::testSuddenEnd(void){
 		assertNotValid("1.0", isValidNumber, ',');
 		assertNotValid("1.01", isValidNumber, ',');
 		assertNotValid("0123", isValidNumber, ',');
-		
+
 		//--- void testJSONValidator__isValidNumber::testNegative(void){
 		assertNotValid("-123", isValidNumber, ',');
 		assertNotValid("-12.3", isValidNumber, ',');
@@ -359,9 +359,9 @@ void testJSONValidator__isValidNumber::testSuddenEnd(void){
 		assertNotValid("-1.", isValidNumber, ',');
 		assertNotValid("-0.0", isValidNumber, ',');
 		assertNotValid("-1.0", isValidNumber, ',');
-		assertNotValid("-1.01", isValidNumber, ',');	
-		assertNotValid("-0123", isValidNumber, ','); 
-		
+		assertNotValid("-1.01", isValidNumber, ',');
+		assertNotValid("-0123", isValidNumber, ',');
+
 		//--- void testJSONValidator__isValidNumber::testPositive_ScientificNotation(void){
 		assertNotValid("0e", isValidNumber, ',');
 		assertNotValid("0E", isValidNumber, ',');
@@ -377,21 +377,21 @@ void testJSONValidator__isValidNumber::testSuddenEnd(void){
 		assertNotValid("1.e2", isValidNumber, ',');
 		assertNotValid("0.0e2", isValidNumber, ',');
 		assertNotValid("1.0e2", isValidNumber, ',');
-		
+
 		//--- void testJSONValidator__isValidNumber::testNegative_ScientificNotation(void){
 		assertNotValid("-0e123", isValidNumber, ',');
 		assertNotValid("-0e12.3", isValidNumber, ',');
 		assertNotValid("-1.e123", isValidNumber, ',');
 		assertNotValid("-1.e12.3", isValidNumber, ',');
 		assertNotValid("-1.0e123", isValidNumber, ',');
-		assertNotValid("-1.0e12.3", isValidNumber, ',');	
+		assertNotValid("-1.0e12.3", isValidNumber, ',');
 		assertNotValid("-0e2", isValidNumber, ',');
 		assertNotValid("-1e2", isValidNumber, ',');
 		assertNotValid("-0.e2", isValidNumber, ',');
 		assertNotValid("-1.e2", isValidNumber, ',');
 		assertNotValid("-0.0e2", isValidNumber, ',');
 		assertNotValid("-1.0e2", isValidNumber, ',');
-		
+
 		//--- void testJSONValidator__isValidNumber::testPositive_SignedScientificNotation(void){
 		assertNotValid("0e-123", isValidNumber, ',');
 		assertNotValid("0e+123", isValidNumber, ',');
@@ -411,7 +411,7 @@ void testJSONValidator__isValidNumber::testSuddenEnd(void){
 		assertNotValid("1.e2", isValidNumber, ',');
 		assertNotValid("0.0e2", isValidNumber, ',');
 		assertNotValid("1.0e2", isValidNumber, ',');
-		
+
 		//---	void testJSONValidator__isValidNumber::testNegative_SignedScientificNotation(void){
 		assertNotValid("-0e-123", isValidNumber, ',');
 		assertNotValid("-0e+123", isValidNumber, ',');
@@ -441,7 +441,7 @@ void testJSONValidator__isValidNumber::testSuddenEnd(void){
 		assertNotValid("-1.e+2", isValidNumber, ',');
 		assertNotValid("-0.0e+2", isValidNumber, ',');
 		assertNotValid("-1.0e+2", isValidNumber, ',');
-		
+
 		//strict stuff
 		assertNotValid(".01", isValidNumber, ',');  //no leading 0 as required by the standard
 		assertNotValid("-.01", isValidNumber, ',');  //no leading 0 as required by the standard
@@ -491,8 +491,8 @@ void testJSONValidator__isValidNumber::testSuddenEnd(void){
 		assertNotValid("+0.0e+2", isValidNumber, ',');
 		assertNotValid("+1.0e+2", isValidNumber, ',');
 		assertNotValid("0128", isValidNumber, ',');  //because of the 8
-		
-		
+
+
 		//--- void testJSONValidator__isValidNumber::testNotNumbers(void){
 		assertNotValid("0xABCDv", isValidNumber, ',');
 		assertNotValid("001234", isValidNumber, ',');

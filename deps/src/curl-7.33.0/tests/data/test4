@@ -46,7 +46,7 @@ Host: %HOSTIP:%HTTPPORT
 extra-header: here
 Accept: replaced
 X-Custom-Header:
-X-Test: foo; 
+X-Test: foo;
 X-Test2: foo;
 
 </protocol>

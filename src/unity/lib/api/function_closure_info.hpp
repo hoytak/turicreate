@@ -16,8 +16,8 @@
 #include <serialization/serialization_includes.hpp>
 namespace turi {
 /**
- * Describes a function capture closure. 
- * 
+ * Describes a function capture closure.
+ *
  *  Defines a closure class describing a lambda closure. Contains 2 fields:
  *
  *  \param native_fn_name The toolkit native function name
@@ -25,7 +25,7 @@ namespace turi {
  *  \param arguments An array of the same length as the toolkit native function.
  *      Each array element is an array of 2 elements [is_capture, value]
  *  \code{.py}
- *      If is_capture == 1: 
+ *      If is_capture == 1:
  *          value contains the captured value
  *      If is_capture == 0:
  *          value contains a number denoting the lambda argument position.
@@ -36,12 +36,12 @@ namespace turi {
  *      lambda x, y: fn(10, x, x, y)
  *  \endcode
  *
- *  Then arguments will be 
- *  
+ *  Then arguments will be
+ *
  *      [1, 10], -->  is captured value. has value 10
- *      [0, 0],  -->  is not captured value. is argument 0 of the lambda. 
- *      [0, 0],  -->  is not captured value. is argument 0 of the lambda. 
- *      [0, 1]   -->  is not captured value. is argument 1 of the lambda. 
+ *      [0, 0],  -->  is not captured value. is argument 0 of the lambda.
+ *      [0, 0],  -->  is not captured value. is argument 0 of the lambda.
+ *      [0, 1]   -->  is not captured value. is argument 1 of the lambda.
  *  \endcode
  */
 struct function_closure_info {

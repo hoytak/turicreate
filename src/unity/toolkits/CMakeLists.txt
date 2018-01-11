@@ -10,7 +10,7 @@ subdirs(ml_model
         clustering
         ml_data_2
         recsys
-        util 
+        util
         options
         evaluation
         supervised_learning

@@ -7,7 +7,7 @@ compilation model
 
 SSLeay 0.9.0b 19-Apr-1998
 built on Sat Apr 25 12:43:14 EST 1998
-options:bn(64,64) md2(int) rc4(ptr,int) des(ptr,risc2,16,long) idea(int) blowfish(ptr) 
+options:bn(64,64) md2(int) rc4(ptr,int) des(ptr,risc2,16,long) idea(int) blowfish(ptr)
 C flags:cc -use_readonly_const -O2 -DTERMIOS -DB_ENDIAN
 The 'numbers' are in 1000s of bytes per second processed.
 type              8 bytes     64 bytes    256 bytes   1024 bytes   8192 bytes
@@ -34,4 +34,3 @@ rsa 4096 bits   0.5656s   0.0096s      1.8    103.7
 dsa  512 bits   0.0034s   0.0061s    290.8    164.9
 dsa 1024 bits   0.0084s   0.0161s    119.1     62.3
 dsa 2048 bits   0.0260s   0.0515s     38.5     19.4
-

@@ -171,7 +171,7 @@ namespace Aws
                         if (sessionTokenIter != m_profileKeyValuePairs.end())
                         {
                             sessionToken = sessionTokenIter->second;
-                        }                        
+                        }
 
                         profile.SetCredentials(Aws::Auth::AWSCredentials(accessKey, secretKey, sessionToken));
                     }
@@ -222,7 +222,7 @@ namespace Aws
         AWSConfigFileProfileConfigLoader::AWSConfigFileProfileConfigLoader(const Aws::String& fileName, bool useProfilePrefix) :
                 m_fileName(fileName), m_useProfilePrefix(useProfilePrefix)
         {
-            AWS_LOGSTREAM_INFO(CONFIG_FILE_LOADER, "Initializing config loader against fileName " 
+            AWS_LOGSTREAM_INFO(CONFIG_FILE_LOADER, "Initializing config loader against fileName "
                     << fileName << " and using profilePrefix = " << useProfilePrefix);
         }
 

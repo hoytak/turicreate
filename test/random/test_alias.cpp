@@ -18,7 +18,7 @@ using namespace turi;
  * Create a Small PMF by hand.
  */
 std::vector<double> create_small_pmf() {
-  return {0.05, 0.01, 0.03, 0.01, 0.05, 0.1, 0.07, 0.03, 0.04, 0.01, 
+  return {0.05, 0.01, 0.03, 0.01, 0.05, 0.1, 0.07, 0.03, 0.04, 0.01,
     0.08, 0.02, 0.1, 0.1, 0.2, 0.1};
 }
 
@@ -40,7 +40,7 @@ std::vector<double> create_large_pmf(size_t K) {
 }
 
 /**
- * Run a benchmark on a given pmf that draws num_samples using the 
+ * Run a benchmark on a given pmf that draws num_samples using the
  * alias method as well as random::multinomial. For comparison (and
  * a lower bound) the timing for just a uniformly distributed int
  * is included.
@@ -54,21 +54,21 @@ void run_alias_benchmark(size_t num_samples, std::vector<double> probs) {
   timer ti;
   ti.start();
   auto A = random::alias_sampler(probs);
-  std::cout << std::setw(20) << "alias setup time: " 
+  std::cout << std::setw(20) << "alias setup time: "
             << ti.current_time() << std::endl;
   size_t k;
   ti.start();
   for (size_t i=0; i < num_samples; ++i) {
     k = A.sample();
   }
-  std::cout << std::setw(20) << "alias " 
+  std::cout << std::setw(20) << "alias "
             << ti.current_time() << std::endl;
 
   ti.start();
   for (size_t i=0; i < num_samples; ++i) {
     k = random::multinomial(probs);
   }
-  std::cout << std::setw(20) << "multinomial " 
+  std::cout << std::setw(20) << "multinomial "
             << ti.current_time() << std::endl;
 
   size_t K = probs.size();
@@ -76,7 +76,7 @@ void run_alias_benchmark(size_t num_samples, std::vector<double> probs) {
   for (size_t i=0; i < num_samples; ++i) {
     k = random::fast_uniform<size_t>(0, K);
   }
-  std::cout << std::setw(20) << "fast unif " 
+  std::cout << std::setw(20) << "fast unif "
             << ti.current_time() << std::endl;
 
 }
@@ -93,7 +93,7 @@ std::vector<size_t> count_samples(size_t num_samples, std::vector<double> probs)
 
 int main(int argc, char **argv) {
   if (argc < 2) {
-    std::cerr << "format: " << argv[0] << " <num_samples>" 
+    std::cerr << "format: " << argv[0] << " <num_samples>"
               << std::endl;
     exit(1);
   }
@@ -106,20 +106,18 @@ int main(int argc, char **argv) {
   run_alias_benchmark(N, p1);
 
   std::cout << "Performance on a large pmf with 1000 levels:" << std::endl;
-  auto p2 = create_large_pmf(1000); 
+  auto p2 = create_large_pmf(1000);
   run_alias_benchmark(N, p2);
 
   std::cout << "Compare observed frequencies (left) with true probabilities"
             << std::endl;
   size_t num_samples = 100000;
   auto probs = create_small_pmf();
-  auto counts = count_samples(num_samples, probs); 
+  auto counts = count_samples(num_samples, probs);
   for (size_t k = 0; k < counts.size(); ++k) {
-    std::cout << counts[k] / (double) num_samples << " " 
-              << probs[k] 
+    std::cout << counts[k] / (double) num_samples << " "
+              << probs[k]
               << std::endl;
   }
   return 0;
 }
-
-

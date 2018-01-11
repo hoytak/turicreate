@@ -32,7 +32,7 @@ class generic_aggregator: public group_aggregate_value {
 
    /// Returns a new empty instance of sum with the same type
    group_aggregate_value* new_instance() const {
-     generic_aggregator* ret = 
+     generic_aggregator* ret =
          new generic_aggregator(fn, initial_value);
      return ret;
    }
@@ -95,15 +95,15 @@ class generic_aggregator: public group_aggregate_value {
  *
  *
  */
-template <typename ResultType, 
-         typename ReduceFunctionType, 
+template <typename ResultType,
+         typename ReduceFunctionType,
           typename AggregateFunctionType>
 ResultType reduce(
   std::shared_ptr<planner_node> input,
   ReduceFunctionType reduce_fn,
   AggregateFunctionType aggregate_fn,
   ResultType init = ResultType()) {
- 
+
   generic_aggregator<ResultType, ReduceFunctionType> agg(reduce_fn, init);
   auto output = op_reduce::make_planner_node(input, agg, flex_type_enum::STRING);
   sframe sf = planner().materialize(output);

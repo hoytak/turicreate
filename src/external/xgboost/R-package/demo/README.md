@@ -12,7 +12,7 @@ XGBoost R Feature Walkthrough
 Benchmarks
 ====
 * [Starter script for Kaggle Higgs Boson](../../demo/kaggle-higgs)
- 
+
 Notes
 ====
 * Contribution of examples, benchmarks is more than welcomed!

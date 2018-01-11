@@ -34,19 +34,19 @@ struct operator_impl<planner_node_type::SARRAY_SOURCE_NODE> : public query_opera
  public:
 
   planner_node_type type() const { return planner_node_type::SARRAY_SOURCE_NODE; }
-  
+
   static std::string name() { return "sarray_source"; }
-  
+
   inline operator_impl(std::shared_ptr<sarray<flexible_type> > source,
                        size_t begin_index = 0, size_t end_index = size_t(-1) )
       : m_source(source)
       , m_begin_index(begin_index)
       , m_end_index(end_index == size_t(-1) ? m_source->size() : end_index)
   { }
-  
+
   static query_operator_attributes attributes() {
     query_operator_attributes ret;
-    ret.attribute_bitfield = query_operator_attributes::SOURCE | 
+    ret.attribute_bitfield = query_operator_attributes::SOURCE |
         query_operator_attributes::SUPPORTS_SKIPPING;
     ret.num_inputs = 0;
     return ret;
@@ -90,18 +90,18 @@ struct operator_impl<planner_node_type::SARRAY_SOURCE_NODE> : public query_opera
     DASSERT_LE(end_index, source->size());
 
     // we need to keep a copy of the source in the node for reference counting
-    // reasons. 
-    return planner_node::make_shared(planner_node_type::SARRAY_SOURCE_NODE, 
-                                     {{"index", strm.str()}, 
-                                      {"type", (flex_int)type}, 
+    // reasons.
+    return planner_node::make_shared(planner_node_type::SARRAY_SOURCE_NODE,
+                                     {{"index", strm.str()},
+                                      {"type", (flex_int)type},
                                       {"begin_index", begin_index},
                                       {"end_index", end_index}},
-                                     {{"sarray", any(source)}}); 
+                                     {{"sarray", any(source)}});
   }
 
   static std::shared_ptr<query_operator> from_planner_node(
       std::shared_ptr<planner_node> pnode) {
-    ASSERT_EQ((int)pnode->operator_type, 
+    ASSERT_EQ((int)pnode->operator_type,
               (int)planner_node_type::SARRAY_SOURCE_NODE);
     ASSERT_TRUE(pnode->any_operator_parameters.count("sarray"));
     auto source = pnode->any_operator_parameters["sarray"]
@@ -116,7 +116,7 @@ struct operator_impl<planner_node_type::SARRAY_SOURCE_NODE> : public query_opera
   static std::vector<flex_type_enum> infer_type(
       std::shared_ptr<planner_node> pnode) {
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::SARRAY_SOURCE_NODE);
-    flex_type_enum type = 
+    flex_type_enum type =
         (flex_type_enum)(flex_int)(pnode->operator_parameters["type"]);
     return {type};
   }

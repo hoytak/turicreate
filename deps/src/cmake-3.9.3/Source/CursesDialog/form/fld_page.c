@@ -35,10 +35,10 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_new_page(FIELD *field, bool new_page_flag)
-|   
-|   Description   :  Marks the field as the beginning of a new page of 
+|
+|   Description   :  Marks the field as the beginning of a new page of
 |                    the form.
 |
 |   Return Values :  E_OK         - success
@@ -47,10 +47,10 @@ MODULE_ID("$Id$")
 int set_new_page(FIELD * field, bool new_page_flag)
 {
   Normalize_Field(field);
-  if (field->form) 
+  if (field->form)
     RETURN(E_CONNECTED);
 
-  if (new_page_flag) 
+  if (new_page_flag)
     field->status |= _NEWPAGE;
   else
     field->status &= ~_NEWPAGE;
@@ -59,9 +59,9 @@ int set_new_page(FIELD * field, bool new_page_flag)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  bool new_page(const FIELD *field)
-|   
+|
 |   Description   :  Retrieve the info whether or not the field starts a
 |                    new page on the form.
 |

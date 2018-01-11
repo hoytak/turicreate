@@ -65,9 +65,9 @@ class linear_regression_opt_interface: public
    * \note Default options are to be used when the interface is called from the
    * linear_regression class.
    */
-  linear_regression_opt_interface(const ml_data& _data, 
-                                  const ml_data& _valid_data, 
-                                  linear_regression& _model, 
+  linear_regression_opt_interface(const ml_data& _data,
+                                  const ml_data& _valid_data,
+                                  linear_regression& _model,
                                   bool _feature_rescaling=true);
 
   /**
@@ -81,12 +81,12 @@ class linear_regression_opt_interface: public
    * \param[in] _n_threads Set the number of threads.
    */
   void set_threads(size_t _n_threads);
-  
+
   /**
    * Set feature scaling
    */
   void init_feature_rescaling();
-  
+
   /**
    * Transform the final solution back to the original scale.
    *
@@ -113,7 +113,7 @@ class linear_regression_opt_interface: public
    *
    * \param[in] a vector of strings to print at the beginning of the header.
    */
-  std::vector<std::pair<std::string, size_t>> 
+  std::vector<std::pair<std::string, size_t>>
       get_status_header(const std::vector<std::string>& stat_names);
 
   /**
@@ -122,7 +122,7 @@ class linear_regression_opt_interface: public
    * \param[in] a vector of model coefficients.
    * \param[in] a vector of stats to print at the beginning of each row
    */
-  std::vector<std::string> get_status(const DenseVector& coefs, 
+  std::vector<std::string> get_status(const DenseVector& coefs,
                                       const std::vector<std::string>& stats);
 
   /**
@@ -159,4 +159,3 @@ class linear_regression_opt_interface: public
 } // turicreate
 
 #endif
-

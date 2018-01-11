@@ -29,7 +29,7 @@ static bool set_memory_protection(char* ptr, size_t len, int protect_flags) {
   size_t npages = 1;
   if (aligned_address_start != aligned_address_end) {
     npages = 2;
-  } 
+  }
   int ret = mprotect(aligned_address_start, npages * pagesize, protect_flags);
   return ret == 0;
 }
@@ -48,10 +48,10 @@ static void* get_dl_baseaddr(char* so_name) {
   }
 }
 
-/* 
+/*
  * There are basically reimplementations of a few stuff
  * in numpy/core/src/multiarray/alloc.c
- * 
+ *
  *  void* PyDataMem_NEW(size_t);            == malloc
  *
  *  void* PyDataMem_ZEROED(size_t, size_t); == calloc
@@ -59,14 +59,14 @@ static void* get_dl_baseaddr(char* so_name) {
  *  void* PyDataMem_RENEW(void*, size_t);   == realloc
  *
  *  void* PyDataMem_FREE(void*);            == free
- *  
+ *
  *  void* npy_alloc_cache(npy_uintp sz);    == malloc
  *
  *  void* npy_alloc_cache_zero(npy_uintp sz); == calloc with elsize = 1
  *
  *  void* npy_free_cache(void * p, npy_uintp sd); == free(p)
  */
-                                   
+
 void* AltPyDataMem_NEW(size_t size) {
   return my_malloc(size);
 }
@@ -106,9 +106,9 @@ EXPORT bool perform_function_override(char* function_to_override,
   //
   // to the address of the function to override
   const size_t NBYTES_TO_WRITE = 12;
-  unsigned char instructions[12] = 
-                        {0x48, 0xB8, 
-                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  unsigned char instructions[12] =
+                        {0x48, 0xB8,
+                           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                            0xFF, 0xE0};
   (*reinterpret_cast<void**>(instructions + 2)) = target_function;
 
@@ -126,7 +126,7 @@ EXPORT bool perform_function_override(char* function_to_override,
                         PROT_READ | PROT_EXEC);
   return true;
 }
-EXPORT bool perform_numpy_malloc_override(char* library, 
+EXPORT bool perform_numpy_malloc_override(char* library,
                                           size_t malloc_offset,
                                           size_t calloc_offset,
                                           size_t realloc_offset,

@@ -24,7 +24,7 @@ struct pagerank_test {
       {"max_iterations", 20},
       {"reset_probability", 0.15},
     };
-    size_t n = runner.get_default_num_workers_from_env(); 
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(options, 9.95996, n);
   }
 
@@ -34,7 +34,7 @@ struct pagerank_test {
       {"max_iterations", 20},
       {"reset_probability", 0.3},
     };
-    size_t n = runner.get_default_num_workers_from_env(); 
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(options, 17.68454, n);
   }
 
@@ -71,7 +71,7 @@ struct pagerank_test {
       // Act
       auto m = variant_get_value<std::shared_ptr<simple_model>>(ret);
 
-      // Assert 
+      // Assert
       {
         auto delta = variant_get_value<double>(m->params.at("delta"));
         auto threshold = variant_get_value<double>(m->params.at("threshold"));

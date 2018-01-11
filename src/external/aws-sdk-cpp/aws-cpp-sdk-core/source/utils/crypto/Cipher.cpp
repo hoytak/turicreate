@@ -36,14 +36,14 @@ namespace Aws
 
                 CryptoBuffer bytes(lengthBytes);
                 size_t lengthToGenerate = ctrMode ? (3 * bytes.GetLength())  / 4 : bytes.GetLength();
-                
+
                 rng->GetBytes(bytes.GetUnderlyingData(), lengthToGenerate);
 
                 if(!*rng)
                 {
                     AWS_LOGSTREAM_FATAL(LOG_TAG, "Random Number generation failed. Abort all crypto operations.");
                     assert(false);
-                    abort();                    
+                    abort();
                 }
 
                 return bytes;
@@ -54,7 +54,7 @@ namespace Aws
                 assert(m_key.GetLength() >= SYMMETRIC_KEY_LENGTH);
                 assert(m_initializationVector.GetLength() == 0 || m_initializationVector.GetLength() >= MIN_IV_LENGTH);
 
-                if(m_key.GetLength() < SYMMETRIC_KEY_LENGTH || 
+                if(m_key.GetLength() < SYMMETRIC_KEY_LENGTH ||
                     (m_initializationVector.GetLength() > 0 && m_initializationVector.GetLength() < MIN_IV_LENGTH))
                 {
                     m_failure = true;
@@ -106,4 +106,3 @@ namespace Aws
         }
     }
 }
-

@@ -137,7 +137,7 @@ int main(int argc, char** argv) {
   for (size_t i = 0;i < BUBBLE_SORT_SIZE; ++i) s[i] =rand();
   f = s;
   assert(s.size() == f.size());
-  
+
  flexible_type f2(flex_type_enum::LIST);
   for (size_t i = 0;i < BUBBLE_SORT_SIZE; ++i) {
     f2.push_back(flexible_type(s[i]));

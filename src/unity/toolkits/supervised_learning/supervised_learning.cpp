@@ -374,7 +374,7 @@ std::vector<std::string> supervised_learning_model_base::get_metrics()  const {
 /**
  * Get tracking metrics
  */
-std::vector<std::string> 
+std::vector<std::string>
       supervised_learning_model_base::get_tracking_metrics()  const {
   return tracking_metrics;
 }
@@ -750,15 +750,15 @@ std::map<std::string, variant_type> supervised_learning_model_base::evaluate(
   std::vector<std::string> evaluator_names;
   typedef std::shared_ptr<evaluation::supervised_evaluation_interface> evalptr;
   std::vector<evalptr> evaluators;
-  
+
   // Compute a specific metric or all metrics ["auto"]
   std::vector<std::string> metrics_computed;
   if (evaluation_type == std::string("auto")) {
-    metrics_computed = metrics; 
-    DASSERT_TRUE(metrics_computed.size() > 0); 
+    metrics_computed = metrics;
+    DASSERT_TRUE(metrics_computed.size() > 0);
   } else if (evaluation_type == std::string("train")) {
     metrics_computed = tracking_metrics;
-    DASSERT_TRUE(metrics_computed.size() > 0); 
+    DASSERT_TRUE(metrics_computed.size() > 0);
   } else {
     metrics_computed.push_back(evaluation_type);
   }
@@ -767,27 +767,27 @@ std::map<std::string, variant_type> supervised_learning_model_base::evaluate(
   bool contains_prob_evaluator = false;
   for (const auto& m: metrics_computed){
     std::map<std::string, variant_type> kwargs {
-       {"average", to_variant(std::string("default"))}, 
+       {"average", to_variant(std::string("default"))},
        {"binary", to_variant(false)},
        {"index_map", to_variant(identity_map)},
        {"num_classes", to_variant(num_classes)},
        {"inv_index_map", to_variant(index_map)}};
-    
-    // Remove metrics that can't be computed. 
+
+    // Remove metrics that can't be computed.
     auto e = evaluation::get_evaluator_metric(m, kwargs);
     evaluators.push_back(e);
     evaluator_names.push_back(m);
 
-    // For progress tracking. Make sure the IF in train mode, then 
+    // For progress tracking. Make sure the IF in train mode, then
     // training metrics are table printer compatible.
-    DASSERT_TRUE((evaluation_type == std::string("train")) 
-                                        <= e->is_table_printer_compatible()); 
+    DASSERT_TRUE((evaluation_type == std::string("train"))
+                                        <= e->is_table_printer_compatible());
 
     // If a prob-evaluator is needed, then we use prediction probabilities.
     if (! contains_prob_evaluator) {
       contains_prob_evaluator = e->is_prob_evaluator();
     }
-  } 
+  }
   DASSERT_TRUE(evaluators.size() > 0);
   DASSERT_TRUE(metrics_computed.size() > 0);
 
@@ -940,28 +940,28 @@ std::vector<std::vector<flexible_type>>
 
   auto metadata = this->ml_mdata;
   std::vector<std::vector<flexible_type>> ret(metadata->num_dimensions());
- 
-  size_t pos = 0; 
+
+  size_t pos = 0;
   for(size_t col_index = 0; col_index < metadata->num_columns(); ++col_index) {
     std::vector<flexible_type> out(2);
     out[0] = metadata->column_name(col_index);
 
     switch(metadata->column_mode(col_index)) {
 
-      case ml_column_mode::DICTIONARY: 
-      case ml_column_mode::CATEGORICAL: 
+      case ml_column_mode::DICTIONARY:
+      case ml_column_mode::CATEGORICAL:
       case ml_column_mode::CATEGORICAL_VECTOR:
         {
-          for(size_t i = 0; i < metadata->index_size(col_index); ++i) { 
+          for(size_t i = 0; i < metadata->index_size(col_index); ++i) {
             out[1] = metadata->indexer(
                 col_index)->map_index_to_value(i).to<flex_string>();
             ret[pos] = out;
             pos++;
           }
-          break; 
+          break;
         }
       case ml_column_mode::NUMERIC_VECTOR: {
-        for(size_t i = 0; i < metadata->index_size(col_index); ++i) { 
+        for(size_t i = 0; i < metadata->index_size(col_index); ++i) {
           out[1] = i;
           ret[pos] = out;
           pos++;
@@ -974,48 +974,48 @@ std::vector<std::vector<flexible_type>>
         pos++;
         break;
       }
-      default: ASSERT_TRUE(false); 
+      default: ASSERT_TRUE(false);
     }
   }
-  return ret; 
+  return ret;
 }
 
 void supervised_learning_model_base::api_train(
-    gl_sframe data, 
+    gl_sframe data,
     const std::string& target,
     gl_sframe validation_data,
     const std::map<std::string, flexible_type>& options) {
 
-  // TODO: remove this plumbing now that neural nets has been 
-  // moved out. 
+  // TODO: remove this plumbing now that neural nets has been
+  // moved out.
   constexpr bool support_image_type = false;
 
   gl_sframe f_data = data;
   f_data.remove_column(target);
-  sframe X = f_data.materialize_to_sframe(); 
-    
+  sframe X = f_data.materialize_to_sframe();
+
   sframe y = data.select_columns({target}).materialize_to_sframe();
 
   ml_missing_value_action missing_value_action =
     this->support_missing_value() ? ml_missing_value_action::USE_NAN
                                   : ml_missing_value_action::ERROR;
 
-  sframe valid_X, valid_y; 
+  sframe valid_X, valid_y;
 
   if(validation_data.num_columns() != 0) {
 
     gl_sframe f_v_data = validation_data;
     f_v_data.remove_column(target);
-    valid_X = f_v_data.materialize_to_sframe(); 
-    
+    valid_X = f_v_data.materialize_to_sframe();
+
     valid_y = validation_data.select_columns({target}).materialize_to_sframe();
-    
+
     check_feature_column_types(valid_X, support_image_type);
     check_target_column_type(this->name(), valid_y);
     check_feature_column_types_match(X, valid_X);
   }
 
-  this->init_options(options); 
+  this->init_options(options);
   this->init(X, y, valid_X, valid_y, missing_value_action);
   this->train();
 }
@@ -1038,7 +1038,7 @@ gl_sarray supervised_learning_model_base::api_predict(
       missing_value_action);
 
   ml_data m_data = this->construct_ml_data_using_current_metadata(X, missing_value_action);
-  
+
   return gl_sarray(this->predict(m_data, output_type));
 }
 
@@ -1154,7 +1154,7 @@ gl_sframe _fast_classify(
 }
 
 /**
- * Get the metadata mapping. 
+ * Get the metadata mapping.
  */
 std::vector<std::vector<flexible_type>> _get_metadata_mapping(
     std::shared_ptr<supervised_learning_model_base> model) {

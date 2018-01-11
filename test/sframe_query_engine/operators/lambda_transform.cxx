@@ -12,7 +12,7 @@
 using namespace turi;
 using namespace turi::query_eval;
 
-// TODO: get a pickle string for simple lambda 
+// TODO: get a pickle string for simple lambda
 const std::string IDENTITY_LAMBDA_STRING="";
 const std::string PLUS_ONE_LAMBDA_STRING="";
 

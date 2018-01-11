@@ -34,7 +34,3 @@ if(NOT DEFINED CMAKE_STD_NAMESPACE)
       "the following output:\n${OUTPUT}\n\n")
   endif ()
 endif()
-
-
-
-

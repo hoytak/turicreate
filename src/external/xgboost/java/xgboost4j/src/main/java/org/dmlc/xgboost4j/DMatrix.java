@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -28,9 +28,9 @@ import org.dmlc.xgboost4j.wrapper.XgboostJNI;
  * @author hzx
  */
 public class DMatrix {
-    private static final Log logger = LogFactory.getLog(DMatrix.class);    
+    private static final Log logger = LogFactory.getLog(DMatrix.class);
     long handle = 0;
-    
+
     //load native library
     static {
         try {
@@ -40,7 +40,7 @@ public class DMatrix {
             logger.error(ex);
         }
     }
-    
+
     /**
      * sparse matrix type (CSR or CSC)
      */
@@ -48,11 +48,11 @@ public class DMatrix {
         CSR,
         CSC;
     }
-    
+
     /**
      *  init DMatrix from file (svmlight format)
-     * @param dataPath 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @param dataPath
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public DMatrix(String dataPath) throws XGBoostError {
         if(dataPath == null) {
@@ -62,7 +62,7 @@ public class DMatrix {
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixCreateFromFile(dataPath, 1, out));
         handle = out[0];
     }
-    
+
     /**
      * create DMatrix from sparse matrix
      * @param headers index to headers (rowHeaders for CSR or colHeaders for CSC)
@@ -84,7 +84,7 @@ public class DMatrix {
         }
         handle = out[0];
     }
-    
+
    /**
      * create DMatrix from dense matrix
      * @param data data values
@@ -97,76 +97,76 @@ public class DMatrix {
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixCreateFromMat(data, nrow, ncol, 0.0f, out));
         handle = out[0];
     }
-    
+
     /**
      * used for DMatrix slice
-     * @param handle 
+     * @param handle
      */
     private DMatrix(long handle) {
         this.handle = handle;
     }
-    
-    
-    
+
+
+
     /**
      * set label of dmatrix
-     * @param labels 
+     * @param labels
      */
     public void setLabel(float[] labels) throws XGBoostError {
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixSetFloatInfo(handle, "label", labels));
     }
-    
+
     /**
      * set weight of each instance
-     * @param weights 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @param weights
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public void setWeight(float[] weights) throws XGBoostError {
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixSetFloatInfo(handle, "weight", weights));
     }
-    
+
     /**
      * if specified, xgboost will start from this init margin
      * can be used to specify initial prediction to boost from
-     * @param baseMargin 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @param baseMargin
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public void setBaseMargin(float[] baseMargin) throws XGBoostError {
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixSetFloatInfo(handle, "base_margin", baseMargin));
     }
-    
+
     /**
      * if specified, xgboost will start from this init margin
      * can be used to specify initial prediction to boost from
-     * @param baseMargin 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @param baseMargin
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public void setBaseMargin(float[][] baseMargin) throws XGBoostError {
         float[] flattenMargin = flatten(baseMargin);
         setBaseMargin(flattenMargin);
     }
-    
+
     /**
      * Set group sizes of DMatrix (used for ranking)
-     * @param group 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @param group
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public void setGroup(int[] group) throws XGBoostError {
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixSetGroup(handle, group));
     }
-    
+
     private float[] getFloatInfo(String field) throws XGBoostError {
         float[][] infos = new float[1][];
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixGetFloatInfo(handle, field, infos));
         return infos[0];
     }
-    
+
     private int[] getIntInfo(String field) throws XGBoostError {
         int[][] infos = new int[1][];
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixGetUIntInfo(handle, field, infos));
         return infos[0];
     }
-    
+
     /**
      * get label values
      * @return label
@@ -175,7 +175,7 @@ public class DMatrix {
     public float[] getLabel() throws XGBoostError {
         return getFloatInfo("label");
     }
-    
+
     /**
      * get weight of the DMatrix
      * @return weights
@@ -184,7 +184,7 @@ public class DMatrix {
     public float[] getWeight() throws XGBoostError {
         return getFloatInfo("weight");
     }
-    
+
     /**
      * get base margin of the DMatrix
      * @return base margin
@@ -193,7 +193,7 @@ public class DMatrix {
     public float[] getBaseMargin() throws XGBoostError {
         return getFloatInfo("base_margin");
     }
-    
+
     /**
      * Slice the DMatrix and return a new DMatrix that only contains `rowIndex`.
      * @param rowIndex
@@ -207,7 +207,7 @@ public class DMatrix {
         DMatrix sMatrix = new DMatrix(sHandle);
         return sMatrix;
     }
-    
+
     /**
      * get the row number of DMatrix
      * @return number of rows
@@ -218,23 +218,23 @@ public class DMatrix {
         ErrorHandle.checkCall(XgboostJNI.XGDMatrixNumRow(handle,rowNum));
         return rowNum[0];
     }
-    
+
     /**
      * save DMatrix to filePath
-     * @param filePath 
+     * @param filePath
      */
     public void saveBinary(String filePath) {
         XgboostJNI.XGDMatrixSaveBinary(handle, filePath, 1);
     }
-    
+
     public long getHandle() {
         return handle;
     }
-    
+
     /**
      * flatten a mat to array
      * @param mat
-     * @return 
+     * @return
      */
     private static float[] flatten(float[][] mat) {
         int size = 0;
@@ -245,15 +245,15 @@ public class DMatrix {
             System.arraycopy(ar, 0, result, pos, ar.length);
             pos += ar.length;
         }
-        
+
         return result;
     }
-    
+
     @Override
     protected void finalize() {
         delete();
     }
-    
+
     public synchronized void delete() {
         if(handle != 0) {
             XgboostJNI.XGDMatrixFree(handle);

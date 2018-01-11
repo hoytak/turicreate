@@ -17,9 +17,9 @@ print_help() {
   echo
   echo "Usage: ./make_docs.sh"
   echo
-  echo "  --debug      Use the debug build instead of the release build" 
+  echo "  --debug      Use the debug build instead of the release build"
   echo
-  echo "Produce an sphinx docs at pydocs/" 
+  echo "Produce an sphinx docs at pydocs/"
   echo "Example: ./make_pydocs.sh"
   exit 1
 } # end of print help
@@ -61,4 +61,3 @@ generate_docs() {
 }
 
 generate_docs
-

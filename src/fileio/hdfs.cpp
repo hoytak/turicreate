@@ -19,7 +19,7 @@ namespace turi {
 /*                                                                        */
 /**************************************************************************/
 
-// This is an intentional leak of raw pointers, 
+// This is an intentional leak of raw pointers,
 // including the mutex, the hdfs object, and the map of hdfs objects
 // because termination depends on the hdfs object to be around
 // to properly cleanup temp files in the hdfs.

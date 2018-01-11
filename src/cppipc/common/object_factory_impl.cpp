@@ -30,7 +30,7 @@ std::string object_factory_impl::ping(std::string pingval) {
   }
 
   if(cancel_id != 0) {
-    // If the cancelled command matches the currently running one, change 
+    // If the cancelled command matches the currently running one, change
     // this value to uint64_t(-1) to show that we must cancel.
     bool ret = get_srv_running_command().compare_exchange_strong(cancel_id, (unsigned long long)uint64_t(-1));
     if(ret) {

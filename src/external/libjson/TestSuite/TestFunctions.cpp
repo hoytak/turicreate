@@ -210,7 +210,7 @@ void TestSuite::TestFunctions(void){
 			 test2.cast(JSON_BOOL);
 			 assertEquals(test2, false);
 		  #endif
-    
+
 		  UnitTest::SetPrefix("TestFunctions.cpp - Merge");
 		  test1 = JSON_TEXT("hello");
 		  test2 = JSON_TEXT("hello");

@@ -44,7 +44,7 @@ void test_vertex_apply() {
                                      flex_type_enum::FLOAT,
                                      [=](const std::vector<flexible_type>& val, flexible_type prev_ret){
                                        TS_ASSERT_LESS_THAN(data_index, val.size());
-                                       return val[data_index] + prev_ret / 2; 
+                                       return val[data_index] + prev_ret / 2;
                                      });
   check_vertex_apply_result(ret);
 
@@ -56,7 +56,7 @@ void test_vertex_apply() {
                                      ret,
                                      flex_type_enum::FLOAT,
                                      [=](const flexible_type& val, flexible_type prev_ret){
-                                       return val + prev_ret / 2; 
+                                       return val + prev_ret / 2;
                                      });
   check_vertex_apply_result(ret);
 
@@ -74,9 +74,9 @@ void test_vertex_apply() {
                                       [=](const std::vector<flexible_type>& val, double& sum) {
                                         TS_ASSERT_LESS_THAN(data_index, val.size());
                                         sum += (double)val[data_index];
-                                      }, 
+                                      },
                                       [=](const double& val, double& sum) {
-                                        sum += val; 
+                                        sum += val;
                                       });
   TS_ASSERT_EQUALS(vsum, n_vertex);
 

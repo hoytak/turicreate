@@ -14,7 +14,7 @@ import sys as _sys
 
 class TuriConfig:
 
-    __slots__ = ['turicreate_server', 'server_addr', 'server_bin', 'log_dir', 
+    __slots__ = ['turicreate_server', 'server_addr', 'server_bin', 'log_dir',
                  'log_rotation_interval','log_rotation_truncate']
 
     def __init__(self, server_addr=None):

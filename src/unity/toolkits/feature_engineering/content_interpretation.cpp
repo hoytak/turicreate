@@ -104,13 +104,13 @@ EXPORT bool content_interpretation_valid(gl_sarray data, const flex_string& inte
  *    long_text: Interpreted as long or free-form text.
  *    categorical: Should be interpreted as a categorical variable.
  *    sparse_vector: dictionary of (key, value) pairs.
- *    numerical: Numerical column. 
+ *    numerical: Numerical column.
  *    vector: Interprets a vector column as a numerical vector.
  *    image: It's an image.
  *    timestamp: It's a timestamp.
  *
  *  If it starts with "undefined:", then the rest is the reason behind it.
- *  
+ *
  */
 EXPORT flex_string infer_content_interpretation(gl_sarray data) {
 

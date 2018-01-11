@@ -168,7 +168,7 @@ class fiber_control {
 
   // delete copy constructor
   fiber_control(fiber_control&) {};
-  
+
  public:
 
   /// Private constructor
@@ -180,8 +180,8 @@ class fiber_control {
    * Returns a fiber ID. IDs are not sequential.
    * \note The ID is really a pointer to a fiber_control::fiber object.
    */
-  size_t launch(boost::function<void (void)> fn, 
-                size_t stacksize = 8192, 
+  size_t launch(boost::function<void (void)> fn,
+                size_t stacksize = 8192,
                 affinity_type worker_affinity = all_affinity());
 
 
@@ -210,7 +210,7 @@ class fiber_control {
    */
   inline size_t num_active_workers() {
     return active_workers.value;
-  } 
+  }
 
   /**
    * Returns the total number threads ever created
@@ -224,7 +224,7 @@ class fiber_control {
    */
   void set_tls_deleter(void (*deleter)(void*));
 
-  /** 
+  /**
    * Sets the callback function called whenever a fiber quits.
    * The function takes one argument: the current worker ID.
    *
@@ -235,7 +235,7 @@ class fiber_control {
   }
 
 
-  /** 
+  /**
    * Sets the callback function called periodically (every 10ms or so)
    * on a context switch.
    * The function takes one argument: the current worker ID.
@@ -249,7 +249,7 @@ class fiber_control {
 
 
 
-  /** 
+  /**
    * Sets the callback function called on every context switch.
    * The function takes one argument: the current worker ID.
    *
@@ -304,15 +304,15 @@ class fiber_control {
 
 
   /**
-   * Returns true if the current worker has other priority fibers waiting on 
+   * Returns true if the current worker has other priority fibers waiting on
    * its queue
    */
   static bool worker_has_priority_fibers_on_queue();
 
 
   /// True if the singleton instance was created
-  static bool instance_created; 
-  static size_t instance_construct_params_nworkers; 
+  static bool instance_created;
+  static size_t instance_construct_params_nworkers;
   static size_t instance_construct_params_affinity_base;
 
   /**
@@ -322,7 +322,7 @@ class fiber_control {
    * \param nworkers Number of worker threads to spawn. If set to 0,
    *                 the number of workers will be automatically determined
    *                 based on the number of cores the system has.
-   * \param affinity_base First worker will have CPU affinity equal to 
+   * \param affinity_base First worker will have CPU affinity equal to
    *                      affinity_base. Second will be affinity_base + 1, etc.
    *                      Defaults to 0.
    */
@@ -419,4 +419,3 @@ class fiber_control {
 }
 
 #endif
-

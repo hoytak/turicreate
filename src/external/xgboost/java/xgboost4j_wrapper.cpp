@@ -1,9 +1,9 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,17 +32,17 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixCreat
     int silent;
     void* result[1];
     unsigned long out[1];
-    
+
     fname = (char *)jenv->GetStringUTFChars(jfname, 0);
-    
-    silent = (int)jsilent; 
+
+    silent = (int)jsilent;
     jresult = (jint) XGDMatrixCreateFromFile((char const *)fname, silent, result);
-    
-    
+
+
     *(void **)&out[0] = *result;
 
     if (fname) jenv->ReleaseStringUTFChars(jfname, (const char *)fname);
-    
+
     jenv->SetLongArrayRegion(jout, 0, 1, (const jlong *) out);
     return jresult;
 }
@@ -59,22 +59,22 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixCreat
     bst_ulong nelem;
     void *result[1];
     unsigned long out[1];
-  
+
     jlong* indptr = jenv->GetLongArrayElements(jindptr, 0);
     jint* indices = jenv->GetIntArrayElements(jindices, 0);
-    jfloat* data = jenv->GetFloatArrayElements(jdata, 0); 
-    nindptr = (bst_ulong)jenv->GetArrayLength(jindptr); 
-    nelem = (bst_ulong)jenv->GetArrayLength(jdata); 
+    jfloat* data = jenv->GetFloatArrayElements(jdata, 0);
+    nindptr = (bst_ulong)jenv->GetArrayLength(jindptr);
+    nelem = (bst_ulong)jenv->GetArrayLength(jdata);
 
-    jresult = (jint) XGDMatrixCreateFromCSR((unsigned long const *)indptr, (unsigned int const *)indices, (float const *)data, nindptr, nelem, result);    
+    jresult = (jint) XGDMatrixCreateFromCSR((unsigned long const *)indptr, (unsigned int const *)indices, (float const *)data, nindptr, nelem, result);
     *(void **)&out[0] = *result;
     jenv->SetLongArrayRegion(jout, 0, 1, (const jlong *) out);
-    
+
     //release
     jenv->ReleaseLongArrayElements(jindptr, indptr, 0);
     jenv->ReleaseIntArrayElements(jindices, indices, 0);
     jenv->ReleaseFloatArrayElements(jdata, data, 0);
-    
+
     return jresult;
 }
 
@@ -90,22 +90,22 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixCreat
     bst_ulong nelem;
     void *result[1];
     unsigned long out[1];
-  
+
     jlong* indptr = jenv->GetLongArrayElements(jindptr, NULL);
     jint* indices = jenv->GetIntArrayElements(jindices, 0);
     jfloat* data = jenv->GetFloatArrayElements(jdata, NULL);
-    nindptr = (bst_ulong)jenv->GetArrayLength(jindptr); 
-    nelem = (bst_ulong)jenv->GetArrayLength(jdata); 
+    nindptr = (bst_ulong)jenv->GetArrayLength(jindptr);
+    nelem = (bst_ulong)jenv->GetArrayLength(jdata);
 
-    jresult = (jint) XGDMatrixCreateFromCSC((unsigned long const *)indptr, (unsigned int const *)indices, (float const *)data, nindptr, nelem, result);  
+    jresult = (jint) XGDMatrixCreateFromCSC((unsigned long const *)indptr, (unsigned int const *)indices, (float const *)data, nindptr, nelem, result);
     *(void **)&out[0] = *result;
     jenv->SetLongArrayRegion(jout, 0, 1, (const jlong *) out);
-    
+
     //release
     jenv->ReleaseLongArrayElements(jindptr, indptr, 0);
     jenv->ReleaseIntArrayElements(jindices, indices, 0);
     jenv->ReleaseFloatArrayElements(jdata, data, 0);
-    
+
     return jresult;
 }
 
@@ -122,20 +122,20 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixCreat
     float miss ;
     void *result[1];
     unsigned long out[1];
-  
+
 
     jfloat* data = jenv->GetFloatArrayElements(jdata, 0);
-    nrow = (bst_ulong)jnrow; 
-    ncol = (bst_ulong)jncol; 
-    miss = (float)jmiss; 
-    
+    nrow = (bst_ulong)jnrow;
+    ncol = (bst_ulong)jncol;
+    miss = (float)jmiss;
+
     jresult = (jint) XGDMatrixCreateFromMat((float const *)data, nrow, ncol, miss, result);
     *(void **)&out[0] = *result;
     jenv->SetLongArrayRegion(jout, 0, 1, (const jlong *) out);
-  
+
     //release
     jenv->ReleaseFloatArrayElements(jdata, data, 0);
-  
+
     return jresult;
 }
 
@@ -153,16 +153,16 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixSlice
     unsigned long out[1];
 
     jint* indexset = jenv->GetIntArrayElements(jindexset, 0);
-    handle = *(void **)&jhandle; 
-    len = (bst_ulong)jenv->GetArrayLength(jindexset); 
+    handle = *(void **)&jhandle;
+    len = (bst_ulong)jenv->GetArrayLength(jindexset);
 
     jresult = (jint) XGDMatrixSliceDMatrix(handle, (int const *)indexset, len, result);
     *(void **)&out[0] = *result;
     jenv->SetLongArrayRegion(jout, 0, 1, (const jlong *) out);
-    
+
     //release
     jenv->ReleaseIntArrayElements(jindexset, indexset, 0);
-    
+
     return jresult;
 }
 
@@ -175,7 +175,7 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixFree
   (JNIEnv *jenv, jclass jcls, jlong jhandle) {
     jint jresult = 0;
     void *handle = (void *) 0 ;
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     jresult = (jint) XGDMatrixFree(handle);
     return jresult;
 }
@@ -191,14 +191,14 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixSaveB
     void *handle = (void *) 0 ;
     char *fname = (char *) 0 ;
     int silent ;
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     fname = 0;
     fname = (char *)jenv->GetStringUTFChars(jfname, 0);
 
-    silent = (int)jsilent; 
+    silent = (int)jsilent;
     jresult = (jint) XGDMatrixSaveBinary(handle, (char const *)fname, silent);
     if (fname) jenv->ReleaseStringUTFChars(jfname, (const char *)fname);
-    
+
     return jresult;
 }
 
@@ -215,19 +215,19 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixSetFl
     bst_ulong len;
 
 
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
 
     field = (char *)jenv->GetStringUTFChars(jfield, 0);
 
-    
+
     jfloat* array = jenv->GetFloatArrayElements(jarray, NULL);
-    len = (bst_ulong)jenv->GetArrayLength(jarray); 
+    len = (bst_ulong)jenv->GetArrayLength(jarray);
     jresult = (jint) XGDMatrixSetFloatInfo(handle, (char const *)field, (float const *)array, len);
-    
+
     //release
     if (field) jenv->ReleaseStringUTFChars(jfield, (const char *)field);
     jenv->ReleaseFloatArrayElements(jarray, array, 0);
-    
+
     return jresult;
 }
 
@@ -242,11 +242,11 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixSetUI
     void *handle = (void *) 0 ;
     char *field = (char *) 0 ;
     bst_ulong len ;
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     field = 0;
     field = (char *)jenv->GetStringUTFChars(jfield, 0);
 
-    
+
     jint* array = jenv->GetIntArrayElements(jarray, NULL);
     len = (bst_ulong)jenv->GetArrayLength(jarray);
 
@@ -254,7 +254,7 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixSetUI
     //release
     if (field) jenv->ReleaseStringUTFChars(jfield, (const char *)field);
     jenv->ReleaseIntArrayElements(jarray, array, 0);
-    
+
     return jresult;
 }
 
@@ -271,13 +271,13 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixSetGr
 
     handle = *(void **)&jhandle;
     jint* array = jenv->GetIntArrayElements(jarray, NULL);
-    len = (bst_ulong)jenv->GetArrayLength(jarray); 
+    len = (bst_ulong)jenv->GetArrayLength(jarray);
 
     jresult = (jint) XGDMatrixSetGroup(handle, (unsigned int const *)array, len);
-    
+
     //release
     jenv->ReleaseIntArrayElements(jarray, array, 0);
-    
+
     return jresult;
 }
 
@@ -295,22 +295,22 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixGetFl
     *len = 0;
     float *result[1];
 
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     field = 0;
     if (jfield) {
         field = (char *)jenv->GetStringUTFChars(jfield, 0);
         if (!field) return 0;
     }
-    
+
     jresult = (jint) XGDMatrixGetFloatInfo(handle, (char const *)field, len, (const float **) result);
- 
+
     if (field) jenv->ReleaseStringUTFChars(jfield, (const char *)field);
-  
+
     jsize jlen = (jsize)*len;
     jfloatArray jarray = jenv->NewFloatArray(jlen);
     jenv->SetFloatArrayRegion(jarray, 0, jlen, (jfloat *) *result);
     jenv->SetObjectArrayElement(jout, 0, (jobject) jarray);
-    
+
     return jresult;
 }
 
@@ -328,13 +328,13 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixGetUI
     *len = 0;
     unsigned int *result[1];
 
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     field = (char *)jenv->GetStringUTFChars(jfield, 0);
-    
+
     jresult = (jint) XGDMatrixGetUIntInfo(handle, (char const *)field, len, (const unsigned int **) result);
- 
+
     if (field) jenv->ReleaseStringUTFChars(jfield, (const char *)field);
-  
+
     jsize jlen = (jsize)*len;
     jintArray jarray = jenv->NewIntArray(jlen);
     jenv->SetIntArrayRegion(jarray, 0, jlen, (jint *) *result);
@@ -352,7 +352,7 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGDMatrixNumRo
     jint jresult = 0 ;
     void *handle = (void *) 0 ;
     bst_ulong result[1];
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     jresult = (jint) XGDMatrixNumRow(handle, result);
     jenv->SetLongArrayRegion(jout, 0, 1, (const jlong *) result);
     return jresult;
@@ -371,7 +371,7 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterCreat
     void *result[1];
     jlong* cjhandles = 0;
     unsigned long out[1];
-    
+
     if(jhandles) {
         len = (bst_ulong)jenv->GetArrayLength(jhandles);
         handles = new void*[len];
@@ -381,18 +381,18 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterCreat
             handles[i] = *(void **)&cjhandles[i];
         }
     }
-    
+
     jresult = (jint) XGBoosterCreate(handles, len, result);
-    
+
     //release
     if(jhandles) {
         delete[] handles;
         jenv->ReleaseLongArrayElements(jhandles, cjhandles, 0);
     }
-    
-    *(void **)&out[0] = *result; 
+
+    *(void **)&out[0] = *result;
     jenv->SetLongArrayRegion(jout, 0, 1, (const jlong *) out);
-    
+
     return jresult;
 }
 
@@ -404,7 +404,7 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterCreat
 JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterFree
   (JNIEnv *jenv, jclass jcls, jlong jhandle) {
     void *handle = (void *) 0 ;
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     return (jint) XGBoosterFree(handle);
 }
 
@@ -420,15 +420,15 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterSetPa
     void *handle = (void *) 0 ;
     char *name = (char *) 0 ;
     char *value = (char *) 0 ;
-    handle = *(void **)&jhandle; 
-    
+    handle = *(void **)&jhandle;
+
     name = (char *)jenv->GetStringUTFChars(jname, 0);
     value = (char *)jenv->GetStringUTFChars(jvalue, 0);
 
     jresult = (jint) XGBoosterSetParam(handle, (char const *)name, (char const *)value);
     if (name) jenv->ReleaseStringUTFChars(jname, (const char *)name);
     if (value) jenv->ReleaseStringUTFChars(jvalue, (const char *)value);
-    
+
     return jresult;
 }
 
@@ -442,9 +442,9 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterUpdat
     void *handle = (void *) 0 ;
     int iter ;
     void *dtrain = (void *) 0 ;
-    handle = *(void **)&jhandle; 
-    iter = (int)jiter; 
-    dtrain = *(void **)&jdtrain; 
+    handle = *(void **)&jhandle;
+    iter = (int)jiter;
+    dtrain = *(void **)&jdtrain;
     return (jint) XGBoosterUpdateOneIter(handle, iter, dtrain);
 }
 
@@ -460,17 +460,17 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterBoost
     void *dtrain = (void *) 0 ;
     bst_ulong len ;
 
-    handle = *(void **)&jhandle; 
-    dtrain = *(void **)&jdtrain;    
+    handle = *(void **)&jhandle;
+    dtrain = *(void **)&jdtrain;
     jfloat* grad = jenv->GetFloatArrayElements(jgrad, 0);
     jfloat* hess = jenv->GetFloatArrayElements(jhess, 0);
     len = (bst_ulong)jenv->GetArrayLength(jgrad);
     jresult = (jint) XGBoosterBoostOneIter(handle, dtrain, grad, hess, len);
-    
+
     //release
     jenv->ReleaseFloatArrayElements(jgrad, grad, 0);
     jenv->ReleaseFloatArrayElements(jhess, hess, 0);
-    
+
     return jresult;
 }
 
@@ -488,46 +488,46 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterEvalO
     char **evnames = 0;
     bst_ulong len ;
     char *result[1];
-    
-    handle = *(void **)&jhandle; 
-    iter = (int)jiter; 
-    len = (bst_ulong)jenv->GetArrayLength(jdmats); 
-    
-    
+
+    handle = *(void **)&jhandle;
+    iter = (int)jiter;
+    len = (bst_ulong)jenv->GetArrayLength(jdmats);
+
+
     if(len > 0) {
         dmats = new void*[len];
         evnames = new char*[len];
     }
-    
+
     //put handle from jhandles to chandles
     jlong* cjdmats = jenv->GetLongArrayElements(jdmats, 0);
     for(bst_ulong i=0; i<len; i++) {
         dmats[i] = *(void **)&cjdmats[i];
     }
-    
+
     //transfer jObjectArray to char**
     for(bst_ulong i=0; i<len; i++) {
         jstring jevname = (jstring)jenv->GetObjectArrayElement(jevnames, i);
         evnames[i] = (char *)jenv->GetStringUTFChars(jevname, 0);
     }
-    
+
     jresult = (jint) XGBoosterEvalOneIter(handle, iter, dmats, (char const *(*))evnames, len, (const char **) result);
-    
+
     if(len > 0) {
         delete[] dmats;
         //release string chars
         for(bst_ulong i=0; i<len; i++) {
             jstring jevname = (jstring)jenv->GetObjectArrayElement(jevnames, i);
             jenv->ReleaseStringUTFChars(jevname, (const char*)evnames[i]);
-        }        
+        }
         delete[] evnames;
         jenv->ReleaseLongArrayElements(jdmats, cjdmats, 0);
     }
-    
+
     jstring jinfo = 0;
     if (*result) jinfo = jenv->NewStringUTF((const char *) *result);
     jenv->SetObjectArrayElement(jout, 0, jinfo);
-  
+
     return jresult;
 }
 
@@ -546,19 +546,19 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterPredi
     bst_ulong len[1];
     *len = 0;
     float *result[1];
-    
-    handle = *(void **)&jhandle; 
-    dmat = *(void **)&jdmat; 
-    option_mask = (int)joption_mask; 
-    ntree_limit = (unsigned int)jntree_limit; 
+
+    handle = *(void **)&jhandle;
+    dmat = *(void **)&jdmat;
+    option_mask = (int)joption_mask;
+    ntree_limit = (unsigned int)jntree_limit;
 
     jresult = (jint) XGBoosterPredict(handle, dmat, option_mask, ntree_limit, len, (const float **) result);
-    
+
     jsize jlen = (jsize)*len;
     jfloatArray jarray = jenv->NewFloatArray(jlen);
     jenv->SetFloatArrayRegion(jarray, 0, jlen, (jfloat *) *result);
     jenv->SetObjectArrayElement(jout, 0, jarray);
-    
+
     return jresult;
 }
 
@@ -572,14 +572,14 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterLoadM
     jint jresult = 0;
     void *handle = (void *) 0 ;
     char *fname = (char *) 0 ;
-    handle = *(void **)&jhandle; 
-    
+    handle = *(void **)&jhandle;
+
     fname = (char *)jenv->GetStringUTFChars(jfname, 0);
 
-    
+
     jresult = (jint) XGBoosterLoadModel(handle,(char const *)fname);
     if (fname) jenv->ReleaseStringUTFChars(jfname, (const char *)fname);
-    
+
     return jresult;
 }
 
@@ -593,13 +593,13 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterSaveM
     jint jresult = 0;
     void *handle = (void *) 0 ;
     char *fname = (char *) 0 ;
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     fname = 0;
     fname = (char *)jenv->GetStringUTFChars(jfname, 0);
 
     jresult = (jint) XGBoosterSaveModel(handle, (char const *)fname);
     if (fname) jenv->ReleaseStringUTFChars(jfname, (const char *)fname);
-    
+
     return jresult;
 }
 
@@ -613,9 +613,9 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterLoadM
     void *handle = (void *) 0 ;
     void *buf = (void *) 0 ;
     bst_ulong len ;
-    handle = *(void **)&jhandle; 
-    buf = *(void **)&jbuf; 
-    len = (bst_ulong)jlen; 
+    handle = *(void **)&jhandle;
+    buf = *(void **)&jbuf;
+    len = (bst_ulong)jlen;
     return (jint) XGBoosterLoadModelFromBuffer(handle, (void const *)buf, len);
 }
 
@@ -632,7 +632,7 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterGetMo
     bst_ulong len[1];
     *len = 0;
     char *result[1];
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
 
     jresult = (jint)XGBoosterGetModelRaw(handle, len, (const char **) result);
     if (*result){
@@ -655,9 +655,9 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterDumpM
     int with_stats ;
     bst_ulong len[1];
     *len = 0;
-    
+
     char **result[1];
-    handle = *(void **)&jhandle; 
+    handle = *(void **)&jhandle;
     fmap = 0;
     if (jfmap) {
         fmap = (char *)jenv->GetStringUTFChars(jfmap, 0);
@@ -666,15 +666,15 @@ JNIEXPORT jint JNICALL Java_org_dmlc_xgboost4j_wrapper_XgboostJNI_XGBoosterDumpM
     with_stats = (int)jwith_stats;
 
     jresult = (jint) XGBoosterDumpModel(handle, (const char *)fmap, with_stats, len, (const char ***) result);
-    
+
     jsize jlen = (jsize)*len;
     jobjectArray jinfos = jenv->NewObjectArray(jlen, jenv->FindClass("java/lang/String"), jenv->NewStringUTF(""));
     for(int i=0 ; i<jlen; i++) {
         jenv->SetObjectArrayElement(jinfos, i, jenv->NewStringUTF((const char*) result[0][i]));
     }
     jenv->SetObjectArrayElement(jout, 0, jinfos);
-    
+
     if (fmap) jenv->ReleaseStringUTFChars(jfmap, (const char *)fmap);
-    
+
     return jresult;
 }

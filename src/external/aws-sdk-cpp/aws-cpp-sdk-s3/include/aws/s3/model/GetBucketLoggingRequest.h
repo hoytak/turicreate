@@ -32,25 +32,25 @@ namespace Model
     GetBucketLoggingRequest();
     Aws::String SerializePayload() const override;
 
-    
+
     inline const Aws::String& GetBucket() const{ return m_bucket; }
 
-    
+
     inline void SetBucket(const Aws::String& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(Aws::String&& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(const char* value) { m_bucketHasBeenSet = true; m_bucket.assign(value); }
 
-    
+
     inline GetBucketLoggingRequest& WithBucket(const Aws::String& value) { SetBucket(value); return *this;}
 
-    
+
     inline GetBucketLoggingRequest& WithBucket(Aws::String&& value) { SetBucket(value); return *this;}
 
-    
+
     inline GetBucketLoggingRequest& WithBucket(const char* value) { SetBucket(value); return *this;}
 
   private:

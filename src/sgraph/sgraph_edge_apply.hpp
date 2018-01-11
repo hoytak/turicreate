@@ -42,7 +42,7 @@ namespace sgraph_compute {
  * out must be of the result_type specified.
  *
  * The function must take as the first argument, a vector<flexible_type>
- * and the second argument, T, and must return an object castable to a 
+ * and the second argument, T, and must return an object castable to a
  * flexible_type of the result_type specified.
  *
  * For instance, if I am going to compute a change in message value between
@@ -51,21 +51,21 @@ namespace sgraph_compute {
  * \code
  *  const size_t msg_idx = g.get_edge_field_id("message");
  *
- *  // compute the change in message 
+ *  // compute the change in message
  *  auto delta = sgraph_compute::edge_apply(
  *      g,
  *      new_message,      // a vector<shared_ptr<sarray<flexible_type>>>
  *      flex_type_enum::FLOAT,
- *      [&](const std::vector<flexible_type>& edata, const flexible_type& y) { 
+ *      [&](const std::vector<flexible_type>& edata, const flexible_type& y) {
  *        return std::abs((double)(edata[msg_idx]) - (double)(y));
  *      });
  * \endcode
- * 
+ *
  * Note that if the apply is only going to access one column, the alternative
  * overload will be more efficient.
  */
 template <typename Fn, typename T>
-std::vector<std::shared_ptr<sarray<flexible_type>>> 
+std::vector<std::shared_ptr<sarray<flexible_type>>>
 edge_apply(sgraph& g,
            std::vector<std::shared_ptr<sarray<T>>> & other,
            flex_type_enum result_type,
@@ -96,7 +96,7 @@ edge_apply(sgraph& g,
  * out must be of the result_type specified.
  *
  * The function must take as the only argument, a vector<flexible_type>.
- * and must return an object castable to a flexible_type of the result_type 
+ * and must return an object castable to a flexible_type of the result_type
  * specified.
  *
  * For instance, if I am going to compute a "normalized" sampling vector.
@@ -112,12 +112,12 @@ edge_apply(sgraph& g,
  *        return edata;
  *      });
  * \endcode
- * 
+ *
  * Note that if the apply is only going to access one column, the alternative
  * overload will be more efficient.
  */
 template <typename Fn>
-std::vector<std::shared_ptr<sarray<flexible_type>>> 
+std::vector<std::shared_ptr<sarray<flexible_type>>>
 edge_apply(sgraph& g,
              flex_type_enum result_type,
              Fn fn) {
@@ -148,26 +148,26 @@ edge_apply(sgraph& g,
  * out must be of the result_type specified.
  *
  * The function must take as the first argument, a flexible_type
- * and the second argument, T, and must return an object castable to a 
+ * and the second argument, T, and must return an object castable to a
  * flexible_type of the result_type specified.
  *
  * For instance, if I am going to compute a change in message value between
  * the existing column, and a new computed column:
  *
  * \code
- *  // compute the change in message 
+ *  // compute the change in message
  *  auto delta = sgraph_compute::edge_apply(
  *      g,
  *      "message",
  *      new_message,      // a vector<shared_ptr<sarray<flexible_type>>>
  *      flex_type_enum::FLOAT,
- *      [&](const flexible_type& edata, const flexible_type& y) { 
- *        return std::abs((double)(edata) - (double)(y)); 
+ *      [&](const flexible_type& edata, const flexible_type& y) {
+ *        return std::abs((double)(edata) - (double)(y));
  *      });
  * \endcode
  */
 template <typename Fn, typename T>
-std::vector<std::shared_ptr<sarray<flexible_type>>> 
+std::vector<std::shared_ptr<sarray<flexible_type>>>
 edge_apply(sgraph& g,
              std::string column_name,
              std::vector<std::shared_ptr<sarray<T>>> & other,
@@ -200,7 +200,7 @@ edge_apply(sgraph& g,
  * out must be of the result_type specified.
  *
  * The function must take as the only argument, a flexible_type.
- * and must return an object castable to a flexible_type of the result_type 
+ * and must return an object castable to a flexible_type of the result_type
  * specified.
  *
  * For instance, if I am going to compute the log of the message column.
@@ -216,7 +216,7 @@ edge_apply(sgraph& g,
  * \endcode
  */
 template <typename Fn>
-std::vector<std::shared_ptr<sarray<flexible_type>>> 
+std::vector<std::shared_ptr<sarray<flexible_type>>>
 edge_apply(sgraph& g,
              std::string column_name,
              flex_type_enum result_type,
@@ -258,7 +258,7 @@ edge_apply(sgraph& g,
  *     combiner(partial_reduction[partition], total_reduction)
  *  return total_reduction
  * \endcode
- * 
+ *
  * Example. Here were compute the sum of the triangle_count field of every edge.
  * \code
  *  const size_t triangle_idx = g.get_edge_field_id("triangle_counts");
@@ -279,7 +279,7 @@ edge_apply(sgraph& g,
  */
 template <typename ResultType, typename Reducer, typename Combiner>
 typename std::enable_if<!std::is_convertible<Reducer, std::string>::value, ResultType>::type
-/*ResultType*/ edge_reduce(sgraph& g, 
+/*ResultType*/ edge_reduce(sgraph& g,
                              Reducer fn,
                              Combiner combine,
                              ResultType init = ResultType()) {
@@ -288,7 +288,7 @@ typename std::enable_if<!std::is_convertible<Reducer, std::string>::value, Resul
   mutex lock;
   ResultType ret = init;
   parallel_for((size_t)(0), len, [&](size_t i) {
-    std::vector<ResultType> result = 
+    std::vector<ResultType> result =
         turi::reduce(edata[i],
                          [&](const std::vector<flexible_type>& left, ResultType& right) {
                            fn(left, right);
@@ -324,7 +324,7 @@ typename std::enable_if<!std::is_convertible<Reducer, std::string>::value, Resul
  *     combiner(partial_reduction[partition], total_reduction)
  *  return total_reduction
  * \endcode
- * 
+ *
  * Example. Here were compute the sum of the triangle field of every edge.
  * \code
  *  total_triangles =
@@ -341,7 +341,7 @@ typename std::enable_if<!std::is_convertible<Reducer, std::string>::value, Resul
  * \endcode
  */
 template <typename ResultType, typename Reducer, typename Combiner>
-ResultType edge_reduce(sgraph& g, 
+ResultType edge_reduce(sgraph& g,
                          std::string column_name,
                          Reducer fn,
                          Combiner combine,
@@ -366,7 +366,7 @@ ResultType edge_reduce(sgraph& g,
   return ret;
 }
 
-} // end of sgraph 
+} // end of sgraph
 
 /// \}
 } // end of turicreate

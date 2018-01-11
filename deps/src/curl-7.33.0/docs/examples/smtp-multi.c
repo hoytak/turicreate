@@ -199,5 +199,3 @@ int main(void)
   curl_global_cleanup();
   return 0;
 }
-
-

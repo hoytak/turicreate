@@ -103,7 +103,7 @@ HTTP Cookies
     storage of cookies. Pass in the cookie as a HTTP header with all the
     details set, or pass in a line from a netscape cookie file. This option
     can also be used to flush the cookies etc.
-    
+
   CURLINFO_COOKIELIST
 
     Extract cookie information from the internal cookie storage as a linked

@@ -14,16 +14,16 @@ extern "C" {
 namespace turi {
 namespace v2_block_impl {
 
-void block_writer::init(std::string group_index_file, 
-                        size_t num_segments, 
+void block_writer::init(std::string group_index_file,
+                        size_t num_segments,
                         size_t num_columns) {
   m_output_files.resize(num_segments);
   m_output_file_locks.resize(num_segments);
   m_output_bytes_written.resize(num_segments);
 
-  // 1x for the compression buffer, 
+  // 1x for the compression buffer,
   // 1x for the flexible_type serialization buffer
-  m_buffer_pool.init(2 * num_segments); 
+  m_buffer_pool.init(2 * num_segments);
 
   m_blocks.resize(num_segments);
   for (auto& m_blockseg: m_blocks) m_blockseg.resize(num_columns);
@@ -33,9 +33,9 @@ void block_writer::init(std::string group_index_file,
   m_index_info.segment_files.resize(num_segments);
   m_index_info.columns.resize(num_columns);
 
-  // fill in the per column information of m_index_info. 
+  // fill in the per column information of m_index_info.
   for (size_t col = 0;col < m_index_info.columns.size(); ++col) {
-    m_index_info.columns[col].index_file = 
+    m_index_info.columns[col].index_file =
         m_index_info.group_index_file + ":" + std::to_string(col);
     m_index_info.columns[col].version = 2;
     m_index_info.columns[col].nsegments = m_index_info.nsegments;
@@ -51,14 +51,14 @@ void block_writer::init(std::string group_index_file,
 void block_writer::open_segment(size_t segmentid, std::string filename) {
   ASSERT_LT(segmentid, m_index_info.nsegments);
   ASSERT_TRUE(m_output_files[segmentid] == NULL);
-  m_output_files[segmentid].reset(new general_ofstream(filename, 
-                                                    /* must not compress! 
+  m_output_files[segmentid].reset(new general_ofstream(filename,
+                                                    /* must not compress!
                                                      * We need the blocks!*/
                                                      false));
   m_index_info.segment_files[segmentid] = filename;
   // update the per column segment file
   for (size_t col = 0;col < m_index_info.columns.size(); ++col) {
-    m_index_info.columns[col].segment_files[segmentid] = 
+    m_index_info.columns[col].segment_files[segmentid] =
         m_index_info.segment_files[segmentid] + ":" + std::to_string(col);
   }
 
@@ -72,7 +72,7 @@ void block_writer::open_segment(size_t segmentid, std::string filename) {
 static char padding_bytes[4096] = {0};
 
 size_t block_writer::write_block(size_t segment_id,
-                                 size_t column_id, 
+                                 size_t column_id,
                                  char* data,
                                  block_info block) {
   DASSERT_LT(segment_id, m_index_info.nsegments);
@@ -124,7 +124,7 @@ size_t block_writer::write_block(size_t segment_id,
 }
 
 size_t block_writer::write_typed_block(size_t segment_id,
-                                       size_t column_id, 
+                                       size_t column_id,
                                        const std::vector<flexible_type>& data,
                                        block_info block) {
   auto serialization_buffer = m_buffer_pool.get_new_buffer();
@@ -142,11 +142,11 @@ void block_writer::close_segment(size_t segment_id) {
 }
 
 group_index_file_information& block_writer::get_index_info() {
-  return m_index_info; 
+  return m_index_info;
 }
 
 void block_writer::write_index_file() {
-  write_array_group_index_file(m_index_info.group_index_file, 
+  write_array_group_index_file(m_index_info.group_index_file,
                                m_index_info);
 }
 

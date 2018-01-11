@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-Owner::Owner() : 
+Owner::Owner() :
     m_displayNameHasBeenSet(false),
     m_iDHasBeenSet(false)
 {
 }
 
-Owner::Owner(const XmlNode& xmlNode) : 
+Owner::Owner(const XmlNode& xmlNode) :
     m_displayNameHasBeenSet(false),
     m_iDHasBeenSet(false)
 {

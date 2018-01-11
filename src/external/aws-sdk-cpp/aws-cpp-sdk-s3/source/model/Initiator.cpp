@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-Initiator::Initiator() : 
+Initiator::Initiator() :
     m_iDHasBeenSet(false),
     m_displayNameHasBeenSet(false)
 {
 }
 
-Initiator::Initiator(const XmlNode& xmlNode) : 
+Initiator::Initiator(const XmlNode& xmlNode) :
     m_iDHasBeenSet(false),
     m_displayNameHasBeenSet(false)
 {

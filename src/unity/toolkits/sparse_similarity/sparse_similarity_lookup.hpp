@@ -25,18 +25,18 @@ template <typename T> class sarray;
  *
  *  The similarity metrics are an implementation of a class that
  *  implements a number of methods dictating the math used in the
- *  accumulation.  See similarities.hpp for details. 
- * 
+ *  accumulation.  See similarities.hpp for details.
+ *
  *  This model is creating using the create(...) methods below, which
  *  takes the name of the similarity and the current options.  The
  *  options given in add_options(...) must be present in the options
  *  map.
- *  
+ *
  *  The model can be trained by either providing the similarities of
  *  the items directly, or by training the model on a sarray of
- *  user-item-ratings.  See the below functions for details. 
+ *  user-item-ratings.  See the below functions for details.
  *
- * 
+ *
  *  Code Structure:
  *
  * - This model is intended to be encapsulated by other user-facing
@@ -44,7 +44,7 @@ template <typename T> class sarray;
  *   provides the user facing API, creates this model and then uses
  *   it.  Some item cf specific features, like how to handle new
  *   users, are punted to that model -- this one only can be queried
- *   with a list of items and ratings which then produce the output. 
+ *   with a list of items and ratings which then produce the output.
  *
  * - The similarity class defines the metric used, and then how the
  *   averaging at prediction time is done.
@@ -58,8 +58,8 @@ template <typename T> class sarray;
  *
  * - A number of accompaning utilities -- for example, nearest
  *   neighbors functions, utilities to generate the per-item
- *   statistics, and 
- *   
+ *   statistics, and
+ *
  * - A dense matrix class that stores only the upper diaganol part of
  *   a matrix is provided in sliced_itemitem_matrix.hpp. Included in
  *   that header are tools for estimating the number of row-slices and
@@ -75,7 +75,7 @@ class sparse_similarity_lookup {
   virtual std::string similarity_name() const = 0;
 
   /** Adds in all of the options needed for this class to the option
-   *  manager. 
+   *  manager.
    */
   static void add_options(option_manager& options);
 
@@ -92,7 +92,7 @@ class sparse_similarity_lookup {
    *  of each item as a sparse vector and then measuring the
    *  similarity between them.  This calculation is done as
    *  efficiently as possible using a combination of nearest neighbors
-   *  search and lookup tables. 
+   *  search and lookup tables.
    */
   virtual std::map<std::string, flexible_type>
   train_from_sparse_matrix_sarray(
@@ -130,8 +130,8 @@ class sparse_similarity_lookup {
    *   of the tuple for all the items in the item_predictions
    *   container.
    *
-   *   This is also the way to generate values for predict -- 
-   *   
+   *   This is also the way to generate values for predict --
+   *
    *   Returns the number of item similarity pairs that were
    *   considered.  (In some corner cases, such as when an item had no
    *   users that also rated other items, we want to recommend by
@@ -173,7 +173,7 @@ class sparse_similarity_lookup {
 
  protected:
 
-  /**  The stored options. 
+  /**  The stored options.
    */
   std::map<std::string, flexible_type> options;
 

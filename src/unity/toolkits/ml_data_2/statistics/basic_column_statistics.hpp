@@ -10,7 +10,7 @@
 #include <logger/assertions.hpp>
 #include <serialization/serialization_includes.hpp>
 #include <unity/toolkits/ml_data_2/ml_data_column_modes.hpp>
-#include <parallel/pthread_tools.hpp> 
+#include <parallel/pthread_tools.hpp>
 #include <boost/thread/lock_algorithms.hpp>
 #include <mutex>
 
@@ -118,11 +118,11 @@ class basic_column_statistics : public column_statistics {
   void finalize();
 
  private:
-  /// Perform finalizations; split between the threadlocal stuff and the global stuff. 
+  /// Perform finalizations; split between the threadlocal stuff and the global stuff.
   void _finalize_threadlocal(size_t, bool, bool);
   void _finalize_global(size_t, bool, bool);
-  
-  
+
+
   ////////////////////////////////////////////////////////////////////////////////
   // Stuff for the saving and loading
 
@@ -182,16 +182,16 @@ class basic_column_statistics : public column_statistics {
   std::vector<std::vector<size_t> > by_thread_element_counts;
   std::vector<std::vector<element_statistics_accumulator> > by_thread_mean_var_acc;
 
-  // The locks are done by 
+  // The locks are done by
   static constexpr size_t n_locks = 64; // Should be power of 2
-  
+
   std::array<simple_spinlock, n_locks> global_element_locks;
   std::vector<size_t> global_element_counts;
   std::vector<element_statistics_accumulator> global_mean_var_acc;
 
   volatile size_t global_size = 0;
 
-  /**  Return the index of the appropriate lock. 
+  /**  Return the index of the appropriate lock.
    *
    */
   inline size_t get_lock_index(size_t idx) const {
@@ -199,7 +199,7 @@ class basic_column_statistics : public column_statistics {
     return lock_idx;
   }
 
-  /**  Possibly resize the local array. 
+  /**  Possibly resize the local array.
    */
   template <typename T>
   inline void check_local_array_size(size_t idx, std::vector<T>& v) {
@@ -222,7 +222,7 @@ class basic_column_statistics : public column_statistics {
     }
   }
 
-  /**  Check global array size. Possibly resize it. 
+  /**  Check global array size. Possibly resize it.
    */
   template <typename T>
   inline void check_global_array_size(size_t idx, std::vector<T>& v) {
@@ -230,23 +230,23 @@ class basic_column_statistics : public column_statistics {
     // If needed, increase the value of global_size.
     if(global_size <= idx) {
 
-      do { 
+      do {
         size_t g = global_size;
-        
+
         if(g > idx)
-          break; 
+          break;
 
         bool success = atomic_compare_and_swap(global_size, g, idx+1);
 
         if(!success)
-          continue; 
-        
+          continue;
+
       } while(false);
     }
 
     // See if a resize is needed.
     if(UNLIKELY(idx >= v.size() )) {
-      
+
       // Grow aggressively, since a resize is really expensive.
       size_t new_size = 2 * (parallel_threshhold + idx + 1);
 
@@ -260,7 +260,7 @@ class basic_column_statistics : public column_statistics {
         // accessing it while we resize it.
         boost::lock(all_locks.begin(), all_locks.end());
 
-        // It's possible that another thread beat us to it. 
+        // It's possible that another thread beat us to it.
         if(v.size() < idx + 1)
           v.resize(new_size);
 

@@ -72,7 +72,7 @@ void write_image(const std::string& filename, char* data, size_t width, size_t h
   } else {
     log_and_throw (std::string("Unsupported channel size " + std::to_string(channels)));
   }
-} 
+}
 
 /**************************************************************************/
 /*                                                                        */

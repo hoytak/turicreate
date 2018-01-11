@@ -6,7 +6,7 @@
  *
  *	!!! ATTENTION !!!
  *
- *	libjson currently has three number parsing methods, they are being merged 
+ *	libjson currently has three number parsing methods, they are being merged
  *	behind the scenes, but all three interfaces must be consistent, so every set
  *	of numbers need to be tested in all three spots
  *
@@ -78,7 +78,7 @@ void testJSONValidator__isValidMember::testNotMembers(void){
 void testJSONValidator__isValidMember::testSuddenEnd(void){
 	#ifdef JSON_VALIDATE
 		assertNotValid_Depth("", isValidMember, ',');
-	
+
 		//--- void testJSONValidator__isValidMember::testSuddenEnd(void){
 		assertNotValid_Depth("true", isValidMember, ',');
 		assertNotValid_Depth("false", isValidMember, ',');

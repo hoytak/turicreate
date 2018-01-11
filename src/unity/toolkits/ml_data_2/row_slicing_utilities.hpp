@@ -7,12 +7,12 @@
 #define ML_DATA_ROW_SLICING_UTILITIES_H_
 
 #include <vector>
-#include <unity/toolkits/ml_data_2/metadata.hpp> 
+#include <unity/toolkits/ml_data_2/metadata.hpp>
 #include <flexible_type/flexible_type.hpp>
 #include <numerics/armadillo.hpp>
 #include <numerics/armadillo.hpp>
-#include <unity/lib/variant.hpp> 
-#include <unity/lib/variant_deep_serialize.hpp> 
+#include <unity/lib/variant.hpp>
+#include <unity/lib/variant_deep_serialize.hpp>
 
 namespace turi { namespace v2 {
 
@@ -26,8 +26,8 @@ class row_slicer {
 
  public:
 
-  row_slicer() {} 
-  
+  row_slicer() {}
+
   /** Constructor -- provide ml_metadata class and a subset of column
    *  indices to use in this particular row.  the columns_to_pick must
    *  be in sorted order.
@@ -52,10 +52,10 @@ class row_slicer {
    *    // Select that we want columns 1 and 2, but drop 0.
    *    v2::row_slicer s_c1_c2(data.metadata(), {1, 2} );
    *
-   *    v2::dense_vector vd; 
-   *    v2::sparse_vector vs; 
+   *    v2::dense_vector vd;
+   *    v2::sparse_vector vs;
    *    std::vector<flexible_type> vu;
-   *    
+   *
    *    ////////////////////////////////////////
    *
    *    auto it = data.get_iterator();
@@ -88,9 +88,9 @@ class row_slicer {
    *      data.set_data(X, "", {},
    *                    { {"C1", v2::ml_column_mode::UNTRANSLATED},
    *                      {"C2", v2::ml_column_mode::UNTRANSLATED} });
-   *      
+   *
    *      data.fill();
-   *      
+   *
    *      std::vector<v2::ml_data_entry> x_t;
    *      std::vector<flexible_type> x_u;
    *
@@ -98,7 +98,7 @@ class row_slicer {
    *      v2::row_slicer s_c1_c2(data.metadata(), {1, 2} );
    *
    *      std::vector<flexible_type> vu;
-   *      
+   *
    *      auto it = data.get_iterator();
    *
    *      it.fill_observation(x_t);
@@ -114,25 +114,25 @@ class row_slicer {
    *      ++it;
    */
   row_slicer(const std::shared_ptr<ml_metadata>& metadata,
-             const std::vector<size_t>& columns_to_pick); 
+             const std::vector<size_t>& columns_to_pick);
 
   /**  Take a row, represented by a pair of translated and
    *   untranslated columns (either of which may be empty), and
-   *   use it to fill a sparse vector with the result. 
+   *   use it to fill a sparse vector with the result.
    */
   void slice(sparse_vector& dest,
              const std::vector<ml_data_entry>& x_t, const std::vector<flexible_type>& x_u) const;
 
   /**  Take a row, represented by a pair of translated and
    *   untranslated columns (either of which may be empty), and
-   *   use it to fill a dense vector with the result. 
+   *   use it to fill a dense vector with the result.
    */
   void slice(dense_vector& dest,
              const std::vector<ml_data_entry>& x_t, const std::vector<flexible_type>& x_u) const;
 
   /**  Take a row, represented by a pair of translated and
    *   untranslated columns (either of which may be empty), and
-   *   use it to fill an untranslated row with the result. 
+   *   use it to fill an untranslated row with the result.
    */
   void slice(std::vector<flexible_type>& dest,
              const std::vector<ml_data_entry>& x_t, const std::vector<flexible_type>& x_u) const;
@@ -151,18 +151,18 @@ class row_slicer {
    */
   void load(turi::iarchive& iarc);
 
-  
+
  private:
-  
-  bool pick_from_flexible_type = false; 
+
+  bool pick_from_flexible_type = false;
 
   std::vector<size_t> flex_type_columns_to_pick;
-  
-  std::vector<int> column_pick_mask; 
 
-  std::vector<size_t> index_offsets; 
+  std::vector<int> column_pick_mask;
+
+  std::vector<size_t> index_offsets;
   std::vector<size_t> index_sizes;
-  
+
   size_t _num_dimensions = 0;
 };
 

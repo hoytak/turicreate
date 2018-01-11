@@ -190,7 +190,7 @@ lz4_reader_bid(struct archive_read_filter_bidder *self,
 	} else if (number == LZ4_LEGACY) {
 		bits_checked += 32;
 	}
-	
+
 	return (bits_checked);
 }
 
@@ -357,7 +357,7 @@ lz4_filter_read(struct archive_read_filter *self, const void **p)
 			if (read_buf == NULL) {
 				archive_set_error(
 				    &self->archive->archive,
-		    		    ARCHIVE_ERRNO_MISC,
+				    ARCHIVE_ERRNO_MISC,
 				    "Malformed lz4 data");
 				return (ARCHIVE_FATAL);
 			}

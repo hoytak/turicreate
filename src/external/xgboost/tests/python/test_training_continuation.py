@@ -49,4 +49,3 @@ class TestTrainingContinuation(unittest.TestCase):
         assert ntrees_03a == 10
         assert ntrees_03b == 10
         assert mean_squared_error(y, gbdt_03a.predict(dtrain)) == mean_squared_error(y, gbdt_03b.predict(dtrain))
-		

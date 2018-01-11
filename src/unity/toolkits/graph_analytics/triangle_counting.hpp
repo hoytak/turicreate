@@ -18,17 +18,17 @@ namespace triangle_counting {
  * Accepted Parameters: None
  *
  * Returned Parameters:
- * \li \b training_time (flexible_type: float). The training time of the algorithm in seconds 
+ * \li \b training_time (flexible_type: float). The training time of the algorithm in seconds
  * excluding all other preprocessing stages.
  *
  * \li \b num_triangles (flexible_type: int) The total number of triangles found
- * 
+ *
  * \li \b __graph__ (unity_graph). The graph object with the field "triangle_count",
- * The triangle_count field (integer) on each vertex contains the number of 
+ * The triangle_count field (integer) on each vertex contains the number of
  * triangles each vertex is involved in.
  */
 std::vector<toolkit_function_specification> get_toolkit_function_registration();
 
-} // namespace triangle_counting 
+} // namespace triangle_counting
 } // namespace turi
 #endif

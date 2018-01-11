@@ -46,13 +46,13 @@ toolkit_function_response_type precision_recall_by_user(toolkit_function_invocat
   for (const auto& cutoff : cutoffs) {
     cutoffs_vec.push_back((size_t) cutoff);
   }
-  
+
   // Create ml_data object
   std::string user_column = recommendations.column_name(USER_COLUMN_INDEX);
-  std::string item_column = recommendations.column_name(ITEM_COLUMN_INDEX); 
+  std::string item_column = recommendations.column_name(ITEM_COLUMN_INDEX);
   if (user_column == item_column)
     log_and_throw("User column and item column must be different.");
-  
+
   sframe pr = precision_recall_by_user(
       data.select_columns({user_column, item_column}),
       recommendations.select_columns({user_column, item_column}),
@@ -76,11 +76,11 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
 
   toolkit_function_specification precision_recall_by_user_spec;
   precision_recall_by_user_spec.name = "evaluation_precision_recall_by_user";
-  precision_recall_by_user_spec.toolkit_execute_function = 
+  precision_recall_by_user_spec.toolkit_execute_function =
  (toolkit_function_response_type(*)(toolkit_function_invocation&))precision_recall_by_user;
 
   specs.push_back(precision_recall_by_user_spec);
-  REGISTER_FUNCTION(_supervised_streaming_evaluator, "unity_targets", 
+  REGISTER_FUNCTION(_supervised_streaming_evaluator, "unity_targets",
                         "unity_predictions", "metric", "kwargs");
   return specs;
 }

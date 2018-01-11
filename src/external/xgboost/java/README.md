@@ -1,5 +1,5 @@
 # xgboost4j
-this is a java wrapper for xgboost 
+this is a java wrapper for xgboost
 
 the structure of this wrapper is almost the same as the official python wrapper.
 
@@ -13,7 +13,7 @@ core of this wrapper is two classes:
   please refer to [xgboost4j.md](doc/xgboost4j.md) for more information.
 
   besides, simple examples could be found in [xgboost4j-demo](xgboost4j-demo/README.md)
- 
+
 
 ## build native library
 
@@ -23,6 +23,6 @@ for windows: open the xgboost.sln in "../windows" folder, you will found the xgb
  * rebuild all
  * double click "create_wrap.bat" to set library to proper place
 
-for linux: 
+for linux:
  * make sure you have installed jdk and `JAVA_HOME` has been setted properly
  * run "create_wrap.sh"

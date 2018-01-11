@@ -11,7 +11,7 @@
 namespace turi {
   /**
    * Helper utility for converting from flexible_type to json.
-   * TODO: Fill in details 
+   * TODO: Fill in details
    */
   inline JSONNode flexible_type_to_json(const flexible_type& val, std::string name) {
 

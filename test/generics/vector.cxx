@@ -39,31 +39,31 @@ using namespace turi;
 
 template <typename T>
 void verify_serialization(const gl_vector<T>& v) {
-  
+
   // into gl_vector
-  gl_vector<T> v1; 
+  gl_vector<T> v1;
   save_and_load_object(v1, v);
   DASSERT_TRUE(v == v1);
 
   // Into std
-  std::vector<T> v2; 
+  std::vector<T> v2;
   save_and_load_object(v2, v);
   DASSERT_EQ(v2.size(), v.size());
   DASSERT_TRUE(std::equal(v2.begin(), v2.end(), v.begin()));
 
   // from std into empty
-  std::vector<T> v3; 
+  std::vector<T> v3;
   v3 = v;
-  gl_vector<T> v4; 
+  gl_vector<T> v4;
   save_and_load_object(v4, v3);
   DASSERT_TRUE(v4 == v);
-  
+
   // from std into non-empty
   save_and_load_object(v1, v3);
   DASSERT_TRUE(v1 == v);
 }
 
-template <typename T> 
+template <typename T>
 void verify_consistency(const gl_vector<T>& v) {
 
   // Constructor 1
@@ -71,13 +71,13 @@ void verify_consistency(const gl_vector<T>& v) {
     gl_vector<T> v2(v);
     DASSERT_TRUE(v == v2);
   }
-  
+
   // Constructor 2
   {
     gl_vector<T> v2(v.begin(), v.end());
     DASSERT_TRUE(v == v2);
   }
-  
+
   // Assignment
   {
     gl_vector<T> v2;
@@ -91,7 +91,7 @@ void verify_consistency(const gl_vector<T>& v) {
     v2.assign(v.begin(), v.end());
     DASSERT_TRUE(v == v2);
   }
-  
+
   // Assignment by insert
   {
     gl_vector<T> v2;
@@ -107,7 +107,7 @@ void verify_consistency(const gl_vector<T>& v) {
     v2.insert(v2.end(), v.begin(), v.end());
     DASSERT_TRUE(v == v2);
   }
-  
+
   // construction by empty, then resize, then index fill
   {
     gl_vector<T> v2;
@@ -118,7 +118,7 @@ void verify_consistency(const gl_vector<T>& v) {
     DASSERT_TRUE(v == v2);
   }
 
-  // construction by empty, then resize, then 
+  // construction by empty, then resize, then
   {
     gl_vector<T> v2;
     v2.reserve(v.size());
@@ -127,14 +127,14 @@ void verify_consistency(const gl_vector<T>& v) {
     }
     DASSERT_TRUE(v == v2);
   }
-  
+
   // construction by empty, then resize, then iteration
   {
     gl_vector<T> v2;
     v2.resize(v.size());
-    auto it = v2.begin(); 
+    auto it = v2.begin();
     for(size_t i = 0; i < v.size(); ++i, ++it) {
-      *it = v[i]; 
+      *it = v[i];
     }
     DASSERT_TRUE(v == v2);
   }
@@ -143,13 +143,13 @@ void verify_consistency(const gl_vector<T>& v) {
   {
     gl_vector<T> v2;
     v2.resize(v.size());
-    auto it = v2.rbegin(); 
+    auto it = v2.rbegin();
     for(size_t i = v.size(); (i--) != 0; ++it) {
-      *it = v[i]; 
+      *it = v[i];
     }
     DASSERT_TRUE(v == v2);
   }
-  
+
   // Assignment by insert into cleared vector.
   {
     gl_vector<T> v2;
@@ -169,7 +169,7 @@ void verify_consistency(const gl_vector<T>& v) {
   }
 
   ////////////////////////////////////////////////////////////////////////////////
-  // test casting. 
+  // test casting.
   {
     std::vector<T> v_stl;
 
@@ -178,14 +178,14 @@ void verify_consistency(const gl_vector<T>& v) {
     TS_ASSERT_EQUALS(v_stl.size(), v.size());
     TS_ASSERT(std::equal(v.begin(), v.end(), v_stl.begin()));
 
-    // Assignment 
+    // Assignment
     gl_vector<T> v2(20);
 
     v2 = v_stl;
 
-    TS_ASSERT_EQUALS(v2, v); 
-  
-    // Construction 
+    TS_ASSERT_EQUALS(v2, v);
+
+    // Construction
     gl_vector<T> v3(v_stl);
 
     TS_ASSERT_EQUALS(v3, v);
@@ -253,7 +253,7 @@ class MoveOnly
   {data_ = x.data_; x.data_ = 0; return *this;}
 
   int get() const {return data_;}
-  
+
   bool operator==(const MoveOnly& x) const {return data_ == x.data_;}
   bool operator< (const MoveOnly& x) const {return data_ <  x.data_;}
 };
@@ -421,7 +421,7 @@ struct gl_vector_datatype_test  {
 
     verify_consistency(l1);
     verify_serialization(l1);
-    
+
   }
 
   void test_erase_iter_iter() {
@@ -433,7 +433,7 @@ struct gl_vector_datatype_test  {
       TS_ASSERT_EQUALS(l1.size(), 3);
       TS_ASSERT(std::distance(l1.cbegin(), l1.cend()) == 3);
       TS_ASSERT(i == l1.begin());
-      
+
       verify_consistency(l1);
       verify_serialization(l1);
     }
@@ -444,7 +444,7 @@ struct gl_vector_datatype_test  {
       TS_ASSERT_EQUALS(std::distance(l1.cbegin(), l1.cend()), 2);
       TS_ASSERT_EQUALS(i, l1.begin());
       TS_ASSERT(l1 == gl_vector<int>(a1+1, a1+3));
-      
+
       verify_consistency(l1);
       verify_serialization(l1);
     }
@@ -574,7 +574,7 @@ struct gl_vector_datatype_test  {
       TS_ASSERT_EQUALS(v[j], a[k]);
     for (; j < 105; ++j)
       TS_ASSERT_EQUALS(v[j], 0);
-    
+
     verify_consistency(v);
     verify_serialization(v);
   }
@@ -608,7 +608,7 @@ struct gl_vector_datatype_test  {
     TS_ASSERT(i == c.cbegin());
 
     verify_serialization(c);
-    verify_consistency(c); 
+    verify_consistency(c);
   }
 
   void test_iterators_1_const()
@@ -622,7 +622,7 @@ struct gl_vector_datatype_test  {
     TS_ASSERT(i == c.cbegin());
 
     verify_serialization(c);
-    verify_consistency(c); 
+    verify_consistency(c);
   }
 
   void test_swap_1()
@@ -643,9 +643,9 @@ struct gl_vector_datatype_test  {
     TS_ASSERT_EQUALS(v2.data(), ptr_1);
 
     verify_serialization(v1);
-    verify_consistency(v1); 
+    verify_consistency(v1);
     verify_serialization(v2);
-    verify_consistency(v2); 
+    verify_consistency(v2);
   }
 
   void test_swap_2()
@@ -656,19 +656,19 @@ struct gl_vector_datatype_test  {
     gl_vector<int> c2(a2, a2+sizeof(a2)/sizeof(a2[0]));
 
     verify_serialization(c1);
-    verify_consistency(c1); 
+    verify_consistency(c1);
     verify_serialization(c2);
-    verify_consistency(c2); 
-    
+    verify_consistency(c2);
+
     std::swap(c1, c2);
 
     TS_ASSERT(c1 == gl_vector<int>(a2, a2+sizeof(a2)/sizeof(a2[0])));
     TS_ASSERT(c2 == gl_vector<int>(a1, a1+sizeof(a1)/sizeof(a1[0])));
 
     verify_serialization(c1);
-    verify_consistency(c1); 
+    verify_consistency(c1);
     verify_serialization(c2);
-    verify_consistency(c2); 
+    verify_consistency(c2);
   }
 
   void test_shrink_to_fit_1()
@@ -678,9 +678,9 @@ struct gl_vector_datatype_test  {
     v.shrink_to_fit();
     TS_ASSERT_EQUALS(v.capacity(), 101);
     TS_ASSERT_EQUALS(v.size(), 101);
-    
+
     verify_serialization(v);
-    verify_consistency(v); 
+    verify_consistency(v);
   }
 
   void test_shrink_to_fit_2()
@@ -690,9 +690,9 @@ struct gl_vector_datatype_test  {
     v.shrink_to_fit();
     TS_ASSERT_EQUALS(v.capacity(), 100);
     TS_ASSERT_EQUALS(v.size(), 100);
-    
+
     verify_serialization(v);
-    verify_consistency(v); 
+    verify_consistency(v);
   }
 
   void test_resize_1()
@@ -709,9 +709,9 @@ struct gl_vector_datatype_test  {
       TS_ASSERT(v[i] == 0);
     for (unsigned i = 50; i < 200; ++i)
       TS_ASSERT(v[i] == 1);
-    
+
     verify_serialization(v);
-    verify_consistency(v); 
+    verify_consistency(v);
   }
 
   void test_resize_2()
@@ -726,7 +726,7 @@ struct gl_vector_datatype_test  {
     TS_ASSERT(v.capacity() >= 200);
 
     verify_serialization(v);
-    verify_consistency(v); 
+    verify_consistency(v);
   }
 
   void test_resize_2_move()
@@ -747,7 +747,7 @@ struct gl_vector_datatype_test  {
     TS_ASSERT(v.capacity() >= 10);
 
     verify_serialization(v);
-    verify_consistency(v); 
+    verify_consistency(v);
   }
 
   void test_reserve_2() {
@@ -761,7 +761,7 @@ struct gl_vector_datatype_test  {
     TS_ASSERT(v.capacity() == 150);
 
     verify_serialization(v);
-    verify_consistency(v); 
+    verify_consistency(v);
   }
 
   void test_reserve_2_move() {
@@ -783,9 +783,9 @@ struct gl_vector_datatype_test  {
     TS_ASSERT(l2 == l);
 
     verify_serialization(l);
-    verify_consistency(l); 
+    verify_consistency(l);
     verify_serialization(l2);
-    verify_consistency(l2); 
+    verify_consistency(l2);
   }
 
   void test_assign_initializers() {
@@ -798,7 +798,7 @@ struct gl_vector_datatype_test  {
     TS_ASSERT(d[3] == 6);
 
     verify_serialization(d);
-    verify_consistency(d); 
+    verify_consistency(d);
   }
 
   void test_assign_move() {
@@ -824,12 +824,12 @@ struct gl_vector_datatype_test  {
 
     verify_serialization(c);
     verify_consistency(c);
-    
+
     c.pop_back();
     TS_ASSERT(c.size() == 0);
-    
+
     verify_serialization(c);
-    verify_consistency(c); 
+    verify_consistency(c);
   }
 
   void test_pop_back_2() {
@@ -844,13 +844,13 @@ struct gl_vector_datatype_test  {
     TS_ASSERT(i.use_count() == 2);
     TS_ASSERT(c.size() == 1);
 
-    verify_consistency(c); 
+    verify_consistency(c);
 
     c.pop_back();
     TS_ASSERT(c.size() == 0);
     TS_ASSERT(i.use_count() == 1);
 
-    verify_consistency(c); 
+    verify_consistency(c);
   }
 
 
@@ -864,7 +864,7 @@ template <class T> void _test_types()
   typedef gl_vector<T> C;
 
     static_assert((std::is_same<typename C::value_type, T>::value), "");
-    
+
     static_assert((std::is_same<
         typename std::iterator_traits<typename C::iterator>::iterator_category,
         std::random_access_iterator_tag>::value), "");

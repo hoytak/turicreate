@@ -37,7 +37,7 @@ make_testing_sarray(flex_type_enum types,
  * \internal
  * \ingroup sframe_physical
  * \addtogroup sframe_internal SFrame Internal
- * 
+ *
  *  Creates a random SFrame for testing purposes.  The
  *  column_type_info gives the types of the column.
  *

@@ -25,4 +25,3 @@ $	goto loop
 $ loop_end:
 $	set default 'save_def'
 $	exit
-

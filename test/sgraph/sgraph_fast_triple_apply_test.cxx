@@ -10,7 +10,7 @@
 
 using namespace turi;
 
-// Implement degree count function using triple_apply 
+// Implement degree count function using triple_apply
 std::vector<std::pair<flexible_type, flexible_type>> triple_apply_degree_count(
   sgraph& g, sgraph::edge_direction dir) {
 
@@ -82,8 +82,8 @@ void test_triple_apply_edge_data_modification() {
                                  auto src_id = vdata[src_addr.partition_id][src_addr.local_id];
                                  auto dst_id = vdata[dst_addr.partition_id][dst_addr.local_id];
 
-                                 scope.edge()[field_id] = src_id + dst_id; 
-                                                          
+                                 scope.edge()[field_id] = src_id + dst_id;
+
                                }, {"id_sum"}, {"id_sum"});
 
   sframe edge_sframe = g.get_edges();

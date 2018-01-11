@@ -18,7 +18,7 @@ namespace feature_engineering {
  * transformer_base model interface.
  * ---------------------------------------
  *
- *  Base class for handling feature engineering transformers. This class is meant 
+ *  Base class for handling feature engineering transformers. This class is meant
  *  to be a guide to aid model writing for feature engineering modules.
  *
  *  Each C++ toolkit contains the following:
@@ -32,11 +32,11 @@ namespace feature_engineering {
  *              options, option ranges, type etc. This must be initialized only
  *              once in the set_options() function.
  *
- * 
+ *
  * Functions that should always be implemented. Here are some notes about
  * each of these functions that may help guide you in writing your model.
  *
- * *) init_transformer : Initializer the transformer i.e this is the same as 
+ * *) init_transformer : Initializer the transformer i.e this is the same as
  *                       __init__ from the python side.
  *
  * *) fit  : Fit the transformer with the data (SFrame)
@@ -47,13 +47,13 @@ namespace feature_engineering {
  * *) init_options : Initialize the options manager.
  *
  * *) save: Save the model with the turicreate iarc. Turi is a server-client
- *          module. DO NOT SAVE ANYTHING in the client side. Make sure that 
+ *          module. DO NOT SAVE ANYTHING in the client side. Make sure that
  *          everything is in the server side. For example: You might be tempted
  *          do keep options that the user provides into the server side but
  *          DO NOT do that because save and load will break things for you!
  *
  * *) load: Load the model with the turicreate oarc.
- *  
+ *
  * *) version: A get version for this model
  */
 class EXPORT transformer_base : public sdk_model_base {
@@ -89,7 +89,7 @@ class EXPORT transformer_base : public sdk_model_base {
    * Loads a model previously saved at a particular version number.
    * Should raise an exception on failure.
    */
-  virtual void load_version(iarchive& iarc, size_t version) = 0; 
+  virtual void load_version(iarchive& iarc, size_t version) = 0;
 
 
   /**
@@ -99,26 +99,26 @@ class EXPORT transformer_base : public sdk_model_base {
    *
    * \param[in] options Options to set
    */
-  virtual void init_options(const std::map<std::string, 
+  virtual void init_options(const std::map<std::string,
                                             flexible_type>& _options) = 0;
 
   /**
    * Init the transformer and return an instantiated object.
    *
    * \param[in] options (**kwargs from python)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "__init__" in python.
    *
    */
-  virtual void init_transformer(const std::map<std::string, 
+  virtual void init_transformer(const std::map<std::string,
                                               flexible_type>& _options) = 0;
   /**
    * Fit the transformer and make it ready for transformations.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "fit" in python.
@@ -130,27 +130,27 @@ class EXPORT transformer_base : public sdk_model_base {
    * Transform the given data.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "transform" in python.
    *
    */
-  virtual gl_sframe transform(gl_sframe data) = 0; 
+  virtual gl_sframe transform(gl_sframe data) = 0;
 
   /**
    * Function implemented by BEGIN_CLASS_MEMBER_REGISTRATION
-   */ 
+   */
   virtual void perform_registration() = 0;
-  virtual std::string uid() = 0; 
-  
+  virtual std::string uid() = 0;
+
   /**
    * Fit and transform the given data. Intended as an optimization because
-   * fit and transform are usually always called together. The default 
+   * fit and transform are usually always called together. The default
    * implementaiton calls fit and then transform.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "fit_transform" in python.
@@ -158,7 +158,7 @@ class EXPORT transformer_base : public sdk_model_base {
    */
   gl_sframe fit_transform(gl_sframe data) {
      fit(data);
-     return transform(data); 
+     return transform(data);
   }
 
 };

@@ -24,7 +24,7 @@ fiber_control::affinity_type fiber_control::all_affinity() {
   return ret;
 }
 
-fiber_control::fiber_control(size_t nworkers, 
+fiber_control::fiber_control(size_t nworkers,
                              size_t affinity_base)
     :nworkers(nworkers),
     affinity_base(affinity_base),
@@ -48,7 +48,7 @@ fiber_control::fiber_control(size_t nworkers,
   }
   // launch the workers
   for (size_t i = 0;i < nworkers; ++i) {
-    workers.launch(boost::bind(&fiber_control::worker_init, this, i), 
+    workers.launch(boost::bind(&fiber_control::worker_init, this, i),
                    affinity_base + i);
   }
 }
@@ -184,7 +184,7 @@ mutex flush_lock;
 void fiber_control::worker_init(size_t workerid) {
   /*
    * This is the "root" stack for each worker.
-   * When there are active user threads associated with this worker, 
+   * When there are active user threads associated with this worker,
    * it will switch directly between the fibers.
    * But, when the worker has no other fiber to run, it will return to this
    * stack and and wait in a condition variable
@@ -211,7 +211,7 @@ void fiber_control::worker_init(size_t workerid) {
       schedule[workerid].waiting = false;
       active_workers.inc();
       yield_to(next_fib);
-      if (context_switch_periodic_callback && 
+      if (context_switch_periodic_callback &&
           flush_timer.current_time() > 0.0001 && flush_lock.try_lock()) {
         context_switch_periodic_callback(get_worker_id());
         flush_timer.start();
@@ -269,8 +269,8 @@ void fiber_control::trampoline(intptr_t _args) {
   fiber_control::exit();
 }
 
-size_t fiber_control::launch(boost::function<void(void)> fn, 
-                             size_t stacksize, 
+size_t fiber_control::launch(boost::function<void(void)> fn,
+                             size_t stacksize,
                              affinity_type affinity) {
   ASSERT_GT(affinity.popcount(), 0);
   size_t b = 0;
@@ -338,7 +338,7 @@ size_t fiber_control::pick_fiber_worker(fiber* fib) {
 void fiber_control::yield_to(fiber* next_fib) {
   // the core scheduling logic
   tls* t = get_tls_ptr();
-  
+
   // if (next_fib) {
   //   if (t->cur_fiber) {
   //     printf("%ld: yield to: %ld from %ld\n", get_worker_id(), next_fib->id, t->cur_fiber->id);

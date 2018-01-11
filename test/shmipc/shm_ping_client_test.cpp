@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     client.send(s.c_str(), s.length());
     if (s == "end") break;
     char *c = nullptr;
-    size_t len = 0;  
+    size_t len = 0;
     size_t receivelen = 0;
     bool ok = client.receive_direct(&c, &len, receivelen, 10);
     std::cout << "Received:" << std::string(c, receivelen) << std::endl;

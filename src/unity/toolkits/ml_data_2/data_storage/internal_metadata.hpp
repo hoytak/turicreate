@@ -12,7 +12,7 @@
 
 namespace turi {
 
-struct metadata_load; 
+struct metadata_load;
 
 namespace v2 {
 
@@ -101,7 +101,7 @@ struct column_metadata {
  private:
 
   friend struct turi::metadata_load;
-  
+
   /** This is set to hold the size of the numeric column if it is
    *  fixed, and size_t(-1) otherwise.
    */

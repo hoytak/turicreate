@@ -42,7 +42,7 @@ void setup(toolkit_function_invocation& invoke) {
 
 /**
  * We start with every vertex having core_id = KMAX,
- * Each iteration, while the gather will +1 for neighbors whose core_id > CURRENT_K 
+ * Each iteration, while the gather will +1 for neighbors whose core_id > CURRENT_K
  * If the gather is > 0 and <= CURRENT_K, then we set the core_id to CURRENT_K (indicate its deleted).
  * And repeat...
  */
@@ -105,7 +105,7 @@ void triple_apply_kcore(sgraph& g) {
         edge[e_deleted_idx] = 1;
         --source[degree_idx];
         --target[degree_idx];
-        // We need to check again if the deletion of this edge 
+        // We need to check again if the deletion of this edge
         // causing either source or target vertex to be deleted.
         if (!source[v_deleted_idx] && source[degree_idx] <= CURRENT_K) {
           source[core_idx] = CURRENT_K;
@@ -258,5 +258,5 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
   return {main_spec, option_spec, model_spec};
 }
 
-} // end of namespace kcore 
+} // end of namespace kcore
 } // end of namespace turi

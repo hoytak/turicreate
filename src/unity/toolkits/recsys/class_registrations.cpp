@@ -4,7 +4,7 @@
 #include <unity/toolkits/recsys/models/popularity.hpp>
 
 
-namespace turi { namespace recsys { 
+namespace turi { namespace recsys {
 
 BEGIN_CLASS_REGISTRATION
 REGISTER_CLASS(recsys_factorization_model)

@@ -46,12 +46,12 @@ request_socket::request_socket(void* zmq_ctx,
     } else {
       targets[i].server = targets[i].key;
     }
-    
+
   }
   target_lock.unlock();
   // register the key value store callback
   if (zk_keyval != NULL) {
-    zk_kv_callback_id = zk_keyval->add_callback(boost::bind(&request_socket::keyval_change, 
+    zk_kv_callback_id = zk_keyval->add_callback(boost::bind(&request_socket::keyval_change,
                                                             this, _1, _2, _3, _4));
   }
   last_any_id = 0;
@@ -97,7 +97,7 @@ void request_socket::keyval_change(turi::zookeeper_util::key_value* unused,
       }
     }
   }
-    
+
   // scan new and modified keys
   for (size_t i = 0;i < targets.size(); ++i) {
     for (size_t j = 0;j < newkeys.size(); ++j) {
@@ -122,7 +122,7 @@ bool request_socket::update_target_from_zk_locked(const size_t id) {
     targets[id].server = ret.second;
     // set the change flag if the socket was created
     targets[id].server_changed = (targets[id].z_socket != NULL);
-  } 
+  }
   return ret.first;
 }
 
@@ -132,7 +132,7 @@ void* request_socket::get_socket(const size_t id) {
   if (!targets[id].server_changed && zsock != NULL) {
     return zsock;
   }
-  // acquire a lock on the mutex 
+  // acquire a lock on the mutex
   boost::lock_guard<boost::mutex> guard(target_lock);
 
   // same as fast path case. But must retry it in the lock
@@ -154,7 +154,7 @@ void* request_socket::get_socket(const size_t id) {
     if (targets[id].server.empty()) {
       // unfortunately I do not have a server!
       // return failure
-      return NULL;    
+      return NULL;
     }
     targets[id].z_socket = zmq_socket(z_ctx, ZMQ_REQ);
     set_conservative_socket_parameters(targets[id].z_socket);
@@ -186,14 +186,14 @@ void request_socket::force_close_socket(const size_t id) {
 
 
 
-int request_socket::request_master(zmq_msg_vector& msgs, 
+int request_socket::request_master(zmq_msg_vector& msgs,
                                    zmq_msg_vector& ret,
                                    size_t max_retry_count) {
   return send_and_retry(0, max_retry_count, msgs, ret);
 }
 
 
-int request_socket::request_any(zmq_msg_vector& msgs, 
+int request_socket::request_any(zmq_msg_vector& msgs,
                                 zmq_msg_vector& ret,
                                 size_t max_retry_count) {
   int retval;
@@ -219,18 +219,18 @@ int request_socket::send_and_retry(size_t id, size_t max_retry,
   // insert the header for the target key
   if (zk_keyval) msgs.insert_front(targets[id].key);
   size_t failure_counter = 0;
-  
+
   if (msgs.size() == 0) {
     logstream(LOG_ERROR) << "request socket error: Attempting to send 0 length message"
                          << std::endl;
     assert(msgs.size() > 0);
-  } 
+  }
 
   int retval = 1;
 
   while (retval != 0 && failure_counter <= max_retry) {
     // make a copy of the stuff to be sent
-    
+
     retval = 0;
     // try to get a socket. If we can't get a socket. we fail
     void* zsock = get_socket(id);
@@ -257,7 +257,7 @@ SEND_AND_RETRY_FAILURE:
       if (failure_counter <= max_retry) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
       }
-    } 
+    }
   }
   // revert msgs to what it was before
   msgs.pop_front();

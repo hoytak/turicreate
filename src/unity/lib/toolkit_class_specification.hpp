@@ -18,7 +18,7 @@ class model_base;
  */
 struct toolkit_class_specification {
   /**
-   * A short name used to identify this toolkit. For instance, 
+   * A short name used to identify this toolkit. For instance,
    * LDA, or PageRank.
    */
   std::string name;

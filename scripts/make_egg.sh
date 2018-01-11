@@ -330,7 +330,7 @@ set_git_SHA() {
   if [ $? -ne 0 ]; then
     GIT_SHA = "NA"
   fi
-  
+
   cd ${WORKSPACE}/${build_type}/src/unity/python/
   sed -i -e "s/'.*'#{{GIT_SHA}}/'${GIT_SHA}'#{{GIT_SHA}}/g" turicreate/version_info.py
 }

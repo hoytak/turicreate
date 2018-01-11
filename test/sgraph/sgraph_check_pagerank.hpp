@@ -29,7 +29,7 @@ void check_pagerank(pagerank_fn_type compute_pagerank) {
     }
   }
   {
-    // for star graph, the center's pagerank = 0.15 + 0.85 * (n-1)) 
+    // for star graph, the center's pagerank = 0.15 + 0.85 * (n-1))
     sgraph star_graph = create_star_graph(n_vertex, n_partition);
     // star_graph.get_edges().debug_print();
     compute_pagerank(star_graph, 3);

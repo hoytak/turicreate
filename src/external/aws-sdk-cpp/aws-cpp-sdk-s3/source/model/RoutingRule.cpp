@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-RoutingRule::RoutingRule() : 
+RoutingRule::RoutingRule() :
     m_conditionHasBeenSet(false),
     m_redirectHasBeenSet(false)
 {
 }
 
-RoutingRule::RoutingRule(const XmlNode& xmlNode) : 
+RoutingRule::RoutingRule(const XmlNode& xmlNode) :
     m_conditionHasBeenSet(false),
     m_redirectHasBeenSet(false)
 {

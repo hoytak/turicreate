@@ -11,7 +11,7 @@
 
 namespace turi {
 
-/**  
+/**
  * \ingroup util
  * Class to use the garuanteed destructor call of a scoped variable
  *   to simulate a try...finally block.  This is the standard C++ way

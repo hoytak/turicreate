@@ -19,11 +19,11 @@
 
 // TODO: List of todo's for this file
 //------------------------------------------------------------------------------
-// 
+//
 
 namespace turi {
 
-namespace optimization { 
+namespace optimization {
 
 /**
  * \ingroup group_optimization
@@ -43,22 +43,22 @@ class non_negative_orthant : public constraint_interface {
     size_t variables;                       /**< # Variables in the problem */
 
   public:
-  
-  
+
+
   /**
-   * Default constructor. 
+   * Default constructor.
    */
   non_negative_orthant(const size_t& _variables){
     variables = _variables;
   }
-  
+
   /**
    * Default desctuctor. Do nothing.
    */
   ~non_negative_orthant(){
   }
-  
-  
+
+
   /**
    * Project a dense point into the constraint space.
    * \param[in,out]  point   Point (Dense Vector)
@@ -71,10 +71,10 @@ class non_negative_orthant : public constraint_interface {
     DASSERT_EQ(variables, point.size());
     inplace_elementwise_max(point, 0);
   }
-  
+
   /**
    * Project a block of a dense point into the constraint space.
-   * 
+   *
    * \param[in,out]  point        A block project the point.
    * \param[in]      block_start  Start index of the block
    * \param[in]      block_size   Size of the block
@@ -89,7 +89,7 @@ class non_negative_orthant : public constraint_interface {
     DASSERT_EQ(block_size, point.size());
     inplace_elementwise_max(point, 0);
   }
-  
+
   /**
    * Boolean function to deterstd::mine if a dense point is present in a constraint
    * space.
@@ -101,20 +101,20 @@ class non_negative_orthant : public constraint_interface {
     for(size_t i=0; i < size_t(point.size()); i++){
       if( point(i) <= -OPTIMIZATION_ZERO)
         return false;
-    } 
+    }
     return true;
   }
 
 
   /**
    * A measure of the first order optimality conditions.
-   * 
+   *
    * \param[in]  point    Point which we are querying.
    * \param[in]  gradient Gradient at that point for a given function
    *
-   * Use the Cauchy point as a measure of optimality. See Pg 486 of 
+   * Use the Cauchy point as a measure of optimality. See Pg 486 of
    * Nocedal and Wright (Edition 2)
-   * 
+   *
    */
   inline double first_order_optimality_conditions(const DenseVector &point,
                                         const DenseVector& gradient) const{
@@ -146,10 +146,10 @@ class box_constraints: public constraint_interface {
     size_t variables;                /**< # Variables in the problem */
 
   public:
-  
-  
+
+
   /**
-   * Default constructor. 
+   * Default constructor.
    * \param[in]  _variables Number of variables
    * \param[in]  _lb Lower bound
    * \param[in]  _ub Upper bound
@@ -162,9 +162,9 @@ class box_constraints: public constraint_interface {
     ub.resize(variables);
     ub.fill(_ub);
   }
-  
+
   /**
-   * Default constructor. 
+   * Default constructor.
    * \param[in]  _variables Number of variables
    * \param[in]  _lb Lower bound
    * \param[in]  _ub Upper bound
@@ -175,14 +175,14 @@ class box_constraints: public constraint_interface {
     lb = _lb;
     ub = _ub;
   }
-  
+
   /**
    * Default desctuctor. Do nothing.
    */
   ~box_constraints(){
   }
-  
-  
+
+
   /**
    * Project a dense point into the constraint space.
    * \param[in,out]  point   Point (Dense Vector)
@@ -195,12 +195,12 @@ class box_constraints: public constraint_interface {
     DASSERT_EQ(variables, point.size());
     for(size_t i=0; i < size_t(point.size()); i++){
       point(i) = std::min(std::max(point(i), lb(i)), ub(i));
-    } 
+    }
   }
-  
+
   /**
    * Project a block of a dense point into the constraint space.
-   * 
+   *
    * \param[in,out]  point        A block project the point.
    * \param[in]      block_start  Start index of the block
    * \param[in]      block_size   Size of the block
@@ -216,7 +216,7 @@ class box_constraints: public constraint_interface {
     for(size_t i=0; i < block_size; i++){
       point(i) = std::min(std::max(point(i),
                                   lb(block_start + i)), ub(block_start + i));
-    } 
+    }
   }
 
   /**
@@ -228,23 +228,23 @@ class box_constraints: public constraint_interface {
   inline bool is_satisfied(const DenseVector &point) const {
     DASSERT_EQ(variables, point.size());
     for(size_t i=0; i < size_t(point.size()); i++){
-      if( point(i) <= lb(i) - OPTIMIZATION_ZERO || 
+      if( point(i) <= lb(i) - OPTIMIZATION_ZERO ||
           point(i) >= ub(i) + OPTIMIZATION_ZERO)
         return false;
-    } 
+    }
     return true;
   }
 
 
   /**
    * A measure of the first order optimality conditions.
-   * 
+   *
    * \param[in]  point    Point which we are querying.
    * \param[in]  gradient Gradient at that point for a given function
    *
-   * Use the Cauchy point as a measure of optimality. See Pg 486 of 
+   * Use the Cauchy point as a measure of optimality. See Pg 486 of
    * Nocedal and Wright (Edition 2)
-   * 
+   *
    */
   inline double first_order_optimality_conditions(const DenseVector &point,
                                         const DenseVector& gradient) const{
@@ -269,5 +269,4 @@ class box_constraints: public constraint_interface {
 } // optimization
 } // turicreate
 
-#endif 
-
+#endif

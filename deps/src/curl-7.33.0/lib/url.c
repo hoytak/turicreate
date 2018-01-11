@@ -5950,4 +5950,3 @@ CURLcode Curl_do_more(struct connectdata *conn, int *complete)
 
   return result;
 }
-

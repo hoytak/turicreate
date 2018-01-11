@@ -225,7 +225,7 @@ archive_write_ar_header(struct archive_write *a, struct archive_entry *entry)
 		 * actually 15 bytes.
 		 */
 		if (strlen(filename) <= 15) {
-			strncpy(&buff[AR_name_offset], 
+			strncpy(&buff[AR_name_offset],
 			    filename, strlen(filename));
 			buff[AR_name_offset + strlen(filename)] = '/';
 		} else {
@@ -558,6 +558,6 @@ ar_basename(const char *path)
 	startp = endp;
 	while (startp > path && *(startp - 1) != '/')
 		startp--;
-	
+
 	return (startp);
 }

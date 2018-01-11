@@ -44,22 +44,22 @@ namespace Model
     GetObjectTorrentResult& operator=(AmazonWebServiceResult<Utils::Stream::ResponseStream>&& result);
 
 
-    
+
     inline Aws::IOStream& GetBody() { return m_body.GetUnderlyingStream(); }
 
-    
+
     inline const RequestCharged& GetRequestCharged() const{ return m_requestCharged; }
 
-    
+
     inline void SetRequestCharged(const RequestCharged& value) { m_requestCharged = value; }
 
-    
+
     inline void SetRequestCharged(RequestCharged&& value) { m_requestCharged = value; }
 
-    
+
     inline GetObjectTorrentResult& WithRequestCharged(const RequestCharged& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline GetObjectTorrentResult& WithRequestCharged(RequestCharged&& value) { SetRequestCharged(value); return *this;}
 
   private:

@@ -34,9 +34,9 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int post_form(FORM * form)
-|   
+|
 |   Description   :  Writes the form into its associated subwindow.
 |
 |   Return Values :  E_OK              - success
@@ -56,12 +56,12 @@ int post_form(FORM * form)
   if (!form)
     RETURN(E_BAD_ARGUMENT);
 
-  if (form->status & _POSTED)   
+  if (form->status & _POSTED)
     RETURN(E_POSTED);
 
   if (!(form->field))
     RETURN(E_NOT_CONNECTED);
-  
+
   formwin = Get_Form_Window(form);
   getmaxyx(formwin, height, width);
   if ((form->cols > width) || (form->rows > height))
@@ -85,9 +85,9 @@ int post_form(FORM * form)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int unpost_form(FORM * form)
-|   
+|
 |   Description   :  Erase form from its associated subwindow.
 |
 |   Return Values :  E_OK            - success
@@ -100,10 +100,10 @@ int unpost_form(FORM * form)
   if (!form)
     RETURN(E_BAD_ARGUMENT);
 
-  if (!(form->status & _POSTED)) 
+  if (!(form->status & _POSTED))
     RETURN(E_NOT_POSTED);
 
-  if (form->status & _IN_DRIVER) 
+  if (form->status & _IN_DRIVER)
     RETURN(E_BAD_STATE);
 
   Call_Hook(form,fieldterm);

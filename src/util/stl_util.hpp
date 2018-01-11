@@ -56,12 +56,12 @@ namespace turi {
   template <typename T>
   std::set<T> set_union(const std::set<T>& a, const std::set<T>& b) {
     std::set<T> output;
-    std::set_union(a.begin(), a.end(), 
+    std::set_union(a.begin(), a.end(),
                    b.begin(), b.end(),
                    std::inserter(output, output.begin()));
     return output;
   }
-  
+
   /**
    * computes the union of a set and a value.
    */
@@ -78,7 +78,7 @@ namespace turi {
   template <typename T>
   std::set<T> set_intersect(const std::set<T>& a, const std::set<T>& b) {
     std::set<T> output;
-    std::set_intersection(a.begin(), a.end(), 
+    std::set_intersection(a.begin(), a.end(),
                           b.begin(), b.end(),
                           std::inserter(output, output.begin()));
     return output;
@@ -90,7 +90,7 @@ namespace turi {
   template <typename T>
   std::set<T> set_difference(const std::set<T>& a, const std::set<T>& b) {
     std::set<T> output;
-    std::set_difference(a.begin(), a.end(), 
+    std::set_difference(a.begin(), a.end(),
                         b.begin(), b.end(),
                         std::inserter(output, output.begin()));
     return output;
@@ -112,7 +112,7 @@ namespace turi {
    * Returns 2 sets: <s in partition, s not in partition>
    */
   template <typename T>
-  std::pair<std::set<T>,std::set<T> > 
+  std::pair<std::set<T>,std::set<T> >
   set_partition(const std::set<T>& s, const std::set<T>& partition) {
     std::set<T> a, b;
     a = set_intersect(s, partition);
@@ -127,7 +127,7 @@ namespace turi {
   bool set_disjoint(const std::set<T>& a, const std::set<T>& b) {
     return (intersection_size(a,b) == 0);
   }
-  
+
   /**
    * Returns true if the two sets are equal
    */
@@ -136,7 +136,7 @@ namespace turi {
     if (a.size() != b.size()) return false;
     return a == b; // defined in <set>
   }
-  
+
   /**
    * Returns true if b is included in a
    */
@@ -145,7 +145,7 @@ namespace turi {
     return std::includes(a.begin(), a.end(), b.begin(), b.end());
   }
 
-  /** 
+  /**
    * Returns true if $a \subseteq b$
    */
   template <typename T>
@@ -153,7 +153,7 @@ namespace turi {
     return includes(b, a);
   }
 
-  /** 
+  /**
    * Returns true if $b \subseteq a$
    */
   template <typename T>
@@ -161,7 +161,7 @@ namespace turi {
     return includes(a, b);
   }
 
-  /* 
+  /*
    * \internal
    * Prints a container.
    */
@@ -191,8 +191,8 @@ namespace turi {
    * Writes a human representation of the set to the supplied stream.
    */
   template <typename T>
-  typename boost::enable_if_c<boost::is_output_streamable<T>::value, 
-           std::ostream&>::type 
+  typename boost::enable_if_c<boost::is_output_streamable<T>::value,
+           std::ostream&>::type
   operator<<(std::ostream& out, const std::set<T>& s) {
     return print_range(out, s, "{", ", ", "}");
   }
@@ -201,8 +201,8 @@ namespace turi {
    * Writes a human representation of a vector to the supplied stream.
    */
   template <typename T>
-  typename boost::enable_if_c<boost::is_output_streamable<T>::value, 
-           std::ostream&>::type 
+  typename boost::enable_if_c<boost::is_output_streamable<T>::value,
+           std::ostream&>::type
   operator<<(std::ostream& out, const std::vector<T>& v) {
     return print_range(out, v, "[", ", ", "]");
   }
@@ -224,7 +224,7 @@ namespace turi {
   } // end of safe_get
 
   /**
-   * constant lookup in a map. If key is not found in map, 
+   * constant lookup in a map. If key is not found in map,
    * 'default_value' is returned. Note that this can't return a reference
    * and must return a copy
    */
@@ -287,7 +287,7 @@ namespace turi {
    * Computes the union of two maps
    */
   template <typename Key, typename T>
-  std::map<Key, T> 
+  std::map<Key, T>
   map_union(const std::map<Key, T>& a,
             const std::map<Key, T>& b) {
     // Initialize the output map
@@ -298,12 +298,12 @@ namespace turi {
                    output.value_comp());
     return output;
   }
-  
+
   /**
    * Computes the intersection of two maps
    */
   template <typename Key, typename T>
-  std::map<Key, T> 
+  std::map<Key, T>
   map_intersect(const std::map<Key, T>& a,
                 const std::map<Key, T>& b) {
     // Initialize the output map
@@ -315,12 +315,12 @@ namespace turi {
                           output.value_comp());
     return output;
   }
-  
+
   /**
    * Returns the entries of a map whose keys show up in the set keys
    */
   template <typename Key, typename T>
-  std::map<Key, T> 
+  std::map<Key, T>
   map_intersect(const std::map<Key, T>& m,
                 const std::set<Key>& keys) {
     std::map<Key, T> output;
@@ -336,7 +336,7 @@ namespace turi {
    * Computes the difference between two maps
    */
   template <typename Key, typename T>
-  std::map<Key, T> 
+  std::map<Key, T>
   map_difference(const std::map<Key, T>& a,
                  const std::map<Key, T>& b) {
     // Initialize the output map
@@ -368,7 +368,7 @@ namespace turi {
    */
   template <typename Key, typename T>
   std::vector<Key> keys_as_vector(const std::map<Key, T>& map) {
-    std::vector<Key> output(map.size());   
+    std::vector<Key> output(map.size());
     typedef std::pair<Key, T> pair_type;
     size_t i = 0;
     for(const pair_type& pair: map) {
@@ -390,12 +390,12 @@ namespace turi {
     }
     return output;
   }
-  
+
   /**
    * Gets a subset of values from a map
    */
   template <typename Key, typename T>
-  std::vector<T> values(const std::map<Key, T>& m, 
+  std::vector<T> values(const std::map<Key, T>& m,
                         const std::set<Key>& keys) {
     std::vector<T> output;
 
@@ -404,12 +404,12 @@ namespace turi {
     }
     return output;
   }
-  
+
   /**
    * Gets a subset of values from a map
    */
   template <typename Key, typename T>
-  std::vector<T> values(const std::map<Key, T>& m, 
+  std::vector<T> values(const std::map<Key, T>& m,
                         const std::vector<Key>& keys) {
     std::vector<T> output;
     for(const Key &i: keys) {
@@ -417,13 +417,13 @@ namespace turi {
     }
     return output;
   }
-  
+
   /** Creates an identity map (a map from elements to themselves)
    */
   template <typename Key>
   std::map<Key, Key> make_identity_map(const std::set<Key>& keys) {
     std::map<Key, Key> m;
-    for(const Key& key: keys) 
+    for(const Key& key: keys)
       m[key] = key;
     return m;
   }
@@ -432,7 +432,7 @@ namespace turi {
   template <typename Key, typename T>
   std::ostream& operator<<(std::ostream& out, const std::map<Key, T>& m) {
     out << "{";
-    for (typename std::map<Key, T>::const_iterator it = m.begin(); 
+    for (typename std::map<Key, T>::const_iterator it = m.begin();
          it != m.end();) {
       out << it->first << "-->" << it->second;
       if (++it != m.end()) out << " ";
@@ -467,7 +467,7 @@ namespace turi {
   template<typename T>
   T fromstr(const std::string& str) {
     std::stringstream strm(str);
-    T elem; 
+    T elem;
     strm >> elem;
     ASSERT_FALSE(strm.fail());
     return elem;
@@ -488,9 +488,9 @@ namespace turi {
 
 
   // inline std::string change_suffix(const std::string& fname,
-  //                                  const std::string& new_suffix) {             
+  //                                  const std::string& new_suffix) {
   //   size_t pos = fname.rfind('.');
-  //   assert(pos != std::string::npos); 
+  //   assert(pos != std::string::npos);
   //   const std::string new_base(fname.substr(0, pos));
   //   return new_base + new_suffix;
   // } // end of change_suffix
@@ -501,7 +501,7 @@ namespace turi {
   if auto_trim is true, trim() is called on all the extracted strings
   before returning.
   */
-  inline std::vector<std::string> strsplit(const std::string& str, 
+  inline std::vector<std::string> strsplit(const std::string& str,
                                            const std::string& splitchars,
                                            const bool auto_trim = false) {
     std::vector<std::string> tokens;
@@ -535,4 +535,3 @@ namespace turi {
 }; // end of namespace turi
 
 #endif
-

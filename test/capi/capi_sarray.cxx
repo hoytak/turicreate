@@ -13,27 +13,27 @@ class capi_test_sarray {
 
     std::vector<double> v = {1, 2, 4.5, 9, 10000000, -12433};
 
-    tc_error* error = NULL; 
-    
-    tc_flex_list* fl = make_flex_list_double(v); 
+    tc_error* error = NULL;
+
+    tc_flex_list* fl = make_flex_list_double(v);
 
     tc_sarray* sa = tc_sarray_create_from_list(fl, &error);
 
-    TS_ASSERT(error == NULL); 
+    TS_ASSERT(error == NULL);
 
-    { 
+    {
       // Make sure it gets out what we want it to.
-      for(size_t i = 0; i < v.size(); ++i) { 
-        tc_flexible_type* ft = tc_sarray_extract_element(sa, i, &error); 
-        TS_ASSERT(error == NULL); 
+      for(size_t i = 0; i < v.size(); ++i) {
+        tc_flexible_type* ft = tc_sarray_extract_element(sa, i, &error);
+        TS_ASSERT(error == NULL);
 
         TS_ASSERT(tc_ft_is_double(ft) != 0);
 
-        double val = tc_ft_double(ft, &error); 
-        TS_ASSERT(error == NULL); 
+        double val = tc_ft_double(ft, &error);
+        TS_ASSERT(error == NULL);
 
-        TS_ASSERT(v[i] == val); 
-      
+        TS_ASSERT(v[i] == val);
+
         tc_ft_destroy(ft);
       }
     }

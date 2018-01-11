@@ -238,4 +238,3 @@ class query_object_client {
 
 } // libfault
 #endif
-

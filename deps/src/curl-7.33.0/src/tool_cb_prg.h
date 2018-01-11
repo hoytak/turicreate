@@ -47,4 +47,3 @@ int tool_progress_cb(void *clientp,
                      double ultotal, double ulnow);
 
 #endif /* HEADER_CURL_TOOL_CB_PRG_H */
-

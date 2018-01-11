@@ -7,9 +7,9 @@
 #include <unity/toolkits/supervised_learning/linear_svm.hpp>
 #include <unity/toolkits/supervised_learning/logistic_regression.hpp>
 
-namespace turi { namespace supervised { 
+namespace turi { namespace supervised {
 
-using namespace xgboost; 
+using namespace xgboost;
 
 BEGIN_CLASS_REGISTRATION
 REGISTER_CLASS(boosted_trees_classifier)

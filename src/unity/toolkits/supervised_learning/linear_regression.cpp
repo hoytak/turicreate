@@ -62,7 +62,7 @@ linear_regression::~linear_regression(){
 /**
  * Init function common to all regression inits.
  */
-void linear_regression::model_specific_init(const ml_data& data, 
+void linear_regression::model_specific_init(const ml_data& data,
                                             const ml_data& valid_data){
 
   // Create an interface to the solver.
@@ -70,7 +70,7 @@ void linear_regression::model_specific_init(const ml_data& data,
 
   // Update the model
   state["num_coefficients"] =  variables;
-  
+
   // Initialize the solver
   lr_interface.reset(new linear_regression_opt_interface(data, valid_data, *this));
 }
@@ -83,29 +83,29 @@ void linear_regression::init_options(const std::map<std::string,
     flexible_type>&_opts){
 
   options.create_real_option(
-      "convergence_threshold", 
-      "Convergence threshold for training", 
+      "convergence_threshold",
+      "Convergence threshold for training",
       0.01,
       optimization::OPTIMIZATION_ZERO,
       optimization::OPTIMIZATION_INFTY,
-      false); 
-  
+      false);
+
   options.create_real_option(
-      "step_size", 
-      "Guess for the initial step size for the solver", 
+      "step_size",
+      "Guess for the initial step size for the solver",
       1.0,
       optimization::OPTIMIZATION_ZERO,
       optimization::OPTIMIZATION_INFTY,
-      false); 
-  
+      false);
+
   options.create_integer_option(
-      "max_iterations", 
-      "Maximum number of iterations to perform during training", 
+      "max_iterations",
+      "Maximum number of iterations to perform during training",
       10,
       1,
       std::numeric_limits<int>::max(),
-      false); 
-  
+      false);
+
   options.create_boolean_option(
       "feature_rescaling",
       "Rescale features to have unit L2-Norm",
@@ -113,36 +113,36 @@ void linear_regression::init_options(const std::map<std::string,
       false);
 
   options.create_integer_option(
-      "lbfgs_memory_level", 
-      "Number of previous iterations to cache for LBFGS", 
+      "lbfgs_memory_level",
+      "Number of previous iterations to cache for LBFGS",
       11,
       1,
       std::numeric_limits<int>::max(),
-      false); 
-  
+      false);
+
   options.create_categorical_option(
-      "solver", 
-      "Solver used for training", 
+      "solver",
+      "Solver used for training",
       "auto",
       {flexible_type("auto"), flexible_type("newton"), flexible_type("lbfgs"),
       flexible_type("fista")},
-      false); 
-  
+      false);
+
   options.create_real_option(
-      "l1_penalty", 
-      "Penalty on the L1-penalty", 
+      "l1_penalty",
+      "Penalty on the L1-penalty",
       0,
       0,
       optimization::OPTIMIZATION_INFTY,
-      false); 
-  
+      false);
+
   options.create_real_option(
-      "l2_penalty", 
-      "Penalty on the L2-penalty", 
+      "l2_penalty",
+      "Penalty on the L2-penalty",
       0.01,
       0,
       optimization::OPTIMIZATION_INFTY,
-      false); 
+      false);
 
   // Set options!
   options.set_options(_opts);
@@ -204,7 +204,7 @@ void linear_regression::train(){
   // Auto solver
   // \note Currently, we do not incorporate dataset sparsity while selecting
   // the datasets. We should store a "sparsity index" in ml_metadata to give
-  // us a sense of how sparse the dataset is. Ideally, all the rules are 
+  // us a sense of how sparse the dataset is. Ideally, all the rules are
   // going to be heavily dependant on sparsity. Right now, we will assume
   // that all "fat" datasets are always sparse.
   if(solver == "auto"){
@@ -222,7 +222,7 @@ void linear_regression::train(){
       }
     }
   }
-  this->set_options({{"solver", solver}}); 
+  this->set_options({{"solver", solver}});
 
   std::stringstream ss;
   if (l1_penalty > optimization::OPTIMIZATION_ZERO &&
@@ -236,7 +236,7 @@ void linear_regression::train(){
 
 
   // To prevent Newton method from crashing
-  if(solver == "newton" && 
+  if(solver == "newton" &&
                 variables > LINEAR_REGRESSION_NEWTON_VARIABLES_HARD_LIMIT){
     ss << "Number of coefficients is too large for Newton method. "
        << "Try using the option solver='lbfgs'."
@@ -265,14 +265,14 @@ void linear_regression::train(){
 
   // Step 4: Store the coefficients
   // -------------------------------------------------------------------------
-  coefs = stats.solution;  
+  coefs = stats.solution;
   lr_interface->rescale_solution(coefs);
   bool has_stderr = (stats.hessian.n_rows * stats.hessian.n_cols > 0) &&
     (examples > variables);
   if (has_stderr) {
-    double scale = 2 * stats.func_value / (examples - variables); 
-    std_err = get_stderr_from_hessian(stats.hessian) * sqrt(scale); 
-    DASSERT_EQ(std_err.size(), coefs.size()); 
+    double scale = 2 * stats.func_value / (examples - variables);
+    std_err = get_stderr_from_hessian(stats.hessian) * sqrt(scale);
+    DASSERT_EQ(std_err.size(), coefs.size());
     lr_interface->rescale_solution(std_err);
   }
 
@@ -308,19 +308,19 @@ void linear_regression::train(){
 
 
 /**
- * Predict for a single example. 
+ * Predict for a single example.
  */
 flexible_type linear_regression::predict_single_example(
-         const DenseVector& x, 
+         const DenseVector& x,
          const prediction_type_enum& output_type){
   return dot(x, coefs);
 }
 
 /**
- * Predict for a single example. 
+ * Predict for a single example.
  */
 flexible_type linear_regression::predict_single_example(
-         const SparseVector& x, 
+         const SparseVector& x,
          const prediction_type_enum& output_type){
   return dot(x, coefs);
 }
@@ -336,7 +336,7 @@ void linear_regression::set_coefs(const DenseVector& _coefs) {
  * Turi Serialization Save
  */
 void linear_regression::save_impl(turi::oarchive& oarc) const {
-  
+
   // State
   variant_deep_save(state, oarc);
 
@@ -352,14 +352,14 @@ void linear_regression::save_impl(turi::oarchive& oarc) const {
  * Turi Serialization Load
  */
 void linear_regression::load_version(turi::iarchive& iarc, size_t version) {
-  ASSERT_MSG(version <= LINEAR_REGRESSION_MODEL_VERSION, 
+  ASSERT_MSG(version <= LINEAR_REGRESSION_MODEL_VERSION,
           "This model version cannot be loaded. Please re-save your state.");
 
   if (version < 4) {
     log_and_throw("Cannot load a model saved using a version prior to GLC-1.7.");
   }
 
-  // State  
+  // State
   variant_deep_load(state, iarc);
 
   // Everything else
@@ -367,11 +367,11 @@ void linear_regression::load_version(turi::iarchive& iarc, size_t version) {
        >> metrics
        >> coefs
        >> options;
-  
+
   if (version < 1){
     state["progress"] = to_variant(FLEX_UNDEFINED);
   }
-  
+
   // Erase options that are no longer valid.
   if (version < 2){
     state.erase("auto_tuning");
@@ -379,19 +379,19 @@ void linear_regression::load_version(turi::iarchive& iarc, size_t version) {
     options.delete_option("auto_tuning");
     options.delete_option("mini_batch_size");
   }
-  
+
   // GLC 1.7
   if (version < 4) {
     tracking_metrics = metrics;
     this->set_default_evaluation_metric();
-    
+
     // Add a column of Nones for stderrs.
     auto sf_coef = *(variant_get_value<std::shared_ptr<unity_sframe>>(
                 state["coefficients"])->get_underlying_sframe());
     sf_coef = add_na_std_err_to_coef(sf_coef);
     std::shared_ptr<unity_sframe> unity_coef = std::make_shared<unity_sframe>();
     unity_coef->construct_from_sframe(sf_coef);
-    state["coefficients"] = to_variant(unity_coef); 
+    state["coefficients"] = to_variant(unity_coef);
   }
 
 }
@@ -407,7 +407,7 @@ size_t linear_regression::get_version() const{
   //  2 -  Version 1.4
   //  3 -  Version 1.5
   //  4 -  Version 1.7
-  return LINEAR_REGRESSION_MODEL_VERSION;  
+  return LINEAR_REGRESSION_MODEL_VERSION;
 }
 
 void linear_regression::export_to_coreml(const std::string& filename) {

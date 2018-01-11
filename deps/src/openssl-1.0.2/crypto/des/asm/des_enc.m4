@@ -333,7 +333,7 @@ $4:
 	sll	out1, 28, out1            ! rotate
 	xor	$1, local1, $1            ! 1 finished, local1 now sbox 7
 
-	ld	[global2+local2], local2  ! 2 
+	ld	[global2+local2], local2  ! 2
 	srl	out0, 24, local1          ! 7
 	or	out1, local0, out1        ! rotate
 
@@ -1360,7 +1360,7 @@ DES_encrypt2:
 DES_encrypt3:
 
 	save	%sp, FRAME, %sp
-	
+
 	sethi	%hi(.PIC.DES_SPtrans-1f),global1
 	or	global1,%lo(.PIC.DES_SPtrans-1f),global1
 1:	call	.+8
@@ -1405,7 +1405,7 @@ DES_encrypt3:
 DES_decrypt3:
 
 	save	%sp, FRAME, %sp
-	
+
 	sethi	%hi(.PIC.DES_SPtrans-1f),global1
 	or	global1,%lo(.PIC.DES_SPtrans-1f),global1
 1:	call	.+8
@@ -1450,7 +1450,7 @@ DES_decrypt3:
 DES_ncbc_encrypt:
 
 	save	%sp, FRAME, %sp
-	
+
 	define({INPUT},  { [%sp+BIAS+ARG0+0*ARGSZ] })
 	define({OUTPUT}, { [%sp+BIAS+ARG0+1*ARGSZ] })
 	define({IVEC},   { [%sp+BIAS+ARG0+4*ARGSZ] })
@@ -1461,7 +1461,7 @@ DES_ncbc_encrypt:
 	add	%o7,global1,global1
 	sub	global1,.PIC.DES_SPtrans-.des_and,out2
 
-	cmp	in5, 0                    ! enc   
+	cmp	in5, 0                    ! enc
 
 #ifdef OPENSSL_SYSNAME_ULTRASPARC
 	be,pn	%icc, .ncbc.dec
@@ -2098,4 +2098,3 @@ DES_SPtrans:
 	.word	0x00820000, 0x00020080, 0x20020080, 0x20800000
 	.word	0x00000080, 0x20820000, 0x00820080, 0x00000000
 	.word	0x20000000, 0x20800080, 0x00020000, 0x00820080
-

@@ -18,11 +18,11 @@ namespace sframe_impl {
  * \ingroup sframe_physical
  * is_swriter_base<T>::value is true if T inherits from swriter_base
  */
-template <typename T, 
+template <typename T,
           typename DecayedT = typename std::decay<T>::type,
-          typename Iterator = typename DecayedT::iterator> 
+          typename Iterator = typename DecayedT::iterator>
 struct is_swriter_base {
-  static constexpr bool value = 
+  static constexpr bool value =
       std::is_base_of<turi::swriter_base<Iterator>, DecayedT>::value;
 };
 

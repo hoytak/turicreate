@@ -40,7 +40,7 @@ struct unity_sketch_test {
     TS_ASSERT_EQUALS(sketch->size(), 40000);
     TS_ASSERT_EQUALS(sketch->min(), 0.0);
     TS_ASSERT_EQUALS(sketch->max(), 2.0);
-    
+
 
     // approximate count is approximate
     TS_ASSERT_DELTA(sketch->frequency_count((flexible_type(0.0))), 10000, 1000.0);
@@ -130,14 +130,14 @@ struct unity_sketch_test {
     std::sort(ret.begin(), ret.end());
     TS_ASSERT_EQUALS(ret.size(), 0);
   }
-  
+
   void test_nan_handling_1() {
     std::shared_ptr<unity_sarray_base> dbl(new unity_sarray);
     std::vector<flexible_type> vecb = {NAN, 1.0/0, 1.0, 2.0, 3.0};
     std::vector<flexible_type> vec;
     vec.reserve(4000);
     for(size_t i = 0; i < 1000; ++i) vec.insert(vec.end(), vecb.begin(), vecb.end());
-            
+
     std::static_pointer_cast<unity_sarray>(dbl)->construct_from_vector(vec, flex_type_enum::FLOAT);
     std::shared_ptr<unity_sketch_base> sketch(new unity_sketch);
     std::static_pointer_cast<unity_sketch>(sketch)->construct_from_sarray(dbl);
@@ -147,13 +147,13 @@ struct unity_sketch_test {
     std::shared_ptr<unity_sarray_base> dbl(new unity_sarray);
     std::vector<flexible_type> vecb = {flex_vec{NAN, 1.0}, flex_vec{6.0, 1.0/0},
                                       flex_vec{1.0}, flex_vec{2.0}, flex_vec{3.0}};
-    
+
     std::vector<flexible_type> vec;
     vec.reserve(5000);
-    
+
     for(size_t i = 0; i < 1000; ++i)
       vec.insert(vec.end(), vecb.begin(), vecb.end());
-    
+
     std::static_pointer_cast<unity_sarray>(dbl)->construct_from_vector(vec, flex_type_enum::VECTOR);
     std::shared_ptr<unity_sketch_base> sketch(new unity_sketch);
     std::static_pointer_cast<unity_sketch>(sketch)->construct_from_sarray(dbl);
@@ -169,7 +169,7 @@ struct unity_sketch_test {
 
     for(size_t i = 0; i < 1000; ++i)
       vec.insert(vec.end(), vecb.begin(), vecb.end());
-            
+
     std::static_pointer_cast<unity_sarray>(dbl)->construct_from_vector(vec, flex_type_enum::DICT);
     std::shared_ptr<unity_sketch_base> sketch(new unity_sketch);
     std::static_pointer_cast<unity_sketch>(sketch)->construct_from_sarray(dbl);
@@ -186,12 +186,12 @@ struct unity_sketch_test {
       vec.push_back(i);
       vec.push_back(-i);
     }
-            
+
     std::static_pointer_cast<unity_sarray>(intl)->construct_from_vector(vec, flex_type_enum::INTEGER);
     std::shared_ptr<unity_sketch_base> sketch(new unity_sketch);
     std::static_pointer_cast<unity_sketch>(sketch)->construct_from_sarray(intl);
   }
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_unity_sketch_test, unity_sketch_test)

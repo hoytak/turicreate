@@ -182,7 +182,7 @@ static void GlueFreeBlocks(CPpmd7 *p)
   #else
   CPpmd7_Node_Ref head = p->AlignOffset + p->Size;
   #endif
-  
+
   CPpmd7_Node_Ref n = head;
   unsigned i;
 
@@ -209,7 +209,7 @@ static void GlueFreeBlocks(CPpmd7 *p)
   NODE(n)->Prev = head;
   if (p->LoUnit != p->HiUnit)
     ((CPpmd7_Node *)p->LoUnit)->Stamp = 1;
-  
+
   /* Glue free blocks */
   while (n != head)
   {
@@ -227,7 +227,7 @@ static void GlueFreeBlocks(CPpmd7 *p)
     }
     n = node->Next;
   }
-  
+
   /* Fill lists of free blocks */
   for (n = NODE(head)->Next; n != head;)
   {
@@ -353,7 +353,7 @@ static void RestartModel(CPpmd7 *p)
       for (m = 0; m < 64; m += 8)
         dest[m] = val;
     }
-  
+
   for (i = 0; i < 25; i++)
     for (k = 0; k < 16; k++)
     {
@@ -379,10 +379,10 @@ static CTX_PTR CreateSuccessors(CPpmd7 *p, Bool skip)
   CPpmd_Byte_Ref upBranch = (CPpmd_Byte_Ref)SUCCESSOR(p->FoundState);
   CPpmd_State *ps[PPMD7_MAX_ORDER];
   unsigned numPs = 0;
-  
+
   if (!skip)
     ps[numPs++] = p->FoundState;
-  
+
   while (c->Suffix)
   {
     CPpmd_Void_Ref successor;
@@ -404,10 +404,10 @@ static CTX_PTR CreateSuccessors(CPpmd7 *p, Bool skip)
     }
     ps[numPs++] = s;
   }
-  
+
   upState.Symbol = *(const Byte *)Ppmd7_GetPtr(p, upBranch);
   SetSuccessor(&upState, upBranch + 1);
-  
+
   if (c->NumStats == 1)
     upState.Freq = ONE_STATE(c)->Freq;
   else
@@ -440,7 +440,7 @@ static CTX_PTR CreateSuccessors(CPpmd7 *p, Bool skip)
     SetSuccessor(ps[--numPs], REF(c1));
     c = c1;
   }
-  
+
   return c;
 }
 
@@ -456,11 +456,11 @@ static void UpdateModel(CPpmd7 *p)
   CPpmd_Void_Ref successor, fSuccessor = SUCCESSOR(p->FoundState);
   CTX_PTR c;
   unsigned s0, ns;
-  
+
   if (p->FoundState->Freq < MAX_FREQ / 4 && p->MinContext->Suffix != 0)
   {
     c = SUFFIX(p->MinContext);
-    
+
     if (c->NumStats == 1)
     {
       CPpmd_State *s = ONE_STATE(c);
@@ -498,7 +498,7 @@ static void UpdateModel(CPpmd7 *p)
     SetSuccessor(p->FoundState, REF(p->MinContext));
     return;
   }
-  
+
   *p->Text++ = p->FoundState->Symbol;
   successor = REF(p->Text);
   if (p->Text >= p->UnitsStart)
@@ -506,7 +506,7 @@ static void UpdateModel(CPpmd7 *p)
     RestartModel(p);
     return;
   }
-  
+
   if (fSuccessor)
   {
     if (fSuccessor <= successor)
@@ -530,9 +530,9 @@ static void UpdateModel(CPpmd7 *p)
     SetSuccessor(p->FoundState, successor);
     fSuccessor = REF(p->MinContext);
   }
-  
+
   s0 = p->MinContext->SummFreq - (ns = p->MinContext->NumStats) - (p->FoundState->Freq - 1);
-  
+
   for (c = p->MaxContext; c != p->MinContext; c = SUFFIX(c))
   {
     unsigned ns1;
@@ -599,7 +599,7 @@ static void UpdateModel(CPpmd7 *p)
   }
   p->MaxContext = p->MinContext = CTX(fSuccessor);
 }
-  
+
 static void Rescale(CPpmd7 *p)
 {
   unsigned i, adder, sumFreq, escFreq;
@@ -616,7 +616,7 @@ static void Rescale(CPpmd7 *p)
   adder = (p->OrderFall != 0);
   s->Freq = (Byte)((s->Freq + adder) >> 1);
   sumFreq = s->Freq;
-  
+
   i = p->MinContext->NumStats - 1;
   do
   {
@@ -634,7 +634,7 @@ static void Rescale(CPpmd7 *p)
     }
   }
   while (--i);
-  
+
   if (s->Freq == 0)
   {
     unsigned numStats = p->MinContext->NumStats;
@@ -1071,7 +1071,7 @@ static void Ppmd7_EncodeSymbol(CPpmd7 *p, CPpmd7z_RangeEnc *rc, int symbol)
       sum += s->Freq;
     }
     while (--i);
-    
+
     p->HiBitsFlag = p->HB2Flag[p->FoundState->Symbol];
     PPMD_SetAllBitsIn256Bytes(charMask);
     MASK(s->Symbol) = 0;
@@ -1116,7 +1116,7 @@ static void Ppmd7_EncodeSymbol(CPpmd7 *p, CPpmd7z_RangeEnc *rc, int symbol)
       p->MinContext = Ppmd7_GetContext(p, p->MinContext->Suffix);
     }
     while (p->MinContext->NumStats == numMasked);
-    
+
     see = Ppmd7_MakeEscFreq(p, numMasked, &escFreq);
     s = Ppmd7_GetStats(p, p->MinContext);
     sum = 0;
@@ -1145,7 +1145,7 @@ static void Ppmd7_EncodeSymbol(CPpmd7 *p, CPpmd7z_RangeEnc *rc, int symbol)
       s++;
     }
     while (--i);
-    
+
     RangeEnc_Encode(rc, sum, escFreq, sum + escFreq);
     see->Summ = (UInt16)(see->Summ + sum + escFreq);
   }

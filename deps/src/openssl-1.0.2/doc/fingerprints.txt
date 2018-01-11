@@ -57,7 +57,6 @@ uid                  Bodo Moeller <3moeller@informatik.uni-hamburg.de>
 uid                  Bodo Moeller <Bodo_Moeller@public.uni-hamburg.de>
 uid                  Bodo Moeller <3moeller@rzdspc5.informatik.uni-hamburg.de>
 
-pub   2048R/0E604491 2013-04-30            
+pub   2048R/0E604491 2013-04-30
       Key fingerprint = 8657 ABB2 60F0 56B1 E519 0839 D9C4 D26D 0E60 4491
 uid                  Matt Caswell <frodo@baggins.org>
-

@@ -23,4 +23,3 @@ rsa  512 bits   0.024s
 rsa 1024 bits   0.125s
 rsa 2048 bits   0.806s
 rsa 4096 bits   5.800s
-

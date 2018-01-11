@@ -40,11 +40,11 @@ namespace sgraph_compute {
  * ### Vertex Gather ###
  * Given a graph, this class computes for each vertex, a generalized "sum" over
  * neighborhood of each vertex. You need to define a function which is then
- * given 
- *  - the data on the central vertex, 
- *  - the data on the edge, 
+ * given
+ *  - the data on the central vertex,
+ *  - the data on the edge,
  *  - the data on the other vertex
- *  - The direction of the edge. 
+ *  - The direction of the edge.
  *
  * The function then performs some computation and aggregates the result
  * into a combiner.
@@ -123,13 +123,13 @@ class sgraph_engine {
   /*                             Gather                                     */
   /*                                                                        */
   /**************************************************************************/
-  using const_gather_function_type = std::function<void(const graph_data_type& center, 
-                                                        const graph_data_type& edge, 
-                                                        const graph_data_type& other, 
+  using const_gather_function_type = std::function<void(const graph_data_type& center,
+                                                        const graph_data_type& edge,
+                                                        const graph_data_type& other,
                                                         edge_direction edgedir,
                                                         T& combiner)>;
-  std::vector<std::shared_ptr<sarray<T>>> gather(sgraph& graph, 
-                                const_gather_function_type gather, 
+  std::vector<std::shared_ptr<sarray<T>>> gather(sgraph& graph,
+                                const_gather_function_type gather,
                                 const T& initial_value,
                                 edge_direction edgedir = edge_direction::ANY_EDGE,
                                 size_t central_group = 0,
@@ -146,18 +146,18 @@ class sgraph_engine {
          [&](std::vector<std::pair<size_t, size_t> > edgeparts) {
            std::set<vertex_partition_address> vertex_partitions;
            std::set<size_t> combine_partitions;
-           // for each partition requested, figure out exactly 
+           // for each partition requested, figure out exactly
            // which partition / group I need to load
-           // That does depend on the edge direction I am 
+           // That does depend on the edge direction I am
            // executing.
            for(auto edgepart: edgeparts) {
-           logstream(LOG_INFO) << "Planning Execution on Edge Partition: " 
+           logstream(LOG_INFO) << "Planning Execution on Edge Partition: "
                                << edgepart.first << " " << edgepart.second << std::endl;
              for(size_t gather_vgroup: sgraph_compute_group) {
-               if (edgedir == edge_direction::ANY_EDGE || 
+               if (edgedir == edge_direction::ANY_EDGE ||
                    edgedir == edge_direction::IN_EDGE) {
                  // this is the edge partition I will read when I have to run
-                 // this edge set. this is IN-edges. So src group is 
+                 // this edge set. this is IN-edges. So src group is
                  // the gather_vgroup and dst group is the central group.
                  // partition is as defined by edgepart
                  edge_partition_address address(gather_vgroup, central_group,
@@ -166,10 +166,10 @@ class sgraph_engine {
                  vertex_partitions.insert(address.get_src_vertex_partition());
                  vertex_partitions.insert(address.get_dst_vertex_partition());
                }
-               if (edgedir == edge_direction::ANY_EDGE || 
+               if (edgedir == edge_direction::ANY_EDGE ||
                           edgedir == edge_direction::OUT_EDGE) {
                  // this is the edge partition I will read when I have to run
-                 // this edge set. this is OUT-edges. So dst group is 
+                 // this edge set. this is OUT-edges. So dst group is
                  // the gather_vgroup and src group is the central group.
                  // partition is as defined by edgepart
                  edge_partition_address address(central_group, gather_vgroup,
@@ -184,7 +184,7 @@ class sgraph_engine {
            load_graph_vertex_blocks(graph, vertex_partitions);
            load_combine_blocks(combine_partitions);
          },
-         // This is the actual parallel for, and this is the block I am to 
+         // This is the actual parallel for, and this is the block I am to
          // be executing
          [&](std::pair<size_t, size_t> edgepart) {
            // at this stage we are in parallel. Also we we guaranteed to have all
@@ -195,7 +195,7 @@ class sgraph_engine {
            // we are actually loading.
            for(size_t gather_vgroup: sgraph_compute_group) {
              edge_partition_address address;
-             // TODO: revisit the code when we actually have vertex groups 
+             // TODO: revisit the code when we actually have vertex groups
              address = edge_partition_address(gather_vgroup, central_group,
                                               edgepart.first, edgepart.second);
              sframe& edgeframe = graph.edge_partition(address);
@@ -239,15 +239,15 @@ class sgraph_engine {
          [&](std::vector<std::pair<size_t, size_t> > edgeparts) {
            std::set<vertex_partition_address> vertex_partitions;
            std::set<size_t> combine_partitions;
-           // for each partition requested, figure out exactly 
+           // for each partition requested, figure out exactly
            // which partition / group I need to load
-           // That does depend on the edge direction I am 
+           // That does depend on the edge direction I am
            // executing.
            for(auto edgepart: edgeparts) {
-           logstream(LOG_INFO) << "Planning Execution on Edge Partition: " 
+           logstream(LOG_INFO) << "Planning Execution on Edge Partition: "
                                << edgepart.first << " " << edgepart.second << std::endl;
              // this is the edge partition I will read when I have to run
-             // this edge set. this is IN-edges. So src group is 
+             // this edge set. this is IN-edges. So src group is
              // the gather_vgroup and dst group is the central group.
              // partition is as defined by edgepart
              edge_partition_address address(groupa, groupb, edgepart.first, edgepart.second);
@@ -258,7 +258,7 @@ class sgraph_engine {
            // request loading of all the vertex partitions I need
            load_graph_vertex_blocks(graph, vertex_partitions);
          },
-         // This is the actual parallel for, and this is the block I am to 
+         // This is the actual parallel for, and this is the block I am to
          // be executing
          [&](std::pair<size_t, size_t> edgepart) {
            // at this stage we are in parallel. Also we we guaranteed to have all
@@ -300,7 +300,7 @@ class sgraph_engine {
    * Initializes the temporary data structures, and the accumulation sarrays
    * we need to do the computation.
    */
-  void init_data_structures(const sgraph& graph, 
+  void init_data_structures(const sgraph& graph,
                             size_t sgraph_compute_group,
                             const T& initial_value) {
     vertex_data.clear();
@@ -310,16 +310,16 @@ class sgraph_engine {
 
     /*
      * A *very* sparsely populated buffer of vertex data.
-     * vertex_data[group][partition][row] 
+     * vertex_data[group][partition][row]
      */
     vertex_data.resize(graph.get_num_groups());
     for(auto& v: vertex_data) v.resize(graph.get_num_partitions());
     // create the gather data
     combine_sarrays.resize(graph.get_num_partitions());
     combine_data.resize(graph.get_num_partitions());
-    // shape up the combine_sarrays. 
+    // shape up the combine_sarrays.
     // Create gather SArrays of the correct size
-    parallel_for(size_t(0), 
+    parallel_for(size_t(0),
                  graph.get_num_partitions(),
                  [&](size_t i) {
                    const sframe& frame = graph.vertex_partition(i, sgraph_compute_group);
@@ -345,7 +345,7 @@ class sgraph_engine {
     // look for all loaded blocks and if they are not in the vertex_address set, unload it
     for (size_t group = 0; group < vertex_data.size(); ++group) {
       for (size_t partition = 0; partition < vertex_data[group].size(); ++partition) {
-        if (vertex_data[group][partition].is_loaded() && 
+        if (vertex_data[group][partition].is_loaded() &&
             vertex_address.count({group, partition}) == 0) {
           vertex_data[group][partition].unload();
         }
@@ -364,7 +364,7 @@ class sgraph_engine {
                    // get the frame for the vertex partition
                    const sframe& frame = graph.vertex_partition(part.partition, part.group);
                    // load it into the vertex data.
-                   logstream(LOG_INFO) << "Loading Vertex Partition: " 
+                   logstream(LOG_INFO) << "Loading Vertex Partition: "
                                        << part.group << " " << part.partition << std::endl;
                    vertex_data[part.group][part.partition].load_if_not_loaded(frame);
                  });
@@ -385,7 +385,7 @@ class sgraph_engine {
         if (typeid(T) == typeid(flexible_type)) {
           combine_sarrays[partition]->set_type(m_return_type);
         }
-        combine_data[partition].flush(*combine_sarrays[partition]); 
+        combine_data[partition].flush(*combine_sarrays[partition]);
         // we need to do a save here.
         combine_data[partition].unload();
       }
@@ -396,7 +396,7 @@ class sgraph_engine {
               std::inserter(partitions_vec, partitions_vec.end()));
 
     // now, for each element in partitions, if it is not loaded, load it
-    parallel_for(partitions_vec.begin(), 
+    parallel_for(partitions_vec.begin(),
                  partitions_vec.end(),
                  [&](size_t part) {
                    logstream(LOG_INFO) << "Loading Combine Partition: " << part << std::endl;
@@ -428,7 +428,7 @@ class sgraph_engine {
         size_t srcid = edgedata[srcid_column];
         size_t dstid = edgedata[dstid_column];
 
-        if (edgedir == edge_direction::IN_EDGE || 
+        if (edgedir == edge_direction::IN_EDGE ||
             edgedir == edge_direction::ANY_EDGE) {
           DASSERT_EQ(address.dst_group, central_group);
           // acquire lock on the combine target
@@ -454,7 +454,7 @@ class sgraph_engine {
                  vertex_data[dst_address.group][dst_address.partition][dstid],
                  edge_direction::OUT_EDGE,
                  combine_data[src_address.partition][srcid]);
-        } 
+        }
       }
       row_start += nrows;
     }

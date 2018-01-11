@@ -261,7 +261,7 @@ void logistic_regression::train() {
       }
     }
   }
-  this->set_options({{"solver", solver}}); 
+  this->set_options({{"solver", solver}});
 
   std::stringstream ss;
   if (l1_penalty > optimization::OPTIMIZATION_ZERO &&
@@ -314,7 +314,7 @@ void logistic_regression::train() {
     (this->num_examples() > this->num_coefficients);
   if (has_stderr) {
     std_err = get_stderr_from_hessian(stats.hessian);
-    DASSERT_EQ(std_err.size(), coefs.size()); 
+    DASSERT_EQ(std_err.size(), coefs.size());
     lr_interface->rescale_solution(std_err);
   }
 
@@ -686,7 +686,7 @@ void logistic_regression::save_impl(turi::oarchive& oarc) const {
 
   // State
   variant_deep_save(state, oarc);
-  
+
   // Everything else
   oarc << ml_mdata
        << metrics
@@ -722,14 +722,14 @@ void logistic_regression::load_version(turi::iarchive& iarc, size_t version) {
   if (version < 6) {
     tracking_metrics = metrics;
     this->set_default_evaluation_metric();
-    
+
     // Add a column of Nones for stderrs.
     auto sf_coef = *(variant_get_value<std::shared_ptr<unity_sframe>>(
                 state["coefficients"])->get_underlying_sframe());
     sf_coef = add_na_std_err_to_coef(sf_coef);
     std::shared_ptr<unity_sframe> unity_coef = std::make_shared<unity_sframe>();
     unity_coef->construct_from_sframe(sf_coef);
-    state["coefficients"] = unity_coef; 
+    state["coefficients"] = unity_coef;
   }
 
 }
@@ -808,7 +808,7 @@ void logistic_regression::export_to_coreml(const std::string& filename) {
   pipeline.add(model);
   pipeline.addOutput(ml_mdata->target_column_name(), target_output_data_type);
   pipeline.addOutput(prob_column_name, target_additional_data_type);
-  
+
   // Add metadata
   std::map<std::string, flexible_type> context_metadata = {
     {"class", name()},

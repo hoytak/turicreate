@@ -19,4 +19,3 @@ int query_main(int argc, char** argv, const query_object_factory_type& factory);
 
 } // namespace;
 #endif
-

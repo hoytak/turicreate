@@ -26,17 +26,17 @@ void EXPORT set_pylambda_evaluation_functions(pylambda_evaluation_functions* eva
  */
 size_t make_lambda(const std::string& pylambda_str) {
   DASSERT_TRUE(evaluation_functions.init_lambda != NULL);
-  
+
   size_t lambda_id = evaluation_functions.init_lambda(pylambda_str);
   python::check_for_python_exception();
-  
-  logstream(LOG_DEBUG) << "Created lambda id=" << lambda_id << std::endl;  
+
+  logstream(LOG_DEBUG) << "Created lambda id=" << lambda_id << std::endl;
 
   return lambda_id;
 }
 
 void release_lambda(size_t lambda_id) {
-  
+
   logstream(LOG_DEBUG) << "release lambda id=" << lambda_id << std::endl;
 
   DASSERT_TRUE(evaluation_functions.release_lambda != NULL);
@@ -58,7 +58,7 @@ pylambda_evaluator::~pylambda_evaluator() {
 size_t pylambda_evaluator::make_lambda(const std::string& pylambda_str) {
   return lambda::make_lambda(pylambda_str);
 }
-  
+
 void pylambda_evaluator::release_lambda(size_t lambda_id) {
   return lambda::release_lambda(lambda_id);
 }
@@ -116,7 +116,7 @@ std::vector<flexible_type> pylambda_evaluator::bulk_eval_rows(
   evaluation_functions.set_random_seed(seed);
 
   std::vector<flexible_type> ret(rows.num_rows());
-  
+
   size_t i = 0;
   for (const auto& x : rows) {
     if (skip_undefined && x[0] == FLEX_UNDEFINED) {
@@ -215,16 +215,16 @@ std::string pylambda_evaluator::initialize_shared_memory_comm() {
               if (m_shared_memory_thread_terminating) return;
             }
             char* receive_buffer = nullptr;
-            size_t receive_buffer_length = 0;  
+            size_t receive_buffer_length = 0;
             size_t message_length = 0;
             char* send_buffer = nullptr;
             size_t send_buffer_length= 0 ;
             while(1) {
-              bool has_data = 
+              bool has_data =
                   shmipc::large_receive(*m_shared_memory_server,
-                                        &receive_buffer, 
-                                        &receive_buffer_length, 
-                                        message_length, 
+                                        &receive_buffer,
+                                        &receive_buffer_length,
+                                        message_length,
                                         3 /* timeout */);
               if (!has_data) {
                 if (m_shared_memory_thread_terminating) break;

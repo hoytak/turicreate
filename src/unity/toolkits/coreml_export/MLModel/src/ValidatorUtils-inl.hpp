@@ -13,7 +13,7 @@
 
 namespace CoreML {
 
-    
+
     /*
      * Utility that make sures the feature types are valid.
      *
@@ -23,7 +23,7 @@ namespace CoreML {
      */
     inline Result validateSchemaTypes(const std::vector<Specification::FeatureType::TypeCase>& allowedFeatureTypes,
                  const Specification::FeatureDescription& featureDesc) {
-        
+
         // Check the types
         auto type = featureDesc.type().Type_case();
         for (const auto& t : allowedFeatureTypes) {
@@ -32,7 +32,7 @@ namespace CoreML {
                 return Result();
             }
         }
-        
+
         // Invalid type
         std::stringstream out;
         out << "Unsupported type \"" << MLFeatureTypeType_Name(static_cast<MLFeatureTypeType>(featureDesc.type().Type_case()))
@@ -78,24 +78,24 @@ namespace CoreML {
                                                               int maxFeatureCount,
                                                               const std::vector<Specification::FeatureType::TypeCase>& allowedFeatureTypes) {
         Result result;
-        
+
         // 0 means no maximum fixed feature count.
         if (maxFeatureCount != 0 && features.size() > maxFeatureCount) {
             return Result(ResultType::TOO_MANY_FEATURES_FOR_MODEL_TYPE, "Feature descriptions exceeded " + std::to_string(maxFeatureCount));
         }
-        
+
         for (int i = 0; i < features.size(); i++) {
             result = validateSchemaTypes(allowedFeatureTypes, features[i]);
             if (!result.good()) {
                 return result;
             }
         }
-        
+
         return result;
     }
 
     /*
-     * Utility that checks a set of descriptions to validate 
+     * Utility that checks a set of descriptions to validate
      * there is a feature with a specific name and type in an allowed set
      */
     template <typename Descriptions>

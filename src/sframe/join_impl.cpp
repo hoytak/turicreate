@@ -253,7 +253,7 @@ sframe hash_join_executor::grace_hash_join() {
     for(size_t i = 0; i < num_segments; ++i) {
       right_segment_lengths.push_back(grace_right->segment_length(i));
     }
-  } else { 
+  } else {
     num_segments = 1;
     right_segment_lengths.push_back(grace_right->num_rows());
   }
@@ -598,7 +598,7 @@ std::shared_ptr<sframe> hash_join_executor::grace_partition_frame(
 
   // We're done writing. Close all output iterators.
   parted_array->close();
-  
+
   _frames_partitioned = true;
 
   return parted_array;

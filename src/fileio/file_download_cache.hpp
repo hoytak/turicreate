@@ -39,12 +39,12 @@ class file_download_cache {
   /**
    * downloads the URL (it can be s3, https, http, file, or even local file)
    * and returns a local file name at which the contents at the URL can be
-   * read from. 
+   * read from.
    *
-   * This function can be safely run in parallel. Though if the same file is 
-   * requested in two threads simultaneously, the file may be downloaded 
+   * This function can be safely run in parallel. Though if the same file is
+   * requested in two threads simultaneously, the file may be downloaded
    * twice.
-   * 
+   *
    * May throw exceptions if the URL cannot be downloaded.
    */
   std::string get_file(const std::string& url);

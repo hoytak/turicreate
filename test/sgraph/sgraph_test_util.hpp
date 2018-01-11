@@ -180,7 +180,7 @@ inline sgraph create_star_graph(size_t nverts, size_t npartition,
   column edata_col = {
     "edata",
     flex_type_enum::STRING,
-    edata 
+    edata
   };
 
   column vdata_col = {
@@ -266,18 +266,18 @@ bool test_frame_equal(sframe left, sframe right,
                       const std::vector<size_t>& key_columns) {
   if ((left.size() != right.size()) ||
       (left.num_columns() != right.num_columns())) {
-    std::cerr << "Size mismatch" << std::endl; 
+    std::cerr << "Size mismatch" << std::endl;
     return false;
   }
   size_t nrow = left.num_rows();
   size_t ncol = left.num_columns();
   for (size_t i = 0; i < ncol; ++i) {
     if (left.column_name(i) != right.column_name(i)) {
-      std::cerr << "Column name mismatch" << std::endl; 
+      std::cerr << "Column name mismatch" << std::endl;
       return false;
     }
     if (left.column_type(i) != right.column_type(i)) {
-      std::cerr << "Column type mismatch" << std::endl; 
+      std::cerr << "Column type mismatch" << std::endl;
       return false;
     }
   }
@@ -316,7 +316,7 @@ bool test_frame_equal(sframe left, sframe right,
            b[j].get_type() == flex_type_enum::UNDEFINED) ||
            (a[j] == b[j])
            )) {
-        std::cerr << "Data (" << i << ", " << j <<  ") mismatch: " 
+        std::cerr << "Data (" << i << ", " << j <<  ") mismatch: "
                   << a[j] << " !=  " << b[j] << std::endl;
         return false;
       }

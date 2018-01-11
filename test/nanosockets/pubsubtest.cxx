@@ -13,7 +13,7 @@
 #include <nanosockets/publish_socket.hpp>
 #include <nanosockets/subscribe_socket.hpp>
 using namespace turi;
-using namespace nanosockets; 
+using namespace nanosockets;
 
 size_t get_value(zmq_msg_vector& msgvec) {
   TS_ASSERT_EQUALS(msgvec.size(), 1);
@@ -49,7 +49,7 @@ void sub_handler(const std::string& recv){
   ++num_received;
 }
 
-void start_sub(std::string address){  
+void start_sub(std::string address){
   subscribe_socket subsock(sub_handler);
   subsock.connect(address);
   subsock.subscribe("moof");

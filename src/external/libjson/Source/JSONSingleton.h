@@ -3,11 +3,11 @@
 
 template <typename T> class JSONSingleton {
 public:
-	static inline T get(void){ 
-		return get_singleton() -> ptr; 
+	static inline T get(void){
+		return get_singleton() -> ptr;
 	}
-	static inline void set(T p){ 
-		get_singleton() -> ptr = p; 
+	static inline void set(T p){
+		get_singleton() -> ptr = p;
 	}
 private:
 	inline JSONSingleton() : ptr(NULL) { }

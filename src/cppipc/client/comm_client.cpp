@@ -24,14 +24,14 @@ EXPORT std::atomic<size_t>& get_cancelled_command() {
   return cancelled_command;
 }
 
-comm_client::comm_client(std::vector<std::string> zkhosts, 
+comm_client::comm_client(std::vector<std::string> zkhosts,
                          std::string name,
                          size_t num_tolerable_ping_failures,
                          std::string alternate_control_address,
                          std::string alternate_publish_address,
                          const std::string public_key,
                          const std::string secret_key,
-                         const std::string server_public_key, 
+                         const std::string server_public_key,
                          bool ops_interruptible):
     object_socket(name, 2),
     subscribesock(boost::bind(&comm_client::subscribe_callback, this, _1)),
@@ -258,7 +258,7 @@ void comm_client::status_callback_thread_function() {
       boost::unique_lock<boost::mutex> buffer_lock(status_buffer_mutex);
       while(status_buffer.empty() && !status_callback_thread_done) {
         status_buffer_cond.wait(buffer_lock);
-      } 
+      }
       // swap out and get my own copy of the messages
       std::swap(localbuf, status_buffer);
     }
@@ -297,7 +297,7 @@ void comm_client::stop_status_callback_thread() {
   // wake up and shut down the status callback thread
   {
     boost::unique_lock<boost::mutex> buffer_lock(status_buffer_mutex);
-    status_callback_thread_done = true; 
+    status_callback_thread_done = true;
     status_buffer_cond.notify_one();
   }
   status_callback_thread->join();
@@ -305,7 +305,7 @@ void comm_client::stop_status_callback_thread() {
   status_callback_thread = NULL;
 }
 
-void comm_client::add_status_watch(std::string prefix, 
+void comm_client::add_status_watch(std::string prefix,
                          std::function<void(std::string)> callback) {
   boost::lock_guard<boost::mutex> guard(this->status_callback_lock);
   for(auto& cb: prefix_to_status_callback) {
@@ -335,8 +335,8 @@ void comm_client::clear_status_watch() {
   prefix_to_status_callback.clear();
 }
 
-int comm_client::internal_call_impl(call_message& call, 
-                                    nanosockets::zmq_msg_vector& ret, 
+int comm_client::internal_call_impl(call_message& call,
+                                    nanosockets::zmq_msg_vector& ret,
                                     bool control,
                                     size_t timeout) {
   // If the socket is already dead, return with an unreachable
@@ -464,7 +464,7 @@ int comm_client::send_deletion_list(const std::vector<size_t>& object_ids) {
   prepare_call_message_structure(0, &object_factory_base::sync_objects, msg);
 
   turi::oarchive oarc;
-  cppipc::issue(oarc, &object_factory_base::sync_objects, 
+  cppipc::issue(oarc, &object_factory_base::sync_objects,
                 object_ids, false /* inactive list */);
 
   msg.body = oarc.buf;

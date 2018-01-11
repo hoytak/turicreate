@@ -97,7 +97,7 @@ namespace Aws
                 operator bool() const { return Good(); }
 
                 /**
-                 * Encrypt a buffer of data. Part of the contract for this interface is that intention that 
+                 * Encrypt a buffer of data. Part of the contract for this interface is that intention that
                  * a user call this function multiple times for a large stream. As such, multiple calls to this function
                  * on the same instance should produce valid sequential output for an encrypted stream.
                  */

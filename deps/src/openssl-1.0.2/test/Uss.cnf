@@ -33,4 +33,3 @@ authorityKeyIdentifier=keyid,issuer:always
 basicConstraints = CA:false
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 issuerAltName=issuer:copy
-

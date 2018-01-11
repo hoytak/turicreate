@@ -21,13 +21,13 @@ public:
     }
 
     // fold
-    int sum = fold_reduce(0, ctr.size(), 
+    int sum = fold_reduce(0, ctr.size(),
                           [&](size_t idx, int& sum) {
                             sum += ctr[idx];
                           }, 0);
     TS_ASSERT_EQUALS(sum, 100000);
 
-    // parallel for over iterators 
+    // parallel for over iterators
     parallel_for(ctr.begin(), ctr.end(), [&](int& c) {
                       c++;
                     });
@@ -70,17 +70,17 @@ public:
   void test_exception_forward() {
     std::vector<int> ctr(100000);
     // parallel for over integers
-    TS_ASSERT_THROWS_ANYTHING(parallel_for((size_t)0, (size_t)100, 
+    TS_ASSERT_THROWS_ANYTHING(parallel_for((size_t)0, (size_t)100,
                                            [&](size_t idx) {
                                              throw("hello world");
                                            }));
 
-    TS_ASSERT_THROWS_ANYTHING(fold_reduce((size_t)0, (size_t)100, 
+    TS_ASSERT_THROWS_ANYTHING(fold_reduce((size_t)0, (size_t)100,
                                           [&](size_t idx, double& sum) {
                                             throw("hello world");
                                           }, 0.0));
 
-    TS_ASSERT_THROWS_ANYTHING(parallel_for(ctr.begin(), ctr.end(), 
+    TS_ASSERT_THROWS_ANYTHING(parallel_for(ctr.begin(), ctr.end(),
                                            [&](int& c) {
                                              throw("hello world");
                                            }));

@@ -16,5 +16,3 @@ With Turi Create, you can work with:
 As always, reference the [API
 docs](https://apple.github.io/turicreate/docs/api/turicreate.data_structures.html)
 for more information.
-
-

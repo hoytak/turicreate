@@ -45,12 +45,12 @@ namespace json {
  * Writes a vector of values into a JSON entry.
  *
  * For instance, given a 3 element vector containing {"hello", "pika", "chu"}
- * The vector be represented as 
+ * The vector be represented as
  *
  * key:["hello", "pika", "chu"]
  *
  * \see read_sequence_section
- * 
+ *
  */
 template <typename T>
 JSONNode to_json_node(const std::string& key,
@@ -82,7 +82,7 @@ inline JSONNode to_json_node<size_t>(const std::string& key,
 #endif
 /**
  * Writes a dictionary of values into an JSON entry.
- * For instance, given a 3 element map containing 
+ * For instance, given a 3 element map containing
  * {"fish":"hello", "and":"pika", "chips":"chu"}.
  *
  * In the json file this will be represented as:

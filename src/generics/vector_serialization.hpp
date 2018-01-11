@@ -12,7 +12,7 @@
 
 namespace turi {
 
-template <typename T> class gl_vector; 
+template <typename T> class gl_vector;
 
   namespace archive_detail {
     /**
@@ -23,7 +23,7 @@ template <typename T> class gl_vector;
     struct gl_vector_serialize_impl {
       static void exec(OutArcType& oarc, const ValueType& vec) {
         // really this is an assert false. But the static assert
-        // must depend on a template parameter 
+        // must depend on a template parameter
         BOOST_STATIC_ASSERT(sizeof(OutArcType) == 0);
         assert(false);
       };
@@ -36,12 +36,12 @@ template <typename T> class gl_vector;
     struct gl_vector_deserialize_impl {
       static void exec(InArcType& iarc, ValueType& vec) {
         // really this is an assert false. But the static assert
-        // must depend on a template parameter 
+        // must depend on a template parameter
         BOOST_STATIC_ASSERT(sizeof(InArcType) == 0);
         assert(false);
       };
     };
-    
+
     /// If contained type is not a POD use the standard serializer
     template <typename OutArcType, typename ValueType>
     struct gl_vector_serialize_impl<OutArcType, ValueType, false > {
@@ -85,13 +85,13 @@ template <typename T> class gl_vector;
         deserialize(iarc, vec.data(), sizeof(ValueType)*vec.size());
       }
     };
-  
+
     /**
        Serializes a vector */
     template <typename OutArcType, typename ValueType>
     struct serialize_impl<OutArcType, gl_vector<ValueType>, false > {
       static void exec(OutArcType& oarc, const gl_vector<ValueType>& vec) {
-        gl_vector_serialize_impl<OutArcType, ValueType, 
+        gl_vector_serialize_impl<OutArcType, ValueType,
           gl_is_pod_or_scaler<ValueType>::value >::exec(oarc, vec);
       }
     };
@@ -100,12 +100,11 @@ template <typename T> class gl_vector;
     template <typename InArcType, typename ValueType>
     struct deserialize_impl<InArcType, gl_vector<ValueType>, false > {
       static void exec(InArcType& iarc, gl_vector<ValueType>& vec){
-        gl_vector_deserialize_impl<InArcType, ValueType, 
+        gl_vector_deserialize_impl<InArcType, ValueType,
           gl_is_pod_or_scaler<ValueType>::value >::exec(iarc, vec);
       }
     };
   } // archive_detail
 } // namespace turi
 
-#endif 
-
+#endif

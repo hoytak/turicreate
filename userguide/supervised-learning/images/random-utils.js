@@ -24,4 +24,3 @@ function gaussian_mixture(mean1, mean2, var1, var2){
     return var2 * randn() + mean2;
   }
 }
-

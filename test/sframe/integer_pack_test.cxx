@@ -65,7 +65,7 @@ struct integer_pack_test {
         }
       }
     }
-    
+
     // harder cases
     for (size_t multiplier = 1; multiplier < 63; ++multiplier) {
       for (size_t shift = 1; shift < 63; ++shift) {
@@ -107,7 +107,7 @@ struct integer_pack_test {
         }
       }
     }
-    
+
     // integer boundary cases
     int64_t maxint = std::numeric_limits<int64_t>::max() >> 4;
     for (size_t multiplier = maxint; multiplier < maxint; ++multiplier) {

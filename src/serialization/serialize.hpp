@@ -20,4 +20,3 @@
 #include <serialization/serialize_to_from_string.hpp>
 #include <serialization/conditional_serialize.hpp>
 #endif
-

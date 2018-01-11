@@ -41,9 +41,9 @@ namespace swriter_impl {
 template <typename T>
 using output_iterator = turi::sframe_function_output_iterator<
               T,
-              std::function<void(const T&)>, 
+              std::function<void(const T&)>,
               std::function<void(T&&)>,
-              std::function<void(const sframe_rows&)> >; 
+              std::function<void(const sframe_rows&)> >;
 } // namespace swriter_impl
 
 /**

@@ -51,4 +51,3 @@ struct HdrCbData {
 size_t tool_header_cb(void *ptr, size_t size, size_t nmemb, void *userdata);
 
 #endif /* HEADER_CURL_TOOL_CB_HDR_H */
-

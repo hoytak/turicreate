@@ -14,4 +14,3 @@
   */
 
 #define USE_AWS_MEMORY_MANAGEMENT
-

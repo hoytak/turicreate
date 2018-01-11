@@ -18,7 +18,7 @@ namespace turi {
 namespace v2_block_impl {
 
 static constexpr size_t NUM_IO_LOCKS = 16;
-static unfair_lock* get_io_locks() { 
+static unfair_lock* get_io_locks() {
   static unfair_lock iolocks[NUM_IO_LOCKS];
   return iolocks;
 }
@@ -34,19 +34,19 @@ block_manager::block_manager() {
 
 column_address block_manager::open_column(std::string column_file) {
   std::lock_guard<turi::mutex> guard(m_global_lock);
-  std::pair<std::string, size_t> parsed_fname = parse_v2_segment_filename(column_file); 
+  std::pair<std::string, size_t> parsed_fname = parse_v2_segment_filename(column_file);
   if (parsed_fname.second == (size_t)(-1)) parsed_fname.second = 0;
   size_t segment_id = 0;
   if (m_file_to_segments.count(parsed_fname.first)) {
     // the segment has already been opened
     segment_id = m_file_to_segments[parsed_fname.first];
   } else {
-    // create a new segment 
+    // create a new segment
     segment_id = (segment_id_counter);
     ++segment_id_counter;
 
     std::shared_ptr<segment> seg_ptr = std::make_shared<segment>();
-    
+
     seg_ptr->segment_file = parsed_fname.first;
     size_t io_lock_id = fileio::get_io_parallelism_id(parsed_fname.first);
     if (io_lock_id == (size_t)(-1)) {
@@ -70,34 +70,34 @@ column_address block_manager::open_column(std::string column_file) {
 void block_manager::close_column(column_address addr) {
   std::lock_guard<turi::mutex> guard(m_global_lock);
   size_t segment_id = std::get<0>(addr);
-  ASSERT_TRUE(m_segments[segment_id] != NULL); 
+  ASSERT_TRUE(m_segments[segment_id] != NULL);
 
   std::shared_ptr<segment> seg_ptr = m_segments[segment_id];
-  
+
   bool segment_destroyed = false;
   {
     std::lock_guard<turi::mutex> guard(seg_ptr->lock);
     // decrement the reference count of the internal segment
     if (seg_ptr->reference_count.dec() == 0) {
-      logstream(LOG_DEBUG) << "Closing " << seg_ptr->segment_file 
+      logstream(LOG_DEBUG) << "Closing " << seg_ptr->segment_file
                            << std::endl;
       segment_destroyed = true;
       // we can close the segment entirely
       m_file_to_segments.erase(seg_ptr->segment_file);
       // try to close the segment files
       std::lock_guard<turi::mutex> guard(m_file_handles_lock);
-      std::shared_ptr<general_ifstream> handle = 
+      std::shared_ptr<general_ifstream> handle =
           seg_ptr->segment_file_handle.lock();
       if (handle) handle->close();
     }
-  } 
+  }
   if (segment_destroyed) {
-    m_segments.erase(segment_id); 
+    m_segments.erase(segment_id);
   }
 }
 
 size_t block_manager::num_blocks_in_column(column_address addr) {
-  // get the segment 
+  // get the segment
   size_t segment_id = std::get<0>(addr);
   size_t column_id = std::get<1>(addr);
   std::shared_ptr<segment> seg = get_segment(segment_id);
@@ -109,7 +109,7 @@ const block_info& block_manager::get_block_info(block_address addr) {
 
   size_t segment_id, column_id, block_id;
   std::tie(segment_id, column_id, block_id) = addr;
-  // get the segment 
+  // get the segment
   std::shared_ptr<segment> seg = get_segment(segment_id);
   return seg->blocks[column_id][block_id];
 }
@@ -121,12 +121,12 @@ const std::vector<std::vector<block_info>>& block_manager::get_all_block_info(si
   return seg->blocks;
 }
 
-std::shared_ptr<std::vector<char> > 
+std::shared_ptr<std::vector<char> >
 block_manager::read_block(block_address addr, block_info** ret_info) {
 
   size_t segment_id, column_id, block_id;
   std::tie(segment_id, column_id, block_id) = addr;
-  // get the segment 
+  // get the segment
   std::shared_ptr<segment> seg = get_segment(segment_id);
   // get the block info
   block_info& info = seg->blocks[column_id][block_id];
@@ -143,7 +143,7 @@ block_manager::read_block(block_address addr, block_info** ret_info) {
   std::shared_ptr<general_ifstream> fin = get_segment_file_handle(seg);
   fin->seekg(info.offset, std::ios_base::beg);
   size_t iolockid = seg->io_parallelism_id;
-  bool use_io_lock = SFRAME_IO_READ_LOCK > 0 && 
+  bool use_io_lock = SFRAME_IO_READ_LOCK > 0 &&
       (seg->file_size > SFRAME_IO_LOCK_FILE_SIZE_THRESHOLD);
   if (use_io_lock && iolockid != (size_t)(-1)) get_io_locks()[iolockid].lock();
   fin->read(ret->data(), info.length);
@@ -160,7 +160,7 @@ block_manager::read_block(block_address addr, block_info** ret_info) {
     /*
      * Decompress into another buffer.
      */
-    std::shared_ptr<std::vector<char> > decompression_buffer = 
+    std::shared_ptr<std::vector<char> > decompression_buffer =
         m_buffer_pool.get_new_buffer();
     decompression_buffer->resize(info.block_size);
     LZ4_decompress_safe(ret->data(),                   // src
@@ -169,13 +169,13 @@ block_manager::read_block(block_address addr, block_info** ret_info) {
                         info.block_size);              // target length
     std::swap(ret, decompression_buffer);
     m_buffer_pool.release_buffer(std::move(decompression_buffer));
-  } 
+  }
   return ret;
 }
 
 
 
-bool block_manager::read_typed_block(block_address addr, 
+bool block_manager::read_typed_block(block_address addr,
                                      std::vector<flexible_type>& ret,
                                      block_info** ret_info) {
   block_info* info;
@@ -219,7 +219,7 @@ std::shared_ptr<block_manager::segment> block_manager::get_segment(size_t segid)
   return m_segments[segid];
 }
 
-std::shared_ptr<general_ifstream> 
+std::shared_ptr<general_ifstream>
 block_manager::get_segment_file_handle(std::shared_ptr<segment>& group) {
   std::shared_ptr<general_ifstream> fin = group->segment_file_handle.lock();
   if (!fin) {

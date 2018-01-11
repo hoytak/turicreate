@@ -42,25 +42,25 @@ namespace Model
 
     void AddToNode(Aws::Utils::Xml::XmlNode& parentNode) const;
 
-    
+
     inline const Aws::String& GetETag() const{ return m_eTag; }
 
-    
+
     inline void SetETag(const Aws::String& value) { m_eTagHasBeenSet = true; m_eTag = value; }
 
-    
+
     inline void SetETag(Aws::String&& value) { m_eTagHasBeenSet = true; m_eTag = value; }
 
-    
+
     inline void SetETag(const char* value) { m_eTagHasBeenSet = true; m_eTag.assign(value); }
 
-    
+
     inline ObjectVersion& WithETag(const Aws::String& value) { SetETag(value); return *this;}
 
-    
+
     inline ObjectVersion& WithETag(Aws::String&& value) { SetETag(value); return *this;}
 
-    
+
     inline ObjectVersion& WithETag(const char* value) { SetETag(value); return *this;}
 
     /**
@@ -216,19 +216,19 @@ namespace Model
      */
     inline ObjectVersion& WithLastModified(Aws::Utils::DateTime&& value) { SetLastModified(value); return *this;}
 
-    
+
     inline const Owner& GetOwner() const{ return m_owner; }
 
-    
+
     inline void SetOwner(const Owner& value) { m_ownerHasBeenSet = true; m_owner = value; }
 
-    
+
     inline void SetOwner(Owner&& value) { m_ownerHasBeenSet = true; m_owner = value; }
 
-    
+
     inline ObjectVersion& WithOwner(const Owner& value) { SetOwner(value); return *this;}
 
-    
+
     inline ObjectVersion& WithOwner(Owner&& value) { SetOwner(value); return *this;}
 
   private:

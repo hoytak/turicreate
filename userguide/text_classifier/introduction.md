@@ -1,8 +1,8 @@
 # Text classification
 
-Text classification - commonly used in tasks such as <a 
+Text classification - commonly used in tasks such as <a
 href="https://en.wikipedia.org/wiki/Sentiment_analysis"> sentiment
-analysis</a> - refers to the use of natural language processing (NLP) 
+analysis</a> - refers to the use of natural language processing (NLP)
 techniques to extract subjective information such as the polarity of the text, e.g., whether or not the
 author is speaking positively or negatively about some topic.
 
@@ -98,12 +98,12 @@ let prediction = try? MySentenceClassifier().prediction(text: bagOfWords)
 
 func bow(text: String) -> [String: Double] {
     var bagOfWords = [String: Double]()
-    
+
     let tagger = NSLinguisticTagger(tagSchemes: [.tokenType], options: 0)
     let range = NSRange(location: 0, length: text.utf16.count)
     let options: NSLinguisticTagger.Options = [.omitPunctuation, .omitWhitespace]
     tagger.string = text
-    
+
     tagger.enumerateTags(in: range, unit: .word, scheme: .tokenType, options: options) { _, tokenRange, _ in
         let word = (text as NSString).substring(with: tokenRange)
         if bagOfWords[word] != nil {
@@ -112,7 +112,7 @@ func bow(text: String) -> [String: Double] {
             bagOfWords[word] = 1
         }
     }
-    
+
     return bagOfWords
 }
 ```

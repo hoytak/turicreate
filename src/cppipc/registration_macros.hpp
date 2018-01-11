@@ -30,9 +30,9 @@
  *   virtual std::string ping(std::string) = 0;
  *   virtual int add_one(int) = 0;
  *   virtual int add_one(int, int) = 0;
- * 
- * 
- *   REGISTRATION_BEGIN(object_base) // argument is a name which must 
+ *
+ *
+ *   REGISTRATION_BEGIN(object_base) // argument is a name which must
  *                                   // uniquely identify the object
  *   REGISTER(object_base::ping)
  *   REGISTER(object_base::add)
@@ -41,20 +41,20 @@
  * };
  * \endcode
  *
- * The registration macros adds 2 static functions. The first function is 
+ * The registration macros adds 2 static functions. The first function is
  * \code
- *  static inline std::string __get_type_name__() {  
- *    return name; 
- *  } 
+ *  static inline std::string __get_type_name__() {
+ *    return name;
+ *  }
  * \endcode
  * Where "name" is the argument provided to REGISTRATION_BEGIN macro. This
  * name is used for object creation and must uniquely identify the type of the
  * object.
  *
- * The second function is 
+ * The second function is
  * \code
- * template <typename Registry> 
- * static inline void __register__(Registry& reg) { 
+ * template <typename Registry>
+ * static inline void __register__(Registry& reg) {
  *    reg.register_function(&object_base::ping, "object_base::ping");
  *    reg.register_function(&object_base::add, "object_base::add");
  *    reg.register_function(&object_base::add_one, "object_base::add_one");
@@ -71,7 +71,7 @@
       return #name; \
     } \
     template <typename Registry> \
-    static inline void __register__(Registry& reg) { 
+    static inline void __register__(Registry& reg) {
 
 #define XSTRINGIFY(s) STRINGIFY(s)
 #define STRINGIFY(s) #s
@@ -83,15 +83,14 @@
       demangled_name = abi::__cxa_demangle(typeid(decltype(&FN)).name(), 0, 0, &status); \
       reg.register_function(&FN, std::string(XSTRINGIFY(FN)) + " " + demangled_name); \
       free(demangled_name); \
-          } 
+          }
 */
 #define REGISTER(FN) { \
       reg.register_function(&FN, std::string(XSTRINGIFY(FN))); \
-} 
+}
 
 
 
 #define REGISTRATION_END }
 
 #endif //CPPIPC_REGISTRATION_MACROS_HPP
- 

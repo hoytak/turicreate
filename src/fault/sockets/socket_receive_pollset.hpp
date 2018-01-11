@@ -18,9 +18,9 @@ namespace libfault {
 /**
  * \ingroup fault
  * A receive multiplexor.
- */  
+ */
 class EXPORT socket_receive_pollset {
-  public:  
+  public:
    typedef boost::function<void(socket_receive_pollset*, const zmq_pollitem_t&)> callback_type;
    socket_receive_pollset();
    ~socket_receive_pollset();
@@ -40,7 +40,7 @@ class EXPORT socket_receive_pollset {
    void add_timer_item(void* tag, const callback_type& callback);
 
    /**
-    * Removes a poll item. 
+    * Removes a poll item.
     * Either the "socket", or "fd" field in the item must be filled.
     * It will match based on these two fields, whichever is non-zero.
     */
@@ -69,13 +69,13 @@ class EXPORT socket_receive_pollset {
    void start_poll_thread();
 
    /** Stops the polling thread
-    */ 
+    */
    void stop_poll_thread();
   private:
    std::vector<zmq_pollitem_t> pollset;
    std::vector<std::pair<void*, callback_type> > timerset;
    std::vector<callback_type> callbacks;
-    
+
    boost::thread* poll_thread;
    volatile bool poll_thread_started;
    volatile bool contended;
@@ -87,4 +87,3 @@ class EXPORT socket_receive_pollset {
 
 } // libfault
 #endif
-

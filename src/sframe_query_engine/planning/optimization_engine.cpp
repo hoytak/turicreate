@@ -66,7 +66,7 @@ const std::vector<std::shared_ptr<opt_transform> >& optimization_transform_regis
 static std::shared_ptr<const optimization_transform_registry> get_transform_registry() {
 
   static std::shared_ptr<const optimization_transform_registry> transform_registry;
-  
+
   /*  Okay, it's not ready yet.  Create it; needs to be done with a
    *  lock.
    */
@@ -199,7 +199,7 @@ void optimization_engine::replace_node(cnode_info_ptr _old_node, pnode_ptr new_p
 
     DASSERT_TRUE(is_present);
   }
-  
+
   old_node->outputs.clear();
 
   // Make sure the old node
@@ -215,7 +215,7 @@ void optimization_engine::replace_node(cnode_info_ptr _old_node, pnode_ptr new_p
   }
 
 #endif
-  
+
   // Prune this node out of the graph
   eliminate_node_and_prune(old_node);
 
@@ -237,7 +237,7 @@ void optimization_engine:: eliminate_node_and_prune(node_info_ptr n) {
 
   // Make as discarded
   n->node_discarded = true;
-  
+
   // Remove this node from it's inputs.
   while(!n->inputs.empty()) {
     node_info_ptr n_in = n->inputs.back();

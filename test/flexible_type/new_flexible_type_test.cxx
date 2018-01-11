@@ -18,7 +18,7 @@ using namespace turi;
 struct new_flexible_type_test  {
 
   public:
-    
+
     void test_storage() {
       // test assignment from integer and copy of integer
       flexible_type f, f2;
@@ -29,7 +29,7 @@ struct new_flexible_type_test  {
       TS_ASSERT_EQUALS(f2.get_type(), flex_type_enum::INTEGER);
       TS_ASSERT_EQUALS(f2.get<flex_int>(), 1);
 
-      
+
 
       // test assignment from flex_float and copy of flex_float
       f = 1.1;
@@ -327,7 +327,7 @@ struct new_flexible_type_test  {
       TS_ASSERT_EQUALS((int)ret.first.array_at(0).get_type(), (int)flex_type_enum::LIST);
       TS_ASSERT_EQUALS((int)ret.first.array_at(0).size(), 0);
 
-      
+
       s = "[{}]"; c= &s[0];
       ret = parser.general_flexible_type_parse(&c, s.length());
       TS_ASSERT(ret.second);
@@ -422,7 +422,7 @@ struct new_flexible_type_test  {
     // convert it back to flexible_type
     // check flexible_type for equality
     template <typename T>
-    void converter_test(T value) {  
+    void converter_test(T value) {
       static_assert(flexible_type_converter<T>::value, "bad");
       TS_ASSERT(flexible_type_converter<T>::value == true);
       flexible_type fval = flexible_type_converter<T>().set(T(value));

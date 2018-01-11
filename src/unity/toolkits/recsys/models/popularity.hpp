@@ -46,7 +46,7 @@ class EXPORT recsys_popularity : public recsys_model_base {
 
   sframe predict(const v2::ml_data& test_data) const;
 
-  sframe get_similar_items(std::shared_ptr<sarray<flexible_type>> items, 
+  sframe get_similar_items(std::shared_ptr<sarray<flexible_type>> items,
                            size_t k=0) const;
 
   sframe get_similar_users(std::shared_ptr<sarray<flexible_type>> users,
@@ -76,7 +76,7 @@ class EXPORT recsys_popularity : public recsys_model_base {
   double unseen_item_prediction;
   std::shared_ptr<nearest_neighbors::ball_tree_neighbors> nearest_items_model;
 
- public: 
+ public:
   BEGIN_CLASS_MEMBER_REGISTRATION("popularity")
   END_CLASS_MEMBER_REGISTRATION
 
@@ -86,5 +86,3 @@ class EXPORT recsys_popularity : public recsys_model_base {
 }}
 
 #endif /* TURI_RECSYS_MODEL_POP_COUNT_H_ */
-
-

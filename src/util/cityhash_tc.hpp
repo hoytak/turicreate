@@ -6,7 +6,7 @@
 #ifndef TURI_CITYHASH_GL_H_
 #define TURI_CITYHASH_GL_H_
 
-#include <vector> 
+#include <vector>
 #include <util/code_optimization.hpp>
 
 // Copyright (c) 2011 Google, Inc.
@@ -702,14 +702,14 @@ static inline local_uint128 CityHashCrc128(const char *s, size_t len) {
 
 static inline uint64_t SimpleIntegerHash64(uint64_t s) {
 
-  static const uint64_t m = 0xc6a4a7935bd1e995ULL; 
+  static const uint64_t m = 0xc6a4a7935bd1e995ULL;
   static const int r = 47;
-  
+
   // XOR with k0 so the hash that maps to 0 is not that common.  Note
   // that this is a one-to-one map from {0,1}^64 -> {0,1}^64, so one
   // hash must map to 0.
 
-  
+
   uint64_t k = (uint64_t(s) ^ k0);
 
   k *= m;
@@ -723,9 +723,9 @@ static inline local_uint128 SimpleIntegerHash128(uint64_t s1, uint64_t s2) {
 
   // Simply use the murmer hash 2 inner loop on s and s ^ rand_int_1.
   // This process gives good mixing (by the murmerhash 2 stuff), plus
-  // is completely reversible so there are no collisions. 
-  
-  static const uint64_t m = 0xc6a4a7935bd1e995ULL; 
+  // is completely reversible so there are no collisions.
+
+  static const uint64_t m = 0xc6a4a7935bd1e995ULL;
   static const int r = 47;
 
   local_uint128 k;
@@ -733,15 +733,15 @@ static inline local_uint128 SimpleIntegerHash128(uint64_t s1, uint64_t s2) {
   k.first = s1;
   k.second = s2;
 
-  k.first *= m; 
-  k.second *= m; 
-  k.first ^= k.first >> r; 
-  k.second ^= k.second >> r; 
-  k.first *= m; 
-  k.second *= m; 
-		
+  k.first *= m;
+  k.second *= m;
+  k.first ^= k.first >> r;
+  k.second ^= k.second >> r;
+  k.first *= m;
+  k.second *= m;
+
   k.second ^= k.first;
-  k.second *= m; 
+  k.second *= m;
 
   return k;
 }
@@ -751,7 +751,7 @@ static inline local_uint128 SimpleIntegerHash128(uint64_t s) {
 
   static const uint64_t rand_int_1 = 0x6e626e7774e95a48ULL;
 
-  return SimpleIntegerHash128(s, rand_int_1 ^ s); 
+  return SimpleIntegerHash128(s, rand_int_1 ^ s);
 }
 
 static inline local_uint128 Murmor3MixRoutine64(uint64_t x, uint64_t y, uint64_t seed) {
@@ -763,7 +763,7 @@ static inline local_uint128 Murmor3MixRoutine64(uint64_t x, uint64_t y, uint64_t
 
   // Taken exactly from the smhasher 64 bit code for murmur3 at
   // http://code.google.com/p/smhasher/
-  
+
   x *= c1; x  = Rotate(x,31); x *= c2; h1 ^= x;
 
   h1 = Rotate(h1,27); h1 += h2; h1 = h1*5+0x52dce729;
@@ -772,7 +772,7 @@ static inline local_uint128 Murmor3MixRoutine64(uint64_t x, uint64_t y, uint64_t
 
   h2 = Rotate(h2,31); h2 += h1; h2 = h2*5+0x38495ab5;
 
-  return std::make_pair(h1, h2); 
+  return std::make_pair(h1, h2);
 }
 
 static inline local_uint128 Murmor3MixRoutine128(uint128_t x, uint128_t y, uint64_t seed) {
@@ -798,7 +798,7 @@ static inline local_uint128 Murmor3MixRoutine128(uint128_t x, uint128_t y, uint6
 
   uint64_t y1 = uint64_t(y >> 64);
   uint64_t y2 = uint64_t(y);
-  
+
   y1 *= c1; y1  = Rotate(y1,31); y1 *= c2; h1 ^= y1;
 
   h1 = Rotate(h1,27); h1 += h2; h1 = h1*5+0x52dce729;
@@ -806,18 +806,18 @@ static inline local_uint128 Murmor3MixRoutine128(uint128_t x, uint128_t y, uint6
   y2 *= c2; y  = Rotate(y2,33); y2 *= c1; h2 ^= y2;
 
   h2 = Rotate(h2,31); h2 += h1; h2 = h2*5+0x38495ab5;
-  
-  return std::make_pair(h1, h2); 
+
+  return std::make_pair(h1, h2);
 }
 
 }
 
 // Now, all the external wrappers for the above functions
 
-class flexible_type; 
+class flexible_type;
 
-/** 
- * \ingroup util 
+/**
+ * \ingroup util
  * \addtogroup Hashing
  * \brief A generic set of hashing functions built around Google's cityhash.
  * \{
@@ -848,7 +848,7 @@ static inline uint128_t hash128(const std::string& s) {
 }
 
 /**
- * Returns a 128 bit hash of a uint128_t hash value. 
+ * Returns a 128 bit hash of a uint128_t hash value.
  * The hash is unique, has good bit-wise properties, and is very fast.
  *
  * \param v  128 bit integer value to hash.
@@ -870,7 +870,7 @@ static inline uint128_t hash128(uint128_t v) {
 template <typename T>
 static inline uint128_t hash128(
     const T& v, typename std::enable_if<std::is_integral<T>::value && sizeof(T) <= 8>::type* = 0) {
-  
+
   cityhash_local::local_uint128 r = cityhash_local::SimpleIntegerHash128(uint64_t(v));
 
   return ((uint128_t(cityhash_local::Uint128High64(r)) << 64)
@@ -879,7 +879,7 @@ static inline uint128_t hash128(
 
 
 /**
- * Returns a 128 bit hash of a uint128_t hash value. 
+ * Returns a 128 bit hash of a uint128_t hash value.
  * The hash is unique, has good bit-wise properties, and is very fast.
  *
  * \param v  64 bit integer value to hash.
@@ -897,7 +897,7 @@ static inline uint128_t hash128(uint64_t v) {
  *
  * \param v flexible_type value to hash.
  */
-uint128_t hash128(const flexible_type& v); 
+uint128_t hash128(const flexible_type& v);
 
 /**
  * Returns a 128 bit hash of a vector of flexible_type values.  The
@@ -969,7 +969,7 @@ static inline uint64_t hash64(uint128_t v) {
 
   uint64_t h1 = uint64_t(v >> 64);
   uint64_t h2 = uint64_t(v);
-  
+
   cityhash_local::local_uint128 r = cityhash_local::Murmor3MixRoutine64(h1, h2, rand_int);
 
   return r.first ^ r.second;
@@ -994,7 +994,7 @@ static inline uint64_t hash64(
  *
  * \param v flexible_type value to hash.
  */
-uint64_t hash64(const flexible_type& v); 
+uint64_t hash64(const flexible_type& v);
 
 /**
  * Returns a 64 bit hash of a vector of flexible_type values.  The
@@ -1018,7 +1018,7 @@ static inline uint128_t hash128_combine(uint128_t h1, uint128_t h2) {
 
   // This hash function is okay when there are x1, x2, y1, and y2 are
   // not correlated, which is the case here.
-  cityhash_local::local_uint128 r = cityhash_local::Murmor3MixRoutine128(h1, h2, rand_int); 
+  cityhash_local::local_uint128 r = cityhash_local::Murmor3MixRoutine128(h1, h2, rand_int);
 
   return ((uint128_t(cityhash_local::Uint128High64(r)) << 64)
           + uint128_t(cityhash_local::Uint128Low64(r)));
@@ -1047,8 +1047,8 @@ static inline uint128_t hash128(const std::vector<std::string>& v) {
   uint128_t h = hash128(v.size());
   for(const std::string& s : v)
     h = hash128_update(h, s);
-  
-  return h; 
+
+  return h;
 }
 
 
@@ -1062,7 +1062,7 @@ static inline uint128_t hash128(const std::vector<std::string>& v) {
 static inline uint64_t hash64_combine(uint64_t h1, uint64_t h2) {
 
   static const uint64_t rand_int = 0x73a3916ae45d01e5ULL;
-  
+
   cityhash_local::local_uint128 r = cityhash_local::Murmor3MixRoutine64(h1, h2, rand_int);
 
   return r.first ^ r.second;
@@ -1105,27 +1105,27 @@ static inline uint64_t hash64(const std::vector<std::string>& v) {
   uint64_t h = hash64(v.size());
   for(const std::string& s : v)
     h = hash64_update(h, s);
-  
-  return h; 
+
+  return h;
 }
 
 
 /**
  * Returns a 32bit value based on index and seed that has reasonable
  * pseudorandom properties; I.e. for a given seed, each index maps to
- * effectively random values of size_t. 
+ * effectively random values of size_t.
  *
  * \param index Index from which the pseudorandom map value is mapped.
- * \param seed Random seed governing the mapping. 
+ * \param seed Random seed governing the mapping.
  */
 static inline uint32_t simple_random_mapping(size_t index, size_t seed) {
   cityhash_local::local_uint128 r = cityhash_local::SimpleIntegerHash128(index, seed);
   // Mix the last few bits
   uint64_t h = r.first ^ r.second;
-  return uint32_t(h ^ (h >> 32)); 
+  return uint32_t(h ^ (h >> 32));
 }
 
-/** 
+/**
  * Provides a simple, reversable hash for indices.  This hash has
  *  excellent mixing properties, preserves 0 (i.e. 0 maps to 0), and
  *  is reversable by calling reverse_index_hash(...) below.
@@ -1137,11 +1137,11 @@ static inline uint64_t index_hash(uint64_t idx) {
 
   static constexpr uint64_t m3_final_1     = 0xff51afd7ed558ccdULL;
   static constexpr uint64_t m3_final_2     = 0xc4ceb9fe1a85ec53ULL;
-  
-  static constexpr uint64_t r = 33;  
+
+  static constexpr uint64_t r = 33;
 
   uint64_t h = idx;
-  
+
   h ^= h >> r;
   h *= m3_final_1;
   h ^= h >> r;
@@ -1151,7 +1151,7 @@ static inline uint64_t index_hash(uint64_t idx) {
   return h;
 }
 
-/** 
+/**
  * The reverse of \ref index_hash. Gets the index from the index_hash
  */
 static inline uint64_t reverse_index_hash(uint64_t idx)  {
@@ -1159,11 +1159,11 @@ static inline uint64_t reverse_index_hash(uint64_t idx)  {
   // Multaplicative inverses of m3_final_1 and m3_final_2 above
   static constexpr uint64_t m3_final_1_inv = 0x4f74430c22a54005ULL;
   static constexpr uint64_t m3_final_2_inv = 0x9cb4b2f8129337dbULL;
-  
-  static constexpr uint64_t r = 33;  
+
+  static constexpr uint64_t r = 33;
 
   uint64_t h = idx;
-  
+
   h ^= h >> r;
   h *= m3_final_2_inv;
   h ^= h >> r;
@@ -1173,7 +1173,7 @@ static inline uint64_t reverse_index_hash(uint64_t idx)  {
   return h;
 }
 
-/** 
+/**
  * \}
  */
 

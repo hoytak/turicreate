@@ -28,5 +28,3 @@ if(NOT CMAKE_NO_ANSI_STREAM_HEADERS)
 
   mark_as_advanced(CMAKE_NO_ANSI_STREAM_HEADERS)
 endif()
-
-

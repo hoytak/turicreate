@@ -59,7 +59,7 @@ bool upgrade_file_handle_limit(size_t limit) {
 
 /**
  * Gets the current file handle limit.
- * Returns the current file handle limit on success, 
+ * Returns the current file handle limit on success,
  * -1 on infinity, and 0 on failure.
  */
 int get_file_handle_limit() {
@@ -129,17 +129,17 @@ class memory_release_thread {
 #endif
 
 void configure_global_environment(std::string argv0) {
-  // file limit upgrade has to be the very first thing that happens. The 
+  // file limit upgrade has to be the very first thing that happens. The
   // reason is that on Mac, once a file descriptor has been used (even STDOUT),
   // the file handle limit increase will appear to work, but will in fact fail
   // silently.
   upgrade_file_handle_limit(4096);
   int file_handle_limit = get_file_handle_limit();
   if (file_handle_limit < 4096) {
-    logstream(LOG_WARNING) 
+    logstream(LOG_WARNING)
         << "Unable to raise the file handle limit to 4096. "
         << "Current file handle limit = " << file_handle_limit << ". "
-        << "You may be limited to frames with about " << file_handle_limit / 16 
+        << "You may be limited to frames with about " << file_handle_limit / 16
         << " columns" << std::endl;
   }
   // if file handle limit is >= 512,
@@ -164,7 +164,7 @@ void configure_global_environment(std::string argv0) {
   boost::optional<std::string> envval = getenv_str("DISABLE_MEMORY_AUTOTUNE");
   bool disable_memory_autotune = ((bool)envval) && (std::string(*envval) == "1");
 
-  
+
   // memory limit
   envval = getenv_str("TURI_MEMORY_LIMIT_IN_MB");
   if (envval) {
@@ -178,14 +178,14 @@ void configure_global_environment(std::string argv0) {
   }
 
   if (total_system_memory > 0 && !disable_memory_autotune) {
-    // TODO: MANY MANY HEURISTICS 
+    // TODO: MANY MANY HEURISTICS
     // assume we have 1/2 of working memory to do things like sort, join, etc.
     // and the other 1/2 of working memory goes to file caching
     // HUERISTIC 1: Cell size estimate is 64
     // HUERISTIC 2: Row size estimate is Cell size estimate * 5
     //
     // Also, we only allow upgrades on the existing conservative values when
-    // duing these estimates to prevent us from having impractically small 
+    // duing these estimates to prevent us from having impractically small
     // values.
     size_t CELL_SIZE_ESTIMATE = 64;
     size_t ROW_SIZE_ESTIMATE = CELL_SIZE_ESTIMATE * 5;
@@ -225,7 +225,7 @@ void global_startup::perform_startup() {
 global_startup::~global_startup() { }
 
 namespace startup_impl {
-// we use an externed global variable so that only one occurance of this 
+// we use an externed global variable so that only one occurance of this
 // object shows up after many shared library linkings.
 global_startup startup_instance;
 } // startup_impl
@@ -269,7 +269,7 @@ void global_teardown::perform_teardown() {
 global_teardown::~global_teardown() { }
 
 namespace teardown_impl {
-// we use an externed global variable so that only one occurance of this 
+// we use an externed global variable so that only one occurance of this
 // object shows up after many shared library linkings.
 global_teardown teardown_instance;
 } // teardown_impl

@@ -35,9 +35,9 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int scale_form( const FORM *form, int *rows, int *cols )
-|   
+|
 |   Description   :  Retrieve size of form
 |
 |   Return Values :  E_OK              - no error
@@ -51,12 +51,12 @@ int scale_form(const FORM * form, int * rows, int * cols)
 
   if ( !(form->field) )
     RETURN(E_NOT_CONNECTED);
-  
-  if (rows) 
+
+  if (rows)
     *rows = form->rows;
-  if (cols) 
+  if (cols)
     *cols = form->cols;
-  
+
   RETURN(E_OK);
 }
 

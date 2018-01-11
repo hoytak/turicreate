@@ -24,7 +24,7 @@ std::string get_region_name_from_endpoint(std::string endpoint);
 
 /**
  * \ingroup fileio
- * Returns a S3 bucket specific path. On regular S3 this returns the 
+ * Returns a S3 bucket specific path. On regular S3 this returns the
  * virtualhosting style bucket. On other explicitly specified endpoints,
  * this returns $S3_ENDPOINT/[bucket]/
  *

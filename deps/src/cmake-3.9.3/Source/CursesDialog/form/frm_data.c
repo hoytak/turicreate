@@ -37,9 +37,9 @@ MODULE_ID("$Id$")
 extern int winnstr(WINDOW *, char *, int);
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  bool data_behind(const FORM *form)
-|   
+|
 |   Description   :  Check for off-screen data behind. This is nearly trivial
 |                    becose the begin of a field is fixed.
 |
@@ -68,18 +68,18 @@ bool data_behind(const FORM *form)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static char * After_Last_Non_Pad_Position(
 |                                    char *buffer,
 |                                    int len,
 |                                    int pad)
-|   
+|
 |   Description   :  Find the last position in the buffer that doesn't
 |                    contain a padding character.
 |
-|   Return Values :  The pointer to this position 
+|   Return Values :  The pointer to this position
 +--------------------------------------------------------------------------*/
-INLINE 
+INLINE
 static char * After_Last_Non_Pad_Position(char *buffer, int len, int pad)
 {
   char *end = buffer + len;
@@ -94,11 +94,11 @@ static char * After_Last_Non_Pad_Position(char *buffer, int len, int pad)
 #define SMALL_BUFFER_SIZE (80)
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  bool data_ahead(const FORM *form)
-|   
+|
 |   Description   :  Check for off-screen data ahead. This is more difficult
-|                    because a dynamic field has a variable end. 
+|                    because a dynamic field has a variable end.
 |
 |   Return Values :  TRUE   - there are off-screen data ahead
 |                    FALSE  - there are no off-screen data ahead
@@ -127,7 +127,7 @@ bool data_ahead(const FORM *form)
 	bp = buffer;
 
       assert(bp != 0);
-      
+
       if (Single_Line_Field(field))
 	{
 	  int check_len;
@@ -141,10 +141,10 @@ bool data_ahead(const FORM *form)
 	      cursor_moved = TRUE;
 	      wmove(form->w,0,pos);
 	      winnstr(form->w,bp,check_len);
-	      found_content = 
+	      found_content =
 		After_Last_Non_Pad_Position(bp,check_len,field->pad);
 	      if (found_content==bp)
-		  pos += field->cols;		  
+		  pos += field->cols;
 	      else
 		{
 		  result = TRUE;
@@ -161,7 +161,7 @@ bool data_ahead(const FORM *form)
 	      wmove(form->w,pos,0);
 	      pos++;
 	      winnstr(form->w,bp,field->cols);
-	      found_content = 
+	      found_content =
 		After_Last_Non_Pad_Position(bp,field->cols,field->pad);
 	      if (found_content!=bp)
 		{

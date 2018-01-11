@@ -574,7 +574,7 @@ add_pattern_from_file(struct archive_match *a, struct match_list *mlist,
 	int64_t offset;
 	int r;
 
-	ar = archive_read_new(); 
+	ar = archive_read_new();
 	if (ar == NULL) {
 		archive_set_error(&(a->archive), ENOMEM, "No memory");
 		return (ARCHIVE_FATAL);
@@ -624,7 +624,7 @@ add_pattern_from_file(struct archive_match *a, struct match_list *mlist,
 						break;
 					}
 				} else {
-			            	if (*b == 0x0d || *b == 0x0a) {
+					if (*b == 0x0d || *b == 0x0a) {
 						found_separator = 1;
 						break;
 					}
@@ -1288,7 +1288,7 @@ cmp_node_mbs(const struct archive_rb_node *n1,
 		return (-1);
 	return (strcmp(p1, p2));
 }
-        
+
 static int
 cmp_key_mbs(const struct archive_rb_node *n, const void *key)
 {
@@ -1317,7 +1317,7 @@ cmp_node_wcs(const struct archive_rb_node *n1,
 		return (-1);
 	return (wcscmp(p1, p2));
 }
-        
+
 static int
 cmp_key_wcs(const struct archive_rb_node *n, const void *key)
 {
@@ -1843,4 +1843,3 @@ owner_excluded(struct archive_match *a, struct archive_entry *entry)
 	}
 	return (0);
 }
-

@@ -4,13 +4,13 @@
 #include <exception>
 #include <string>
 
-// This struct needs to be available for the c functions 
-extern "C" { 
+// This struct needs to be available for the c functions
+extern "C" {
 
 #include <capi/TuriCore.h>
 
 struct tc_error_struct {
-  std::string message; 
+  std::string message;
 };
 
 
@@ -24,10 +24,10 @@ struct tc_error_struct {
   try { do {} while(false)
 
 
-/** Defines the end of the exception handling block.  
+/** Defines the end of the exception handling block.
  *
- *  Takes one required and one option argument.  First argument is the 
- *  name of the tc_error** variable.  Second argument is the return value 
+ *  Takes one required and one option argument.  First argument is the
+ *  name of the tc_error** variable.  Second argument is the return value
  *  on error.
  */
 #define ERROR_HANDLE_END(error_var, ...) \
@@ -46,8 +46,8 @@ struct tc_error_struct {
 
 
 
-// Fill error from a thrown exception 
-void fill_error_from_exception(std::exception_ptr eptr, tc_error** error);  
+// Fill error from a thrown exception
+void fill_error_from_exception(std::exception_ptr eptr, tc_error** error);
 
 // Fill the error from an error string
 void set_error(tc_error** error, const std::string& message);

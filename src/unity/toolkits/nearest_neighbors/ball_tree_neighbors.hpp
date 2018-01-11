@@ -24,7 +24,7 @@ namespace nearest_neighbors {
  * -----------------------------------------------------------------------------
  *
  * Implements the ball tree method for k-nearest neighbors search.
- * 
+ *
  * The ball tree works by partitioning the reference data into into successively
  * smaller balls, and recording the center (i.e. pivot) and radius of each ball.
  * A ball tree query uses the pivots and radii to exclude many of the balls from
@@ -32,16 +32,16 @@ namespace nearest_neighbors {
  *
  * In addition to the objects contained in the nearest_neighbors_model base
  * class, the ball tree contains the following:
- * 
+ *
  * - membership:
  *     Each element of this vector indicates which node the corresponding
  *     reference data point belongs to. After the tree is constructed, the
  *     elements in this vector correspond to leaf nodes of the tree only.
- * 
+ *
  * - pivots:
  *     The reference data point at the center of each tree node.
- *     
- * - node_radii:  
+ *
+ * - node_radii:
  *     The distance from the pivot of each node to the most distant
  *     reference point belonging to the tree node.
  */
@@ -102,14 +102,14 @@ class EXPORT ball_tree_neighbors: public nearest_neighbors_model {
    * option manager should throw errors if the options do not satisfy the option
    * manager's conditions.
    *
-   * \param[in] opts Options to set 
-   */ 
+   * \param[in] opts Options to set
+   */
   void init_options(const std::map<std::string,flexible_type>& _opts);
 
 
   /**
    * Create a ball tree nearest neighbors model.
-   * 
+   *
    * \param[in] X sframe input feature data
    * \param[in] ref_labels row labels for the reference dataset
    * \param[in] composite_distance_params
@@ -128,8 +128,8 @@ class EXPORT ball_tree_neighbors: public nearest_neighbors_model {
    * current k'th nearest neighbor, that child node (and its descendants) is
    * skpped in the traversal.
    *
-   * \param[in] mld_queries query data 
-   * \param[in] query_labels sframe query labels 
+   * \param[in] mld_queries query data
+   * \param[in] query_labels sframe query labels
    * \param[in] k size_t max number of neighbors to return for each query
    * \param[in] radius double max distance for returned neighbors to each query
    *
@@ -138,7 +138,7 @@ class EXPORT ball_tree_neighbors: public nearest_neighbors_model {
    *
    * \note Assumes that data is already in the right shape.
    */
-  sframe query(const v2::ml_data& mld_queries, 
+  sframe query(const v2::ml_data& mld_queries,
                const std::vector<flexible_type>& query_labels,
                const size_t k, const double radius,
                const bool include_self_edges) const;
@@ -159,12 +159,12 @@ class EXPORT ball_tree_neighbors: public nearest_neighbors_model {
    * Turi serialization save
    */
   void load_version(turi::iarchive& iarc, size_t version);
-  
+
   // TODO: convert interface above to use the extensions methods here
   BEGIN_CLASS_MEMBER_REGISTRATION("nearest_neighbors_ball_tree")
   END_CLASS_MEMBER_REGISTRATION
 
-}; 
+};
 
 
 }  // namespace nearest_neighbors

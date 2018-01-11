@@ -26,8 +26,8 @@ gl_sframe generate_data(std::map<std::string, flexible_type>& opts) {
   size_t examples = opts.at("examples");
   std::vector<std::string> feature_names = {"string", "dict", "list"};
   std::vector<flex_type_enum> feature_types = {
-    flex_type_enum::STRING, 
-    flex_type_enum::DICT, 
+    flex_type_enum::STRING,
+    flex_type_enum::DICT,
     flex_type_enum::LIST};
 
   gl_sframe_writer writer(feature_names, feature_types, 1);
@@ -105,7 +105,7 @@ gl_sframe generate_bad_list(std::map<std::string, flexible_type>& opts) {
 /**
  * Construct a model from data and options.
  */
-std::shared_ptr<word_trimmer> init_model(const gl_sframe& data, 
+std::shared_ptr<word_trimmer> init_model(const gl_sframe& data,
                        std::map<std::string, flexible_type>& opts) {
 
   std::shared_ptr<word_trimmer> model;
@@ -157,14 +157,14 @@ void check_model(std::shared_ptr<word_trimmer> model,
   flexible_type _get;
 
   // Answers.
-  std::map<std::string, flexible_type> default_options = { 
+  std::map<std::string, flexible_type> default_options = {
     {"to_lower", true},
     {"output_column_prefix", flex_undefined()},
     {"stopwords", flex_undefined()},
     {"threshold", 2},
     {"delimiters", flex_list({"\r", "\v", "\n", "\f", "\t", " "})}
   };
-  
+
   std::vector<std::string> _list_fields_ans = {
         "features",
         "excluded_features",
@@ -177,7 +177,7 @@ void check_model(std::shared_ptr<word_trimmer> model,
   };
   std::map<std::string, flexible_type> options;
   for (const auto& kvp: default_options){
-    if (opts.count(kvp.first) == 0) { 
+    if (opts.count(kvp.first) == 0) {
       options[kvp.first] = kvp.second;
     } else {
       options[kvp.first] = opts[kvp.first];
@@ -206,7 +206,7 @@ void check_model(std::shared_ptr<word_trimmer> model,
   // Check list_fields
   _list_fields = model->list_fields();
   for(const auto& f: _list_fields_ans){
-    TS_ASSERT(std::find(_list_fields.begin(), _list_fields.end(), f) 
+    TS_ASSERT(std::find(_list_fields.begin(), _list_fields.end(), f)
                                                     != _list_fields.end());
   }
   TS_ASSERT_EQUALS(_list_fields.size(), _list_fields_ans.size());
@@ -254,33 +254,33 @@ void run_bad_input_list_test(std::map<std::string, flexible_type>& opts) {
  *  Run tests.
 */
 struct word_trimmer_test  {
- 
+
   public:
 
   void test_word_trimmer_basic() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 20}, 
+      {"examples", 20},
       {"to_lower", true},
       {"exclude", false},
-      {"delimiters", flex_undefined()}}; 
+      {"delimiters", flex_undefined()}};
     run_word_trimmer_test(opts);
   }
 
   void test_bad_input_dict() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 20}, 
+      {"examples", 20},
       {"to_lower", true},
       {"exclude", false},
-      {"delimiters", flex_undefined()}}; 
+      {"delimiters", flex_undefined()}};
     run_bad_input_dict_test(opts);
   }
 
   void test_bad_input_list() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 20}, 
+      {"examples", 20},
       {"to_lower", true},
       {"exclude", false},
-      {"delimiters", flex_undefined()}}; 
+      {"delimiters", flex_undefined()}};
     run_bad_input_list_test(opts);
   }
 };

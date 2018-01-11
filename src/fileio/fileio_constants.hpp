@@ -24,7 +24,7 @@ std::string get_cache_prefix();
 
 /**
  * \ingroup fileio
- * The "directory" (cache://tmp/) which all cached files are located in 
+ * The "directory" (cache://tmp/) which all cached files are located in
  */
 std::string get_temp_cache_prefix();
 
@@ -56,7 +56,7 @@ extern const size_t FILEIO_INITIAL_CAPACITY_PER_FILE;
 
 /**
  * \ingroup fileio
- * The maximum memory capacity assigned to a cached file until it has to 
+ * The maximum memory capacity assigned to a cached file until it has to
  * be flushed.
  */
 extern size_t FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE;
@@ -71,7 +71,7 @@ extern size_t FILEIO_MAXIMUM_CACHE_CAPACITY;
  * \ingroup fileio
  * The default fileio reader buffer size
  */
-extern size_t FILEIO_READER_BUFFER_SIZE; 
+extern size_t FILEIO_READER_BUFFER_SIZE;
 
 /**
  * \ingroup fileio

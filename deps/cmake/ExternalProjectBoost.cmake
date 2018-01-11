@@ -159,4 +159,3 @@ add_dependencies(boost_test ex_boost)
 target_link_libraries(boost_test INTERFACE ${libnames} boost)
 
 set(HAS_BOOST_TEST TRUE CACHE BOOL "")
-

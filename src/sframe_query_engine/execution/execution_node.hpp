@@ -51,9 +51,9 @@ class query_context;
  * \subsection execution_node_coroutines Coroutines
  *
  * Essentially, calling a coroutine, causes a context switch to occur
- * starting the coroutine. Then within the coroutine, a "sink()" function can be 
+ * starting the coroutine. Then within the coroutine, a "sink()" function can be
  * called which context switches and resumes execution *where the coroutine was
- * initially triggered*. 
+ * initially triggered*.
  *
  * The classical example is a producer-consumer queue
  * \code
@@ -73,7 +73,7 @@ class query_context;
  *
  * \endcode
  *
- * Here, we are using coroutines to attach and communicate between query 
+ * Here, we are using coroutines to attach and communicate between query
  * operators, so for instance, here is a simple transform on a source.
  * \code
  * void data_source() {
@@ -97,7 +97,7 @@ class query_context;
  * \endcode
  *
  * while the context switch is relatively cheap (boost coroutines promise this
- * at < 100 cycles or so), we still want to avoid performing the context 
+ * at < 100 cycles or so), we still want to avoid performing the context
  * switch for every row, so our unit of communication across coroutines
  * is an \ref sframe_rows object which represents a collection of rows, but
  * represented columnar-wise. Every communicated block must be of a constant
@@ -117,20 +117,20 @@ class query_context;
  *    and they continue to be read until say... 256 rows are generated.
  *    This is then sent to the "+" operator which resumes execution.
  *  - The "+" operator then reads the right logical filter operator.
- *  - The right logical filter operator now needs to read source_B and 
+ *  - The right logical filter operator now needs to read source_B and
  *  selector_source.
- *  - However, selector_source has already advanced because it was partially 
+ *  - However, selector_source has already advanced because it was partially
  *  consumed for the left logical filter.
- * 
+ *
  * A solution to this requires the selector_source to buffer its reads
  * while feeding the left logical_filter. The solution to this is to either
- * assume that all connected operators operate at exactly the same rate 
- * (we can guarantee this with some care as to how the operator graph is 
+ * assume that all connected operators operate at exactly the same rate
+ * (we can guarantee this with some care as to how the operator graph is
  * constructed), or we allow buffering. This buffering has to be somewhat
  * intelligent because it may require unbounded buffers.
  *
- * An earlier version of this execution model used the former procedure 
- * (assuming uniform rate), now we use the \ref broadcast_queue to provide 
+ * An earlier version of this execution model used the former procedure
+ * (assuming uniform rate), now we use the \ref broadcast_queue to provide
  * unbounfed buffering.
  *
  * \subsection execution_node_usage execution_node Usage
@@ -154,12 +154,12 @@ class execution_node  : public std::enable_shared_from_this<execution_node> {
  public:
   execution_node(){}
 
-  /** 
+  /**
    * Initializes the execution node with an operator and inputs.
    * Also resets the operator.
    */
   explicit execution_node(const std::shared_ptr<query_operator>& op,
-                 const std::vector<std::shared_ptr<execution_node> >& inputs 
+                 const std::vector<std::shared_ptr<execution_node> >& inputs
                    = std::vector<std::shared_ptr<execution_node>>());
 
   execution_node(execution_node&&) = default;
@@ -167,8 +167,8 @@ class execution_node  : public std::enable_shared_from_this<execution_node> {
 
   execution_node(const execution_node&) = delete;
   execution_node& operator=(const execution_node&) = delete;
-  
-  /** 
+
+  /**
    * Initializes the execution node with an operator and inputs.
    * Also resets the operator.
    */
@@ -200,9 +200,9 @@ class execution_node  : public std::enable_shared_from_this<execution_node> {
   }
 
   /**
-   * resets the state of this execution node. Note that this does NOT 
+   * resets the state of this execution node. Note that this does NOT
    * recursively reset all parents (since in a general graph this could cause
-   * multiple resets of the same vertex). The caller must ensure that all 
+   * multiple resets of the same vertex). The caller must ensure that all
    * connected execution nodes are reset.
    */
   void reset();
@@ -215,8 +215,8 @@ class execution_node  : public std::enable_shared_from_this<execution_node> {
   }
 
   /**
-   * If an exception occured while excecuting this node, this returns the 
-   * last exception exception. Otherwise returns an exception_ptr which 
+   * If an exception occured while excecuting this node, this returns the
+   * last exception exception. Otherwise returns an exception_ptr which
    * compares equal to the null pointer.
    */
   std::exception_ptr get_exception() const {
@@ -257,7 +257,7 @@ class execution_node  : public std::enable_shared_from_this<execution_node> {
   std::vector<input_node> m_inputs;
 
   std::unique_ptr<broadcast_queue<std::shared_ptr<sframe_rows> > > m_output_queue;
-  size_t m_head = 0; 
+  size_t m_head = 0;
   bool m_coroutines_started = false;
   bool m_skip_next_block = false;
 

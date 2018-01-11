@@ -12,7 +12,7 @@ encoded_block::encoded_block() {
 }
 
 void encoded_block::init(block_info info, std::vector<char>&& data) {
-  m_block = block{info, 
+  m_block = block{info,
     std::make_shared<std::vector<char>>(std::move(data))};
   m_size = info.num_elem;
 }
@@ -49,7 +49,7 @@ void encoded_block_range::coroutine_launch() {
           [coro_m_shared, coro_m_block]
           (boost::coroutines::coroutine<void>::push_type& sink){
             // coroutine function basically calls the decoder with a callback
-            // which sticks stuff into the buffer. 
+            // which sticks stuff into the buffer.
             // and triggers the sink when the buffer full.
             typed_decode_stream_callback(coro_m_block.m_block_info,
                                          coro_m_block.m_data->data(),
@@ -87,7 +87,7 @@ void encoded_block_range::skip(size_t n) {
   call_source();
 }
 
-size_t encoded_block_range::fill_buffer(flexible_type* write_target, 
+size_t encoded_block_range::fill_buffer(flexible_type* write_target,
                                         size_t numel) {
   if (numel == 0) return 0;
   if (coroutine_started && !source) return 0;

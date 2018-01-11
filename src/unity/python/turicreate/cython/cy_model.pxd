@@ -4,7 +4,7 @@
 # Use of this source code is governed by a BSD-3-clause license that can
 # be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
 from libcpp.vector cimport vector
-from libcpp.string cimport string 
+from libcpp.string cimport string
 from libcpp.pair cimport pair
 from .cy_variant cimport variant_type, variant_map_type
 from .cy_unity_base_types cimport model_base_ptr
@@ -23,4 +23,3 @@ cdef class UnityModel:
     cpdef list_fields(self)
 
     cpdef get(self, key, opts=*)
-

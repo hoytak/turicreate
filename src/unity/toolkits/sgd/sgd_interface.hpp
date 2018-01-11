@@ -76,10 +76,10 @@ class sgd_interface_base {
 
   /** Gives a hard limit on the sgd step size.  Certain algorithms
    *  will blow up with a step size too large, and this gives a method
-   *  of setting a hard limit on step sizes considered. 
+   *  of setting a hard limit on step sizes considered.
    */
   virtual double max_step_size() const { return std::numeric_limits<double>::max(); }
-  
+
   /** If there are any issues with the model, this function can return
    *  false to force a reset.  It is called once at the end of each
    *  iteration.
@@ -133,11 +133,11 @@ class sgd_interface_base {
 
   /** Calculate the current regularization penalty.  This is used to
    *  compute the objective value, which is interpreted as loss + reg
-   *  penalty.  
+   *  penalty.
    */
   virtual double current_regularization_penalty() const = 0;
 
-  /** Apply the sgd step.  Called on each data point. 
+  /** Apply the sgd step.  Called on each data point.
    */
   virtual double apply_sgd_step(size_t thread_idx,
                                 const std::vector<v2::ml_data_entry>& x,

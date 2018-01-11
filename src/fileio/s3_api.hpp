@@ -72,20 +72,20 @@ struct list_objects_response {
  * \internal
  * Lists objects or prefixes prefixed by a give s3 url.
  *
- * This is a thin wrapper around the S3 API 
- * http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html 
+ * This is a thin wrapper around the S3 API
+ * http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html
  * and may not quite do what you think it does.
  *
  * if s3_url points to a valid prefix, it will return only the prefix
  * as a directory. For instance if I have an S3 bucket containing
- * 
+ *
  * foo/hello.txt
  *
  * list_objects("s3://foo") will return simply "foo/" as a directory.
  *
  * See list_directory() and is_directory() for a more sensible implementation
  * which behaves somewhat more file system like.
- * 
+ *
  * \returns A list_objects_response object.
  * If list_objects_response.error is an empty string, it indicates success.
  * Otherwise, it contains an error code. list_objects_response.directories
@@ -105,13 +105,13 @@ list_objects_response list_objects(std::string s3_url,
  *
  * if s3_url points to a valid prefix, it will return the prefix's contents
  * like a directory.
- * 
+ *
  * foo/hello.txt
  *
- * list_objects("s3://foo") will return "foo/hello.txt" 
+ * list_objects("s3://foo") will return "foo/hello.txt"
  *
  * If s3_url points to an object it will just return the object.
- * 
+ *
  * \returns A list_objects_response object.
  * If list_objects_response.error is an empty string, it indicates success.
  * Otherwise, it contains an error code. list_objects_response.directories
@@ -127,7 +127,7 @@ list_objects_response list_directory(std::string s3_url,
  * \ingroup fileio
  * \internal
  * Tests if url is a directory or a regular file.
- * Returns a pair of (exists, is_directory). If exists is false, 
+ * Returns a pair of (exists, is_directory). If exists is false,
  * is_directory should be ignored
  */
 std::pair<bool, bool> is_directory(std::string s3_url,

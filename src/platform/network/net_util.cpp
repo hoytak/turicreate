@@ -25,7 +25,7 @@
 #define NUM_VM_MAC_ADDRS 8
 #define MAC_PREFIX_SIZE 3
 namespace turi {
- 
+
 bool str_to_ip(const char* c, uint32_t& out) {
   if (c == NULL) return false;
   else return inet_pton(AF_INET, c, &out) > 0;
@@ -50,7 +50,7 @@ bool get_interface_ip_in_subnet(uint32_t subnet_id, uint32_t subnet_mask, uint32
   struct ifaddrs * firstifaddr = ifAddrStruct;
   ASSERT_NE(ifAddrStruct, NULL);
   while (ifAddrStruct != NULL) {
-    if (ifAddrStruct->ifa_addr != NULL && 
+    if (ifAddrStruct->ifa_addr != NULL &&
         ifAddrStruct->ifa_addr->sa_family == AF_INET) {
       char* tmpAddrPtr = NULL;
       // check it is IP4 and not lo0.
@@ -99,9 +99,9 @@ bool get_interface_ip_in_subnet(uint32_t subnet_id, uint32_t subnet_mask, uint32
     for(; cur_struct != NULL; cur_struct = cur_struct->Next) {
       PIP_ADAPTER_UNICAST_ADDRESS first_addr = cur_struct->FirstUnicastAddress;
       PIP_ADAPTER_UNICAST_ADDRESS cur_addr = first_addr;
-      
+
       // Some interface-level checking
-      
+
       // Check if operational
       if(cur_struct->OperStatus != IfOperStatusUp) {
         std::cerr << "Not operational!" << std::endl;
@@ -166,7 +166,7 @@ bool get_interface_ip_in_subnet(uint32_t subnet_id, uint32_t subnet_mask, uint32
       std::cerr << "Found interface" << std::endl;
       while(cur_addr != NULL) {
 
-        // 
+        //
         //NOTE: The one, the one, don't go for the one.
         struct sockaddr_in *the_one =
           (struct sockaddr_in *)cur_addr->Address.lpSockaddr;
@@ -231,32 +231,32 @@ EXPORT uint32_t get_local_ip(bool print) {
   if (c_subnet_id != NULL) {
     if (!str_to_ip(c_subnet_id, subnet_id)) {
       std::cerr << "Unable to convert TURI_SUBNET_ID to a valid address. Cannot continue\n";
-      exit(1); 
+      exit(1);
     }
   }
   if (c_subnet_mask != NULL) {
     if (!str_to_ip(c_subnet_mask, subnet_mask)) {
       std::cerr << "Unable to convert TURI_SUBNET_MASK to a valid address. Cannot continue\n";
-      exit(1); 
+      exit(1);
     }
   }
 
-  // error checking. 
+  // error checking.
   // By the end of this block, we should either have both subnet_id and subnet_mask filled
   // to reasonable values, or are dead.
-  
+
   if (c_subnet_id == NULL && c_subnet_mask != NULL) {
     // If subnet mask specified but not subnet ID, we cannot continue.
     std::cerr << "TURI_SUBNET_MASK specified, but TURI_SUBNET_ID not specified.\n";
     std::cerr << "We cannot continue\n";
     exit(1);
-  } 
+  }
   if (c_subnet_id != NULL && c_subnet_mask == NULL) {
     if (print) {
       std::cerr << "TURI_SUBNET_ID specified, but TURI_SUBNET_MASK not specified.\n";
       std::cerr << "We will try to guess a subnet mask\n";
     }
-    // if subnet id specified, but not subnet mask. We can try to guess a mask 
+    // if subnet id specified, but not subnet mask. We can try to guess a mask
     // by finding the first "on" bit in the subnet id, and matching everything
     // to the left of it.
     // easiest way to do that is to left extend the subnet_id
@@ -328,4 +328,3 @@ EXPORT std::pair<size_t, int> get_free_tcp_port() {
 }
 
 } // namespace turi
-

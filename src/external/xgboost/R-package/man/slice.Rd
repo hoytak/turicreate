@@ -28,4 +28,3 @@ train <- agaricus.train
 dtrain <- xgb.DMatrix(train$data, label=train$label)
 dsub <- slice(dtrain, 1:3)
 }
-

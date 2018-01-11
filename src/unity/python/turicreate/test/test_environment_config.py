@@ -41,4 +41,3 @@ class EnvironmentConfigTester(unittest.TestCase):
         finally:
             shutil.rmtree(test_dir)
             del os.environ["TURI_CONFIG_FILE"]
-

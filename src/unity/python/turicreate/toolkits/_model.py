@@ -342,12 +342,12 @@ class ExposeAttributesFromProxy(object):
 @_six.add_metaclass(RegistrationMetaClass)
 class Model(ExposeAttributesFromProxy):
     """
-    This class defines the minimal interface of a model object which is 
+    This class defines the minimal interface of a model object which is
     backed by a C++ model implementation.
 
     All state in a Model must be stored in the C++-side __proxy__ object.
 
-    _native_name must be implemented. _native_name can returns a list if there 
+    _native_name must be implemented. _native_name can returns a list if there
     are multiple C++ types for the same Python object. The native names *must*
     match the registered name of the model (name() method)
 
@@ -479,17 +479,17 @@ class Model(ExposeAttributesFromProxy):
 @_six.add_metaclass(RegistrationMetaClass)
 class CustomModel(ExposeAttributesFromProxy):
     """
-    This class is used to implement Python-only models. 
+    This class is used to implement Python-only models.
 
     The following must be implemented
     - _get_version
-    - _get_native_state 
+    - _get_native_state
     - _native_name (class method)
     - _load_version (class method)
 
     On save, get_native_state is called which must return a dictionary
     containing the state of the object. This must contain
-    all the relevant information needed to reconstruct the model. 
+    all the relevant information needed to reconstruct the model.
 
     On load _load_version is used to reconstruct the object.
 
@@ -554,7 +554,7 @@ class CustomModel(ExposeAttributesFromProxy):
             # take a copy of it.
             state = self.__proxy__.get_state()
 
-            # We don't know how to serialize a Python class, hence we need to 
+            # We don't know how to serialize a Python class, hence we need to
             # reduce the classifier to the proxy object before saving it.
             state['classifier'] = state['classifier'].__proxy__
             return state

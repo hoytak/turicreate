@@ -21,7 +21,7 @@ s3_device::s3_device(const std::string& filename, const bool write) {
   // split out the access key and secret key
   s3url url;
   parse_s3url(filename, url);
-  
+
   m_s3fs = std::make_shared<dmlc::io::S3FileSystem>();
   m_s3fs->SetCredentials(url.access_key_id, url.secret_key);
   std::string url_without_credentials;
@@ -74,8 +74,8 @@ bool s3_device::good() const {
   else return false;
 }
 
-std::streampos s3_device::seek(std::streamoff off, 
-                               std::ios_base::seekdir way, 
+std::streampos s3_device::seek(std::streamoff off,
+                               std::ios_base::seekdir way,
                                std::ios_base::openmode openmode) {
   if (openmode == std::ios_base::in) {
     if (way == std::ios_base::beg) {

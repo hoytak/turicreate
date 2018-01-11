@@ -43,30 +43,30 @@ namespace turi {
    (even dynamically changeable at runtime), but the caveat is that
    you must know the exact stored type to be able to extract the data
    safely.
-   
+
    To serialize/deserialize the any, regular serialization procedures
    apply.  However, since a statically initialized type registration
    system is used to identify the type of the deserialized object, so
    the user must pay attention to a couple of minor issues.
-   
-   On serialization: 
-   
+
+   On serialization:
+
    \li \b a) If an any contains a serializable type, the any can be
              serialized.
    \li \b b) If an any contains an unserializable type, the
              serialization will fail at runtime.
-   
+
    On deserialization:
-   
+
    \li \b c) An empty any can be constructed with no type information
              and it can be deserialized from an archive.
    \li \b d) However, the deserialization will fail at runtime if the
              true type of the any is never accessed / instantiated
              anywhere in the code.
-             
+
    Condition \b d) is particular unusual so I will illustrate with an
    example.
-   
+
    Given a simple user struct:
    \code
    struct UserStruct {
@@ -79,9 +79,9 @@ namespace turi {
      }
    }
   \endcode
-  
+
    If an any object contains the struct, it will be serializable.
-   
+
    \code
    UserStruct us;
    us.i = 10;
@@ -91,31 +91,31 @@ namespace turi {
    turi::oarchive oarc(fout);
    oarc << a;    // write the any
    \endcode
-   
+
    To deserialize, I will open an input archive and stream into an any.
-   
+
    \code
-   // open input 
+   // open input
    std::ifstream fin("test.bin");
    turi::iarchive iarc(fin);
    // create an any and read it
    any a;
-   iarc >> a; 
+   iarc >> a;
    \endcode
-   
+
    Now, unusually, the above code will fail, while the following code
    will succeed
-   
+
    \code
-   // open input 
+   // open input
    std::ifstream fin("test.bin");
    turi::iarchive iarc(fin);
    // create an any and read it
    any a;
-   iarc >> a; 
+   iarc >> a;
    std::cout << a.as<UserStruct>().i;
    \endcode
-   
+
    The <tt> a.as<UserStruct>() </tt> forces the instantiation of static functions
    which allow the any deserialization to identify the UserStruct type.
   */
@@ -147,7 +147,7 @@ namespace turi {
       : contents(new holder<ValueType>(value)) { }
 
     /// Construct an any from another any
-    any(const any & other) : 
+    any(const any & other) :
       contents(other.empty() ? NULL : other.contents->clone()) { }
 
     /// Destroy the contentss of this any
@@ -197,7 +197,7 @@ namespace turi {
         as<ValueType>() = rhs;
       } else { any(rhs).swap(*this); }
       return *this;
-    }    
+    }
 
     /**
      * Update the contents of this any to match the type of the other
@@ -215,15 +215,15 @@ namespace turi {
       return *this;
     }
 
-    std::ostream& print(std::ostream& out) const {     
-      return empty()? (out << "EMPTY") : contents->print(out);        
+    std::ostream& print(std::ostream& out) const {
+      return empty()? (out << "EMPTY") : contents->print(out);
     }
 
     /// Returns the type information of the stored data.
     const std::type_info& type() const {
       return empty() ? typeid(void) : contents->type();
     }
-    
+
     /// Return the name of the internal type as a string.
     const std::string type_name() const {
       return empty() ? "NULL" : std::string(contents->type().name());
@@ -235,9 +235,9 @@ namespace turi {
       if(contents != NULL) { delete contents; contents = NULL; }
       bool isempty(true);
       isoftarc >> isempty;
-      if (isempty == false) contents = iholder::load(isoftarc);      
+      if (isempty == false) contents = iholder::load(isoftarc);
     }
-    
+
     /// Saves the any to a file. Caveats apply. See the main any docs.
     void save(oarchive& arc) const {
       oarchive_soft_fail osoftarc(arc);
@@ -252,7 +252,7 @@ namespace turi {
      * This section contain the global registry used to determine the
      * deserialization code for a particular type.  Essentially the
      * registry is a global map in which all subtypes of iholder
-     * register a deserialization function with their type. 
+     * register a deserialization function with their type.
      */
 
     typedef iholder* (*deserialize_function_type)(iarchive_soft_fail& arc);
@@ -266,19 +266,19 @@ namespace turi {
      * statically declare the global registry
      */
     static registry_map_type& get_global_registry();
-    
+
   public:
 
     template <typename ValueType> static
-    typename boost::disable_if_c<boost::is_output_streamable<ValueType>::value, 
-                                 void>::type 
-    print_type_or_contents(std::ostream& out, const ValueType &h) { 
-      out << "Not_Printable[" << typeid(ValueType).name() << ']'; 
+    typename boost::disable_if_c<boost::is_output_streamable<ValueType>::value,
+                                 void>::type
+    print_type_or_contents(std::ostream& out, const ValueType &h) {
+      out << "Not_Printable[" << typeid(ValueType).name() << ']';
     }
 
     template <typename ValueType> static
-    typename boost::enable_if_c<boost::is_output_streamable<ValueType>::value, 
-                                void>::type 
+    typename boost::enable_if_c<boost::is_output_streamable<ValueType>::value,
+                                void>::type
     print_type_or_contents(std::ostream& out, const ValueType &h) { out << h; }
 
 
@@ -289,8 +289,8 @@ namespace turi {
      */
     template<typename ValueType>
     class holder : public iholder {
-    public: 
-      typedef ValueType value_type;   
+    public:
+      typedef ValueType value_type;
       /// The actual contents of the holder
       ValueType contents;
       /// Construct a holder from a value
@@ -310,9 +310,9 @@ namespace turi {
        * with this type of holder
        */
       uint64_t deserializer_id() const { return registry.localid; }
-      void save(oarchive_soft_fail &arc) const { 
-        arc << registry.localid << contents; 
-      }    
+      void save(oarchive_soft_fail &arc) const {
+        arc << registry.localid << contents;
+      }
       /**
        * Print the contents or the type if the contents does not
        * support printing
@@ -336,25 +336,25 @@ namespace turi {
        * deserialization.
        */
       struct registry_type {
-        uint64_t localid; 
-        registry_type() { 
+        uint64_t localid;
+        registry_type() {
           boost::hash<std::string> hash_function;
           // compute localid
           localid = hash_function(typeid(ValueType).name());
           any::get_global_registry()[localid] = holder::deserialize;
-        }        
+        }
       }; // end of registry type
       /**
        * The registry is a static member that will get constructed
        * before main and used to register the any type
        */
-      static registry_type registry;        
-    private: 
+      static registry_type registry;
+    private:
       holder& operator=(const holder& other) { }
     }; // end of class holder
 
   }; // end of class any
-  
+
 
   /**
    * This static membery computes the holder (type specific)
@@ -376,4 +376,3 @@ std::ostream& operator<<(std::ostream& out, const turi::any& any);
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #endif
-

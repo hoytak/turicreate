@@ -18,7 +18,7 @@ void set_conservative_socket_parameters(void* socket);
 extern int64_t FORCE_IPC_TO_TCP_FALLBACK;
 
 /**
- * Normalizes an zeromq address. 
+ * Normalizes an zeromq address.
  * On windows, this converts IPc addresses to localhost address.
  */
 std::string normalize_address(const std::string& address);

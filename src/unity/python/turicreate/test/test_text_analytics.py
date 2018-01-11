@@ -138,7 +138,7 @@ class FeatureEngineeringTest(unittest.TestCase):
             warnings.simplefilter("always")
             tc.text_analytics.count_ngrams(self.sa_word, n=10, method='word')
             assert len(context) == 1
-            
+
 
     def test_trim_rare_words(self):
         """

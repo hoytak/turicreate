@@ -36,4 +36,3 @@ struct show_window : ::boost::process::detail::handler_base
 }}}}
 
 #endif
-

@@ -15,7 +15,7 @@ general_fstream_sink::general_fstream_sink(std::string file) {
   open_file(file, boost::ends_with(file, ".gz"));
 }
 
-general_fstream_sink::general_fstream_sink(std::string file, 
+general_fstream_sink::general_fstream_sink(std::string file,
                                                bool gzip_compressed) {
   open_file(file, gzip_compressed);
 }
@@ -35,7 +35,7 @@ bool general_fstream_sink::is_open() const {
   return underlying_stream && !underlying_stream->bad();
 }
 
-std::streamsize general_fstream_sink::write(const char* c, 
+std::streamsize general_fstream_sink::write(const char* c,
                                             std::streamsize bufsize) {
 #ifdef _WIN32
 // windows has interesting issues if bufsize >= 2GB
@@ -72,8 +72,8 @@ general_fstream_sink::~general_fstream_sink() {
     try {
       close();
     } catch (...) {
-      logstream(LOG_ERROR) << "Exception occured on closing " 
-                           << sanitized_filename 
+      logstream(LOG_ERROR) << "Exception occured on closing "
+                           << sanitized_filename
                            << ". The file may not be properly written" << std::endl;
     }
   }

@@ -31,7 +31,7 @@ void call_dispatch(cppipc::dispatch* d,
                    std::stringstream& response) {
   turi::iarchive iarc(message);
   turi::oarchive oarc(response);
-  d->execute(testobject, NULL /* comm_server here. we don't have one */, 
+  d->execute(testobject, NULL /* comm_server here. we don't have one */,
              iarc, oarc);
 }
 

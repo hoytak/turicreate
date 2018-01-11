@@ -52,4 +52,3 @@ void parse_cert_parameter(const char *cert_parameter,
 #endif
 
 #endif /* HEADER_CURL_TOOL_GETPARAM_H */
-

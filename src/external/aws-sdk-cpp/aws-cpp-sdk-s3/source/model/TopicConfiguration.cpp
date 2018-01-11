@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-TopicConfiguration::TopicConfiguration() : 
+TopicConfiguration::TopicConfiguration() :
     m_idHasBeenSet(false),
     m_topicArnHasBeenSet(false),
     m_eventsHasBeenSet(false),
@@ -37,7 +37,7 @@ TopicConfiguration::TopicConfiguration() :
 {
 }
 
-TopicConfiguration::TopicConfiguration(const XmlNode& xmlNode) : 
+TopicConfiguration::TopicConfiguration(const XmlNode& xmlNode) :
     m_idHasBeenSet(false),
     m_topicArnHasBeenSet(false),
     m_eventsHasBeenSet(false),

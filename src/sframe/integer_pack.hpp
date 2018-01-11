@@ -27,20 +27,20 @@ namespace turi {
  * Integer Packing Routines
  */
 namespace integer_pack {
-/** 
+/**
  * Performs a byte aligned variable length encode of 8 byte wide integers.
- * 
- * It is important to remember that x86(-64) is little endian. i.e. the 
- * least significant byte is at the lowest memory address. 
- * This makes the presentation a little different from how most other 
+ *
+ * It is important to remember that x86(-64) is little endian. i.e. the
+ * least significant byte is at the lowest memory address.
+ * This makes the presentation a little different from how most other
  * integer compression blogs which generally "prefix" the binary string
- * with stuff, thus in the most significant bits. This 
- * makes it very complicated to decode. Here we are instead going to 
+ * with stuff, thus in the most significant bits. This
+ * makes it very complicated to decode. Here we are instead going to
  * attach stuff to the lowest significant bits which will then appear as a
  * prefix when writing to a stream.
- *  
+ *
  * The format is relatively straightforward.
- * [... binary representation of number .. ] [0] [as many "1" bits as (length of 
+ * [... binary representation of number .. ] [0] [as many "1" bits as (length of
  *                                                number in bytes, rounded up. - 1)]
  *
  * Essentially this leaves 8 possible encodings
@@ -74,47 +74,47 @@ static inline void variable_encode(OutArcType& oarc, uint64_t s) {
     oarc.direct_assign(trunc_s);
   }
   else if ((s >> (16-2)) == 0) {
-    // 0b00000000 00000000 - 
+    // 0b00000000 00000000 -
     // 0b00111111 11111111
     uint16_t trunc_s = s;
     trunc_s = (trunc_s << 2) | 1;
     oarc.direct_assign(trunc_s);
   }
   else if ((s >> (24-3)) == 0) {
-    // 0b00000000 00000000 00000000 - 
+    // 0b00000000 00000000 00000000 -
     // 0b00011111 11111111 11111111
     uint32_t trunc_s = s;
     trunc_s = (trunc_s << 3) | 3;
     oarc.write((char*)(&trunc_s), 3);
-  } 
+  }
   else if ((s >> (32-4)) == 0) {
-    // 0b00000000 00000000 00000000 00000000 - 
+    // 0b00000000 00000000 00000000 00000000 -
     // 0b00001111 11111111 11111111 11111111
     uint32_t trunc_s = s;
     trunc_s = (trunc_s << 4) | 7;
     oarc.direct_assign(trunc_s);
-  } 
+  }
   else if ((s >> (40-5)) == 0) {
-    // 0b00000000 00000000 00000000 00000000 00000000 - 
+    // 0b00000000 00000000 00000000 00000000 00000000 -
     // 0b00000111 11111111 11111111 11111111 11111111
     uint64_t trunc_s = s;
     trunc_s = (trunc_s << 5) | 15;
     oarc.write((char*)(&trunc_s), 5);
-  } 
+  }
   else if ((s >> (48-6)) == 0) {
-    // 0b00000000 00000000 00000000 00000000 00000000 00000000 - 
+    // 0b00000000 00000000 00000000 00000000 00000000 00000000 -
     // 0b00000011 11111111 11111111 11111111 11111111 11111111
     uint64_t trunc_s = s;
     trunc_s = (trunc_s << 6) | 31;
     oarc.write((char*)(&trunc_s), 6);
-  } 
+  }
   else if ((s >> (56-7)) == 0) {
-    // 0b00000000 00000000 00000000 00000000 00000000 00000000 00000000 - 
+    // 0b00000000 00000000 00000000 00000000 00000000 00000000 00000000 -
     // 0b00000001 11111111 11111111 11111111 11111111 11111111 11111111
     uint64_t trunc_s = s;
     trunc_s = (trunc_s << 7) | 63;
     oarc.write((char*)(&trunc_s), 7);
-  } 
+  }
   else {
     // all 8 bytes
     unsigned char c = 127;
@@ -168,9 +168,9 @@ static inline void variable_decode(InArcType& iarc, uint64_t & s) {
  * Maps values [0,-1,1,-2,2,-3,3,-4,4...] to [0,1,2,3,4,5,6,...]
  * return 2*|val| - sign.
  *
- * (This is equivalent Google Protobuf's ZigZag encoding 
+ * (This is equivalent Google Protobuf's ZigZag encoding
  * (see https://developers.google.com/protocol-buffers/docs/encoding#types)
- * and can be more compactly written as (n << 1) ^ (n >> 63) 
+ * and can be more compactly written as (n << 1) ^ (n >> 63)
  * (requiring only 3 ops instead of 5 ops here)
  *
  */
@@ -179,11 +179,11 @@ inline uint64_t shifted_integer_encode(int64_t val) {
   int64_t sign = (val >> 63);
   // turning a negative value into a positive value is ~(t - 1)
   uint64_t absval = (val + sign) ^ sign; // compute the absolute value
-  return (absval << 1) + sign; 
+  return (absval << 1) + sign;
 }
 
 /**
- * Reverse of shifted_integer_encode. 
+ * Reverse of shifted_integer_encode.
  * Maps values  [0,1,2,3,4,5,6,...] to [0,-1,1,-2,2,-3,3,-4,4...]
  */
 inline int64_t shifted_integer_decode(uint64_t val) {
@@ -238,13 +238,13 @@ static constexpr unsigned char FRAME_OF_REFERENCE_HEADER_MASK = 3;
  *   apply the \ref shifted_integer_encode() to the delta array, and
  *   pack that using as few bits as possible. See below for the details on
  *   the packing.
- *   
+ *
  * Packing
  * -------
  * After the values to be coded are generated (see above), the remaining numbers
  * are packed by finding the maximum number of bits required to represent
- * any value.  
- * i.e. 
+ * any value.
+ * i.e.
  *
  *     [0,0,0,0,0,0] --> 0 bit maximum
  *     [1,0,1,0,1,0] --> 1 bit maximum
@@ -262,7 +262,7 @@ static constexpr unsigned char FRAME_OF_REFERENCE_HEADER_MASK = 3;
  *
  * Then one of the pack_... functions are used to code the values.
  *
- * Coding 
+ * Coding
  * ------
  * First there is a 1 byte header:
  * [6 bit: 1 + log2 code length] [2 bits codec type]
@@ -271,7 +271,7 @@ static constexpr unsigned char FRAME_OF_REFERENCE_HEADER_MASK = 3;
  *   - FRAME_OF_REFERENCE
  *   - FRAME_OF_REFERENCE_DELTA
  *   - FRAME_OF_REFERENCE_DELTA_NEGATIVE
- *  
+ *
  *
  * \note The coding does not store the number of values stored. The decoder
  * \ref frame_of_reference_decode_128() requires the number of values to
@@ -279,8 +279,8 @@ static constexpr unsigned char FRAME_OF_REFERENCE_HEADER_MASK = 3;
  */
 template <typename OutArcType>
 GL_HOT
-void frame_of_reference_encode_128(const uint64_t* input, 
-                                   size_t len, 
+void frame_of_reference_encode_128(const uint64_t* input,
+                                   size_t len,
                                    OutArcType& oarc) {
   if (len == 0) return;
   DASSERT_LE(len, 128);
@@ -291,12 +291,12 @@ void frame_of_reference_encode_128(const uint64_t* input,
   //
   // In Frame of Reference Delta, negative values are supported by mapping
   // this sequence (0, -1,1,-2,2,-3,3,-4,4...) to the [0,1,2,3,4,5,6,...]
-  // (Forward mapping is -> if i positive, return 2i, 
+  // (Forward mapping is -> if i positive, return 2i,
   //                        else if i negative, return -2i - 1)
-  // To do this in bits interestingly, simply involves making the 
+  // To do this in bits interestingly, simply involves making the
   // least significant bit the sign it. i.e.
   // return (abs(t) << 1) + sgn(t)
-  // Note that the conversion is 1-1. 
+  // Note that the conversion is 1-1.
   uint64_t minvalue = input[0];
   uint64_t frame[128];
   uint64_t delta[128];
@@ -312,19 +312,19 @@ void frame_of_reference_encode_128(const uint64_t* input,
   // Calculate the frame in the same loop as the rest
   frame[0] = input[0] - minvalue;
   uint64_t all_or_frame = frame[0];
-    
+
   if (is_incremental) {
     nbits_delta = 0;
     delta[0] = input[0];
 
-    uint64_t all_or = 0; 
+    uint64_t all_or = 0;
     for (size_t i = 1; i < len; ++i) {
       delta[i] = input[i] - input[i-1];
       all_or |= delta[i];
       frame[i] = input[i] - minvalue;
       all_or_frame |= frame[i];
     }
-        
+
     nbits_delta = 64 - n_leading_zeros(all_or);
   } else {
     nbits_delta_negative = 0;
@@ -341,7 +341,7 @@ void frame_of_reference_encode_128(const uint64_t* input,
     nbits_delta_negative = 64 - n_leading_zeros(all_or);
   }
   nbits_frame = 64 - n_leading_zeros(all_or_frame);
-  
+
   // whats the most efficient encoding?
   unsigned char coding_technique = 0;
   if (nbits_frame <= nbits_delta && nbits_frame <= nbits_delta_negative) {
@@ -373,7 +373,7 @@ void frame_of_reference_encode_128(const uint64_t* input,
 //   logstream(LOG_INFO) << "Encoding header " << (int)(header) << ": " << len << std::endl;
   if (coding_technique == FRAME_OF_REFERENCE) {
     variable_encode(oarc, minvalue);
-  } else if (coding_technique == FRAME_OF_REFERENCE_DELTA || 
+  } else if (coding_technique == FRAME_OF_REFERENCE_DELTA ||
              coding_technique == FRAME_OF_REFERENCE_DELTA_NEGATIVE) {
     variable_encode(oarc, input[0]);
     ++input;
@@ -409,7 +409,7 @@ void frame_of_reference_encode_128(const uint64_t* input,
     oarc.write((char*)pack, bytes_used);
     break;
    case 64:
-    oarc.write((char*)input, sizeof(uint64_t)*len); 
+    oarc.write((char*)input, sizeof(uint64_t)*len);
     break;
    default:
     ASSERT_TRUE(false);
@@ -426,11 +426,11 @@ void frame_of_reference_encode_128(const uint64_t* input,
 template <typename InArcType>
 void frame_of_reference_decode_128(InArcType& iarc,
                                    size_t len,
-                                   uint64_t* output) { 
+                                   uint64_t* output) {
   if (len == 0) return;
   DASSERT_LE(len, 128);
   unsigned char header;
-  iarc.read_into(header); 
+  iarc.read_into(header);
   unsigned char nbits = 0;
   unsigned char shiftpos = header >> FRAME_OF_REFERENCE_HEADER_NUM_BITS;
   unsigned char coding_technique = header & FRAME_OF_REFERENCE_HEADER_MASK;
@@ -446,7 +446,7 @@ void frame_of_reference_decode_128(InArcType& iarc,
 //   logstream(LOG_INFO) << "Decoding header " << (int)(header) << ": " << len << std::endl;
   if (coding_technique == FRAME_OF_REFERENCE) {
     variable_decode(iarc, minvalue);
-  } else if (coding_technique == FRAME_OF_REFERENCE_DELTA || 
+  } else if (coding_technique == FRAME_OF_REFERENCE_DELTA ||
            coding_technique == FRAME_OF_REFERENCE_DELTA_NEGATIVE) {
     variable_decode(iarc, output[0]);
     ++output;
@@ -482,7 +482,7 @@ void frame_of_reference_decode_128(InArcType& iarc,
     unpack_32((uint32_t*)pack, len, output);
     break;
    case 64:
-    iarc.read((char*)output, sizeof(uint64_t)*len); 
+    iarc.read((char*)output, sizeof(uint64_t)*len);
     break;
    default:
     ASSERT_TRUE(false);
@@ -497,13 +497,13 @@ void frame_of_reference_decode_128(InArcType& iarc,
   } else if (coding_technique == FRAME_OF_REFERENCE_DELTA) {
     for (int i = 0;i < (int)len; ++i) {
       // yes this will will go below 0. yes this is intentional
-      output[i] += output[i-1]; 
+      output[i] += output[i-1];
     }
   } else if (coding_technique == FRAME_OF_REFERENCE_DELTA_NEGATIVE) {
     for (int i = 0;i < (int)len; ++i) {
       output[i] = shifted_integer_decode(output[i]);
       // yes this will will go below 0. yes this is intentional
-      output[i] += output[i-1]; 
+      output[i] += output[i-1];
     }
   }
 }

@@ -16,7 +16,7 @@ rank = rabit.get_rank()
 a = np.zeros(n)
 for i in xrange(n):
     a[i] = rank + i
-    
+
 print '@node[%d] before-allreduce: a=%s' % (rank, str(a))
 a = rabit.allreduce(a, rabit.MAX)
 print '@node[%d] after-allreduce-max: a=%s' % (rank, str(a))

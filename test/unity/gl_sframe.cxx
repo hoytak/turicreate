@@ -22,7 +22,7 @@ struct gl_sframe_test {
       sf["c"] = "x";
       _assert_sarray_equals(sf["c"], {"x","x","x","x"});
       sf["d"] = FLEX_UNDEFINED;
-      _assert_sarray_equals(sf["d"], 
+      _assert_sarray_equals(sf["d"],
                             {FLEX_UNDEFINED, FLEX_UNDEFINED, FLEX_UNDEFINED, FLEX_UNDEFINED});
       TS_ASSERT_EQUALS((int)sf["d"].dtype(), (int)flex_type_enum::FLOAT);
 
@@ -67,7 +67,7 @@ struct gl_sframe_test {
 
     void test_apply() {
       gl_sframe sf(_make_reference_frame());
-      sf["c"] = sf.apply([](const std::vector<flexible_type>& f) { return f[0]; }, 
+      sf["c"] = sf.apply([](const std::vector<flexible_type>& f) { return f[0]; },
                          flex_type_enum::INTEGER);
       _assert_sarray_equals(sf["a"], _to_vec(sf["c"]));
     }
@@ -82,7 +82,7 @@ struct gl_sframe_test {
       std::cout <<  sf3;
       std::cout <<  sf3.sample(.3);
       std::cout <<  sf3.sample(.3, 12345);
-    }  
+    }
     void test_sample_split() {
       gl_sframe sf(_make_reference_frame());
       {
@@ -197,15 +197,15 @@ struct gl_sframe_test {
       gl_sframe sf3 = sf.join(sf2, {"a"}, "left");
 
       sf["c"] = sf["b"];
-      _assert_sframe_equals(sf3, sf); 
+      _assert_sframe_equals(sf3, sf);
     }
 
     void test_pack_unpack() {
       auto reference = _make_reference_frame();
       gl_sframe sf(reference.pack_columns(reference.column_names(), "X1"));
-      
+
       gl_sarray sa = _make_reference_frame()
-          .apply([](const std::vector<flexible_type>& f) { return f; }, 
+          .apply([](const std::vector<flexible_type>& f) { return f; },
                  flex_type_enum::LIST);
 
       _assert_sarray_equals(sf["X1"], _to_vec(sa));
@@ -223,13 +223,13 @@ struct gl_sframe_test {
                           {"category.service", {FLEX_UNDEFINED, 1, 1, FLEX_UNDEFINED}},
                           {"category.shop", {1, 1, FLEX_UNDEFINED, 1}}});
      std::cout << sf;
-     std::cout <<  sf.pack_columns({"category.retail", "category.food", 
-               "category.service", "category.shop"}, 
+     std::cout <<  sf.pack_columns({"category.retail", "category.food",
+               "category.service", "category.shop"},
                "category");
 
-     std::cout << sf.pack_columns({"category.retail", "category.food", 
-               "category.service", "category.shop"}, 
-               "category", 
+     std::cout << sf.pack_columns({"category.retail", "category.food",
+               "category.service", "category.shop"},
+               "category",
                flex_type_enum::DICT);
     }
 
@@ -239,7 +239,7 @@ struct gl_sframe_test {
       // to compare equality, need to make sure the unstacked group has the same order
       // since the unstacking can be in arbitrary ordering
       // i.e. we need to sort it.
-      auto group_sort = 
+      auto group_sort =
           [](const flexible_type& x) -> flexible_type{
             flex_list v = x;
             std::sort(v.begin(), v.end());
@@ -337,7 +337,7 @@ struct gl_sframe_test {
       in_parallel([&](size_t thread_idx, size_t num_threads) {
         size_t start_idx = sf_size * thread_idx / num_threads;
         size_t end_idx = sf_size * (thread_idx + 1) / num_threads;
-        for (const auto& v: sf.range_iterator(start_idx, end_idx)) { 
+        for (const auto& v: sf.range_iterator(start_idx, end_idx)) {
           TS_ASSERT_EQUALS((int)v[0], 0);
           TS_ASSERT_EQUALS((int)v[1], 1);
         }
@@ -397,7 +397,7 @@ struct gl_sframe_test {
       return ret;
     }
 
-    void _assert_flexvec_equals(const std::vector<flexible_type>& sa, 
+    void _assert_flexvec_equals(const std::vector<flexible_type>& sa,
                                 const std::vector<flexible_type>& sb) {
       TS_ASSERT_EQUALS(sa.size(), sb.size());
       for (size_t i = 0;i < sa.size() ;++i) {

@@ -27,7 +27,7 @@
 #include <random/random.hpp>
 
 namespace turi {
-  
+
 namespace text {
 
 class scvb0_solver {
@@ -45,27 +45,27 @@ class scvb0_solver {
 
   /**
    * Train the model using the SCVB0 algorithm.
-   * 
+   *
    * See Foulds, Boyles, DuBois, Smyth, Welling.
    * Stochastic Collapsed Variational Bayesian Inference
    * for Latent Dirichlet Allocation. KDD 2013.
-   * See http://arxiv.org/pdf/1305.2452.pdf for a pdf. 
+   * See http://arxiv.org/pdf/1305.2452.pdf for a pdf.
    *
-   * The key aspect of this algorithm is to keep a set of statistics that 
+   * The key aspect of this algorithm is to keep a set of statistics that
    * describe the number of times each word in the vocabulary has been assigned
    * to each topic. We then iterate through minibatches of documents and
-   * perform updates akin to online EM: we use our current statistics (N_Z and N_phi) 
+   * perform updates akin to online EM: we use our current statistics (N_Z and N_phi)
    * to make estimated "local" versions using the minibatch.
    *
    */
-  void train(std::shared_ptr<sarray<flexible_type>> data, bool verbose); 
+  void train(std::shared_ptr<sarray<flexible_type>> data, bool verbose);
 
 
  private:
   topic_model* model;
 
   // Hyperparameters for learning rate
-  size_t s; 
+  size_t s;
   size_t tau;
   double kappa;
 
@@ -79,7 +79,7 @@ class scvb0_solver {
  private:
 
   /**
-   * Initialize global estimate of N_theta_j. 
+   * Initialize global estimate of N_theta_j.
    */
   void initialize_N_theta_j(size_t C_j) {
      N_theta_j = arma::zeros(model->num_topics, 1);
@@ -103,7 +103,7 @@ class scvb0_solver {
     // DASSERT(i >= 0 && i < vocab_size);
     arma::mat gamma_ij(model->num_topics, 1);
     for (size_t k = 0; k < model->num_topics; ++k) {
-      gamma_ij(k, 0) = (N_phi(w_ij, k) + model->beta) * 
+      gamma_ij(k, 0) = (N_phi(w_ij, k) + model->beta) *
         (N_theta_j(k) + model->alpha) /
         (N_Z(k) + model->beta * model->vocab_size);
     }
@@ -120,7 +120,7 @@ class scvb0_solver {
                         size_t C_j,
                         double rho) {
     double alpha = std::pow(1 - rho, count_ij);
-    N_theta_j = alpha * N_theta_j + C_j * gamma_ij * (1 - alpha); 
+    N_theta_j = alpha * N_theta_j + C_j * gamma_ij * (1 - alpha);
   }
 
   /**
@@ -149,7 +149,7 @@ class scvb0_solver {
    * Update local estimate of N_phi with the current token probabilities.
    */
   void update_N_phi_hat(const arma::mat& gamma_ij,
-                        size_t word_ij, 
+                        size_t word_ij,
                         size_t M, size_t C) {
     for (size_t k = 0; k < model->num_topics; ++k) {
       N_phi_hat(word_ij, k) += gamma_ij(k) * C / M;

@@ -42,61 +42,61 @@ namespace Model
     DeleteObjectsResult(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
     DeleteObjectsResult& operator=(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
 
-    
+
     inline const Aws::Vector<DeletedObject>& GetDeleted() const{ return m_deleted; }
 
-    
+
     inline void SetDeleted(const Aws::Vector<DeletedObject>& value) { m_deleted = value; }
 
-    
+
     inline void SetDeleted(Aws::Vector<DeletedObject>&& value) { m_deleted = value; }
 
-    
+
     inline DeleteObjectsResult& WithDeleted(const Aws::Vector<DeletedObject>& value) { SetDeleted(value); return *this;}
 
-    
+
     inline DeleteObjectsResult& WithDeleted(Aws::Vector<DeletedObject>&& value) { SetDeleted(value); return *this;}
 
-    
+
     inline DeleteObjectsResult& AddDeleted(const DeletedObject& value) { m_deleted.push_back(value); return *this; }
 
-    
+
     inline DeleteObjectsResult& AddDeleted(DeletedObject&& value) { m_deleted.push_back(value); return *this; }
 
-    
+
     inline const RequestCharged& GetRequestCharged() const{ return m_requestCharged; }
 
-    
+
     inline void SetRequestCharged(const RequestCharged& value) { m_requestCharged = value; }
 
-    
+
     inline void SetRequestCharged(RequestCharged&& value) { m_requestCharged = value; }
 
-    
+
     inline DeleteObjectsResult& WithRequestCharged(const RequestCharged& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline DeleteObjectsResult& WithRequestCharged(RequestCharged&& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline const Aws::Vector<Error>& GetErrors() const{ return m_errors; }
 
-    
+
     inline void SetErrors(const Aws::Vector<Error>& value) { m_errors = value; }
 
-    
+
     inline void SetErrors(Aws::Vector<Error>&& value) { m_errors = value; }
 
-    
+
     inline DeleteObjectsResult& WithErrors(const Aws::Vector<Error>& value) { SetErrors(value); return *this;}
 
-    
+
     inline DeleteObjectsResult& WithErrors(Aws::Vector<Error>&& value) { SetErrors(value); return *this;}
 
-    
+
     inline DeleteObjectsResult& AddErrors(const Error& value) { m_errors.push_back(value); return *this; }
 
-    
+
     inline DeleteObjectsResult& AddErrors(Error&& value) { m_errors.push_back(value); return *this; }
 
   private:

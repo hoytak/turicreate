@@ -281,5 +281,3 @@ double conviction_score(const double& LHS_support, const double& RHS_support, co
 } // turicreate
 
 #endif
-
-

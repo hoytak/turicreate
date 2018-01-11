@@ -96,51 +96,51 @@ extern void __print_back_trace();
  * \def CHECK(condition)
  * CHECK dies with a fatal error if condition is not true.  It is *not*
  * controlled by NDEBUG, so the check will be executed regardless of
- * compilation mode.  
+ * compilation mode.
  */
 /**
  * \def ASSERT_TRUE(val)
- * Expects val to evaluate to true, dies with a fatal error otherwise. Synonyms are 
+ * Expects val to evaluate to true, dies with a fatal error otherwise. Synonyms are
  * EXPECT_TRUE
  */
 /**
  * \def ASSERT_FALSE(val)
- * Expects val to evaluate to false, dies with a fatal error otherwise. Synonyms are 
+ * Expects val to evaluate to false, dies with a fatal error otherwise. Synonyms are
  * EXPECT_FALSE
  */
 /**
  * \def CHECK_EQ(val1, val2)
- * Expects val1 == val2, dies with a fatal error otherwise. Synonyms are 
- * ASSERT_EQ and EXPECT_EQ. 
+ * Expects val1 == val2, dies with a fatal error otherwise. Synonyms are
+ * ASSERT_EQ and EXPECT_EQ.
  */
 /**
  * \def CHECK_NE(val1, val2)
- * Expects val1 != val2, dies with a fatal error otherwise. Synonyms are 
+ * Expects val1 != val2, dies with a fatal error otherwise. Synonyms are
  * ASSERT_NE and EXPECT_NE
  */
 /**
  * \def CHECK_LE(val1, val2)
- * Expects val1 <= val2, dies with a fatal error otherwise. Synonyms are 
+ * Expects val1 <= val2, dies with a fatal error otherwise. Synonyms are
  * ASSERT_LE and EXPECT_LE
  */
 /**
  * \def CHECK_LT(val1, val2)
- * Expects val1 < val2, dies with a fatal error otherwise. Synonyms are 
+ * Expects val1 < val2, dies with a fatal error otherwise. Synonyms are
  * ASSERT_LT and EXPECT_LT
  */
 /**
  * \def CHECK_GE(val1, val2)
- * Expects val1 >= val2, dies with a fatal error otherwise. Synonyms are 
+ * Expects val1 >= val2, dies with a fatal error otherwise. Synonyms are
  * ASSERT_GE and EXPECT_GE
  */
 /**
  * \def CHECK_GT(val1, val2)
- * Expects val1 > val2, dies with a fatal error otherwise. Synonyms are 
+ * Expects val1 > val2, dies with a fatal error otherwise. Synonyms are
  * ASSERT_GT and EXPECT_GT
  */
 /**
  * \def CHECK_DELTA(val1, val2, delta)
- * Expects |val1 - val2| <= delta difference, 
+ * Expects |val1 - val2| <= delta difference,
  * dies with a fatal error otherwise. Mainly meant for floating point values.
  * ASSERT_DELTA and EXPECT_DELTA
  */
@@ -388,4 +388,3 @@ extern void __print_back_trace();
 #endif
 
 #endif // _LOGGING_H_
-

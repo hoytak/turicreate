@@ -9,9 +9,9 @@
 #include <sstream>
 
 namespace CoreML {
-    
+
   static const char* m_prefix = "validator error: ";
-    
+
   Result::Result() : m_type(ResultType::NO_ERROR), m_message("not an error") { }
 
   Result::Result(ResultType type, const std::string& message) :
@@ -64,5 +64,5 @@ namespace CoreML {
     out.m_type = ResultType::FEATURE_TYPE_INVARIANT_VIOLATION;
     return out;
   }
-  
+
 }

@@ -31,14 +31,14 @@ namespace distributed_sgraph_compute {
  *
  * The actual on disk representation looks like the following:
  *
- * Where the partition size (\ref partition_size) is 4, we shuffle all the 
+ * Where the partition size (\ref partition_size) is 4, we shuffle all the
  * vertices into 4 SFrames, each of 1 segment. The shuffling is performed by
  * simply hashing the vertex ID into one of the buckets.
  *
  * The edges however, are placed into 4*4=16 SFrames, each of 1 segment.
  * Each edge (src,dst) is placed into the (hash(src) % 4) * 4 + hash(dst) % 4.
  * Essentially the Edge SFrame can be thought of as cutting the adjacency matrix
- * into a 4x4 grid. 
+ * into a 4x4 grid.
  *
  * The result is that the edges in the block (0,0) is adjacent only to the
  * vertices in the first block (0), the edges in block (0,1) is adjacent only
@@ -46,7 +46,7 @@ namespace distributed_sgraph_compute {
  *
  * \verbatim
  *
- * Vertices                 Edges  
+ * Vertices                 Edges
  *  +---+      +-------+-------+-------+-------+
  *  |   |      |       |       |       |       |
  *  | 0 |      | (0,0) | (0,1) | (0,2) | (0,3) |
@@ -69,14 +69,14 @@ namespace distributed_sgraph_compute {
  *  be consistent and identical across all groups.
  *
  *  Vertex grouping is implemented by having multiple of the vertex blocks, one
- *  for each group. Thus m_vertex_groups[0] contains a vector of SFrames for 
- *  vertex group 0 and so on. 
+ *  for each group. Thus m_vertex_groups[0] contains a vector of SFrames for
+ *  vertex group 0 and so on.
  *
  *  Edges are not grouped and they may span any collection of vertices.
  *  However, to be able to efficiently slice vertices and edges across groups,
  *  there are g*g edges groups, where m_edge_groups[{a,b}]
  *  contain all the edges between group a and group b.
- */ 
+ */
 class sgraph {
  public:
 
@@ -99,13 +99,13 @@ class sgraph {
     size_t group = 0, partition = 0;
     vertex_partition_address() = default;
     vertex_partition_address(size_t group, size_t partition):
-        group(group),partition(partition) { } 
+        group(group),partition(partition) { }
 
     bool operator==(const vertex_partition_address& other) const {
       return group == other.group && partition == other.partition;
     }
     bool operator<(const vertex_partition_address& other) const {
-      return group < other.group || 
+      return group < other.group ||
           (group == other.group && partition < other.partition);
     }
   };
@@ -116,8 +116,8 @@ class sgraph {
 
     edge_partition_address() = default;
     edge_partition_address(size_t src_group, size_t dst_group,
-                           size_t partition1, size_t partition2) : 
-        src_group(src_group), dst_group(dst_group), 
+                           size_t partition1, size_t partition2) :
+        src_group(src_group), dst_group(dst_group),
         partition1(partition1), partition2(partition2) { }
 
     vertex_partition_address get_src_vertex_partition() {
@@ -139,7 +139,7 @@ class sgraph {
 
   sgraph& operator=(const sgraph& other) = default;
 
-  /** 
+  /**
    * Returns a sframe of vertices satisfying the id and field constraints.
    */
   sframe get_vertices(const std::vector<flexible_type>& vid_vec = {},
@@ -182,7 +182,7 @@ class sgraph {
 
   /**
    * Adds vertices to the graph.
-   * 
+   *
    * Note: The dataframe must contain the id_field_name
    */
    bool add_vertices(const dataframe_t& vertices,
@@ -220,7 +220,7 @@ class sgraph {
                          size_t group = 0);
 
   /**
-   * Similar to copy_vertex_field but work on edge data. 
+   * Similar to copy_vertex_field but work on edge data.
    * If the new_field already exists, it will be replaced.
    */
   bool copy_edge_field(const std::string& field, const std::string& new_field,
@@ -261,20 +261,20 @@ class sgraph {
   bool select_edge_fields(const std::vector<std::string>& fields, size_t groupa = 0, size_t groupb = 0);
 
   /**
-   * Resets the graph 
+   * Resets the graph
    */
   bool clear();
 
   /**
    * Returns the collection of SFrames containing all the vertices
    * in group groupid.
-   * 
+   *
    * This function can be used as the left hand side of an assignment.
    * i.e.
    * \code
    * vertex_group(group) = blah
    * \endcode
-   * The caller must guarantee that blah is of the right size. (i.e. 
+   * The caller must guarantee that blah is of the right size. (i.e.
    * blah.size() == get_num_partitions() )
    */
   inline std::vector<sframe>& vertex_group(size_t groupid = 0) {
@@ -301,10 +301,10 @@ class sgraph {
    * \code
    * edge_group(group) = blah
    * \endcode
-   * The caller must guarantee that blah is of the right size. (i.e. 
+   * The caller must guarantee that blah is of the right size. (i.e.
    * blah.size() == get_num_partitions() * get_num_partitions() )
    */
-  inline std::vector<sframe>& edge_group(size_t groupa = 0, 
+  inline std::vector<sframe>& edge_group(size_t groupa = 0,
                                          size_t groupb = 0) {
     ASSERT_LT(groupa, m_num_groups);
     ASSERT_LT(groupb, m_num_groups);
@@ -333,7 +333,7 @@ class sgraph {
    * vertex_partition(part, group) = sframe
    * \endcode
    */
-  inline sframe& vertex_partition(size_t partition, 
+  inline sframe& vertex_partition(size_t partition,
                                   size_t groupid = 0) {
     ASSERT_LT(partition, m_num_partitions);
     return vertex_group(groupid)[partition];
@@ -344,7 +344,7 @@ class sgraph {
    * Returns the SFrame containing all the vertices in a given partition
    * of a group groupid
    */
-  inline const sframe& vertex_partition(size_t partition, 
+  inline const sframe& vertex_partition(size_t partition,
                                         size_t groupid = 0) const {
     ASSERT_LT(partition, m_num_partitions);
     return vertex_group(groupid)[partition];
@@ -385,8 +385,8 @@ class sgraph {
    * \endcode
    */
   inline sframe& edge_partition(size_t partition1,
-                                size_t partition2, 
-                                size_t groupa = 0, 
+                                size_t partition2,
+                                size_t groupa = 0,
                                 size_t groupb = 0) {
     ASSERT_LT(partition1, m_num_partitions);
     ASSERT_LT(partition2, m_num_partitions);
@@ -616,7 +616,7 @@ class sgraph {
    * Extracts the data for a particular field of a group of vertices.
    * The column must exist. Assertion failure otherwise.
    */
-  std::vector<std::shared_ptr<sarray<flexible_type>>> 
+  std::vector<std::shared_ptr<sarray<flexible_type>>>
       fetch_vertex_data_field(std::string column_name, size_t group = 0) const;
 
 
@@ -625,7 +625,7 @@ class sgraph {
    * and return std::vector<std::vector<flexible_type>>
    * The column must exist. Assertion failure otherwise.
    */
-  std::vector<std::vector<flexible_type>> 
+  std::vector<std::vector<flexible_type>>
       fetch_vertex_data_field_in_memory(std::string column_name, size_t groupid = 0) const;
 
   /**
@@ -723,8 +723,8 @@ class sgraph {
   }
 
   /**
-   * A list of all the group names. The 0th group (the default group) 
-   * is always the group name "default". 
+   * A list of all the group names. The 0th group (the default group)
+   * is always the group name "default".
    */
   std::vector<std::string> m_vertex_group_names;
 
@@ -754,13 +754,13 @@ class sgraph {
   flex_type_enum m_vid_type = flex_type_enum::INTEGER;
 
   /**
-   * An array of the same length as vertex_group_names. 
+   * An array of the same length as vertex_group_names.
    * Each vertex group is represented as an array of sframes.
    */
   std::vector<std::vector<sframe> > m_vertex_groups;
 
   /**
-   * A map from (group, group) to an edge group. 
+   * A map from (group, group) to an edge group.
    * Each edge group is represented as an array of sframes.
    * Only the "upper triangle" of the group pair is defined. i.e.
    * to find all edges between group a and group b, it is in
@@ -780,7 +780,7 @@ class sgraph {
   /**
    * Adjust the columns in sf to be the order of column_names.
    * All columns in sf must exist in column_names, and the types must match column_types.
-   * For columns in column_names that are not in sf, add a dummy column filled 
+   * For columns in column_names that are not in sf, add a dummy column filled
    * with flexible_undefined values.
    */
   static bool reorder_and_add_new_columns(sframe& sf,
@@ -846,7 +846,7 @@ class sgraph {
 template<typename T, typename FLEX_TYPE>
 bool sgraph::add_vertex_field(std::vector<std::vector<T>>& column,
                               std::string column_name,
-                              flex_type_enum column_type, 
+                              flex_type_enum column_type,
                               size_t groupid) {
   auto vfields = get_vertex_fields();
   if (std::count(vfields.begin(), vfields.end(), column_name) != 0) {

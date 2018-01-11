@@ -229,5 +229,3 @@ Notes:
 
  - ./tunala -? gives you a list of other command-line options, but tunala.c is
    also a good place to look :-)
-
-

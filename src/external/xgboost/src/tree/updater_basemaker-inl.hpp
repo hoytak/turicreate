@@ -14,7 +14,7 @@
 #include <xgboost/src/utils/random.h>
 #include <xgboost/src/utils/quantile.h>
 
-// GLC parallel lambda premitive 
+// GLC parallel lambda premitive
 #include <parallel/lambda_omp.hpp>
 #include <parallel/pthread_tools.hpp>
 

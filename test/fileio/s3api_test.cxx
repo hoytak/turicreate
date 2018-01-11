@@ -48,8 +48,8 @@ struct s3api_test {
     TS_ASSERT(parse_s3url("s3://::AAA/bar", out)); // capital letter
     TS_ASSERT(!parse_s3url("s3://::abc-/bar", out)); // hyphen end
     TS_ASSERT(!parse_s3url("s3://::-abc/bar", out)); // hyphen begin
-    TS_ASSERT(!parse_s3url("s3://::a./bar", out)); // end dot 
-    TS_ASSERT(!parse_s3url("s3://::.a/bar", out)); // begin dot 
+    TS_ASSERT(!parse_s3url("s3://::a./bar", out)); // end dot
+    TS_ASSERT(!parse_s3url("s3://::.a/bar", out)); // begin dot
     TS_ASSERT(!parse_s3url("s3://::a/bar", out)); // too short
     TS_ASSERT(!parse_s3url("s3://::10.10.10.10/bar", out)); // ip address
     TS_ASSERT(parse_s3url("s3://::Turi-Dataset/bar", out)); // hyphen end

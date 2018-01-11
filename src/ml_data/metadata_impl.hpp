@@ -28,7 +28,7 @@ inline size_t ml_metadata::column_index(const std::string& _column_name, bool ma
   auto it = _column_name_to_index_map.find(_column_name);
 
   bool is_present = (it != _column_name_to_index_map.end());
-  
+
   if(max_on_error) {
     return LIKELY(is_present) ? it->second : size_t(-1);
   } else {
@@ -36,7 +36,7 @@ inline size_t ml_metadata::column_index(const std::string& _column_name, bool ma
       log_and_throw((std::string("Column ") + _column_name + " not found in model metadata.").c_str());
     }
     DASSERT_TRUE(column_name(it->second) == _column_name);
-    return it->second; 
+    return it->second;
   }
 }
 

@@ -23,7 +23,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-GetObjectTorrentRequest::GetObjectTorrentRequest() : 
+GetObjectTorrentRequest::GetObjectTorrentRequest() :
     m_bucketHasBeenSet(false),
     m_keyHasBeenSet(false),
     m_requestPayerHasBeenSet(false)

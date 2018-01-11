@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-CommonPrefix::CommonPrefix() : 
+CommonPrefix::CommonPrefix() :
     m_prefixHasBeenSet(false)
 {
 }
 
-CommonPrefix::CommonPrefix(const XmlNode& xmlNode) : 
+CommonPrefix::CommonPrefix(const XmlNode& xmlNode) :
     m_prefixHasBeenSet(false)
 {
   *this = xmlNode;

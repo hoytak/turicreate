@@ -28,11 +28,11 @@ echo="echo %s rabit_num_trial=$nrep;"
 keepalive = """
 nrep=0
 rc=254
-while [ $rc -eq 254 ]; 
+while [ $rc -eq 254 ];
 do
     export rabit_num_trial=$nrep
     %s
-    %s 
+    %s
     rc=$?;
     nrep=$((nrep+1));
 done
@@ -44,7 +44,7 @@ def exec_cmd(cmd, taskid, worker_env):
     cmd = ' '.join(cmd)
     env = os.environ.copy()
     for k, v in worker_env.items():
-        env[k] = str(v)        
+        env[k] = str(v)
     env['rabit_task_id'] = str(taskid)
     env['PYTHONPATH'] = WRAPPER_PATH
 
@@ -57,13 +57,13 @@ def exec_cmd(cmd, taskid, worker_env):
                 ntrial += 1
                 continue
         else:
-            if args.verbose != 0: 
+            if args.verbose != 0:
                 bash = keepalive % (echo % cmd, cmd)
             else:
                 bash = keepalive % ('', cmd)
             ret = subprocess.call(bash, shell=True, executable='bash', env = env)
         if ret == 0:
-            if args.verbose != 0:        
+            if args.verbose != 0:
                 print 'Thread %d exit with 0' % taskid
             return
         else:
@@ -83,7 +83,7 @@ def mthread_submit(nslave, worker_args, worker_envs):
          nslave number of slave process to start up
          args arguments to launch each job
               this usually includes the parameters of master_uri and parameters passed into submit
-    """       
+    """
     procs = {}
     for i in range(nslave):
         procs[i] = Thread(target = exec_cmd, args = (args.command + worker_args, i, worker_envs))

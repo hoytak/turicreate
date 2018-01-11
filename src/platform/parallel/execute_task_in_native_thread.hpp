@@ -19,7 +19,7 @@ namespace turi {
 std::exception_ptr execute_task_in_native_thread(const std::function<void(void)>& fn);
 
 namespace native_exec_task_impl {
-template <typename T> 
+template <typename T>
 struct value_type {
   T ret;
 
@@ -36,7 +36,7 @@ struct value_type {
   }
 };
 
-template <> 
+template <>
 struct value_type<void> {
 
   void get_result() { }

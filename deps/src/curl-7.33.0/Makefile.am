@@ -279,4 +279,3 @@ $(VC8LIBPRJ): $(VC8LIBPRJ_DEPS)
 	  > $(VC8LIBPRJ) || { rm -f $$body; exit 1; }; \
 	\
 	rm -f $$body)
-

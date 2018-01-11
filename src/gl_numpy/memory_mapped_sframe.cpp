@@ -16,7 +16,7 @@
 #include <util/code_optimization.hpp>
 #include <fileio/fs_utils.hpp>
 namespace turi {
-namespace gl_numpy { 
+namespace gl_numpy {
 
 /*
  * Since we can only hold flex_int and flex_float at the moment,
@@ -54,7 +54,7 @@ bool memory_mapped_sframe::load(sframe frame) {
   if (ret == false) return false;
 
   /*
-   * std::cout << "Creating SFrame mapping at " 
+   * std::cout << "Creating SFrame mapping at "
    *           << (void*)(m_ps->begin) << std::endl;
    */
   return true;
@@ -80,22 +80,22 @@ void memory_mapped_sframe::unload() {
 
 bool memory_mapped_sframe::activate() {
   /*
-   * The mapping between sframe and a flat memory address is 
+   * The mapping between sframe and a flat memory address is
    * mildly complicated by the need to support column types which
    * are of vector type. This means that there is not a 1-1 mapping between
    * columns and values: some columns may have more values than other columns.
    *
    * We are going to assume that for vector columns, the 1st element of the
-   * column tells us the size of the vector and we will interpret all the 
+   * column tells us the size of the vector and we will interpret all the
    * remaining values that way:
-   *   i.e. 
+   *   i.e.
    *    - From the 1st value, we say that all vectors are of length N
-   *    - if there are vectors later which are shorter than N, 
+   *    - if there are vectors later which are shorter than N,
    *      all remaining values are NaN
    *    - If there are vectors which are longer than N, the vector is truncated.
    *
    * The last annoyance is the mapping to the pagefault handler.
-   * The pagefault handler basically requires us to fill in one "page" 
+   * The pagefault handler basically requires us to fill in one "page"
    * and exactly that one page. No more, no less. So we may end up slicing
    * between rows to fill up the page. And that is kinda annoying.
    * We are going to assume the pagesize divides by 8 though, (which really
@@ -124,7 +124,7 @@ bool memory_mapped_sframe::activate() {
       m_type = flex_type_enum::FLOAT;
     }
   }
-  
+
   // fill in the remaining values
   m_values_per_row = 0;
   for (auto i : m_values_per_column) m_values_per_row += i;
@@ -133,14 +133,14 @@ bool memory_mapped_sframe::activate() {
   // assume that sizeof(flex_int) is same as sizeof(flex_float)
   m_length = m_values_per_row * m_frame.num_rows();
   m_length_in_bytes = m_length * sizeof(flex_int);
-  m_ps = 
-      user_pagefault::allocate(m_length_in_bytes, 
+  m_ps =
+      user_pagefault::allocate(m_length_in_bytes,
                [=](user_pagefault::userpf_page_set* ps,
                    char* page_address,
-                   size_t minimum_fill_length)->size_t { 
+                   size_t minimum_fill_length)->size_t {
                      return this->handler_callback(ps,
                                                    page_address,
-                                                   minimum_fill_length); 
+                                                   minimum_fill_length);
                    });
   return true;
 }
@@ -166,24 +166,24 @@ size_t memory_mapped_sframe::length() {
   return m_length;
 }
 
-inline void memory_mapped_sframe::integer_value_to_integer(const flexible_type& f, 
+inline void memory_mapped_sframe::integer_value_to_integer(const flexible_type& f,
                                                    flex_int* store) {
   (*store) =  f.get_type() != flex_type_enum::UNDEFINED ? f.get<flex_int>() : 0;
 }
 
-inline void memory_mapped_sframe::integer_value_to_float(const flexible_type& f, 
+inline void memory_mapped_sframe::integer_value_to_float(const flexible_type& f,
                                                          flex_int* store) {
-  (*reinterpret_cast<flex_float*>(store)) =  
+  (*reinterpret_cast<flex_float*>(store)) =
       f.get_type() != flex_type_enum::UNDEFINED ? f.get<flex_int>() : 0;
 }
 
-inline void memory_mapped_sframe::float_value_to_float(const flexible_type& f, 
+inline void memory_mapped_sframe::float_value_to_float(const flexible_type& f,
                                                        flex_int* store) {
   (*store) =  f.get_type() != flex_type_enum::UNDEFINED ? f.get<flex_int>() : M_NAN_VALUE;
 }
 
 
-inline GL_HOT_INLINE_FLATTEN 
+inline GL_HOT_INLINE_FLATTEN
 void memory_mapped_sframe::store_row_to_pointer(const sframe_rows::row& row,
                                                 flex_int* store) {
   if (m_type == flex_type_enum::INTEGER) {
@@ -217,7 +217,7 @@ void memory_mapped_sframe::store_row_to_pointer(const sframe_rows::row& row,
             for (size_t j = vec.size(); j < m_values_per_column[i]; ++j) {
               (*store++) = M_NAN_VALUE;
             }
-          } 
+          }
         } else {
           // missing value. all NaNs
           for (size_t j = 0; j < m_values_per_column[i]; ++j) {
@@ -239,16 +239,16 @@ size_t memory_mapped_sframe::handler_callback(user_pagefault::userpf_page_set* p
   size_t num_to_fill = minimum_fill_length / m_element_length;
   size_t start = s_addr - root;
 
-  // ok. so we basically need to fill from 
+  // ok. so we basically need to fill from
   // s_addr[0] to s_addr[num_to_fill]
   //
-  // filling in values 'start' to 'start + num_to_fill' of a 
+  // filling in values 'start' to 'start + num_to_fill' of a
   // "flattened" sframe (i.e. we think about the values in each row just
   // appearing consecutively one after another).
   // This is ever so slightly annoying.
   //
-  // Once again, to reiterate, we are assuming everything is already 
-  // 8 bytes == sizeof(flex_int) == sizeof(flex_float) aligned. 
+  // Once again, to reiterate, we are assuming everything is already
+  // 8 bytes == sizeof(flex_int) == sizeof(flex_float) aligned.
 
   size_t frame_row_start = start / m_values_per_row;
   size_t frame_row_start_offset = start - frame_row_start * m_values_per_row;
@@ -264,7 +264,7 @@ size_t memory_mapped_sframe::handler_callback(user_pagefault::userpf_page_set* p
    *    |                                          |
    *    --------------------------------------------
    *        ...         ...           ...
-   * 
+   *
    *  frame_row_start
    * |
    * |                       frame_row_start_offset
@@ -295,8 +295,8 @@ size_t memory_mapped_sframe::handler_callback(user_pagefault::userpf_page_set* p
    */
 
   sframe_rows rows;
-  // remember. read_rows exclude the "end" so we need to read one more row. 
-  m_reader->read_rows(frame_row_start, 
+  // remember. read_rows exclude the "end" so we need to read one more row.
+  m_reader->read_rows(frame_row_start,
                       frame_row_end + 1,
                       rows);
 
@@ -308,18 +308,18 @@ size_t memory_mapped_sframe::handler_callback(user_pagefault::userpf_page_set* p
       // first row
       // this row may be cut since we really only need to start from
       // frame_row_start_offset. so we read the row into a buffer
-      store_row_to_pointer(row, buffer_row.data()); 
+      store_row_to_pointer(row, buffer_row.data());
 
-      size_t first_row_last_elem = 
+      size_t first_row_last_elem =
           frame_row_start != frame_row_end ? buffer_row.size() : frame_row_end_offset;
       for (size_t col = frame_row_start_offset; col < first_row_last_elem; ++col) {
         (*s_addr++) = buffer_row[col];
       }
     } else if (row_number == frame_row_end) {
       // last row
-      // this row may be cut since we need to end at 
+      // this row may be cut since we need to end at
       // frame_row_end_offset. so we read the row into a buffer
-      store_row_to_pointer(row, buffer_row.data()); 
+      store_row_to_pointer(row, buffer_row.data());
       for (size_t col = 0; col < frame_row_end_offset; ++col) {
         (*s_addr++) = buffer_row[col];
       }

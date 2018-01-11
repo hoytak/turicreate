@@ -1418,7 +1418,7 @@ read_mac_metadata_blob(struct archive_read *a, struct tar *tar,
 			return ARCHIVE_OK;
 	}
 
- 	/* Read the body as a Mac OS metadata blob. */
+	/* Read the body as a Mac OS metadata blob. */
 	size = archive_entry_size(entry);
 
 	/*

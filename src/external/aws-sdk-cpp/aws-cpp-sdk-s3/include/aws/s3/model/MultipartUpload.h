@@ -163,19 +163,19 @@ namespace Model
      */
     inline MultipartUpload& WithStorageClass(StorageClass&& value) { SetStorageClass(value); return *this;}
 
-    
+
     inline const Owner& GetOwner() const{ return m_owner; }
 
-    
+
     inline void SetOwner(const Owner& value) { m_ownerHasBeenSet = true; m_owner = value; }
 
-    
+
     inline void SetOwner(Owner&& value) { m_ownerHasBeenSet = true; m_owner = value; }
 
-    
+
     inline MultipartUpload& WithOwner(const Owner& value) { SetOwner(value); return *this;}
 
-    
+
     inline MultipartUpload& WithOwner(Owner&& value) { SetOwner(value); return *this;}
 
     /**

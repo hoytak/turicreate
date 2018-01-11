@@ -50,7 +50,7 @@ void to_bytes(uint32_t val, uint8_t *bytes) {
 uint32_t to_int32(const uint8_t *bytes) {
   return (uint32_t) bytes[0]     |
      ((uint32_t) bytes[1] << 8)  |
-     ((uint32_t) bytes[2] << 16) | 
+     ((uint32_t) bytes[2] << 16) |
      ((uint32_t) bytes[3] << 24);
 }
 
@@ -73,7 +73,7 @@ void wiki_md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest) {
   h3 = 0x10325476;
 
   //Pre-processing:
-  //append "1" bit to message    
+  //append "1" bit to message
   //append "0" bits until message length in bits ≡ 448 (mod 512)
   //append length mod (2^64) to message
 
@@ -115,7 +115,7 @@ void wiki_md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest) {
         g = (5*i + 1) % 16;
       } else if (i < 48) {
         f = b ^ c ^ d;
-        g = (3*i + 5) % 16;          
+        g = (3*i + 5) % 16;
       } else {
         f = c ^ (b | (~d));
         g = (7*i) % 16;
@@ -150,7 +150,7 @@ void wiki_md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest) {
 
 std::string md5(std::string val) {
   uint8_t result[16];
-  wiki_md5(reinterpret_cast<const uint8_t*>(val.c_str()), 
+  wiki_md5(reinterpret_cast<const uint8_t*>(val.c_str()),
            val.length(), result);
   std::string ret(32, ' ');
   const char hexchars[17] = "0123456789ABCDEF";
@@ -165,7 +165,7 @@ std::string md5(std::string val) {
 
 std::string md5_raw(std::string val) {
   uint8_t result[16];
-  wiki_md5(reinterpret_cast<const uint8_t*>(val.c_str()), 
+  wiki_md5(reinterpret_cast<const uint8_t*>(val.c_str()),
            val.length(), result);
   return std::string(reinterpret_cast<char*>(result), 16);
 }

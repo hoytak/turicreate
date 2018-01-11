@@ -27,7 +27,7 @@ gl_sframe generate_data(std::map<std::string, flexible_type> opts) {
   std::vector<std::string> feature_names;
   std::vector<flex_type_enum> feature_types;
   feature_names = {"ints", "reals"};
-  feature_types = {flex_type_enum::INTEGER, 
+  feature_types = {flex_type_enum::INTEGER,
                    flex_type_enum::FLOAT};
 
   gl_sframe_writer writer(feature_names, feature_types, 1);
@@ -48,7 +48,7 @@ gl_sframe generate_data(std::map<std::string, flexible_type> opts) {
 /**
  * Construct a model from data and options.
  */
-std::shared_ptr<feature_binner> init_model(gl_sframe data, 
+std::shared_ptr<feature_binner> init_model(gl_sframe data,
                        std::map<std::string, flexible_type> opts) {
 
   std::shared_ptr<feature_binner> model;
@@ -101,7 +101,7 @@ void check_model(std::shared_ptr<feature_binner> model,
   flexible_type _get;
 
   // Answers.
-  std::map<std::string, flexible_type> default_options = { 
+  std::map<std::string, flexible_type> default_options = {
     {"exclude", false}
   };
   std::vector<std::string> _list_fields_ans = {
@@ -111,7 +111,7 @@ void check_model(std::shared_ptr<feature_binner> model,
   };
   std::map<std::string, flexible_type> options;
   for (const auto& kvp: default_options){
-    if (opts.count(kvp.first) == 0) { 
+    if (opts.count(kvp.first) == 0) {
       options[kvp.first] = kvp.second;
     } else {
       options[kvp.first] = opts[kvp.first];
@@ -123,7 +123,7 @@ void check_model(std::shared_ptr<feature_binner> model,
   auto observed_cols = variant_get_value<std::vector<std::string>>(
                             model->get_value_from_state("features"));
   TS_ASSERT(data.column_names() == observed_cols);
-  
+
   // Check options
   _options = model->get_current_options();
   for (auto& kvp: options){
@@ -139,7 +139,7 @@ void check_model(std::shared_ptr<feature_binner> model,
   // Check list_fields
   _list_fields = model->list_fields();
   for(const auto& f: _list_fields_ans){
-    TS_ASSERT(std::find(_list_fields.begin(), _list_fields.end(), f) 
+    TS_ASSERT(std::find(_list_fields.begin(), _list_fields.end(), f)
                                                     != _list_fields.end());
   }
 
@@ -175,24 +175,24 @@ void run_feature_binner_test(std::map<std::string, flexible_type> opts) {
  *  Run tests.
 */
 struct feature_binner_test  {
- 
+
   public:
 
 
   void test_feature_binner_basic_log_scale() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 8}, 
-      {"strategy", "logarithmic"}}; 
+      {"examples", 8},
+      {"strategy", "logarithmic"}};
     run_feature_binner_test(opts);
   }
- 
+
    void test_feature_binner_basic_quantiles() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 8}, 
-      {"strategy", "quantile"}}; 
+      {"examples", 8},
+      {"strategy", "quantile"}};
     run_feature_binner_test(opts);
   }
- 
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_feature_binner_test, feature_binner_test)

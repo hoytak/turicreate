@@ -13,12 +13,12 @@ namespace turi{
 namespace image_util{
 
 /**
-* Return the head of passed sarray, but cast to string. Used for printing on python side. 
+* Return the head of passed sarray, but cast to string. Used for printing on python side.
 */
 std::shared_ptr<unity_sarray> _head_str(std::shared_ptr<unity_sarray> image_sarray, size_t num_rows);
 
 /**
-* Return flex_vec flexible type that is sum of all images with data in vector form. 
+* Return flex_vec flexible type that is sum of all images with data in vector form.
 */
 
 flexible_type sum(std::shared_ptr<unity_sarray> unity_data);
@@ -36,7 +36,7 @@ flexible_type generate_mean(std::shared_ptr<unity_sarray> unity_data);
 /**************************************************************************/
 
 /**
- * Construct an sframe of flex_images, with url pointing to directory where images reside. 
+ * Construct an sframe of flex_images, with url pointing to directory where images reside.
  */
 std::shared_ptr<unity_sframe> load_images(std::string url, std::string format,
     bool with_path, bool recursive, bool ignore_failure, bool random_order);
@@ -90,7 +90,7 @@ flexible_type resize_image(const flexible_type& image, size_t resized_width,
 /** Resize an sarray of flex_image with the new size.
  */
 std::shared_ptr<unity_sarray> resize_image_sarray(
-    std::shared_ptr<unity_sarray> image_sarray, size_t resized_width, 
+    std::shared_ptr<unity_sarray> image_sarray, size_t resized_width,
     size_t resized_height, size_t resized_channels, bool decode = false);
 
 
@@ -107,7 +107,7 @@ std::shared_ptr<unity_sarray>
   image_sarray_to_vector_sarray(std::shared_ptr<unity_sarray> image_sarray,
       bool undefined_on_failure);
 
-/** Convert sarray of vector to sarray of image 
+/** Convert sarray of vector to sarray of image
  */
 std::shared_ptr<unity_sarray>
   vector_sarray_to_image_sarray(std::shared_ptr<unity_sarray> image_sarray,

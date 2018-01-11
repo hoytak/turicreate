@@ -20,7 +20,7 @@ class thread_pool;
  * Multiple parallel_task_queue objects can be associated with the same
  * thread_pool and each parallel_task_queue instance has its own indepedendent
  * task joining capability.
- * 
+ *
  * The parallel_task_queue also provides exception forwarding.
  * exception throws within a thread of type const char* will be caught
  * and forwarded to the join() function.
@@ -45,13 +45,13 @@ class parallel_task_queue {
    */
   parallel_task_queue(thread_pool& pool);
 
-  /** 
+  /**
    * Launch a single task into the thread pool which calls spawn_function.
    *
    * If virtual_threadid is set, the target thread will appear to have
    * thread ID equal to the requested thread ID.
    */
-  void launch(const boost::function<void (void)> &spawn_function, 
+  void launch(const boost::function<void (void)> &spawn_function,
               int virtual_threadid = -1);
 
 
@@ -60,7 +60,7 @@ class parallel_task_queue {
     Once this function returns normally, the queue is empty.
 
     Note that this function may not return if producers continually insert
-    tasks through launch. 
+    tasks through launch.
     */
   void join();
 
@@ -84,12 +84,12 @@ class parallel_task_queue {
   /**
    * \ingroup util
    * Manages a pool of threads.
-   * 
-   * The interface is nearly identical to the \ref thread_group. 
+   *
+   * The interface is nearly identical to the \ref thread_group.
    * The key difference is internal behavior. The thread pool preallocates a
-   * collection of threads which it keeps asleep. When tasks are issued 
+   * collection of threads which it keeps asleep. When tasks are issued
    * through the "launch" function, threads are woken up to perform the
-   * tasks. 
+   * tasks.
    *
    * The thread_pool object does not perform exception forwarding, use
    * parallel_task_queue for that.
@@ -105,16 +105,16 @@ class parallel_task_queue {
     size_t pool_size;
 
     mutex mut;
-    conditional event_condition;  
+    conditional event_condition;
     size_t tasks_inserted = 0;
     size_t tasks_completed = 0;
-    bool waiting_on_join = false; 
-      
+    bool waiting_on_join = false;
+
     bool cpu_affinity;
     // not implemented
     thread_pool& operator=(const thread_pool &thrgrp);
     thread_pool(const thread_pool&);
-      
+
     /**
        Called by each thread. Loops around a queue of tasks.
     */
@@ -125,40 +125,40 @@ class parallel_task_queue {
        Resets the task and exception queue
     */
     void spawn_thread_group();
-      
+
     /**
        Destroys the thread pool.
        Also destroys the task queue
     */
     void destroy_all_threads();
   public:
-      
-    /** Initializes a thread pool with nthreads. 
-     * If affinity is set, the nthreads will by default stripe across 
-     * the available cores on the system. 
+
+    /** Initializes a thread pool with nthreads.
+     * If affinity is set, the nthreads will by default stripe across
+     * the available cores on the system.
      */
     thread_pool(size_t nthreads = 2, bool affinity = false);
-    
+
     /**
      * Set the number of threads in the queue
      */
     void resize(size_t nthreads);
-    
+
     /**
      * Get the number of threads
      */
     size_t size() const;
 
 
-    /** 
+    /**
      * Queues a single task into the thread pool which calls spawn_function.
      *
      * If virtual_threadid is set, the target thread will appear to have
      * thread ID equal to the requested thread ID.
      */
-    void launch(const boost::function<void (void)> &spawn_function, 
+    void launch(const boost::function<void (void)> &spawn_function,
                  int virtual_threadid = -1);
-    
+
     void join();
 
     /**
@@ -169,7 +169,7 @@ class parallel_task_queue {
      * new threads are created with the new affinity setting.
      */
     void set_cpu_affinity(bool affinity);
-      
+
     /**
        Gets the CPU affinity.
     */

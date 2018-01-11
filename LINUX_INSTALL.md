@@ -1,7 +1,7 @@
 # Linux Installation Instructions
 
 The minimum requirements are:
- - python 2.7 
+ - python 2.7
  - glibc >= 2.12 (Centos >= 6, Ubuntu >= 10.10)
  - For Neural Network support, glibc >= 2.17 is needed. Centos >= 7 and Ubuntu >= 13.04
  - libstdc++ >= 6.0.21
@@ -143,7 +143,7 @@ wget ftp://ftp.pbone.net/mirror/li.nux.ro/download/nux/dextop/el6/x86_64/chrome-
 sudo rpm -i --badreloc --noscripts --relocate /opt/google/chrome=$HOME chrome-deps-stable-3.11-1.x86_64.rp
 ```
 
-This will install libstdc++.so into $HOME/lib. 
+This will install libstdc++.so into $HOME/lib.
 Alternatively, you can compile gcc >= 5.4 from source.
 
 Every time you open a new bash session, you should run the following commands.You could put them in ~/.bashrc for convenience.
@@ -176,7 +176,7 @@ pip install turicreate
 ### Centos 6
 
 The situation with Centos 6 is somewhat complicated since Centos 6 ships with
-Python 2.6 which is not compatible. We also need to be obtaining a recent version of 
+Python 2.6 which is not compatible. We also need to be obtaining a recent version of
 libstdc++.
 
 Basically, what you need is
@@ -217,7 +217,7 @@ wget ftp://ftp.pbone.net/mirror/li.nux.ro/download/nux/dextop/el6/x86_64/chrome-
 sudo rpm -i --badreloc --noscripts --relocate /opt/google/chrome=$HOME chrome-deps-stable-3.11-1.x86_64.rpm
 ```
 
-This will install libstdc++.so into $HOME/lib. 
+This will install libstdc++.so into $HOME/lib.
 Alternatively, you can compile gcc >= 5.4 from source.
 
 #### Installing the other dependencies
@@ -257,5 +257,3 @@ pip install turicreate
 ```
 
 (The second 'pip' command runs the newer pip inside of the virtualenv.)
-
-

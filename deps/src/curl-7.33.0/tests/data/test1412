@@ -77,7 +77,7 @@ http
 crypto
 </features>
  <name>
-HTTP GET with --anyauth with two URLs (picking Digest) 
+HTTP GET with --anyauth with two URLs (picking Digest)
  </name>
  <command>
 http://%HOSTIP:%HTTPPORT/1412 -u testuser:testpass --anyauth http://%HOSTIP:%HTTPPORT/14120001

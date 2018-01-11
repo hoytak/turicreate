@@ -24,4 +24,3 @@ print "\n";
 @a=split(//,$k2);
 foreach (@a) { printf "%02x-",ord($_); }
 print "\n";
-

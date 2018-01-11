@@ -53,4 +53,3 @@ long tool_tvlong(struct timeval t1);
 #define tvlong(a)         tool_tvlong((a))
 
 #endif /* HEADER_CURL_TOOL_UTIL_H */
-

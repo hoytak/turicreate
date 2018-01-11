@@ -40,7 +40,7 @@ class toolkit_class_registry {
   /**
    * Registers a toolkit class.
    */
-  bool register_toolkit_class(std::vector<toolkit_class_specification> classes, 
+  bool register_toolkit_class(std::vector<toolkit_class_specification> classes,
                               std::string prefix = "");
 
   /**

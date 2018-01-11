@@ -91,7 +91,7 @@ sub unrolledloopbody {
 for ($i=0;$i<4;$i++) {
 $code.=<<___;
 	ldo	1($XX[0]),$XX[1]
-	`sprintf("$LDX	%$TY(%$key),%$dat1") if ($i>0)`	
+	`sprintf("$LDX	%$TY(%$key),%$dat1") if ($i>0)`
 	and	$mask,$XX[1],$XX[1]
 	$LDX	$YY($key),$TY
 	$MKX	$YY,$key,$ix
@@ -159,7 +159,7 @@ RC4
 	ldo	`2*$SZ`($key),$key
 
 	ldi	0xff,$mask
-	ldi	3,$dat0		
+	ldi	3,$dat0
 
 	ldo	1($XX[0]),$XX[0]	; warm up loop
 	and	$mask,$XX[0],$XX[0]

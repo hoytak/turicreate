@@ -169,7 +169,7 @@ class factorization_model {
   /** \overload
    */
   virtual double calculate_fx(const std::vector<v2::ml_data_entry>& x) const = 0;
-  
+
  public:
 
   virtual void get_item_similarity_scores(
@@ -194,13 +194,13 @@ class factorization_model {
       const std::map<std::string, flexible_type>& opts);
 
  protected:
-  
+
   virtual void internal_setup(const v2::ml_data& train_data) {}
 
   // Unfortunately, the sgd interface needs these right now :-P, so
-  // keep them public for that. 
+  // keep them public for that.
  public:
-  
+
   // All the options for this model
   std::map<std::string, flexible_type> options;
 
@@ -250,9 +250,9 @@ class factorization_model {
 
  public:
 
-  /** Return the serialization version. 
+  /** Return the serialization version.
    */
-  virtual size_t get_version() const = 0; 
+  virtual size_t get_version() const = 0;
 
   /** Serialization in factorization_model_impl.  These methods allow
    *  the child class to have specific parameters that need to be
@@ -265,7 +265,7 @@ class factorization_model {
    */
   void local_save_impl(turi::oarchive& oarc) const;
   void local_load_version(turi::iarchive& iarc, size_t version);
-  
+
   /** Return all the parameters needed by factory_load to determine
    *  what model to instantiate.
    */
@@ -291,11 +291,11 @@ BEGIN_OUT_OF_PLACE_SAVE(arc, std::shared_ptr<factorization::factorization_model>
   } else {
     arc << true;
 
-    // Save the version number 
+    // Save the version number
     size_t version = m->get_version();
-    arc << version; 
-    
-    // Save the model parameters as a map 
+    arc << version;
+
+    // Save the model parameters as a map
     std::map<std::string, variant_type> serialization_parameters =
         m->get_serialization_parameters();
 
@@ -313,15 +313,15 @@ BEGIN_OUT_OF_PLACE_LOAD(arc, std::shared_ptr<factorization::factorization_model>
 
     size_t version;
     arc >> version;
-    
+
     variant_type data_v;
     variant_deep_load(data_v, arc);
-  
+
     std::map<std::string, variant_type> data;
     data = variant_get_value<decltype(data)>(data_v);
 
     m = factorization::factorization_model::factory_load(version, data, arc);
-    
+
   } else {
     m = std::shared_ptr<factorization::factorization_model>();
   }

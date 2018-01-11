@@ -5,7 +5,7 @@ $(function() {
   });
   xData.sort(function (a,b){ return b-a;});
 
-  // Define the three functions 
+  // Define the three functions
 
   function target(x){
     if (x > randn()) {

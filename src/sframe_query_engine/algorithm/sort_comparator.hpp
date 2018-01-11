@@ -45,7 +45,7 @@ struct less_than_full_function
     return compare(v1, v2);
   }
 
-  inline bool operator() (const std::pair<std::vector<flexible_type>, std::string>& v1, 
+  inline bool operator() (const std::pair<std::vector<flexible_type>, std::string>& v1,
                           const std::pair<std::vector<flexible_type>, std::string>& v2) const {
     return compare(v1.first, v2.first);
   }

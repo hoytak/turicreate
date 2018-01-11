@@ -40,25 +40,25 @@ namespace Model
 
     void AddToNode(Aws::Utils::Xml::XmlNode& parentNode) const;
 
-    
+
     inline const Aws::Vector<CompletedPart>& GetParts() const{ return m_parts; }
 
-    
+
     inline void SetParts(const Aws::Vector<CompletedPart>& value) { m_partsHasBeenSet = true; m_parts = value; }
 
-    
+
     inline void SetParts(Aws::Vector<CompletedPart>&& value) { m_partsHasBeenSet = true; m_parts = value; }
 
-    
+
     inline CompletedMultipartUpload& WithParts(const Aws::Vector<CompletedPart>& value) { SetParts(value); return *this;}
 
-    
+
     inline CompletedMultipartUpload& WithParts(Aws::Vector<CompletedPart>&& value) { SetParts(value); return *this;}
 
-    
+
     inline CompletedMultipartUpload& AddParts(const CompletedPart& value) { m_partsHasBeenSet = true; m_parts.push_back(value); return *this; }
 
-    
+
     inline CompletedMultipartUpload& AddParts(CompletedPart&& value) { m_partsHasBeenSet = true; m_parts.push_back(value); return *this; }
 
   private:

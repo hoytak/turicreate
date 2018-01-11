@@ -29,7 +29,7 @@ class dot_graph {
   inline void add_edge(const std::string& src, const std::string& dest) {
     m_edges.push_back({src, dest});
   }
-  
+
   inline void print(std::ostream& out) {
      out << "digraph G {\n";
      for(auto vertex: m_vertices) {

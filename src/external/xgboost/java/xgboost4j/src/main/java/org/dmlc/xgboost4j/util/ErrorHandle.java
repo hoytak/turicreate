@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -26,7 +26,7 @@ import org.dmlc.xgboost4j.wrapper.XgboostJNI;
  */
 public class ErrorHandle {
     private static final Log logger = LogFactory.getLog(ErrorHandle.class);
-    
+
     //load native library
     static {
         try {
@@ -36,7 +36,7 @@ public class ErrorHandle {
             logger.error(ex);
         }
     }
-    
+
     /**
      * check the return value of C API
      * @param ret return valud of xgboostJNI C API call

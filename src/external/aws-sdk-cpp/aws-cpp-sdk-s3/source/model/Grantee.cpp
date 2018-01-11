@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-Grantee::Grantee() : 
+Grantee::Grantee() :
     m_displayNameHasBeenSet(false),
     m_emailAddressHasBeenSet(false),
     m_iDHasBeenSet(false),
@@ -38,7 +38,7 @@ Grantee::Grantee() :
 {
 }
 
-Grantee::Grantee(const XmlNode& xmlNode) : 
+Grantee::Grantee(const XmlNode& xmlNode) :
     m_displayNameHasBeenSet(false),
     m_emailAddressHasBeenSet(false),
     m_iDHasBeenSet(false),

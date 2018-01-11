@@ -18,7 +18,7 @@ namespace turi { namespace recsys {
  *  In this case, the ml_data structure for the user-item lists is
  *  must be sorted by rows, with the first column being the user
  *  column.
- * 
+ *
  *  This operation is done without loading the data into memory.
  *
  *  The user column is assumed to be the first column, and the item
@@ -28,7 +28,7 @@ namespace turi { namespace recsys {
  *  column), then by items (second column).
  *
  *  \return An SArray of vectors of pairs of flex_int, flex_float, where the
- *  first index is the item and the second index is the rating. 
+ *  first index is the item and the second index is the rating.
  */
 std::shared_ptr<sarray<std::vector<std::pair<size_t, double> > > >
 make_user_item_lists(const v2::ml_data& data);

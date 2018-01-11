@@ -12,24 +12,24 @@ namespace type_heuristic_encode {
 /**
  * \internal
  * \ingroup pagefault
- * Attempts to compress a sequence of bytes from start to start + length 
+ * Attempts to compress a sequence of bytes from start to start + length
  * storing the compressed result in output.
  *
  * This is a "type_heuristic_encode" in that it aggressively attempts to
  * reinterpret the data as integer or floating point values, etc. attempts to
  * guess a "column shape" and reencode accordingly.
  *
- * The caller must remember the original length of the input since this is 
+ * The caller must remember the original length of the input since this is
  * required by the decompressor and is not stored by the compressor.
- * length must be a multiple of 8 bytes. 
+ * length must be a multiple of 8 bytes.
  *
- * *output must be a pointer to a memory buffer that can store at least 
+ * *output must be a pointer to a memory buffer that can store at least
  * output_length bytes. This function may reallocate the buffer even
  * on a failure.
  *
  * There is no guarantee that output_length is shorter than the input_length.
  */
-void compress(char* start, size_t length, 
+void compress(char* start, size_t length,
               char** output, size_t& output_length);
 
 /**

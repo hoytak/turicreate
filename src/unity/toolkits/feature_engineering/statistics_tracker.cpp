@@ -12,7 +12,7 @@
 
 namespace turi {
 
-/** 
+/**
  * Utility to check the value types.
  */
 void statistics_tracker::valdidate_types(const flexible_type & value) const {
@@ -28,7 +28,7 @@ void statistics_tracker::valdidate_types(const flexible_type & value) const {
   }
 }
 
-/** 
+/**
  * Initialize the index mapping and setup.
  */
 void statistics_tracker::initialize() {
@@ -51,7 +51,7 @@ void statistics_tracker::initialize() {
   }
 }
 
-/** 
+/**
  * Call this when all calls to map_value_to_index are completed.
  */
 void statistics_tracker::finalize(size_t num_examples) {
@@ -79,11 +79,11 @@ void statistics_tracker::finalize(size_t num_examples) {
         keys.push_back(key_hash_table[kvp.first]);
         counts.push_back(count_hash_table[kvp.first]);
         means.push_back(mean_hash_table[kvp.first]);
-        missing.push_back(missing_hash_table[kvp.first]); 
+        missing.push_back(missing_hash_table[kvp.first]);
         global_index++;
       } else {
         means[it->second] = means[it->second] * ((flex_float)counts[it->second]/(counts[it->second] + count_hash_table[kvp.first]))
-         + mean_hash_table[kvp.first] * ((flex_float)count_hash_table[kvp.first]/(counts[it->second] + count_hash_table[kvp.first])); 
+         + mean_hash_table[kvp.first] * ((flex_float)count_hash_table[kvp.first]/(counts[it->second] + count_hash_table[kvp.first]));
         counts[it->second] += count_hash_table[kvp.first];
         missing[it->second] += missing_hash_table[kvp.first];
       }
@@ -95,7 +95,7 @@ void statistics_tracker::finalize(size_t num_examples) {
     size_t num_implicit_zeros = num_examples - missing[it->second] - counts[it->second];
     if (missing[it->second] == num_examples){
       log_and_throw("At least one feature in " + column_name + " is all None's."
-                    " There must be at least one non-None value for mean imputation.");   
+                    " There must be at least one non-None value for mean imputation.");
     }
     means[it->second] = means[it->second] * ((flex_float)counts[it->second]/(counts[it->second] + num_implicit_zeros));
     counts[it->second] += num_implicit_zeros;
@@ -103,11 +103,11 @@ void statistics_tracker::finalize(size_t num_examples) {
 }
 
 
-/** 
+/**
  * Returns the index associated with the "value" value.
  *
  */
-void statistics_tracker::insert_or_update(const flexible_type& key, 
+void statistics_tracker::insert_or_update(const flexible_type& key,
                             flexible_type value, size_t thread_idx) {
   DASSERT_FALSE(threadlocal_accumulator.count.empty());
   DASSERT_FALSE(threadlocal_accumulator.mean.empty());
@@ -129,7 +129,7 @@ void statistics_tracker::insert_or_update(const flexible_type& key,
   auto& mean_hash_table = threadlocal_accumulator.mean[thread_idx];
   auto& missing_hash_table = threadlocal_accumulator.missing[thread_idx];
   auto& key_hash_table = threadlocal_accumulator.key_index[thread_idx];
-    
+
   // Search
   auto it = key_hash_table.find(wt);
   if (value.get_type() != flex_type_enum::UNDEFINED){
@@ -152,7 +152,7 @@ void statistics_tracker::insert_or_update(const flexible_type& key,
   }
 }
 
-/** 
+/**
  * Returns the index associated with the value.
  */
 size_t statistics_tracker::lookup(const flexible_type& value) const {
@@ -167,7 +167,7 @@ size_t statistics_tracker::lookup(const flexible_type& value) const {
   }
 }
 
-/** 
+/**
  * Returns the counts associated with the value.
  */
 size_t statistics_tracker::lookup_counts(const flexible_type& value) const {
@@ -183,7 +183,7 @@ size_t statistics_tracker::lookup_counts(const flexible_type& value) const {
   }
 }
 
-/** 
+/**
  * Returns the means associated with the value.
  */
 flex_float statistics_tracker::lookup_means(const flexible_type& value) const {
@@ -199,7 +199,7 @@ flex_float statistics_tracker::lookup_means(const flexible_type& value) const {
   }
 }
 
-/** 
+/**
  * Returns the value "value" associated an index.
  */
 flexible_type statistics_tracker::inverse_lookup(size_t idx) const {
@@ -236,8 +236,8 @@ void statistics_tracker::load_version(turi::iarchive& iarc, size_t version) {
        >> missing
        >> column_name;
 
-  // Rebuild the hash-table. 
-  size_t index = 0; 
+  // Rebuild the hash-table.
+  size_t index = 0;
   for(auto& k : keys) {
     hash_value wt(k);
     index_lookup[wt] = index;

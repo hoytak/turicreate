@@ -255,7 +255,7 @@ format_int(char *t, int64_t i)
 {
 	uint64_t ui;
 
-	if (i < 0) 
+	if (i < 0)
 		ui = (i == INT64_MIN) ? (uint64_t)(INT64_MAX) + 1 : (uint64_t)(-i);
 	else
 		ui = i;
@@ -406,7 +406,7 @@ get_entry_hardlink(struct archive_write *a, struct archive_entry *entry,
     const char **name, size_t *length, struct archive_string_conv *sc)
 {
 	int r;
-	
+
 	r = archive_entry_hardlink_l(entry, name, length, sc);
 	if (r != 0) {
 		if (errno == ENOMEM) {
@@ -1967,4 +1967,3 @@ sparse_list_add(struct pax *pax, int64_t offset, int64_t length)
 	/* Add data block. */
 	return (_sparse_list_add_block(pax, offset, length, 0));
 }
-

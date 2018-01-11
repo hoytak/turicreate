@@ -53,7 +53,7 @@ class vertex_block {
   }
 
   void flush(SIterableType& outputsf) {
-    std::copy(m_vertices.begin(), m_vertices.end(), 
+    std::copy(m_vertices.begin(), m_vertices.end(),
               outputsf.get_output_iterator(0));
     outputsf.close();
   }

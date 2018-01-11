@@ -84,7 +84,7 @@ void brute_force_all_pairs_similarity_with_vector_reference(
       !std::is_same<unused_value_type, final_item_data_type>::value);
 
   static constexpr bool missing_values_are_zero = SimilarityType::missing_values_are_zero();
-  
+
   final_item_data_type _unused;
 
   // constants used later
@@ -173,7 +173,7 @@ void brute_force_all_pairs_similarity_with_vector_reference(
 
   // Loop over the blocks.
   for(size_t block_idx = 0; block_idx < num_blocks; ++block_idx) {
-    
+
     // This is the location of the current open slot for dumping one of the rows
     atomic<size_t> block_write_idx = 0;
 
@@ -363,14 +363,14 @@ void brute_force_all_pairs_similarity_with_vector_reference(
                 // This is in the inner loop, so a lot of time is spent
                 // in this computation.  Try to make it as friendly as
                 // possible to the vectorizer as possible.
-                
+
                 double* __restrict__ bd_ptr = &(block_data[block_data_index(0, dim_index)]);
                 item_data_type* __restrict__ it_data_ptr = block_item_data.data();
                 interaction_data_type* __restrict__ int_data_ptr = edges.data();
-                
+
                 for(int i = 0; i < int(num_query_rows_in_block);
                     ++i, ++bd_ptr, ++it_data_ptr, ++int_data_ptr) {
-                  
+
                   similarity.update_interaction_unsafe(
                       *int_data_ptr,
                       ref_item_data, *it_data_ptr,
@@ -381,7 +381,7 @@ void brute_force_all_pairs_similarity_with_vector_reference(
                   // branching on individual entries, so can't do
                   // vectorization here anyway.
                   double block_data_entry = block_data[block_data_index(i, dim_index)];
-                
+
                   if(std::isnan(block_data_entry))
                     continue;
 

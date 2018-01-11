@@ -19,7 +19,7 @@ namespace turi { namespace vc_internal {
 /*  See value_container_mapper.hpp for a full descrition of these things.
  */
 
-/**  
+/**
  *   \internal
  * The vc_hashkey class is used to determine the key type for the
  *   value container mapper hash-map lookup, along with optionally
@@ -30,7 +30,7 @@ namespace turi { namespace vc_internal {
  *
  *   The class is specialized based on the type of the key.
  *
- *   This is the general type, which uses hash_value to store the key. 
+ *   This is the general type, which uses hash_value to store the key.
  */
 template <typename T, class IsMatch = void>
 class vc_hashkey {
@@ -41,13 +41,13 @@ class vc_hashkey {
 
   vc_hashkey() {}
   vc_hashkey(const T& t) GL_HOT_INLINE_FLATTEN : _key(hash64(t)) {}
-  
+
   const T& value() const { DASSERT_TRUE(false); return T(); }
 
   bool operator==(const vc_hashkey& other) const {
     return _key == other._key;
   }
-  
+
   bool operator!=(const vc_hashkey& other) const {
     return !(_key == other._key);
   }
@@ -61,7 +61,7 @@ class vc_hashkey {
   static constexpr bool is_deleted(const vc_hashkey& key) {
     return use_explicit_delete() && !(key._key == ~(uint64_t(0)^uint64_t(0x1)));
   }
-  
+
   static vc_hashkey as_empty() {
     vc_hashkey k;
     k._key = ~uint64_t(0);
@@ -75,10 +75,10 @@ class vc_hashkey {
   }
 
  private:
-  uint64_t _key = 0; 
+  uint64_t _key = 0;
 };
 
-/**  Integer version of the above. 
+/**  Integer version of the above.
  */
 template <typename T>
 class vc_hashkey<T, typename std::enable_if<std::is_integral<T>::value>::type> {
@@ -86,10 +86,10 @@ class vc_hashkey<T, typename std::enable_if<std::is_integral<T>::value>::type> {
   static constexpr bool holds_value() GL_HOT_INLINE { return true; }
   static constexpr bool use_explicit_delete() GL_HOT_INLINE { return false; }
   static constexpr bool key_is_exact() GL_HOT_INLINE { return true; }
-  
+
   vc_hashkey() {}
   vc_hashkey(const T& t) : _value(t) {}
-  
+
   const T& value() const { return _value; }
 
   bool operator==(const vc_hashkey& other) const {
@@ -99,7 +99,7 @@ class vc_hashkey<T, typename std::enable_if<std::is_integral<T>::value>::type> {
   bool operator!=(const vc_hashkey& other) const {
     return _value != other._value;
   }
-  
+
   size_t hash() const { return _value; }
 
   static constexpr bool is_empty(const vc_hashkey& key) GL_HOT_INLINE_FLATTEN {
@@ -109,27 +109,27 @@ class vc_hashkey<T, typename std::enable_if<std::is_integral<T>::value>::type> {
   static constexpr bool is_deleted(const vc_hashkey& key) GL_HOT_INLINE_FLATTEN {
     return use_explicit_delete() && (key._value == ~(T(0)) ^ 1);
   }
-  
+
   static vc_hashkey as_empty() {
     vc_hashkey k;
     k._value = ~(T(0));
     return k;
   }
 
-  // This one is never called, as use_explicit_delete = false; 
+  // This one is never called, as use_explicit_delete = false;
   static vc_hashkey as_deleted() {
     vc_hashkey k;
     k._value = ~(T(0)) ^ 1;
     return k;
   }
-  
+
  private:
-  T _value = 0;  
+  T _value = 0;
 };
 
 
 /**  A container that holds the key and the value.  This is used in
- *   place of a (key, value) pair. 
+ *   place of a (key, value) pair.
  */
 template <typename T, class IsMatch = void>
 class vc_hashkey_and_value {
@@ -144,10 +144,10 @@ class vc_hashkey_and_value {
 
   const key_type& key() const { return _key; }
   const T& value() const { return _value; }
-  
+
  private:
   vc_hashkey<T> _key;
-  T _value; 
+  T _value;
 };
 
 /**  An extension of the key pair to associate it with a value, which

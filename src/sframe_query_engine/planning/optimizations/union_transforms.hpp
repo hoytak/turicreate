@@ -13,12 +13,12 @@
 #include <sframe_query_engine/operators/operator_properties.hpp>
 #include <flexible_type/flexible_type.hpp>
 
-#include <array> 
+#include <array>
 
 namespace turi {
 namespace query_eval {
 
-// This class applies to the union 
+// This class applies to the union
 
 class opt_union_transform : public opt_transform {
   bool transform_applies(planner_node_type t) {
@@ -118,7 +118,7 @@ class opt_union_on_source : public opt_union_transform {
           distinct_input_ranges.insert(input_keys[i]);
         }
       }
-      
+
       if(distinct_input_ranges.size() == num_sources_present) {
         return false;
       }
@@ -126,7 +126,7 @@ class opt_union_on_source : public opt_union_transform {
 
     ////////////////////////////////////////////////////////////////////////////////
     // Now, we know we'll end up doing something.   Let's go for it.
-    
+
     struct merge_info {
       bool is_sarray = false;
 
@@ -304,7 +304,7 @@ class opt_eliminate_singleton_union : public opt_union_transform {
 };
 
 
-/**  
+/**
  * Merges a connected subtree of unions into a minimal set of unions.
  * For instance:
  *
@@ -314,9 +314,9 @@ class opt_eliminate_singleton_union : public opt_union_transform {
  * with a minimal set of unions.
  */
 class opt_union_project_merge : public opt_union_transform {
-  
+
   std::string description() { return "union(project1(a), ..., project2(a)) -> union(project3(a...), ...)"; }
-  
+
   bool apply_transform(optimization_engine *opt_manager, cnode_info_ptr n) {
 
     // Must be at least 2 projects here for this to apply.
@@ -420,7 +420,7 @@ class opt_union_project_merge : public opt_union_transform {
 
       current_output_index_start = current_output_index_end;
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     // Now that we have all of the info, remap all of the inputs
 
@@ -451,7 +451,7 @@ class opt_union_project_merge : public opt_union_transform {
 
       if(is_contiguous) {
         new_inputs.push_back(ii.in->pnode);
-      } else { 
+      } else {
         new_inputs.push_back(op_project::make_planner_node(ii.in->pnode, ii.indices));
       }
     }

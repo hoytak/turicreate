@@ -18,10 +18,10 @@ namespace xgboost {
  * Boosted trees regression.
  *
  */
-class EXPORT boosted_trees_regression: public xgboost_model {  
-  
+class EXPORT boosted_trees_regression: public xgboost_model {
+
   public:
-  
+
   /**
    * Set one of the options in the algorithm.
    *
@@ -30,17 +30,17 @@ class EXPORT boosted_trees_regression: public xgboost_model {
    *
    * \param[in] opts Options to set
    */
-  void init_options(const std::map<std::string,flexible_type>& _opts) override; 
+  void init_options(const std::map<std::string,flexible_type>& _opts) override;
 
-  /** 
-   * Configure booster from options 
+  /**
+   * Configure booster from options
    */
   void configure(void) override;
 
   void export_to_coreml(const std::string& filename);
 
   SUPERVISED_LEARNING_METHODS_REGISTRATION(
-      "boosted_trees_regression", 
+      "boosted_trees_regression",
       boosted_trees_regression)
 
 };
@@ -49,17 +49,17 @@ class EXPORT boosted_trees_regression: public xgboost_model {
  * Boosted trees classifier.
  *
  */
-class EXPORT boosted_trees_classifier : public xgboost_model {  
-  
+class EXPORT boosted_trees_classifier : public xgboost_model {
+
   public:
-  
+
   /**
    * Initialize things that are specific to your model.
    *
    * \param[in] data ML-Data object created by the init function.
    *
    */
-  void model_specific_init(const ml_data& data, 
+  void model_specific_init(const ml_data& data,
                            const ml_data& valid_data) override;
 
   /**
@@ -71,9 +71,9 @@ class EXPORT boosted_trees_classifier : public xgboost_model {
    * \param[in] opts Options to set
    */
   void init_options(const std::map<std::string, flexible_type>& _opts) override;
- 
-  /** 
-   * Configure booster from options 
+
+  /**
+   * Configure booster from options
    */
   void configure(void) override;
 
@@ -82,17 +82,17 @@ class EXPORT boosted_trees_classifier : public xgboost_model {
    */
   void set_default_evaluation_metric(){
     set_evaluation_metric({
-        "accuracy", 
-        "auc", 
+        "accuracy",
+        "auc",
         "confusion_matrix",
-        "f1_score", 
+        "f1_score",
         "log_loss",
-        "precision", 
-        "recall",  
+        "precision",
+        "recall",
         "roc_curve",
-        }); 
+        });
   }
-  
+
   /**
    * Set the default evaluation metric for progress tracking.
    */
@@ -101,11 +101,11 @@ class EXPORT boosted_trees_classifier : public xgboost_model {
         "accuracy", "log_loss"
        });
   }
- 
+
   void export_to_coreml(const std::string& filename);
 
   SUPERVISED_LEARNING_METHODS_REGISTRATION(
-      "boosted_trees_classifier", 
+      "boosted_trees_classifier",
       boosted_trees_classifier)
 
 };

@@ -13,7 +13,7 @@ struct hilbert_par_for_test {
     std::vector<std::pair<size_t, size_t> > preamble_hits;
     mutex lock;
     std::vector<std::pair<size_t, size_t> > parallel_hits;
-    sgraph_compute::hilbert_blocked_parallel_for(n, 
+    sgraph_compute::hilbert_blocked_parallel_for(n,
                                  [&](std::vector<std::pair<size_t, size_t> > v) {
                                    std::copy(v.begin(), v.end(), std::inserter(preamble_hits, preamble_hits.end()));
                                  },

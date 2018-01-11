@@ -24,12 +24,12 @@
 
 
 namespace turi {
-namespace timeseries { 
+namespace timeseries {
 
 
-EXPORT gl_sarray date_range(const flexible_type &start_time, 
-                            const flexible_type &end_time, 
-                            const flexible_type & period); 
+EXPORT gl_sarray date_range(const flexible_type &start_time,
+                            const flexible_type &end_time,
+                            const flexible_type & period);
 
 typedef std::shared_ptr<interpolator_value> interpolator_type;
 class grouped_timeseries;
@@ -45,12 +45,12 @@ class EXPORT gl_timeseries : public turi::toolkit_class_base {
 
   protected:
       static constexpr size_t TIMESERIES_VERSION = 0;
-      gl_sframe m_sframe;                 // The backend gl_sframe 
+      gl_sframe m_sframe;                 // The backend gl_sframe
       bool m_initialized = false;
-          
-      void _check_if_initialized() const { 
+
+      void _check_if_initialized() const {
         if(!m_initialized)
-         throw std::string("Timeseries is not initialized."); 
+         throw std::string("Timeseries is not initialized.");
       }
 
   public:
@@ -67,25 +67,25 @@ class EXPORT gl_timeseries : public turi::toolkit_class_base {
       std::string get_index_col_name() const {
         return m_index_col_name;
       }
-      
+
       flex_type_enum get_index_col_type() const {
         return m_sframe[m_index_col_name].dtype();
       }
-      
+
       void set_index_col_name(std::string index_col) {
         m_index_col_name = index_col;
       }
 
-      std::vector<std::string> get_value_col_names() const { 
+      std::vector<std::string> get_value_col_names() const {
         return m_value_col_names;
       }
-      void set_value_col_names(std::vector<std::string> val_names) { 
+      void set_value_col_names(std::vector<std::string> val_names) {
         m_value_col_names = val_names;
       }
       /**
-       * Get a version for the object. 
+       * Get a version for the object.
        **/
-      size_t get_version() const { 
+      size_t get_version() const {
         return TIMESERIES_VERSION;
       }
 
@@ -103,13 +103,13 @@ class EXPORT gl_timeseries : public turi::toolkit_class_base {
 
       void init(const gl_sframe & _input_sf,const std::string & _name, bool
           is_sorted=false,std::vector<int64_t>  ranges={-1,-1});
-     
-      /** 
-       * resample operator does down/up sampling. 
-       * 
-       * \param[in] period      : Period to resample to (in seconds). 
-       * \param[in] operators   : Operators for aggregation. 
-       * \param[in] fill_method : Interpolation scheme. 
+
+      /**
+       * resample operator does down/up sampling.
+       *
+       * \param[in] period      : Period to resample to (in seconds).
+       * \param[in] operators   : Operators for aggregation.
+       * \param[in] fill_method : Interpolation scheme.
        * \param[in] label       : The timestamp recorded in the output
        *                          TimeSeries to determine which	654 end point
        *                          (left or right) to use to denote the time
@@ -120,15 +120,15 @@ class EXPORT gl_timeseries : public turi::toolkit_class_base {
        **/
       gl_timeseries resample(
           const flex_float& period,
-          const std::map<std::string, 
-                             aggregate::groupby_descriptor_type>& operators, 
+          const std::map<std::string,
+                             aggregate::groupby_descriptor_type>& operators,
           interpolator_type interpolation_fn =
                         get_builtin_interpolator("__builtin__none__"),
           const std::string& label = "left",
-          const std::string& closed = "right") const; 
+          const std::string& closed = "right") const;
 
       /**
-       * Python wrapper for resampling. This function is the one exposed via the 
+       * Python wrapper for resampling. This function is the one exposed via the
        * SDK to python.
        *
        * \note The reason for this is because the aggregate, and interpolation types
@@ -136,28 +136,28 @@ class EXPORT gl_timeseries : public turi::toolkit_class_base {
        *
        * \note Since the SDK does not support more than 6 arguments, the
        *       downsample_params, and upsample_params have been combined.
-       * 
+       *
        *
        *       downsample_params : (ds_columns, ds_output_columns, ds_ops)
-       *       upsample_params   : (up_op) 
+       *       upsample_params   : (up_op)
        */
       gl_timeseries resample_wrapper(
-              double period, 
+              double period,
               const flex_list& downsample_params,
               const flex_list& upsample_params,
-              const std::string& label, 
-              const std::string& close) const; 
-      
+              const std::string& label,
+              const std::string& close) const;
+
       /**
        * shift the index column of the gl_timeseries by number of seconds.
        **/
       gl_timeseries tshift(const flex_float & delta);
-      
+
       /**
        * Shift the non-index columns in the TimeSeries object by specified
-       * number of steps. 
+       * number of steps.
        * The rows at the boundary with no values anymore are replaced by None
-       * values. 
+       * values.
        **/
       gl_timeseries shift(const int64_t & steps);
 
@@ -165,29 +165,29 @@ class EXPORT gl_timeseries : public turi::toolkit_class_base {
                           const flexible_type &end_time,
                           const std::string &closed) const;
 
-            
+
       /**
        * join this TimeSeries with the 'other_ts' TimeSeries on their index
-       * column. 
+       * column.
        *
        * other_ts: the other TimeSeries object.
        * how: how to join two TimeSeries. Accepted methods are 'inner','outer',
        *        and 'left'
        * index_column_name: the new name for the index column of the output
-       *                    TimeSeries. 
+       *                    TimeSeries.
        **/
       gl_timeseries index_join(const gl_timeseries& other_ts, const
           std::string& how, const std::string& index_column_name);
-      
+
       /**
        * union this TimeSeries with the 'other_ts' TimeSeries.
        **/
       gl_timeseries ts_union(const gl_timeseries& other_ts);
-         
+
       gl_grouped_timeseries group(std::vector<std::string> key_columns);
       void add_column(const gl_sarray& data, const std::string& name="");
       void remove_column(const std::string& name);
-      
+
       BEGIN_CLASS_MEMBER_REGISTRATION("_Timeseries")
       REGISTER_CLASS_MEMBER_FUNCTION(gl_timeseries::tshift, "delta")
       REGISTER_CLASS_MEMBER_FUNCTION(gl_timeseries::shift, "steps")
@@ -203,7 +203,7 @@ class EXPORT gl_timeseries : public turi::toolkit_class_base {
       REGISTER_CLASS_MEMBER_FUNCTION(gl_timeseries::ts_union, "other_ts")
       REGISTER_CLASS_MEMBER_FUNCTION(gl_timeseries::resample_wrapper, "period",
           "downsample_params", "upsample_params", "left", "close")
-         
+
       REGISTER_GETTER("sframe", gl_timeseries::get_sframe)
       REGISTER_SETTER("sframe", gl_timeseries::set_sframe)
       REGISTER_GETTER("value_col_names", gl_timeseries::get_value_col_names)

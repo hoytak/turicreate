@@ -13,7 +13,7 @@ namespace turi { namespace query_eval {
 /** Turns a node graph into one with all the source nodes segmented.
  *  Used to run a section in parallel.
  */
-pnode_ptr make_segmented_graph(pnode_ptr n, size_t segment_idx, 
+pnode_ptr make_segmented_graph(pnode_ptr n, size_t segment_idx,
     size_t num_segments, std::map<pnode_ptr, pnode_ptr>& memo) {
   if (memo.count(n)) return memo[n];
   if(num_segments == 0) {

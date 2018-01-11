@@ -91,7 +91,7 @@ struct shared_memory_buffer {
 static atomic<size_t> SERVER_IPC_COUNTER;
 bool server::bind(const std::string& ipcfile, size_t buffer_size) {
   logstream(LOG_INFO) << "Server attaching to " << ipcfile << " " << buffer_size << std::endl;
-  size_t _run_progress = 0; 
+  size_t _run_progress = 0;
   try {
     m_shmname = ipcfile;
     if (m_shmname.empty()) {
@@ -99,18 +99,18 @@ bool server::bind(const std::string& ipcfile, size_t buffer_size) {
       strm << get_my_pid() << "_" << SERVER_IPC_COUNTER.inc();
       m_shmname= strm.str();
     }
-    
+
     // sets up the raii deleter so that we eventually
     // delete this file
     _run_progress = 1;
     m_ipcfile_deleter = register_shared_memory_name(m_shmname);
 
-    
-    // this is really modified from code in 
+
+    // this is really modified from code in
     // http://www.boost.org/doc/libs/1_58_0/doc/html/interprocess/synchronization_mechanisms.html
     _run_progress = 2;
-    m_shared_object.reset(new shared_memory_object(create_only, 
-                                                   m_shmname.c_str(), 
+    m_shared_object.reset(new shared_memory_object(create_only,
+                                                   m_shmname.c_str(),
                                                    read_write));
 
     //Set size
@@ -119,13 +119,13 @@ bool server::bind(const std::string& ipcfile, size_t buffer_size) {
 
     //Map the whole shared memory in this process
     _run_progress = 4;
-    m_mapped_region.reset(new mapped_region(*m_shared_object, 
+    m_mapped_region.reset(new mapped_region(*m_shared_object,
                                             read_write));
 
     _run_progress = 5;
     void* buffer = m_mapped_region->get_address();
     // placement new. put the data in the buffer
-    
+
     _run_progress = 6;
     m_buffer = new (buffer) shared_memory_buffer;
     m_buffer->m_buffer_size = buffer_size;
@@ -135,18 +135,18 @@ bool server::bind(const std::string& ipcfile, size_t buffer_size) {
     logstream(LOG_ERROR) << "SHMIPC initialization Error (1), stage "
                          << _run_progress << ": " << error << std::endl;
     return false;
-    
+
   } catch (const std::exception& error) {
     logstream(LOG_ERROR) << "SHMIPC initialization Error (2), stage "
                          << _run_progress << ": " << error.what() << std::endl;
     return false;
-    
+
   } catch (...) {
     logstream(LOG_ERROR) << "Unknown SHMIPC Initialization Error, stage "
                          << _run_progress << "." << std::endl;
     return false;
   }
-  
+
   return true;
 }
 
@@ -160,7 +160,7 @@ std::string server::get_shared_memory_name() const {
  * will be used.
  */
 template <typename Guard, typename CondVar>
-void condvar_wait(Guard& guard, CondVar& condvar, 
+void condvar_wait(Guard& guard, CondVar& condvar,
           bool has_timeout, boost::system_time timeout_time = boost::system_time()) {
   if (has_timeout) {
     condvar.timed_wait(guard, timeout_time);
@@ -175,10 +175,10 @@ void condvar_wait(Guard& guard, CondVar& condvar,
  *
  * \param c A pointer to a pointer to the output buffer to store the message.
  *          (*c) may be null. The buffer at (*c) will be resized as required.
- *          if c == NULL, it is ignored.  
+ *          if c == NULL, it is ignored.
  *
  * \param clen (*clen) The current length of (*c). The receive call may resize
- *          change this value. 
+ *          change this value.
  *
  * \param receivelen The received length will be stored here.
  *
@@ -187,7 +187,7 @@ void condvar_wait(Guard& guard, CondVar& condvar,
  * \param semcount The semaphore to wait on. For instance, for client->server
  *                 communication this will be region->m_client_to_server.
  *
- * \param timeout The maximum number of seconds to wait for a timeout. 
+ * \param timeout The maximum number of seconds to wait for a timeout.
  *                Can be "-1" in which we will wait forever.
  */
 bool generic_receiver(char** c, size_t* clen,
@@ -220,7 +220,7 @@ bool generic_receiver(char** c, size_t* clen,
       --semcount.count;
 //       std::cout << "Receiving " << receivelen << std::endl;
       return true;
-    } 
+    }
     if (has_timeout && cur_time > timeout_time) break;
     if (is_process_running(semcount.sender_pid) == false) break;
     if (has_timeout == false) {
@@ -322,21 +322,21 @@ server::~server() {
 
 bool client::connect(std::string ipcfile, size_t timeout) {
   logstream(LOG_INFO) << "Client connecting to " << ipcfile << std::endl;
-  // this is really modified from code in 
+  // this is really modified from code in
   // http://www.boost.org/doc/libs/1_58_0/doc/html/interprocess/synchronization_mechanisms.html
-  m_shared_object.reset(new shared_memory_object(open_only, 
-                                                 ipcfile.c_str(), 
+  m_shared_object.reset(new shared_memory_object(open_only,
+                                                 ipcfile.c_str(),
                                                  read_write));
 
   //Map the whole shared memory in this process
-  m_mapped_region.reset(new mapped_region(*m_shared_object, 
+  m_mapped_region.reset(new mapped_region(*m_shared_object,
                                           read_write));
   void* buffer = m_mapped_region->get_address();
   if (buffer == nullptr) return false;
   // placement new. put the data in the buffer
   m_buffer = reinterpret_cast<shared_memory_buffer*>(buffer);
 
-  
+
   // wait for the server for a certain amount of time
   boost::system_time timeout_time = boost::get_system_time();
   bool has_timeout = (timeout != (size_t)(-1));

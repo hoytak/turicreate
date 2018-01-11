@@ -154,7 +154,7 @@ void UnitTest::SaveTo(const std::string & location){
     } else {
         std::cout << "Couldn't save file" << std::endl;
     }
-	
+
 	if (test_likely(Echo)) std::cout << "Passed tests: " << All.size() - Fails.size() << std::endl << "Failed tests: " << Fails.size() << std::endl;
 }
 

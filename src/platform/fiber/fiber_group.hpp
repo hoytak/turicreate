@@ -12,7 +12,7 @@ namespace turi {
 
 /**
  * Defines a group of fibers. Analogous to the thread_group, but is meant
- * to run only little user-mode threads. It is important that fibers never 
+ * to run only little user-mode threads. It is important that fibers never
  * block, since there is no way to context switch out from a blocked fiber.
  * The fiber_group uses the fiber_control singleton instance to manage its
  * fibers.
@@ -28,7 +28,7 @@ class fiber_group {
   atomic<size_t> threads_running;
   mutex join_lock;
   // to be triggered once the threads_running counter becomes 0
-  conditional join_cond; 
+  conditional join_cond;
   // set to true if someone is waiting on a join()
   bool join_waiting;
 
@@ -53,15 +53,15 @@ class fiber_group {
   }
 
   // wraps the call so that we can do the appropriate termination
-  static void invoke(const boost::function<void (void)>& spawn_function, 
+  static void invoke(const boost::function<void (void)>& spawn_function,
                      fiber_group* group);
 
  public:
 
 
-  fiber_group(size_t stacksize = 8192, 
-              affinity_type affinity = fiber_control::all_affinity()) : 
-      stacksize(stacksize), 
+  fiber_group(size_t stacksize = 8192,
+              affinity_type affinity = fiber_control::all_affinity()) :
+      stacksize(stacksize),
       affinity(affinity),
       join_waiting(false),
       exception_raised(false) { }
@@ -88,18 +88,18 @@ class fiber_group {
    * Launch a single thread which calls spawn_function.
    */
   void launch(const boost::function<void (void)> &spawn_function);
-              
+
 
 
   /**
    * Launch a single thread which calls spawn_function with worker affinity.
    */
-  void launch(const boost::function<void (void)> &spawn_function, 
+  void launch(const boost::function<void (void)> &spawn_function,
               affinity_type worker_affinity);
 
 
   /**
-   * Launch a single thread which calls spawn_function with a single 
+   * Launch a single thread which calls spawn_function with a single
    * thread affinity
    */
   void launch(const boost::function<void (void)> &spawn_function,

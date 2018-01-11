@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-Rule::Rule() : 
+Rule::Rule() :
     m_expirationHasBeenSet(false),
     m_iDHasBeenSet(false),
     m_prefixHasBeenSet(false),
@@ -41,7 +41,7 @@ Rule::Rule() :
 {
 }
 
-Rule::Rule(const XmlNode& xmlNode) : 
+Rule::Rule(const XmlNode& xmlNode) :
     m_expirationHasBeenSet(false),
     m_iDHasBeenSet(false),
     m_prefixHasBeenSet(false),

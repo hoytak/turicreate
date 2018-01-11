@@ -20,7 +20,7 @@ class sframe;
 namespace gl_numpy {
 
 /**
- * Defines a memory mapped Sframe. 
+ * Defines a memory mapped Sframe.
  * i.e. an SFrame mapped into a single pointer in memory
  * via the pagefault handler.
  *
@@ -38,7 +38,7 @@ class memory_mapped_sframe {
   memory_mapped_sframe& operator=(memory_mapped_sframe&&) = delete;
 
   /**
-   * Loads an SFrame . Returns false if the SFrame 
+   * Loads an SFrame . Returns false if the SFrame
    * is not of a type we can map in. The SFrame must contain
    * only columns of integer, float, or vector.
    *
@@ -90,15 +90,15 @@ class memory_mapped_sframe {
   std::vector<std::string> m_delete_paths;
 
   /// number of elements
-  size_t m_length = 0; 
+  size_t m_length = 0;
   /// number of bytes in mapped region
-  size_t m_length_in_bytes = 0; 
+  size_t m_length_in_bytes = 0;
 
   /// This is really a constant: double nan value in integral form
-  static flex_int M_NAN_VALUE; 
+  static flex_int M_NAN_VALUE;
 
   /// output type. Integer if all columns are integral. Float otherwise
-  flex_type_enum m_type = flex_type_enum::INTEGER; 
+  flex_type_enum m_type = flex_type_enum::INTEGER;
 
   /// The original frame column types
   std::vector<flex_type_enum> m_column_types;
@@ -106,7 +106,7 @@ class memory_mapped_sframe {
   std::vector<size_t> m_values_per_column;
   /// Total number of values generated per row (sum of m_values_per_column)
   size_t m_values_per_row = 0;
-  
+
 
   static const size_t m_element_length;
   /**
@@ -136,7 +136,7 @@ class memory_mapped_sframe {
    * Interprets a flexible_type value as an float. flexible_type must be
    * an integer or UNDEFINED. If UNDEFINED, it is 0.
    *
-   * \note the output type is always (flex_int*). even though it may store 
+   * \note the output type is always (flex_int*). even though it may store
    * really store a floating point value.
    */
   static void integer_value_to_float(const flexible_type& f,
@@ -145,14 +145,14 @@ class memory_mapped_sframe {
    * Interprets a flexible_type value as an float. flexible_type must be
    * an float or UNDEFINED. If UNDEFINED, it is NaN.
    *
-   * \note the output type is always (flex_int*). even though it may store 
+   * \note the output type is always (flex_int*). even though it may store
    * really store a floating point value. Mainly, this prevents us from having
    * to deal at all with floating point NaN values.
    */
   static void float_value_to_float(const flexible_type& f,
                                    flex_int* store);
 
-  
+
 };
 } // namespace gl_numpy
 } // namespace turi

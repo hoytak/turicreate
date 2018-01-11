@@ -60,5 +60,3 @@ def get_unity():
     If no connection is present, automatically launch a localserver connection.
     """
     return __UNITY_GLOBAL_PROXY__
-
-

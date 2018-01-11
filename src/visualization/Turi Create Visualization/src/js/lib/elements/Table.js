@@ -148,24 +148,24 @@ class Tctable extends Component {
 
                 document.getElementById("arrow_left").style.left = right_value + "px";
                 document.getElementById("image_loading_container").style.left = right_image +"px";
-                
+
                 var target = e.target;
                 window.loading_image_timer = setInterval(function(imageRow, imageColumn, target){
                                                              if(window.image_dictionary[String(imageRow)]){
                                                                  if(window.image_dictionary[String(imageRow)][String(imageColumn)]){
-                                                         
+
                                                                    document.getElementById("image_source_container").style.display = "block";
                                                                     document.getElementById("image_loading_container").style.display = "none";
-                                                         
+
                                                                     var element_bounding = target.getBoundingClientRect();
-                                                         
-                                                         
+
+
                                                                     var arrow_bounding = document.getElementById("arrow_left").getBoundingClientRect();
                                                                     var bound_height = parseInt(((element_bounding.height/2 - arrow_bounding.height/2) + (element_bounding.y)), 10);
-                                                         
+
                                                                     var imageRow = target.getElementsByTagName("img")[0].getAttribute("data-image-row");
                                                                     var imageColumn = target.getElementsByTagName("img")[0].getAttribute("data-image-column");
-                                                         
+
                                                                     var src_values = "data:image/" + window.image_dictionary[String(imageRow)][String(imageColumn)]["format"] + ";base64," + window.image_dictionary[String(imageRow)][String(imageColumn)]["image"];
 
                                                                     document.getElementById("image_source_container").src = src_values;
@@ -195,9 +195,9 @@ class Tctable extends Component {
 
                                                                     document.getElementById("arrow_left").style.left = right_value + "px";
                                                                     document.getElementById("image_source_container").style.left = right_image +"px";
-                                                         
+
                                                                     clearInterval(window.loading_image_timer);
- 
+
                                                                  }
                                                              }
                                                          }, 300, imageRow, imageColumn, target);

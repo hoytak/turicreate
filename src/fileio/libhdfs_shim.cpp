@@ -125,14 +125,14 @@ extern  "C" {
 
 
   hdfsFS hdfsConnect(const char* host, tPort port) {
-    if (!ptr_hdfsConnect) { 
+    if (!ptr_hdfsConnect) {
       *(void**)(&ptr_hdfsConnect) = get_symbol("hdfsConnect");
     }
-    if (ptr_hdfsConnect) { 
+    if (ptr_hdfsConnect) {
       auto x = turi::run_as_native(ptr_hdfsConnect, host, port);
       if (x == NULL) {
         logstream(LOG_INFO) << "hdfsConnect to " << host << ":" << port << " Failed" << std::endl;
-      } 
+      }
       return x;
     } else {
       logstream(LOG_INFO) << "hdfsConnect failed because the hdfsConnect symbol cannot be found" << std::endl;
@@ -433,7 +433,7 @@ extern  "C" {
     };
     file_name = "libjvm.so";
 #endif
-    // From direct enviornment variable 
+    // From direct enviornment variable
     char* env_value = NULL;
     if ((env_value = getenv("TURI_LIBJVM_DIRECTORY")) != NULL) {
       logstream(LOG_INFO) << "Found environment variable TURI_LIBJVM_DIRECTORY: " << env_value << std::endl;

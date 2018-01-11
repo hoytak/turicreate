@@ -14,7 +14,7 @@
 
 // TODO: List of todo's for this file
 //------------------------------------------------------------------------------
-// 
+//
 
 namespace turi {
 
@@ -25,7 +25,7 @@ typedef arma::vec DiagonalMatrix;  // The "diaganol matrix" aspect of this is de
 typedef sparse_vector<double> SparseVector;
 typedef arma::sp_mat SparseMatrix;
 
-namespace optimization { 
+namespace optimization {
 
 
 /**
@@ -34,7 +34,7 @@ namespace optimization {
  * \{
  */
 
-/// Solver options type is a map from string to flexible_type.  
+/// Solver options type is a map from string to flexible_type.
 const std::map<std::string, flexible_type> default_solver_options {
   {"convergence_threshold", 1e-2},
   {"step_size", 1.0},
@@ -59,9 +59,9 @@ const std::map<std::string, flex_type_enum> default_solver_option_types {
 // ---------------------------------------------------------------------------
 
 /// Optimization status
-enum class OPTIMIZATION_STATUS { 
-OPT_UNSET= 0,             ///< Optimizer wasn't called 
-OPT_LOADED = 1,           ///< Model was loaded but the solution was not found.	
+enum class OPTIMIZATION_STATUS {
+OPT_UNSET= 0,             ///< Optimizer wasn't called
+OPT_LOADED = 1,           ///< Model was loaded but the solution was not found.
 OPT_OPTIMAL = 2,          ///< Optimal solution found
 OPT_ITERATION_LIMIT = 3,  ///< Iteration limit reached.
 OPT_TIME_LIMIT = 4,       ///< Time limit reached.
@@ -69,7 +69,7 @@ OPT_INTERRUPTED = 5,     	///< Optimization terminated by user.
 OPT_NUMERIC_ERROR = 6,    ///< Numerical underflow (not enough progress).
 OPT_NUMERIC_OVERFLOW = 7, ///< Numerical overflow. Step size parameter may be too large.
 OPT_LS_FAILURE= 8,        ///< Line search iteration limit hit.
-}; 
+};
 
 
 
@@ -87,16 +87,16 @@ const double LS_SAFE_GUARD = 5.0e-2;  ///< Safe guarding tolerance for line sear
 const double LS_MAX_STEP_SIZE = 25.0; ///< Max allowable step size.
 
 /// Finite difference parameters (required for gradient checking)
-const double FINITE_DIFFERENCE_EPSILON = 1e-5; 
+const double FINITE_DIFFERENCE_EPSILON = 1e-5;
 
 /**
  * Solver return type structure.
- * \note The number of passes over the data need not be the same thing 
+ * \note The number of passes over the data need not be the same thing
  * as the number of iterations. Each iteration could require multiple passes
  * over the data (Eg. for line search).
 */
 struct _solver_return{
-  
+
   int iters = -1;                               /*!< Iterations taken */
   double solve_time = -1;                       /*!< Wall clock time (s) */
   DenseVector solution;                         /*!< Solution */
@@ -117,7 +117,7 @@ typedef struct _solver_return solver_return;
  * Line search return type.
 */
 struct _ls_return{
-  
+
   double step_size = 1.0;                       /*!< Step size found */
   bool status = false;                          /*!< Line search status*/
   int func_evals = 0;                           /*!< Function evals */
@@ -138,27 +138,27 @@ typedef struct _ls_return ls_return;
  * function value.
  */
 class first_order_opt_interface {
- 
+
   public:
-  
+
   /**
-   * Default desctuctor. 
+   * Default desctuctor.
    */
   virtual ~first_order_opt_interface();
-  
 
-  
+
+
   /**
    * Get the number of examples in the dataset (Required for SGD).
    *
-   * \returns Number of examples in the data. 
+   * \returns Number of examples in the data.
    */
   virtual size_t num_examples() const = 0;
 
   /**
    * Get the number of variables in the optimization problem.
    *
-   * \returns Number of variables (features) in the optimization. 
+   * \returns Number of variables (features) in the optimization.
    *
    * \note Statisticians beware. Bias terms are variables in the
    * optimization problem.
@@ -179,12 +179,12 @@ class first_order_opt_interface {
   virtual void compute_first_order_statistics(const DenseVector &point,
       DenseVector& gradient, double & function_value, const size_t mbStart = 0,
       const size_t mbSize = -1) = 0;
-  
-  /** 
+
+  /**
    * Optimizations for performance reasons.
    * -------------------------------------------------------------------------
-   */	
-  
+   */
+
   /**
    * Compute the function value at a given point.
    * \param[in]  point   Point at which we are computing the gradient.
@@ -213,7 +213,7 @@ class first_order_opt_interface {
       gradient, const size_t mbStart = 0, const size_t mbSize = -1);
 
 
-  
+
   /**
    * Reset the state of the model's "randomness" source.
    *
@@ -221,13 +221,13 @@ class first_order_opt_interface {
    *
    */
   virtual void reset(int seed);
-  
+
   /**
    * Get strings needed to print the header for the progress table.
    *
    * \param[in] a vector of strings to print at the beginning of the header.
    */
-  virtual std::vector<std::pair<std::string,size_t>> 
+  virtual std::vector<std::pair<std::string,size_t>>
       get_status_header(const std::vector<std::string>& stats);
 
   /**
@@ -236,7 +236,7 @@ class first_order_opt_interface {
    * \param[in] a vector of model coefficients.
    * \param[in] a vector of stats to print at the beginning of each row
    */
-  virtual std::vector<std::string> get_status(const DenseVector& coefs, 
+  virtual std::vector<std::string> get_status(const DenseVector& coefs,
                                               const std::vector<std::string>& stats);
 
 
@@ -252,12 +252,12 @@ class first_order_opt_interface {
 class second_order_opt_interface: public first_order_opt_interface {
 
   public:
-  
+
   /**
-   * Default desctuctor. 
+   * Default desctuctor.
    */
   virtual ~second_order_opt_interface();
-  
+
   /**
    * Compute second order statistics at the given point. (Hessian, Gradient
    * & Function value)
@@ -272,10 +272,10 @@ class second_order_opt_interface: public first_order_opt_interface {
       DenseMatrix& Hessian, DenseVector& gradient, double & function_value) = 0;
 
 
-  /** 
+  /**
    * Optimizations for performance reasons.
    * -------------------------------------------------------------------------
-   */	
+   */
 
   /**
    *
@@ -288,7 +288,7 @@ class second_order_opt_interface: public first_order_opt_interface {
    *
    */
   virtual void compute_hessian(const DenseVector& point, DenseMatrix& hessian);
-  
+
 
 };
 
@@ -297,5 +297,4 @@ class second_order_opt_interface: public first_order_opt_interface {
 
 } // turicreate
 
-#endif 
-
+#endif

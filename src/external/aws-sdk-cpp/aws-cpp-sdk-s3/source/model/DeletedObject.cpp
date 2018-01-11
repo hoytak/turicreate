@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-DeletedObject::DeletedObject() : 
+DeletedObject::DeletedObject() :
     m_keyHasBeenSet(false),
     m_versionIdHasBeenSet(false),
     m_deleteMarker(false),
@@ -38,7 +38,7 @@ DeletedObject::DeletedObject() :
 {
 }
 
-DeletedObject::DeletedObject(const XmlNode& xmlNode) : 
+DeletedObject::DeletedObject(const XmlNode& xmlNode) :
     m_keyHasBeenSet(false),
     m_versionIdHasBeenSet(false),
     m_deleteMarker(false),

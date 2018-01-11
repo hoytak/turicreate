@@ -45,8 +45,7 @@ namespace turi {
       }
     };
   }
-  
+
 } // namespace turi
 
-#endif 
-
+#endif

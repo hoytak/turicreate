@@ -42,12 +42,12 @@ void log_rotation_background_thread() {
     unlink(symlink_name.c_str());
     fs::create_symlink(current_log_file.c_str(), symlink_name.c_str());
 #endif
-    
+
     // if our counter exceeds the truncate limit, delete earlier files
     if (truncate_limit > 0 && log_counter >= truncate_limit) {
       // delete oldest files
-      std::string oldest_log_file = make_file_name(log_base_name, 
-                                                   log_counter - truncate_limit); 
+      std::string oldest_log_file = make_file_name(log_base_name,
+                                                   log_counter - truncate_limit);
       unlink(oldest_log_file.c_str());
     }
 
@@ -64,7 +64,7 @@ void log_rotation_background_thread() {
   }
 }
 
-void begin_log_rotation(std::string _log_file_name, 
+void begin_log_rotation(std::string _log_file_name,
                         size_t _log_interval,
                         size_t _truncate_limit) {
   if (_truncate_limit == 0) throw "Truncate limit must be >= 1";
@@ -92,7 +92,7 @@ void stop_log_rotation() {
   lock.unlock();
   log_rotate_thread->join();
   log_rotate_thread.reset();
-  // we will continue logging to the same location, but we will 
+  // we will continue logging to the same location, but we will
   // delete the symlink
 #ifndef _WIN32
   unlink(symlink_name.c_str());

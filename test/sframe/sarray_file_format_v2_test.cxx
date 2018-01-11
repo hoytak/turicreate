@@ -155,7 +155,7 @@ struct sarray_file_format_v2_test {
     }
     group_writer.close();
     group_writer.write_index_file();
-    std::cout << "Written 16*4M = 64M integers to disk sequentially in: " 
+    std::cout << "Written 16*4M = 64M integers to disk sequentially in: "
               << ti.current_time() << " seconds \n";
 
 
@@ -176,7 +176,7 @@ struct sarray_file_format_v2_test {
           TS_ASSERT_EQUALS(vals[i], start + i);
         }
       }
-      std::cout << "1600 random seeks of 4096 values in " 
+      std::cout << "1600 random seeks of 4096 values in "
                 << ti.current_time() << " seconds\n" << std::endl;
 
       // test some edge cases. Read past the end
@@ -200,7 +200,7 @@ struct sarray_file_format_v2_test {
       std::vector<size_t> start_points;
       for (size_t i = 0;i < 16; ++i) {
         start_points.push_back(
-            random::fast_uniform<size_t>(0, 
+            random::fast_uniform<size_t>(0,
                                          15 * VERY_LARGE_SIZE));
                                          // 15 so as to give some gap for reading
       }
@@ -216,7 +216,7 @@ struct sarray_file_format_v2_test {
           start_points[j] += len;
         }
       }
-      std::cout << "1600 semi-sequential seeks of average 4096 values in " 
+      std::cout << "1600 semi-sequential seeks of average 4096 values in "
                 << ti.current_time() << " seconds\n" << std::endl;
     }
   }
@@ -242,7 +242,7 @@ struct sarray_file_format_v2_test {
     }
     group_writer.close();
     group_writer.write_index_file();
-    std::cout << "Written 16*4M = 64M flexible_type integers to disk sequentially in: " 
+    std::cout << "Written 16*4M = 64M flexible_type integers to disk sequentially in: "
               << ti.current_time() << " seconds \n";
 
 
@@ -263,7 +263,7 @@ struct sarray_file_format_v2_test {
       if ((size_t)(vals[i]) != start + i) TS_ASSERT_EQUALS((size_t)(vals[i]), start + i);
     }
   }
-  std::cout << "1600 random seeks of 4096 flexible_type values in " 
+  std::cout << "1600 random seeks of 4096 flexible_type values in "
             << ti.current_time() << " seconds\n" << std::endl;
 
   // test some edge cases. Read past the end
@@ -287,7 +287,7 @@ struct sarray_file_format_v2_test {
   std::vector<size_t> start_points;
   for (size_t i = 0;i < 16; ++i) {
     start_points.push_back(
-        random::fast_uniform<size_t>(0, 
+        random::fast_uniform<size_t>(0,
                                      15 * VERY_LARGE_SIZE));
                                      // 15 so as to give some gap for reading
   }
@@ -303,7 +303,7 @@ struct sarray_file_format_v2_test {
       start_points[j] += len;
     }
   }
-  std::cout << "1600 semi-sequential seeks of average 4096 flexible_type values in " 
+  std::cout << "1600 semi-sequential seeks of average 4096 flexible_type values in "
             << ti.current_time() << " seconds\n" << std::endl;
 }
 
@@ -315,7 +315,7 @@ struct sarray_file_format_v2_test {
   std::vector<size_t> start_points;
   for (size_t i = 0;i < 16; ++i) {
     start_points.push_back(
-        random::fast_uniform<size_t>(0, 
+        random::fast_uniform<size_t>(0,
                                      15 * VERY_LARGE_SIZE));
                                      // 15 so as to give some gap for reading
   }
@@ -335,7 +335,7 @@ struct sarray_file_format_v2_test {
       start_points[j] += len;
     }
   }
-  std::cout << "1600 sframe_rows semi-sequential seeks of average 4096 flexible_type values in " 
+  std::cout << "1600 sframe_rows semi-sequential seeks of average 4096 flexible_type values in "
             << ti.current_time() << " seconds\n" << std::endl;
 }
 
@@ -354,7 +354,7 @@ struct sarray_file_format_v2_test {
     }
     TS_ASSERT_EQUALS(k, len);
   }
-  std::cout << "64 vector read sequential seeks of 1M flexible_type values in " 
+  std::cout << "64 vector read sequential seeks of 1M flexible_type values in "
             << ti.current_time() << " seconds\n" << std::endl;
 }
 
@@ -376,7 +376,7 @@ struct sarray_file_format_v2_test {
         }
         TS_ASSERT_EQUALS(k, len);
       }
-      std::cout << "64 sframe_rows sequential seeks of average 1M flexible_type values in " 
+      std::cout << "64 sframe_rows sequential seeks of average 1M flexible_type values in "
                 << ti.current_time() << " seconds\n" << std::endl;
     }
   }

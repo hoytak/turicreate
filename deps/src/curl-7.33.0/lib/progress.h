@@ -69,4 +69,3 @@ void Curl_pgrsTime(struct SessionHandle *data, timerid timer);
 
 
 #endif /* HEADER_CURL_PROGRESS_H */
-

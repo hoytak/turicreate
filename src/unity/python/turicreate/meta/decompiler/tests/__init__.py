@@ -18,7 +18,7 @@ if py2:
     from StringIO import StringIO
 else:
     from io import StringIO
-    
+
 filename = 'tests.py'
 
 class Base(unittest.TestCase):
@@ -32,7 +32,7 @@ class Base(unittest.TestCase):
         result = cmp_ast(left, right)
 
         if not result:
-            
+
             lstream = StringIO()
             print_ast(left, indent='', file=lstream, newline='')
 
@@ -50,7 +50,7 @@ class Base(unittest.TestCase):
 
         expected_ast = compile(stmnt, filename, 'exec', _ast.PyCF_ONLY_AST) if expected_ast is None else expected_ast
         code = compile(expected_ast, filename, 'exec')
-        
+
         if equiv is None:
             mod_ast = make_module(code)
         else:

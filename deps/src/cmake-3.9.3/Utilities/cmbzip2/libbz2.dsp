@@ -7,19 +7,19 @@
 CFG=libbz2 - Win32 Debug
 !MESSAGE これは有効なﾒｲｸﾌｧｲﾙではありません。 このﾌﾟﾛｼﾞｪｸﾄをﾋﾞﾙﾄﾞするためには NMAKE を使用してください。
 !MESSAGE [ﾒｲｸﾌｧｲﾙのｴｸｽﾎﾟｰﾄ] ｺﾏﾝﾄﾞを使用して実行してください
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "libbz2.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE の実行時に構成を指定できます
 !MESSAGE ｺﾏﾝﾄﾞ ﾗｲﾝ上でﾏｸﾛの設定を定義します。例:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "libbz2.mak" CFG="libbz2 - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE 選択可能なﾋﾞﾙﾄﾞ ﾓｰﾄﾞ:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "libbz2 - Win32 Release" ("Win32 (x86) Dynamic-Link Library" 用)
 !MESSAGE "libbz2 - Win32 Debug" ("Win32 (x86) Dynamic-Link Library" 用)
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP Scc_ProjName ""
@@ -80,7 +80,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"libbz2.dll" /pdbtype:sept
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 

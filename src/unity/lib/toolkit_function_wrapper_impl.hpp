@@ -55,7 +55,7 @@ struct function_args_to_mpl_vector {
 
 
 /**
- * Provides a wrapper around the return type of a function call. 
+ * Provides a wrapper around the return type of a function call.
  * For instance:
  * \code
  * int test() {
@@ -87,9 +87,9 @@ struct function_args_to_mpl_vector {
  * try {
  *   res.call(nothing);
  * } catch (...) {
- *   // function was called, but it didn't return properly, 
+ *   // function was called, but it didn't return properly,
  *   // res.ret_value is still 0
- * } 
+ * }
  * // function call was completed successfully. res.ret_value == 1
  * \endcode
  *
@@ -116,7 +116,7 @@ struct result_of_function_wrapper {
   }
 };
 
-/** specialization for the void return case; 
+/** specialization for the void return case;
  * in which case the return value is an integer which is 0 if the function
  * is not called, and 1 if the function is called.
  */
@@ -134,7 +134,7 @@ struct result_of_function_wrapper<void> {
 
 /**
  * A boost fusion type function that achieves:
- * 
+ *
  *    T -> T*
  */
 struct make_pointer_to {
@@ -155,11 +155,11 @@ struct make_pointer_to {
 };
 
 /**
- * Fills in a boost::fusion::vector<T ...> with parameters from the 
+ * Fills in a boost::fusion::vector<T ...> with parameters from the
  * toolkit invocation object.
  *
  * InArgType is a boost::fusion::vector<T ...> representing the input arguments
- * of the user defined function.  
+ * of the user defined function.
  *
  * inargnames is a vector of strings naming each of the argument, and should
  * preferably, (but not necessary) be of the same length as InArgType.
@@ -168,10 +168,10 @@ struct make_pointer_to {
  *
  * inargs[n] = params[inargnames[n]]
  *
- * Except this cannot be done so easily because each entry in the 
+ * Except this cannot be done so easily because each entry in the
  * boost fusion vector is of a different type. So a bit more work is needed.
  *
- * If inargnames is shorter than the actual number of arguments, only 
+ * If inargnames is shorter than the actual number of arguments, only
  * inargnames.size() number of arguments is filled. If it is longer, only the
  * first inargs.size() names are taken.
  */
@@ -182,11 +182,11 @@ struct fill_named_in_args {
   variant_map_type* params;  // pointer to the user's input which called the function
 
   template<int n>
-  void operator()(boost::mpl::integral_c<int, n> t) const { 
+  void operator()(boost::mpl::integral_c<int, n> t) const {
     // the type of inargs[n] the use of std::decay removes all references
     typedef typename std::decay<decltype(boost::fusion::at_c<n>(*inargs))>::type element_type;
     if (n < inargnames.size()) {
-      boost::fusion::at_c<n>(*inargs) = 
+      boost::fusion::at_c<n>(*inargs) =
           turi::safe_varmap_get<element_type>(*params, inargnames[n]);
     }
   }
@@ -194,11 +194,11 @@ struct fill_named_in_args {
 
 
 /**
- * Fills in a boost::fusion::vector<T ...> with parameters from the 
+ * Fills in a boost::fusion::vector<T ...> with parameters from the
  * std::vector<variant_type>.
  *
  * InArgType is a boost::fusion::vector<T ...> representing the input arguments
- * of the user defined function.  
+ * of the user defined function.
  *
  * params is a vector of variants of the same length as InArgType.
  *
@@ -206,7 +206,7 @@ struct fill_named_in_args {
  *
  * inargs[n] = params[n]
  *
- * Except this cannot be done so easily because each entry in the 
+ * Except this cannot be done so easily because each entry in the
  * boost fusion vector is of a different type. So a bit more work is needed.
  */
 template <typename InArgType>
@@ -215,7 +215,7 @@ struct fill_in_args {
   const std::vector<variant_type>* params;  // pointer to the user's input which called the function
 
   template<int n>
-  void operator()(boost::mpl::integral_c<int, n> t) const { 
+  void operator()(boost::mpl::integral_c<int, n> t) const {
     // the type of inargs[n] the use of std::decay removes all references
     typedef typename std::decay<decltype(boost::fusion::at_c<n>(*inargs))>::type element_type;
     if (n < params->size()) {
@@ -268,7 +268,7 @@ struct make_range2 {
  * \endcode
  */
 template <size_t NumInArgs, typename Function>
-std::function<variant_type(variant_map_type)> 
+std::function<variant_type(variant_map_type)>
 generate_function_wrapper(Function fn, std::vector<std::string> inargnames) {
   // import some mpl stuff we will be using
   using boost::mpl::erase;
@@ -285,7 +285,7 @@ generate_function_wrapper(Function fn, std::vector<std::string> inargnames) {
   // decay it to element const, references, etc.
   typedef typename boost::mpl::transform<fn_args_type_original, std::decay<_1>>::type fn_args_type;
 
-  static_assert(size<fn_args_type>::value == NumInArgs, 
+  static_assert(size<fn_args_type>::value == NumInArgs,
                 "Invalid number arguments. #input != #function arguments.");
   typedef fn_args_type in_arg_types;
 
@@ -315,7 +315,7 @@ generate_function_wrapper(Function fn, std::vector<std::string> inargnames) {
           return boost::fusion::invoke(fn, in_args);
         });
         if (retval.is_void) return to_variant(FLEX_UNDEFINED);
-        else return to_variant(retval.ret_value); 
+        else return to_variant(retval.ret_value);
       };
   return fnwrapper;
 }
@@ -339,7 +339,7 @@ generate_function_wrapper(Function fn, std::vector<std::string> inargnames) {
  * \endcode
  */
 template <size_t NumInArgs, typename Function>
-std::function<variant_type(const std::vector<variant_type>&)> 
+std::function<variant_type(const std::vector<variant_type>&)>
 generate_native_function_wrapper(Function fn) {
   // import some mpl stuff we will be using
   using boost::mpl::erase;
@@ -356,7 +356,7 @@ generate_native_function_wrapper(Function fn) {
   // decay it to element const, references, etc.
   typedef typename boost::mpl::transform<fn_args_type_original, std::decay<_1>>::type fn_args_type;
 
-  static_assert(size<fn_args_type>::value == NumInArgs, 
+  static_assert(size<fn_args_type>::value == NumInArgs,
                 "Invalid number arguments. #input != #function arguments.");
   typedef fn_args_type in_arg_types;
 
@@ -387,7 +387,7 @@ generate_native_function_wrapper(Function fn) {
           return boost::fusion::invoke(fn, in_args);
         });
         if (retval.is_void) return to_variant(FLEX_UNDEFINED);
-        else return to_variant(retval.ret_value); 
+        else return to_variant(retval.ret_value);
       };
   return fnwrapper;
 }
@@ -413,8 +413,8 @@ generate_native_function_wrapper(Function fn) {
  * \endcode
  */
 template <size_t NumInArgs, typename T, typename Ret, typename... Args>
-std::function<variant_type(T*, variant_map_type)> 
-generate_member_function_wrapper(Ret (T::* fn)(Args...), 
+std::function<variant_type(T*, variant_map_type)>
+generate_member_function_wrapper(Ret (T::* fn)(Args...),
                                  std::vector<std::string> inargnames) {
   // import some mpl stuff we will be using
   using boost::mpl::erase;
@@ -431,7 +431,7 @@ generate_member_function_wrapper(Ret (T::* fn)(Args...),
   // decay it to element const, references, etc.
   typedef typename boost::mpl::transform<fn_args_type_original, std::decay<_1>>::type fn_args_type;
 
-  static_assert(size<fn_args_type>::value == NumInArgs + 1, 
+  static_assert(size<fn_args_type>::value == NumInArgs + 1,
                 "Invalid number arguments. #input != #function arguments.");
   typedef fn_args_type in_arg_types;
   // pad inargnames in front with one more element to cover for the "this" argument
@@ -464,7 +464,7 @@ generate_member_function_wrapper(Ret (T::* fn)(Args...),
           return boost::fusion::invoke(member_fn, in_args);
         });
         if (retval.is_void) return to_variant(FLEX_UNDEFINED);
-        else return to_variant(retval.ret_value); 
+        else return to_variant(retval.ret_value);
       };
   return fnwrapper;
 }
@@ -492,8 +492,8 @@ generate_member_function_wrapper(Ret (T::* fn)(Args...),
  * around the const.
  */
 template <size_t NumInArgs, typename T, typename Ret, typename... Args>
-std::function<variant_type(T*, variant_map_type)> 
-generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const, 
+std::function<variant_type(T*, variant_map_type)>
+generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const,
                                        std::vector<std::string> inargnames) {
   // import some mpl stuff we will be using
   using boost::mpl::erase;
@@ -510,7 +510,7 @@ generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const,
   // decay it to element const, references, etc.
   typedef typename boost::mpl::transform<fn_args_type_original, std::decay<_1>>::type fn_args_type;
 
-  static_assert(size<fn_args_type>::value == NumInArgs + 1, 
+  static_assert(size<fn_args_type>::value == NumInArgs + 1,
                 "Invalid number arguments. #input != #function arguments.");
   typedef fn_args_type in_arg_types;
   // pad inargnames in front with one more element to cover for the "this" argument
@@ -543,14 +543,14 @@ generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const,
           return boost::fusion::invoke(member_fn, in_args);
         });
         if (retval.is_void) return to_variant(FLEX_UNDEFINED);
-        else return to_variant(retval.ret_value); 
+        else return to_variant(retval.ret_value);
       };
   return fnwrapper;
 }
 
 
 /**
- * Generates a toolkit specification object for a user defined function which 
+ * Generates a toolkit specification object for a user defined function which
  * wraps the user defined function with a helper that provides type checking,
  * argument filling and exception handling.
  *
@@ -562,12 +562,12 @@ generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const,
  * Where toolkit_function_invocation essentially stores a dictionary of input arguments,
  * and toolkit_function_response_type stores a dictionary of outputs.
  *
- * However, this can be quite difficult to use in practice, especially due to 
+ * However, this can be quite difficult to use in practice, especially due to
  * dynamic typing which requires a lot of additional typechecking and validation
  * overhead.
  *
  * The basic idea behind this function is to allow the user can publish
- * arbitrary functions of the form: 
+ * arbitrary functions of the form:
  *
  * \code
  * return_type function_name(InArg1 arg1, InArg2 arg2...)
@@ -580,9 +580,9 @@ generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const,
  *  - unity_sarray*
  *  - unity_sframe*
  *  - unity_sgraph*
- *  - any type contained by flexible_type: i.e. flex_int, flex_vec, etc. 
+ *  - any type contained by flexible_type: i.e. flex_int, flex_vec, etc.
  *
- * The return type can similarly be any input argument type, or any type which 
+ * The return type can similarly be any input argument type, or any type which
  * can be converted into a flexible_type.
  *
  * For instance
@@ -594,17 +594,17 @@ generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const,
  *
  * Then to publish it:
  * \code
- * toolkit_function_specification spec = 
+ * toolkit_function_specification spec =
  *      make_spec<2>(demo, "demo", {"arg1name", "arg2name"});
  * \endcode
  *
  * Will return a toolkit specification object that publishes the user defined
- * function to Python under the name "fnname". And mapping the input 
+ * function to Python under the name "fnname". And mapping the input
  * dictionary to the input arguments of the function using "inargnames"
  * and mapping output arguments to the output dictionary using outargnames.
  *
  * Essentially, with reference to the example demo function above, a helper
- * function is produced which performs the following, but with more error 
+ * function is produced which performs the following, but with more error
  * checking and validation.
  * \code
  * toolkit_function_response_type helper(toolkit_function_invocation& invoke) {
@@ -612,7 +612,7 @@ generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const,
  *    flex_int arg1 =  invoke.params["arg1name"];
  *    unity_sarray* arg2 =  invoke.params["arg2name"];
  *    auto result = demo(arg1, arg2);
- *     
+ *
  *    // generate response
  *    toolkit_function_response_type ret;
  *    ret.params["return_value"] = result;
@@ -627,9 +627,9 @@ generate_const_member_function_wrapper(Ret (T::* fn)(Args...) const,
  * ret = main.run("demo", {'arg1name':5, 'arg2name':array})
  * \endcode
  *
- * 
+ *
  * \tparam NumInArgs The number of input arguments of the user function
- * \tparam Function The type of the function. Usually does not need to be 
+ * \tparam Function The type of the function. Usually does not need to be
  *                  specified. This should be automatically inferable.
  *
  * \param fn Pointer to the user function
@@ -643,7 +643,7 @@ toolkit_function_specification make_spec(Function fn, std::string fnname,
   toolkit_function_specification spec;
   auto fnwrapper = generate_function_wrapper<NumInArgs, Function>(fn, inargnames);
   auto native_fn_wrapper = generate_native_function_wrapper<NumInArgs, Function>(fn);
-  
+
   auto invoke_fn = [fnwrapper,inargnames](turi::toolkit_function_invocation& invoke)->turi::toolkit_function_response_type {
         turi::toolkit_function_response_type ret;
         // we are inside the actual toolkit call now.
@@ -674,10 +674,10 @@ toolkit_function_specification make_spec(Function fn, std::string fnname,
   if (last_colon == std::string::npos) spec.name = fnname;
   else spec.name = fnname.substr(last_colon + 1);
 
-  // store the function 
-  spec.toolkit_execute_function = invoke_fn; 
+  // store the function
+  spec.toolkit_execute_function = invoke_fn;
   spec.native_execute_function = native_fn_wrapper;
-  spec.description["arguments"] = 
+  spec.description["arguments"] =
       flexible_type_converter<decltype(inargnames)>().set(inargnames);
   spec.description["_raw_fn_pointer_"] = reinterpret_cast<size_t>(fn);
 
@@ -687,7 +687,7 @@ toolkit_function_specification make_spec(Function fn, std::string fnname,
 
 
 /**
- * Generates a toolkit specification object for a user defined function which 
+ * Generates a toolkit specification object for a user defined function which
  * wraps the user defined function with a helper that provides type checking,
  * argument filling and exception handling.
  *
@@ -699,14 +699,14 @@ toolkit_function_specification make_spec_indirect(Function fn, std::string fnnam
                                          Args... args) {
   // Get a function traits object from the function type
   typedef boost::function_traits<typename std::remove_pointer<Function>::type> fntraits;
-  static_assert(fntraits::arity == sizeof...(Args), 
+  static_assert(fntraits::arity == sizeof...(Args),
                 "Incorrect number input parameter names specified.");
   return make_spec<sizeof...(Args)>(fn, fnname, {args...});
 }
 
 
 
-} // toolkit_function_wrapper_impl 
+} // toolkit_function_wrapper_impl
 } // turicreate
 
 #endif

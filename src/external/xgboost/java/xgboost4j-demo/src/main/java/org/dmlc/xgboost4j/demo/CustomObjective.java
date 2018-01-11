@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -44,26 +44,26 @@ public class CustomObjective {
      */
     public static class LogRegObj implements IObjective {
         private static final Log logger = LogFactory.getLog(LogRegObj.class);
-        
+
         /**
          * simple sigmoid func
          * @param input
-         * @return 
+         * @return
          * Note: this func is not concern about numerical stability, only used as example
          */
         public float sigmoid(float input) {
             float val = (float) (1/(1+Math.exp(-input)));
             return val;
         }
-        
+
         public float[][] transform(float[][] predicts) {
             int nrow = predicts.length;
             float[][] transPredicts = new float[nrow][1];
-            
+
             for(int i=0; i<nrow; i++) {
                 transPredicts[i][0] = sigmoid(predicts[i][0]);
             }
-            
+
             return transPredicts;
         }
 
@@ -80,21 +80,21 @@ public class CustomObjective {
             }
             float[] grad = new float[nrow];
             float[] hess = new float[nrow];
-            
+
             float[][] transPredicts = transform(predicts);
-            
+
             for(int i=0; i<nrow; i++) {
                 float predict = transPredicts[i][0];
                 grad[i] = predict - labels[i];
                 hess[i] = predict * (1 - predict);
             }
-            
+
             gradients.add(grad);
             gradients.add(hess);
             return gradients;
-        }        
+        }
     }
-    
+
     /**
      * user defined eval function.
      * NOTE: when you do customized loss function, the default prediction value is margin
@@ -105,12 +105,12 @@ public class CustomObjective {
      */
     public static class EvalError implements IEvaluation {
         private static final Log logger = LogFactory.getLog(EvalError.class);
-        
+
         String evalMetric = "custom_error";
-        
+
         public EvalError() {
         }
-        
+
         @Override
         public String getMetric() {
             return evalMetric;
@@ -135,17 +135,17 @@ public class CustomObjective {
                     error++;
                 }
             }
-            
+
             return error/labels.length;
         }
     }
-    
+
     public static void main(String[] args) throws XGBoostError {
         //load train mat (svmlight format)
         DMatrix trainMat = new DMatrix("../../demo/data/agaricus.txt.train");
         //load valid mat (svmlight format)
         DMatrix testMat = new DMatrix("../../demo/data/agaricus.txt.test");
-        
+
         //set params
         //set params
         Params param = new Params() {
@@ -155,21 +155,21 @@ public class CustomObjective {
                 put("silent", 1);
             }
         };
-        
+
         //set round
         int round = 2;
-        
+
         //specify watchList
         List<Map.Entry<String, DMatrix>> watchs =  new ArrayList<>();
         watchs.add(new AbstractMap.SimpleEntry<>("train", trainMat));
         watchs.add(new AbstractMap.SimpleEntry<>("test", testMat));
-        
+
         //user define obj and eval
         IObjective obj = new LogRegObj();
         IEvaluation eval = new EvalError();
-        
+
         //train a booster
-        System.out.println("begin to train the booster model");        
+        System.out.println("begin to train the booster model");
         Booster booster = Trainer.train(param, trainMat, round, watchs, obj, eval);
     }
 }

@@ -58,7 +58,7 @@ std::string file_download_cache::get_file(const std::string& url) {
   int status; bool is_temp;
   std::tie(status, is_temp, localfile) = download_url(url);
   if (status) {
-    log_and_throw_io_failure("Fail to download from " + url + 
+    log_and_throw_io_failure("Fail to download from " + url +
                              ". " + get_curl_error_string(status));
   }
   if (is_temp) {

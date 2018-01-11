@@ -78,7 +78,7 @@ int EXPORT pylambda_worker_main(const std::string& root_path,
   LOG_DEBUG_WITH_PID("parend pid = " << parent_pid);
 
   size_t _last_line = __LINE__;
-#define __TRACK do { _last_line = __LINE__; } while(0)  
+#define __TRACK do { _last_line = __LINE__; } while(0)
   try {
 
     LOG_DEBUG_WITH_PID("Library function entered successfully.");
@@ -113,7 +113,7 @@ int EXPORT pylambda_worker_main(const std::string& root_path,
                            << std::endl;
       has_shm = false;
     }
-    
+
     __TRACK; LOG_DEBUG_WITH_PID("shm_comm_server bind: has_shm=" << has_shm);
 
     // construct the server
@@ -130,13 +130,13 @@ int EXPORT pylambda_worker_main(const std::string& root_path,
           __TRACK; return n;
         }
       });
-    
+
     __TRACK; server.register_type<turi::lambda::graph_lambda_evaluator_interface>([&](){
         __TRACK; auto n = new turi::lambda::graph_pylambda_evaluator();
         __TRACK; LOG_DEBUG_WITH_PID("creation of graph_pylambda_evaluator complete.");
         __TRACK; return n;
       });
-    
+
     __TRACK; LOG_DEBUG_WITH_PID("Starting server.");
     __TRACK; server.start();
 
@@ -163,4 +163,3 @@ int EXPORT pylambda_worker_main(const std::string& root_path,
 }
 
 }}
-

@@ -71,4 +71,3 @@ message TestDiffMessage {
 
   extensions 100 to 199;
 }
-

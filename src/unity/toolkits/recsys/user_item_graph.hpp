@@ -21,6 +21,6 @@ namespace turi { namespace recsys {
  */
 void make_user_item_graph(const v2::ml_data& data,
                           const std::shared_ptr<sarray<flex_dict> >& user_item_lists,
-                          sgraph& g); 
+                          sgraph& g);
 }}
 #endif /* _USER_ITEM_GRAPH_H_ */

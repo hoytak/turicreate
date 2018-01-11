@@ -30,7 +30,7 @@ void ml_data_iterator_base::setup(const ml_data& _data,
 
   has_untranslated_columns = data->has_untranslated_columns();
   has_translated_columns   = data->has_translated_columns() | data->has_target();
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Set up the blocks of information
   global_row_start = data->_row_start;
@@ -59,7 +59,7 @@ void ml_data_iterator_base::setup_block_containing_current_row_index() {
 
   // Check this silly corner case
   if(iter_row_index_start == iter_row_index_end) {
-    data_block.reset(); 
+    data_block.reset();
     return;
   }
 
@@ -70,7 +70,7 @@ void ml_data_iterator_base::setup_block_containing_current_row_index() {
     current_block_index = current_row_index / row_block_size;
 
     data_block.reset();
-    data_block = data->block_manager->get_block(current_block_index); 
+    data_block = data->block_manager->get_block(current_block_index);
   }
 
   size_t desired_current_row = current_row_index;

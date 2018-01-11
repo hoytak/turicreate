@@ -51,7 +51,7 @@ void set_insert(flexible_type& set, const flexible_type& value) {
 /**
  * Helper function to check wheter an element is in the flex_vec.
  * Assuming the flex_vec is sorted.
- */ 
+ */
 bool set_contains(const flexible_type& sorted_vec, const flexible_type& value) {
   const flex_vec& vec = sorted_vec.get<flex_vec>();
   return std::binary_search(vec.begin(), vec.end(), value);
@@ -94,7 +94,7 @@ void init_vertex_id(sgraph& g) {
   parallel_for (0, vgroup.size(), [&](size_t partitionid) {
     size_t begin = beginids[partitionid];
     size_t end = beginids[partitionid+1];
-    std::shared_ptr<sarray<flexible_type>> id_column = 
+    std::shared_ptr<sarray<flexible_type>> id_column =
         std::make_shared<sarray<flexible_type>>();
     id_column->open_for_write(1);
     id_column->set_type(flex_type_enum::INTEGER);
@@ -384,5 +384,5 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
   return {main_spec, option_spec, model_spec};
 }
 
-} // end of namespace triangle counting 
+} // end of namespace triangle counting
 } // end of namespace turi

@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -36,7 +36,7 @@ public class ExternalMemory {
         //currently only support convert from libsvm file
         DMatrix trainMat = new DMatrix("../../demo/data/agaricus.txt.train#dtrain.cache");
         DMatrix testMat = new DMatrix("../../demo/data/agaricus.txt.test#dtest.cache");
-        
+
         //specify parameters
         Params param = new Params() {
             {
@@ -46,19 +46,19 @@ public class ExternalMemory {
                 put("objective", "binary:logistic");
             }
         };
-        
+
         //performance notice: set nthread to be the number of your real cpu
         //some cpu offer two threads per core, for example, a 4 core cpu with 8 threads, in such case set nthread=4
         //param.put("nthread", num_real_cpu);
-        
+
         //specify watchList
         List<Map.Entry<String, DMatrix>> watchs =  new ArrayList<>();
         watchs.add(new AbstractMap.SimpleEntry<>("train", trainMat));
         watchs.add(new AbstractMap.SimpleEntry<>("test", testMat));
-        
+
         //set round
         int round = 2;
-        
+
         //train a boost model
         Booster booster = Trainer.train(param, trainMat, round, watchs, null, null);
     }

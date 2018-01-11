@@ -15,7 +15,7 @@
 namespace turi {
 namespace zookeeper_util {
 class key_value;
-} 
+}
 }
 
 namespace libfault {
@@ -26,7 +26,7 @@ namespace libfault {
  * This object is very much single threaded.
  * Sends to this socket will be received by all machines
  * subscribed to the socket.
- * 
+ *
  * \code
  * publish_socket pubsock(zmq_ctx, NULL, listen_addr);
  * pubsock.send(...);

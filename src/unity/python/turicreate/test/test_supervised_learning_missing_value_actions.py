@@ -337,5 +337,3 @@ class BoostedTreesClassifierTest(SupervisedLearningMissingValueTest):
         super(BoostedTreesClassifierTest, self).setUpClass()
         self.model = tc.boosted_trees_classifier.create(self.sf, self.target, validation_set=None)
         self.support_missing_value = True
-
-

@@ -11,7 +11,7 @@
 namespace turi {
 
 /**
- * Configures the system global environment. This should be the first thing 
+ * Configures the system global environment. This should be the first thing
  * (or close to the first thing) called on program startup.
  */
 void EXPORT configure_global_environment(std::string argv0);
@@ -61,7 +61,7 @@ class EXPORT global_teardown {
   global_teardown& operator=(const global_teardown&) = delete;
 
   /**
-   * Performs all the teardown calls immediately. Further calls to this 
+   * Performs all the teardown calls immediately. Further calls to this
    * function does nothing.
    */
   void perform_teardown();

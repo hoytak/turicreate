@@ -25,7 +25,7 @@
 
 namespace turi { namespace factorization {
 
-  static constexpr flex_int DYNAMIC = flex_int(-1); 
+  static constexpr flex_int DYNAMIC = flex_int(-1);
 
 
 /**  The model factor mode.  This enum determines the particular mode
@@ -49,14 +49,14 @@ public:
   static constexpr flex_int num_factors_if_known = _num_factors_if_known;
   static constexpr bool num_factors_known = (_num_factors_if_known != DYNAMIC);
 
-  typedef typename std::conditional<num_factors_known, 
-            arma::Row<float>::fixed<_num_factors_if_known>, 
+  typedef typename std::conditional<num_factors_known,
+            arma::Row<float>::fixed<_num_factors_if_known>,
             arma::Row<float> >::type factor_type;
 
   typedef row_major_matrix<float> factor_matrix_type;
-  
+
   typedef arma::fvec vector_type;
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Declare flags governing how the model works.
 
@@ -333,13 +333,13 @@ public:
           // corresponding factors are assumed to be zero and to have no
           // effect on any of the totals below; thus we just skip them.
           if(__unlikely__(v.index >= index_sizes[v.column_index])) {
-            
-            for(size_t i = 0; i < num_factors(); ++i) { 
-              XV(j, i) = 0; 
+
+            for(size_t i = 0; i < num_factors(); ++i) {
+              XV(j, i) = 0;
             }
-            
+
           } else {
-          
+
             // Get the global index
             const size_t global_idx = index_offsets[j] + v.index;
 
@@ -402,7 +402,7 @@ public:
           // effect on any of the totals below; thus we just skip them.
           if(__unlikely__(v.index >= index_sizes[v.column_index]))
             continue;
-          
+
           // Get the global index
           const size_t global_idx = index_offsets[v.column_index] + v.index;
 
@@ -450,11 +450,11 @@ public:
           // Just go through calculating the cosine metric
           if(item >= index_sizes[1]) {
             for(auto& p : sim_scores) {
-              p.second = 0; 
+              p.second = 0;
             }
             return;
           }
-          
+
           auto base_row = V.row(index_offsets[1] + item);
 
           float it_r = squared_norm(base_row);
@@ -464,7 +464,7 @@ public:
               p.second = 0;
               continue;
             }
-            
+
             size_t idx = index_offsets[1] + p.first;
             auto item_row = V.row(idx);
             p.second = dot(item_row, base_row) / std::sqrt(it_r * squared_norm(item_row));
@@ -488,10 +488,10 @@ public:
     std::map<std::string, variant_type> save_parameters;
 
     std::string factor_mode_str;
-    
+
     switch(factor_mode) {
       case model_factor_mode::factorization_machine:
-        factor_mode_str = "factorization_machine"; 
+        factor_mode_str = "factorization_machine";
         break;
       case model_factor_mode::matrix_factorization:
         factor_mode_str = "matrix_factorization";
@@ -502,7 +502,7 @@ public:
     }
 
     save_parameters["factor_mode"] = to_variant(factor_mode_str);
-    
+
     size_t __num_factors_if_known = num_factors_if_known;
 
     save_parameters["num_factors_if_known"] = to_variant(__num_factors_if_known);
@@ -514,8 +514,8 @@ public:
   ////////////////////////////////////////////////////////////////////////////////
   // Saving and loading of the model.
 
-  size_t get_version() const { return 1; } 
-  
+  size_t get_version() const { return 1; }
+
   /**  Save routine.
    */
   void save_impl(turi::oarchive& oarc) const {
@@ -797,7 +797,7 @@ public:
     size_t user_global_index = index_offsets[USER_COLUMN_INDEX] + user;
 
     DASSERT_LT(user_global_index, w.size());
-    
+
     double adjustment = (w0 + w[user_global_index]);
 
     // The general purpose one.
@@ -914,7 +914,7 @@ public:
     if(!factor_norms_computed) {
       std::lock_guard<mutex> lg(factor_norm_lock);
 
-      factor_norms.resize(V.n_rows); 
+      factor_norms.resize(V.n_rows);
 
       if(!factor_norms_computed) {
         for(flex_int i = 0; i < V.n_rows; ++i) {

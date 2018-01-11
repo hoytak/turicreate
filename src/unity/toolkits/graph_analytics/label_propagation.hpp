@@ -49,12 +49,12 @@ namespace label_propagation {
  * \li \b delta (flexible_type: float). The average of all last changes
  * made to each vertex in l2 norm.
  *
- * \li \b __graph__ (unity_graph). The graph object with the fields "P_0" 
+ * \li \b __graph__ (unity_graph). The graph object with the fields "P_0"
  * "P_1", ... "P_k" on each vertex, containing the probability
  * of the class for each vertex.
  */
 std::vector<toolkit_function_specification> get_toolkit_function_registration();
 
-} // namespace pagerank 
+} // namespace pagerank
 } // namespace turi
 #endif

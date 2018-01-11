@@ -13,13 +13,13 @@ namespace lockfree_push_back_impl {
   struct idx_ref {
     idx_ref(): reference_count(0), idx(0) { }
     idx_ref(size_t idx): reference_count(0), idx(idx) { }
-    
+
     volatile int reference_count;
     atomic<size_t> idx;
     enum {
       MAX_REF = 65536
     };
-    
+
     inline void inc_ref() {
       while (1) {
         int curref = reference_count;
@@ -27,13 +27,13 @@ namespace lockfree_push_back_impl {
             atomic_compare_and_swap(reference_count, curref, curref + 1)) {
           break;
         }
-      }      
+      }
     }
 
     inline void wait_till_no_ref() {
       while((reference_count & (MAX_REF - 1)) != 0);
     }
-    
+
     inline void dec_ref() {
       __sync_fetch_and_sub(&reference_count, 1);
     }
@@ -41,7 +41,7 @@ namespace lockfree_push_back_impl {
     inline void flag_ref() {
       __sync_fetch_and_xor(&reference_count, MAX_REF);
     }
-    
+
     inline size_t inc_idx() {
       return idx.inc_ret_last();
     }
@@ -51,7 +51,7 @@ namespace lockfree_push_back_impl {
     }
   };
 } // lockfree_push_back_impl
-  
+
 /**
  * Provides a lock free way to insert elements to the end
  * of a container. Container must provide 3 functions.
@@ -60,7 +60,7 @@ namespace lockfree_push_back_impl {
  *  - size_t size()
  *
  * resize(n) must guarantee that size() >= n.
- * T& operator[](size_t idx) must succeed for idx < size() and must be 
+ * T& operator[](size_t idx) must succeed for idx < size() and must be
  * safely executeable in parallel.
  * size() must be safely executeable in parallel with resize().
  *
@@ -124,7 +124,7 @@ class lockfree_push_back {
       }
       return putpos;
     }
-    
+
     bool query(size_t item, T& value) {
       bool ret = false;
       cur.inc_ref();

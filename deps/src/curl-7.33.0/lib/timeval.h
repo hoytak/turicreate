@@ -55,4 +55,3 @@ long Curl_tvlong(struct timeval t1);
 #define Curl_tvdiff_secs(x,y) curlx_tvdiff_secs(x,y)
 
 #endif /* HEADER_CURL_TIMEVAL_H */
-

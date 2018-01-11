@@ -7,8 +7,8 @@
 #include <unity/toolkits/ml_data_2/ml_data.hpp>
 #include <unity/toolkits/ml_data_2/sframe_index_mapping.hpp>
 #include <unity/toolkits/ml_data_2/metadata.hpp>
-#include <random/random.hpp> 
-#include <sframe/sframe_iterators.hpp> 
+#include <random/random.hpp>
+#include <sframe/sframe_iterators.hpp>
 
 namespace turi { namespace recsys {
 
@@ -49,7 +49,7 @@ std::pair<sframe, sframe> make_recsys_train_test_split(
 
     // We have to do it in an order determistic from the actual user
     // values since the indices and hence order are not deterministic.
-    // Otherwise, the end result will still be random. 
+    // Otherwise, the end result will still be random.
     std::nth_element(user_hashes.begin(),
                      user_hashes.begin() + max_num_users,
                      user_hashes.end());
@@ -58,18 +58,18 @@ std::pair<sframe, sframe> make_recsys_train_test_split(
       user_in_test[user_hashes[i].second] = true;
     }
   }
-  
+
   // Now go through and build a test set that filters
   // item_test_proportion of each selected user's items to the test
-  // set. 
+  // set.
 
-  size_t num_segments = thread::cpu_count(); 
-  
-  sframe train_sf; 
+  size_t num_segments = thread::cpu_count();
+
+  sframe train_sf;
   sframe validation_sf;
 
-  train_sf.open_for_write(data.column_names(), data.column_types(), "", num_segments); 
-  validation_sf.open_for_write(data.column_names(), data.column_types(), "", num_segments); 
+  train_sf.open_for_write(data.column_names(), data.column_types(), "", num_segments);
+  validation_sf.open_for_write(data.column_names(), data.column_types(), "", num_segments);
 
   parallel_sframe_iterator_initializer it_init({data, user_id_sframe});
 
@@ -78,33 +78,33 @@ std::pair<sframe, sframe> make_recsys_train_test_split(
 
   in_parallel([&](size_t thread_idx, size_t num_threads) {
 
-      DASSERT_LE(num_threads, num_segments); 
-      
+      DASSERT_LE(num_threads, num_segments);
+
       auto train_out = train_sf.get_output_iterator(thread_idx);
       auto validation_out = validation_sf.get_output_iterator(thread_idx);
 
-      std::vector<flexible_type> out_row; 
-    
+      std::vector<flexible_type> out_row;
+
       for(parallel_sframe_iterator it(it_init, thread_idx, num_threads); !it.done(); ++it) {
 
         it.fill(0, out_row);
 
         size_t user_idx = it.value(1,0);
-        DASSERT_LT(user_idx, user_in_test.size()); 
+        DASSERT_LT(user_idx, user_in_test.size());
 
         // Don't include user_id in here; it's random.  Just use the
         // it.row_index(), which we assume is deterministic.
         uint64_t r_num = hash64(inner_seed, it.row_index());
-        
+
         bool in_validation = (user_in_test[user_idx]
                               ? r_num < max_cutoff
-                              : false); 
-        
+                              : false);
+
         if(in_validation) {
-          *validation_out = out_row; 
-          ++validation_out; 
+          *validation_out = out_row;
+          ++validation_out;
         } else {
-          *train_out = out_row; 
+          *train_out = out_row;
           ++train_out;
         }
       }
@@ -113,7 +113,7 @@ std::pair<sframe, sframe> make_recsys_train_test_split(
   train_sf.close();
   validation_sf.close();
 
-  return std::make_pair(train_sf, validation_sf); 
+  return std::make_pair(train_sf, validation_sf);
 }
 
 

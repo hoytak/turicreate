@@ -19,4 +19,3 @@ There is now a callback scheme in place where filename conversion can
 	otherwise to make it "blah.dll").
     (ii) default to the normal behaviour - we're not on win32, eg.
          finish with (return dso->meth->dso_name_converter(dso,NULL)).
-

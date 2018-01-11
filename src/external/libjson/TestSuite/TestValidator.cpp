@@ -197,7 +197,7 @@ void TestSuite::TestValidator(void){
 	   assertNotValid_Depth("NULL,", isValidMember, ',');
 	   assertNotValid_Depth(",", isValidMember, ',');
     #endif
-    
+
     UnitTest::SetPrefix("TestValidator.cpp - Validator Security");
     #ifdef JSON_SECURITY_MAX_NEST_LEVEL
 	   #if (JSON_SECURITY_MAX_NEST_LEVEL != 128)
@@ -220,6 +220,6 @@ void TestSuite::TestValidator(void){
 		  assertFalse(JSONValidator::isValidRoot(json.c_str()));
 	   }
     #endif
-    
+
 #endif
 }

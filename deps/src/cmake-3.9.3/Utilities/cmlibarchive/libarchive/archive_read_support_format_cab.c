@@ -95,7 +95,7 @@ struct lzx_dec {
 	struct lzx_br {
 #define CACHE_TYPE		uint64_t
 #define CACHE_BITS		(8 * sizeof(CACHE_TYPE))
-	 	/* Cache buffer. */
+		/* Cache buffer. */
 		CACHE_TYPE	 cache_buffer;
 		/* Indicates how many bits avail in cache_buffer. */
 		int		 cache_avail;
@@ -634,7 +634,7 @@ cab_read_header(struct archive_read *a)
 	int err, i;
 	int cur_folder, prev_folder;
 	uint32_t offset32;
-	
+
 	a->archive.archive_format = ARCHIVE_FORMAT_CAB;
 	if (a->archive.archive_format_name == NULL)
 		a->archive.archive_format_name = "CAB";
@@ -730,7 +730,7 @@ cab_read_header(struct archive_read *a)
 	    hd->folder_count, sizeof(struct cffolder));
 	if (hd->folder_array == NULL)
 		goto nomem;
-	
+
 	bytes = 8;
 	if (hd->flags & RESERVE_PRESENT)
 		bytes += hd->cffolder;
@@ -898,10 +898,10 @@ archive_read_format_cab_read_header(struct archive_read *a,
 	struct cffile *file;
 	struct archive_string_conv *sconv;
 	int err = ARCHIVE_OK, r;
-	
+
 	cab = (struct cab *)(a->format->data);
 	if (cab->found_header == 0) {
-		err = cab_read_header(a); 
+		err = cab_read_header(a);
 		if (err < ARCHIVE_WARN)
 			return (err);
 		/* We've found the header. */
@@ -1874,7 +1874,7 @@ cab_minimum_consume_cfdata(struct archive_read *a, int64_t consumed_bytes)
 			cbytes = consumed_bytes;
 		else
 			cbytes = cfdata->unconsumed;
-		rbytes -= cbytes; 
+		rbytes -= cbytes;
 		cfdata->read_offset += (uint16_t)cbytes;
 		cfdata->uncompressed_bytes_remaining -= (uint16_t)cbytes;
 		cfdata->unconsumed -= cbytes;
@@ -2299,7 +2299,7 @@ lzx_br_fillup(struct lzx_stream *strm, struct lzx_br *br)
 		case 3:
 			if (strm->avail_in >= 6) {
 				br->cache_buffer =
-		 		   (br->cache_buffer << 48) |
+				   (br->cache_buffer << 48) |
 				    ((uint64_t)strm->next_in[1]) << 40 |
 				    ((uint64_t)strm->next_in[0]) << 32 |
 				    ((uint32_t)strm->next_in[3]) << 24 |
@@ -2807,7 +2807,7 @@ lzx_decode_blocks(struct lzx_stream *strm, int last)
 					 * dummy bits. */
 					c = lzx_decode_huffman(mt,
 					      lzx_br_bits_forced(
-				 	        &bre, mt_max_bits));
+					        &bre, mt_max_bits));
 					lzx_br_consume(&bre, mt_bitlen[c]);
 					if (!lzx_br_has(&bre, 0))
 						goto failed;/* Over read. */
@@ -3262,7 +3262,7 @@ lzx_make_huffman_table(struct huffman *hf)
 		bitptn[len] = ptn + cnt;
 		bit = 1U << (diffbits -1);
 		extlen = len - HTBL_BITS;
-		
+
 		p = &(tbl[ptn >> diffbits]);
 		if (*p == 0) {
 			*p = len_avail + hf->tree_used;
@@ -3350,4 +3350,3 @@ lzx_decode_huffman(struct huffman *hf, unsigned rbits)
 	/* This bit pattern needs to be found out at a huffman tree. */
 	return (lzx_decode_huffman_tree(hf, rbits, c));
 }
-

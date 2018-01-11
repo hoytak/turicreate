@@ -133,4 +133,3 @@ class PopularityRecommender(_Recommender):
     @classmethod
     def _native_name(cls):
         return "popularity"
-

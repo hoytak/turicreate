@@ -43,8 +43,8 @@ namespace turi {
     struct output_proxy {
       output_proxy(UnaryFunction& f, MoveFunction& f2) : m_f(f), m_f2(f2) { }
       template <class T> output_proxy& operator=(const T& value) {
-        m_f(value); 
-        return *this; 
+        m_f(value);
+        return *this;
       }
 
 
@@ -64,16 +64,16 @@ namespace turi {
         // annoying T&& is a universal reference.
         // So redispatch with a check for r-value-referenceness
         // and call the move version or the const ref version as required
-        output_forward(std::forward<T>(value), 
+        output_forward(std::forward<T>(value),
                        typename std::is_rvalue_reference<decltype(std::forward<T>(value))>::type());
-        return *this; 
+        return *this;
       }
 
       template <class T> output_proxy& operator=(const T&& value) {
         // overload for const T condition. in which case we call the
         // const T& version
         output_forward(value, std::integral_constant<bool, false>());
-        return *this; 
+        return *this;
       }
 
 
@@ -81,7 +81,7 @@ namespace turi {
       MoveFunction& m_f2;
     };
     output_proxy operator*() { return output_proxy(m_f, m_f2); }
-    self& operator++() { return *this; } 
+    self& operator++() { return *this; }
     self& operator++(int) { return *this; }
   private:
     UnaryFunction m_f;

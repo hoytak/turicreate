@@ -35,27 +35,27 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_form_win(FORM *form,WINDOW *win)
-|   
-|   Description   :  Set the window of the form to win. 
+|
+|   Description   :  Set the window of the form to win.
 |
 |   Return Values :  E_OK       - success
 |                    E_POSTED   - form is posted
 +--------------------------------------------------------------------------*/
 int set_form_win(FORM * form, WINDOW * win)
 {
-  if (form && (form->status & _POSTED))	
+  if (form && (form->status & _POSTED))
     RETURN(E_POSTED);
 
   Normalize_Form( form )->win = win;
   RETURN(E_OK);
-}	
+}
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  WINDOW *form_win(const FORM *)
-|   
+|
 |   Description   :  Retrieve the window of the form.
 |
 |   Return Values :  The pointer to the Window or stdscr if there is none.
@@ -67,4 +67,3 @@ WINDOW *form_win(const FORM * form)
 }
 
 /* frm_win.c ends here */
-

@@ -25,8 +25,8 @@
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
 
-#define WIN32_NO_STATUS 
-#include <windows.h> 
+#define WIN32_NO_STATUS
+#include <windows.h>
 #include <bcrypt.h>
 #include <winternl.h>
 #include <winerror.h>
@@ -94,7 +94,7 @@ namespace Aws
                 DWORD m_hashObjectLength;
                 PBYTE m_hashObject;
 
-                //I'm 99% sure the algorithm handle for windows is not thread safe, but I can't 
+                //I'm 99% sure the algorithm handle for windows is not thread safe, but I can't
                 //prove or disprove that theory. Therefore, we have to lock to be safe.
                 std::mutex m_algorithmMutex;
             };
@@ -389,7 +389,7 @@ namespace Aws
 
                 AES_GCM_Cipher_BCrypt& operator=(const AES_GCM_Cipher_BCrypt&) = delete;
 
-                AES_GCM_Cipher_BCrypt(AES_GCM_Cipher_BCrypt&& toMove) : 
+                AES_GCM_Cipher_BCrypt(AES_GCM_Cipher_BCrypt&& toMove) :
                     BCryptSymmetricCipher(std::move(toMove)), m_macBuffer(std::move(toMove.m_macBuffer)), m_finalBuffer(std::move(toMove.m_finalBuffer)),
                     m_authInfo(std::move(toMove.m_authInfo)) {}
 
@@ -430,7 +430,7 @@ namespace Aws
             public:
                 /**
                  * Create AES in KeyWrap mode off of a 256 bit key.
-                 * key - key encryption key               
+                 * key - key encryption key
                  */
                 AES_KeyWrap_Cipher_BCrypt(const CryptoBuffer& key);
 
@@ -452,15 +452,14 @@ namespace Aws
                 void InitDecryptor_Internal() override;
 
                 size_t GetBlockSizeBytes() const override;
-                size_t GetKeyLengthBits() const override; 
-                
+                size_t GetKeyLengthBits() const override;
+
             private:
-                static size_t BlockSizeBytes; 
+                static size_t BlockSizeBytes;
                 static size_t KeyLengthBits;
-                
+
                 CryptoBuffer m_operatingKeyBuffer;
             };
         } // namespace Crypto
     } // namespace Utils
 } // namespace Aws
-

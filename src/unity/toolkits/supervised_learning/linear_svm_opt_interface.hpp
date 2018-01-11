@@ -29,16 +29,16 @@ namespace supervised {
  */
 
  /**
-  * 
+  *
   * Scaled Logistic Loss function
   * --------------------------------
   *
   * SVM is trained using LBFGS on the Modifified logistic function described in
-  * [1]. It is much simpler to optimize and very close to the hinge loss. 
+  * [1]. It is much simpler to optimize and very close to the hinge loss.
   *
   * References:
   *
-  * [1] Modified Logistic Regression: An Approximation to SVM and Its 
+  * [1] Modified Logistic Regression: An Approximation to SVM and Its
   * Applications in Large-Scale Text Categorization - Zhang et al ICML 2003
   *
   *
@@ -57,7 +57,7 @@ class linear_svm_scaled_logistic_opt_interface: public
   size_t examples;                             /**< Num examples */
   size_t primal_variables;                     /**< Primal variables */
   size_t classes = 2;                          /**< Number of classes */
-  
+
   std::map<int, float> class_weights = {{0,1.0}, {1, 1.0}};
 
   size_t n_threads;
@@ -74,8 +74,8 @@ class linear_svm_scaled_logistic_opt_interface: public
   * \param[in] _data        ML Data containing everything
   *
   */
-  linear_svm_scaled_logistic_opt_interface(const ml_data& _data, 
-                                           const ml_data& _valid_data, 
+  linear_svm_scaled_logistic_opt_interface(const ml_data& _data,
+                                           const ml_data& _valid_data,
                                            linear_svm& model);
 
 
@@ -95,7 +95,7 @@ class linear_svm_scaled_logistic_opt_interface: public
    * Set feature scaling
    */
   void init_feature_rescaling();
-  
+
   /**
    * Transform the final solution back to the original scale.
    *
@@ -129,7 +129,7 @@ class linear_svm_scaled_logistic_opt_interface: public
    *
    * \param[in] a vector of strings to print at the beginning of the header.
    */
-  std::vector<std::pair<std::string, size_t>> 
+  std::vector<std::pair<std::string, size_t>>
       get_status_header(const std::vector<std::string>& stat_names);
 
   /**
@@ -138,7 +138,7 @@ class linear_svm_scaled_logistic_opt_interface: public
    * \param[in] a vector of model coefficients.
    * \param[in] a vector of stats to print at the beginning of each row
    */
-  std::vector<std::string> get_status(const DenseVector& coefs, 
+  std::vector<std::string> get_status(const DenseVector& coefs,
                                       const std::vector<std::string>& stats);
 
   /**
@@ -170,7 +170,7 @@ class linear_svm_scaled_logistic_opt_interface: public
   void compute_first_order_statistics(const DenseVector &point, DenseVector&
       gradient, double & function_value, const size_t mbStart = 0, const size_t
       mbSize = -1);
-  
+
 
 };
 
@@ -180,4 +180,3 @@ class linear_svm_scaled_logistic_opt_interface: public
 } // turicreate
 
 #endif
-

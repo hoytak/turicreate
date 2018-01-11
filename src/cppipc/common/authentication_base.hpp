@@ -15,34 +15,34 @@ namespace cppipc {
  * The class implements a few basic functions to attach and validate messages
  * sent between the client and the server. Messages sent from the client to
  * the server are \ref call_message objects. Messages sent from the server
- *  to the client (in response to a call message) are \ref reply_message 
+ *  to the client (in response to a call message) are \ref reply_message
  *  objects.
  *
- * \ref authentication_base::apply_auth(call_message& msg) is called on the 
+ * \ref authentication_base::apply_auth(call_message& msg) is called on the
  * client side to attach authentication information to the message. When the
- * server receives the message, 
+ * server receives the message,
  * \ref authentication_base::validate_auth(call_message& msg) is called on the
  * server side to validate the message. If this function returns false, the
  * server discards the message.
- * The server then replies with a \ref reply_message and the function 
- * \ref authentication_base::apply_auth(reply_message& msg) is called on the 
+ * The server then replies with a \ref reply_message and the function
+ * \ref authentication_base::apply_auth(reply_message& msg) is called on the
  * server side to attach authentication information to the message. When the
- * client receives the message, 
+ * client receives the message,
  * \ref authentication_base::validate_auth(reply_message& msg) is called on the
  * client side to validate the message. If this function returns false, the
  * function call is marked as failed.
  *
- * All of the implemented functions must be reentrant, and must not assume 
+ * All of the implemented functions must be reentrant, and must not assume
  * synchronicity. (i.e. apply_auth can be called on the client side many
  * times in succession).
  *
- * Finally, authentication methods should be designed to be "stackable" with 
+ * Finally, authentication methods should be designed to be "stackable" with
  * other authentication methods. i.e. I should be able to apply two different
  * types of authentication methods on top of each other.
  */
 class authentication_base {
  public:
-  virtual inline ~authentication_base(){} 
+  virtual inline ~authentication_base(){}
 
   /**
    * Attaches the authentication information to a message sent
@@ -71,6 +71,6 @@ class authentication_base {
   virtual bool validate_auth(reply_message& msg) = 0;
 };
 
-} // cppipc 
+} // cppipc
 
 #endif

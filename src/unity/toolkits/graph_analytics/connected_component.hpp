@@ -19,11 +19,11 @@ namespace connected_component {
  * Accepted Parameters: None
  *
  * Returned Parameters:
- * \li \b training_time (flexible_type: float). The training time of the algorithm in seconds 
+ * \li \b training_time (flexible_type: float). The training time of the algorithm in seconds
  * excluding all other preprocessing stages.
  *
  * \li \b num_of_components (flexible_type: int) The number of components of the graph.
- * 
+ *
  * \li \b __graph__ (unity_graph). The graph object with the field "component_id",
  * The component_id field (integer) on each vertex contains the component ID
  * of the vertex. All vertices with the same component ID are connected.

@@ -7,12 +7,12 @@
 
 namespace turi {
 
-sframe join(sframe& sf_left, 
+sframe join(sframe& sf_left,
             sframe& sf_right,
             std::string join_type,
             const std::map<std::string,std::string> join_columns,
             size_t max_buffer_size) {
-  // ***SANITY CHECKS 
+  // ***SANITY CHECKS
 
   std::vector<size_t> left_join_positions;
   std::vector<size_t> right_join_positions;
@@ -21,7 +21,7 @@ sframe join(sframe& sf_left,
     // These will throw if not found
     left_join_positions.push_back(sf_left.column_index(col_pair.first));
     right_join_positions.push_back(sf_right.column_index(col_pair.second));
-    
+
     // Each column must have matching types to compare effectively
     if(sf_left.column_type(left_join_positions.back()) !=
         sf_right.column_type(right_join_positions.back())) {
@@ -31,7 +31,7 @@ sframe join(sframe& sf_left,
       }
     }
   }
-  
+
   // Figure out what join type we have to do
   boost::algorithm::to_lower(join_type);
 

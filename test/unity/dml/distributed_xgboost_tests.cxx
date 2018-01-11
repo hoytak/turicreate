@@ -27,36 +27,36 @@ struct distributed_xgboost_test {
   void test_boosted_trees_regression() {
     std::map<std::string, flexible_type> opts = {
       {"model_name", "boosted_trees_regression"},
-      {"examples", 1000}, 
-      {"features", 10}}; 
-    size_t n = runner.get_default_num_workers_from_env(); 
+      {"examples", 1000},
+      {"features", 10}};
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(opts, n);
   }
 
   void test_random_forest_regression() {
     std::map<std::string, flexible_type> opts = {
       {"model_name", "random_forest_regression"},
-      {"examples", 1000}, 
-      {"features", 10}}; 
-    size_t n = runner.get_default_num_workers_from_env(); 
+      {"examples", 1000},
+      {"features", 10}};
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(opts, n);
   }
 
   void test_boosted_trees_classifier() {
     std::map<std::string, flexible_type> opts = {
       {"model_name", "boosted_trees_classifier"},
-      {"examples", 1000}, 
-      {"features", 10}}; 
-    size_t n = runner.get_default_num_workers_from_env(); 
+      {"examples", 1000},
+      {"features", 10}};
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(opts, n);
   }
 
   void test_random_forest_classifier() {
     std::map<std::string, flexible_type> opts = {
       {"model_name", "random_forest_classifier"},
-      {"examples", 1000}, 
-      {"features", 10}}; 
-    size_t n = runner.get_default_num_workers_from_env(); 
+      {"examples", 1000},
+      {"features", 10}};
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(opts, n);
   }
 

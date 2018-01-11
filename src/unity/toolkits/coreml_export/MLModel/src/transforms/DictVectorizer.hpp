@@ -12,20 +12,20 @@
 
 
 namespace CoreML {
-    
+
 
 class EXPORT DictVectorizer : public Model {
-    
+
 public:
-    
+
     explicit DictVectorizer(const std::string& description = "");
-    
+
     Result addInput(const std::string& featureName, FeatureType featureType) override;
-    
+
     Result setHandleUnknown(MLHandleUnknown state);
-    
+
     Result setFeatureEncoding(const std::vector<int64_t>& container);
-    
+
     Result setFeatureEncoding(const std::vector<std::string>& container);
 };
 

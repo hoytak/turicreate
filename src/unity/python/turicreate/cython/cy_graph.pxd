@@ -3,10 +3,10 @@
 #
 # Use of this source code is governed by a BSD-3-clause license that can
 # be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
-from .cy_flexible_type cimport flexible_type 
+from .cy_flexible_type cimport flexible_type
 from .cy_flexible_type cimport flex_list
 from .cy_flexible_type cimport gl_options_map
-from .cy_flexible_type cimport flex_type_enum 
+from .cy_flexible_type cimport flex_type_enum
 
 from .cy_unity_base_types cimport *
 from .cy_sarray cimport  UnitySArrayProxy
@@ -67,7 +67,7 @@ cdef class UnityGraphProxy:
 
     cpdef get_vertices(self, object ids, object field_constraints, size_t group=*)
 
-    cpdef get_edges(self, object src_ids, object dst_ids, object field_constraints, size_t groupa=*, size_t groupb=*) 
+    cpdef get_edges(self, object src_ids, object dst_ids, object field_constraints, size_t groupa=*, size_t groupb=*)
 
     cpdef add_vertices(self, UnitySFrameProxy sframe, id_field, size_t group=*)
 
@@ -81,7 +81,7 @@ cdef class UnityGraphProxy:
     cpdef get_vertex_field_types(self, size_t group=*)
 
     cpdef select_vertex_fields(self, field, size_t group=*)
-    
+
     cpdef copy_vertex_field(self, src_field, dst_field, size_t group=*)
 
     cpdef delete_vertex_field(self, field, size_t group=*)

@@ -16,10 +16,10 @@ namespace turi { namespace random {
  * \ingroup random
  * This is a standard algorithm for sampling from probability mass functions.
  * It is also known as the Walker Method.
- * Typically sampling from general discrete functions requires the inverse CDF 
+ * Typically sampling from general discrete functions requires the inverse CDF
  * method, which means each sample is O(K) where K is the number of outcomes in
  * the pmf. The alias method, on the other hand, requires O(K) setup but requires
- * only O(1) for each sample. To be specific, each sample only requires a 
+ * only O(1) for each sample. To be specific, each sample only requires a
  * uniformly generated float and a uniformly generated integer.
  *
  * For more details, see
@@ -30,9 +30,9 @@ class alias_sampler {
  public:
    alias_sampler() = default;
    alias_sampler(const alias_sampler&) = default;
-   
+
   /**
-   * Constructor. 
+   * Constructor.
    *
    * \param p Vector representing the probability mass function with K
    * outcomes, where K is the size of the vector. Values should be
@@ -56,9 +56,8 @@ class alias_sampler {
   size_t K;
 };
 
-} // end of random 
+} // end of random
 } // end of turicreate
 
 
 #endif
-

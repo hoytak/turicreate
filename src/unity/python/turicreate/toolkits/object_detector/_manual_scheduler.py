@@ -23,4 +23,3 @@ class ManualScheduler(_mx.lr_scheduler.LRScheduler):
         else:
             f = self.base_lr * self.factor[w[0]]
         return f
-

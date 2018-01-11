@@ -627,4 +627,3 @@ int glob_match_url(char **result, char *filename, URLGlob *glob)
   *result = target;
   return CURLE_OK;
 }
-

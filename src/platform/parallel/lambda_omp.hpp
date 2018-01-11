@@ -13,15 +13,15 @@
 namespace turi {
 
 /**
- * Runs a provided function in parallel, passing the function the thread ID 
- * and the number of threads. The thread ID is always between 0 and 
- * #threads - 1. 
+ * Runs a provided function in parallel, passing the function the thread ID
+ * and the number of threads. The thread ID is always between 0 and
+ * #threads - 1.
  *
  * \ingroup threading
  *
  * \code
  *  in_parallel([&](size_t thrid, size_t num_threads) {
- *                   std::cout << "Thread " << thrid << " out of " 
+ *                   std::cout << "Thread " << thrid << " out of "
  *                             << num_threads << "\n";
  *                 });
  * \endcode
@@ -29,7 +29,7 @@ namespace turi {
  * \param fn The function to run. The function must take two size_t arguments:
  *           the thread ID and the number of threads.
  */
-inline void in_parallel(const std::function<void (size_t thread_id, 
+inline void in_parallel(const std::function<void (size_t thread_id,
                                                   size_t num_threads)>& fn) {
   size_t nworkers = thread_pool::get_instance().size();
 
@@ -74,7 +74,7 @@ thread_pool& get_parfor_thread_pool();
  *    std::vector<double> ret(a.size(), 0); // allocate the return object
  *
  *    parallel_for(0, a.size(), [&](size_t i) {
- *                   ret[i] = a[i] * b[i]; 
+ *                   ret[i] = a[i] * b[i];
  *                 });
  *
  *    return ret;
@@ -83,7 +83,7 @@ thread_pool& get_parfor_thread_pool();
  *
  * \param begin The beginning integer of the for loop
  * \param end The ending integer of the for loop
- * \param fn The function to run. The function must take a single size_t 
+ * \param fn The function to run. The function must take a single size_t
  *           argument which is a current index.
  */
 template <typename FunctionType>
@@ -148,7 +148,7 @@ void parallel_for(size_t begin,
  *
  * \param begin The beginning integer of the for loop
  * \param end The ending integer of the for loop
- * \param fn The function to run. The function must take a single size_t 
+ * \param fn The function to run. The function must take a single size_t
  *           argument which is a current index.
  */
 template <typename FunctionType, typename ReduceType>
@@ -219,7 +219,7 @@ ReduceType fold_reduce (size_t begin,
  *
  * \param begin The beginning integer of the for loop
  * \param end The ending integer of the for loop
- * \param fn The function to run. The function must take a single size_t 
+ * \param fn The function to run. The function must take a single size_t
  *           argument which is a current index.
  */
 template <typename RandomAccessIterator, typename FunctionType>
@@ -239,7 +239,7 @@ inline void parallel_for(RandomAccessIterator iter_begin,
   } else {
     parallel_task_queue threads(thread_pool::get_instance());
 
-    size_t nlen = std::distance(iter_begin, iter_end); // number of elements 
+    size_t nlen = std::distance(iter_begin, iter_end); // number of elements
 
     double split_size = (double)nlen / nworkers; // number of elements per worker
 

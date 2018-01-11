@@ -70,7 +70,7 @@ std::string get_bucket_path(const std::string& bucket) {
     } else {
       return S3_ENDPOINT + "/" + bucket + "/";
     }
-  } 
+  }
 }
 } // fileio
 } // turi

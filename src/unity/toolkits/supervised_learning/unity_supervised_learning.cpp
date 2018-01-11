@@ -41,19 +41,19 @@ namespace supervised {
  * \param[in] invoke  Invocation object
  * \param[in] key     The key in invoke.params
  */
-std::shared_ptr<supervised_learning_model_base> 
+std::shared_ptr<supervised_learning_model_base>
       get_supervised_learning_model(toolkit_function_invocation& invoke,
                                    std::string model_key){
   DASSERT_TRUE(invoke.params.count("model_name") > 0);
   std::shared_ptr<supervised_learning_model_base> model;
-  model = safe_varmap_get<std::shared_ptr<supervised_learning_model_base>>( 
+  model = safe_varmap_get<std::shared_ptr<supervised_learning_model_base>>(
                                 invoke.params, model_key);
 
   // This should not happen.
   if (model == NULL) {
-    std::string model_name 
+    std::string model_name
       = (std::string)safe_varmap_get<flexible_type>(invoke.params, "model_name");
-    log_and_throw("Internal error: " + model_name + 
+    log_and_throw("Internal error: " + model_name +
                                       " is not a supervised learning model.");
   }
   return model;
@@ -69,17 +69,17 @@ toolkit_function_response_type train(toolkit_function_invocation& invoke) {
   DASSERT_TRUE(invoke.params.count("target") > 0);
   DASSERT_TRUE(invoke.params.count("features") > 0);
 
-  // Get data from Python. 
+  // Get data from Python.
   sframe X
     = *(safe_varmap_get<std::shared_ptr<unity_sframe>>(
             invoke.params, "features")->get_underlying_sframe());
   sframe y
     = *(safe_varmap_get<std::shared_ptr<unity_sframe>>(
-            invoke.params, "target")->get_underlying_sframe());   
-  std::string model_name 
+            invoke.params, "target")->get_underlying_sframe());
+  std::string model_name
     = safe_varmap_get<std::string>(invoke.params, "model_name");
 
- 
+
   // Remove option names that are not needed.
   variant_map_type kwargs = invoke.params;
   kwargs.erase("model_name");
@@ -108,7 +108,7 @@ toolkit_function_response_type extract_feature(toolkit_function_invocation& invo
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(invoke.params,
         "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model =
@@ -122,7 +122,7 @@ toolkit_function_response_type extract_feature(toolkit_function_invocation& invo
   sframe test_data
     = *(safe_varmap_get<std::shared_ptr<unity_sframe>>(
             invoke.params, "dataset")->get_underlying_sframe());
-  
+
   sframe X = setup_test_data_sframe(test_data, model, missing_value_action);
   std::shared_ptr<sarray<flexible_type>> py_ptr;
 
@@ -154,7 +154,7 @@ toolkit_function_response_type predict(toolkit_function_invocation& invoke){
   // --------------------------------------------------------------------------
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model
@@ -195,7 +195,7 @@ toolkit_function_response_type predict_topk(toolkit_function_invocation& invoke)
   // --------------------------------------------------------------------------
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model
@@ -238,7 +238,7 @@ toolkit_function_response_type classify(toolkit_function_invocation& invoke) {
   // --------------------------------------------------------------------------
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model
@@ -278,7 +278,7 @@ toolkit_function_response_type evaluate(toolkit_function_invocation& invoke){
   // --------------------------------------------------------------------------
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(invoke.params, "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model
@@ -446,7 +446,7 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
 
   toolkit_function_specification supervised_learning_feature_extraction_spec;
   supervised_learning_feature_extraction_spec.name = "supervised_learning_feature_extraction";
-  supervised_learning_feature_extraction_spec.toolkit_execute_function = extract_feature; 
+  supervised_learning_feature_extraction_spec.toolkit_execute_function = extract_feature;
 
   toolkit_function_specification supervised_learning_predict_spec;
   supervised_learning_predict_spec.name = "supervised_learning_predict";
@@ -508,11 +508,11 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
   specs.push_back(supervised_learning_list_keys_spec);
   specs.push_back(supervised_learning_get_option_value_spec);
   specs.push_back(supervised_learning_feature_extraction_spec);
-  REGISTER_FUNCTION(_fast_predict, "model", "rows", "output_type", 
+  REGISTER_FUNCTION(_fast_predict, "model", "rows", "output_type",
                         "missing_value_action");
-  REGISTER_FUNCTION(_fast_predict_topk, "model", "rows", "output_type", 
+  REGISTER_FUNCTION(_fast_predict_topk, "model", "rows", "output_type",
                         "missing_value_action", "topk");
-  REGISTER_FUNCTION(_fast_classify, "model", "rows", 
+  REGISTER_FUNCTION(_fast_classify, "model", "rows",
                         "missing_value_action");
   REGISTER_FUNCTION(_regression_model_selector, "_X");
   REGISTER_FUNCTION(_classifier_model_selector, "_X");

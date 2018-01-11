@@ -8,9 +8,7 @@ cimport numpy as np
 cdef extern from "numpy/arrayobject.h":
     void PyArray_ENABLEFLAGS(np.ndarray arr, int flags)
 
-# code adapted from 
+# code adapted from
 # http://stackoverflow.com/questions/23872946/force-numpy-ndarray-to-take-ownership-of-its-memory-in-cython
 
 cpdef numpy_own_array(arr)
-
-

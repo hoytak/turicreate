@@ -23,7 +23,7 @@
 // 1. Constant line seach tuning?
 
 namespace turi {
-  
+
 namespace optimization {
 
 
@@ -37,7 +37,7 @@ namespace optimization {
  *
  * Solve a first_order_optimization_iterface model with a gradient descent
  * method.
- * 
+ *
  * \param[in,out] model  Model with first order optimization interface.
  * \param[in] init_point Starting point for the solver.
  * \param[in,out] opts   Solver options.
@@ -49,11 +49,11 @@ namespace optimization {
 */
 template <typename Vector = DenseVector>
 inline solver_return gradient_descent(first_order_opt_interface& model,
-    const DenseVector& init_point, 
+    const DenseVector& init_point,
     std::map<std::string, flexible_type>& opts,
-    const std::shared_ptr<regularizer_interface> reg=NULL){ 
+    const std::shared_ptr<regularizer_interface> reg=NULL){
 
-    // Benchmarking utils. 
+    // Benchmarking utils.
     timer t;
     double start_time = t.current_time();
 
@@ -81,7 +81,7 @@ inline solver_return gradient_descent(first_order_opt_interface& model,
     // First compute the residual. Sometimes, you already have the solution
     // during the starting point. In these settings, you don't want to waste
     // time performing a step of the algorithm.
-    DenseVector point = init_point; 
+    DenseVector point = init_point;
     Vector gradient(point.size());
     double func_value;
     model.compute_first_order_statistics(point, gradient, func_value);
@@ -93,47 +93,47 @@ inline solver_return gradient_descent(first_order_opt_interface& model,
     // Needs to store previous point and gradient information
     DenseVector delta_point = point;
     delta_point.zeros();
-    
+
     // First iteration will take longer. Warn the user.
     logprogress_stream <<"Tuning step size. First iteration could take longer"
                        <<" than subsequent iterations." << std::endl;
-    
+
 
     // Nan Checking!
     if (!std::isfinite(residual)) {
       stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_OVERFLOW;
     }
-    
+
     // Step 2: Algorithm starts here
     // ------------------------------------------------------------------------
     // While not converged
     while((residual >= convergence_threshold) && (iters <= iter_limit)){
 
 
-      // Line search for step size. 
+      // Line search for step size.
       ls_return ls_stats;
-     
+
       // Pick line search based on regularizers.
       if (reg != NULL){
         step_size  *= 2;
-        ls_stats =  backtracking(model, 
+        ls_stats =  backtracking(model,
                                  step_size,
-                                 func_value, 
-                                 point, 
-                                 gradient, 
+                                 func_value,
+                                 point,
+                                 gradient,
                                  -gradient,
                                  reg);
       } else {
-          ls_stats =  more_thuente(model, 
+          ls_stats =  more_thuente(model,
                                    step_size,
-                                   func_value, 
-                                   point, 
-                                   gradient, 
+                                   func_value,
+                                   point,
+                                   gradient,
                                    -gradient);
       }
-      
 
-      // Add info from line search 
+
+      // Add info from line search
       stats.func_evals += ls_stats.func_evals;
       stats.gradient_evals += ls_stats.gradient_evals;
       step_size = ls_stats.step_size;
@@ -161,7 +161,7 @@ inline solver_return gradient_descent(first_order_opt_interface& model,
         stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_OVERFLOW;
         break;
       }
-     
+
       // Compute residual norm (to check for convergence)
       model.compute_first_order_statistics(point, gradient, func_value);
       stats.num_passes++;
@@ -169,9 +169,9 @@ inline solver_return gradient_descent(first_order_opt_interface& model,
       iters++;
 
       // Print progress
-      auto stat_info = {std::to_string(iters), 
+      auto stat_info = {std::to_string(iters),
                         std::to_string(stats.num_passes),
-                        std::to_string(step_size), 
+                        std::to_string(step_size),
                         std::to_string(t.current_time())};
 
       auto row = model.get_status(point, stat_info);
@@ -196,7 +196,7 @@ inline solver_return gradient_descent(first_order_opt_interface& model,
     stats.solve_time = t.current_time() - start_time;
     stats.solution = point;
     stats.progress_table = printer.get_tracked_table();
-    
+
     // Display solver stats
     log_solver_summary_stats(stats);
     return stats;
@@ -208,5 +208,4 @@ inline solver_return gradient_descent(first_order_opt_interface& model,
 /// \}
 } // turicreate
 
-#endif 
-
+#endif

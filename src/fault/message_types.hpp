@@ -18,7 +18,7 @@ namespace libfault {
  * \ingroup fault
  * The internal structure of a message for an object
  * This struct is filled in using direct pointers to the
- * actual message string. Thus the member pointers should not 
+ * actual message string. Thus the member pointers should not
  * be freed.
  */
 struct query_object_message {
@@ -40,7 +40,7 @@ struct query_object_message {
   /// The length of the message.
   size_t msglen;
 
-  /// Parses the message header. 
+  /// Parses the message header.
   /// No copies are made, and msg will point directly into the zeromq
   /// message structure.
   void parse(zmq_msg_vector& data);
@@ -57,7 +57,7 @@ struct query_object_message {
  * \ingroup fault
  * The internal structure of a reply to a query message.
  * This struct is filled in using direct pointers to the
- * actual message string. Thus the member pointers should not 
+ * actual message string. Thus the member pointers should not
  * be freed.
  */
 struct query_object_reply {
@@ -73,7 +73,7 @@ struct query_object_reply {
   char* msg;
   /// The length of the message.
   size_t msglen;
-  
+
   /// Parses the reply header.
   /// No copies are made, and msg will point directly into the zeromq
   /// message structure.

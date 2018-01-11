@@ -13,13 +13,13 @@
 #include <unity/lib/toolkit_function_wrapper_impl.hpp>
 #include <unity/lib/toolkit_class_wrapper_impl.hpp>
 
-/** 
+/**
  * \defgroup group_gl_class_ffi Class Extension Interface
  * \ingroup group_gl_ffi
  *
- * The class Extension Interface provides a collection of macros that automate the 
+ * The class Extension Interface provides a collection of macros that automate the
  * process of exporting a class to Python. The macros are located in
- * sdk/toolkit_class_macros.hpp. 
+ * sdk/toolkit_class_macros.hpp.
  *
  * For detailed usage descriptions, see page_turicreate_extension_interface .
  *
@@ -87,11 +87,11 @@
  *  REGISTER_CLASS_MEMBER_FUNCTION(function, ...var args of input argument names ...)
  *
  *  Registers a function with no arguments.
- *  REGISTER_CLASS_MEMBER_FUNCTION(class::function) 
+ *  REGISTER_CLASS_MEMBER_FUNCTION(class::function)
  *
  *  Registers a function with 2 input arguments. The first input argument is
  *  named "a" and the 2nd input argument is named "b"
- *  REGISTER_CLASS_MEMBER_FUNCTION(class::function, "a", "b") 
+ *  REGISTER_CLASS_MEMBER_FUNCTION(class::function, "a", "b")
  *
  * Example:
  *
@@ -113,7 +113,7 @@
  * \endcode
  *
  * The return value of the function will be returned to Python. The function
- * can return void. If the function fails, it should throw an exception which 
+ * can return void. If the function fails, it should throw an exception which
  * will be forward back to Python as RuntimeError.
  */
 #define REGISTER_CLASS_MEMBER_FUNCTION(function, ...) \
@@ -126,14 +126,14 @@
  * Like REGISTER_CLASS_MEMBER_FUNCTION but allows the python-facing name of
  * the function to be redefined.
  *
- *  REGISTER_NAMED_CLASS_MEMBER_FUNCTION(python_name, function, 
+ *  REGISTER_NAMED_CLASS_MEMBER_FUNCTION(python_name, function,
  *                          ...var args of input argument names ...)
  *
  *  Registers a function with 2 input arguments. The function shall be called
  *  "hello" in Python. The first input argument is named "a" and the 2nd input
- *  argument is named "b". 
+ *  argument is named "b".
  *
- *  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("hello", class::function, "a", "b") 
+ *  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("hello", class::function, "a", "b")
  */
 #define REGISTER_NAMED_CLASS_MEMBER_FUNCTION(name, function, ...) \
   register_function(name,  \
@@ -143,9 +143,9 @@
 
 // /*
 //  * Like REGISTER_CLASS_MEMBER_FUNCTION but to be used when the function to
-//  * be exposed is overloaded. 
+//  * be exposed is overloaded.
 //  *
-//  *  REGISTER_OVERLOADED_CLASS_MEMBER_FUNCTION(function_type, function, 
+//  *  REGISTER_OVERLOADED_CLASS_MEMBER_FUNCTION(function_type, function,
 //  *                          ...var args of input argument names ...)
 //  *
 //  * When a function is overloaded, the function pointer classname::function is
@@ -181,7 +181,7 @@
 //  * be exposed is overloaded, AND the python facing function is to be redefined.
 //  *
 //  *  REGISTER_NAMED_OVERLOADED_CLASS_MEMBER_FUNCTION(python_name,
-//  *                          function_type, function, 
+//  *                          function_type, function,
 //  *                          ...var args of input argument names ...)
 //  *
 //  * When a function is overloaded, the function pointer classname::function is
@@ -201,10 +201,10 @@
 //  *    BEGIN_CLASS_MEMBER_REGISTRATION("example")
 //  *    // the type of the concat function we want
 //  *    typedef std::string (example::* two_arg_concat_type)(std::string ,std::string);
-//  *    REGISTER_OVERLOADED_CLASS_MEMBER_FUNCTION("concat_two", two_arg_concat_type, 
+//  *    REGISTER_OVERLOADED_CLASS_MEMBER_FUNCTION("concat_two", two_arg_concat_type,
 //  *                                              example::concat, "a", "b");
 //  *    typedef std::string (example::* three_arg_concat_type)(std::string ,std::string);
-//  *    REGISTER_OVERLOADED_CLASS_MEMBER_FUNCTION("concat_three", three_arg_concat_type, 
+//  *    REGISTER_OVERLOADED_CLASS_MEMBER_FUNCTION("concat_three", three_arg_concat_type,
 //  *                                              example::concat, "a", "b");
 //  *    END_CLASS_MEMBER_REGISTRATION
 //  *  }
@@ -220,14 +220,14 @@
 /// \internal
 namespace docstring_macro_impl {
   /*
-   * Registers a docstring for a function name. This in combination with 
+   * Registers a docstring for a function name. This in combination with
    * the other overload for register_docstring allows for the macro
    * \code
    * register_docstring(name, #name, docstring)
    * \endcode
    * And that will work regardless of whether name is a string, or symbol.
    */
-  inline std::pair<std::string, std::string> 
+  inline std::pair<std::string, std::string>
       get_docstring(const char** fnname,
                     std::string __unused__,
                     std::string docstring) {
@@ -235,7 +235,7 @@ namespace docstring_macro_impl {
   }
 
   template <typename T>
-  inline std::pair<std::string, std::string> 
+  inline std::pair<std::string, std::string>
       get_docstring(T t,
                     std::string fnname,
                     std::string docstring) {
@@ -245,10 +245,10 @@ namespace docstring_macro_impl {
 
 /**
  * Registers a docstring of a function or property previously registered with
- * any of the registration functions. 
+ * any of the registration functions.
  *
- * Name can be a function, or a string. 
- * (Generally for the name, you put the first argument of any of 
+ * Name can be a function, or a string.
+ * (Generally for the name, you put the first argument of any of
  * the REGISTER macros and it should work fine)
  *
  * \code
@@ -256,7 +256,7 @@ namespace docstring_macro_impl {
  *    REGISTER_CLASS_MEMBER_FUNCTION(example::hello_world);
  *    REGISTER_CLASS_MEMBER_DOCSTRING(example::hello_world, "prints hello world")
  *
- *    REGISTER_NAMED_CLASS_MEMBER_FUNCTION("hello", example::say_hello, "a", "b") 
+ *    REGISTER_NAMED_CLASS_MEMBER_FUNCTION("hello", example::say_hello, "a", "b")
  *    REGISTER_CLASS_MEMBER_DOCSTRING("hello", "says hello")
  *
  *    REGISTER_PROPERTY(abc)
@@ -269,13 +269,13 @@ namespace docstring_macro_impl {
      this->register_docstring(docstring_macro_impl::get_docstring(&name, #name, docstring));
 
 /**
- * Registers a docstring of a class 
+ * Registers a docstring of a class
  * \code
  *    BEGIN_CLASS_MEMBER_REGISTRATION("example")
  *    REGISTER_CLASS_MEMBER_FUNCTION(example::hello_world);
  *    REGISTER_CLASS_MEMBER_DOCSTRING(example::hello_world, "prints hello world")
  *
- *    REGISTER_NAMED_CLASS_MEMBER_FUNCTION("hello", example::say_hello, "a", "b") 
+ *    REGISTER_NAMED_CLASS_MEMBER_FUNCTION("hello", example::say_hello, "a", "b")
  *    REGISTER_CLASS_MEMBER_DOCSTRING("hello", "says hello")
  *
  *    REGISTER_PROPERTY(abc)
@@ -440,5 +440,3 @@ namespace docstring_macro_impl {
 
 /// \}
 #endif // TURI_UNITY_TOOLKIT_MAGIC_MAC ROS_HPP
-
-

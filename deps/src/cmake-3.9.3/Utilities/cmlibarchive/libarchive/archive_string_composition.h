@@ -2289,4 +2289,3 @@ static const struct unicode_decomposition_table u_decomposition_table[] = {
 };
 
 #endif /* ARCHIVE_STRING_COMPOSITION_H_INCLUDED */
-

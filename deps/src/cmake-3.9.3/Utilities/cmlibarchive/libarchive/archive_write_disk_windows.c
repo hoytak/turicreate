@@ -278,7 +278,7 @@ file_information(struct archive_write_disk *a, wchar_t *path,
 	}
 
 	/* Is symlink file ? */
-	if (sim_lstat && 
+	if (sim_lstat &&
 	    ((findData.dwFileAttributes
 		        & FILE_ATTRIBUTE_REPARSE_POINT) &&
 		(findData.dwReserved0 == IO_REPARSE_TAG_SYMLINK)))
@@ -346,7 +346,7 @@ file_information(struct archive_write_disk *a, wchar_t *path,
 	return (0);
 }
 
-/* 
+/*
  * Note: The path, for example, "aa/a/../b../c" will be converted to "aa/c"
  * by GetFullPathNameW() W32 API, which __la_win_permissive_name_w uses.
  * It means we cannot handle multiple dirs in one archive_entry.
@@ -397,7 +397,7 @@ permissive_name_w(struct archive_write_disk *a)
 
 	/*
 	 * A full-pathname pointing to a network drive
-	 * like "\\<server-name>\<share-name>\file". 
+	 * like "\\<server-name>\<share-name>\file".
 	 */
 	if (wnp[0] == L'\\' && wnp[1] == L'\\' && wnp[2] != L'\\') {
 		const wchar_t *p = &wnp[2];
@@ -1201,7 +1201,7 @@ archive_write_disk_gid(struct archive *_a, const char *name, int64_t id)
                return (a->lookup_gid)(a->lookup_gid_data, name, id);
        return (id);
 }
- 
+
 int64_t
 archive_write_disk_uid(struct archive *_a, const char *name, int64_t id)
 {
@@ -2508,4 +2508,3 @@ older(BY_HANDLE_FILE_INFORMATION *st, struct archive_entry *entry)
 }
 
 #endif /* _WIN32 && !__CYGWIN__ */
-

@@ -59,7 +59,7 @@ class count_thresholder : public transformer_base {
   /**
    * Initialize the transformer.
    */
-  void init_transformer(const std::map<std::string, 
+  void init_transformer(const std::map<std::string,
                         flexible_type>& _options);
 
   /**
@@ -73,7 +73,7 @@ class count_thresholder : public transformer_base {
    * Transform the given data.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "transform" in python.
@@ -83,7 +83,7 @@ class count_thresholder : public transformer_base {
 
   /**
    * Fit and transform the given data. Intended as an optimization because
-   * fit and transform are usually always called together. The default 
+   * fit and transform are usually always called together. The default
    * implementaiton calls fit and then transform.
    *
    * \param[in] data  (SFrame of data)
@@ -91,11 +91,11 @@ class count_thresholder : public transformer_base {
   gl_sframe fit_transform(gl_sframe data) {
      data.materialize();
      fit(data);
-     return transform(data); 
+     return transform(data);
   }
 
 
-  
+
   // Functions that all transformers need to register. Can be copied verbatim
   // for other classes.
   // --------------------------------------------------------------------------
@@ -106,10 +106,10 @@ class count_thresholder : public transformer_base {
   REGISTER_CLASS_MEMBER_FUNCTION(count_thresholder::transform, "data");
   REGISTER_CLASS_MEMBER_FUNCTION(count_thresholder::get_current_options);
   REGISTER_CLASS_MEMBER_FUNCTION(count_thresholder::list_fields);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options",
                                      count_thresholder::get_default_options);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get", 
-                                     count_thresholder::get_value_from_state, 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get",
+                                     count_thresholder::get_value_from_state,
                                      "key");
   END_CLASS_MEMBER_REGISTRATION
 

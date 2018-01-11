@@ -665,4 +665,3 @@ dnl
 m4_pattern_forbid([^_*XC])dnl
 m4_define([$0],[])dnl
 ])
-

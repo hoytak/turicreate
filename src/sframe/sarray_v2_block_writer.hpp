@@ -42,16 +42,16 @@ namespace v2_block_impl {
  * writer.init("index", #segments, #columns);
  * for i = 0 to  #segments:
  *   writer.open_segment(i, filename)
- * 
+ *
  * // now you perform repeat calls to the following functions
  * // to write blocks to the segments/columns
  * writer.write_block(...)
  * writer.write_typed_block(...)
  *
- * // close all writes   
+ * // close all writes
  * for i = 0 to  #segments:
  *   writer.close_segment(i)
- * 
+ *
  * // output the array group index file
  * writer.write_index_file()
  * \endcode
@@ -64,7 +64,7 @@ class block_writer {
    * to write, and the number of columns to write.
    */
   void init(std::string group_index_file,
-            size_t num_segments, 
+            size_t num_segments,
             size_t num_columns);
 
   /**
@@ -78,10 +78,10 @@ class block_writer {
    *
    * \param segmentid The segment to write to
    * \param data Pointer to the data to write
-   * \param block_info Metadata about the block. 
+   * \param block_info Metadata about the block.
    *
    * The only fields in block_info which *must* be filled is block_size and
-   * num_elem. 
+   * num_elem.
    * Returns the actual number of bytes written.
    */
   size_t write_block(size_t segment_id,
@@ -94,7 +94,7 @@ class block_writer {
    *
    * \param segment_id The segment to write to
    * \param data Reference to the data to write
-   * \param block_info Metadata about the block. 
+   * \param block_info Metadata about the block.
    *
    * No fields of block_info are required at the moment.
    * Returns the actual number of bytes written.
@@ -150,10 +150,10 @@ class block_writer {
 
   group_index_file_information m_index_info;
 
-  /** 
+  /**
    * A vector of all the block information is stuck in the footer of the file
    * for each segment, for each column, the collection of blocks.
-   * Once inited, this array is never modified and is safe for concurrent 
+   * Once inited, this array is never modified and is safe for concurrent
    * reads.
    * blocks[segment_id][column_id][block_id]
    */

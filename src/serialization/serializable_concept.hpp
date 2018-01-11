@@ -15,9 +15,9 @@ namespace turi {
   /**
    * \brief Concept checks if a type T is serializable.
    *
-   * This is a concept checking class for boost::concept and can be 
-   * used to enforce that a type T is \ref sec_serializable, assignable and 
-   * default constructible. 
+   * This is a concept checking class for boost::concept and can be
+   * used to enforce that a type T is \ref sec_serializable, assignable and
+   * default constructible.
    *
    * \tparam T The type to test for serializability.
    */
@@ -40,4 +40,3 @@ namespace turi {
 
 } // namespace turi
 #endif
-

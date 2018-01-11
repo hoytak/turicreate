@@ -50,19 +50,19 @@
  7.1 Pipelining
  7.2 Graceful base64 decoding failure
  7.3 Enhanced capability support
- 
+
  8. POP3
  8.1 Pipelining
  8.2 Graceful base64 decoding failure
  8.3 Enhanced capability support
- 
+
  9. IMAP
  9.1 Graceful base64 decoding failure
  9.2 Enhanced capability support
- 
+
  10. LDAP
  10.1 SASL based authentication mechanisms
- 
+
  11. New protocols
  11.1 RSYNC
 
@@ -83,7 +83,7 @@
 
  14. SASL
  14.1 Other authentication mechanisms
- 
+
  15. Client
  15.1 sync
  15.2 glob posts
@@ -355,7 +355,7 @@ to provide the data to send.
  decoding of a base64 encoded authentication response fails, we should
  gracefully shutdown the authentication process by sending a * response to the
  server as per RFC5034.
- 
+
 8.3 Enhanced capability support
 
  Add the ability, for an application that uses libcurl, to obtain the list of
@@ -697,4 +697,3 @@ to provide the data to send.
 
  Please see the following thread for more information:
  http://curl.haxx.se/mail/lib-2012-05/0178.html
- 

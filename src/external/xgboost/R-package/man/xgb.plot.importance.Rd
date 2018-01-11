@@ -37,4 +37,3 @@ bst <- xgboost(data = train$data, label = train$label, max.depth = 2,
 importance_matrix <- xgb.importance(train$data@Dimnames[[2]], model = bst)
 xgb.plot.importance(importance_matrix)
 }
-

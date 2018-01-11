@@ -18,7 +18,7 @@
 #   cython_add_standalone_executable( <executable_name> [MAIN_MODULE src1] <src1> <src2> ... <srcN> )
 #
 # To avoid dependence on Python, set the PYTHON_LIBRARY cache variable to point
-# to a static library.  If a MAIN_MODULE source is specified, 
+# to a static library.  If a MAIN_MODULE source is specified,
 # the "if __name__ == '__main__':" from that module is used as the C main() method
 # for the executable.  If MAIN_MODULE, the source with the same basename as
 # <executable_name> is assumed to be the MAIN_MODULE.
@@ -73,7 +73,7 @@ mark_as_advanced( CYTHON_ANNOTATE CYTHON_NO_DOCSTRINGS CYTHON_FLAGS )
 
 set(PYTHON_INCLUDE_DIR
   ${CMAKE_SOURCE_DIR}/deps/local/include/${PYTHON_VERSION})
-set(PYTHON_LIBRARIES 
+set(PYTHON_LIBRARIES
   ${CMAKE_SOURCE_DIR}/deps/local/lib/${CMAKE_SHARED_LIBRARY_PREFIX}${PYTHON_VERSION}${CMAKE_SHARED_LIBRARY_SUFFIX})
 find_package( PythonLibs REQUIRED )
 
@@ -120,7 +120,7 @@ function( compile_pyx _name generated_file )
     # Add the pxd file will the same name as the given pyx file.
     unset( corresponding_pxd_file CACHE )
     find_file( corresponding_pxd_file ${pyx_file_basename}.pxd
-      PATHS "${pyx_path}" ${cmake_include_directories} 
+      PATHS "${pyx_path}" ${cmake_include_directories}
       NO_DEFAULT_PATH )
     if( corresponding_pxd_file )
       list( APPEND pxd_dependencies "${corresponding_pxd_file}" )
@@ -206,7 +206,7 @@ function( compile_pyx _name generated_file )
     set (cython_traceback "--no-c-in-traceback")
   endif()
 
-  # Include directory arguments. 
+  # Include directory arguments.
   list( REMOVE_DUPLICATES cython_include_directories )
   set( include_directory_arg "" )
   foreach( _include_dir ${cython_include_directories} )

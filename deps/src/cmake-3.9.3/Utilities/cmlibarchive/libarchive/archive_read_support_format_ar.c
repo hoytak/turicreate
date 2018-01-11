@@ -440,9 +440,9 @@ archive_read_format_ar_read_header(struct archive_read *a,
 	if ((header_data = __archive_read_ahead(a, 60, NULL)) == NULL)
 		/* Broken header. */
 		return (ARCHIVE_EOF);
-	
+
 	unconsumed = 60;
-	
+
 	ret = _ar_read_header(a, entry, ar, (const char *)header_data, &unconsumed);
 
 	if (unconsumed)

@@ -19,7 +19,7 @@ namespace turi {
 namespace label_propagation {
 
   /**
-   * Global variables 
+   * Global variables
    */
   const std::string LABEL_COLUMN_PREFIX = "P";
   const std::string PREDICTED_LABEL_COLUMN_NAME = "predicted_label";
@@ -128,7 +128,7 @@ namespace label_propagation {
      * current_label_pb[i] is a dense eigen matrix (row major ordering),
      * storing the probability for vertices in partition i.
      *
-     * prev_label_pb is a store the copy of the previous iteration. 
+     * prev_label_pb is a store the copy of the previous iteration.
      */
     typedef row_major_matrix<FLOAT_TYPE> matrix_type;
     std::unique_ptr<std::vector<matrix_type>> current_label_pb(
@@ -191,7 +191,7 @@ namespace label_propagation {
              (*current_label_pb)[target_addr.partition_id].row(target_addr.local_id) += delta;
            }
 
-           // Propagate from target to source 
+           // Propagate from target to source
            if (undirected) {
              arma::Row<FLOAT_TYPE> delta = (*prev_label_pb)[target_addr.partition_id].row(target_addr.local_id) * weight;
              auto& mtx = vertex_locks[source_addr.partition_id][source_addr.local_id];

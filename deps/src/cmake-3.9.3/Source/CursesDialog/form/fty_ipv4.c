@@ -16,11 +16,11 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Check_IPV4_Field(
 |                                      FIELD * field,
 |                                      const void * argp)
-|   
+|
 |   Description   :  Validate buffer content to be a valid IP number (Ver. 4)
 |
 |   Return Values :  TRUE  - field is valid
@@ -49,11 +49,11 @@ static bool Check_IPV4_Field(FIELD * field, const void * argp)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Check_IPV4_Character(
-|                                      int c, 
+|                                      int c,
 |                                      const void *argp )
-|   
+|
 |   Description   :  Check a character for unsigned type or period.
 |
 |   Return Values :  TRUE  - character is valid

@@ -57,14 +57,14 @@ template <typename T>
 using is_variant_member = boost::mpl::contains<variant_type::types, T>;
 
 /**
- * is_model_descendent<T>::value is true if *T  is a descendent of 
+ * is_model_descendent<T>::value is true if *T  is a descendent of
  * model_base, or is model_base itself.
  *
  * \code
  * is_model_descendent<flexible_type>::value // false
  * is_model_descendent<svariant_converter_imple_model*>::value // true
  * is_model_descendent<svariant_converter_imple_model>::value // false
- * is_model_descendent<model_base*>::value // true 
+ * is_model_descendent<model_base*>::value // true
  * \endcode
  */
 template <typename T>
@@ -72,7 +72,7 @@ using is_model_descendent =  std::is_convertible<T*, model_base*>;
 
 template <typename T>
 struct is_toolkit_builtin {
-  static constexpr bool value =  
+  static constexpr bool value =
       std::is_same<typename std::decay<T>::type, gl_sarray>::value ||
       std::is_same<typename std::decay<T>::type, gl_sframe>::value ||
       std::is_same<typename std::decay<T>::type, gl_sarray>::value ||
@@ -102,7 +102,7 @@ struct all_variant_convertible;
  *   variant_type variant_converter<T>::set(const T&)
  * \endcode
  *
- * Essentially variant_converter::get converts from a variant type to an 
+ * Essentially variant_converter::get converts from a variant type to an
  * arbitrary type T, and variant_converter::set converts from an arbitrary type
  * T to a variant_type.
  *
@@ -128,7 +128,7 @@ struct all_variant_convertible;
  *  - variant_type
  *  - Recursive cases
  *     - std::vector<T> where T is of any type in this list including the
- *     recursive cases.  
+ *     recursive cases.
  *     - std::map<std::string, T> where T is of any type in this list including
  *     the recursive cases.
  *     - std::unordered_map<std::string, T> where T are of any type in this list
@@ -137,17 +137,17 @@ struct all_variant_convertible;
  *     recursive cases.
  *     - std::tuple<T...> where T... are of any type in this list including the
  *     recursive cases.
- * 
+ *
  * variant_converter_implementation Details
  * ----------------------
  * The key difficulty is to make sure that every T matches *exactly* one case.
  * Each case below is numbered, and we document here how each situation maps
  * to each case.
  *
- * Base case. 
+ * Base case.
  * All failed templatizations will come here where compilation will fail.
  */
-template <typename T, class Enable = void> 
+template <typename T, class Enable = void>
 struct variant_converter {
   static constexpr bool value = false;
 };
@@ -168,8 +168,8 @@ struct variant_converter<T,
     try {
       f = variant_get_ref<flexible_type>(val);
     } catch(...) {
-      std::string errormsg = 
-          std::string("Expecting a flexible_type. Got a ") + 
+      std::string errormsg =
+          std::string("Expecting a flexible_type. Got a ") +
           get_variant_which_name(val.which());
       throw(errormsg);
     }
@@ -191,8 +191,8 @@ struct variant_converter<T,
  *     - std::vector<variant_type>
  *     - std::map<std::string, variant_type>
  */
-template <typename T> 
-struct variant_converter<T, 
+template <typename T>
+struct variant_converter<T,
     typename std::enable_if<(is_variant_member<T>::value &&
                              !std::is_same<T, flexible_type>::value) ||
                              std::is_same<T, variant_type>::value>::type> {
@@ -208,7 +208,7 @@ struct variant_converter<T,
 /**
  * Case 3: Cover variant_type itself.
  */
-template <> 
+template <>
 struct variant_converter<variant_type, void> {
   static constexpr bool value = true;
   variant_type get(const variant_type& val) {
@@ -224,7 +224,7 @@ struct variant_converter<variant_type, void> {
  * (note that this case is not covered by Case 2 since variant_type
  * stores unity_sarray_base* and not unity_sarray*
  */
-template <> 
+template <>
 struct variant_converter<std::shared_ptr<unity_sarray>, void> {
   static constexpr bool value = true;
   std::shared_ptr<unity_sarray> get(const variant_type& val);
@@ -236,7 +236,7 @@ struct variant_converter<std::shared_ptr<unity_sarray>, void> {
  * (note that this case is not covered by Case 2 since variant_type
  * stores unity_sframe_base* and not unity_sframe*
  */
-template <> 
+template <>
 struct variant_converter<std::shared_ptr<unity_sframe>, void> {
   static constexpr bool value = true;
   std::shared_ptr<unity_sframe> get(const variant_type& val);
@@ -248,7 +248,7 @@ struct variant_converter<std::shared_ptr<unity_sframe>, void> {
  * (note that this case is not covered by Case 2 since variant_type
  * stores unity_sgraph_base* and not unity_sgraph*
  */
-template <> 
+template <>
 struct variant_converter<std::shared_ptr<unity_sgraph>, void> {
   static constexpr bool value = true;
   std::shared_ptr<unity_sgraph> get(const variant_type& val);
@@ -259,11 +259,11 @@ struct variant_converter<std::shared_ptr<unity_sgraph>, void> {
 /**
  * Case 7a: Cover pointer descendents of model_base.
  *
- * This case must not capture the case where T is itself model_base* 
+ * This case must not capture the case where T is itself model_base*
  * since that case is already covered by case 2 (direct members of variant_type)
  */
-template <typename T> 
-struct variant_converter<std::shared_ptr<T>, 
+template <typename T>
+struct variant_converter<std::shared_ptr<T>,
     typename std::enable_if<is_model_descendent<T>::value &&
                             !std::is_same<T, model_base>::value &&
                             !is_toolkit_builtin<T>::value>::type> {
@@ -280,11 +280,11 @@ struct variant_converter<std::shared_ptr<T>,
 /**
  * Case 7b: Cover descendents of model_base.
  *
- * This case must not capture the case where T is itself model_base* 
+ * This case must not capture the case where T is itself model_base*
  * since that case is already covered by case 2 (direct members of variant_type)
  */
-template <typename T> 
-struct variant_converter<T, 
+template <typename T>
+struct variant_converter<T,
     typename std::enable_if<is_model_descendent<T>::value &&
                             !std::is_same<T, model_base>::value &&
                             !is_toolkit_builtin<T>::value>::type> {
@@ -300,12 +300,12 @@ struct variant_converter<T,
  * Case 8: std::vector<T> where T can be contained by a variant.
  *
  * This covers all the remaining std::vector<T> cases.
- * It must be careful to exclude Case 2. This must be disabled for 
+ * It must be careful to exclude Case 2. This must be disabled for
  * std::vector<variant_type>
  *       std::vector<variant_type>
  */
 template <typename T>
-struct variant_converter<std::vector<T>, 
+struct variant_converter<std::vector<T>,
     typename std::enable_if<!is_flexible_type_convertible<std::vector<T>>::value &&
                             is_variant_convertible<T>::value &&
                             !is_variant_member<std::vector<T>>::value>::type> {
@@ -328,9 +328,9 @@ struct variant_converter<std::vector<T>,
 };
 
 /**
- * Case 9: Covers the case std::map<std::string, T> for any T which 
+ * Case 9: Covers the case std::map<std::string, T> for any T which
  * is convertible to variant_type.
- * It must be careful to exclude Case 2. This must be disabled for 
+ * It must be careful to exclude Case 2. This must be disabled for
  * std::map<std::string, variant_type>.
  */
 template <typename T>
@@ -358,7 +358,7 @@ struct variant_converter<std::map<std::string, T>,
 
 
 /**
- * Case 10: Covers the case std::unordered_map<std::string, T> for any T which 
+ * Case 10: Covers the case std::unordered_map<std::string, T> for any T which
  * is convertible to variant_type.
  */
 template <typename T>
@@ -388,16 +388,16 @@ struct variant_converter<std::unordered_map<std::string, T>,
  * to variant_type.
  */
 template <typename S, typename T>
-struct variant_converter<std::pair<S, T>, 
+struct variant_converter<std::pair<S, T>,
     typename std::enable_if<!is_flexible_type_convertible<T>::value &&
                             is_variant_convertible<T>::value>::type> {
   static constexpr bool value = true;
   std::pair<S, T> get(const variant_type& val) {
-    std::vector<variant_type> ret = 
+    std::vector<variant_type> ret =
         variant_converter<std::vector<variant_type>>().get(val);
     ASSERT_MSG(ret.size() == 2,
                "Expecting an array of length 2");
-    return {variant_converter<S>().get(ret[0]), 
+    return {variant_converter<S>().get(ret[0]),
             variant_converter<T>().get(ret[1])};
   }
   variant_type set(const std::pair<S, T>& val) {
@@ -413,28 +413,28 @@ struct variant_converter<std::pair<S, T>,
 /**
  * Case 12: gl datatypes
  */
-template <> 
+template <>
 struct variant_converter<gl_sarray, void> {
   static constexpr bool value = true;
   gl_sarray get(const variant_type& val);
   variant_type set(gl_sarray val);
 };
 
-template <> 
+template <>
 struct variant_converter<gl_sframe, void> {
   static constexpr bool value = true;
   gl_sframe get(const variant_type& val);
   variant_type set(gl_sframe val);
 };
 
-template <> 
+template <>
 struct variant_converter<gl_sgraph, void> {
   static constexpr bool value = true;
   gl_sgraph get(const variant_type& val);
   variant_type set(gl_sgraph val);
 };
 
-template <> 
+template <>
 struct variant_converter<gl_gframe, void> {
   static constexpr bool value = true;
   gl_gframe get(const variant_type& val);
@@ -449,7 +449,7 @@ struct fill_tuple {
   const std::vector<variant_type>* input;
   mutable TupleType tuple;
   template<int n>
-  void operator()(boost::mpl::integral_c<int, n> t) const { 
+  void operator()(boost::mpl::integral_c<int, n> t) const {
     typedef typename std::decay<decltype(std::get<n>(tuple))>::type TargetType;
     std::get<n>(tuple) = variant_converter<TargetType>().get(input->at(n));
   }
@@ -461,7 +461,7 @@ struct fill_variant{
   const TupleType* input;
   mutable std::vector<variant_type> output;
   template<int n>
-  void operator()(boost::mpl::integral_c<int, n> t) const { 
+  void operator()(boost::mpl::integral_c<int, n> t) const {
     typedef typename std::decay<decltype(std::get<n>(*input))>::type TargetType;
     output.at(n) = variant_converter<TargetType>().set(std::get<n>(*input));
   }
@@ -473,21 +473,21 @@ struct fill_variant{
  * the function from the unity_global singleton's instance of the toolkit
  * function registry.
  */
-std::function<variant_type(const std::vector<variant_type>&)> 
+std::function<variant_type(const std::vector<variant_type>&)>
     get_toolkit_function_from_closure(const function_closure_info& closure);
 
 } // variant_converter_impl
 
 /**
- * Case 12: std::tuple<T...> where T... are all convertible to variant_type 
+ * Case 12: std::tuple<T...> where T... are all convertible to variant_type
  */
 template <typename... Args>
-struct variant_converter<std::tuple<Args...>, 
+struct variant_converter<std::tuple<Args...>,
     typename std::enable_if<!all_flexible_type_convertible<Args...>::value &&
                             all_variant_convertible<Args...>::value>::type> {
   static constexpr bool value = true;
   std::tuple<Args...> get(const variant_type& val) {
-    std::vector<variant_type> cv = 
+    std::vector<variant_type> cv =
         variant_converter<std::vector<variant_type>>().get(val);
     if (cv.size() != sizeof...(Args)) {
       std::string error_msg = "Expecting an array of length " + std::to_string(sizeof...(Args));
@@ -515,19 +515,19 @@ struct variant_converter<std::tuple<Args...>,
  * to variant_type.
  */
 template <typename S, typename... Args>
-struct variant_converter<std::function<S(Args...)>, 
+struct variant_converter<std::function<S(Args...)>,
     typename std::enable_if<is_variant_convertible<S>::value &&
                             all_variant_convertible<Args...>::value>::type> {
   static constexpr bool value = true;
   std::function<S(Args...)> get(const variant_type& val) {
     function_closure_info closure;
     closure = variant_get_ref<function_closure_info>(val);
-    auto native_execute_function = 
+    auto native_execute_function =
         variant_converter_impl::get_toolkit_function_from_closure(closure);
     // ok. now we need to wrap the native function up into a function of the
     // appropriate type. How do we do that?
     return [=](Args... args)->S {
-      std::tuple<Args...> val{args...};  
+      std::tuple<Args...> val{args...};
       typename boost::mpl::range_c<int, 0, sizeof...(Args)>::type tuple_range;
       variant_converter_impl::fill_variant<std::tuple<Args...>> filler;
       filler.input = &val;
@@ -554,8 +554,8 @@ struct is_variant_convertible{
 };
 
 /**
- * all_flexible_type_convertible<Args...>::value is true if every type in 
- * Args can be converted to and from a flexible_type via 
+ * all_flexible_type_convertible<Args...>::value is true if every type in
+ * Args can be converted to and from a flexible_type via
  * flexible_type_convert<T>.
  */
 template <typename... Args>
@@ -563,13 +563,13 @@ struct all_variant_convertible {
   typedef boost::mpl::vector<Args...> type_sequence;
   // makes an mpl::vector<true_, false_ ....> where each element transforms
   // each arg to whether it is flexible_type convertible
-  typedef typename boost::mpl::transform<type_sequence, 
-                                         is_variant_convertible<boost::mpl::_1>>::type transformed_sequence; 
+  typedef typename boost::mpl::transform<type_sequence,
+                                         is_variant_convertible<boost::mpl::_1>>::type transformed_sequence;
 
   // the number of good types (number which are true)
   typedef typename boost::mpl::count<transformed_sequence, boost::mpl::bool_<true>>::type num_good;
- 
-  // true if all args are convertible.  
+
+  // true if all args are convertible.
   static constexpr bool value = (num_good::value == sizeof...(Args));
 };
 

@@ -28,12 +28,12 @@ class unity_graph;
 
  /**
  * \ingroup toolkit_util
-  * Create an SArray of vector type, where each element is a row of the 
+  * Create an SArray of vector type, where each element is a row of the
   * provided matrix.
   */
  std::shared_ptr<sarray<flexible_type>> matrix_to_sarray(const arma::mat& m);
 
-/** 
+/**
  * \ingroup toolkit_util
  * Generate an SFrame from a transform function that takes an index
  *   and fills a vector of flexible type.  The signature of the
@@ -54,15 +54,15 @@ sframe sframe_from_ranged_generator(const std::vector<std::string>& column_names
 
   out.open_for_write(column_names, column_types, "", thread::cpu_count());
 
-    // Really inefficient due to the transpose. 
+    // Really inefficient due to the transpose.
   in_parallel([&](size_t thread_index, size_t num_threads) {
       std::vector<flexible_type> out_values(column_names.size());
 
       size_t start_idx = (num_rows * thread_index) / num_threads;
       size_t end_idx = (num_rows * (thread_index + 1)) / num_threads;
-      
+
       auto it_out = out.get_output_iterator(thread_index);
-      
+
       for(size_t i = start_idx; i < end_idx; ++i, ++it_out) {
         generator_function(i, out_values);
         DASSERT_EQ(column_names.size(), out_values.size());
@@ -72,7 +72,7 @@ sframe sframe_from_ranged_generator(const std::vector<std::string>& column_names
 
   out.close();
 
-  return out; 
+  return out;
 }
 
 

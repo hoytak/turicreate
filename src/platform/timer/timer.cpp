@@ -12,20 +12,20 @@
 
 std::ostream&  operator<<(std::ostream& out, const turi::timer& t) {
   return out << t.current_time();
-} 
+}
 
 namespace turi {
-  
-  
+
+
 class hundredms_timer {
   thread timer_thread;
  public:
-  hundredms_timer() {    
+  hundredms_timer() {
     stop = false;
     ti.start();
     timer_thread.launch(boost::bind(&hundredms_timer::alarm_thread, this));
   }
-  size_t ctr; 
+  size_t ctr;
   timer ti;
   mutex lock;
   conditional cond;
@@ -51,7 +51,7 @@ class hundredms_timer {
     }
   }
 
-  ~hundredms_timer() {  
+  ~hundredms_timer() {
     stop_timer();
   }
 };
@@ -60,18 +60,18 @@ static hundredms_timer& get_hms_timer() {
   static hundredms_timer hmstimer;
   return hmstimer;
 }
-  
-  
+
+
 
   /**
-   * Precision of deciseconds 
+   * Precision of deciseconds
    */
   float timer::approx_time_seconds() {
     return float(get_hms_timer().ctr) / 10;
   }
 
   /**
-   * Precision of deciseconds 
+   * Precision of deciseconds
    */
   size_t timer::approx_time_millis() {
     return get_hms_timer().ctr * 100;
@@ -99,11 +99,11 @@ static hundredms_timer& get_hms_timer() {
     timeout.tv_nsec = (sleeplen % 1000) * 1000000;
     while (nanosleep(&timeout, &timeout) == -1);
   }
-  
 
-  
-  
-static unsigned long long rtdsc_ticks_per_sec = 0; 
+
+
+
+static unsigned long long rtdsc_ticks_per_sec = 0;
 static mutex rtdsc_ticks_per_sec_mutex;
 
 unsigned long long estimate_ticks_per_second() {
@@ -121,4 +121,3 @@ unsigned long long estimate_ticks_per_second() {
 }
 
 }
-

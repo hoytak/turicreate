@@ -2,7 +2,7 @@
 
 #ifdef JSON_WRITE_PRIORITY
 	extern bool used_ascii_one;
-	
+
 	void myDoTests(bool asciichar);
 	void myDoTests(bool asciichar){
         used_ascii_one = asciichar;
@@ -18,7 +18,7 @@
 		  assertWrite(test1, json_write, JSON_TEXT("{}"));
 		  json_push_back(test1, json_new_a(JSON_TEXT("Hello"), JSON_TEXT("World")));
 		  json_push_back(test1, json_new_b(JSON_TEXT("libjson"), true));
-		  
+
 		  assertWrite(test1, json_write, JSON_TEXT("{\"Hello\":\"World\",\"libjson\":true}"));
 		  #ifdef JSON_NEWLINE
 			 assertEquals(JSON_NEWLINE, JSON_TEXT("\r\n"));
@@ -137,24 +137,24 @@
 			 #endif
 
 		  #endif
-		
+
           #ifdef JSON_READ_PRIORITY
               used_ascii_one = asciichar;
-		      const json_char * str = JSON_TEXT("{ \"mt\":\"\\\"str\\\"\" }"); // str={"mt":"\"str\""} 
+		      const json_char * str = JSON_TEXT("{ \"mt\":\"\\\"str\\\"\" }"); // str={"mt":"\"str\""}
               json_string check = libjson::strip_white_space(str);
               assertEquals(check, JSON_TEXT("{\"mt\":\"\\\"str\\\"\"}"));
-            
+
               used_ascii_one = asciichar;
-		      JSONNode obj = libjson::parse(str); 
-		      json_string objstr = obj.write(); 
+		      JSONNode obj = libjson::parse(str);
+		      json_string objstr = obj.write();
               assertEquals(objstr, JSON_TEXT("{\"mt\":\"\\\"str\\\"\"}"));
 
 
                 UnitTest::SetPrefix("TestWriter.cpp - ascii one char");
-        	   used_ascii_one = asciichar;
-        	   JSONNode n = libjson::parse(JSON_TEXT("[ \"I said: \\\"foo!\\\"\" ]"));
-        	   json_string result = n.write_formatted();
-        	   assertEquals(result, JSON_TEXT("[\n\t\"I said: \\\"foo!\\\"\"\n]"));
+		   used_ascii_one = asciichar;
+		   JSONNode n = libjson::parse(JSON_TEXT("[ \"I said: \\\"foo!\\\"\" ]"));
+		   json_string result = n.write_formatted();
+		   assertEquals(result, JSON_TEXT("[\n\t\"I said: \\\"foo!\\\"\"\n]"));
           #endif
 	   #endif
 	}
@@ -162,7 +162,7 @@
     void TestSuite::TestWriter(void){
 	   UnitTest::SetPrefix("TestWriter.cpp - Writing (no ascii one)");
 	   myDoTests(false);
-	   
+
 	   UnitTest::SetPrefix("TestWriter.cpp - Writing (yes ascii one)");
 	   myDoTests(true);
 	}

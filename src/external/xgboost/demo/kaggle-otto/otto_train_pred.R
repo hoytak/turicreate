@@ -24,7 +24,7 @@ param <- list("objective" = "multi:softprob",
 
 # Run Cross Valication
 cv.nround = 50
-bst.cv = xgb.cv(param=param, data = x[trind,], label = y, 
+bst.cv = xgb.cv(param=param, data = x[trind,], label = y,
                 nfold = 3, nrounds=cv.nround)
 
 # Train the model

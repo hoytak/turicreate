@@ -16,11 +16,11 @@ query_context::query_context() {
 query_context::query_context(std::function<std::shared_ptr<sframe_rows>(size_t, bool)> callback_on_get_input,
                              std::function<emit_state(const std::shared_ptr<sframe_rows>&)> callback_on_emit,
                             size_t max_buffer_size,
-                            emit_state initial_state) 
+                            emit_state initial_state)
     : m_max_buffer_size(max_buffer_size),
     m_callback_on_get_input(callback_on_get_input),
     m_callback_on_emit(callback_on_emit),
-    m_initial_state(initial_state){ 
+    m_initial_state(initial_state){
   m_buffers = std::make_shared<sframe_rows>();
 }
 

@@ -32,7 +32,7 @@ namespace nearest_neighbors {
 const size_t LSH_NEAREST_NEIGHBORS_BIG_DATA = 1024 * 1024 * (1024 / 8) * 2; // note overflow
 #else
 // Small enough that the test datasets force multiple blocks to be tested
-const size_t LSH_NEAREST_NEIGHBORS_BIG_DATA = 1000; 
+const size_t LSH_NEAREST_NEIGHBORS_BIG_DATA = 1000;
 #endif
 
 
@@ -107,11 +107,11 @@ void lsh_neighbors::train(const sframe& X, const std::vector<flexible_type>& ref
   // Initialize the distance components. NOTE: this needs data to be initialized
   // first because the row slicers need the column indices to be sorted.
   initialize_distances();
- 
+
   DASSERT_FALSE(composite_distances.empty());
   dist_component c = composite_distances[0];
-    
-  bool is_sparse = (mld_ref.max_row_size() < metadata->num_dimensions()); 
+
+  bool is_sparse = (mld_ref.max_row_size() < metadata->num_dimensions());
 
   std::string distance_name = std::get<1>(composite_distance_params[0]).native_fn_name;
   if (distance_name.find_first_of(".") != std::string::npos) {
@@ -123,7 +123,7 @@ void lsh_neighbors::train(const sframe& X, const std::vector<flexible_type>& ref
   size_t num_projections_per_table = (size_t)options.value("num_projections_per_table");
   size_t num_dimensions = metadata->num_dimensions();
   size_t num_rows = X.num_rows();
-  
+
   // TODO: better format
   logprogress_stream << "LSH Options: " << std::endl;
   logprogress_stream << "  Number of tables : " << num_tables << std::endl;
@@ -139,7 +139,7 @@ void lsh_neighbors::train(const sframe& X, const std::vector<flexible_type>& ref
   lsh_model->init_options(options.current_option_values());
   lsh_model->init_model(num_dimensions);
   lsh_model->pre_lsh(mld_ref, is_sparse);
-  
+
   turi::atomic<size_t> n_train_points = 0;
 
   in_parallel([&](size_t thread_idx, size_t num_threads) GL_GCC_ONLY(GL_HOT) {
@@ -147,17 +147,17 @@ void lsh_neighbors::train(const sframe& X, const std::vector<flexible_type>& ref
 
     DenseVector v(num_dimensions);
     SparseVector s(num_dimensions);
- 
+
     for (auto it = mld_ref.get_iterator(thread_idx, num_threads);
            !it.done(); ++it) {
 
       ref_idx = it.row_index(); // reference id
-    
+
       if (cppipc::must_cancel()) {
         log_and_throw("Toolkit canceled by user.");
       }
-    
-      if (!is_sparse) { // dense 
+
+      if (!is_sparse) { // dense
         it.fill_row_expr(v);
         lsh_model->add_reference_data<DenseVector>(ref_idx, v);
       } else { //sparse
@@ -188,8 +188,8 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
 
   DASSERT_FALSE(composite_distances.empty());
   dist_component c = composite_distances[0];
-    
-  bool is_sparse = (mld_ref.max_row_size() < metadata->num_dimensions()); 
+
+  bool is_sparse = (mld_ref.max_row_size() < metadata->num_dimensions());
 
   // Compute the actual number of nearest neighbors and construct the data
   // structures to hold candidate neighbors while reference points are searched
@@ -200,8 +200,8 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
   } else {
     kstar = std::min(k, mld_ref.size());
   }
-   
-  // output 
+
+  // output
   sframe result;
 
   size_t num_dimensions = metadata->num_dimensions();
@@ -215,14 +215,14 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
   //
   // NOTE: this is optimized for large number of queries.
   hash_map_container<size_t, std::vector<size_t>> ref_to_check_map;
-  
+
   size_t max_block_size = mld_queries.size();
 
   /////////////////////////////////////////////////////////////////////////
-  // *roughly* calculate max_block_size using a subset 
-  // 
+  // *roughly* calculate max_block_size using a subset
+  //
   // estimated_overall_size = max_block_size * (average_non_zero_values_per_data
-  // + average_num_candidates_per_data) 
+  // + average_num_candidates_per_data)
   //
   if (mld_queries.size() > 1000) {
     size_t num_samples = std::max(size_t(100), static_cast<size_t>(mld_queries.size() * 0.01));
@@ -232,7 +232,7 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
     double average_nnz = static_cast<double>(num_dimensions);
     double average_candidates = 0.;
 
-    v2::ml_data sampled_data = mld_queries.create_subsampled_copy(num_samples, time(NULL)); 
+    v2::ml_data sampled_data = mld_queries.create_subsampled_copy(num_samples, time(NULL));
     if (!is_sparse) { // dense
       in_parallel([&](size_t thread_idx, size_t num_threads) {
         DenseVector vec(num_dimensions);
@@ -254,24 +254,24 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
           num_candidates += candidates.size();
         }
       });
-      average_nnz = num_nnz / static_cast<double>(num_samples) * 2; // * 2 because sparse_vec is stored as key-value pairs  
+      average_nnz = num_nnz / static_cast<double>(num_samples) * 2; // * 2 because sparse_vec is stored as key-value pairs
     }
     average_candidates = num_candidates / static_cast<double>(num_samples);
-    
+
     //logprogress_stream << "Average NNZ: " << average_nnz << std::endl;
     //logprogress_stream << "Average Candidates: " << average_candidates << std::endl;
-    
+
     max_block_size = std::min(max_block_size, static_cast<size_t>(
-              LSH_NEAREST_NEIGHBORS_BIG_DATA / ((average_candidates + average_nnz + kstar * 2))) + 1); 
- 
+              LSH_NEAREST_NEIGHBORS_BIG_DATA / ((average_candidates + average_nnz + kstar * 2))) + 1);
+
   }
   /////////////////////////////////////////////////////////////////////////////
 
   // logprogress_stream << "Max query block size : " << max_block_size << std::endl;
-  
+
   size_t num_blocks = (mld_queries.size() - 1) / max_block_size + 1;
-  
-  logprogress_stream << "Queries are processed into " << num_blocks 
+
+  logprogress_stream << "Queries are processed into " << num_blocks
       << " blocks." << std::endl;
 
   table_printer table({ {"Query points", 0}, {"\% Complete", 0},
@@ -281,7 +281,7 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
   // working on queries
   //
   // Queries are read in blocks
-   
+
   DenseMatrix query_block_buff_dense;
   std::vector<SparseVector> query_block_buff_sparse;
 
@@ -301,11 +301,11 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
     DASSERT_TRUE(block_size <= max_block_size);
 
     auto mld_queries_in_block = mld_queries.slice(block_start, block_end);
-  
-    // only keep topk nn of queries in the block 
+
+    // only keep topk nn of queries in the block
     std::vector<neighbor_candidates> topk_neighbors(block_size,
                     neighbor_candidates(-1, kstar, radius, include_self_edges));
-  
+
     parallel_for (0, block_size, [&](size_t idx) {
                     topk_neighbors[idx].set_label(idx + block_start);
                   });
@@ -315,7 +315,7 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
     }
 
     in_parallel([&](size_t thread_idx, size_t num_threads) GL_GCC_ONLY(GL_HOT) {
-      
+
       size_t idx_query;
       std::vector<size_t> candidates;
 
@@ -337,8 +337,8 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
         } else {
           it_query.fill_row_expr(query_block_buff_sparse[idx_query]);
           candidates = lsh_model->query<SparseVector>(query_block_buff_sparse[idx_query]);
-        } 
-      
+        }
+
         for (const auto& ref_id: candidates) {
           ref_to_check_map.update(ref_id, [idx_query](std::vector<size_t>& v) {
                                     v.push_back(idx_query);
@@ -360,7 +360,7 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
       size_t idx_ref;
       DenseVector ref_v(num_dimensions);
       SparseVector ref_s(num_dimensions);
-      
+
       for(auto it_ref = mld_ref.get_iterator(thread_idx, num_threads);
         !it_ref.done(); ++it_ref) {
 
@@ -383,7 +383,7 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
 
         for (const auto& idx_query : to_check_set) {
           double dist = 0;
-          if (!is_sparse) { 
+          if (!is_sparse) {
             dist = c.distance->distance(
               ref_v, query_block_buff_dense.row(idx_query).t());
           } else {
@@ -395,7 +395,7 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
         }
       }
     });
-  
+
     append_neighbors_to_sframe(result, topk_neighbors, reference_labels, query_labels);
 
     // clear the map
@@ -408,7 +408,7 @@ sframe lsh_neighbors::query(const v2::ml_data& mld_queries,
 
   table.print_row("Done", 100.0, progress_time());
   table.print_footer();
-   
+
   result.close();
   return result;
 }

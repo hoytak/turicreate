@@ -103,11 +103,11 @@ struct parallel_sframe_iterator_test  {
                      const std::vector<size_t>& num_threads_to_check) {
 
     std::vector<sframe> sfv;
-    
+
     size_t num_segments = 16;
 
-    size_t cur_value = 0; 
-    
+    size_t cur_value = 0;
+
     for(size_t i = 0; i < num_columns_by_sframe.size(); ++i) {
       size_t num_columns = num_columns_by_sframe[i];
 
@@ -117,14 +117,14 @@ struct parallel_sframe_iterator_test  {
 
       for(size_t i = 0; i < num_columns; ++i) {
         names.push_back(std::string("X") + std::to_string(sfv.size()) + "-" + std::to_string(i));
-        types.push_back(flex_type_enum::INTEGER); 
+        types.push_back(flex_type_enum::INTEGER);
       }
-      
+
       sframe out;
 
       out.open_for_write(names, types, "", num_segments);
 
-      std::vector<flexible_type> x(num_columns); 
+      std::vector<flexible_type> x(num_columns);
 
       for(size_t sidx = 0; sidx < num_segments; ++sidx) {
 
@@ -138,19 +138,19 @@ struct parallel_sframe_iterator_test  {
             x[j] = cur_value;
             ++cur_value;
           }
-          
+
           *it_out = x;
         }
       }
-      
+
       out.close();
 
-      sfv.push_back(out); 
+      sfv.push_back(out);
     }
 
     // Build the reference
-    std::vector<std::vector<std::vector<flexible_type> > > reference(sfv.size()); 
-    
+    std::vector<std::vector<std::vector<flexible_type> > > reference(sfv.size());
+
     for(size_t i = 0; i < sfv.size(); ++i)
       reference[i] = testing_extract_sframe_data(sfv[i]);
 
@@ -159,7 +159,7 @@ struct parallel_sframe_iterator_test  {
 
     mutex write_lock;
     atomic<size_t> hit_count = 0;
-    
+
     // Per SFrame check
     auto check_sframe = [&](size_t sf_idx,
                             size_t thread_idx, size_t nt,
@@ -169,41 +169,41 @@ struct parallel_sframe_iterator_test  {
       for(parallel_sframe_iterator it(it_iter, thread_idx, nt); !it.done(); ++it) {
 
         auto& x = check_x[it.row_index()];
-        
+
         it.fill(sf_idx, x);
-            
-        TS_ASSERT_EQUALS(x.size(), sfv[sf_idx].num_columns()); 
+
+        TS_ASSERT_EQUALS(x.size(), sfv[sf_idx].num_columns());
 
         for(size_t j = 0; j < sfv[sf_idx].num_columns(); ++j) {
-          TS_ASSERT_EQUALS(x[j], reference[sf_idx][it.row_index()][j]); 
+          TS_ASSERT_EQUALS(x[j], reference[sf_idx][it.row_index()][j]);
           TS_ASSERT_EQUALS(it.value(sf_idx, j), x[j]);
         }
         ++hit_count;
       }
     };
 
-    // Full row check 
+    // Full row check
     auto check_all = [&](
         size_t thread_idx, size_t num_threads) {
-      
+
       size_t total_num_columns = 0;
       for(const auto& sf : sfv)
         total_num_columns += sf.num_columns();
-      
-      std::vector<flexible_type> x; 
+
+      std::vector<flexible_type> x;
       for(parallel_sframe_iterator it(it_iter, thread_idx, num_threads); !it.done(); ++it) {
-        
+
         it.fill(x);
-            
-        TS_ASSERT_EQUALS(x.size(), total_num_columns); 
+
+        TS_ASSERT_EQUALS(x.size(), total_num_columns);
 
         size_t col_idx = 0;
-        
+
         for(size_t sf_idx = 0; sf_idx < sfv.size(); ++sf_idx) {
           for(size_t j = 0; j < sfv[sf_idx].num_columns(); ++j) {
             TS_ASSERT_EQUALS(x[col_idx], reference[sf_idx][it.row_index()][j]);
             TS_ASSERT_EQUALS(it.value(col_idx), x[col_idx]);
-            ++col_idx; 
+            ++col_idx;
           }
         }
 
@@ -214,31 +214,31 @@ struct parallel_sframe_iterator_test  {
     // Check block reading.
     size_t mbStart = 1;
     size_t mbEnd = 3;
-    parallel_sframe_iterator_initializer it_iter_block(sfv); 
+    parallel_sframe_iterator_initializer it_iter_block(sfv);
     it_iter_block.set_global_block(mbStart, mbEnd);
     auto check_all_block = [&](
         size_t thread_idx, size_t num_threads) {
-      
+
       size_t total_num_columns = 0;
       for(const auto& sf : sfv)
         total_num_columns += sf.num_columns();
-      
-      std::vector<flexible_type> x; 
+
+      std::vector<flexible_type> x;
       for(parallel_sframe_iterator it(it_iter_block, thread_idx, num_threads);
           !it.done(); ++it) {
-        
+
         it.fill(x);
-            
-        TS_ASSERT_EQUALS(x.size(), total_num_columns); 
-        TS_ASSERT(it.row_index() >= mbStart); 
-        TS_ASSERT(it.row_index() < mbEnd); 
+
+        TS_ASSERT_EQUALS(x.size(), total_num_columns);
+        TS_ASSERT(it.row_index() >= mbStart);
+        TS_ASSERT(it.row_index() < mbEnd);
 
         size_t col_idx = 0;
         for(size_t sf_idx = 0; sf_idx < sfv.size(); ++sf_idx) {
           for(size_t j = 0; j < sfv[sf_idx].num_columns(); ++j) {
             TS_ASSERT_EQUALS(x[col_idx], reference[sf_idx][it.row_index()][j]);
             TS_ASSERT_EQUALS(it.value(col_idx), x[col_idx]);
-            ++col_idx; 
+            ++col_idx;
           }
         }
       }
@@ -247,13 +247,13 @@ struct parallel_sframe_iterator_test  {
     for(size_t sf_idx = 0; sf_idx < sfv.size(); ++sf_idx) {
       for(size_t nt : num_threads_to_check) {
         std::vector<std::vector<flexible_type> > check_x;
-        check_x.resize(reference[sf_idx].size()); 
+        check_x.resize(reference[sf_idx].size());
 
         hit_count = 0;
         for(size_t thread_idx = 0; thread_idx < nt; ++thread_idx)
           check_sframe(sf_idx, thread_idx, nt, check_x);
 
-        TS_ASSERT(check_x == reference[sf_idx]); 
+        TS_ASSERT(check_x == reference[sf_idx]);
 
         TS_ASSERT_EQUALS(sfv[0].size(), size_t(hit_count));
       }
@@ -263,16 +263,16 @@ struct parallel_sframe_iterator_test  {
         check_x.resize(reference[sf_idx].size());
 
         hit_count = 0;
-        // Now do the same, but in parallel 
+        // Now do the same, but in parallel
         in_parallel([&](size_t thread_idx, size_t nt) { check_sframe(sf_idx, thread_idx, nt, check_x); } );
 
         TS_ASSERT_EQUALS(sfv[0].size(), size_t(hit_count));
-        
+
         TS_ASSERT(check_x == reference[sf_idx]);
       }
     }
-    
-    // Now, do the same, but considering the full vector. 
+
+    // Now, do the same, but considering the full vector.
     for(size_t nt : num_threads_to_check) {
       hit_count = 0;
       for(size_t thread_idx = 0; thread_idx < nt; ++thread_idx)
@@ -280,13 +280,13 @@ struct parallel_sframe_iterator_test  {
 
       TS_ASSERT_EQUALS(sfv[0].size(), size_t(hit_count));
     }
-      
-    // Now do the same, but in parallel 
-    in_parallel(check_all);   
-    in_parallel(check_all_block);   
+
+    // Now do the same, but in parallel
+    in_parallel(check_all);
+    in_parallel(check_all_block);
   }
 
-  void test_tiny_1() {  _test_correct({1}, 100, {1}); } 
+  void test_tiny_1() {  _test_correct({1}, 100, {1}); }
   void test_tiny_2() {  _test_correct({1}, 4, {1, 4, 16});   }
   void test_tiny_3() {  _test_correct({1, 1}, 100, {1}); }
   void test_tiny_4() {  _test_correct({1, 1}, 4, {1, 4, 16});   }
@@ -331,7 +331,7 @@ struct parallel_sframe_iterator_test  {
     parallel_sframe_iterator_initializer it_init(sf);
 
     atomic<size_t> n_writes = 0;
-  
+
     in_parallel([&](size_t thread_idx, size_t n_threads) {
 
         auto it_out = out->get_output_iterator(thread_idx);

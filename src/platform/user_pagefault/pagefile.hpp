@@ -64,7 +64,7 @@ class pagefile {
   /**
    * Returns the number of elements in each arena.
    *
-   * Returns a vector of length NUM_ARENAS where element i is the number of 
+   * Returns a vector of length NUM_ARENAS where element i is the number of
    * elements stored in each arena.
    */
   std::vector<size_t> get_allocation_counts() const;
@@ -72,7 +72,7 @@ class pagefile {
   /**
    * Returns a vector of arena sizes.
    *
-   * Returns a vector of length NUM_ARENAS where element i is the size 
+   * Returns a vector of length NUM_ARENAS where element i is the size
    * of each element in arena i.
    */
   std::vector<size_t> get_arena_sizes() const;
@@ -91,8 +91,8 @@ class pagefile {
  private:
   /**
    * This structure maintains the arena of size "arena_size". i.e.
-   * It only maintains allocations of *exactly* that size. 
-   * 
+   * It only maintains allocations of *exactly* that size.
+   *
    * Essentially I am interpreting the file as a collection of N consecutive
    * sections of arena_size bytes. A bitfield of length N is used to denote whether
    * a particular section is in use or not.
@@ -133,7 +133,7 @@ class pagefile {
 
   /**
    * Every allocation (accessed by the \ref allocate(), \ref read()
-   * \ref write() and \ref free() function), references a handle to one of 
+   * \ref write() and \ref free() function), references a handle to one of
    * these datastructures that tell us what is the size that was allocated,
    * and its current location (which arena it is in, whether it is compressed,
    * etc).
@@ -147,7 +147,7 @@ class pagefile {
     simple_spinlock allocation_lock;
   };
   /**
-   * Since the user just sees integer handles, this is a map from integer 
+   * Since the user just sees integer handles, this is a map from integer
    * handles to the allocation metadata.
    */
   turi::mutex m_lock;
@@ -159,7 +159,7 @@ class pagefile {
    * Each arena allocation is referenced by an "arena_number_and_offset"
    * address.
    * Basically, the arena number is the index into the m_arenas array; i.e.
-   * which arena. The offset is the position within the pagefile. 
+   * which arena. The offset is the position within the pagefile.
    * i.e. to get to the data, you seek to to the offset arena_size * offset
    * within the pagefile.
    */
@@ -180,7 +180,7 @@ class pagefile {
    */
   void deallocate_arena(std::pair<size_t, size_t> arena_number_and_offset);
   /**
-   * Reads the data stored at the arena address arena_number_and_offset 
+   * Reads the data stored at the arena address arena_number_and_offset
    */
   void read_arena(std::pair<size_t, size_t> arena_number_and_offset, char* data, size_t len);
   void write_arena(std::pair<size_t, size_t> arena_number_and_offset, char* data, size_t len);

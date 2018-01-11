@@ -167,6 +167,6 @@ extern size_t SFRAME_SORT_PIVOT_ESTIMATION_SAMPLE_SIZE;
  */
 extern size_t SFRAME_SORT_MAX_SEGMENTS;
 
-/// \} 
+/// \}
 } // namespace turi
 #endif

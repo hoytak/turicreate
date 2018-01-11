@@ -86,7 +86,7 @@ namespace lambda {
 
     /**
      * Register the lambda_str for all workers, and returns the id for the lambda.
-     * Throws the exception  
+     * Throws the exception
      */
     size_t make_lambda(const std::string& lambda_str);
 
@@ -116,7 +116,7 @@ namespace lambda {
      */
     void bulk_eval(size_t lambda_hash,
                    const std::vector<std::string>& keys,
-                   const std::vector<std::vector<flexible_type>>& args, 
+                   const std::vector<std::vector<flexible_type>>& args,
                    std::vector<flexible_type>& out,
                    bool skip_undefined, int seed);
 
@@ -131,27 +131,27 @@ namespace lambda {
 
     inline size_t num_workers() { return m_worker_pool->num_workers(); }
 
-    static void set_lambda_worker_binary(const std::vector<std::string>& path) { 
+    static void set_lambda_worker_binary(const std::vector<std::string>& path) {
       lambda_worker_binary_and_args = path;
       std::ostringstream ss;
 
       for(size_t i = 0; i < path.size(); ++i) {
-        if(i != 0) ss << ' '; 
+        if(i != 0) ss << ' ';
         ss << path[i];
       }
-      
+
       logstream(LOG_INFO) << "Pylambda worker binary: " << ss.str() << std::endl;
     };
 
-    static void set_lambda_worker_binary(const std::string& path) { 
-      lambda_worker_binary_and_args = {path}; 
+    static void set_lambda_worker_binary(const std::string& path) {
+      lambda_worker_binary_and_args = {path};
       logstream(LOG_INFO) << "Pylambda worker binary: " << path << std::endl;
     };
 
     static const std::vector<std::string>& get_lambda_worker_binary() {
       return lambda_worker_binary_and_args;
     };
-    
+
    private:
 
     lambda_master(lambda_master const&) = delete;
@@ -167,7 +167,7 @@ namespace lambda {
 
     /** The binary for executing the lambda_workers.
      */
-    static std::vector<std::string> lambda_worker_binary_and_args;    
+    static std::vector<std::string> lambda_worker_binary_and_args;
 
   };
 

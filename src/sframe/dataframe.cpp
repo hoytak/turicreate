@@ -41,7 +41,7 @@ namespace turi {
 
     bool r = phrase_parse(str.begin(), str.end(),
       (
-          *blank >> ( 
+          *blank >> (
             int_ [([&](int v){
                    // std::cerr << str << ":int\n";
                    ret = v;
@@ -109,8 +109,8 @@ namespace turi {
       auto typeiter = types.find(colname);
       ASSERT_TRUE(typeiter != types.end());
       flex_type_enum t = typeiter->second;
-      std::cerr << "column: " << colname 
-                << "| type: " << flex_type_enum_to_name(t) << "\n"; 
+      std::cerr << "column: " << colname
+                << "| type: " << flex_type_enum_to_name(t) << "\n";
       auto subiter = iter->second.begin();
       while (subiter != iter->second.end())  {
         std::cerr << (std::string)(*subiter) << "\t";
@@ -122,8 +122,8 @@ namespace turi {
   }
 
 
-  void dataframe_t::set_column(std::string key, 
-                               const std::vector<flexible_type>& val, 
+  void dataframe_t::set_column(std::string key,
+                               const std::vector<flexible_type>& val,
                                flex_type_enum type) {
     if (!values.count(key)) {
       names.push_back(key);
@@ -133,8 +133,8 @@ namespace turi {
   }
 
 
-  void dataframe_t::set_column(std::string key, 
-                               std::vector<flexible_type>&& val, 
+  void dataframe_t::set_column(std::string key,
+                               std::vector<flexible_type>&& val,
                                flex_type_enum type) {
     if (!values.count(key)) {
       names.push_back(key);
@@ -184,7 +184,7 @@ namespace turi {
         if (!line.empty())
           break;
       };
-      // Return here if fail reading the header. 
+      // Return here if fail reading the header.
       if (line.empty()) {
         logstream(LOG_WARNING) << "Ignore empty file " << path << std::endl;
         return;
@@ -220,7 +220,7 @@ namespace turi {
         getline(fin, line);
         // std::cerr << "line: " << line << "\n";
         if (line.empty())
-          break; 
+          break;
 
         boost::tokenizer<boost::escaped_list_separator<char> > tokens(line, sep);
         std::vector<flexible_type> tmp;
@@ -228,7 +228,7 @@ namespace turi {
           tmp.push_back(parse_flexible_type(tok));
         }
         if (tmp.size() != ncols) {
-          std::cerr << "ignore line: " << line << ". Unexpected number of columns.\n"; 
+          std::cerr << "ignore line: " << line << ". Unexpected number of columns.\n";
           continue;
         };
         for (size_t j = 0 ; j < ncols; ++j) {
@@ -248,7 +248,7 @@ namespace turi {
         log_and_throw("File " + path + " has no data.");
       }
 
-      // Type inference and unification, set column_types; 
+      // Type inference and unification, set column_types;
       parallel_for(0, ncols,
                    [&](size_t i) {
           std::vector<flexible_type>& values = column_values[i];
@@ -307,7 +307,7 @@ namespace turi {
       names.swap(column_names);
       for (size_t i = 0 ;i < ncols; ++i) {
         types[names[i]] = column_types[i];
-        values[names[i]].swap(column_values[i]); 
+        values[names[i]].swap(column_values[i]);
       }
 
       std::stringstream ss;
@@ -336,7 +336,7 @@ dataframe_row_iterator dataframe_row_iterator::begin(const dataframe_t& dt) {
   }
   // get the number of rows by getting the length of the first column
   if (iter.iterators.size() > 0) {
-    iter.num_rows = std::distance(iter.iterators[0].first, 
+    iter.num_rows = std::distance(iter.iterators[0].first,
                                   iter.iterators[0].second);
   } else {
     iter.num_rows = 0;
@@ -392,18 +392,18 @@ void dataframe_row_iterator::skip_rows(size_t num_rows_to_skip) {
 /*                                                                        */
 /**************************************************************************/
 void parallel_dataframe_iterate(const dataframe_t& df,
-                                std::function<void(dataframe_row_iterator& iter, 
-                                                   size_t startrow, 
+                                std::function<void(dataframe_row_iterator& iter,
+                                                   size_t startrow,
                                                    size_t endrow)> partialrowfn) {
   in_parallel([&](size_t thread_id, size_t num_threads) {
     // split the rows into groups of rows_per_thread
     size_t rows_per_thread = df.nrows() / num_threads;
     dataframe_row_iterator thlocal_iter = dataframe_row_iterator::begin(df);
 
-    // each thread is going to cover rows_per_thread rows, except for the 
+    // each thread is going to cover rows_per_thread rows, except for the
     // last thread which must cover all the way to the end
     size_t start_row = rows_per_thread * (thread_id);
-    size_t last_row = rows_per_thread * (thread_id + 1); // technically one 
+    size_t last_row = rows_per_thread * (thread_id + 1); // technically one
                                                             // past the last row
     thlocal_iter.skip_rows(start_row);
     if (thread_id == num_threads - 1) last_row = df.nrows();

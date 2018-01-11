@@ -67,15 +67,15 @@ void _test_convergence(
   sframe train_data = lmdata.generate(n_observations, target_column_name, 0, 0.1);
   sframe test_data  = lmdata.generate(n_observations, target_column_name, 1, 0.1);
 
-  ASSERT_TRUE(train_data.num_rows() == n_observations); 
-  ASSERT_TRUE(test_data.num_rows() == n_observations); 
+  ASSERT_TRUE(train_data.num_rows() == n_observations);
+  ASSERT_TRUE(test_data.num_rows() == n_observations);
 
   lm_data_generator lmdata_user({"user_id", "U2"}, {n_categorical_values[0], 16}, opts);
   sframe user_data = lmdata_user.generate(100, "U3", 0, 0.1);
 
   lm_data_generator lmdata_item({"item_id", "I2"}, {n_categorical_values[1], 16}, opts);
   sframe item_data = lmdata_item.generate(100, "I3", 0, 0.1);
-  
+
   std::map<std::string, flexible_type> options =
       { {"solver", "auto"},
         {"binary_target", binary_target},
@@ -99,9 +99,9 @@ restart_model_training:
 
   model->init_options(options);
 
-  ASSERT_TRUE(train_data.num_rows() == n_observations); 
-  ASSERT_TRUE(test_data.num_rows() == n_observations); 
-  
+  ASSERT_TRUE(train_data.num_rows() == n_observations);
+  ASSERT_TRUE(test_data.num_rows() == n_observations);
+
   if(include_side_features)
     model->setup_and_train(train_data, user_data, item_data);
   else

@@ -127,7 +127,7 @@ class opt_interface: public optimization::second_order_opt_interface
       }
     }
   }
-  
+
 
   /**
    * Compute the gradient at the given point. (for logistic_regression)
@@ -165,7 +165,7 @@ class opt_interface: public optimization::second_order_opt_interface
   double compute_function_value(const DenseVector& point, const size_t
       mbStart=0, const size_t mbSize =-1){
     double func = 0;
-    
+
     // Code copied from logistic_regression.cpp
     for (size_t i=0; i < examples; i++){
       DenseVector x = A.row(i).t();
@@ -182,7 +182,7 @@ class opt_interface: public optimization::second_order_opt_interface
     }
     return func;
   }
-  
+
   /**
    * Compute first order statistics at the given point.
    *
@@ -218,7 +218,7 @@ class opt_interface: public optimization::second_order_opt_interface
       gradient += G;
     }
   }
-  
+
   /**
    * Compute second order statistics at the given point.
    *
@@ -235,7 +235,7 @@ class opt_interface: public optimization::second_order_opt_interface
     func = 0;
     gradient.zeros();
     hessian.zeros();
-    
+
     // Code copied from logistic_regression.cpp
     for (size_t i=0; i < examples; i++){
       DenseVector x = A.row(i).t();
@@ -288,7 +288,7 @@ class opt_interface: public optimization::second_order_opt_interface
  * ------------------
  *
  * (1) Solvers + Regularizers
- * (2) Solvers + Constraints  
+ * (2) Solvers + Constraints
  * (3)
  *
  *
@@ -306,7 +306,7 @@ struct optimization_interface_test  {
   std::map<std::string, flexible_type> opts;
 
   public:
-    
+
     optimization_interface_test() {
       size_t examples = 100;
       size_t variables = 10;
@@ -319,7 +319,7 @@ struct optimization_interface_test  {
       A.randu();
       b.randu();
       init_point.zeros();
-      
+
       std::shared_ptr<opt_interface> solver_interface;
       solver_interface.reset(new opt_interface(A, b));
       std::map<std::string, flexible_type> opts =  {
@@ -359,7 +359,7 @@ struct optimization_interface_test  {
           init_point, opts);
       TS_ASSERT(arma::approx_equal(stats.solution, solution,"absdiff", 1e-2));
     }
-    
+
     void test_newton(){
       optimization::solver_return stats;
       stats = turi::optimization::newton_method(*solver_interface,
@@ -390,7 +390,7 @@ struct optimization_interface_test  {
     * Tests optimization utils.
     * ------------------------------------------------------------------------
     */
-    
+
     void check_gradient_checker(){
       for(size_t i=0; i < 10; i++){
         DenseVector point(variables);
@@ -400,7 +400,7 @@ struct optimization_interface_test  {
         TS_ASSERT(check_gradient(*solver_interface, point, gradient));
       }
     }
-    
+
     void check_hessian_checker(){
       for(size_t i=0; i < 10; i++){
         DenseVector point(variables);

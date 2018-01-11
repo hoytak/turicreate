@@ -85,7 +85,7 @@ void TestSuite::TestNamespace(void){
 			 json_free(res);
 			 ASSERT_ZERO_ALLOCATIONS();
 		  }
-	
+
 		#ifdef JSON_SAFE
 		  UnitTest::SetPrefix("TestNamespace.cpp - Parser");
 		  {
@@ -95,8 +95,8 @@ void TestSuite::TestNamespace(void){
 			  ASSERT_ZERO_ALLOCATIONS();
 		  }
 		#endif
-	
-	
+
+
 
 		  #ifdef JSON_VALIDATE
 			 UnitTest::SetPrefix("TestNamespace.cpp - Validator");
@@ -281,7 +281,7 @@ void TestSuite::TestNamespace(void){
 			 assertEquals(tester[2].name(), JSON_TEXT("and"));
 			 assertEquals(tester[2], JSON_TEXT("pluto"));
 			 TestSuite::testParsingItself(tester);
-	
+
 			#ifdef JSON_SAFE
 				assertException(libjson::parse(JSON_TEXT("[{\"a\":\"b\",\"c\":{\"d\":\"e\",\"f\":\"g\",\"e\":\"f ")), std::invalid_argument);
 			#endif

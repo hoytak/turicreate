@@ -51,15 +51,15 @@ static FIELDTYPE const default_fieldtype = {
 const FIELDTYPE* _nc_Default_FieldType = &default_fieldtype;
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  FIELDTYPE *new_fieldtype(
 |                       bool (* const field_check)(FIELD *,const void *),
-|                       bool (* const char_check) (int, const void *) ) 
-|   
+|                       bool (* const char_check) (int, const void *) )
+|
 |   Description   :  Create a new fieldtype. The application programmer must
 |                    write a field_check and a char_check function and give
 |                    them as input to this call.
-|                    If an error occurs, errno is set to                    
+|                    If an error occurs, errno is set to
 |                       E_BAD_ARGUMENT  - invalid arguments
 |                       E_SYSTEM_ERROR  - system error (no memory)
 |
@@ -70,7 +70,7 @@ FIELDTYPE *new_fieldtype(
  bool (* const char_check) (int,const void *) )
 {
   FIELDTYPE *nftyp = (FIELDTYPE *)0;
-  
+
   if ( (field_check) || (char_check) )
     {
       nftyp = (FIELDTYPE *)malloc(sizeof(FIELDTYPE));
@@ -93,9 +93,9 @@ FIELDTYPE *new_fieldtype(
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int free_fieldtype(FIELDTYPE *typ)
-|   
+|
 |   Description   :  Release the memory associated with this fieldtype.
 |
 |   Return Values :  E_OK            - success

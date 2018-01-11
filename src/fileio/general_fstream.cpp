@@ -21,27 +21,27 @@ general_ifstream::general_ifstream(std::string filename)
     // this is the function try block syntax which, together with the member
     // function pointer syntax, is probably the ugliest C++ syntactic element
     // every conceieved.
-    try :general_ifstream_base(filename), opened_filename(filename) 
-    { 
+    try :general_ifstream_base(filename), opened_filename(filename)
+    {
     }  catch (const std::exception& e) {
       log_and_throw_io_failure("Cannot open " + sanitize_url(filename) + " for read. " + e.what());
     } catch (std::string e) {
       log_and_throw_io_failure("Cannot open " + sanitize_url(filename) + " for read. " + e);
     } catch (...) {
       log_and_throw_io_failure("Cannot open " + sanitize_url(filename));
-    } 
+    }
 
 
 general_ifstream::general_ifstream(std::string filename, bool gzip_compressed)
-    try :general_ifstream_base(filename, gzip_compressed), 
-     opened_filename(filename) { 
+    try :general_ifstream_base(filename, gzip_compressed),
+     opened_filename(filename) {
      } catch (const std::exception& e) {
       log_and_throw_io_failure("Cannot open " + sanitize_url(filename) + " for read. " + e.what());
     } catch (std::string e) {
       log_and_throw_io_failure("Cannot open " + sanitize_url(filename) + " for read. " + e);
     } catch (...) {
       log_and_throw_io_failure("Cannot open " + sanitize_url(filename));
-    } 
+    }
 
 size_t general_ifstream::file_size() {
   return this->general_ifstream_base::operator->()->file_size();
@@ -75,7 +75,7 @@ general_ofstream::general_ofstream(std::string filename)
 
 
 general_ofstream::general_ofstream(std::string filename, bool gzip_compress)
-    try :general_ofstream_base(filename, gzip_compress), 
+    try :general_ofstream_base(filename, gzip_compress),
      opened_filename(filename) { }  catch (std::exception e) {
       log_and_throw_io_failure("Cannot open " + sanitize_url(filename) + " for write. " + e.what());
     } catch (std::string e) {

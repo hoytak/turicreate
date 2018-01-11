@@ -32,8 +32,7 @@ namespace archive_detail {
   }
   };
 
-} // archive_detail  
+} // archive_detail
 } // turicreate
 
-#endif 
-
+#endif

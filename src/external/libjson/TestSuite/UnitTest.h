@@ -31,9 +31,9 @@ union unittest_numUnion {
 template<typename T>
 static bool unittest_isNAN(T num){
 	unittest_numUnion<T> orig(num);
-	
+
 	static unittest_numUnion<T> sig_nan(std::numeric_limits<T>::signaling_NaN());
-	
+
 	bool isNAN = true;
 	for(size_t i = 0; i < sizeof(T); ++i){
 		if (orig.c[i] != sig_nan.c[i]){
@@ -42,9 +42,9 @@ static bool unittest_isNAN(T num){
 		}
 	}
 	if (isNAN) return true;
-	
+
 	static unittest_numUnion<T> quiet_nan(std::numeric_limits<T>::quiet_NaN());
-	
+
 	for(size_t i = 0; i < sizeof(T); ++i){
 		if (orig.c[i] != quiet_nan.c[i]){
 			return false;

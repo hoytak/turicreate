@@ -6,10 +6,10 @@ if (!require(vcd)) {
   require(vcd)
 }
 # According to its documentation, Xgboost works only on numbers.
-# Sometimes the dataset we have to work on have categorical data. 
+# Sometimes the dataset we have to work on have categorical data.
 # A categorical variable is one which have a fixed number of values. By example, if for each observation a variable called "Colour" can have only "red", "blue" or "green" as value, it is a categorical variable.
 #
-# In R, categorical variable is called Factor. 
+# In R, categorical variable is called Factor.
 # Type ?factor in console for more information.
 #
 # In this demo we will see how to transform a dense dataframe with categorical variables to a sparse matrix before analyzing it in Xgboost.
@@ -58,8 +58,8 @@ cat("Encoding of the sparse Matrix\n")
 print(sparse_matrix)
 
 # Create the output vector (not sparse)
-# 1. Set, for all rows, field in Y column to 0; 
-# 2. set Y to 1 when Improved == Marked; 
+# 1. Set, for all rows, field in Y column to 0;
+# 2. set Y to 1 when Improved == Marked;
 # 3. Return Y column
 output_vector = df[,Y:=0][Improved == "Marked",Y:=1][,Y]
 

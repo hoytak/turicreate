@@ -20,7 +20,7 @@ struct read_row_of_value {
 
   /**
    * Sets the row length and also determines the output type.
-   * 
+   *
    * If row_length == 1, based on the properties of T, the output type
    * is either INTEGER or FLOAT.
    * Otherwise it is a VECTOR.
@@ -31,7 +31,7 @@ struct read_row_of_value {
       if (std::is_integral<T>::value) value = flexible_type(flex_type_enum::INTEGER);
       else value = flexible_type(flex_type_enum::FLOAT);
     } else {
-      value = flexible_type(flex_type_enum::VECTOR); 
+      value = flexible_type(flex_type_enum::VECTOR);
       value.mutable_get<flex_vec>().resize(n);
     }
   }
@@ -59,9 +59,9 @@ struct read_row_of_value {
 
 
 template <typename T>
-void create_sarray(void* ptr, 
+void create_sarray(void* ptr,
                    size_t num_rows,
-                   size_t row_length, 
+                   size_t row_length,
                    turi::sarray<flexible_type>& out) {
 
   read_row_of_value<T> row_reader;
@@ -90,13 +90,13 @@ extern "C" {
  * \param row_length Number of ELEMENTS per row
  * \param is_integer True if it is an integral type. False for float.
  * \param signed_type True if it is a signed type (only valid for integers)
- * \param element_width Number of bytes per element. 
- *                      (ex: if integer this is the number of bytes for the 
+ * \param element_width Number of bytes per element.
+ *                      (ex: if integer this is the number of bytes for the
  *                      integer representation)
  * \param output_location The output SArray name
  */
-EXPORT bool numpy_to_sarray(void* ptr, 
-                            size_t ptr_length, 
+EXPORT bool numpy_to_sarray(void* ptr,
+                            size_t ptr_length,
                             size_t row_length,
                             bool is_integer,
                             bool signed_type,

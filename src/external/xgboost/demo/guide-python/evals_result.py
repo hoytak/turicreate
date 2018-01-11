@@ -7,7 +7,7 @@ dtrain = xgb.DMatrix('../data/agaricus.txt.train', silent=True)
 dtest = xgb.DMatrix('../data/agaricus.txt.test', silent=True)
 
 param = [('max_depth', 2), ('objective', 'binary:logistic'), ('eval_metric', 'logloss'), ('eval_metric', 'error')]
- 
+
 num_round = 2
 watchlist = [(dtest,'eval'), (dtrain,'train')]
 

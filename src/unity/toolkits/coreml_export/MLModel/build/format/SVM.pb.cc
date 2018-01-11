@@ -448,7 +448,7 @@ double RBFKernel::gamma() const {
   return gamma_;
 }
 void RBFKernel::set_gamma(double value) {
-  
+
   gamma_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.RBFKernel.gamma)
 }
@@ -734,7 +734,7 @@ void PolyKernel::clear_degree() {
   return degree_;
 }
 void PolyKernel::set_degree(::google::protobuf::int32 value) {
-  
+
   degree_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.PolyKernel.degree)
 }
@@ -748,7 +748,7 @@ double PolyKernel::c() const {
   return c_;
 }
 void PolyKernel::set_c(double value) {
-  
+
   c_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.PolyKernel.c)
 }
@@ -762,7 +762,7 @@ double PolyKernel::gamma() const {
   return gamma_;
 }
 void PolyKernel::set_gamma(double value) {
-  
+
   gamma_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.PolyKernel.gamma)
 }
@@ -1016,7 +1016,7 @@ double SigmoidKernel::gamma() const {
   return gamma_;
 }
 void SigmoidKernel::set_gamma(double value) {
-  
+
   gamma_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.SigmoidKernel.gamma)
 }
@@ -1030,7 +1030,7 @@ double SigmoidKernel::c() const {
   return c_;
 }
 void SigmoidKernel::set_c(double value) {
-  
+
   c_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.SigmoidKernel.c)
 }
@@ -1811,7 +1811,7 @@ void SparseNode::clear_index() {
   return index_;
 }
 void SparseNode::set_index(::google::protobuf::int32 value) {
-  
+
   index_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.SparseNode.index)
 }
@@ -1825,7 +1825,7 @@ double SparseNode::value() const {
   return value_;
 }
 void SparseNode::set_value(double value) {
-  
+
   value_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.SparseNode.value)
 }
@@ -3352,7 +3352,7 @@ const ::CoreML::Specification::Kernel& SupportVectorRegressor::kernel() const {
                          : *::CoreML::Specification::Kernel::internal_default_instance();
 }
 ::CoreML::Specification::Kernel* SupportVectorRegressor::mutable_kernel() {
-  
+
   if (kernel_ == NULL) {
     kernel_ = new ::CoreML::Specification::Kernel;
   }
@@ -3361,7 +3361,7 @@ const ::CoreML::Specification::Kernel& SupportVectorRegressor::kernel() const {
 }
 ::CoreML::Specification::Kernel* SupportVectorRegressor::release_kernel() {
   // @@protoc_insertion_point(field_release:CoreML.Specification.SupportVectorRegressor.kernel)
-  
+
   ::CoreML::Specification::Kernel* temp = kernel_;
   kernel_ = NULL;
   return temp;
@@ -3370,9 +3370,9 @@ void SupportVectorRegressor::set_allocated_kernel(::CoreML::Specification::Kerne
   delete kernel_;
   kernel_ = kernel;
   if (kernel) {
-    
+
   } else {
-    
+
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.SupportVectorRegressor.kernel)
 }
@@ -3487,7 +3487,7 @@ const ::CoreML::Specification::Coefficients& SupportVectorRegressor::coefficient
                          : *::CoreML::Specification::Coefficients::internal_default_instance();
 }
 ::CoreML::Specification::Coefficients* SupportVectorRegressor::mutable_coefficients() {
-  
+
   if (coefficients_ == NULL) {
     coefficients_ = new ::CoreML::Specification::Coefficients;
   }
@@ -3496,7 +3496,7 @@ const ::CoreML::Specification::Coefficients& SupportVectorRegressor::coefficient
 }
 ::CoreML::Specification::Coefficients* SupportVectorRegressor::release_coefficients() {
   // @@protoc_insertion_point(field_release:CoreML.Specification.SupportVectorRegressor.coefficients)
-  
+
   ::CoreML::Specification::Coefficients* temp = coefficients_;
   coefficients_ = NULL;
   return temp;
@@ -3505,9 +3505,9 @@ void SupportVectorRegressor::set_allocated_coefficients(::CoreML::Specification:
   delete coefficients_;
   coefficients_ = coefficients;
   if (coefficients) {
-    
+
   } else {
-    
+
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.SupportVectorRegressor.coefficients)
 }
@@ -3521,7 +3521,7 @@ double SupportVectorRegressor::rho() const {
   return rho_;
 }
 void SupportVectorRegressor::set_rho(double value) {
-  
+
   rho_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.SupportVectorRegressor.rho)
 }
@@ -4173,7 +4173,7 @@ const ::CoreML::Specification::Kernel& SupportVectorClassifier::kernel() const {
                          : *::CoreML::Specification::Kernel::internal_default_instance();
 }
 ::CoreML::Specification::Kernel* SupportVectorClassifier::mutable_kernel() {
-  
+
   if (kernel_ == NULL) {
     kernel_ = new ::CoreML::Specification::Kernel;
   }
@@ -4182,7 +4182,7 @@ const ::CoreML::Specification::Kernel& SupportVectorClassifier::kernel() const {
 }
 ::CoreML::Specification::Kernel* SupportVectorClassifier::release_kernel() {
   // @@protoc_insertion_point(field_release:CoreML.Specification.SupportVectorClassifier.kernel)
-  
+
   ::CoreML::Specification::Kernel* temp = kernel_;
   kernel_ = NULL;
   return temp;
@@ -4191,9 +4191,9 @@ void SupportVectorClassifier::set_allocated_kernel(::CoreML::Specification::Kern
   delete kernel_;
   kernel_ = kernel;
   if (kernel) {
-    
+
   } else {
-    
+
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.SupportVectorClassifier.kernel)
 }

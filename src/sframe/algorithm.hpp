@@ -590,10 +590,10 @@ void binary_transform(S1&& input1, S2&& input2, T&& output,
  * \param input The input to read from. Must be a descendent of siterable
  * \param output The output writer to write to. Must be a descendent of swriter_base
  * \param start The start row to begin reading
- * \param step The row step 
+ * \param step The row step
  * \param end One past the last row to read
  */
-template <typename S, typename T, 
+template <typename S, typename T,
 typename = typename std::enable_if<sframe_impl::is_sarray_like<S>::value>::type,
 typename = typename std::enable_if<sframe_impl::is_sarray_like<T>::value>::type>
 void copy_range(S&& input, T&& output,
@@ -626,11 +626,11 @@ void copy_range(S&& input, T&& output,
                  if (step == 1) {
                    // special case for step == 1
                    // read a block and write a block
-                   for (size_t i = start_idx; 
-                        i < end_idx; 
+                   for (size_t i = start_idx;
+                        i < end_idx;
                         i += DEFAULT_SARRAY_READER_BUFFER_SIZE) {
                      size_t block_read_range_start = start + i;
-                     size_t block_read_range_end = 
+                     size_t block_read_range_end =
                          block_read_range_start + DEFAULT_SARRAY_READER_BUFFER_SIZE;
                      block_read_range_end = std::min(block_read_range_end, start + end_idx);
                      reader->read_rows(block_read_range_start,

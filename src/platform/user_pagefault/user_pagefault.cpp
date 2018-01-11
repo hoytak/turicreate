@@ -38,7 +38,7 @@ static std::vector<userpf_page_set*> all_page_sets;
 static std::deque<std::tuple<userpf_page_set*, size_t, size_t> > access_queue;
 
 /**
- * The maximum number of elements in the access queue before we start 
+ * The maximum number of elements in the access queue before we start
  * decommiting stuff.
  */
 static size_t MAX_QUEUE_LENGTH = 128;
@@ -67,7 +67,7 @@ pagefile disk_pagefile;
  *
  * lock must be acquired prior to entry to this function.
  */
-std::pair<int, bool> find_page_set(void* address, 
+std::pair<int, bool> find_page_set(void* address,
                                    int start = 0,
                                    int end = -1) {
   if (end == -1) end = all_page_sets.size();
@@ -80,7 +80,7 @@ std::pair<int, bool> find_page_set(void* address,
     return find_page_set(address, start, mid);
   } else if (all_page_sets[mid]->begin <= address) {
     // page is right recurse right.
-    if ((char*)address < 
+    if ((char*)address <
         (char*)all_page_sets[mid]->begin + all_page_sets[mid]->length) {
       return {mid, true};
     } else {
@@ -96,7 +96,7 @@ std::pair<int, bool> find_page_set(void* address,
  */
 void insert_page_set(userpf_page_set* ps) {
   std::lock_guard<turi::mutex> guard(lock);
-  auto iter = std::upper_bound(all_page_sets.begin(), 
+  auto iter = std::upper_bound(all_page_sets.begin(),
                    all_page_sets.end(),
                    ps,
                    [](const userpf_page_set* left, const userpf_page_set* right) {
@@ -136,7 +136,7 @@ userpf_page_set* get_page_set(void* address) {
   else return all_page_sets[location.first];
 }
 
-userpf_page_set* allocate(size_t length, 
+userpf_page_set* allocate(size_t length,
                           userpf_handler_callback fill_callback,
                           userpf_release_callback release_callback,
                           bool writable) {
@@ -172,7 +172,7 @@ userpf_page_set* allocate(size_t length,
   // locks
   ps->locks.resize(ps->num_large_pages);
   // pagefile
-  ps->pagefile_allocations = 
+  ps->pagefile_allocations =
       std::vector<size_t>(ps->num_large_pages, (size_t)(-1));
   insert_page_set(ps);
   return ps;
@@ -214,12 +214,12 @@ static bool evict_to_pagefile(userpf_page_set* ps, size_t index) {
   if (ps->pagefile_allocations[index] == (size_t)(-1)) {
     // printf("Allocating a new page\n");
     ps->pagefile_allocations[index] = disk_pagefile.allocate();
-  } 
+  }
   // printf("Evicting page: %ld to %ld\n", index, ps->pagefile_allocations[index]);
   char* aligned_address =  ps->begin + TURI_PAGE_SIZE * index;
   char* last_address = aligned_address + TURI_PAGE_SIZE;
   if (last_address > ps->end) last_address = ps->end;
-  bool ret = disk_pagefile.write(ps->pagefile_allocations[index], aligned_address, 
+  bool ret = disk_pagefile.write(ps->pagefile_allocations[index], aligned_address,
                              last_address - aligned_address);
   // printf("Evicting page: %ld to %ld Done with %d \n", index, ps->pagefile_allocations[index], ret);
   return ret;
@@ -256,7 +256,7 @@ static void handle_eviction() {
       if (!ps->dirty.get(index)) evict_iter = evict_iter2;
     }
 
-    
+
     auto evict = *evict_iter;
     access_queue.erase(evict_iter);
     userpf_page_set* ps;
@@ -369,18 +369,18 @@ static bool dirty_pages(userpf_page_set* ps, size_t index) {
     // shift back the last address if we will exceed the end
     if (last_address > ps->end) last_address = ps->end;
     // printf("Dirty page: %p\n", aligned_address);
-    mprotect(aligned_address, last_address - aligned_address,  
+    mprotect(aligned_address, last_address - aligned_address,
              PROT_READ | PROT_WRITE);
     ps->dirty.set_bit(index);
     return true;
 }
 
 /**
- * The actual handler called for the page. Handles a pagefault within the page 
+ * The actual handler called for the page. Handles a pagefault within the page
  * "index" within the pageset ps.
  *
- * Requests for the TURI_PAGE_SIZE bytes beginning at 
- * ps->begin + index * TURI_PAGE_SIZE (or up to the allocation limit) 
+ * Requests for the TURI_PAGE_SIZE bytes beginning at
+ * ps->begin + index * TURI_PAGE_SIZE (or up to the allocation limit)
  * be filled by the callback.
  */
 static bool page_handler(userpf_page_set* ps, size_t index) {
@@ -398,7 +398,7 @@ static bool page_handler(userpf_page_set* ps, size_t index) {
     return fill_pages(ps, index);
   } else if (ps->writable) {
     return dirty_pages(ps, index);
-  } 
+  }
   // all other cases are bad
   return false;
 }
@@ -422,7 +422,7 @@ bool pagefault_handler(char* addr) {
     // address + (system word size - 1)
     // and fill the next pages too if the index does not match up
     size_t index2 = (addr + (sizeof(ptrdiff_t) - 1) - ps->begin) / TURI_PAGE_SIZE;
-    if (index2 != index && 
+    if (index2 != index &&
         index2 < ps->num_large_pages) {
       auto success = page_handler(ps, index2);
       if (success == false) {
@@ -472,7 +472,7 @@ static struct sigaction prev_action;
 static void segv_handler(int sig_num, siginfo_t* info, void* ucontext) {
   // this is the pointer which segfaulted
   char* addr = (char*)(info->si_addr);
-  bool handler_ok = pagefault_handler(addr); 
+  bool handler_ok = pagefault_handler(addr);
   if (handler_ok) return;
 
   std::cerr << "Access to invalid address: " << (void*)(addr) << std::endl;
@@ -493,7 +493,7 @@ bool setup_pagefault_handler(size_t max_resident_memory) {
     if (ret != nullptr) {
       size_t limit = atoll(ret);
       if (limit != 0) max_resident_memory = limit;
-    } 
+    }
   }
   if (max_resident_memory == (size_t)(-1)) {
     size_t default_memory_size = total_mem() / 2;
@@ -511,12 +511,12 @@ bool setup_pagefault_handler(size_t max_resident_memory) {
   if (sigaction(SIGBUS, &sigact, &prev_action) != 0) {
     fprintf(stderr, "error registering page fault handler");
     return false;
-  } 
+  }
 #else
   if (sigaction(SIGSEGV, &sigact, &prev_action) != 0) {
     fprintf(stderr, "error registering page fault handler");
     return false;
-  } 
+  }
 #endif
   pagefault_handler_installed = true;
   // set up disk pagefile

@@ -19,4 +19,3 @@ if [ ${TASK} == "test" ]; then
     make all || exit -1
     ../scripts/travis_runtest.sh || exit -1
 fi
-

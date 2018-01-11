@@ -40,25 +40,25 @@ namespace Model
 
     void AddToNode(Aws::Utils::Xml::XmlNode& parentNode) const;
 
-    
+
     inline const Aws::Vector<Rule>& GetRules() const{ return m_rules; }
 
-    
+
     inline void SetRules(const Aws::Vector<Rule>& value) { m_rulesHasBeenSet = true; m_rules = value; }
 
-    
+
     inline void SetRules(Aws::Vector<Rule>&& value) { m_rulesHasBeenSet = true; m_rules = value; }
 
-    
+
     inline LifecycleConfiguration& WithRules(const Aws::Vector<Rule>& value) { SetRules(value); return *this;}
 
-    
+
     inline LifecycleConfiguration& WithRules(Aws::Vector<Rule>&& value) { SetRules(value); return *this;}
 
-    
+
     inline LifecycleConfiguration& AddRules(const Rule& value) { m_rulesHasBeenSet = true; m_rules.push_back(value); return *this; }
 
-    
+
     inline LifecycleConfiguration& AddRules(Rule&& value) { m_rulesHasBeenSet = true; m_rules.push_back(value); return *this; }
 
   private:

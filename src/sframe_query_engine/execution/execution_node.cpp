@@ -16,14 +16,14 @@ using boost::coroutines::stack_traits;
 /*
  * Default stack size is 64K or minimum_size() whichever is larger
  */
-int64_t COROUTINE_STACK_SIZE = 
+int64_t COROUTINE_STACK_SIZE =
     64*1024 < stack_traits::minimum_size() ?
         stack_traits::minimum_size() : 64*1024;
 
 REGISTER_GLOBAL_WITH_CHECKS(int64_t, COROUTINE_STACK_SIZE, false,
-            +[](int64_t i){ 
-              return stack_traits::minimum_size() <= i && 
-                  i <= stack_traits::maximum_size() 
+            +[](int64_t i){
+              return stack_traits::minimum_size() <= i &&
+                  i <= stack_traits::maximum_size()
             ;});
 
 execution_node::execution_node(const std::shared_ptr<query_operator>& op,
@@ -39,7 +39,7 @@ void execution_node::init(const std::shared_ptr<query_operator>& op,
     ASSERT_EQ(inputs.size(), (size_t)num_inputs);
   }
 
-  // register each source 
+  // register each source
   for (auto& i : inputs) {
     input_node node;
     node.m_node = i;
@@ -71,10 +71,10 @@ void execution_node::start_coroutines() {
   auto coro_attributes = boost::coroutines::attributes(COROUTINE_STACK_SIZE);
 
   auto attributes = m_operator->attributes();
-  bool supports_skipping = 
+  bool supports_skipping =
       attributes.attribute_bitfield & query_operator_attributes::SUPPORTS_SKIPPING;
 
-  bool is_linear_operator = 
+  bool is_linear_operator =
       attributes.attribute_bitfield & query_operator_attributes::LINEAR;
 
   /*
@@ -83,12 +83,12 @@ void execution_node::start_coroutines() {
    *
    * The 2nd lambda below, is called whenever the coroutine produces stuff.
    * Essentially, sink() leaves the current coroutine, sending information
-   * to its consumers. 
+   * to its consumers.
    *
    * The consumers however will request from the current coroutine, whether
    * to skip the block or not. This is stored in the state
-   * m_skip_next_block. 
-   * 
+   * m_skip_next_block.
+   *
    * Requesting for a skipped block is merely an optimization. Even when a
    * block is skipped, the producer coroutines are triggered; its just that
    * skipping is possible, and ocassionally nullptrs can be passed instead of
@@ -100,11 +100,11 @@ void execution_node::start_coroutines() {
    *  - If the operator supports skipping: i.e. it recognizes the skipping
    *  state, we send it the skipping state by returning
    *  emit_state::SKIP_NEXT_BLOCK.
-   *  
+   *
    *  - If the operator does not support skipping, but is a linear operator,
    *  we can pull a trick by making it seem like the input is shorter.
    *  Thus we do not return to the coroutine, but we bypass it,
-   *  Consuming the next inputs blocks, throwing it away, and sinking a nullptr 
+   *  Consuming the next inputs blocks, throwing it away, and sinking a nullptr
    *  value.
    *
    *  - If the operator does not support skipping AND is a non-linear operator
@@ -113,7 +113,7 @@ void execution_node::start_coroutines() {
   m_source = boost::coroutines::coroutine<void>::pull_type(
       [this, supports_skipping, is_linear_operator]
       (boost::coroutines::coroutine<void>::push_type & sink) {
-        
+
         emit_state initial_operator_state = emit_state::NONE;
         if (supports_skipping && m_skip_next_block) {
           initial_operator_state = emit_state::SKIP_NEXT_BLOCK;
@@ -132,7 +132,7 @@ LABEL_GOTO_SINK_AGAIN:
                                 // we are supposed to skip the next block
                                 if (m_skip_next_block) {
                                   if (supports_skipping) {
-                                    // operator supports skipping. tell it 
+                                    // operator supports skipping. tell it
                                     // we are skipping
                                     return emit_state::SKIP_NEXT_BLOCK;
                                   } else if (is_linear_operator) {
@@ -141,12 +141,12 @@ LABEL_GOTO_SINK_AGAIN:
                                     for (size_t i = 0;i < num_inputs(); ++i) {
                                       get_next_from_input(i, true);
                                     }
-                                    // write a fake output, this is the skipped 
+                                    // write a fake output, this is the skipped
                                     // block. And sink again.
                                     add_operator_output(nullptr);
                                     goto LABEL_GOTO_SINK_AGAIN;
                                   } else {
-                                    // operator does not support skipping. 
+                                    // operator does not support skipping.
                                     // read it as usual
                                     return emit_state::NONE;
                                   }

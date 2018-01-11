@@ -56,7 +56,7 @@ public:
 
     TS_ASSERT_EQUALS(g.num_vertices(), 3);
     _assert_vec_equals(g.get_vertex_fields(), {"__id", "v_str", "v_int", "v_float"});
-    _assert_vec_equals(g.get_vertex_field_types(), 
+    _assert_vec_equals(g.get_vertex_field_types(),
      {flex_type_enum::INTEGER,
       flex_type_enum::STRING,
       flex_type_enum::INTEGER,
@@ -83,7 +83,7 @@ public:
     // reference graph
     gl_sgraph g(vertices, edges);
 
-    // get all vertices 
+    // get all vertices
     _assert_sframe_equals(g.get_vertices().sort("__id"), vertices);
 
     // get vid in {1,2}

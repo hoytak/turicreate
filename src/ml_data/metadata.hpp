@@ -17,7 +17,7 @@ class ml_data;
 
 /**
  * \ingroup mldata
- * ml_metadata provides all the column-wise statistics and column translation 
+ * ml_metadata provides all the column-wise statistics and column translation
  * information for \ref ml_data.
  */
 class ml_metadata {
@@ -375,7 +375,7 @@ class ml_metadata {
   friend class ml_data_row_reference;
   ml_data_internal::row_metadata cached_rm_with_target;
   ml_data_internal::row_metadata cached_rm_without_target;
-  
+
 };
 
 }

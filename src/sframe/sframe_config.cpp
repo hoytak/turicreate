@@ -18,17 +18,17 @@ namespace sframe_config {
 EXPORT size_t SFRAME_SORT_BUFFER_SIZE = size_t(2*1024*1024)*size_t(1024);
 EXPORT size_t SFRAME_READ_BATCH_SIZE = 128;
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
                             SFRAME_SORT_BUFFER_SIZE,
-                            true, 
+                            true,
                             +[](int64_t val){ return (val >= 1024) &&
                             // Check against overflow...no more than an exabyte
                             (val <= size_t(1024*1024*1024)*size_t(1024*1024*1024)); });
 
 
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            SFRAME_READ_BATCH_SIZE, 
-                            true, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            SFRAME_READ_BATCH_SIZE,
+                            true,
                             +[](int64_t val){ return val >= 1; });
 
 }

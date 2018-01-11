@@ -97,4 +97,3 @@ macro(CHECK_CXX_SOURCE_COMPILES SOURCE VAR)
     endif()
   endif()
 endmacro()
-

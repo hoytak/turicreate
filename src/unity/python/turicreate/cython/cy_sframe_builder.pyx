@@ -44,7 +44,7 @@ cdef class UnitySFrameBuilderProxy:
 
         cdef vector[string] column_names = to_vector_of_strings(_column_names)
         cdef string save_location = str_to_cpp(_save_location)
-    
+
         cdef vector[flex_type_enum] tmp_column_types
         tmp_column_types.reserve(len(column_types))
         for i in column_types:
@@ -58,7 +58,7 @@ cdef class UnitySFrameBuilderProxy:
             self.thisptr.append(c_row, segment)
 
     cpdef append_multiple(self, object rows, size_t segment):
-        cdef vector[vector[flexible_type]] c_vals 
+        cdef vector[vector[flexible_type]] c_vals
         for i in rows:
             c_vals.push_back(flex_list_from_iterable(i))
         self.thisptr.append_multiple(c_vals, segment)

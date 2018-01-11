@@ -42,7 +42,7 @@ namespace turi {
 
     /**
      * \internal
-     * 
+     *
      * \brief Estimates the total current size of the memory heap in
      * bytes. If memory info is not available then 0 is returned.
      *
@@ -66,7 +66,7 @@ namespace turi {
      * \brief Determines the total number of allocated bytes.  If
      * memory info is not available then 0 is returned.
      *
-     * @return the total bytes allocated 
+     * @return the total bytes allocated
      */
     inline size_t allocated_bytes() {
       size_t allocated_size(0);
@@ -83,7 +83,7 @@ namespace turi {
 
     /**
      * \internal
-     * 
+     *
      * \brief Print a memory usage summary prefixed by the string
      * argument.
      *
@@ -107,7 +107,7 @@ namespace turi {
 
     /**
      * \internal
-     * 
+     *
      * \brief Log a memory usage summary prefixed by the string
      * argument.
      *
@@ -131,5 +131,3 @@ namespace turi {
 };
 
 #endif
-
-

@@ -30,14 +30,14 @@ class EXPORT ml_metadata {
   inline bool has_target() const;
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Accessing the indexers 
+  // Accessing the indexers
 
   /** Returns true if the underlying column type is indexed, and false
    *  otherwise.  This differs form the is_categorical in that
    *  dictionaries are not treated as pure categorical variables, as
    *  they have values associated with them, but they are indexed.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline bool is_indexed(size_t column_index) const;
 
@@ -48,14 +48,14 @@ class EXPORT ml_metadata {
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline bool is_indexed(const std::string& column_name) const;
-  
+
   /** Returns the metadata for a particular column, even if that
    *  column is a side feature.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline const std::shared_ptr<ml_data_internal::column_indexer>&
   indexer(size_t column_index) const;
@@ -65,7 +65,7 @@ class EXPORT ml_metadata {
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline const std::shared_ptr<ml_data_internal::column_indexer>&
   indexer(const std::string& column_name) const;
@@ -84,11 +84,11 @@ class EXPORT ml_metadata {
 
   ////////////////////////////////////////////////////////////////////////////////
   // Accessing the statistics
-  
+
   /** Returns the metadata for a particular column, even if that
    *  column is a side feature.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline const std::shared_ptr<ml_data_internal::column_statistics>&
   statistics(size_t column_index) const;
@@ -98,7 +98,7 @@ class EXPORT ml_metadata {
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline const std::shared_ptr<ml_data_internal::column_statistics>&
   statistics(const std::string& column_name) const;
@@ -110,18 +110,18 @@ class EXPORT ml_metadata {
 
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Aggregate statistics of the columns 
+  // Aggregate statistics of the columns
 
   /** Returns the number of columns present, including any possible
    *  side columns.
    */
   inline size_t num_columns(bool include_side_columns_if_present = true,
-                            bool include_untranslated_columns = true) const; 
+                            bool include_untranslated_columns = true) const;
 
   /** Returns the number of untranslated columns present.
    */
-  inline size_t num_untranslated_columns() const; 
-  
+  inline size_t num_untranslated_columns() const;
+
   /** Returns true if there are translated columns present, and false
    *  otherwise.
    */
@@ -131,10 +131,10 @@ class EXPORT ml_metadata {
    *  otherwise.
    */
   inline bool has_untranslated_columns() const;
-  
+
   /** Returns the name of the column at column_index.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline const std::string& column_name(size_t column_index) const;
 
@@ -145,24 +145,24 @@ class EXPORT ml_metadata {
   /** Returns the index of the column matching column_name, or throws
    *  an error if it does not exist.
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline size_t column_index(const std::string& column_name) const;
 
   /**
    * Returns true if the metadata contains the given column.
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline bool contains_column(const std::string& column_name) const;
-  
+
   /** Returns the name of the column at column_index.
    */
   inline const std::string& target_column_name() const;
 
   /** Returns the current index size of the columns in the metadata.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline size_t column_size(size_t column_index) const;
 
@@ -172,12 +172,12 @@ class EXPORT ml_metadata {
 
   ////////////////////////////////////////////////////////////////////////////////
   // Index sizes
-  
+
   /** Returns the index size of the column in the metadata that were
    *  present at train time.  Index size differs from column size in
    *  that column_size may grow on test, but index_size is constant.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline size_t index_size(size_t column_index) const;
 
@@ -187,11 +187,11 @@ class EXPORT ml_metadata {
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline size_t index_size(const std::string& column_name) const;
 
-  
+
   /** Returns the global index offset of the columns in the metadata
    *  that were present at train time.  This is fixed at setup time;
    *  global indices for the column c_idx are in the interval
@@ -200,7 +200,7 @@ class EXPORT ml_metadata {
    *  \param column_index The index of the column.
    */
   inline size_t global_index_offset(size_t column_index) const;
-  
+
   /** Returns the global index offset of the columns in the metadata
    *  that were present at train time.  This is fixed at setup time;
    *  global indices for the column c_idx are in the interval
@@ -208,7 +208,7 @@ class EXPORT ml_metadata {
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline size_t global_index_offset(const std::string& column_name) const;
 
@@ -224,12 +224,12 @@ class EXPORT ml_metadata {
   inline size_t num_dimensions() const;
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Accessing flags of the columns 
-  
+  // Accessing flags of the columns
+
   /** Returns true if the underlying type is treated as a categorical
    *  variable, and false otherwise.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline bool is_categorical(size_t column_index) const;
 
@@ -238,39 +238,39 @@ class EXPORT ml_metadata {
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline bool is_categorical(const std::string& column_name) const;
-  
+
   /** Returns true if the underlying target type is treated as a
    *  categorical variable, and false otherwise.
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline bool target_is_categorical() const;
-  
+
   /** Returns true if the underlying column is a side column handled
-   *  by an implicit join, and false otherwise.  
+   *  by an implicit join, and false otherwise.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline bool is_side_column(size_t column_index) const;
 
   /** Returns true if the underlying column is a side column handled
-   *  by an implicit join, and false otherwise.  
+   *  by an implicit join, and false otherwise.
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline bool is_side_column(const std::string& column_name) const;
-  
+
   /** Returns true if the underlying column type is untranslated.
    *  This means it will only be available as flexible_type later on.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline bool is_untranslated_column(size_t column_index) const;
 
@@ -279,14 +279,14 @@ class EXPORT ml_metadata {
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline bool is_untranslated_column(const std::string& column_name) const;
-  
+
   /**  Returns the mode of the column.  See ml_data_column_modes.hpp
    *  for details on the column modes.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline ml_column_mode column_mode(size_t column_index) const;
 
@@ -295,7 +295,7 @@ class EXPORT ml_metadata {
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline ml_column_mode column_mode(const std::string& column_name) const;
 
@@ -307,31 +307,31 @@ class EXPORT ml_metadata {
   /** Returns the type of the column in the metadata
    *  present at train time.
    *
-   *  \param column_index The index of the column. 
+   *  \param column_index The index of the column.
    */
   inline flex_type_enum column_type(size_t column_index) const;
 
-  /** Returns the type of the column in the metadata 
+  /** Returns the type of the column in the metadata
    *  present at train time.
    *
    *  \overload
    *
-   *  \param column_name The name of the column. 
+   *  \param column_name The name of the column.
    */
   inline flex_type_enum column_type(const std::string& column_name) const;
-  
+
   /**  Returns the mode of the target column.  See
    *  ml_data_column_modes.hpp for details on the column modes.
    */
   inline flex_type_enum target_column_type() const;
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Other information. 
-  
+  // Other information.
+
   /** Returns the current options.
    */
   inline const std::map<std::string, flexible_type>& get_current_options() const;
-  
+
   /** Serialization version.
    */
   size_t get_version() const { return 2; }
@@ -348,7 +348,7 @@ class EXPORT ml_metadata {
    */
   inline bool has_side_features() const;
 
-  /** 
+  /**
    * Set the missing value action on predict time.
    */
   inline void set_missing_value_on_predict(const std::string& missing_value_action) {
@@ -423,10 +423,10 @@ class EXPORT ml_metadata {
   // index 0 and 1 in the recommender).  this allows us to reorder the
   // columns as needed
   std::vector<std::string> original_column_names;
-  
+
   // The options the model was created with.
   std::map<std::string, flexible_type> options;
-  
+
   // Cached values; this is a small optimization here to allow
   // statistics to be used in time-sensitive places.  The
   // setup_cached_values function prepares these from the current

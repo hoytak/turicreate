@@ -756,7 +756,7 @@ skip_sfx(struct archive_read *a)
       /* Remaining bytes are less than window. */
       window >>= 1;
       if (window < 0x40)
-      	goto fatal;
+	goto fatal;
       continue;
     }
     if (bytes < 0x40)
@@ -770,9 +770,9 @@ skip_sfx(struct archive_read *a)
      */
     while (p + 7 < q) {
       if (memcmp(p, RAR_SIGNATURE, 7) == 0) {
-      	skip = p - (const char *)h;
-      	__archive_read_consume(a, skip);
-      	return (ARCHIVE_OK);
+	skip = p - (const char *)h;
+	__archive_read_consume(a, skip);
+	return (ARCHIVE_OK);
       }
       p += 0x10;
     }

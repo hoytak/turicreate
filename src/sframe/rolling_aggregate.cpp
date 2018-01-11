@@ -84,14 +84,14 @@ std::shared_ptr<sarray<flexible_type>> rolling_apply(
     ssize_t end = clip(window_end+(running_length-1), 0, reader->size());
     seg_ranges[i] = std::make_pair(size_t(beg), size_t(end));
   }
-  
+
   // Store the type returned by the aggregation function of each segment
   std::vector<flex_type_enum> fn_returned_types(num_segments,
                                                 flex_type_enum::UNDEFINED);
 
   parallel_for(0, num_segments, [&](size_t segment_id) {
     auto range = seg_ranges[segment_id];
-    
+
     // Create buffer for the window
     auto window_buf = boost::circular_buffer<flexible_type>(total_window_size,
         flex_undefined());
@@ -137,7 +137,7 @@ std::shared_ptr<sarray<flexible_type>> rolling_apply(
         auto result = full_window_aggregate(agg_op, window_buf.begin(), window_buf.end());
         // Record the emitted type from the function. We just take the first
         // one that is non-NULL.
-        if(fn_returned_types[segment_id] == flex_type_enum::UNDEFINED && 
+        if(fn_returned_types[segment_id] == flex_type_enum::UNDEFINED &&
             result.get_type() != flex_type_enum::UNDEFINED) {
           fn_returned_types[segment_id] = result.get_type();
         }

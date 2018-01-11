@@ -6,7 +6,7 @@
 #include <unity/toolkits/evaluation/evaluation_constants.hpp>
 namespace turi {
 namespace evaluation {
-const size_t USER_COLUMN_INDEX = 0; 
+const size_t USER_COLUMN_INDEX = 0;
 const size_t ITEM_COLUMN_INDEX = 1;
 }
 } // namespace turi

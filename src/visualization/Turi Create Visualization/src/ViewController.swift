@@ -7,28 +7,25 @@ import WebKit
 import CoreImage
 
 class ViewController: NSViewController, NSWindowDelegate {
-    
+
     @IBOutlet weak var webView: WKWebView!
-    
+
     // load view
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // create graph object
         SharedData.shared.vegaContainer = VegaContainer(view: webView)
     }
-    
+
     override func viewDidAppear() {
         self.view.window?.delegate = self
         self.view.layer?.backgroundColor = NSColor.white.cgColor
     }
-    
+
     func windowShouldClose(_ sender: Any) -> Bool {
         NSApplication.shared().terminate(self)
         return true
     }
 
 }
-
-
-

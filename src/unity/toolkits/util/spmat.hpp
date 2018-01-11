@@ -13,7 +13,7 @@
 /**
  * \ingroup toolkit_util
  * A simple utility class for representing sparse matrices of counts.
- * It exposes getting particular elements, incrementing elements by a 
+ * It exposes getting particular elements, incrementing elements by a
  * value, and removing zero elements from the internal data structure.
  * It is row-based, so only exposes get_row and num_rows.
  */
@@ -26,9 +26,9 @@ class spmat {
   spmat(size_t num_rows = 0) {
     m = std::vector<std::map<size_t, size_t>>(num_rows);
   }
-    
+
   /**
-   * Get a vector of nonzero elements in a single row. 
+   * Get a vector of nonzero elements in a single row.
    */
   const std::map<size_t, size_t>& get_row(size_t i) {
     return m[i];
@@ -44,7 +44,7 @@ class spmat {
       return m[i].at(j);
     }
   }
-  
+
   /**
    * Get the number of rows.
    */
@@ -54,7 +54,7 @@ class spmat {
    * Delete zeros in a single row
    */
   void trim(const size_t i) {
-    auto it = m[i].begin(); 
+    auto it = m[i].begin();
     for( ; it != m[i].end();) {
       if (it->second == 0) {
         it = m[i].erase(it);
@@ -65,7 +65,7 @@ class spmat {
   }
 
   /**
-   * Increment the element (a, b) by v. 
+   * Increment the element (a, b) by v.
    */
   void increment(const size_t& a, const size_t& b, const size_t& v) {
     auto it = m[a].find(b);
@@ -76,14 +76,14 @@ class spmat {
     }
   }
 
-  /** 
+  /**
    * Convert to Arma matrix.
    */
   arma::Mat<int> as_matrix() {
     size_t nrows = m.size();
     size_t ncols = 0;
     for (size_t i = 0; i < nrows; ++i) {
-      auto row = get_row(i); 
+      auto row = get_row(i);
       for (auto it = row.begin(); it != row.end(); ++it) {
         auto col = it->first;
         if (col >= ncols) ncols = col+1; // zero-based indexing
@@ -91,7 +91,7 @@ class spmat {
     }
     arma::Mat<int> ret(nrows, ncols);
     for (size_t i = 0; i < nrows; ++i) {
-      auto row = get_row(i); 
+      auto row = get_row(i);
       for (auto it = row.begin(); it != row.end(); ++it) {
         auto j = it->first;
         auto v = it->second;
@@ -100,15 +100,15 @@ class spmat {
     }
     return ret;
   }
- 
-  /** 
+
+  /**
    * Convert to Arma matrix.
    */
   arma::Mat<int> as_matrix_transpose() {
     size_t nrows = m.size();
     size_t ncols = 0;
     for (size_t i = 0; i < nrows; ++i) {
-      auto row = get_row(i); 
+      auto row = get_row(i);
       for (auto it = row.begin(); it != row.end(); ++it) {
         auto col = it->first;
         if (col >= ncols) ncols = col+1; // zero-based indexing
@@ -116,7 +116,7 @@ class spmat {
     }
     arma::Mat<int> ret(ncols, nrows);
     for (size_t i = 0; i < nrows; ++i) {
-      auto row = get_row(i); 
+      auto row = get_row(i);
       for (auto it = row.begin(); it != row.end(); ++it) {
         auto j = it->first;
         auto v = it->second;
@@ -125,7 +125,7 @@ class spmat {
     }
     return ret;
   }
- 
+
  private:
   std::vector<std::map<size_t, size_t>> m;
 };

@@ -35,7 +35,7 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_fieldtype_choice(
 |                          FIELDTYPE *typ,
 |                          bool (* const next_choice)(FIELD *,const void *),
@@ -50,7 +50,7 @@ int set_fieldtype_choice(FIELDTYPE * typ,
 			 bool (* const next_choice) (FIELD *,const void *),
 			 bool (* const prev_choice) (FIELD *,const void *))
 {
-  if ( !typ || !next_choice || !prev_choice ) 
+  if ( !typ || !next_choice || !prev_choice )
     RETURN(E_BAD_ARGUMENT);
 
   typ->status |= _HAS_CHOICE;

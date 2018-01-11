@@ -126,7 +126,7 @@ unit1300_DEPENDENCIES = $(top_builddir)/src/libcurltool.la \
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
-am__v_lt_1 = 
+am__v_lt_1 =
 am__objects_2 = ../libtest/unit1301-first.$(OBJEXT)
 am_unit1301_OBJECTS = unit1301-unit1301.$(OBJEXT) $(am__objects_2)
 unit1301_OBJECTS = $(am_unit1301_OBJECTS)
@@ -207,12 +207,12 @@ am__v_P_1 = :
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN     " $@;
-am__v_GEN_1 = 
+am__v_GEN_1 =
 AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
-am__v_at_1 = 
-DEFAULT_INCLUDES = 
+am__v_at_1 =
+DEFAULT_INCLUDES =
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -225,7 +225,7 @@ LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 AM_V_CC = $(am__v_CC_@AM_V@)
 am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
 am__v_CC_0 = @echo "  CC      " $@;
-am__v_CC_1 = 
+am__v_CC_1 =
 CCLD = $(CC)
 LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -233,7 +233,7 @@ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
-am__v_CCLD_1 = 
+am__v_CCLD_1 =
 SOURCES = $(unit1300_SOURCES) $(unit1301_SOURCES) $(unit1302_SOURCES) \
 	$(unit1303_SOURCES) $(unit1304_SOURCES) $(unit1305_SOURCES) \
 	$(unit1307_SOURCES) $(unit1308_SOURCES) $(unit1309_SOURCES) \
@@ -550,7 +550,7 @@ unit1394_SOURCES = unit1394.c $(UNITFILES)
 unit1394_CPPFLAGS = $(AM_CPPFLAGS) $(LIBMETALINK_CPPFLAGS)
 unit1394_LDADD = @LIBMETALINK_LIBS@ $(top_builddir)/lib/libcurl.la @LIBCURL_LIBS@
 unit1394_LDFLAGS = @LIBMETALINK_LDFLAGS@ $(top_builddir)/src/libcurltool.la
-unit1394_LIBS = 
+unit1394_LIBS =
 unit1395_SOURCES = unit1395.c $(UNITFILES)
 unit1395_CPPFLAGS = $(AM_CPPFLAGS)
 unit1396_SOURCES = unit1396.c $(UNITFILES)
@@ -608,79 +608,79 @@ clean-noinstPROGRAMS:
 ../libtest/unit1300-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1300$(EXEEXT): $(unit1300_OBJECTS) $(unit1300_DEPENDENCIES) $(EXTRA_unit1300_DEPENDENCIES) 
+unit1300$(EXEEXT): $(unit1300_OBJECTS) $(unit1300_DEPENDENCIES) $(EXTRA_unit1300_DEPENDENCIES)
 	@rm -f unit1300$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1300_OBJECTS) $(unit1300_LDADD) $(LIBS)
 ../libtest/unit1301-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1301$(EXEEXT): $(unit1301_OBJECTS) $(unit1301_DEPENDENCIES) $(EXTRA_unit1301_DEPENDENCIES) 
+unit1301$(EXEEXT): $(unit1301_OBJECTS) $(unit1301_DEPENDENCIES) $(EXTRA_unit1301_DEPENDENCIES)
 	@rm -f unit1301$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1301_OBJECTS) $(unit1301_LDADD) $(LIBS)
 ../libtest/unit1302-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1302$(EXEEXT): $(unit1302_OBJECTS) $(unit1302_DEPENDENCIES) $(EXTRA_unit1302_DEPENDENCIES) 
+unit1302$(EXEEXT): $(unit1302_OBJECTS) $(unit1302_DEPENDENCIES) $(EXTRA_unit1302_DEPENDENCIES)
 	@rm -f unit1302$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1302_OBJECTS) $(unit1302_LDADD) $(LIBS)
 ../libtest/unit1303-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1303$(EXEEXT): $(unit1303_OBJECTS) $(unit1303_DEPENDENCIES) $(EXTRA_unit1303_DEPENDENCIES) 
+unit1303$(EXEEXT): $(unit1303_OBJECTS) $(unit1303_DEPENDENCIES) $(EXTRA_unit1303_DEPENDENCIES)
 	@rm -f unit1303$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1303_OBJECTS) $(unit1303_LDADD) $(LIBS)
 ../libtest/unit1304-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1304$(EXEEXT): $(unit1304_OBJECTS) $(unit1304_DEPENDENCIES) $(EXTRA_unit1304_DEPENDENCIES) 
+unit1304$(EXEEXT): $(unit1304_OBJECTS) $(unit1304_DEPENDENCIES) $(EXTRA_unit1304_DEPENDENCIES)
 	@rm -f unit1304$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1304_OBJECTS) $(unit1304_LDADD) $(LIBS)
 ../libtest/unit1305-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1305$(EXEEXT): $(unit1305_OBJECTS) $(unit1305_DEPENDENCIES) $(EXTRA_unit1305_DEPENDENCIES) 
+unit1305$(EXEEXT): $(unit1305_OBJECTS) $(unit1305_DEPENDENCIES) $(EXTRA_unit1305_DEPENDENCIES)
 	@rm -f unit1305$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1305_OBJECTS) $(unit1305_LDADD) $(LIBS)
 ../libtest/unit1307-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1307$(EXEEXT): $(unit1307_OBJECTS) $(unit1307_DEPENDENCIES) $(EXTRA_unit1307_DEPENDENCIES) 
+unit1307$(EXEEXT): $(unit1307_OBJECTS) $(unit1307_DEPENDENCIES) $(EXTRA_unit1307_DEPENDENCIES)
 	@rm -f unit1307$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1307_OBJECTS) $(unit1307_LDADD) $(LIBS)
 ../libtest/unit1308-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1308$(EXEEXT): $(unit1308_OBJECTS) $(unit1308_DEPENDENCIES) $(EXTRA_unit1308_DEPENDENCIES) 
+unit1308$(EXEEXT): $(unit1308_OBJECTS) $(unit1308_DEPENDENCIES) $(EXTRA_unit1308_DEPENDENCIES)
 	@rm -f unit1308$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1308_OBJECTS) $(unit1308_LDADD) $(LIBS)
 ../libtest/unit1309-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1309$(EXEEXT): $(unit1309_OBJECTS) $(unit1309_DEPENDENCIES) $(EXTRA_unit1309_DEPENDENCIES) 
+unit1309$(EXEEXT): $(unit1309_OBJECTS) $(unit1309_DEPENDENCIES) $(EXTRA_unit1309_DEPENDENCIES)
 	@rm -f unit1309$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1309_OBJECTS) $(unit1309_LDADD) $(LIBS)
 ../libtest/unit1330-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1330$(EXEEXT): $(unit1330_OBJECTS) $(unit1330_DEPENDENCIES) $(EXTRA_unit1330_DEPENDENCIES) 
+unit1330$(EXEEXT): $(unit1330_OBJECTS) $(unit1330_DEPENDENCIES) $(EXTRA_unit1330_DEPENDENCIES)
 	@rm -f unit1330$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1330_OBJECTS) $(unit1330_LDADD) $(LIBS)
 ../libtest/unit1394-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1394$(EXEEXT): $(unit1394_OBJECTS) $(unit1394_DEPENDENCIES) $(EXTRA_unit1394_DEPENDENCIES) 
+unit1394$(EXEEXT): $(unit1394_OBJECTS) $(unit1394_DEPENDENCIES) $(EXTRA_unit1394_DEPENDENCIES)
 	@rm -f unit1394$(EXEEXT)
 	$(AM_V_CCLD)$(unit1394_LINK) $(unit1394_OBJECTS) $(unit1394_LDADD) $(LIBS)
 ../libtest/unit1395-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1395$(EXEEXT): $(unit1395_OBJECTS) $(unit1395_DEPENDENCIES) $(EXTRA_unit1395_DEPENDENCIES) 
+unit1395$(EXEEXT): $(unit1395_OBJECTS) $(unit1395_DEPENDENCIES) $(EXTRA_unit1395_DEPENDENCIES)
 	@rm -f unit1395$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1395_OBJECTS) $(unit1395_LDADD) $(LIBS)
 ../libtest/unit1396-first.$(OBJEXT): ../libtest/$(am__dirstamp) \
 	../libtest/$(DEPDIR)/$(am__dirstamp)
 
-unit1396$(EXEEXT): $(unit1396_OBJECTS) $(unit1396_DEPENDENCIES) $(EXTRA_unit1396_DEPENDENCIES) 
+unit1396$(EXEEXT): $(unit1396_OBJECTS) $(unit1396_DEPENDENCIES) $(EXTRA_unit1396_DEPENDENCIES)
 	@rm -f unit1396$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(unit1396_OBJECTS) $(unit1396_LDADD) $(LIBS)
 

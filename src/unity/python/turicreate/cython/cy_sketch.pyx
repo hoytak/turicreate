@@ -6,9 +6,9 @@
 from cython.operator cimport dereference as deref
 from cython.operator cimport preincrement as inc
 from .cy_flexible_type cimport flex_list
-from .cy_flexible_type cimport flexible_type 
+from .cy_flexible_type cimport flexible_type
 from .cy_flexible_type cimport flexible_type_from_pyobject
-from .cy_flexible_type cimport pyobject_from_flexible_type 
+from .cy_flexible_type cimport pyobject_from_flexible_type
 from .cy_flexible_type cimport flex_list_from_iterable
 
 
@@ -112,4 +112,3 @@ cdef class UnitySketchProxy:
 
     cpdef cancel(self):
         self.thisptr.cancel()
-

@@ -72,7 +72,7 @@ std::shared_ptr<column_indexer> column_indexer::factory_create(
   __EXTRACT(original_column_type);
 
 #undef __EXTRACT
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Step 5: Save the creation parameters so that they can be reused
   // during serialization.

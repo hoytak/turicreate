@@ -229,4 +229,3 @@ BOOST_AUTO_TEST_CASE(coverage, *boost::unit_test::timeout(5))
 
     }
 }
-

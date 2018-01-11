@@ -134,7 +134,7 @@ void file_logger::_log(int lineloglevel,const char* file,const char* function,
 #endif
     // write the actual logger
 
-    int byteswritten = head_bytes_written + 
+    int byteswritten = head_bytes_written +
         vsnprintf(str + head_bytes_written, 1024 - head_bytes_written,fmt,ap);
 
     str[byteswritten] = '\n';
@@ -144,8 +144,8 @@ void file_logger::_log(int lineloglevel,const char* file,const char* function,
       pthread_mutex_lock(&mut);
       if (callback[lineloglevel]) {
         // only emit the message not the header
-        callback[lineloglevel](lineloglevel, 
-                               str + head_bytes_written, 
+        callback[lineloglevel](lineloglevel,
+                               str + head_bytes_written,
                                byteswritten - head_bytes_written);
       }
       pthread_mutex_unlock(&mut);
@@ -298,4 +298,3 @@ file_logger& file_logger::start_stream(int lineloglevel,const char* file,
   }
   return *this;
 }
-

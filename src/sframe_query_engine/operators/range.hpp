@@ -26,7 +26,7 @@ struct operator_impl<planner_node_type::RANGE_NODE> : public query_operator {
  public:
 
   inline planner_node_type type() const { return planner_node_type::RANGE_NODE; }
-  
+
   static std::string name() { return "range"; }
 
   static query_operator_attributes attributes() {
@@ -35,7 +35,7 @@ struct operator_impl<planner_node_type::RANGE_NODE> : public query_operator {
     ret.num_inputs = 0;
     return ret;
   }
-  
+
   inline operator_impl(flex_int start, flex_int end)
   : m_start(start)
   , m_end(end)
@@ -66,7 +66,7 @@ struct operator_impl<planner_node_type::RANGE_NODE> : public query_operator {
 
   static std::shared_ptr<planner_node> make_planner_node(
       flex_int start, flex_int end) {
-    return planner_node::make_shared(planner_node_type::RANGE_NODE, 
+    return planner_node::make_shared(planner_node_type::RANGE_NODE,
                                      {{"start", start},
                                       {"begin_index", 0},
                                       {"end_index", end - start}});
@@ -99,7 +99,7 @@ struct operator_impl<planner_node_type::RANGE_NODE> : public query_operator {
                    pnode->operator_parameters["begin_index"];
     return count;
   }
-  
+
   static std::string repr(std::shared_ptr<planner_node> pnode, pnode_tagger&) {
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::RANGE_NODE);
     ASSERT_TRUE(pnode->operator_parameters.count("start"));

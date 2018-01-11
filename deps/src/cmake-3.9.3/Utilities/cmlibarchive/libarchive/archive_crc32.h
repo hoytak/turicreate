@@ -51,7 +51,7 @@ crc32(unsigned long crc, const void *_p, size_t len)
 			for (i = 8; i > 0; --i) {
 				if (crc2 & 1)
 					crc2 = (crc2 >> 1) ^ 0xedb88320UL;
-				else    
+				else
 					crc2 = (crc2 >> 1);
 			}
 			crc_tbl[b] = crc2;

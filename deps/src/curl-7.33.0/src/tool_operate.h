@@ -26,4 +26,3 @@
 int operate(struct Configurable *config, int argc, argv_item_t argv[]);
 
 #endif /* HEADER_CURL_TOOL_OPERATE_H */
-

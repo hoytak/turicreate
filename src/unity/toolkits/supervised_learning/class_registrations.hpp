@@ -10,7 +10,6 @@ namespace supervised {
 std::vector<turi::toolkit_class_specification> get_toolkit_class_registration();
 
 }// supervised
-}// turi 
+}// turi
 
 #endif
-

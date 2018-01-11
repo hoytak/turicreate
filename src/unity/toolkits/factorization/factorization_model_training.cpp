@@ -7,7 +7,7 @@
 #include <unity/toolkits/sgd/basic_sgd_solver.hpp>
 #include <unity/toolkits/factorization/ranking_sgd_solver_implicit.hpp>
 #include <unity/toolkits/factorization/ranking_sgd_solver_explicit.hpp>
-#include <unity/toolkits/factorization/model_factory.hpp> 
+#include <unity/toolkits/factorization/model_factory.hpp>
 
 namespace turi { namespace factorization {
 
@@ -43,16 +43,16 @@ factorization_model::factory_train(
 
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Step 1: Set up all the variables to decide things 
+  // Step 1: Set up all the variables to decide things
 
   // Determine whether we are in ranking mode or not
   bool ranking = (
       options.count("ranking_regularization") && options.at("ranking_regularization") > 0);
-  
+
   // Are we using implicit data?  If so, handle it with binary targets
   // and logistic data.
   if(!train_data.has_target()) {
-    options["binary_target"] = true; 
+    options["binary_target"] = true;
     ranking = true;
   }
 
@@ -70,28 +70,28 @@ factorization_model::factory_train(
   std::string raw_regularization_type = options.at("regularization_type");
 
   std::string regularization_type;
-  
+
   if(raw_regularization_type == "normal")
     regularization_type = "L2";
   else if(raw_regularization_type == "weighted")
     regularization_type = "ON_THE_FLY";
   else
     ASSERT_TRUE(false);
-  
+
   if(!(options.at("regularization") > 0
        || options.at("linear_regularization") > 0)) {
-    
+
     regularization_type = "NONE";
   }
 
   // Set the number of factors
   flex_int num_factors = options.at("num_factors");
-  
+
   // Create the model
   std::tie(model, solver) = create_model_and_solver(
       train_data, options,
       loss_type, solver_class, regularization_type, factor_mode, num_factors);
-      
+
 
   // Run the solver
   model->_training_stats = solver->run();

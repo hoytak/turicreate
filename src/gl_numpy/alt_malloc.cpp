@@ -26,13 +26,13 @@ struct alloc_metadata {
   //  - otherwise it is acquired from a memory mapped sframe
   //
   //  why are these regular pointers?
-  //  - The pageset is managed by the pagefault handler. it should never be 
+  //  - The pageset is managed by the pagefault handler. it should never be
   //  deleted directly.
   //  - mm_sframe its "ok" to leak. essentially if the user never calls free
   // on us, this will leak and we will then leak. If we try to clean this
-  // up on process destruction it may end up causing more complicated 
+  // up on process destruction it may end up causing more complicated
   // issues due to termination ordering.
-  user_pagefault::userpf_page_set* pageset = nullptr; 
+  user_pagefault::userpf_page_set* pageset = nullptr;
   gl_numpy::memory_mapped_sframe* mm_sframe = nullptr;
 };
 static turi::mutex lock;
@@ -48,7 +48,7 @@ const size_t LOWER_LIMIT = 16*1024*1024; /*16 MB*/
  * Does nothing. For mallocs and stuff like that zero filled pages are fine.
  */
 size_t noop_callback(user_pagefault::userpf_page_set* pageset,
-                     char* address, 
+                     char* address,
                      size_t fill_length) { return 0;}
 
 
@@ -86,7 +86,7 @@ void* my_malloc(size_t size) {
     std::lock_guard<turi::mutex> guard(lock);
     addresses[pageset->begin] = std::make_shared<alloc_metadata>(metadata);
     /*
-     * std::cout << "Malloc of size " << size << " at " 
+     * std::cout << "Malloc of size " << size << " at "
      *           << (void*)(pageset->begin) << std::endl;
      */
     return pageset->begin;
@@ -156,7 +156,7 @@ void* my_realloc(void *ptr, size_t size) {
         addresses.erase(ptr);
         addresses[retptr] = metadata;
       }
-    } 
+    }
     return retptr;
   } else {
     // in all other cases things are slightly more annoying
@@ -191,7 +191,7 @@ EXPORT void* pointer_from_sframe(const char* directory, bool delete_on_close) {
     turi::dir_archive dir;
     dir.open_directory_for_read(directory);
     std::string content_value;
-    if (dir.get_metadata("contents", content_value) && 
+    if (dir.get_metadata("contents", content_value) &&
         content_value == "sframe") {
 
       std::string prefix = dir.get_next_read_prefix();
@@ -218,9 +218,9 @@ EXPORT void* pointer_from_sframe(const char* directory, bool delete_on_close) {
     std::cout << err << "\n";
   } catch (const char* err) {
     std::cout << err << "\n";
-  } catch (std::exception& err){ 
+  } catch (std::exception& err){
     std::cout << err.what() << "\n";
-  } catch (...) { 
+  } catch (...) {
     std::cout << "Unknown error\n";
   }
   return nullptr;

@@ -68,9 +68,9 @@ struct lambda_graph_triple_apply_data {
   std::vector<std::vector<flexible_type> >* out_edge_data;
 
   std::vector<std::vector<flexible_type> >* source_partition;
-  std::vector<std::vector<flexible_type> >* target_partition; 
+  std::vector<std::vector<flexible_type> >* target_partition;
 
-        
+
   const std::vector<std::string>* vertex_keys;
   const std::vector<std::string>* edge_keys;
   const std::vector<std::string>* mutated_edge_keys;
@@ -85,7 +85,7 @@ struct pylambda_evaluation_functions {
   void (*eval_lambda)(size_t, lambda_call_data*);
   void (*eval_lambda_by_dict)(size_t, lambda_call_by_dict_data*);
   void (*eval_lambda_by_sframe_rows)(size_t, lambda_call_by_sframe_rows_data*);
-  void (*eval_graph_triple_apply)(size_t, lambda_graph_triple_apply_data*);  
+  void (*eval_graph_triple_apply)(size_t, lambda_graph_triple_apply_data*);
 };
 
 /** This is called through the cython functions to set up the
@@ -94,7 +94,7 @@ struct pylambda_evaluation_functions {
 void set_pylambda_evaluation_functions(pylambda_evaluation_functions* eval_function_struct);
 
 extern pylambda_evaluation_functions evaluation_functions;
-  
+
 /**
  * Creates a lambda from a pickled lambda string.
  *
@@ -162,7 +162,7 @@ class pylambda_evaluator : public lambda_evaluator_interface {
    */
   void release_lambda(size_t lambda_hash);
 
-  
+
   /**
    * Apply as a function: flexible_type -> flexible_type,
    *
@@ -189,7 +189,7 @@ class pylambda_evaluator : public lambda_evaluator_interface {
 
   /**
    * Evaluate the lambda function on each element separately in the values.
-   * The value element is combined with the keys to form a dictionary argument. 
+   * The value element is combined with the keys to form a dictionary argument.
    */
   std::vector<flexible_type> bulk_eval_dict(size_t lambda_hash,
                                             const std::vector<std::string>& keys,
@@ -205,13 +205,13 @@ class pylambda_evaluator : public lambda_evaluator_interface {
                                                  const sframe_rows& values,
                                                  bool skip_undefined, int seed);
 
-  
+
   /**
    * Redirects to either bulk_eval_rows or bulk_eval_dict_rows.
    * First byte in the string is a bulk_eval_serialized_tag byte to denote
    * whether this call is going to bulk_eval_rows or bulk_eval_dict_rows.
    *
-   * Deserializes the remaining parameters from the string 
+   * Deserializes the remaining parameters from the string
    * and calls the function accordingly.
    */
   std::vector<flexible_type> bulk_eval_rows_serialized(const char* ptr, size_t len);

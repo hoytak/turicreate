@@ -6,14 +6,14 @@
 #ifndef TURI_TESTING_DATA_GENERATORS_H_
 #define TURI_TESTING_DATA_GENERATORS_H_
 
-#include <sframe/sframe.hpp> 
+#include <sframe/sframe.hpp>
 #include <numerics/armadillo.hpp>
 #include <map>
 #include <string>
 
 namespace turi { namespace recsys {
 
-/** 
+/**
  * \ingroup toolkit_util
  * A simple class for generating fake linear model data for testing
  * purposes.  This uses the factorization machine model to generate
@@ -54,7 +54,7 @@ class lm_data_generator {
   sframe generate(size_t n_observations,
                   const std::string& target_column_name,
                   size_t random_seed,
-                  double noise_sd) const; 
+                  double noise_sd) const;
 
   /** Fill two datasets for ranking and testing the ranking.  This
    * works by building a linear model and assuming that the
@@ -77,7 +77,7 @@ class lm_data_generator {
 
   std::vector<std::string> column_names;
   std::vector<size_t> n_categorical_values;
-  
+
   size_t n_factors, dim;
   bool logistic_mode;
 

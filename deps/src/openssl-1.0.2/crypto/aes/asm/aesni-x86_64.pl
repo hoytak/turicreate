@@ -27,7 +27,7 @@
 # ECB	4.25/4.25   1.38/1.38   1.28/1.28   1.26/1.26	1.26/1.26
 # CTR	5.42/5.42   1.92/1.92   1.44/1.44   1.28/1.28   1.26/1.26
 # CBC	4.38/4.43   4.15/1.43   4.07/1.32   4.07/1.29   4.06/1.28
-# CCM	5.66/9.42   4.42/5.41   4.16/4.40   4.09/4.15   4.06/4.07   
+# CCM	5.66/9.42   4.42/5.41   4.16/4.40   4.09/4.15   4.06/4.07
 # OFB	5.42/5.42   4.64/4.64   4.44/4.44   4.39/4.39   4.38/4.38
 # CFB	5.73/5.85   5.56/5.62   5.48/5.56   5.47/5.55   5.47/5.55
 #
@@ -111,7 +111,7 @@
 # performance is achieved by interleaving instructions working on
 # independent blocks. In which case asymptotic limit for such modes
 # can be obtained by dividing above mentioned numbers by AES
-# instructions' interleave factor. Westmere can execute at most 3 
+# instructions' interleave factor. Westmere can execute at most 3
 # instructions at a time, meaning that optimal interleave factor is 3,
 # and that's where the "magic" number of 1.25 come from. "Optimal
 # interleave factor" means that increase of interleave factor does
@@ -293,7 +293,7 @@ ___
 # on 2x subroutine on Atom Silvermont account. For processors that
 # can schedule aes[enc|dec] every cycle optimal interleave factor
 # equals to corresponding instructions latency. 8x is optimal for
-# * Bridge and "super-optimal" for other Intel CPUs... 
+# * Bridge and "super-optimal" for other Intel CPUs...
 
 sub aesni_generate2 {
 my $dir=shift;
@@ -1173,7 +1173,7 @@ $code.=<<___;
 	lea	7($ctr),%r9
 	 mov	%r10d,0x60+12(%rsp)
 	bswap	%r9d
-	 mov	OPENSSL_ia32cap_P+4(%rip),%r10d 
+	 mov	OPENSSL_ia32cap_P+4(%rip),%r10d
 	xor	$key0,%r9d
 	 and	\$`1<<26|1<<22`,%r10d		# isolate XSAVE+MOVBE
 	mov	%r9d,0x70+12(%rsp)
@@ -1271,7 +1271,7 @@ $code.=<<___;
 	movdqu	$in2,0x40($out)
 	movdqu	$in3,0x50($out)
 	lea	0x60($out),$out
-	
+
 	sub	\$6,$len
 	jnc	.Lctr32_loop6
 
@@ -1443,7 +1443,7 @@ $code.=<<___;
 	movups		$inout6,0x60($out)
 	movups		$inout7,0x70($out)
 	lea		0x80($out),$out
-	
+
 	sub	\$8,$len
 	jnc	.Lctr32_loop8
 
@@ -2609,7 +2609,7 @@ $code.=<<___;
 	cmp	\$0x70,$len
 	jbe	.Lcbc_dec_six_or_seven
 
-	and	\$`1<<26|1<<22`,%r9d	# isolate XSAVE+MOVBE	
+	and	\$`1<<26|1<<22`,%r9d	# isolate XSAVE+MOVBE
 	sub	\$0x50,$len
 	cmp	\$`1<<22`,%r9d		# check for MOVBE without XSAVE
 	je	.Lcbc_dec_loop6_enter

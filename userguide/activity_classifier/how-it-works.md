@@ -8,7 +8,7 @@ A single input to the neural network is a session as defined in the previous sec
 
 <img src="images/convolutional_filter.png"></img>
 
-The output of the convolutional layer is a vector representation for each prediction window, encoding these learnt features. The recurrent layer takes as input a sequence of these vectors. 
+The output of the convolutional layer is a vector representation for each prediction window, encoding these learnt features. The recurrent layer takes as input a sequence of these vectors.
 
 The recurrent layer is specialized for learning temporal features across sequences. For example it may learn that spatial features associated with walking are more likely to occur after detecting spatial features associated with running. These features are further encoded into the output of the recurrent layer.
 

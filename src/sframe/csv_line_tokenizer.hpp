@@ -25,18 +25,18 @@ class flexible_type_parser;
 
 /**
  * CSV Line Tokenizer.
- * 
+ *
  * To use, simply set the appropriate options inside the struct, and use one of
  * the tokenize_line functions to parse a line inside a CSV file.
  *
  * \note This parser at the moment only handles the case where each row of
- * the CSV is on one line. It is in fact very possible that this is not the 
+ * the CSV is on one line. It is in fact very possible that this is not the
  * case. Pandas in particular permits line breaks inside of quoted strings,
- * and vectors, and that is quite problematic.  
+ * and vectors, and that is quite problematic.
  */
 struct csv_line_tokenizer {
   /**
-   * If set to true, quotes inside a field will be preserved (Default false). 
+   * If set to true, quotes inside a field will be preserved (Default false).
    * i.e. if set to true, the 2nd entry in the following row will be read as
    * ""hello world"" with the quote characters.
    * \verbatim
@@ -46,9 +46,9 @@ struct csv_line_tokenizer {
   bool preserve_quoting = false;
 
   /**
-   * The character to use to identify the beginning of a C escape sequence 
+   * The character to use to identify the beginning of a C escape sequence
    * (Defualt '\'). i.e. "\n" will be converted to the '\n' character, "\\"
-   * will be converted to "\", etc. Note that only the single character 
+   * will be converted to "\", etc. Note that only the single character
    * escapes are converted. unicode (\Unnnn), octal (\nnn), hexadecimal (\xnn)
    * are not interpreted.
    */
@@ -74,11 +74,11 @@ struct csv_line_tokenizer {
   std::string line_terminator = "\n";
 
   /**
-   * The character used to begin a comment (Default '#'). An occurance of 
+   * The character used to begin a comment (Default '#'). An occurance of
    * this character outside of quoted strings will cause the parser to
    * ignore the remainder of the line.
    * \verbatim
-   * # this is a 
+   * # this is a
    * # comment
    * user,name,rating
    * 123,hello,45
@@ -95,7 +95,7 @@ struct csv_line_tokenizer {
   bool has_comment_char = true;
 
   /**
-   * If set to true, pairs of quote characters in a quoted string 
+   * If set to true, pairs of quote characters in a quoted string
    * are interpreted as a single quote (Default false).
    * For instance, if set to true, the 2nd field of the 2nd line is read as
    * \b "hello "world""
@@ -133,8 +133,8 @@ struct csv_line_tokenizer {
    * The output vector will be cleared, and each field will be inserted into
    * the output vector. Returns true on success and false on failure.
    *
-   * \param str Pointer to string to tokenize. 
-   *            Contents of string may be modified. 
+   * \param str Pointer to string to tokenize.
+   *            Contents of string may be modified.
    * \param len Length of string to tokenize
    * \param output Output vector which will contain the result
    *
@@ -159,12 +159,12 @@ struct csv_line_tokenizer {
    *   // The buffer may be modified
    * }
    * \endcode
-   * 
+   *
    * For instance, to insert the parsed tokens into an output vector, the
    * following code could be used:
-   * 
+   *
    * \code
-   * return tokenize_line(str, 
+   * return tokenize_line(str,
    *                 [&](const char* buf, size_t len)->bool {
    *                   output.emplace_back(buf, len);
    *                   return true;
@@ -182,7 +182,7 @@ struct csv_line_tokenizer {
 
   /**
    * Tokenizes a line directly into array of flexible_type and type specifiers.
-   * This version of tokenize line is strict, requiring that the length of 
+   * This version of tokenize line is strict, requiring that the length of
    * the output vector matches up exactly with the number of columns, and the
    * types of the flexible_type be fully specified.
    *
@@ -192,14 +192,14 @@ struct csv_line_tokenizer {
    *     1, hello world, 2.0
    * \endverbatim
    *
-   * then output vector must have 3 elements. 
+   * then output vector must have 3 elements.
    *
-   * If the types of the 3 elements in the output vector are: 
+   * If the types of the 3 elements in the output vector are:
    * [flex_type_enum::INTEGER, flex_type_enum::STRING, flex_type_enum::FLOAT]
-   * then, they will be parsed as such emitting an output of 
+   * then, they will be parsed as such emitting an output of
    * [1, "hello world", 2.0].
    *
-   * However, if the types of the 3 elements in the output vector are: 
+   * However, if the types of the 3 elements in the output vector are:
    * [flex_type_enum::STRING, flex_type_enum::STRING, flex_type_enum::STRING]
    * then, the output will contain be ["1", "hello world", "2.0"].
    *
@@ -216,7 +216,7 @@ struct csv_line_tokenizer {
    *  - flex_type_enum::VECTOR (a vector of numbers specified like [1 2 3]
    *                            but allowing separators to be spaces, commas(,)
    *                            or semicolons(;). The separator should not
-   *                            match the CSV separator since the parsers are 
+   *                            match the CSV separator since the parsers are
    *                            independent)
    *
    * The tokenizer will not modify the types of the output vector. However,
@@ -263,14 +263,14 @@ struct csv_line_tokenizer {
    * Parse the buf content into flexible_type.
    * The type of the flexible_type is determined by the out variable.
    *
-   * If recursive_parse is set to true, things which parse to strings will 
+   * If recursive_parse is set to true, things which parse to strings will
    * attempt to be reparsed. This allows for instance
    * the quoted element "123" to be parsed as an integer instead of a string.
    *
    * If recursive_parse is true, the contents of the buffer may be modified
    * (the buffer itself is used to maintain the recursive parse state)
    */
-  bool parse_as(char** buf, size_t len, 
+  bool parse_as(char** buf, size_t len,
                 flexible_type& out, bool recursive_parse=false);
 
 
@@ -299,11 +299,11 @@ struct csv_line_tokenizer {
    *                  parsed token. Only called when lookahead succeeds, but later
    *                  parsing fails, thus requiring cancellation of the lookahead.
    *
-   * \note Whether this function modifies the input string is dependent on 
+   * \note Whether this function modifies the input string is dependent on
    * whether add_token modifies the input string.
    */
   template <typename Fn, typename Fn2, typename Fn3>
-  bool tokenize_line_impl(char* str, size_t len, 
+  bool tokenize_line_impl(char* str, size_t len,
                           Fn add_token,
                           Fn2 lookahead,
                           Fn3 undotoken);

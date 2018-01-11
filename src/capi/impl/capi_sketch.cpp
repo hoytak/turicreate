@@ -4,9 +4,9 @@
 #include <capi/impl/capi_flex_list.hpp>
 #include <capi/impl/capi_flexible_type.hpp>
 #include <capi/impl/capi_sketch.hpp>
-#include <export.hpp> 
+#include <export.hpp>
 
-#include <flexible_type/flexible_type.hpp> 
+#include <flexible_type/flexible_type.hpp>
 #include <unity/lib/unity_sarray.hpp>
 
 extern "C" {

@@ -222,7 +222,7 @@ class EXPORT categorical_imputer : public transformer_base {
    * Transform the given data.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "transform" in python.
@@ -232,7 +232,7 @@ class EXPORT categorical_imputer : public transformer_base {
 
   /**
    * Fit and transform the given data. Intended as an optimization because
-   * fit and transform are usually always called together. The default 
+   * fit and transform are usually always called together. The default
    * implementaiton calls fit and then transform.
    *
    * \param[in] data  (SFrame of data)
@@ -240,7 +240,7 @@ class EXPORT categorical_imputer : public transformer_base {
   gl_sframe fit_transform(gl_sframe data) {
      data.materialize();
      fit(data);
-     return transform(data); 
+     return transform(data);
   }
 
   // Functions that all transformers need to register. Can be copied verbatim
@@ -253,9 +253,9 @@ class EXPORT categorical_imputer : public transformer_base {
   REGISTER_CLASS_MEMBER_FUNCTION(categorical_imputer::transform, "data");
   REGISTER_CLASS_MEMBER_FUNCTION(categorical_imputer::get_current_options);
   REGISTER_CLASS_MEMBER_FUNCTION(categorical_imputer::list_fields);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options",
       categorical_imputer::get_default_options);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get",
       categorical_imputer::get_value_from_state, "key");
   END_CLASS_MEMBER_REGISTRATION
 

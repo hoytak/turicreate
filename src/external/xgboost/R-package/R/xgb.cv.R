@@ -1,7 +1,7 @@
 #' Cross Validation
-#' 
+#'
 #' The cross valudation function of xgboost
-#' 
+#'
 #' @importFrom data.table data.table
 #' @importFrom data.table as.data.table
 #' @importFrom magrittr %>%
@@ -12,7 +12,7 @@
 #' @importFrom stringr str_split
 #' @importFrom stringr str_replace
 #' @importFrom stringr str_match
-#' 
+#'
 #' @param params the list of parameters. Commonly used ones are:
 #' \itemize{
 #'   \item \code{objective} objective function, common ones are
@@ -29,7 +29,7 @@
 #'   See also demo/ for walkthrough example in R.
 #' @param data takes an \code{xgb.DMatrix} or \code{Matrix} as the input.
 #' @param nrounds the max number of iterations
-#' @param nfold the original dataset is randomly partitioned into \code{nfold} equal size subsamples. 
+#' @param nfold the original dataset is randomly partitioned into \code{nfold} equal size subsamples.
 #' @param label option field, when data is \code{Matrix}
 #' @param missing Missing is only used when input is dense matrix, pick a float
 #'     value that represents missing value. Sometime a data use 0 or other extreme value to represents missing values.
@@ -45,24 +45,24 @@
 #'   \item \code{auc} Area under curve
 #'   \item \code{merror} Exact matching error, used to evaluate multi-class classification
 #' }
-#' @param obj customized objective function. Returns gradient and second order 
+#' @param obj customized objective function. Returns gradient and second order
 #'   gradient with given prediction and dtrain.
-#' @param feval custimized evaluation function. Returns 
-#'   \code{list(metric='metric-name', value='metric-value')} with given 
+#' @param feval custimized evaluation function. Returns
+#'   \code{list(metric='metric-name', value='metric-value')} with given
 #'   prediction and dtrain.
 #' @param stratified \code{boolean} whether sampling of folds should be stratified by the values of labels in \code{data}
 #' @param folds \code{list} provides a possibility of using a list of pre-defined CV folds (each element must be a vector of fold's indices).
 #'   If folds are supplied, the nfold and stratified parameters would be ignored.
 #' @param verbose \code{boolean}, print the statistics during the process
 #' @param print.every.n Print every N progress messages when \code{verbose>0}. Default is 1 which means all messages are printed.
-#' @param early.stop.round If \code{NULL}, the early stopping function is not triggered. 
-#'     If set to an integer \code{k}, training with a validation set will stop if the performance 
+#' @param early.stop.round If \code{NULL}, the early stopping function is not triggered.
+#'     If set to an integer \code{k}, training with a validation set will stop if the performance
 #'     keeps getting worse consecutively for \code{k} rounds.
 #' @param maximize If \code{feval} and \code{early.stop.round} are set, then \code{maximize} must be set as well.
 #'     \code{maximize=TRUE} means the larger the evaluation score the better.
-#'     
+#'
 #' @param ... other parameters to pass to \code{params}.
-#' 
+#'
 #' @return
 #' If \code{prediction = TRUE}, a list with the following elements is returned:
 #' \itemize{
@@ -72,15 +72,15 @@
 #'
 #' If \code{prediction = FALSE}, just a \code{data.table} with each mean and standard deviation stat for training set and test set is returned.
 #'
-#' @details 
-#' The original sample is randomly partitioned into \code{nfold} equal size subsamples. 
-#' 
-#' Of the \code{nfold} subsamples, a single subsample is retained as the validation data for testing the model, and the remaining \code{nfold - 1} subsamples are used as training data. 
-#' 
+#' @details
+#' The original sample is randomly partitioned into \code{nfold} equal size subsamples.
+#'
+#' Of the \code{nfold} subsamples, a single subsample is retained as the validation data for testing the model, and the remaining \code{nfold - 1} subsamples are used as training data.
+#'
 #' The cross-validation process is then repeated \code{nrounds} times, with each of the \code{nfold} subsamples used exactly once as the validation data.
-#' 
+#'
 #' All observations are used for both training and validation.
-#' 
+#'
 #' Adapted from \url{http://en.wikipedia.org/wiki/Cross-validation_\%28statistics\%29#k-fold_cross-validation}
 #'
 #' @examples

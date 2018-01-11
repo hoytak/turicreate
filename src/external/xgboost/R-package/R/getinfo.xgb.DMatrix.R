@@ -1,18 +1,18 @@
 setClass('xgb.DMatrix')
 
 #' Get information of an xgb.DMatrix object
-#' 
+#'
 #' Get information of an xgb.DMatrix object
-#' 
+#'
 #' The information can be one of the following:
-#' 
+#'
 #' \itemize{
 #'     \item \code{label}: label Xgboost learn from ;
 #'     \item \code{weight}: to do a weight rescale ;
 #'     \item \code{base_margin}: base margin is the base prediction Xgboost will boost from ;
 #'     \item \code{nrow}: number of rows of the \code{xgb.DMatrix}.
 #' }
-#' 
+#'
 #' @examples
 #' data(agaricus.train, package='xgboost')
 #' train <- agaricus.train
@@ -23,7 +23,7 @@ setClass('xgb.DMatrix')
 #' stopifnot(all(labels2 == 1-labels))
 #' @rdname getinfo
 #' @export
-#' 
+#'
 getinfo <- function(object, ...){
     UseMethod("getinfo")
 }

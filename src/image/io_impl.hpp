@@ -12,7 +12,7 @@
 
 #ifndef int_p_NULL
 #define int_p_NULL (int*)NULL
-#endif 
+#endif
 
 #include <image/image_type.hpp>
 #include <boost/gil/extension/io/jpeg_dynamic_io.hpp>
@@ -33,7 +33,7 @@ void write_image_impl(std::string filename, char* data, size_t& width, size_t& h
   } else  if (format == Format::PNG){
     png_write_view(filename, view);
   }
-} 
+}
 
 // Template specialization: JPEG does not support RGBA
 template<>

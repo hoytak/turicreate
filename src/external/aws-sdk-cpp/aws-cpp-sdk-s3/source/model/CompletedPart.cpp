@@ -29,14 +29,14 @@ namespace S3
 namespace Model
 {
 
-CompletedPart::CompletedPart() : 
+CompletedPart::CompletedPart() :
     m_eTagHasBeenSet(false),
     m_partNumber(0),
     m_partNumberHasBeenSet(false)
 {
 }
 
-CompletedPart::CompletedPart(const XmlNode& xmlNode) : 
+CompletedPart::CompletedPart(const XmlNode& xmlNode) :
     m_eTagHasBeenSet(false),
     m_partNumber(0),
     m_partNumberHasBeenSet(false)

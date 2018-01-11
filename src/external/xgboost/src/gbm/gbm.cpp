@@ -18,4 +18,3 @@ IGradBooster* CreateGradBooster(const char *name) {
 }
 }  // namespace gbm
 }  // namespace xgboost
-

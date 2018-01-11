@@ -1180,4 +1180,3 @@ AllreduceRobust::RingPassing(void *sendrecvbuf_,
 }
 }  // namespace engine
 }  // namespace rabit
-

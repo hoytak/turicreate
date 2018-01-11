@@ -2,7 +2,7 @@
  *
  *  This test suite should get run before releasing a new version of libjson, once all
  *  unit tests have passed.  This asserts that the Options are in the default configuration,
- *  this prevents me from accidentally releasing libjson using options that I had been testing 
+ *  this prevents me from accidentally releasing libjson using options that I had been testing
  *  with.  It also performs a speed benchmark, so I can keep track of how libjson is performing
  *
  */
@@ -190,8 +190,8 @@ using namespace std;
 static string makeBigFormatted(){
     string json = "{\n";
     for(unsigned int i = 0; i < IT_COUNT; ++i){
-	   json += "\t//This is an object\r\n\t{\n\t\t\"name\" : 14.783,\n\t\t/* This is a multilen commenet */\n\t\t\"another\" : \"I am a stirng\"\n\t},"; 
-	   json += "\n\n\t//This is an array\r\n\t[4, 16, true, false, 78.98],\n"; 
+	   json += "\t//This is an object\r\n\t{\n\t\t\"name\" : 14.783,\n\t\t/* This is a multilen commenet */\n\t\t\"another\" : \"I am a stirng\"\n\t},";
+	   json += "\n\n\t//This is an array\r\n\t[4, 16, true, false, 78.98],\n";
     }
     json += "\t\"number\" : null\n}";
     return json;
@@ -200,8 +200,8 @@ static string makeBigFormatted(){
 static string makeBig(){
     string json = "{";
     for(unsigned int i = 0; i < IT_COUNT; ++i){
-	   json += "{\"name\":14.783,\"another\":\"I am a stirng\"},"; 
-	   json += "[4, 16, true, false, 78.98],"; 
+	   json += "{\"name\":14.783,\"another\":\"I am a stirng\"},";
+	   json += "[4, 16, true, false, 78.98],";
     }
     json += "\"number\":null}";
     return json;
@@ -218,7 +218,7 @@ int main (int argc, char * const argv[]) {
 		  json_as_float(json_get(meh, "name"));
 		  char * str = json_as_string(json_get(meh, "another"));
 		  json_free(str);
-		  
+
 		  meh = json_at(node, j * 2 + 1);
 		  json_as_int(json_at(meh, 0));
 		  json_as_int(json_at(meh, 1));
@@ -229,9 +229,9 @@ int main (int argc, char * const argv[]) {
 	   json_delete(node);
     }
     cout << "Reading:             " << clock() - start << endl;
-    
-    
-    
+
+
+
     mystr = makeBig();
     start = clock();
     for(unsigned int i = 0; i < 100; ++i){
@@ -241,7 +241,7 @@ int main (int argc, char * const argv[]) {
 		  json_as_float(json_get(meh, "name"));
 		  char * str = json_as_string(json_get(meh, "another"));
 		  json_free(str);
-		  
+
 		  meh = json_at(node, j * 2 + 1);
 		  json_as_int(json_at(meh, 0));
 		  json_as_int(json_at(meh, 1));
@@ -252,8 +252,8 @@ int main (int argc, char * const argv[]) {
 	   json_delete(node);
     }
     cout << "Reading Unformatted: " << clock() - start << endl;
-    
-    
+
+
     start = clock();
     for(unsigned int i = 0; i < 100; ++i){
 	   node = json_new(JSON_NODE);
@@ -262,7 +262,7 @@ int main (int argc, char * const argv[]) {
 		  json_push_back(meh, json_new_f("name", 14.783));
 		  json_push_back(meh, json_new_a("another", "I am a string"));
 		  json_push_back(node, meh);
-		  
+
 		  meh = json_new(JSON_ARRAY);
 		  json_push_back(meh, json_new_i(NULL, 14));
 		  json_push_back(meh, json_new_i("", 1));
@@ -274,16 +274,16 @@ int main (int argc, char * const argv[]) {
 	   json_delete(node);
     }
     cout << "Building:            " << clock() - start << endl;
-    
-    
-    
+
+
+
     node = json_new(JSON_NODE);
     for (unsigned int j = 0; j < IT_COUNT; ++j){
 	   JSONNODE * meh = json_new(JSON_NODE);
 	   json_push_back(meh, json_new_f("name", 14.783));
 	   json_push_back(meh, json_new_a("another", "I am a string"));
 	   json_push_back(node, meh);
-	   
+
 	   meh = json_new(JSON_ARRAY);
 	   json_push_back(meh, json_new_i(NULL, 14));
 	   json_push_back(meh, json_new_i("", 1));
@@ -298,7 +298,7 @@ int main (int argc, char * const argv[]) {
 	   json_free(str);
     }
     cout << "Writing:             " << clock() - start << endl;
-    
+
     start = clock();
     for(unsigned int i = 0; i < 100; ++i){
 	   char * str = json_write(node);
@@ -306,6 +306,6 @@ int main (int argc, char * const argv[]) {
     }
     cout << "Writing Unformatted: " << clock() - start << endl;
     json_delete(node);
-    
+
     return 0;
 }

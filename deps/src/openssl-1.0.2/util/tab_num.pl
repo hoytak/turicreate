@@ -14,4 +14,3 @@ while (<>)
 	print $_.("\t" x $i).$num."\n";
 	$num++;
 	}
-

@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
   zmq_msg_init_size(msg, 8);
   memcpy(zmq_msg_data(msg), "hellowor", 8);
   void* t = zmq_stopwatch_start();
-  for (size_t i = 0;i < 100000; ++i) { 
+  for (size_t i = 0;i < 100000; ++i) {
     int ret = reqsock.request_master(sendmsg, response);
     assert(ret == 0);
     response.clear_and_free();
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
     }
   }
   size_t rt = zmq_stopwatch_stop(t);
-  std::cout << rt << "\n"; 
+  std::cout << rt << "\n";
   return 0;  */
   while(1) {
     std::string s;

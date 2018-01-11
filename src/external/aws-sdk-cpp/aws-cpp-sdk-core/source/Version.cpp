@@ -26,5 +26,3 @@ namespace Version
   }
 } //namespace Version
 } //namespace Aws
-
-

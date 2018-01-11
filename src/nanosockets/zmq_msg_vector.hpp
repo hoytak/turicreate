@@ -301,7 +301,7 @@ class EXPORT zmq_msg_vector {
      iarc >> msgs;
    }
  private:
-   // list so things are not invalidated. A number of 
+   // list so things are not invalidated. A number of
    // things in this class pass pointers around
    std::list<nn_msg_t> msgs;
    size_t read_index;

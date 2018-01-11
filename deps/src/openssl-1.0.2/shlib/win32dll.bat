@@ -10,4 +10,3 @@ cl /Felibeay32.dll /GD /MD /LD -DWIN32 %OPTIONS% ms\libeay32.def crypto\crypto.c
 cl /Fessleay32.dll /GD /MD /LD -DWIN32 %OPTIONS% ms\ssleay32.def ssl\ssl.c libeay32.lib
 
 cl /Fessleay.exe /MD -DWIN32 %OPTIONS% apps\eay.c ssleay32.lib libeay32.lib user32.lib ws2_32.lib
-

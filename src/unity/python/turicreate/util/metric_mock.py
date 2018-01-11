@@ -28,7 +28,7 @@ class MetricMock:
   def track(self, distinct_id, event_name, properties={}, meta={}):
     if self._event_limit < 0 or len(_calls) < self._event_limit:
       self._calls.append( {'method':'track',
-                      'distinct_id':distinct_id, 
+                      'distinct_id':distinct_id,
                       'event_name':event_name,
                       'properties':properties,
                       'meta':meta,

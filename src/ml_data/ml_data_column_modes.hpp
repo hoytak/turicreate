@@ -21,7 +21,7 @@ class sframe;
  * \ingroup mldata
  * \{
  */
-/** 
+/**
  * The missing value action.
  */
 enum class ml_missing_value_action : int {IMPUTE, ERROR, USE_NAN};

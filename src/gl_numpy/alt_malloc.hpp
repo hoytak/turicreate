@@ -31,13 +31,13 @@ size_t get_memory_limit();
 size_t pagefile_total_allocated_bytes();
 
 /**
- * Returns the total number of compressed bytes we are currently managing in 
+ * Returns the total number of compressed bytes we are currently managing in
  * the pagefile
  */
 size_t pagefile_total_stored_bytes();
 
 /**
- * Returns the total number of compressed bytes we are currently managing in 
+ * Returns the total number of compressed bytes we are currently managing in
  * the pagefile
  */
 size_t pagefile_compression_ratio();
@@ -46,8 +46,8 @@ size_t pagefile_compression_ratio();
 /**
  * Returns true if malloc injection was successful: i.e. my_malloc
  * was called at least once. For this test to be correct,
- * malloc injection has to be attempted, and a numpy array created 
- * (to try to trigger our malloc implementation). Then 
+ * malloc injection has to be attempted, and a numpy array created
+ * (to try to trigger our malloc implementation). Then
  * malloc_injection_successful() can be tested.
  */
 bool malloc_injection_successful();

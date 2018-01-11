@@ -147,4 +147,3 @@ void ExtensionGenerator::Generate(io::Printer* printer) const {
 }  // namespace compiler
 }  // namespace protobuf
 }  // namespace google
-

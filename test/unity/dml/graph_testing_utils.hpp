@@ -40,7 +40,7 @@ sframe create_sframe(const std::vector<column>& columns) {
  * Create the zachary karate dataset
  */
 sgraph create_zachary_dataset() {
-    // Zachary's Karate Club dataset. 
+    // Zachary's Karate Club dataset.
     // Initial labels determined manually with the following labels:
     // label 0: vertices 1, 3
     // label 1: vertices  4, 16
@@ -75,11 +75,11 @@ sgraph create_zachary_dataset() {
 
     size_t num_partitions = 4;
     sgraph g(num_partitions);
-    sframe vertex_data = create_sframe({{"id", flex_type_enum::INTEGER, ids}, 
-                                        {"label", flex_type_enum::INTEGER, labels}, 
+    sframe vertex_data = create_sframe({{"id", flex_type_enum::INTEGER, ids},
+                                        {"label", flex_type_enum::INTEGER, labels},
                                         {"expected", flex_type_enum::INTEGER, expected}});
-    sframe edge_data = create_sframe({{"src", flex_type_enum::INTEGER, srcs}, 
-                                     {"dst", flex_type_enum::INTEGER, dsts}, 
+    sframe edge_data = create_sframe({{"src", flex_type_enum::INTEGER, srcs},
+                                     {"dst", flex_type_enum::INTEGER, dsts},
                                      {"data", flex_type_enum::INTEGER, edges}});
     g.add_vertices(vertex_data, "id", 0);
     g.add_edges(edge_data, "src", "dst", 0, 0);

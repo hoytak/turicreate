@@ -19,126 +19,126 @@ namespace turi {
 
 template <class T>
 class row_major_matrix {
- public: 
+ public:
 typedef T value_type;
 
-  size_t n_rows = 0, n_cols = 0; 
- 
+  size_t n_rows = 0, n_cols = 0;
+
  private:
-  arma::Mat<T> _X; 
+  arma::Mat<T> _X;
 
   inline void _internal_check() const {
-    DASSERT_EQ(_X.n_rows, n_cols); 
-    DASSERT_EQ(_X.n_cols, n_rows); 
+    DASSERT_EQ(_X.n_rows, n_cols);
+    DASSERT_EQ(_X.n_cols, n_rows);
   }
 
  public:
-  row_major_matrix() 
+  row_major_matrix()
     : n_rows(0)
     , n_cols(0)
     , _X(0,0)
   {}
 
-  row_major_matrix(size_t _n_rows, size_t _n_cols) 
+  row_major_matrix(size_t _n_rows, size_t _n_cols)
     : n_rows(_n_rows)
     , n_cols(_n_cols)
-    , _X(n_cols, n_rows) 
+    , _X(n_cols, n_rows)
   {}
 
  void zeros() { _X.zeros(); }
 
- void ones() { _X.ones(); } 
+ void ones() { _X.ones(); }
 
  void resize(size_t _n_rows, size_t _n_cols) {
-   n_rows = _n_rows; 
-   n_cols = _n_cols; 
-   _X.resize(n_cols, n_rows); 
+   n_rows = _n_rows;
+   n_cols = _n_cols;
+   _X.resize(n_cols, n_rows);
    _internal_check();
  }
 
  auto operator()(size_t i, size_t j) const -> decltype(_X(j,i)) {
    _internal_check();
   return _X(j, i);
- } 
+ }
 
  auto operator()(size_t i, size_t j) -> decltype(_X(j,i)) {
    _internal_check();
   return _X(j, i);
- } 
+ }
 
-  GL_HOT_INLINE_FLATTEN 
+  GL_HOT_INLINE_FLATTEN
   inline arma::Row<T> row(size_t i) const {
   _internal_check();
-  
+
   // It doesn't work to return .col(i).t(); apparently there is a reference
-  // to a temporary that goes away in that process.  Simulate this by 
-  // returning a rowvec initialized from the memory so it doesn't copy anything.  
+  // to a temporary that goes away in that process.  Simulate this by
+  // returning a rowvec initialized from the memory so it doesn't copy anything.
   //
   // The hurt is real.
   //
-  return arma::Row<T>(const_cast<T*>(&(_X(0, i))), n_cols, false); 
+  return arma::Row<T>(const_cast<T*>(&(_X(0, i))), n_cols, false);
  }
- 
+
  template <typename V>
  void set_row(size_t i, V&& v) {
   _internal_check();
   _X.col(i) = v.t();
- } 
- 
+ }
+
  template <typename V>
  void add_row(size_t i, V&& v) {
   _internal_check();
   _X.col(i) += v.t();
- } 
- 
- auto tr_rows(size_t first_row, size_t last_row) const 
+ }
+
+ auto tr_rows(size_t first_row, size_t last_row) const
    -> decltype(_X.cols(first_row, last_row)) {
   _internal_check();
-   return _X.cols(first_row, last_row); 
+   return _X.cols(first_row, last_row);
  }
- 
- void fill(T v) { 
+
+ void fill(T v) {
   _X.fill(v);
  }
 
  auto t() -> decltype(_X) {
-   return _X; 
+   return _X;
  }
 
  auto t() const -> decltype(_X) {
-   return _X; 
+   return _X;
  }
 
- auto X() const -> decltype(_X.t()) { 
-   return _X.t(); 
+ auto X() const -> decltype(_X.t()) {
+   return _X.t();
  }
 
 
- template <typename A> 
- inline const row_major_matrix<value_type>& operator=(A&& X) { 
-    _X = X.t(); 
-    n_rows = _X.n_cols; 
+ template <typename A>
+ inline const row_major_matrix<value_type>& operator=(A&& X) {
+    _X = X.t();
+    n_rows = _X.n_cols;
     n_cols = _X.n_rows;
     return *this;
  }
- 
-inline const row_major_matrix<value_type>& operator=(const row_major_matrix<value_type>& X) { 
-    _X = X._X; 
-    n_rows = _X.n_cols; 
+
+inline const row_major_matrix<value_type>& operator=(const row_major_matrix<value_type>& X) {
+    _X = X._X;
+    n_rows = _X.n_cols;
     n_cols = _X.n_rows;
     return *this;
  }
- 
- template <typename A> 
- inline const row_major_matrix<value_type>& operator+=(A&& X) { 
-    _X += X.t();  
+
+ template <typename A>
+ inline const row_major_matrix<value_type>& operator+=(A&& X) {
+    _X += X.t();
     return *this;
  }
- 
 
- inline const row_major_matrix<value_type>& operator+=(const row_major_matrix<value_type>& X) { 
-    _X += X._X; 
-    return *this; 
+
+ inline const row_major_matrix<value_type>& operator+=(const row_major_matrix<value_type>& X) {
+    _X += X._X;
+    return *this;
  }
 
  auto tr_tail_rows(size_t n) -> decltype(_X.tail_cols(n)) {
@@ -175,22 +175,22 @@ inline const row_major_matrix<value_type>& operator=(const row_major_matrix<valu
 
 };
 
-template <typename T> 
-static inline auto mean(const row_major_matrix<T>& X) 
-  -> const decltype(arma::mean(X.X()))& { 
-  return arma::mean(X.X()); 
+template <typename T>
+static inline auto mean(const row_major_matrix<T>& X)
+  -> const decltype(arma::mean(X.X()))& {
+  return arma::mean(X.X());
 }
 
-template <typename T, typename C> 
-static inline auto dot(const row_major_matrix<T>& X, const C& Y) 
--> decltype(arma::dot(X.X(), Y)) { 
-  return arma::dot(X.X(), Y); 
+template <typename T, typename C>
+static inline auto dot(const row_major_matrix<T>& X, const C& Y)
+-> decltype(arma::dot(X.X(), Y)) {
+  return arma::dot(X.X(), Y);
 }
 
-template <typename T, typename C> 
-static inline auto dot(const C& Y, const row_major_matrix<T>& X) 
+template <typename T, typename C>
+static inline auto dot(const C& Y, const row_major_matrix<T>& X)
  -> decltype(arma::dot(Y, X.X())) {
-  return arma::dot(Y, X.X()); 
+  return arma::dot(Y, X.X());
 }
 
 

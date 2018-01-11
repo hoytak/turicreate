@@ -23,7 +23,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-PutBucketRequestPaymentRequest::PutBucketRequestPaymentRequest() : 
+PutBucketRequestPaymentRequest::PutBucketRequestPaymentRequest() :
     m_bucketHasBeenSet(false),
     m_contentMD5HasBeenSet(false),
     m_requestPaymentConfigurationHasBeenSet(false)

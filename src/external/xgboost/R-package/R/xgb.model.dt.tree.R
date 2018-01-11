@@ -1,7 +1,7 @@
 #' Convert tree model dump to data.table
-#' 
+#'
 #' Read a tree model text dump and return a data.table.
-#' 
+#'
 #' @importFrom data.table data.table
 #' @importFrom data.table set
 #' @importFrom data.table rbindlist
@@ -22,11 +22,11 @@
 #'
 #' @return A \code{data.table} of the features used in the model with their gain, cover and few other thing.
 #'
-#' @details 
+#' @details
 #' General function to convert a text dump of tree model to a Matrix. The purpose is to help user to explore the model and get a better understanding of it.
-#' 
+#'
 #' The content of the \code{data.table} is organised that way:
-#' 
+#'
 #' \itemize{
 #' \item \code{ID}: unique identifier of a node ;
 #'  \item \code{Feature}: feature used in the tree to operate a split. When Leaf is indicated, it is the end of a branch ;
@@ -38,22 +38,22 @@
 #'  \item \code{Cover}: metric to measure the number of observation affected by the split ;
 #'  \item \code{Tree}: ID of the tree. It is included in the main ID ;
 #'  \item \code{Yes.X} or \code{No.X}: data related to the pointer in \code{Yes} or \code{No} column ;
-#' } 
-#'   
+#' }
+#'
 #' @examples
 #' data(agaricus.train, package='xgboost')
-#' 
-#' #Both dataset are list with two items, a sparse matrix and labels 
-#' #(labels = outcome column which will be learned). 
+#'
+#' #Both dataset are list with two items, a sparse matrix and labels
+#' #(labels = outcome column which will be learned).
 #' #Each column of the sparse Matrix is a feature in one hot encoding format.
 #' train <- agaricus.train
-#' 
-#' bst <- xgboost(data = train$data, label = train$label, max.depth = 2, 
+#'
+#' bst <- xgboost(data = train$data, label = train$label, max.depth = 2,
 #'                eta = 1, nthread = 2, nround = 2,objective = "binary:logistic")
-#' 
+#'
 #' #agaricus.test$data@@Dimnames[[2]] represents the column names of the sparse matrix.
 #' xgb.model.dt.tree(agaricus.train$data@@Dimnames[[2]], model = bst)
-#' 
+#'
 #' @export
 xgb.model.dt.tree <- function(feature_names = NULL, filename_dump = NULL, model = NULL, text = NULL, n_first_tree = NULL){
 

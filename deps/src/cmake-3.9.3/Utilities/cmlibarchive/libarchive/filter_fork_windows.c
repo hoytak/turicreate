@@ -153,7 +153,7 @@ __archive_create_child(const char *cmd, int *child_stdin, int *child_stdout)
 
 	*child_stdout = _open_osfhandle((intptr_t)childStdout[0], _O_RDONLY);
 	*child_stdin = _open_osfhandle((intptr_t)childStdin[1], _O_WRONLY);
-	
+
 	CloseHandle(childStdout[1]);
 	CloseHandle(childStdin[0]);
 

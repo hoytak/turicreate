@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     ############################################################
     # Set up the logging
-    
+
     if len(sys.argv) == 1:
         dry_run = True
     else:
@@ -135,7 +135,7 @@ if __name__ == "__main__":
 
     _write_out_file_name = os.environ.get("TURI_LAMBDA_WORKER_LOG_FILE", "")
     _write_out_file = None
-    
+
     def _write_log(s, error = False):
         s = s + "\n"
 
@@ -148,7 +148,7 @@ if __name__ == "__main__":
                 # of a bad file descriptor passed on from a windows
                 # subprocess
                 pass
-            
+
         elif _write_out is not None:
             try:
                 _write_out.write(s)
@@ -179,27 +179,27 @@ if __name__ == "__main__":
 
     for s in sys.argv:
         _write_log("Lambda worker args: \n  %s" % ("\n  ".join(sys.argv)))
-            
+
     if dry_run:
         print("PyLambda script called with no IPC information; entering diagnostic mode.")
 
     setup_environment(info_log_function = _write_log,
                       error_log_function = lambda s: _write_log(s, error=True))
-        
+
     ############################################################
     # Load in the cython lambda workers.  On import, this will resolve
     # the proper symbols.
-    
+
     if get_installation_flavor() == "sframe":
         from sframe.cython.cy_pylambda_workers import run_pylambda_worker
     else:
         from turicreate.cython.cy_pylambda_workers import run_pylambda_worker
-    
+
     main_dir = get_main_dir()
 
     default_loglevel = 5  # 5: LOG_WARNING, 4: LOG_PROGRESS  3: LOG_EMPH  2: LOG_INFO  1: LOG_DEBUG
     dryrun_loglevel = 1  # 5: LOG_WARNING, 4: LOG_PROGRESS  3: LOG_EMPH  2: LOG_INFO  1: LOG_DEBUG
-    
+
     if not dry_run:
         # This call only returns after the parent process is done.
         result = run_pylambda_worker(main_dir, sys.argv[1], default_loglevel)

@@ -15,7 +15,7 @@ if version == 0:
 else:
     print '[%d] restart from version %d' % (rank, version)
 
-for i in xrange(version, nround):    
+for i in xrange(version, nround):
     res = rabit.allreduce(data + model+local, rabit.SUM)
     print '[%d] iter=%d: %s' % (rank, i, str(res))
     model = res

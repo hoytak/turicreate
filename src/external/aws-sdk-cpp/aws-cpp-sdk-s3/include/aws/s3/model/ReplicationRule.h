@@ -150,19 +150,19 @@ namespace Model
      */
     inline ReplicationRule& WithStatus(ReplicationRuleStatus&& value) { SetStatus(value); return *this;}
 
-    
+
     inline const Destination& GetDestination() const{ return m_destination; }
 
-    
+
     inline void SetDestination(const Destination& value) { m_destinationHasBeenSet = true; m_destination = value; }
 
-    
+
     inline void SetDestination(Destination&& value) { m_destinationHasBeenSet = true; m_destination = value; }
 
-    
+
     inline ReplicationRule& WithDestination(const Destination& value) { SetDestination(value); return *this;}
 
-    
+
     inline ReplicationRule& WithDestination(Destination&& value) { SetDestination(value); return *this;}
 
   private:

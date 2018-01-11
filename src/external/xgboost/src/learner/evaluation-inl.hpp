@@ -18,7 +18,7 @@
 #include "./evaluation.h"
 #include "./helper_utils.h"
 
-// GLC parallel lambda premitive 
+// GLC parallel lambda premitive
 #include <parallel/lambda_omp.hpp>
 #include <parallel/pthread_tools.hpp>
 #include <parallel/atomic.hpp>

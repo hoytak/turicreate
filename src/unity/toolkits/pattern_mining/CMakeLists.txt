@@ -14,4 +14,3 @@ make_library(unity_pattern_mining
     unity_ml_model
     unity_feature_engineering
   )
-

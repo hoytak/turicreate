@@ -42,4 +42,3 @@ int Curl_bundle_remove_conn(struct connectbundle *cb_ptr,
 
 
 #endif /* HEADER_CURL_BUNDLES_H */
-

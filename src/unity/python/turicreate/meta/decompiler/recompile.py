@@ -22,7 +22,7 @@ if py3:
     import builtins #@UnresolvedImport
 else:
     import __builtin__ as builtins
-     
+
 import marshal
 import imp
 from py_compile import PyCompileError, wr_long
@@ -33,11 +33,10 @@ def create_pyc(codestring, cfile, timestamp=None):
 
     if timestamp is None:
         timestamp = time()
-    
+
     codeobject = builtins.compile(codestring, '<recompile>', 'exec')
-        
+
     cfile.write(MAGIC)
     cfile.write(struct.pack('i', timestamp))
     marshal.dump(codeobject, cfile)
     cfile.flush()
-    

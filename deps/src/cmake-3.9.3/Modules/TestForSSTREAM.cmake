@@ -34,7 +34,3 @@ if(NOT DEFINED CMAKE_HAS_ANSI_STRING_STREAM)
       "the following output:\n${OUTPUT}\n\n")
   endif ()
 endif()
-
-
-
-

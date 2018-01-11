@@ -12,7 +12,7 @@ namespace pattern_mining {
 
 
 BEGIN_FUNCTION_REGISTRATION
-REGISTER_FUNCTION(_pattern_mining_create, "data", "event", "features", 
+REGISTER_FUNCTION(_pattern_mining_create, "data", "event", "features",
           "min_support", "max_patterns", "min_length");
 END_FUNCTION_REGISTRATION
 

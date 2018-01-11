@@ -104,4 +104,3 @@ run_ssl_test
 # SSLv2 test
 export PRETTY="SSLv2"
 run_ssl_test
-

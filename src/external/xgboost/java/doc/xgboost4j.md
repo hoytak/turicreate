@@ -10,10 +10,10 @@ This page will introduce xgboost4j, the java wrapper for xgboost, including:
 
 =
 #### Build xgboost4j
-* Build native library  
+* Build native library
 first make sure you have installed jdk and `JAVA_HOME` has been setted properly, then simply run `./create_wrap.sh`.
 
-* Package xgboost4j  
+* Package xgboost4j
 to package xgboost4j, you can run `mvn package` in xgboost4j folder or just use IDE(eclipse/netbeans) to open this maven project and build.
 
 =
@@ -30,11 +30,11 @@ import org.dmlc.xgboost4j.DMatrix;
 DMatrix dmat = new DMatrix("train.svm.txt");
 ```
 
-* To load sparse matrix in CSR/CSC format is a little complicated, the usage is like :  
-suppose a sparse matrix :  
-1 0 2 0  
-4 0 0 3  
-3 1 2 0  
+* To load sparse matrix in CSR/CSC format is a little complicated, the usage is like :
+suppose a sparse matrix :
+1 0 2 0
+4 0 0 3
+3 1 2 0
 
   for CSR format
 ```java
@@ -52,12 +52,12 @@ int[] rowIndex = new int[] {0,1,2,2,0,2,1};
 DMatrix dmat = new DMatrix(colHeaders, rowIndex, data, DMatrix.SparseType.CSC);
 ```
 
-* To load 3*2 dense matrix, the usage is like :  
-suppose a matrix :  
-1    2  
-3    4  
-5    6  
- 
+* To load 3*2 dense matrix, the usage is like :
+suppose a matrix :
+1    2
+3    4
+5    6
+
 ```java
 float[] data = new float[] {1f,2f,3f,4f,5f,6f};
 int nrow = 3;

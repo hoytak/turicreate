@@ -22,8 +22,8 @@ template <typename T>
 struct lazy_eval_operation_base {
   typedef T value_type;
   /**
-   * Number of arguments in the operation. For instance, a simple 
-   * transformation (like "add_row") is a unary transform, and this 
+   * Number of arguments in the operation. For instance, a simple
+   * transformation (like "add_row") is a unary transform, and this
    * function will return 1. A "join" is a binary transform, and will return 2.
    * Finally, parent-less operations like "load_from_file" will return 0.
    *
@@ -44,7 +44,7 @@ struct lazy_eval_operation_base {
    *  size of the parents list is empty, and the operation should be
    *  performed on the output object directly.
    *  - For the Unary function (function of 1 argument. i.e. o = f(a1) ) the
-   *  output object is the "parent" object , and the operation should be 
+   *  output object is the "parent" object , and the operation should be
    *  performed inplace. i.e, it shoud really compute ( o = f(o) )
    *  - For the Binary function (function of 2 arguments) ( o = f(a1, a2) )
    *  the output object is the also the 1st parent, and the ancestor list

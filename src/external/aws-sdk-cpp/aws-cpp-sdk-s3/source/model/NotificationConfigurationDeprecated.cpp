@@ -29,14 +29,14 @@ namespace S3
 namespace Model
 {
 
-NotificationConfigurationDeprecated::NotificationConfigurationDeprecated() : 
+NotificationConfigurationDeprecated::NotificationConfigurationDeprecated() :
     m_topicConfigurationHasBeenSet(false),
     m_queueConfigurationHasBeenSet(false),
     m_cloudFunctionConfigurationHasBeenSet(false)
 {
 }
 
-NotificationConfigurationDeprecated::NotificationConfigurationDeprecated(const XmlNode& xmlNode) : 
+NotificationConfigurationDeprecated::NotificationConfigurationDeprecated(const XmlNode& xmlNode) :
     m_topicConfigurationHasBeenSet(false),
     m_queueConfigurationHasBeenSet(false),
     m_cloudFunctionConfigurationHasBeenSet(false)

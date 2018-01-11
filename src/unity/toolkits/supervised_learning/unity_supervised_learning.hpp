@@ -253,4 +253,3 @@ std::vector<toolkit_function_specification> get_toolkit_function_registration();
 } // namespace supervised
 } // namespace turi
 #endif
-

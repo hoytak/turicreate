@@ -165,7 +165,7 @@ struct row_data_block {
   void load(turi::iarchive& iarc) {
     iarc >> entry_data >> additional_data;
   }
-  
+
   void save(turi::oarchive& oarc) const {
     oarc << entry_data << additional_data;
   }
@@ -350,7 +350,7 @@ _read_raw_ml_data_column_block(
     ++row_block_ptr;
 
   const size_t num_columns = rm.num_x_columns;
-  
+
   for(size_t c_idx = 0; c_idx < num_columns; ++c_idx) {
 
     DASSERT_LT(c_idx, rm.metadata_vect.size());
@@ -361,9 +361,9 @@ _read_raw_ml_data_column_block(
     size_t index_size = rm.metadata_vect[c_idx]->index_size();
     size_t index_offset = rm.metadata_vect[c_idx]->global_index_offset();
 
-    // The offset should always have been initialized. 
+    // The offset should always have been initialized.
     DASSERT_NE(index_offset, size_t(-1));
-    
+
     /** Call this to read out an index.
      */
     auto read_index = [&]() GL_GCC_ONLY(GL_HOT_INLINE_FLATTEN) {
@@ -520,9 +520,9 @@ read_ml_data_row(
   size_t row_data_size = get_row_data_size(rm, row_block_ptr);
 #endif
 
-  const bool use_side_features = (side_features != nullptr); 
+  const bool use_side_features = (side_features != nullptr);
   const entry_value_iterator row_block_start = row_block_ptr;
-  
+
   // Here, we've got num_x_columns values for x, with the first one
   // for y.
   {
@@ -538,7 +538,7 @@ read_ml_data_row(
   }
 
 
-  // Some functional code, pun intended.  
+  // Some functional code, pun intended.
   if(use_side_features) {
 
     // Loop through the columns relevant to the side data; this needs
@@ -548,7 +548,7 @@ read_ml_data_row(
     // Call this code as it's own function since side data is not
     // commonly used.
     auto add_side_features_sep_function = [&]() GL_GCC_ONLY(GL_HOT_NOINLINE_FLATTEN) {
-      
+
       auto out_function_to_add_side_data = [&](
           ml_column_mode mode, size_t column_index,
           size_t feature_index, double value,
@@ -556,10 +556,10 @@ read_ml_data_row(
 
         if(mode == ml_column_mode::CATEGORICAL) {
 
-          // Get the data information for this particular column. 
+          // Get the data information for this particular column.
           auto data = side_features->get_side_feature_block(column_index, feature_index);
 
-          // Case 1: nothing in the side data for this column / feature. 
+          // Case 1: nothing in the side data for this column / feature.
           if(data.row_block_ptr == nullptr) {
 
             // If there is nothing in the side data for this feature,
@@ -570,8 +570,8 @@ read_ml_data_row(
                           i + data.column_offset,
                           data.rm.metadata_vect[i]->index_size());
             }
-            
-          // Case 2: join on the data. 
+
+          // Case 2: join on the data.
           } else {
 
             // There is legit data in this; we just need to call
@@ -580,7 +580,7 @@ read_ml_data_row(
             // the ones in data.rm (which is just local to the side
             // info), so hook the user-supplied out_function and
             // offset the column index.
-              
+
             auto sd_out_function_with_hook =
             [&](ml_column_mode mode, size_t column_index,
                 size_t feature_index, double value,
@@ -605,17 +605,17 @@ read_ml_data_row(
         }
       };
 
-      entry_value_iterator sd_row_block_ptr = row_block_start; 
-      
+      entry_value_iterator sd_row_block_ptr = row_block_start;
+
       // Now, reread the original data to get the column indices of
-      // on which the side_features have to be joined.  
+      // on which the side_features have to be joined.
       _read_raw_ml_data_column_block(
           rm, sd_row_block_ptr, out_function_to_add_side_data,
           [](ml_column_mode, size_t, size_t){});
     };
 
-    // Call the above non-inlined function. 
-    add_side_features_sep_function(); 
+    // Call the above non-inlined function.
+    add_side_features_sep_function();
   }
 
   // Check to make sure the layout is good.  Note that the

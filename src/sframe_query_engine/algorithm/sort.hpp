@@ -29,7 +29,7 @@ class planner_node;
  *   - First do a quantile sketch over all sort columns and use the quantile sketch to
  *     figure out the partition keys that we will use to split the sframe rows into
  *     small chunks so that each chunk is realtively sorted. Each chunk is small enough
- *     so that we could sort in memory 
+ *     so that we could sort in memory
  *   - Scatter partition the sframe according to above partition keys. The resulting
  *     value is persisted. Each partition is stored as one segment in a sarray.
  *   - The sorting resulting is then lazily materialized through le_sort operator

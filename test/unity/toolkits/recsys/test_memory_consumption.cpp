@@ -7,7 +7,7 @@
 #include <string>
 #include <random/random.hpp>
 #include <unity/toolkits/ml_data_2/ml_data.hpp>
-#include <unity/toolkits/ml_data_2/sframe_index_mapping.hpp> 
+#include <unity/toolkits/ml_data_2/sframe_index_mapping.hpp>
 #include <unity/toolkits/recsys/models.hpp>
 #include <sframe/testing_utils.hpp>
 #include <util/testing_utils.hpp>
@@ -27,11 +27,11 @@ int main(int argc, char **argv) {
 
     for(size_t i = 0; i < 100; ++i) {
 
-      make_testing_sarray(flex_type_enum::INTEGER, {1}); 
+      make_testing_sarray(flex_type_enum::INTEGER, {1});
     }
-    
+
     std::cerr << "Recommend time / 1000: " << tt.current_time_millis() << "ms." << std::endl;
   }
 
-  return 0; 
+  return 0;
 }

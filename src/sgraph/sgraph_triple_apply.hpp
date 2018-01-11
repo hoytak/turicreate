@@ -108,7 +108,7 @@ typedef std::function<void(std::vector<edge_scope>&)> batch_triple_apply_fn_type
  * \endcode
  *
  * \param g The target graph to perform the transformation.
- * \param apply_fn The user defined function that will be applied on each edge scope. 
+ * \param apply_fn The user defined function that will be applied on each edge scope.
  * \param mutated_vertex_fields A subset of vertex data columns that the apply_fn will modify.
  * \param mutated_edge_fields A subset of edge data columns that the apply_fn will modify.
  * \param requires_vertex_id Set to false for optimization when vertex id is not required

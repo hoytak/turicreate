@@ -23,7 +23,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-CreateBucketRequest::CreateBucketRequest() : 
+CreateBucketRequest::CreateBucketRequest() :
     m_aCLHasBeenSet(false),
     m_bucketHasBeenSet(false),
     m_createBucketConfigurationHasBeenSet(false),

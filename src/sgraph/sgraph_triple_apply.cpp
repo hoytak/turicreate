@@ -35,7 +35,7 @@ namespace {
    * \ref load_partition initailze the visitor with the graph,
    * the edge parittion ids and the associated in-memory vertex data blocks.
    *
-   * The in-memory vertex block is writable, and therefore, locking 
+   * The in-memory vertex block is writable, and therefore, locking
    * must be taken care of by the visitor as well.
    *
    * load_partition() in general should only read vertices, and a barrier
@@ -53,7 +53,7 @@ namespace {
     /**
      * Initialize the visitor state with the graph, edge partition ids,
      * and the associated in-memory vertex blocks.
-     * 
+     *
      * \param g the target sgraph to be visited
      * \param source_vertex_block source vertex data loaded in memory.
      * \param source_vertex_block target vertex data loaded in memory.
@@ -153,8 +153,8 @@ namespace {
         std::set<vertex_partition_address> vertex_partition_to_unload;
 
         for (const auto& coordinate: coordinates) {
-          size_t srcid = coordinate.first; 
-          size_t dstid = coordinate.second; 
+          size_t srcid = coordinate.first;
+          size_t dstid = coordinate.second;
           edge_partition_address edge_partition(0, 0, srcid, dstid);
           vertex_partition_to_load.insert(vertex_partition_address(0, srcid));
           vertex_partition_to_load.insert(vertex_partition_address(0, dstid));
@@ -174,7 +174,7 @@ namespace {
         std::stringstream message_ss;
         message_ss << "Vertex partitions in memory: ";
         for (const auto& coord: vertex_partition_to_load)
-          message_ss << coord.partition << " "; 
+          message_ss << coord.partition << " ";
         logstream(LOG_INFO) << message_ss.str() << std::endl;
       };
 
@@ -313,7 +313,7 @@ namespace {
     DASSERT_TRUE(source_block.is_loaded());
     DASSERT_TRUE(target_block.is_loaded());
 
-    logstream(LOG_INFO) << "Do work on partition " 
+    logstream(LOG_INFO) << "Do work on partition "
                         << partition_address.partition1
                         << ", " << partition_address.partition2
                         << "\nNumber of vertices: " << m_graph.vertex_partition(src_partition).size()
@@ -492,9 +492,9 @@ namespace {
     sframe* edge_data_ptr;
 
     bool m_mutating_edge_data;
-    // sframe storing the mutated edge data. 
+    // sframe storing the mutated edge data.
     sframe m_mutated_edges;
-    // output iterator of m_mutated_edges 
+    // output iterator of m_mutated_edges
     sframe::iterator m_mutated_edge_data_writer;
     // id of the edge fields to be modified.
     std::vector<size_t> m_mutated_edge_field_ids;
@@ -578,7 +578,7 @@ namespace {
       m_src_partition = _src_partition;
       m_dst_partition = _dst_partition;
 
-      // If edge data will be modified, prepare an sframe that stores 
+      // If edge data will be modified, prepare an sframe that stores
       // the modified edge data.
       m_mutating_edges = !mutated_edge_fields.empty();
       if (m_mutating_edges) {
@@ -603,7 +603,7 @@ namespace {
 
     /**
      * Apply user defined batch_apply_function to the successfully locked edges.
-     * The rest of the edges will be stored in a local buffer and postpone to 
+     * The rest of the edges will be stored in a local buffer and postpone to
      * be processed in the next visit_edges call.
      */
     void visit_edges(std::vector<edge_data>& edgedata) {
@@ -696,7 +696,7 @@ namespace {
       return m_locked_scopes;
     }
 
-    // Returns a pair of locks associated with the edge data. The returned 
+    // Returns a pair of locks associated with the edge data. The returned
     // lock pair has lock ordering of pair.first > pair.second. (lock the first before the second).
     std::pair<mutex_type&, mutex_type&> get_edge_mutex(const edge_data& edata) {
       size_t srcid = edata[m_srcid_column];
@@ -980,8 +980,8 @@ namespace {
 
     sgraph_synchronize m_graph_sync;
   }; // end of lambda_triple_apply_edge_visitor
-  
-  }// end of empty namespace 
+
+  }// end of empty namespace
 
   /**
    * The actual triple apply API.

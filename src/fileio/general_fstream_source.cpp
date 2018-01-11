@@ -15,7 +15,7 @@ general_fstream_source::general_fstream_source(std::string file) {
   open_file(file, boost::ends_with(file, ".gz"));
 }
 
-general_fstream_source::general_fstream_source(std::string file, 
+general_fstream_source::general_fstream_source(std::string file,
                                                bool gzip_compressed) {
   open_file(file, gzip_compressed);
 }
@@ -60,7 +60,7 @@ void general_fstream_source::close() {
   in_file.reset();
 }
 
-std::streampos general_fstream_source::seek(std::streamoff off, 
+std::streampos general_fstream_source::seek(std::streamoff off,
                                             std::ios_base::seekdir way) {
   if (!decompressor) {
     underlying_stream->clear();

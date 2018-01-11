@@ -9,7 +9,7 @@ from .cy_flexible_type cimport flex_list
 from .cy_flexible_type cimport gl_options_map
 from libcpp.vector cimport vector
 from libcpp.string cimport string
-from .cy_unity_base_types cimport * 
+from .cy_unity_base_types cimport *
 from .cy_unity cimport function_closure_info
 from .cy_unity cimport make_function_closure_info
 
@@ -147,7 +147,7 @@ cdef class UnitySArrayProxy:
     cpdef var(self, size_t ddof)
 
     cpdef nnz(self)
-  
+
     cpdef str_to_datetime(self, str_format)
 
     cpdef datetime_to_str(self, str_format)
@@ -203,7 +203,7 @@ cdef class UnitySArrayProxy:
     cpdef item_length(self)
 
     cpdef unpack_dict(self, column_name_prefix, object, na_value)
-  
+
     cpdef expand(self, column_name_prefix, object, value_types)
 
     cpdef unpack(self, column_name_prefix, object, value_types, na_value)

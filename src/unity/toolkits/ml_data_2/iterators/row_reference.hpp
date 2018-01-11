@@ -35,48 +35,48 @@ typedef arma::fvec DenseVector;
  *     auto row_ref = it.get_reference();
  *
  *     // do stuff ...
- *     row_ref.fill(x); 
+ *     row_ref.fill(x);
  *
  *  The data block pointed to by this reference is kept alive as long
- *  as this reference class exists. 
+ *  as this reference class exists.
  *
  *
  *  Another example of how it is used is below:
  *
  *     sframe X = make_integer_testing_sframe( {"C1", "C2"}, { {0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4} } );
- * 
+ *
  *     v2::ml_data data;
- * 
+ *
  *     data.fill(X);
- * 
+ *
  *     // Get row references
- * 
- *     std::vector<v2::ml_data_row_reference> rows(data.num_rows()); 
- * 
+ *
+ *     std::vector<v2::ml_data_row_reference> rows(data.num_rows());
+ *
  *     for(auto it = data.get_iterator(); !it.done(); ++it) {
  *       rows[it.row_index()] = it.get_reference();
  *     }
- * 
+ *
  *     // Now go through and make sure that each of these hold the
  *     // correct answers.
  *
- *     std::vector<v2::ml_data_entry> x; 
- * 
+ *     std::vector<v2::ml_data_entry> x;
+ *
  *     for(size_t i = 0; i < rows.size(); ++i) {
  *
- *       // The metadata for the row is the same as that in the data. 
+ *       // The metadata for the row is the same as that in the data.
  *       ASSERT_TRUE(rows[i].metadata().get() == data.metadata().get());
- *       
+ *
  *       rows[i].fill(x);
- * 
+ *
  *       ASSERT_EQ(x.size(), 2);
  *
- *       ASSERT_EQ(x[0].column_index, 0); 
- *       ASSERT_EQ(x[0].index, 0); 
+ *       ASSERT_EQ(x[0].column_index, 0);
+ *       ASSERT_EQ(x[0].index, 0);
  *       ASSERT_EQ(x[0].value, i);
  *
- *       ASSERT_EQ(x[1].column_index, 1); 
- *       ASSERT_EQ(x[1].index, 0); 
+ *       ASSERT_EQ(x[1].column_index, 1);
+ *       ASSERT_EQ(x[1].index, 0);
  *       ASSERT_EQ(x[1].value, i);
  *     }
  *   }
@@ -115,7 +115,7 @@ class ml_data_row_reference {
         x, data_block->rm, current_data_iter(),
         side_features);
   }
-  
+
   /**
    * Fill an observation vector with the untranslated columns, if any
    * have been specified at setup time.  These columns are simply
@@ -173,7 +173,7 @@ class ml_data_row_reference {
    */
   template <typename T, typename Index>
   inline void fill(turi::sparse_vector<T,Index>& x) const {
-    
+
     x.zeros();
 
     if(!data_block->metadata->has_translated_columns())
@@ -237,7 +237,7 @@ class ml_data_row_reference {
    * the current location in the iteration.
    *
    * \note The 0th category is used as a reference category.
-   *  
+   *
    *
    * Example:
    *
@@ -245,8 +245,8 @@ class ml_data_row_reference {
    *
    *   ...
    *
-   *   it.fill_row_expr(X.row(row_idx)); 
-   *  
+   *   it.fill_row_expr(X.row(row_idx));
+   *
    * ---------------------------------------------
    *
    * \param[in,out] x   A row expression.
@@ -257,14 +257,14 @@ class ml_data_row_reference {
   inline void fill_row_expr(DenseRowXpr&& x) const {
 
     x.zeros();
-    
+
     ml_data_internal::copy_raw_into_array(
         x,
         data_block->rm, current_data_iter(),
         side_features,
         use_reference_encoding);
   }
-  
+
   /** Returns the current target value, if present, or 1 if not
    *  present.  If the target column is supposed to be a categorical
    *  value, then use categorical_target_index().
@@ -287,7 +287,7 @@ class ml_data_row_reference {
     return data_block->metadata;
   }
 
-  
+
  private:
   friend class ml_data_iterator_base;
 

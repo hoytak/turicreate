@@ -15,7 +15,7 @@
 #include <sframe_query_engine/planning/planner_node.hpp>
 
 namespace turi {
-namespace query_eval { 
+namespace query_eval {
 
 class query_planner;
 
@@ -25,17 +25,17 @@ class query_planner;
  * \{
  */
 
-/**  
+/**
  * The main query plan call.
  */
 class planner {
  public:
-  typedef std::function<bool(size_t, const std::shared_ptr<sframe_rows>&)> 
+  typedef std::function<bool(size_t, const std::shared_ptr<sframe_rows>&)>
     write_callback_type;
 
   planner() {}
 
-  /**  
+  /**
    * Materialize the output from a node on a graph as an SFrame.
    *
    * Note that exec_params allows some control over the execution of the
@@ -48,11 +48,11 @@ class planner {
    *
    * Internally, the materialization hierarchy is:
    *  - \ref planner::materialize Handles the most general materializations
-   *  - \ref planner::execute_node Replicates a plan for parallelization. 
+   *  - \ref planner::execute_node Replicates a plan for parallelization.
    *                               A private function.
    *  - \ref subplan_executor Executes a restricted plan.
    */
-  sframe materialize(std::shared_ptr<planner_node> tip, 
+  sframe materialize(std::shared_ptr<planner_node> tip,
                      materialize_options exec_params = materialize_options());
 
   /**
@@ -70,18 +70,18 @@ class planner {
                    size_t num_segments,
                    materialize_options exec_params = materialize_options());
 
-  
+
   /** If this returns true, it is recommended to go ahead and
    *  materialize the sframe operations on the fly to prevent memory
    *  issues.
    */
   bool online_materialization_recommended(std::shared_ptr<planner_node> tip);
 
-  /**  
+  /**
    * Materialize the output, returning the result as a planner node.
    */
   std::shared_ptr<planner_node>  materialize_as_planner_node(
-      std::shared_ptr<planner_node> tip, 
+      std::shared_ptr<planner_node> tip,
       materialize_options exec_params = materialize_options());
 
   /**

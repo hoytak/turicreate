@@ -31,7 +31,7 @@ sframe group(sframe sframe_in, std::string key_column) {
 
   size_t input_nsegments = sframe_in.num_segments();
 
-  size_t output_nsegments = std::max(input_nsegments, 
+  size_t output_nsegments = std::max(input_nsegments,
                               thread::cpu_count() * std::max<size_t>(1, log2(thread::cpu_count())));
   hash_bucket_container<std::vector<flexible_type>> hash_container(output_nsegments, comparator);
 
@@ -49,7 +49,7 @@ sframe group(sframe sframe_in, std::string key_column) {
     }
   });
 
-  ret.open_for_write(sframe_in.column_names(), 
+  ret.open_for_write(sframe_in.column_names(),
                      sframe_in.column_types(),
                      "",
                      output_nsegments);

@@ -3,16 +3,16 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#include <unity/toolkits/coreml_export/mlmodel_include.hpp> 
+#include <unity/toolkits/coreml_export/mlmodel_include.hpp>
 #include <unity/toolkits/coreml_export/mldata_exporter.hpp>
 
-namespace turi { 
+namespace turi {
 
 /**
- *  Creates a pipeline from an MLData metadata object that takes input of the 
- *  same form as the input from the mldata would take, then outputs it as a final 
+ *  Creates a pipeline from an MLData metadata object that takes input of the
+ *  same form as the input from the mldata would take, then outputs it as a final
  *  vector named __vectorized_features__ that can then be used by other algorithms.
- *  The pipeline is returned.  The output variables to the pipeline are 
+ *  The pipeline is returned.  The output variables to the pipeline are
  */
 void setup_pipeline_from_mldata(
     CoreML::Pipeline& pipeline,
@@ -81,13 +81,13 @@ void setup_pipeline_from_mldata(
 
           if(metadata->column_type(column_idx) == flex_type_enum::STRING) {
             ohe.addInput(column_name, CoreML::FeatureType::String());
-            ohe.addOutput(column_name, 
+            ohe.addOutput(column_name,
                 CoreML::FeatureType::Dictionary(MLDictionaryFeatureTypeKeyType_int64KeyType));
 
             pipeline.addInput(column_name, CoreML::FeatureType::String());
             pipeline.add(ohe);
 
-            vect.addInput(column_name, 
+            vect.addInput(column_name,
                 CoreML::FeatureType::Dictionary(MLDictionaryFeatureTypeKeyType_int64KeyType));
             vect.add(column_name, dimension);
 
@@ -99,7 +99,7 @@ void setup_pipeline_from_mldata(
             pipeline.addInput(column_name, CoreML::FeatureType::Int64());
             pipeline.add(ohe);
 
-            vect.addInput(column_name, 
+            vect.addInput(column_name,
                 CoreML::FeatureType::Dictionary(MLDictionaryFeatureTypeKeyType_int64KeyType));
             vect.add(column_name, dimension);
 
@@ -118,21 +118,21 @@ void setup_pipeline_from_mldata(
           CoreML::DictVectorizer dv =
               CoreML::DictVectorizer("Dict Vectorizer on Column" + std::to_string(column_idx));
 
-          bool string_mode = false; 
+          bool string_mode = false;
 
-          std::set<flex_type_enum> key_types = metadata->indexer(column_idx)->extract_key_types(); 
+          std::set<flex_type_enum> key_types = metadata->indexer(column_idx)->extract_key_types();
 
-          if(key_types.size() == 1 
-             && *key_types.begin() == flex_type_enum::STRING) { 
+          if(key_types.size() == 1
+             && *key_types.begin() == flex_type_enum::STRING) {
 
             string_mode = true;
-          
-          } else if(key_types.size() == 1 
+
+          } else if(key_types.size() == 1
                     && *key_types.begin() == flex_type_enum::INTEGER) {
 
             string_mode = false;
 
-          } else { 
+          } else {
             log_and_throw("Only dictionary typed columns with all string or all "
                 "integer keys can be exported to coreml.");
           }
@@ -159,22 +159,22 @@ void setup_pipeline_from_mldata(
 
           size_t dimension = metadata->column_size(column_idx);
 
-          auto string_dict = CoreML::FeatureType::Dictionary(MLDictionaryFeatureTypeKeyType_stringKeyType); 
-          auto int_dict = CoreML::FeatureType::Dictionary(MLDictionaryFeatureTypeKeyType_int64KeyType); 
+          auto string_dict = CoreML::FeatureType::Dictionary(MLDictionaryFeatureTypeKeyType_stringKeyType);
+          auto int_dict = CoreML::FeatureType::Dictionary(MLDictionaryFeatureTypeKeyType_int64KeyType);
 
-          // Add in the correct 
+          // Add in the correct
           if(string_mode) {
-            dv.addInput(column_name, string_dict); 
-            pipeline.addInput(column_name, string_dict); 
-          } else { 
-            dv.addInput(column_name, int_dict); 
-            dv.addOutput(column_name, int_dict);  
+            dv.addInput(column_name, string_dict);
+            pipeline.addInput(column_name, string_dict);
+          } else {
+            dv.addInput(column_name, int_dict);
+            dv.addOutput(column_name, int_dict);
           }
 
-          dv.addOutput(column_name, int_dict);  
+          dv.addOutput(column_name, int_dict);
           pipeline.add(dv);
 
-          vect.addInput(column_name, int_dict);  
+          vect.addInput(column_name, int_dict);
           vect.add(column_name, dimension);
           break;
         }

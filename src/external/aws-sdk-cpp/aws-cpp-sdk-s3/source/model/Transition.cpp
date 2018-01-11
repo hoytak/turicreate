@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-Transition::Transition() : 
+Transition::Transition() :
     m_dateHasBeenSet(false),
     m_days(0),
     m_daysHasBeenSet(false),
@@ -37,7 +37,7 @@ Transition::Transition() :
 {
 }
 
-Transition::Transition(const XmlNode& xmlNode) : 
+Transition::Transition(const XmlNode& xmlNode) :
     m_dateHasBeenSet(false),
     m_days(0),
     m_daysHasBeenSet(false),

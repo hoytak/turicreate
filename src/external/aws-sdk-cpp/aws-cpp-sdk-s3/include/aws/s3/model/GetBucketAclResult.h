@@ -41,19 +41,19 @@ namespace Model
     GetBucketAclResult(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
     GetBucketAclResult& operator=(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
 
-    
+
     inline const Owner& GetOwner() const{ return m_owner; }
 
-    
+
     inline void SetOwner(const Owner& value) { m_owner = value; }
 
-    
+
     inline void SetOwner(Owner&& value) { m_owner = value; }
 
-    
+
     inline GetBucketAclResult& WithOwner(const Owner& value) { SetOwner(value); return *this;}
 
-    
+
     inline GetBucketAclResult& WithOwner(Owner&& value) { SetOwner(value); return *this;}
 
     /**

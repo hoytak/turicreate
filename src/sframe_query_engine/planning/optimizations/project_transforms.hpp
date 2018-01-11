@@ -13,7 +13,7 @@
 #include <sframe_query_engine/operators/operator_properties.hpp>
 #include <flexible_type/flexible_type.hpp>
 
-#include <array> 
+#include <array>
 
 namespace turi {
 namespace query_eval {
@@ -29,12 +29,12 @@ class opt_project_transform : public opt_transform {
 class opt_project_on_source : public opt_project_transform {
 
   std::string description() { return "project(source) -> source"; }
-  
+
   bool apply_transform(optimization_engine *opt_manager, cnode_info_ptr n) {
 
     if(n->inputs[0]->type != planner_node_type::SFRAME_SOURCE_NODE)
-      return false; 
-    
+      return false;
+
     auto flex_indices = n->p("indices").get<flex_list>();
 
     sframe old_sf = n->inputs[0]->any_p<sframe>("sframe");
@@ -43,9 +43,9 @@ class opt_project_on_source : public opt_project_transform {
     // columns present.
     if(flex_indices.size() > old_sf.num_columns())
       return false;
-    
+
     std::vector<std::shared_ptr<sarray<flexible_type> > > columns;
-    
+
     for(const auto& idx_f : flex_indices) {
       size_t idx = idx_f;
       DASSERT_LT(idx, old_sf.num_columns());
@@ -72,11 +72,11 @@ class opt_eliminate_identity_project : public opt_project_transform {
   std::string description() { return "project(a, {0,1,...,num_columns(a)}) -> a"; }
 
   bool apply_transform(optimization_engine *opt_manager, cnode_info_ptr n) {
-    
+
     const auto& flex_indices = n->p("indices").get<flex_list>();
 
     size_t nc = n->inputs[0]->num_columns();
-    
+
     if(flex_indices.size() != nc)
       return false;
 
@@ -102,8 +102,8 @@ class opt_merge_projects : public opt_project_transform {
     DASSERT_TRUE(n->type == planner_node_type::PROJECT_NODE);
 
     if(n->inputs[0]->type != planner_node_type::PROJECT_NODE)
-      return false; 
-    
+      return false;
+
     const auto& iv_1 = n->inputs[0]->p("indices").get<flex_list>();
     const auto& iv_2 = n->p("indices").get<flex_list>();
 
@@ -126,9 +126,9 @@ class opt_merge_projects : public opt_project_transform {
     }
 
     pnode_ptr out = op_project::make_planner_node(n->inputs[0]->inputs[0]->pnode, iv_out);
-    
+
     opt_manager->replace_node(n, out);
-    
+
     return true;
   }
 };
@@ -171,7 +171,7 @@ class opt_project_append_exchange : public opt_project_transform {
 class opt_project_logical_filter_exchange : public opt_project_transform {
 
   std::string description() { return "project(logical_filter(a), mask) -> logical_filter(project(a), mask)"; }
-    
+
   bool apply_transform(optimization_engine *opt_manager, cnode_info_ptr n) {
 
     DASSERT_TRUE(n->type == planner_node_type::PROJECT_NODE);
@@ -183,7 +183,7 @@ class opt_project_logical_filter_exchange : public opt_project_transform {
 
     if(iv.size() > n->inputs[0]->num_columns())
       return false;
-    
+
     std::vector<size_t> iv_s(iv.begin(), iv.end());
 
     pnode_ptr out = op_logical_filter::make_planner_node(
@@ -197,7 +197,7 @@ class opt_project_logical_filter_exchange : public opt_project_transform {
 
 };
 
-/**  Selectively pass a project through a union. 
+/**  Selectively pass a project through a union.
  *
  *   The goal of this operator is to pass a project through a union
  *   with the hope of pruning the tree before the union.  However,
@@ -205,7 +205,7 @@ class opt_project_logical_filter_exchange : public opt_project_transform {
  *   number of possible output transformations.
  *
  *   1.  One side is eliminated.  In this case, the union is dropped,
- *   and the projection simply is translated to the pre-union indices. 
+ *   and the projection simply is translated to the pre-union indices.
  *
  *   2.  The projection operator maintains the partitioning between
  *   the two union inputs.  In this case, it is replaced with
@@ -218,20 +218,20 @@ class opt_project_logical_filter_exchange : public opt_project_transform {
  *
  */
 class opt_union_project_exchange : public opt_project_transform {
-  
+
   std::string description() { return "partitionable_project(union(a,...)) ?->? union(project1(a), ...)"; }
-    
+
   bool apply_transform(optimization_engine *opt_manager, cnode_info_ptr n) {
-    
+
     DASSERT_TRUE(n->type == planner_node_type::PROJECT_NODE);
-    
+
     if(n->inputs[0]->type != planner_node_type::UNION_NODE)
       return false;
 
     cnode_info_ptr u_node = n->inputs[0];
 
     DASSERT_TRUE(!u_node->inputs.empty());
-    
+
     // Determine what kind of transformation we can do.  It's possible
     // that we don't do any.
     const auto& out_iv = n->p("indices").get<flex_list>();
@@ -260,7 +260,7 @@ class opt_union_project_exchange : public opt_project_transform {
     size_t current_input = 0;
     size_t current_input_idx = 0;
     for(size_t i = 0; i < u_node->num_columns(); ++i) {
-      
+
       if(output_used[i]) {
         projections_by_input[current_input].push_back(current_input_idx);
         remapped_indices[i] = i - current_offset;

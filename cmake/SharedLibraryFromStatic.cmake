@@ -2,24 +2,24 @@
 include(CMakeParseArguments)
 
 # shared_library_from_static([library name] REQUIRES [bunch of stuff] [DIRECT])
-# 
+#
 # This is performed in 2 stages.
 # Stage 1 collects the set of archives by building a dummy executable in them
 # but intercepting the link stage to find the set of archives.
 #
 # Stage 2 builds the actual shared library. It merges the archives listed
-# by stage 1 and uses that to put together the shared library 
+# by stage 1 and uses that to put together the shared library
 #
 # Stage 1:
 # .1 What we do first is to identify all the archive files. That is done by
 #   creating an executable. essentiallly generating make_executable(REQUIRES
-#   [bunch of stuff]) using a dummy cpp file.  
+#   [bunch of stuff]) using a dummy cpp file.
 # 2. We then intercept the link stage using (RULE_LAUNCH_LINK)
 #    redirecting it to a shell script called dump_library_list.sh
 # 3. dump_library_list (aside from completing the link), also generates 2
-# files. 
+# files.
 #     collect_archives.txt --> contains all libraries which live inside the
-#                               build directory 
+#                               build directory
 #     collect_libs.txt --> contains all libraries which live elsewhere.
 #
 #  Stage 2:
@@ -28,16 +28,16 @@ include(CMakeParseArguments)
 #  2.  And then once again, intercepts the link stage redirecting it to a
 #      shell script called collect_archive.sh
 #  3. This script will then:
-#     - unpack all the archives in collect_archives.txt, merging them into 
+#     - unpack all the archives in collect_archives.txt, merging them into
 #       a single library called collect.a
-#     - appends the contents of collect_libs.txt 
+#     - appends the contents of collect_libs.txt
 #     - combine it with the original shared library link line
 #       as well as instructing the linker to take the complete contents
 #       of collect.a (ex: -Wl,-whole-archive collect.a -Wl,-no-whole-archive)
-#     -  complete the link 
+#     -  complete the link
 #
 # If DIRECT is set, only direct dependencies in REQUIRES collected. Recursive
-# dependencies are not collected. 
+# dependencies are not collected.
 #
 #
 function(make_shared_library_from_static NAME)
@@ -57,7 +57,7 @@ function(make_shared_library_from_static NAME)
         endif()
 
         if (${args_DIRECT})
-                # if we are only collecting direct dependencies, 
+                # if we are only collecting direct dependencies,
                 # compile a string of all the targets targets
                 set(directfilelist)
                 foreach(req ${args_REQUIRES})

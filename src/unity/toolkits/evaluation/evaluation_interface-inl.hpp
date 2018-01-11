@@ -70,7 +70,7 @@ public:
 
 
 /**
- * Get the "highest" label as the reference label. 
+ * Get the "highest" label as the reference label.
  */
 inline flexible_type get_reference_label(
                 const std::unordered_set<flexible_type>& labels) {
@@ -93,10 +93,10 @@ inline flexible_type get_reference_label(
   }
   return ret;
 }
-     
+
 
 /**
- * Perform an None save average. 
+ * Perform an None save average.
 */
 inline flexible_type average_with_none_skip(
     std::unordered_map<flexible_type, flexible_type> scores) {
@@ -114,13 +114,13 @@ inline flexible_type average_with_none_skip(
   if (tot_classes == 0) {
     return FLEX_UNDEFINED;
   } else {
-    return flex_float(average / tot_classes); 
+    return flex_float(average / tot_classes);
   }
 }
 
 /**
- * Check that probabilities are in the range [0, 1]. 
- * 
+ * Check that probabilities are in the range [0, 1].
+ *
 */
 inline bool check_probability_range(const double& pred) {
   if ((pred < 0 - EVAL_ZERO) || (pred > (1 + EVAL_ZERO))) {
@@ -130,7 +130,7 @@ inline bool check_probability_range(const double& pred) {
 }
 
 /**
- * Check undefined. 
+ * Check undefined.
 */
 inline bool check_undefined(const flexible_type& pred) {
   if (pred.get_type() == flex_type_enum::UNDEFINED) {
@@ -145,11 +145,11 @@ inline bool check_undefined(const flexible_type& pred) {
  * \param[in] tp True positives.
  * \param[in] fp False positives.
 */
-inline flexible_type compute_precision_score(size_t tp, size_t fp) { 
+inline flexible_type compute_precision_score(size_t tp, size_t fp) {
   if (tp + fp > 0) {
     return double(tp)/(tp + fp);
   } else {
-    return FLEX_UNDEFINED; 
+    return FLEX_UNDEFINED;
   }
 }
 
@@ -159,14 +159,14 @@ inline flexible_type compute_precision_score(size_t tp, size_t fp) {
  * \param[in] tp True positives.
  * \param[in] fn False negatives.
 */
-inline flexible_type compute_recall_score(size_t tp, size_t fn) { 
+inline flexible_type compute_recall_score(size_t tp, size_t fn) {
   if (tp + fn > 0) {
     return double(tp)/(tp + fn);
   } else {
-    return FLEX_UNDEFINED; 
+    return FLEX_UNDEFINED;
   }
 }
-    
+
 /**
  * Compute fbeta_score (returns None when not defined)
  *
@@ -179,16 +179,16 @@ inline flexible_type compute_fbeta_score(
 
   flexible_type pr = compute_precision_score(tp, fp);
   flexible_type rec = compute_recall_score(tp, fn);
-      
+
   if (pr == FLEX_UNDEFINED) {
     return rec;
   }
   if (rec == FLEX_UNDEFINED) {
     return pr;
   }
- 
-  double pr_d = pr.get<double>(); 
-  double rec_d = rec.get<double>(); 
+
+  double pr_d = pr.get<double>();
+  double rec_d = rec.get<double>();
   double denom = std::max(1e-20, beta * beta * pr_d + rec_d);
   return (1.0 + beta * beta) * (pr_d * rec_d) / denom;
 }
@@ -247,17 +247,17 @@ class supervised_evaluation_interface {
    * \param[in] n_threads Number of threads.
    */
   virtual void init(size_t _n_threads = 1) = 0;
-  
+
   /**
-   * Returns true of this evaluator works on probabilities/scores (vs) 
-   * classes. 
+   * Returns true of this evaluator works on probabilities/scores (vs)
+   * classes.
    */
   virtual bool is_prob_evaluator() const {
     return false;
   }
-  
+
   /**
-   * Returns true of this evaluator can be displayed as a single float value. 
+   * Returns true of this evaluator can be displayed as a single float value.
    */
   virtual bool is_table_printer_compatible() const {
     return true;
@@ -473,8 +473,8 @@ class multiclass_logloss: public supervised_evaluation_interface {
    * Constructor.
    */
   multiclass_logloss(
-      const std::unordered_map<flexible_type, size_t>& index_map, 
-      size_t num_classes = size_t(-1)) { 
+      const std::unordered_map<flexible_type, size_t>& index_map,
+      size_t num_classes = size_t(-1)) {
     m_index_map = index_map;
     if (num_classes == size_t(-1)) {
       this->num_classes = index_map.size();
@@ -484,8 +484,8 @@ class multiclass_logloss: public supervised_evaluation_interface {
   }
 
   /**
-   * Returns true of this evaluator works on probabilities/scores (vs) 
-   * classes. 
+   * Returns true of this evaluator works on probabilities/scores (vs)
+   * classes.
    */
   bool is_prob_evaluator() const {
     return true;
@@ -526,14 +526,14 @@ class multiclass_logloss: public supervised_evaluation_interface {
                                  const std::vector<double>& prediction,
                                  size_t thread_id = 0){
     DASSERT_TRUE(thread_id < n_threads);
-    
-    // If the class provided is a "new" class then treat the probability as 0.0; 
+
+    // If the class provided is a "new" class then treat the probability as 0.0;
     double pred = 0.0;
     if (target < prediction.size()) {
       pred = prediction[target];
     }
     num_examples[thread_id]++;
-    check_probability_range(pred); 
+    check_probability_range(pred);
     logloss[thread_id] += log(
         std::max(std::min(1.0 - EVAL_ZERO, pred), EVAL_ZERO));
   }
@@ -551,7 +551,7 @@ class multiclass_logloss: public supervised_evaluation_interface {
                         size_t thread_id = 0){
     DASSERT_TRUE(thread_id < n_threads);
     num_examples[thread_id]++;
-  
+
 
     // Error out!
     if(prediction.size() != this->num_classes) {
@@ -560,9 +560,9 @@ class multiclass_logloss: public supervised_evaluation_interface {
          << "(" << prediction.size() << ") != number of classes"
          << "(" << m_index_map.size() << ")." << std::endl;
       log_and_throw(ss.str());
-    } 
-   
-    // If the class provided is a "new" class then treat the probability as 0.0; 
+    }
+
+    // If the class provided is a "new" class then treat the probability as 0.0;
     auto it = m_index_map.find(target);
     size_t label = 0;
     double pred = 0.0;
@@ -574,8 +574,8 @@ class multiclass_logloss: public supervised_evaluation_interface {
         pred = preds[label];
       }
     }
-    
-    check_probability_range(pred); 
+
+    check_probability_range(pred);
     logloss[thread_id] += log(
         std::max(std::min(1.0 - 1e-15, pred), 1e-15));
   }
@@ -614,15 +614,15 @@ class binary_logloss: public supervised_evaluation_interface {
   std::unordered_map<flexible_type, size_t> index_map;
 
   public:
-  
+
   /**
-   * Constructor. 
+   * Constructor.
    *
    * \param[in] index_map Dictionary from flexible_type -> size_t for classes.
    */
   binary_logloss(
-      std::unordered_map<flexible_type, size_t> index_map = 
-                  std::unordered_map<flexible_type, size_t>()) { 
+      std::unordered_map<flexible_type, size_t> index_map =
+                  std::unordered_map<flexible_type, size_t>()) {
     this->index_map = index_map;
   }
 
@@ -633,10 +633,10 @@ class binary_logloss: public supervised_evaluation_interface {
     return (std::string)("binary_logloss");
   }
 
-  
+
   /**
-   * Returns true of this evaluator works on probabilities/scores (vs) 
-   * classes. 
+   * Returns true of this evaluator works on probabilities/scores (vs)
+   * classes.
    */
   bool is_prob_evaluator() const {
     return true;
@@ -672,8 +672,8 @@ class binary_logloss: public supervised_evaluation_interface {
     DASSERT_TRUE(thread_id < n_threads);
     num_examples[thread_id]++;
     check_probability_range(prediction);
-    logloss[thread_id] += 
-      log(target !=0 ? std::max(prediction, EVAL_ZERO) : 
+    logloss[thread_id] +=
+      log(target !=0 ? std::max(prediction, EVAL_ZERO) :
                        std::max(1.0 - prediction, EVAL_ZERO));
   }
 
@@ -690,8 +690,8 @@ class binary_logloss: public supervised_evaluation_interface {
                         size_t thread_id = 0){
     DASSERT_TRUE(thread_id < n_threads);
     check_undefined(prediction);
-    DASSERT_TRUE((prediction.get_type() == flex_type_enum::FLOAT) || 
-                 (prediction.get_type() == flex_type_enum::INTEGER)); 
+    DASSERT_TRUE((prediction.get_type() == flex_type_enum::FLOAT) ||
+                 (prediction.get_type() == flex_type_enum::INTEGER));
     DASSERT_EQ(index_map.size(), 2);
     DASSERT_TRUE(index_map.count(target) > 0);
 
@@ -699,7 +699,7 @@ class binary_logloss: public supervised_evaluation_interface {
     size_t label = index_map.at(target);
     double pred = prediction.to<double>();
     check_probability_range(pred);
-    logloss[thread_id] += 
+    logloss[thread_id] +=
       log(label != 0 ? std::max(pred, EVAL_ZERO) : std::max(1.0 - pred, EVAL_ZERO));
   }
 
@@ -765,7 +765,7 @@ class classifier_accuracy: public supervised_evaluation_interface {
       num_examples[i] = 0;
     }
   }
-  
+
 
   /**
    * Register a (target, prediction) pair that are unmapped
@@ -845,8 +845,8 @@ class confusion_matrix: public supervised_evaluation_interface {
   std::vector<std::unordered_map<std::pair<flexible_type, flexible_type>, size_t,
                                                         flex_pair_hash>> counts;
   protected:
-  
-  // Useful variables 
+
+  // Useful variables
   size_t n_threads = 0;
   std::unordered_set<flexible_type> labels;
   std::map<size_t, flexible_type> index_map;
@@ -855,11 +855,11 @@ class confusion_matrix: public supervised_evaluation_interface {
 
 
   public:
-  
+
   /**
-   * Constructor. 
+   * Constructor.
    */
-  confusion_matrix(std::map<size_t, flexible_type> index_map = 
+  confusion_matrix(std::map<size_t, flexible_type> index_map =
                                         std::map<size_t, flexible_type>()) {
     this->index_map = index_map;
   }
@@ -878,12 +878,12 @@ class confusion_matrix: public supervised_evaluation_interface {
     n_threads = _n_threads;
     counts.resize(n_threads);
   }
-  
+
   /**
-   * Returns true of this evaluator can be displayed as a single float value. 
+   * Returns true of this evaluator can be displayed as a single float value.
    */
   virtual bool is_table_printer_compatible() const {
-    return false; 
+    return false;
   }
 
   /**
@@ -1072,7 +1072,7 @@ class precision_recall_base : public confusion_matrix {
   std::unordered_map<flexible_type, size_t> tn; // True negatives
   std::unordered_map<flexible_type, size_t> fp; // False positives
   std::unordered_map<flexible_type, size_t> fn; // False negatives
-    
+
   public:
 
   /**
@@ -1103,9 +1103,9 @@ class precision_recall_base : public confusion_matrix {
    * Name of the evaluator.
    */
   std::string name() const = 0;
-  
+
   /**
-   * Returns true of this evaluator can be displayed as a single float value. 
+   * Returns true of this evaluator can be displayed as a single float value.
    */
   bool is_table_printer_compatible() const {
     return average != average_type_enum::NONE;
@@ -1234,7 +1234,7 @@ class fbeta_score: public precision_recall_base {
           total_fn += fn[l];
         }
         return to_variant(compute_fbeta_score(total_tp, total_fp, total_fn, beta));
-      
+
       // Average scores.
       }
       case average_type_enum::DEFAULT:
@@ -1290,7 +1290,7 @@ class precision : public precision_recall_base {
     DASSERT_TRUE(labels.size() >= 0);
     DASSERT_EQ(fp.size(), labels.size());
     DASSERT_EQ(tp.size(), labels.size());
-    
+
 
     // Multi-class vs binary classification.
     std::unordered_map<flexible_type, flexible_type> precision_scores;
@@ -1507,7 +1507,7 @@ class flexible_accuracy : public precision_recall_base {
 
 /**
  * Computes the ROC curve. An aggregated version is computed, where we
- * compute the true positive rate and false positive rate for a set of 
+ * compute the true positive rate and false positive rate for a set of
  * 1000 predefined thresholds equally spaced from 0 to 1.
  * For each prediction, we find which bin it belongs to and we increment
  * the count of true positives (where y=1 and yhat is greater than the lower
@@ -1520,23 +1520,23 @@ class flexible_accuracy : public precision_recall_base {
  *   where prediction_prob is the probability of the "positive" class. Here
  *   the "positive" class is defined as the largest class as sorted by flexible_type
  *   semantics.
- * 
+ *
  * - multiclass mode: In this mode, the inputs are (target_class, prob_vec)
- *   where prob_vec are the vector of probabilities. In this case, the 
- *   target_class must be integer 
+ *   where prob_vec are the vector of probabilities. In this case, the
+ *   target_class must be integer
  */
 class roc_curve: public supervised_evaluation_interface {
 
-  
+
   private:
 
   // Accumulators
-  std::unordered_map<std::pair<flexible_type, flexible_type>, size_t, 
+  std::unordered_map<std::pair<flexible_type, flexible_type>, size_t,
          flex_pair_hash> final_counts_thread, final_counts;
   std::vector<std::vector<std::vector<size_t>>> tpr;
   std::vector<std::vector<std::vector<size_t>>> fpr;
   std::vector<std::vector<size_t>> num_examples;
-  
+
   protected:
 
   // Options
@@ -1553,23 +1553,23 @@ class roc_curve: public supervised_evaluation_interface {
   std::vector<std::vector<size_t>> total_fp;
   std::vector<std::vector<size_t>> total_tp;
   std::vector<size_t> total_examples;
-  
+
   public:
 
   /**
-   * Constructor. 
+   * Constructor.
    *
    * \param[in] index_map Dictionary from flexible_type -> size_t for classes.
    * \param[in] average   Averaging mode
    * \param[in] binary    Is the input mode expected to be binary?
    */
   roc_curve(
-      std::unordered_map<flexible_type, size_t> index_map = 
-                  std::unordered_map<flexible_type, size_t>(), 
-      flexible_type average = FLEX_UNDEFINED, 
-      bool binary = true, 
-      size_t num_classes = size_t(-1)) { 
-    this->average = average_type_enum_from_name(average); 
+      std::unordered_map<flexible_type, size_t> index_map =
+                  std::unordered_map<flexible_type, size_t>(),
+      flexible_type average = FLEX_UNDEFINED,
+      bool binary = true,
+      size_t num_classes = size_t(-1)) {
+    this->average = average_type_enum_from_name(average);
     this->binary = binary;
     this->index_map = index_map;
     if (num_classes == size_t(-1)) {
@@ -1580,37 +1580,37 @@ class roc_curve: public supervised_evaluation_interface {
   }
 
   /**
-   * Name of the evaluator. 
+   * Name of the evaluator.
    */
-  std::string name() const { 
+  std::string name() const {
     return (std::string)("roc_curve");
   }
-  
+
   /**
-   * Returns true of this evaluator works on probabilities/scores (vs) 
-   * classes. 
+   * Returns true of this evaluator works on probabilities/scores (vs)
+   * classes.
    */
   bool is_prob_evaluator() const {
     return true;
   }
-  
+
   /**
-   * Returns true of this evaluator can be displayed as a single float value. 
+   * Returns true of this evaluator can be displayed as a single float value.
    */
   virtual bool is_table_printer_compatible() const {
-    return false; 
+    return false;
   }
- 
+
   /**
    * Init the state with a variant type.
    */
-  void init(size_t _n_threads = 1) { 
+  void init(size_t _n_threads = 1) {
     DASSERT_TRUE(num_classes > 0);
     DASSERT_LE(binary, num_classes == 2);
 
     // Init the options.
     n_threads = _n_threads;
-   
+
     // Initialize the accumulators
     tpr.resize(n_threads);
     fpr.resize(n_threads);
@@ -1631,7 +1631,7 @@ class roc_curve: public supervised_evaluation_interface {
         }
       }
     }
-    
+
     // Initialize the aggregators.
     total_fp.resize(num_classes);
     total_tp.resize(num_classes);
@@ -1654,9 +1654,9 @@ class roc_curve: public supervised_evaluation_interface {
 
     // This effectively makes the upper bin [0.999, 1] instead of [0.999, 1).
     // If a prediction is exactly 1.0, then it would get assigned to
-    // a bin with lower bound 1.0, but since we want 1000 bins, we move 
+    // a bin with lower bound 1.0, but since we want 1000 bins, we move
     // these into the bin with lower bound 0.999.
-    if (bin == NUM_BINS) bin -= 1; 
+    if (bin == NUM_BINS) bin -= 1;
     return bin;
   }
 
@@ -1664,7 +1664,7 @@ class roc_curve: public supervised_evaluation_interface {
     // Get the lower threshold of predictions that fall into this bin.
     return bin/((double)NUM_BINS);
   }
-  
+
   /**
    * Register a (target, prediction) pair
    *
@@ -1673,16 +1673,16 @@ class roc_curve: public supervised_evaluation_interface {
    * \param[in] thread_id  Thread id
    *
    */
-  void register_example(const flexible_type& target, 
+  void register_example(const flexible_type& target,
                         const flexible_type& prediction,
                         size_t thread_id = 0){
     DASSERT_LT(thread_id, n_threads);
     DASSERT_LT(thread_id, fpr.size());
     DASSERT_LT(thread_id, tpr.size());
     check_undefined(prediction);
-    DASSERT_EQ(binary, (prediction.get_type() == flex_type_enum::FLOAT) || 
-                       (prediction.get_type() == flex_type_enum::INTEGER)); 
-    DASSERT_EQ(!binary, prediction.get_type() == flex_type_enum::VECTOR); 
+    DASSERT_EQ(binary, (prediction.get_type() == flex_type_enum::FLOAT) ||
+                       (prediction.get_type() == flex_type_enum::INTEGER));
+    DASSERT_EQ(!binary, prediction.get_type() == flex_type_enum::VECTOR);
 
     // The index for this target. Skip the example if it doesn't exist!
     size_t idx = 0;
@@ -1697,13 +1697,13 @@ class roc_curve: public supervised_evaluation_interface {
     // Binary mode.
     if (binary) {
       DASSERT_EQ(num_classes, 2);
-      
+
       // Add this example to the prediction counter.
       double pred = prediction.to<double>();
       check_probability_range(pred);
       size_t bin = get_bin(pred);
-    
-      if (idx == 1) { 
+
+      if (idx == 1) {
         DASSERT_LT(bin, tpr[thread_id][1].size());
         DASSERT_LT(bin, fpr[thread_id][0].size());
         tpr[thread_id][1][bin]++;
@@ -1727,8 +1727,8 @@ class roc_curve: public supervised_evaluation_interface {
            << "(" << prediction.size() << ") != number of classes"
            << "(" << num_classes << ")." << std::endl;
         log_and_throw(ss.str());
-      } 
-      
+      }
+
       // Data point in the test set but not in the training set. Skip.
       if (idx >= prediction.size()) {
         return;
@@ -1738,9 +1738,9 @@ class roc_curve: public supervised_evaluation_interface {
       for (size_t i = 0; i < prediction.size(); i++) {
         check_probability_range(prediction[i]);
         size_t bin = get_bin(prediction[i]);
-      
-        // Update the tpr and fpr rates! 
-        if (i == idx) { 
+
+        // Update the tpr and fpr rates!
+        if (i == idx) {
           DASSERT_LT(bin, tpr[thread_id][idx].size());
           tpr[thread_id][i][bin]++;
         } else {
@@ -1752,23 +1752,23 @@ class roc_curve: public supervised_evaluation_interface {
     }
 
   }
-  
+
   /**
-   * Gather global metrics for true_positives and false negatives 
+   * Gather global metrics for true_positives and false negatives
    */
   void gather_global_metrics() {
-   
+
     // Total fp, tp, examples
     for (size_t i = 0; i < n_threads; ++i) {
       for (size_t c = 0; c < num_classes; c++) {
-        total_examples[c]  += num_examples[i][c]; 
+        total_examples[c]  += num_examples[i][c];
         for (size_t j = 0; j < NUM_BINS; ++j) {
           total_fp[c][j] += fpr[i][c][j];
           total_tp[c][j] += tpr[i][c][j];
-        } 
+        }
       }
     }
-    
+
     // Get the number of false positives and true positives for all
     // bins above the current bin.
     for (size_t c = 0; c < num_classes; c++) {
@@ -1779,7 +1779,7 @@ class roc_curve: public supervised_evaluation_interface {
     }
 
   }
-  
+
   /**
    * Return the final metric.
    */
@@ -1793,10 +1793,10 @@ class roc_curve: public supervised_evaluation_interface {
     auto compute_roc_curve = [total_bins, _num_classes](
           const std::vector<std::vector<size_t>>& total_fp,
           const std::vector<std::vector<size_t>>& total_tp,
-          const std::vector<size_t>& total_examples, 
-          const size_t& c,  
-          bool binary = true, // Is this in binary mode? 
-          const std::map<size_t, flexible_type>& inv_map = 
+          const std::vector<size_t>& total_examples,
+          const size_t& c,
+          bool binary = true, // Is this in binary mode?
+          const std::map<size_t, flexible_type>& inv_map =
                  std::map<size_t, flexible_type>())  -> variant_type {
 
       size_t all_examples = 0;
@@ -1807,10 +1807,10 @@ class roc_curve: public supervised_evaluation_interface {
       // Columns in the SFrame.
       sframe ret;
       std::vector<std::string> col_names {"threshold", "fpr", "tpr", "p", "n"};
-      std::vector<flex_type_enum> col_types {flex_type_enum::FLOAT, 
-                                             flex_type_enum::FLOAT, 
+      std::vector<flex_type_enum> col_types {flex_type_enum::FLOAT,
                                              flex_type_enum::FLOAT,
-                                             flex_type_enum::INTEGER, 
+                                             flex_type_enum::FLOAT,
+                                             flex_type_enum::INTEGER,
                                              flex_type_enum::INTEGER};
 
       // Not binary, add class to it!
@@ -1823,9 +1823,9 @@ class roc_curve: public supervised_evaluation_interface {
       ret.open_for_write(col_names, col_types, "", 1);
       std::vector<flexible_type> out_v;
       auto it_out = ret.get_output_iterator(0);
-      
+
       // Write to the SFrame.
-      size_t cl = 0; 
+      size_t cl = 0;
       do {
         if (binary) cl = c;
 
@@ -1833,18 +1833,18 @@ class roc_curve: public supervised_evaluation_interface {
         for (size_t j=0; j < total_bins; ++j) {
           DASSERT_LE(total_tp[cl][j], total_examples[cl]);
           DASSERT_LE(total_fp[cl][j], all_examples - total_examples[cl]);
-          out_v = {j / double(total_bins), 
-                   (1.0 * total_fp[cl][j]) / (all_examples - total_examples[cl]), 
-                   (1.0 * total_tp[cl][j]) / total_examples[cl], 
+          out_v = {j / double(total_bins),
+                   (1.0 * total_fp[cl][j]) / (all_examples - total_examples[cl]),
+                   (1.0 * total_tp[cl][j]) / total_examples[cl],
                    total_examples[cl], (all_examples - total_examples[cl])};
           if (not binary) {
             out_v.push_back(inv_map.at(cl));
           }
-          *it_out = out_v; 
+          *it_out = out_v;
         }
-      
+
         // Manually add final row.
-        out_v = {1.0, 0.0, 0.0, 
+        out_v = {1.0, 0.0, 0.0,
                  total_examples[c], (all_examples - total_examples[c])};
         if (not binary) {
             out_v.push_back(inv_map.at(cl));
@@ -1853,24 +1853,24 @@ class roc_curve: public supervised_evaluation_interface {
         // Write the row.
         *it_out = out_v;
         cl++;
-        
+
         if (binary) break;
         if (cl == _num_classes) break;
 
       } while (true);
-      
+
       ret.close();
-      DASSERT_EQ(ret.size(), 
-            (total_bins + 1) * (binary + (1 - binary) * _num_classes)); 
+      DASSERT_EQ(ret.size(),
+            (total_bins + 1) * (binary + (1 - binary) * _num_classes));
 
       // Convert to variant type.
       std::shared_ptr<unity_sframe> tmp = std::make_shared<unity_sframe>();
       tmp->construct_from_sframe(ret);
       variant_type roc_curve = to_variant<std::shared_ptr<unity_sframe>>(tmp);
-      return roc_curve; 
+      return roc_curve;
 
     }; // end-of-helper function.
-    
+
     // Compute the integral with respect to ROC-1
     if (num_classes == 2) {
       return to_variant(compute_roc_curve(total_fp, total_tp, total_examples, 1));
@@ -1882,8 +1882,8 @@ class roc_curve: public supervised_evaluation_interface {
       case average_type_enum::NONE:
       case average_type_enum::DEFAULT:
       {
-      
-        // Create an inverse map.    
+
+        // Create an inverse map.
         std::map<size_t, flexible_type> inv_map;
         for (const auto& kvp: index_map) {
           inv_map[kvp.second] = kvp.first;
@@ -1892,7 +1892,7 @@ class roc_curve: public supervised_evaluation_interface {
       }
 
       default:
-        DASSERT_TRUE(false); 
+        DASSERT_TRUE(false);
     }
 
     DASSERT_TRUE(false);
@@ -1901,26 +1901,26 @@ class roc_curve: public supervised_evaluation_interface {
 
 
 /*
- * Compute the Area Under the Curve (AUC) using the trapezoidal rule 
+ * Compute the Area Under the Curve (AUC) using the trapezoidal rule
  */
 class auc: public roc_curve {
 
-  public: 
+  public:
 
   /**
-   * Constructor. 
+   * Constructor.
    *
    * \param[in] index_map Dictionary from flexible_type -> size_t for classes.
    * \param[in] average   Averaging mode
    * \param[in] binary    Is the input mode expected to be binary?
    */
   auc(
-      std::unordered_map<flexible_type, size_t> index_map = 
-                  std::unordered_map<flexible_type, size_t>(), 
-      flexible_type average = "micro", 
-      bool binary = true, 
-      size_t num_classes = size_t(-1)) { 
-    this->average = average_type_enum_from_name(average); 
+      std::unordered_map<flexible_type, size_t> index_map =
+                  std::unordered_map<flexible_type, size_t>(),
+      flexible_type average = "micro",
+      bool binary = true,
+      size_t num_classes = size_t(-1)) {
+    this->average = average_type_enum_from_name(average);
     this->binary = binary;
     this->index_map = index_map;
     if (num_classes == size_t(-1)) {
@@ -1931,33 +1931,33 @@ class auc: public roc_curve {
   }
 
   /*
-   * Name of the evaluator. 
+   * Name of the evaluator.
    */
-  std::string name() const { 
+  std::string name() const {
     return (std::string)("auc");
   }
-  
+
   /**
-   * Returns true of this evaluator can be displayed as a single float value. 
+   * Returns true of this evaluator can be displayed as a single float value.
    */
   virtual bool is_table_printer_compatible() const {
-    return average != average_type_enum::NONE; 
+    return average != average_type_enum::NONE;
   }
-  
- 
+
+
   /**
    * Return the final metric.
    */
   variant_type get_metric() {
 
     this->gather_global_metrics();
-    
+
     // Compute the auc-score.
-    size_t total_bins = NUM_BINS; 
+    size_t total_bins = NUM_BINS;
     auto compute_auc = [total_bins](
           const std::vector<std::vector<size_t>>& total_fp,
           const std::vector<std::vector<size_t>>& total_tp,
-          const std::vector<size_t>& total_examples, 
+          const std::vector<size_t>& total_examples,
           const size_t& c)  -> double {
 
       size_t all_examples = 0;
@@ -1970,13 +1970,13 @@ class auc: public roc_curve {
         double delta = total_fp[c][i] - total_fp[c][i+1];
         delta /= (all_examples - total_examples[c]);
         if (delta > 1e-10) {
-          auc_score += 0.5 * (total_tp[c][i] + total_tp[c][i+1]) * delta 
+          auc_score += 0.5 * (total_tp[c][i] + total_tp[c][i+1]) * delta
                                                           / total_examples[c];
-        } 
+        }
       }
       return auc_score;
     };
-    
+
     // Compute the integral with respect to ROC-1
     if (num_classes == 2) {
       return to_variant(compute_auc(total_fp, total_tp, total_examples, 1));
@@ -1987,8 +1987,8 @@ class auc: public roc_curve {
       // Score for each class.
       case average_type_enum::NONE:
       {
-      
-        // Create an inverse map.    
+
+        // Create an inverse map.
         std::map<size_t, flexible_type> inv_map;
         for (const auto& kvp: index_map) {
           inv_map[kvp.second] = kvp.first;
@@ -2025,9 +2025,9 @@ class auc: public roc_curve {
 /*
  * Factory method to get the set of evaluation metrics.
  * \param[in] metric Name of the metric
- * \param[in] kwargs Arguments for the metric 
+ * \param[in] kwargs Arguments for the metric
  *
- * 
+ *
  * \example
  *
  * For a constructor of the following format:
@@ -2038,7 +2038,7 @@ class auc: public roc_curve {
  *
  * this factory function can be called as follows:
  *
- * get_evaluator_metric("flexible_accuracy", 
+ * get_evaluator_metric("flexible_accuracy",
  *            {"average", to_variant(std::string("micro"))})
  *
  * This is intended to work just like the python side.
@@ -2053,10 +2053,10 @@ inline std::shared_ptr<supervised_evaluation_interface> get_evaluator_metric(
     evaluator = std::make_shared<rmse>(rmse());
   } else if(metric == "max_error"){
     evaluator = std::make_shared<max_error>(max_error());
-  
+
   } else if(metric == "confusion_matrix_no_map"){
     evaluator = std::make_shared<confusion_matrix>(confusion_matrix());
-  
+
   } else if(metric == "confusion_matrix"){
     DASSERT_TRUE(kwargs.count("inv_index_map") > 0);
     std::map<size_t, flexible_type> inv_map = variant_get_value<
@@ -2070,7 +2070,7 @@ inline std::shared_ptr<supervised_evaluation_interface> get_evaluator_metric(
   } else if(metric == "accuracy"){
     evaluator = std::make_shared<classifier_accuracy>(classifier_accuracy());
 
-  } else if(metric == "binary_logloss") { 
+  } else if(metric == "binary_logloss") {
     DASSERT_TRUE(kwargs.count("index_map") > 0);
     auto index_map = variant_get_value<
        std::unordered_map<flexible_type, size_t>>(kwargs.at("index_map"));
@@ -2116,35 +2116,35 @@ inline std::shared_ptr<supervised_evaluation_interface> get_evaluator_metric(
       num_classes = variant_get_value<size_t>(kwargs.at("num_classes"));
     }
     evaluator = std::make_shared<auc>(auc(index_map, average, binary, num_classes));
-  
+
   } else if(metric == "flexible_accuracy"){
     DASSERT_TRUE(kwargs.count("average") > 0);
     auto average = variant_get_value<flexible_type>(kwargs.at("average"));
     evaluator = std::make_shared<flexible_accuracy>(
                                       flexible_accuracy(average));
-  
+
   } else if(metric == "precision"){
     DASSERT_TRUE(kwargs.count("average") > 0);
     auto average = variant_get_value<flexible_type>(kwargs.at("average"));
     evaluator = std::make_shared<precision>(precision(average));
-  
+
   } else if(metric == "recall"){
     DASSERT_TRUE(kwargs.count("average") > 0);
     auto average = variant_get_value<flexible_type>(kwargs.at("average"));
     evaluator = std::make_shared<recall>(recall(average));
-  
+
   } else if(metric == "fbeta_score"){
     DASSERT_TRUE(kwargs.count("beta") > 0);
     DASSERT_TRUE(kwargs.count("average") > 0);
     auto beta = variant_get_value<double>(kwargs.at("beta"));
     auto average = variant_get_value<flexible_type>(kwargs.at("average"));
     evaluator = std::make_shared<fbeta_score>(fbeta_score(beta, average));
-  
+
   } else if(metric == "f1_score"){
     DASSERT_TRUE(kwargs.count("average") > 0);
     auto average = variant_get_value<flexible_type>(kwargs.at("average"));
     evaluator = std::make_shared<fbeta_score>(fbeta_score(1.0, average));
-  
+
   } else {
     log_and_throw("\'" + metric + "\' is not a supported evaluation metric.");
   }

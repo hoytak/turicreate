@@ -837,7 +837,7 @@ archive_read_format_7zip_read_data(struct archive_read *a,
 			    "7-Zip bad CRC: 0x%lx should be 0x%lx",
 			    (unsigned long)zip->entry_crc32,
 			    (unsigned long)zip->si.ss.digests[
-			    		zip->entry->ssIndex]);
+					zip->entry->ssIndex]);
 			ret = ARCHIVE_WARN;
 		}
 	}
@@ -3883,4 +3883,3 @@ Bcj2_Decode(struct _7zip *zip, uint8_t *outBuf, size_t outSize)
 
 	return ((ssize_t)outPos);
 }
-

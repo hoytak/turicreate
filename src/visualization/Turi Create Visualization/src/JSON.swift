@@ -15,15 +15,15 @@ public class JSON {
         }
         return objectString
     }
-    
+
     public static func stringify(obj: [String: Any]) throws -> String {
         return try self.stringify(anything:obj)
     }
-    
+
     public static func stringify(arr: [Any]) throws -> String {
         return try self.stringify(anything:arr)
     }
-    
+
     public static func parse(str: String) throws -> Any {
         guard let data = str.data(using: String.Encoding.utf8, allowLossyConversion: false) else {
             throw VisualizationError.JSONSerializationError

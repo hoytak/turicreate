@@ -23,9 +23,9 @@ csv_line_tokenizer::csv_line_tokenizer() {
 }
 
 
-bool csv_line_tokenizer::tokenize_line(const char* str, size_t len, 
+bool csv_line_tokenizer::tokenize_line(const char* str, size_t len,
                                        std::function<bool (std::string&, size_t)> fn) {
-  return tokenize_line_impl((char*)str, len, 
+  return tokenize_line_impl((char*)str, len,
                             [&](char* buf, size_t len)->bool {
                               if (len == 0) {
                                 std::string tmp;
@@ -70,7 +70,7 @@ bool csv_line_tokenizer::tokenize_line(const char* str, size_t len,
                          if (len > 0 && buf[len - 1] == quote_char) --len;
                          output.emplace_back(buf, len);
                          if (is_quoted) {
-                           unescape_string(output.back(), escape_char, 
+                           unescape_string(output.back(), escape_char,
                                            quote_char, double_quote);
                          }
                          return true;
@@ -102,14 +102,14 @@ size_t csv_line_tokenizer::tokenize_line(char* str, size_t len,
   size_t ctr = 0;
   size_t num_outputs = output.size();
   if (output_order != nullptr) num_outputs = output_order->size();
-  bool success = 
+  bool success =
   tokenize_line_impl(str, len,
                      [&](char* buf, size_t len)->bool {
                        if (ctr >= num_outputs) {
                          // special handling for space delimiters
                          // If we exceeded the expected number of output columns
-                         // but if the remaining characters are empty or 
-                         // all whitespace, we do not fail. 
+                         // but if the remaining characters are empty or
+                         // all whitespace, we do not fail.
                          // But instead simply ignore.
                          if (delimiter_is_space_but_not_tab) {
                            if (len == 0) return true;
@@ -134,10 +134,10 @@ size_t csv_line_tokenizer::tokenize_line(char* str, size_t len,
                        // length is 0. Except string. which will become an
                        // empty string.
                        if (len == 0) {
-                         if (permit_undefined && 
+                         if (permit_undefined &&
                              outtype != flex_type_enum::STRING) {
                            output[output_idx].reset(flex_type_enum::UNDEFINED);
-                         } else if (permit_undefined && 
+                         } else if (permit_undefined &&
                              outtype == flex_type_enum::STRING &&
                              empty_string_in_na_values) {
                            output[output_idx].reset(flex_type_enum::UNDEFINED);
@@ -163,7 +163,7 @@ size_t csv_line_tokenizer::tokenize_line(char* str, size_t len,
                        size_t output_idx = ctr;
                        if (output_order != nullptr) output_idx = (*output_order)[ctr];
                        if (output_idx == (size_t)(-1)) {
-                         // no output required. Just parse the contents 
+                         // no output required. Just parse the contents
                          // and drop the result
                          const char* prevbuf = (*buf);
                          parser->general_flexible_type_parse(buf, bufend - (*buf));
@@ -190,7 +190,7 @@ size_t csv_line_tokenizer::tokenize_line(char* str, size_t len,
                          return false;
                        }
                        // no recursive parse. so parse_as will not modify the buffer
-                       bool success = parse_as((char**)buf, bufend - (*buf), 
+                       bool success = parse_as((char**)buf, bufend - (*buf),
                                                output[output_idx], false);
                        if (success) ++ctr;
                        return success;
@@ -204,7 +204,7 @@ size_t csv_line_tokenizer::tokenize_line(char* str, size_t len,
 };
 
 
-bool csv_line_tokenizer::parse_as(char** buf, size_t len, 
+bool csv_line_tokenizer::parse_as(char** buf, size_t len,
                                   flexible_type& out, bool recursive_parse) {
 
   if (!na_values.empty()) {
@@ -221,20 +221,20 @@ bool csv_line_tokenizer::parse_as(char** buf, size_t len,
   bool parse_success = false;
   // we are trying to parse a non-string, but this actually looks like a string
   // to me.  it might be some other type wrapped inside quote characters
-  if (recursive_parse && 
-      out.get_type() != flex_type_enum::STRING && 
-      out.get_type() != flex_type_enum::UNDEFINED && 
+  if (recursive_parse &&
+      out.get_type() != flex_type_enum::STRING &&
+      out.get_type() != flex_type_enum::UNDEFINED &&
       (*buf)[0] == quote_char && (*buf)[len - 1] == quote_char) {
     flexible_type tmp(flex_type_enum::STRING);
     // unescape the string inplace
     // skip the quote characters
     char* end_of_buf = (*buf) + len;
-    ++(*buf); 
+    ++(*buf);
     if (len > 1) len -= 2;
-    size_t new_length = 
+    size_t new_length =
         unescape_string(*buf, len, escape_char, quote_char, double_quote);
     bool ret = parse_as(buf, new_length, out, false);
-    (*buf) = end_of_buf; 
+    (*buf) = end_of_buf;
     return ret;
   }
 
@@ -268,7 +268,7 @@ bool csv_line_tokenizer::parse_as(char** buf, size_t len,
        }
        parse_success = true;
        if (is_quoted) {
-         unescape_string(out.mutable_get<flex_string>(), escape_char, 
+         unescape_string(out.mutable_get<flex_string>(), escape_char,
                          quote_char, double_quote);
        }
        break;
@@ -283,15 +283,15 @@ bool csv_line_tokenizer::parse_as(char** buf, size_t len,
      {
        std::tie(out, parse_success) = parser->general_flexible_type_parse((const char**)buf, len);
        // can we recursively parse this if it is a string?
-       if (recursive_parse && 
-           parse_success && 
+       if (recursive_parse &&
+           parse_success &&
            out.get_type() == flex_type_enum::STRING) {
          // make the string a parse buffer
          const flex_string& s = out.get<flex_string>();
          const char* cbegin = s.c_str();
          const char* c = cbegin;
          size_t clen = s.length();
-         // trim trailing whitespace if any. (the parser will take care of 
+         // trim trailing whitespace if any. (the parser will take care of
          // any whitespace before
          while(clen > 0 && std::isspace(c[clen - 1])) clen--;
          // try to reparse
@@ -312,8 +312,8 @@ bool csv_line_tokenizer::parse_as(char** buf, size_t len,
   }
 
   if (!na_values.empty()) {
-    // if it is a string, if it matches the string that was parsed, it is also 
-    // an na_value 
+    // if it is a string, if it matches the string that was parsed, it is also
+    // an na_value
     if (parse_success == true && out.get_type() == flex_type_enum::STRING) {
       const char* c = out.get<flex_string>().c_str();
       size_t clen = out.get<flex_string>().length();
@@ -347,18 +347,18 @@ bool csv_line_tokenizer::parse_as(char** buf, size_t len,
 #define END_LINE() keep_parsing = false; break;
 
 // current character matches first character of delimiter
-// and delimiter is either a single character, or we need to do a 
+// and delimiter is either a single character, or we need to do a
 // more expensive test.
 #define DELIMITER_TEST() (delimiter_is_not_empty && \
                           (*buf) == delimiter_first_character) &&     \
       (delimiter_is_singlechar ||     \
        test_is_delimiter(buf, bufend, delimiter_begin, delimiter_end))
 
-static inline bool test_is_delimiter(const char* c, const char* end, 
+static inline bool test_is_delimiter(const char* c, const char* end,
                                 const char* delimiter, const char* delimiter_end) {
   // if I have more delimiter characters than the length of the string
   // quit.
-  if (delimiter_end - delimiter > end - c) return false; 
+  if (delimiter_end - delimiter > end - c) return false;
   while (delimiter != delimiter_end) {
     if ((*c) != (*delimiter)) return false;
     ++c; ++delimiter;
@@ -371,7 +371,7 @@ static inline bool is_space_but_not_tab(char c) {
 }
 
 template <typename Fn, typename Fn2, typename Fn3>
-bool csv_line_tokenizer::tokenize_line_impl(char* str, 
+bool csv_line_tokenizer::tokenize_line_impl(char* str,
                                             size_t len,
                                             Fn add_token,
                                             Fn2 lookahead,
@@ -388,7 +388,7 @@ bool csv_line_tokenizer::tokenize_line_impl(char* str,
   // this is set to true for the character immediately after an escape character
   // and false all other times
   bool escape_sequence = false;
-  tokenizer_state state = tokenizer_state::START_FIELD; 
+  tokenizer_state state = tokenizer_state::START_FIELD;
   field_buffer_len = 0;
   if (delimiter_is_new_line) {
     add_token(str, len);
@@ -446,9 +446,9 @@ bool csv_line_tokenizer::tokenize_line_impl(char* str,
            // ok we have successfully parsed a field.
            // drop whitespace
            while(buf < bufend && std::isspace(*buf)) ++buf;
-           if (buf == bufend) { 
+           if (buf == bufend) {
              continue;
-           } else if (DELIMITER_TEST()) { 
+           } else if (DELIMITER_TEST()) {
              start_field_with_delimiter_encountered = true;
              // skip past the delimiter
              buf += delimiter.length();
@@ -527,14 +527,14 @@ REGULAR_CHARACTER:
     if (reset_escape_sequence) escape_sequence = false;
   }
   if (!good) return false;
-  // cleanup 
+  // cleanup
   if (state != tokenizer_state::START_FIELD) {
-    if (!add_token(&(field_buffer[0]), field_buffer_len)) { 
+    if (!add_token(&(field_buffer[0]), field_buffer_len)) {
       return false;
     }
   } else {
     if (start_field_with_delimiter_encountered) {
-      if (!add_token(NULL, 0)) { 
+      if (!add_token(NULL, 0)) {
         return false;
       }
     }
@@ -546,15 +546,15 @@ void csv_line_tokenizer::init() {
   parser.reset(new flexible_type_parser(delimiter, escape_char));
   is_regular_line_terminator = line_terminator == "\n";
   if (is_regular_line_terminator) {
-    delimiter_is_new_line = delimiter == "\n" || 
-                            delimiter == "\r" || 
+    delimiter_is_new_line = delimiter == "\n" ||
+                            delimiter == "\r" ||
                             delimiter == "\r\n";
   } else {
     delimiter_is_new_line = delimiter == line_terminator;
   }
 
   delimiter_is_not_empty = !delimiter.empty();
-  delimiter_is_space_but_not_tab = delimiter_is_not_empty && 
+  delimiter_is_space_but_not_tab = delimiter_is_not_empty &&
                       std::all_of(delimiter.begin(),
                                    delimiter.end(),
                                    [](char c)->bool {
@@ -566,7 +566,7 @@ void csv_line_tokenizer::init() {
   for (auto& na_val: na_values) {
     empty_string_in_na_values |= na_val.length() == 0;
   }
-  
+
 }
 
 } // namespace turi

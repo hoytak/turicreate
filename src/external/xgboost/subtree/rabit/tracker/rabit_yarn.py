@@ -19,11 +19,11 @@ if not os.path.exists(YARN_JAR_PATH):
     warnings.warn("cannot find \"%s\", I will try to run build" % YARN_JAR_PATH)
     cmd = 'cd %s;./build.sh' % (os.path.dirname(__file__) + '/../yarn/')
     print cmd
-    subprocess.check_call(cmd, shell = True, env = os.environ) 
+    subprocess.check_call(cmd, shell = True, env = os.environ)
     assert os.path.exists(YARN_JAR_PATH), "failed to build rabit-yarn.jar, try it manually"
 
 hadoop_binary  = None
-# code 
+# code
 hadoop_home = os.getenv('HADOOP_HOME')
 
 if hadoop_home is not None:
@@ -73,10 +73,10 @@ if args.jobname == 'auto':
 
 if hadoop_binary is None:
     parser.add_argument('-hb', '--hadoop_binary', required = True,
-                        help="path to hadoop binary file")  
+                        help="path to hadoop binary file")
 else:
-    parser.add_argument('-hb', '--hadoop_binary', default = hadoop_binary, 
-                        help="path to hadoop binary file")  
+    parser.add_argument('-hb', '--hadoop_binary', default = hadoop_binary,
+                        help="path to hadoop binary file")
 
 args = parser.parse_args()
 
@@ -91,11 +91,11 @@ hadoop_version = out[1].split('.')
 
 (classpath, err) = subprocess.Popen('%s classpath --glob' % args.hadoop_binary, shell = True, stdout=subprocess.PIPE).communicate()
 
-if hadoop_version < 2:    
+if hadoop_version < 2:
     print 'Current Hadoop Version is %s, rabit_yarn will need Yarn(Hadoop 2.0)' % out[1]
 
 def submit_yarn(nworker, worker_args, worker_env):
-    fset = set([YARN_JAR_PATH, YARN_BOOT_PY]) 
+    fset = set([YARN_JAR_PATH, YARN_BOOT_PY])
     if args.auto_file_cache != 0:
         for i in range(len(args.command)):
             f = args.command[i]
@@ -111,8 +111,8 @@ def submit_yarn(nworker, worker_args, worker_env):
                 WRAPPER_PATH + '/librabit_wrapper_mock.so']
         for f in flst:
             if os.path.exists(f):
-                fset.add(f)            
-    
+                fset.add(f)
+
     cmd = 'java -cp `%s classpath`:%s org.apache.hadoop.yarn.rabit.Client ' % (args.hadoop_binary, YARN_JAR_PATH)
     env = os.environ.copy()
     for k, v in worker_env.items():

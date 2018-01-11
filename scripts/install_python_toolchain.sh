@@ -77,7 +77,7 @@ mkdir -p deps/local/lib
 mkdir -p deps/local/include
 
 pushd deps/local/include
-for f in `ls ../../env/include/python2.7/*`; do  
+for f in `ls ../../env/include/python2.7/*`; do
   ln -Ffs $f
 done
 popd
@@ -90,4 +90,3 @@ done
 popd
 
 linux_patch_sigfpe_handler
-

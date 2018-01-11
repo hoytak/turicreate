@@ -98,7 +98,7 @@ class hash_bucket_container {
     }
   };
 
-  // Delete copy and copy assignment 
+  // Delete copy and copy assignment
   hash_bucket_container(const hash_bucket_container& other) = delete;
   hash_bucket_container& operator=(const hash_bucket_container& other) = delete;
 

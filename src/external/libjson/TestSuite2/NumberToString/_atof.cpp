@@ -62,7 +62,7 @@ void testNumberToString__atof::testPositive_ScientificNotation(void){
 	assertNaN(NumberToString::_atof(JSON_TEXT("1.e3.3")));
 	assertFloatEquals(1e3, NumberToString::_atof(JSON_TEXT("1.0e3")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("1.0e3.3")));
-	
+
 	assertFloatEquals(0e2, NumberToString::_atof(JSON_TEXT("0e2")));
 	assertFloatEquals(1e2, NumberToString::_atof(JSON_TEXT("1e2")));
 	assertFloatEquals(0e2, NumberToString::_atof(JSON_TEXT("0.e2")));
@@ -83,7 +83,7 @@ void testNumberToString__atof::testNegative_ScientificNotation(void){
 	assertNaN(NumberToString::_atof(JSON_TEXT("-1.e3.3")));
 	assertFloatEquals(-1e3, NumberToString::_atof(JSON_TEXT("-1.0e3")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("-1.0e3.3")));
-	
+
 	assertFloatEquals(0e2, NumberToString::_atof(JSON_TEXT("-0e2")));
 	assertFloatEquals(-1e2, NumberToString::_atof(JSON_TEXT("-1e2")));
 	assertFloatEquals(0e2, NumberToString::_atof(JSON_TEXT("-0.e2")));
@@ -110,7 +110,7 @@ void testNumberToString__atof::testPositive_SignedScientificNotation(void){
 	assertFloatEquals(1e3, NumberToString::_atof(JSON_TEXT("1.0e+3")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("1.0e-3.3")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("1.0e+3.3")));
-	
+
 	assertFloatEquals(0e2, NumberToString::_atof(JSON_TEXT("0e2")));
 	assertFloatEquals(1e2, NumberToString::_atof(JSON_TEXT("1e2")));
 	assertFloatEquals(0e2, NumberToString::_atof(JSON_TEXT("0.e2")));
@@ -140,7 +140,7 @@ void testNumberToString__atof::testNegative_SignedScientificNotation(void){
 	assertFloatEquals(-1e3, NumberToString::_atof(JSON_TEXT("-1.0e+3")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("-1.0e-3.3")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("-1.0e+3.3")));
-	
+
 	assertFloatEquals(0e-2, NumberToString::_atof(JSON_TEXT("-0e-2")));
 	assertFloatEquals(-1e-2, NumberToString::_atof(JSON_TEXT("-1e-2")));
 	assertFloatEquals(0e-2, NumberToString::_atof(JSON_TEXT("-0.e-2")));
@@ -153,7 +153,7 @@ void testNumberToString__atof::testNegative_SignedScientificNotation(void){
 	assertFloatEquals(-1e2, NumberToString::_atof(JSON_TEXT("-1.e+2")));
 	assertFloatEquals(0e2, NumberToString::_atof(JSON_TEXT("-0.0e+2")));
 	assertFloatEquals(-1e2, NumberToString::_atof(JSON_TEXT("-1.0e+2")));
-	
+
 	assertNaN(NumberToString::_atof(JSON_TEXT("1e-0123")));  //not valid because of negative and leading zero
 #endif
 }
@@ -190,12 +190,12 @@ void testNumberToString__atof::testStrict(void){
 	assertNaN(NumberToString::_atof(JSON_TEXT("+1.0e-3.3")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("+1.0e+3.3")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("+1.e3.3")));
-	
+
 	assertNaN(NumberToString::_atof(JSON_TEXT("0x12FF")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("0128")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("0123")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("-0123")));
-	
+
 	assertNaN(NumberToString::_atof(JSON_TEXT("0xABCD")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("0124")));
 	assertNaN(NumberToString::_atof(JSON_TEXT("+1")));
@@ -242,4 +242,3 @@ void testNumberToString__atof::testNotNumbers(void){
 #endif
 #endif
 }
-

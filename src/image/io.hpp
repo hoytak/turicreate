@@ -43,7 +43,7 @@ void parse_png(const char* data, size_t length,
 
 void decode_png(const char* data, size_t length, char** decoded_data, size_t& out_length);
 
-void encode_png(const char* data, size_t width, size_t height, size_t channels, char** out_data, size_t& out_length); 
+void encode_png(const char* data, size_t width, size_t height, size_t channels, char** out_data, size_t& out_length);
 /**************************************************************************/
 /*                                                                        */
 /*                             Prototype Code                             */

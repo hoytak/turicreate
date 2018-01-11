@@ -22,11 +22,11 @@
 namespace turi {
 
 void index_file_information::save(oarchive& oarc) const {
-  oarc << index_file << version << nsegments << block_size 
+  oarc << index_file << version << nsegments << block_size
        << content_type << segment_sizes << segment_files << metadata;
 }
 void index_file_information::load(iarchive& iarc) {
-  iarc >> index_file >> version >> nsegments >> block_size 
+  iarc >> index_file >> version >> nsegments >> block_size
        >> content_type >> segment_sizes >> segment_files >> metadata;
 }
 

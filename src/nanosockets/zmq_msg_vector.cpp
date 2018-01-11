@@ -99,7 +99,7 @@ int zmq_msg_vector::recv_impl(int socket, int timeout) {
     if (rc == -1) return nn_errno();
     else if (rc == 0) return EAGAIN;
   }
-  char* buf = NULL; 
+  char* buf = NULL;
   size_t len = NN_MSG;
   int rc = 0;
   while(1) {

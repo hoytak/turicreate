@@ -14,4 +14,3 @@ macro(copy_files NAME)
     DESTINATION  ${CMAKE_CURRENT_BINARY_DIR}
     FILES_MATCHING PATTERN ${NAME} )
 endmacro(copy_files NAME)
-

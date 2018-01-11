@@ -117,5 +117,3 @@ macro(TEST_BIG_ENDIAN VARIABLE)
       endif()
   endif()
 endmacro()
-
-

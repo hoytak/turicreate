@@ -76,19 +76,19 @@ namespace Model
      */
     inline AccessControlPolicy& AddGrants(Grant&& value) { m_grantsHasBeenSet = true; m_grants.push_back(value); return *this; }
 
-    
+
     inline const Owner& GetOwner() const{ return m_owner; }
 
-    
+
     inline void SetOwner(const Owner& value) { m_ownerHasBeenSet = true; m_owner = value; }
 
-    
+
     inline void SetOwner(Owner&& value) { m_ownerHasBeenSet = true; m_owner = value; }
 
-    
+
     inline AccessControlPolicy& WithOwner(const Owner& value) { SetOwner(value); return *this;}
 
-    
+
     inline AccessControlPolicy& WithOwner(Owner&& value) { SetOwner(value); return *this;}
 
   private:

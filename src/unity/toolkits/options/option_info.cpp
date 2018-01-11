@@ -93,15 +93,15 @@ flexible_type option_info::interpret_value(const flexible_type& value) const {
 
         if(!value_type_okay) {
           std::ostringstream msg;
-          msg << "Expected numeric value for option '" << name 
-              << "'. Cannot cast " << sep_char << value << sep_char 
+          msg << "Expected numeric value for option '" << name
+              << "'. Cannot cast " << sep_char << value << sep_char
               << " to a numeric value.";
           log_and_throw(msg.str());
         }
 
         if( (!(double(ret_v) >= lower_bound)) || (!(double(ret_v) <= upper_bound))) {
           std::ostringstream msg;
-          msg << "Option '" << name << "' must be in the range [" 
+          msg << "Option '" << name << "' must be in the range ["
               << lower_bound << ", " << upper_bound << "].";
           log_and_throw(msg.str());
         }
@@ -147,14 +147,14 @@ flexible_type option_info::interpret_value(const flexible_type& value) const {
         if(!value_type_okay) {
           std::ostringstream msg;
           msg << "Expected integer value for option '" << name
-              << "'. Cannot cast " << sep_char << value << sep_char 
+              << "'. Cannot cast " << sep_char << value << sep_char
               << " to an integer value.";
           log_and_throw(msg.str());
         }
 
         if( (!(flex_int(ret_v) >= lower_bound)) || (!(flex_int(ret_v) <= upper_bound))) {
           std::ostringstream msg;
-          msg << "Option '" << name << "' must be in the range [" 
+          msg << "Option '" << name << "' must be in the range ["
               << lower_bound << ", " << upper_bound << "].";
           log_and_throw(msg.str());
         }
@@ -231,7 +231,7 @@ flexible_type option_info::interpret_value(const flexible_type& value) const {
         if(!value_type_okay) {
 
           std::ostringstream msg;
-          msg << "Expected boolean value for option '" << name << sep_char 
+          msg << "Expected boolean value for option '" << name << sep_char
               << "'. Cannot interpret " << sep_char << value << sep_char
               << " as True or False.";
 
@@ -243,8 +243,8 @@ flexible_type option_info::interpret_value(const flexible_type& value) const {
     case option_info::CATEGORICAL:
       {
         DASSERT_EQ(std::set<flexible_type>(allowed_values.begin(),
-                                           allowed_values.end()).count(default_value), 1);  
-        
+                                           allowed_values.end()).count(default_value), 1);
+
         bool is_okay = false;
         for(const auto& okay_v : allowed_values) {
           if(value == okay_v) {
@@ -258,7 +258,7 @@ flexible_type option_info::interpret_value(const flexible_type& value) const {
           for(size_t i = 0; i < allowed_values.size()-1; i++){
             msg << sep_char << allowed_values[i] << sep_char << ", ";
           }
-          msg << "or " << sep_char << allowed_values[allowed_values.size()-1] 
+          msg << "or " << sep_char << allowed_values[allowed_values.size()-1]
               << sep_char << ").";
           log_and_throw(msg.str());
         }
@@ -298,7 +298,7 @@ void option_info::check_value(const flexible_type& value) const {
 */
 void option_info::save(turi::oarchive& oarc) const {
   oarc << name << description << default_value << parameter_type
-       << lower_bound << upper_bound << allowed_values; 
+       << lower_bound << upper_bound << allowed_values;
 }
 
 /**
@@ -306,9 +306,7 @@ void option_info::save(turi::oarchive& oarc) const {
 */
 void option_info::load(turi::iarchive& iarc) {
   iarc >> name >> description >> default_value >> parameter_type
-       >> lower_bound >> upper_bound >> allowed_values; 
+       >> lower_bound >> upper_bound >> allowed_values;
 }
 
 }}
-
-

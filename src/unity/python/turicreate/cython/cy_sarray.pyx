@@ -96,7 +96,7 @@ cdef class UnitySArrayProxy:
             val = flexible_type_from_pyobject_hint(value, t)
         with nogil:
             self.thisptr.construct_from_const(val, size, datatype)
-    
+
     cpdef save(self, _index_file):
         cdef string index_file = str_to_cpp(_index_file)
         with nogil:
@@ -109,7 +109,7 @@ cdef class UnitySArrayProxy:
         return self.thisptr.has_size()
 
     cpdef head(self, size_t length):
-        cdef unity_sarray_base_ptr proxy 
+        cdef unity_sarray_base_ptr proxy
         with nogil:
             proxy = self.thisptr.head(length)
         return create_proxy_wrapper_from_existing_proxy(proxy)
@@ -150,7 +150,7 @@ cdef class UnitySArrayProxy:
         return create_proxy_wrapper_from_existing_proxy(proxy)
 
     cpdef filter(self, fn, bint skip_undefined, int seed):
-        cdef string lambda_str 
+        cdef string lambda_str
         if type(fn) == str or type(fn) == bytes:
             lambda_str = bytes(fn)  # We don't want to decode or encode here
         else:
@@ -240,14 +240,14 @@ cdef class UnitySArrayProxy:
 
     cpdef str_to_datetime(self, _str_format):
         cdef unity_sarray_base_ptr proxy
-        cdef string str_format = str_to_cpp(_str_format)        
+        cdef string str_format = str_to_cpp(_str_format)
         with nogil:
             proxy = (self.thisptr.str_to_datetime(str_format))
         return create_proxy_wrapper_from_existing_proxy(proxy)
 
     cpdef datetime_to_str(self, _str_format):
         cdef unity_sarray_base_ptr proxy
-        cdef string str_format = str_to_cpp(_str_format)        
+        cdef string str_format = str_to_cpp(_str_format)
         with nogil:
             proxy = (self.thisptr.datetime_to_str(str_format))
         return create_proxy_wrapper_from_existing_proxy(proxy)
@@ -293,7 +293,7 @@ cdef class UnitySArrayProxy:
 
     cpdef vector_operator(self, UnitySArrayProxy other, op):
         cdef unity_sarray_base_ptr proxy
-        cdef string cpp_op = str_to_cpp(op)        
+        cdef string cpp_op = str_to_cpp(op)
         with nogil:
             proxy = (self.thisptr.vector_operator(other._base_ptr, cpp_op))
         return create_proxy_wrapper_from_existing_proxy(proxy)
@@ -456,7 +456,7 @@ cdef class UnitySArrayProxy:
         with nogil:
             proxy = (self.thisptr.copy_range(start, step, end))
         return create_proxy_wrapper_from_existing_proxy(proxy)
-    
+
     cpdef builtin_rolling_apply(self, _fn_name, ssize_t before, ssize_t after, size_t min_observations):
         cdef string fn_name = str_to_cpp(_fn_name)
         cdef unity_sarray_base_ptr proxy

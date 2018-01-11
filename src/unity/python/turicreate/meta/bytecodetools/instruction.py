@@ -21,7 +21,7 @@ co_ord = (lambda c:c) if py3 else ord
 
 class Instruction(object):
     '''
-    A Python byte-code instruction. 
+    A Python byte-code instruction.
     '''
     def __init__(self, i= -1, op=None, lineno=None):
         self.i = i
@@ -35,11 +35,11 @@ class Instruction(object):
     @property
     def opname(self):
         return opcode.opname[self.op]
-    
+
     @property
     def is_jump(self):
         return self.op in opcode.hasjrel or self.op in opcode.hasjabs
-    
+
     @property
     def to(self):
         if self.op in opcode.hasjrel:
@@ -96,5 +96,3 @@ class Instruction(object):
             elif self.op in opcode.hasfree:
                 result.append('(' + repr(self.arg) + ')')
         return ' '.join(result)
-
-        

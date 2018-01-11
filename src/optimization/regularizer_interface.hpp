@@ -15,7 +15,7 @@
 
 namespace turi {
 
-namespace optimization { 
+namespace optimization {
 
 
 /**
@@ -33,21 +33,21 @@ namespace optimization {
  *
 */
 class regularizer_interface {
- 
+
   public:
-  
+
   /**
-   * Default desctuctor. 
+   * Default desctuctor.
    */
   virtual ~regularizer_interface() {};
 
-  
+
   /**
    * Function to determine if the regularizer is smooth.
    * \returns false
    */
   bool is_smooth() {return false;};
-  
+
   /**
    * Compute the function value of the regularizer at a given point.
    * \param[in]  point   Point at which we are computing the gradient.
@@ -55,17 +55,17 @@ class regularizer_interface {
    */
   virtual double compute_function_value(const DenseVector &point) const = 0;
 
-  
+
   /**
    * Compute the gradient (or subgradient) at the given point.
    *
    * \param[in]  point    Point at which we are computing the gradient.
    * \param[out] gradient Dense gradient
-   * 
+   *
    */
   virtual void compute_gradient(const DenseVector &point, DenseVector&
       gradient) const = 0;
-  
+
   /**
    * Compute the proximal operator for the regularizer at a given point.
    *
@@ -76,16 +76,16 @@ class regularizer_interface {
    * defined as
    *                prox_f(x) = argmin_v ( f(v) + 0.5 * penalty ||x-v||^2)
    *  The idea is an old concept in optimization but it well explained in (1).
-   *  
+   *
    * References:
    *
    * (1) Parikh, Neal, and Stephen Boyd. "Foundations and Trends in
    * Optimization." (2014).
-   *  
+   *
    */
   virtual void apply_proximal_operator(DenseVector &point, const double&
       _penalty=0) const = 0;
-  
+
 
 };
 
@@ -96,9 +96,9 @@ class regularizer_interface {
  *
 */
 class smooth_regularizer_interface: public regularizer_interface {
- 
+
   public:
-  
+
   /**
    * Function to determine if the regularizer is smooth.
    * \returns true
@@ -106,10 +106,10 @@ class smooth_regularizer_interface: public regularizer_interface {
   bool is_smooth() {return true;};
 
   /**
-   * Default desctuctor. 
+   * Default desctuctor.
    */
   virtual ~smooth_regularizer_interface() {};
-  
+
   /**
    * Compute the hessian of the regularizer at a given point.
    * \param[in]      point   Point at which we are computing the gradient.
@@ -126,5 +126,4 @@ class smooth_regularizer_interface: public regularizer_interface {
 } // optimization
 } // turicreate
 
-#endif 
-
+#endif

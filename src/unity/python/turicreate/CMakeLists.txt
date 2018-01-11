@@ -52,4 +52,3 @@ if (APPLE)
     COMMAND cp -a "${CMAKE_BINARY_DIR}/src/visualization/${CMAKE_BUILD_TYPE}/Turi Create Visualization.app" ${CMAKE_CURRENT_BINARY_DIR}
   )
 endif()
-

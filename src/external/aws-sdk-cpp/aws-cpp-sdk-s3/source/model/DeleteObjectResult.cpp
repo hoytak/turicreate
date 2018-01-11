@@ -25,12 +25,12 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws;
 
-DeleteObjectResult::DeleteObjectResult() : 
+DeleteObjectResult::DeleteObjectResult() :
     m_deleteMarker(false)
 {
 }
 
-DeleteObjectResult::DeleteObjectResult(const AmazonWebServiceResult<XmlDocument>& result) : 
+DeleteObjectResult::DeleteObjectResult(const AmazonWebServiceResult<XmlDocument>& result) :
     m_deleteMarker(false)
 {
   *this = result;

@@ -26,7 +26,7 @@ class query_context;
 
 
 /**
- * Basic attributes about the operator. 
+ * Basic attributes about the operator.
  */
 struct query_operator_attributes {
   enum attribute {
@@ -34,8 +34,8 @@ struct query_operator_attributes {
 
     LINEAR = 1, /** A linear input operator consumes input sources at the
                          same rate and emit outputs at the same rate*/
-    SUB_LINEAR = 2, /** A sublinear operator consumes input sources at the 
-                       same rate, but may generate output at a different 
+    SUB_LINEAR = 2, /** A sublinear operator consumes input sources at the
+                       same rate, but may generate output at a different
                        lower or higher rate */
     SOURCE = 4, /** A source operator is a direct source from an sframe
                  * or sarray and has no inputs. */
@@ -93,7 +93,7 @@ class query_operator {
  public:
 
   virtual planner_node_type type() const = 0;
-  
+
   /**
    * Basic execution attributes about the query.
    */
@@ -105,7 +105,7 @@ class query_operator {
    * Pretty prints the operator including all additional parameters.
    */
   inline std::string name() const {
-    return planner_node_type_to_name(this->type()); 
+    return planner_node_type_to_name(this->type());
   }
 
   /**
@@ -114,14 +114,14 @@ class query_operator {
   virtual std::string print() const {
     return this->name();
   }
-  
+
   /**
    * Makes a copy of the object.
    */
   virtual std::shared_ptr<query_operator> clone() const = 0;
 
   /**
-   * Executes a query. 
+   * Executes a query.
    */
   virtual void execute(query_context& context) { ASSERT_TRUE(false); }
 
@@ -142,11 +142,11 @@ class query_operator {
 ////////////////////////////////////////////////////////////////////////////////
 // Generic fall through operator_impl implementation
 
-template <planner_node_type PType> 
+template <planner_node_type PType>
 class operator_impl : query_operator_attributes {
 
   planner_node_type type() const { return planner_node_type::INVALID; }
-  
+
   std::shared_ptr<query_operator> clone() const {
     ASSERT_TRUE(false);
     return nullptr;

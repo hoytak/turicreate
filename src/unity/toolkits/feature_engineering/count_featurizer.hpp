@@ -36,25 +36,25 @@ namespace feature_engineering {
  *    - P(Y = 1 | X = x_i)
  *    - ...
  *    - P(Y = k-2 | X = x_i)
- * 
- * This procedure is generally quite memory intensive, requiring the 
- * count table #(Y=y,  X=x) to be built up for every column, requiring 
+ *
+ * This procedure is generally quite memory intensive, requiring the
+ * count table #(Y=y,  X=x) to be built up for every column, requiring
  * O(k * N(X)) memory per column where N(X) is the number of unique values of X.
  *
  * Instead, we will approximate the count table this way:
- * For each input column X, 
+ * For each input column X,
  *  - We maintain k count tables. i.e. one count for each Y value, where
  *    each count table is represented by a count-min-sketch.
- *  http://www.cs.rutgers.edu/~muthu/cmz-sdm.pdf provides some analysis on the 
+ *  http://www.cs.rutgers.edu/~muthu/cmz-sdm.pdf provides some analysis on the
  *  use of the count-min sketch and empirical validation as to why the
  *  count-min sketch is preferred over the count sketch in the power-law
  *  distribution setting.
  *
- *  This provides counts which are inherently upper bounds on the actual 
- *  counts. Therefore, estimating 
+ *  This provides counts which are inherently upper bounds on the actual
+ *  counts. Therefore, estimating
  *  P(Y = 0 | X = x_i) with #(Y = 0 & X = x_i) / #(X = x_i)
  *  is problematic since if #(X = x_i) is estimated indepedendently,
- *  the probabilities may not sum to 1. 
+ *  the probabilities may not sum to 1.
  *  Instead #(X = x_i) should be estimated with \sum_y #(Y = y & X = x_i)
  */
 class EXPORT count_featurizer : public transformer_base {
@@ -71,16 +71,16 @@ class EXPORT count_featurizer : public transformer_base {
   void load_version(iarchive& iarc, size_t version);
 
   // transformer
-  void init_options(const std::map<std::string, 
+  void init_options(const std::map<std::string,
                     flexible_type>& _options);
-  void init_transformer(const std::map<std::string, 
+  void init_transformer(const std::map<std::string,
                         flexible_type>& _options);
   void fit(gl_sframe data);
-  gl_sframe transform(gl_sframe data); 
-  gl_sframe fit_transform(gl_sframe data); 
+  gl_sframe transform(gl_sframe data);
+  gl_sframe fit_transform(gl_sframe data);
 
   // collect the state in a single shared pointer so that this can be
-  // shared across to the lazy apply. 
+  // shared across to the lazy apply.
   struct transform_state {
     // random seed
     size_t seed = 0;
@@ -89,7 +89,7 @@ class EXPORT count_featurizer : public transformer_base {
     std::string prob_column_prefix;
     std::vector<flexible_type> y_values;
     // counters[i][colnumber] contains the sketch for column colnumber
-    // and y value y_values[i]. 
+    // and y value y_values[i].
     std::vector<
           std::vector<sketches::countmin<flexible_type>>
           > counters;
@@ -102,10 +102,10 @@ class EXPORT count_featurizer : public transformer_base {
   REGISTER_CLASS_MEMBER_FUNCTION(count_featurizer::fit_transform, "data")
   REGISTER_CLASS_MEMBER_FUNCTION(count_featurizer::get_current_options);
   REGISTER_CLASS_MEMBER_FUNCTION(count_featurizer::list_fields);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options",
                              count_featurizer::get_default_options);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get", 
-                             count_featurizer::get_value_from_state, 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get",
+                             count_featurizer::get_value_from_state,
                              "key");
 
   END_CLASS_MEMBER_REGISTRATION

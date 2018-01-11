@@ -35,8 +35,3 @@ if(NOT DEFINED CMAKE_ANSI_FOR_SCOPE)
       "the following output:\n${OUTPUT}\n\n")
   endif ()
 endif()
-
-
-
-
-

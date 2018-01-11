@@ -37,11 +37,11 @@
 
 #undef set_fieldtype_arg
 int	set_fieldtype_arg(
-		FIELDTYPE *typ, 
+		FIELDTYPE *typ,
 		void	*(*const make_arg)(
-		va_list	*p1), 
+		va_list	*p1),
 		void	*(*const copy_arg)(
-		const void *p1), 
+		const void *p1),
 		void	(*const free_arg)(
 		void	*p1))
 		{ return(*(int *)0); }
@@ -55,7 +55,7 @@ void	*field_arg(
 
 #undef set_field_fore
 int	set_field_fore(
-		FIELD	*field, 
+		FIELD	*field,
 		chtype	attr)
 		{ return(*(int *)0); }
 
@@ -66,7 +66,7 @@ chtype	field_fore(
 
 #undef set_field_back
 int	set_field_back(
-		FIELD	*field, 
+		FIELD	*field,
 		chtype	attr)
 		{ return(*(int *)0); }
 
@@ -79,7 +79,7 @@ chtype	field_back(
 
 #undef set_current_field
 int	set_current_field(
-		FORM	*form, 
+		FORM	*form,
 		FIELD	*field)
 		{ return(*(int *)0); }
 
@@ -100,27 +100,27 @@ FIELD	*_nc_Default_Field;
 
 #undef _nc_Make_Argument
 TypeArgument *_nc_Make_Argument(
-		const FIELDTYPE *typ, 
-		va_list	*ap, 
+		const FIELDTYPE *typ,
+		va_list	*ap,
 		int	*err)
 		{ return(*(TypeArgument **)0); }
 
 #undef _nc_Copy_Argument
 TypeArgument *_nc_Copy_Argument(
-		const FIELDTYPE *typ, 
-		const TypeArgument *argp, 
+		const FIELDTYPE *typ,
+		const TypeArgument *argp,
 		int	*err)
 		{ return(*(TypeArgument **)0); }
 
 #undef _nc_Free_Argument
 void	_nc_Free_Argument(
-		const FIELDTYPE *typ, 
+		const FIELDTYPE *typ,
 		TypeArgument *argp)
 		{ /* void */ }
 
 #undef _nc_Copy_Type
 bool	_nc_Copy_Type(
-		FIELD	*dst, 
+		FIELD	*dst,
 		FIELD const *src)
 		{ return(*(bool *)0); }
 
@@ -131,11 +131,11 @@ void	_nc_Free_Type(
 
 #undef new_field
 FIELD	*new_field(
-		int	rows, 
-		int	cols, 
-		int	frow, 
-		int	fcol, 
-		int	nrow, 
+		int	rows,
+		int	cols,
+		int	frow,
+		int	fcol,
+		int	nrow,
 		int	nbuf)
 		{ return(*(FIELD **)0); }
 
@@ -148,8 +148,8 @@ int	free_field(
 
 #undef dup_field
 FIELD	*dup_field(
-		FIELD	*field, 
-		int	frow, 
+		FIELD	*field,
+		int	frow,
 		int	fcol)
 		{ return(*(FIELD **)0); }
 
@@ -157,12 +157,12 @@ FIELD	*dup_field(
 
 #undef set_fieldtype_choice
 int	set_fieldtype_choice(
-		FIELDTYPE *typ, 
+		FIELDTYPE *typ,
 		bool	(*const next_choice)(
-		FIELD	*p1, 
-		const void *p2), 
+		FIELD	*p1,
+		const void *p2),
 		bool	(*const prev_choice)(
-		FIELD	*p1, 
+		FIELD	*p1,
 		const void *p2))
 		{ return(*(int *)0); }
 
@@ -170,7 +170,7 @@ int	set_fieldtype_choice(
 
 #undef link_fieldtype
 FIELDTYPE *link_fieldtype(
-		FIELDTYPE *type1, 
+		FIELDTYPE *type1,
 		FIELDTYPE *type2)
 		{ return(*(FIELDTYPE **)0); }
 
@@ -178,20 +178,20 @@ FIELDTYPE *link_fieldtype(
 
 #undef field_info
 int	field_info(
-		const FIELD *field, 
-		int	*rows, 
-		int	*cols, 
-		int	*frow, 
-		int	*fcol, 
-		int	*nrow, 
+		const FIELD *field,
+		int	*rows,
+		int	*cols,
+		int	*frow,
+		int	*fcol,
+		int	*nrow,
 		int	*nbuf)
 		{ return(*(int *)0); }
 
 #undef dynamic_field_info
 int	dynamic_field_info(
-		const FIELD *field, 
-		int	*drows, 
-		int	*dcols, 
+		const FIELD *field,
+		int	*drows,
+		int	*dcols,
 		int	*maxgrow)
 		{ return(*(int *)0); }
 
@@ -199,7 +199,7 @@ int	dynamic_field_info(
 
 #undef set_field_just
 int	set_field_just(
-		FIELD	*field, 
+		FIELD	*field,
 		int	just)
 		{ return(*(int *)0); }
 
@@ -212,8 +212,8 @@ int	field_just(
 
 #undef link_field
 FIELD	*link_field(
-		FIELD	*field, 
-		int	frow, 
+		FIELD	*field,
+		int	frow,
 		int	fcol)
 		{ return(*(FIELD **)0); }
 
@@ -221,7 +221,7 @@ FIELD	*link_field(
 
 #undef set_max_field
 int	set_max_field(
-		FIELD	*field, 
+		FIELD	*field,
 		int	maxgrow)
 		{ return(*(int *)0); }
 
@@ -229,8 +229,8 @@ int	set_max_field(
 
 #undef move_field
 int	move_field(
-		FIELD	*field, 
-		int	frow, 
+		FIELD	*field,
+		int	frow,
 		int	fcol)
 		{ return(*(int *)0); }
 
@@ -242,10 +242,10 @@ const FIELDTYPE *_nc_Default_FieldType = {0};
 #undef new_fieldtype
 FIELDTYPE *new_fieldtype(
 		bool	(*const field_check)(
-		FIELD	*p1, 
-		const void *p2), 
+		FIELD	*p1,
+		const void *p2),
 		bool	(*const char_check)(
-		int	p1, 
+		int	p1,
 		const void *p2))
 		{ return(*(FIELDTYPE **)0); }
 
@@ -258,7 +258,7 @@ int	free_fieldtype(
 
 #undef set_field_opts
 int	set_field_opts(
-		FIELD	*field, 
+		FIELD	*field,
 		Field_Options opts)
 		{ return(*(int *)0); }
 
@@ -269,13 +269,13 @@ Field_Options field_opts(
 
 #undef field_opts_on
 int	field_opts_on(
-		FIELD	*field, 
+		FIELD	*field,
 		Field_Options opts)
 		{ return(*(int *)0); }
 
 #undef field_opts_off
 int	field_opts_off(
-		FIELD	*field, 
+		FIELD	*field,
 		Field_Options opts)
 		{ return(*(int *)0); }
 
@@ -283,7 +283,7 @@ int	field_opts_off(
 
 #undef set_field_pad
 int	set_field_pad(
-		FIELD	*field, 
+		FIELD	*field,
 		int	ch)
 		{ return(*(int *)0); }
 
@@ -296,7 +296,7 @@ int	field_pad(
 
 #undef set_new_page
 int	set_new_page(
-		FIELD	*field, 
+		FIELD	*field,
 		bool	new_page_flag)
 		{ return(*(int *)0); }
 
@@ -309,7 +309,7 @@ bool	new_page(
 
 #undef set_field_status
 int	set_field_status(
-		FIELD	*field, 
+		FIELD	*field,
 		bool	status)
 		{ return(*(int *)0); }
 
@@ -322,8 +322,8 @@ bool	field_status(
 
 #undef set_field_type
 int	set_field_type(
-		FIELD	*field, 
-		FIELDTYPE *type, 
+		FIELD	*field,
+		FIELDTYPE *type,
 		...)
 		{ return(*(int *)0); }
 
@@ -336,7 +336,7 @@ FIELDTYPE *field_type(
 
 #undef set_field_userptr
 int	set_field_userptr(
-		FIELD	*field, 
+		FIELD	*field,
 		void	*usrptr)
 		{ return(*(int *)0); }
 
@@ -381,7 +381,7 @@ int	free_form(
 
 #undef set_form_fields
 int	set_form_fields(
-		FORM	*form, 
+		FORM	*form,
 		FIELD	**fields)
 		{ return(*(int *)0); }
 
@@ -414,13 +414,13 @@ int	_nc_Synchronize_Attributes(
 
 #undef _nc_Synchronize_Options
 int	_nc_Synchronize_Options(
-		FIELD	*field, 
+		FIELD	*field,
 		Field_Options newopts)
 		{ return(*(int *)0); }
 
 #undef _nc_Set_Current_Field
 int	_nc_Set_Current_Field(
-		FORM	*form, 
+		FORM	*form,
 		FIELD	*newfield)
 		{ return(*(int *)0); }
 
@@ -436,32 +436,32 @@ FIELD	*_nc_First_Active_Field(
 
 #undef _nc_Set_Form_Page
 int	_nc_Set_Form_Page(
-		FORM	*form, 
-		int	page, 
+		FORM	*form,
+		int	page,
 		FIELD	*field)
 		{ return(*(int *)0); }
 
 typedef struct {
-  int keycode;           
-  int (*cmd)(FORM *);    
+  int keycode;
+  int (*cmd)(FORM *);
 } Binding_Info;
 
 #undef form_driver
 int	form_driver(
-		FORM	*form, 
+		FORM	*form,
 		int	c)
 		{ return(*(int *)0); }
 
 #undef set_field_buffer
 int	set_field_buffer(
-		FIELD	*field, 
-		int	buffer, 
+		FIELD	*field,
+		int	buffer,
 		const char *value)
 		{ return(*(int *)0); }
 
 #undef field_buffer
 char	*field_buffer(
-		const FIELD *field, 
+		const FIELD *field,
 		int	buffer)
 		{ return(*(char **)0); }
 
@@ -469,7 +469,7 @@ char	*field_buffer(
 
 #undef set_field_init
 int	set_field_init(
-		FORM	*form, 
+		FORM	*form,
 		Form_Hook func)
 		{ return(*(int *)0); }
 
@@ -480,7 +480,7 @@ Form_Hook field_init(
 
 #undef set_field_term
 int	set_field_term(
-		FORM	*form, 
+		FORM	*form,
 		Form_Hook func)
 		{ return(*(int *)0); }
 
@@ -491,7 +491,7 @@ Form_Hook field_term(
 
 #undef set_form_init
 int	set_form_init(
-		FORM	*form, 
+		FORM	*form,
 		Form_Hook func)
 		{ return(*(int *)0); }
 
@@ -502,7 +502,7 @@ Form_Hook form_init(
 
 #undef set_form_term
 int	set_form_term(
-		FORM	*form, 
+		FORM	*form,
 		Form_Hook func)
 		{ return(*(int *)0); }
 
@@ -515,7 +515,7 @@ Form_Hook form_term(
 
 #undef set_form_opts
 int	set_form_opts(
-		FORM	*form, 
+		FORM	*form,
 		Form_Options opts)
 		{ return(*(int *)0); }
 
@@ -526,13 +526,13 @@ Form_Options form_opts(
 
 #undef form_opts_on
 int	form_opts_on(
-		FORM	*form, 
+		FORM	*form,
 		Form_Options opts)
 		{ return(*(int *)0); }
 
 #undef form_opts_off
 int	form_opts_off(
-		FORM	*form, 
+		FORM	*form,
 		Form_Options opts)
 		{ return(*(int *)0); }
 
@@ -540,7 +540,7 @@ int	form_opts_off(
 
 #undef set_form_page
 int	set_form_page(
-		FORM	*form, 
+		FORM	*form,
 		int	page)
 		{ return(*(int *)0); }
 
@@ -577,8 +577,8 @@ int	form_request_by_name(
 
 #undef scale_form
 int	scale_form(
-		const FORM *form, 
-		int	*rows, 
+		const FORM *form,
+		int	*rows,
 		int	*cols)
 		{ return(*(int *)0); }
 
@@ -586,7 +586,7 @@ int	scale_form(
 
 #undef set_form_sub
 int	set_form_sub(
-		FORM	*form, 
+		FORM	*form,
 		WINDOW	*win)
 		{ return(*(int *)0); }
 
@@ -599,7 +599,7 @@ WINDOW	*form_sub(
 
 #undef set_form_userptr
 int	set_form_userptr(
-		FORM	*form, 
+		FORM	*form,
 		void	*usrptr)
 		{ return(*(int *)0); }
 
@@ -612,7 +612,7 @@ void	*form_userptr(
 
 #undef set_form_win
 int	set_form_win(
-		FORM	*form, 
+		FORM	*form,
 		WINDOW	*win)
 		{ return(*(int *)0); }
 

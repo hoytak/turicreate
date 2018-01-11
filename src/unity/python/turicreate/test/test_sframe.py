@@ -2960,7 +2960,7 @@ class SFrameTest(unittest.TestCase):
         self.assertTrue('int_data' not in sf2.column_names())
         self.assertTrue('float_data' not in sf2.column_names())
 
-        # rename 
+        # rename
         sf = SFrame(self.__create_test_df(1000))
         sf2 = sf.rename({'int_data':'int','float_data':'float'}, inplace=False)
         self.assertTrue(sf2 is not sf)
@@ -2979,7 +2979,7 @@ class SFrameTest(unittest.TestCase):
         self.assertTrue('int' in sf2.column_names())
         self.assertTrue('float' in sf2.column_names())
 
-        # swap 
+        # swap
         sf = SFrame(self.__create_test_df(1000))
         old_cnames = sf.column_names()
 
@@ -2987,7 +2987,7 @@ class SFrameTest(unittest.TestCase):
         new_cnames = sf.column_names()
         int_data_idx = new_cnames.index('int_data')
         float_data_idx = new_cnames.index('float_data')
-        new_cnames[int_data_idx],new_cnames[float_data_idx] = new_cnames[float_data_idx],new_cnames[int_data_idx] 
+        new_cnames[int_data_idx],new_cnames[float_data_idx] = new_cnames[float_data_idx],new_cnames[int_data_idx]
 
 
 
@@ -3398,4 +3398,3 @@ if __name__ == "__main__":
             break
 
     unittest.main()
-

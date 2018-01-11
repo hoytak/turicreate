@@ -8,7 +8,7 @@
 
 #include <logger/assertions.hpp>
 #include <unity/toolkits/ml_data_2/data_storage/ml_data_row_translation.hpp>
-#include <unity/toolkits/ml_data_2/data_storage/ml_data_block_manager.hpp> 
+#include <unity/toolkits/ml_data_2/data_storage/ml_data_block_manager.hpp>
 #include <unity/toolkits/ml_data_2/ml_data.hpp>
 #include <unity/toolkits/ml_data_2/side_features.hpp>
 #include <unity/toolkits/ml_data_2/iterators/composite_row_type.hpp>
@@ -129,7 +129,7 @@ class ml_data_iterator_base {
    * The metadata surrounding the original column indices are
    */
   inline void fill_untranslated_values(std::vector<flexible_type>& x) const GL_HOT_INLINE_FLATTEN {
-    
+
     if(!has_untranslated_columns) {
       x.clear();
       return;
@@ -142,7 +142,7 @@ class ml_data_iterator_base {
     for(size_t i = 0; i < data_block->untranslated_columns.size(); ++i) {
       x[i] = data_block->untranslated_columns[i][row_index];
     }
-    
+
     DASSERT_TRUE(x.size() >= 1);
   }
 
@@ -247,7 +247,7 @@ class ml_data_iterator_base {
    * Fill a row from the current location in the iteration.
    *
    * \note The 0th category is used as a reference category.
-   *  
+   *
    *
    * Example:
    *
@@ -255,8 +255,8 @@ class ml_data_iterator_base {
    *
    *   ...
    *
-   *   it.fill_row_expr(X.row(row_idx)); 
-   *  
+   *   it.fill_row_expr(X.row(row_idx));
+   *
    * ---------------------------------------------
    *
    * \param[in,out] x   An armadillo row expression.
@@ -267,10 +267,10 @@ class ml_data_iterator_base {
   inline void fill_row_expr(DenseRowXpr&& x) const {
 
     x.zeros();
-    
+
     if(!has_translated_columns)
       return;
-    
+
     ml_data_internal::copy_raw_into_array(
         x,
         rm, current_data_iter(),
@@ -278,20 +278,20 @@ class ml_data_iterator_base {
         use_reference_encoding);
   }
 
-  
+
   /** Fill a composite row container.  The composite row container
    *  must have its specification set; this specification is used to
-   *  then fill the observation. 
+   *  then fill the observation.
    */
   inline void fill_observation(composite_row_container& crc) GL_HOT_INLINE_FLATTEN {
 
     DASSERT_TRUE(crc.subrow_spec != nullptr);
 
     fill_untranslated_values(crc.flextype_buffer);
-    crc.subrow_spec->fill(crc, rm, current_data_iter(), crc.flextype_buffer); 
+    crc.subrow_spec->fill(crc, rm, current_data_iter(), crc.flextype_buffer);
   }
 
-  
+
   /** Returns the current target value, if present, or 1 if not
    *  present.  If the target column is supposed to be a categorical
    *  value, then use categorical_target_index().
@@ -381,7 +381,7 @@ class ml_data_iterator_base {
   size_t global_row_start, global_row_end;
 
   /** The maximum row size across all rows in the given ml_data object.
-   * Each row's size is defined to be the number of unpacked features in that 
+   * Each row's size is defined to be the number of unpacked features in that
    * row. For example, this is useful when one needs to preallocate a vector
    * to be the largest size needed for any row that will be given by this
    * iterator.
@@ -394,10 +394,10 @@ class ml_data_iterator_base {
 
  private:
 
-  /** A pointer to the current block.  
+  /** A pointer to the current block.
    */
-  std::shared_ptr<ml_data_internal::ml_data_block> data_block; 
-  
+  std::shared_ptr<ml_data_internal::ml_data_block> data_block;
+
  protected:
 
   /** Return a pointer to the current location in the data.
@@ -438,7 +438,7 @@ class ml_data_iterator_base {
 
   ////////////////////////////////////////////////////////////////////////////////
   // Internal reader functions
-  
+
   /// Loads the block containing the row index row_index
   void setup_block_containing_current_row_index() GL_HOT_NOINLINE;
 

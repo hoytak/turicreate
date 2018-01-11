@@ -33,9 +33,9 @@ class sarray;
 
 /**
  * Implements a simple input iterator over an sarray.
- * 
+ *
  * The sarray_iterator provides a simple input iterator (like forward iterator,
- * but one pass. i.e. increment of one, invalidates all other copies.) over a 
+ * but one pass. i.e. increment of one, invalidates all other copies.) over a
  * segment of an sarray.
  */
 template <typename T>
@@ -53,8 +53,8 @@ class sarray_iterator {
    * Use of this iterator will produce undefined results.
    */
   sarray_iterator()
-      :reader(NULL), segmentid(0), 
-       current_element(T()), current_element_counter(0) {} 
+      :reader(NULL), segmentid(0),
+       current_element(T()), current_element_counter(0) {}
 
   /// Default copy constructor
   sarray_iterator(const sarray_iterator& other) = default;
@@ -63,7 +63,7 @@ class sarray_iterator {
   sarray_iterator& operator=(const sarray_iterator& other) = default;
 
   /**
-   * Constructs an iterator from an input archive. 
+   * Constructs an iterator from an input archive.
    * Creates a start iterator to the segment.
    *
    * \param reader The file format reader to use
@@ -71,8 +71,8 @@ class sarray_iterator {
    * \param is_start_iterator If true, creates a start iterator to the segment.
    *                          If false, creates an end iterator to the segment.
    */
-  sarray_iterator(sarray_reader_buffer<T>* reader, 
-                  size_t segmentid, 
+  sarray_iterator(sarray_reader_buffer<T>* reader,
+                  size_t segmentid,
                   bool is_start_iterator)
       :reader(reader), segmentid(segmentid),
        current_element(T()), current_element_counter(0) {
@@ -91,7 +91,7 @@ class sarray_iterator {
   /**
    * Advances the iterator to the next element
    */
-  sarray_iterator& operator++() { 
+  sarray_iterator& operator++() {
     if (reader->has_next()) {
       current_element = reader->next();
       ++current_element_counter;
@@ -99,7 +99,7 @@ class sarray_iterator {
       current_element_counter = num_elements;
       reader->clear();
     }
-    return *this; 
+    return *this;
   }
 
   /**
@@ -115,8 +115,8 @@ class sarray_iterator {
    * element in the same sarray).
    */
   bool operator==(const sarray_iterator& other) const {
-    return (reader == other.reader) && 
-        (segmentid == other.segmentid) && 
+    return (reader == other.reader) &&
+        (segmentid == other.segmentid) &&
         (current_element_counter == other.current_element_counter);
   }
 
@@ -167,21 +167,21 @@ class sarray_iterator {
 
 
 /**
- * The SArray reader provides a reading interface to 
+ * The SArray reader provides a reading interface to
  * an immutable, on disk, sequence of objects T.
  *
- * The SArray is an immutable sequence of objects of type T, and is internally 
- * represented as a collection of files. The sequence is cut up into a 
+ * The SArray is an immutable sequence of objects of type T, and is internally
+ * represented as a collection of files. The sequence is cut up into a
  * collection of segments (not necessarily of equal length), where each segment
  * covers a disjoint subset of the sequence. Each segment can then be read
- * in parallel. 
+ * in parallel.
  *
  * To read from an sarray<T> use \ref sarray::get_reader():
  * \code
  * auto reader = array.get_reader();
  * \endcode
  * reader will be of type sarray_reader<T>
- * 
+ *
  * reader can then provide input iterators from segments via the begin()
  * and end() functions.
  */
@@ -195,7 +195,7 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
   typedef typename iterator::value_type value_type;
 
   /**
-   * Default constructor. Does nothing. Use init() 
+   * Default constructor. Does nothing. Use init()
    */
   sarray_reader() = default;
 
@@ -208,20 +208,20 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
 
 
 
-  ~sarray_reader() { 
+  ~sarray_reader() {
     if (reader) delete reader;
   }
 
 
   /**
-   * Attempts to construct an sarray_iterator which reads from 
+   * Attempts to construct an sarray_iterator which reads from
    * an existing sarray.
    * If the index file cannot be opened, an exception is thrown.
    *
    * \param array The array to read
-   * \param num_segments If num_segments == (size_t)(-1), the 
+   * \param num_segments If num_segments == (size_t)(-1), the
    *                     original file segmentation is used. Otherwise,
-   *                     the array is cut into num_segments number of 
+   *                     the array is cut into num_segments number of
    *                     logical segments which distribute the rows uniformly.
    */
   void init(const sarray<T>& array, size_t num_segments = (size_t)(-1)) {
@@ -242,7 +242,7 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
         current_row_index = row_end;
       }
     } else {
-      // we equally divide the data across the segments 
+      // we equally divide the data across the segments
       // compute the segment lengths
       ASSERT_GT(num_segments, 0);
       size_t totallength = size();
@@ -258,10 +258,10 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
   }
 
   /**
-   * Attempts to construct an sarray_iterator which reads from 
+   * Attempts to construct an sarray_iterator which reads from
    * an existing sarray and uses a segmentation defined by an argument.
    * If the index file cannot be opened, an exception is thrown.
-   * If the sum of the lengths of all the segments do not add up to the 
+   * If the sum of the lengths of all the segments do not add up to the
    * length of the sarray, an exception is thrown
    *
    * \param array The array to read
@@ -291,8 +291,8 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
     create_segment_read_buffers(segment_row_start_end);
   }
 
-  /** 
-   * Return the number of segments in the collection. 
+  /**
+   * Return the number of segments in the collection.
    * Will throw an exception if the sarray is invalid (there is an error
    * reading files)
    */
@@ -301,7 +301,7 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
     return m_num_segments;
   }
 
-  /** 
+  /**
    * Return the number of rows in the segment.
    * Will throw an exception if the sarray is invalid (there is an error
    * reading files)
@@ -350,7 +350,7 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
     ASSERT_NE(reader, NULL);
     const index_file_information& index_info = reader->get_index_info();
     if (index_info.metadata.count(key)) {
-      return std::pair<bool, std::string>(true, 
+      return std::pair<bool, std::string>(true,
                                           index_info.metadata.at(key));
     } else {
       return std::pair<bool, std::string>(false, "");
@@ -371,9 +371,9 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
   }
 
 
-  /** 
+  /**
    * Return the begin iterator of the segment.
-   * The iterator (\ref sarray_iterator) is of the input iterator type and 
+   * The iterator (\ref sarray_iterator) is of the input iterator type and
    * has value_type T. See \ref end() to get the end iterator of the segment.
    *
    * The iterator is invalid once the originating sarray is destroyed.
@@ -406,7 +406,7 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
   }
 
   /** Return the end iterator of the segment.
-   * The iterator (\ref sarray_iterator) is of the input iterator type and 
+   * The iterator (\ref sarray_iterator) is of the input iterator type and
    * has value_type T. See \ref end() to get the end iterator of the segment.
    *
    * The iterator is invalid once the originating sarray is destroyed.
@@ -436,11 +436,11 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
   /**
    * Reads a collection of rows, storing the result in out_obj.
    * This function is independent of the open_segment/read_segment/close_segment
-   * functions, and can be called anytime. This function is also fully 
+   * functions, and can be called anytime. This function is also fully
    * concurrent.
    * \param row_start First row to read
    * \param row_end one past the last row to read (i.e. EXCLUSIVE). row_end can
-   *                be beyond the end of the array, in which case, 
+   *                be beyond the end of the array, in which case,
    *                fewer rows will be read.
    * \param out_obj The output array
    * \returns Actual number of rows read. Return (size_t)(-1) on failure.
@@ -448,8 +448,8 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
    * \note This function is not always efficient. Different file formats
    * implementations will have different characteristics.
    */
-  size_t read_rows(size_t row_start, 
-                   size_t row_end, 
+  size_t read_rows(size_t row_start,
+                   size_t row_end,
                    std::vector<T>& out_obj) {
     DASSERT_NE(reader, NULL);
     return reader->read_rows(row_start, row_end, out_obj);
@@ -458,11 +458,11 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
   /**
    * Reads a collection of rows, storing the result in out_obj.
    * This function is independent of the open_segment/read_segment/close_segment
-   * functions, and can be called anytime. This function is also fully 
+   * functions, and can be called anytime. This function is also fully
    * concurrent.
    * \param row_start First row to read
    * \param row_end one past the last row to read (i.e. EXCLUSIVE). row_end can
-   *                be beyond the end of the array, in which case, 
+   *                be beyond the end of the array, in which case,
    *                fewer rows will be read.
    * \param out_obj The output array
    * \returns Actual number of rows read. Return (size_t)(-1) on failure.
@@ -470,8 +470,8 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
    * \note This function is not always efficient. Different file formats
    * implementations will have different characteristics.
    */
-  size_t read_rows(size_t row_start, 
-                   size_t row_end, 
+  size_t read_rows(size_t row_start,
+                   size_t row_end,
                    sframe_rows& out_obj);
 
 
@@ -486,7 +486,7 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
 
 
   /**
-   * Returns the type of the SArray (as set by 
+   * Returns the type of the SArray (as set by
    * \ref swriter<flexible_type>::set_type). If the type of the SArray was
    * not set, this returns \ref flex_type_enum::UNDEFINED, in which case
    * each row can be of arbitrary type.
@@ -496,7 +496,7 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
    */
   flex_type_enum get_type() const {
     if (!std::is_same<T, flexible_type>::value) {
-      ASSERT_MSG(false, 
+      ASSERT_MSG(false,
                   "Use of get_type() in SArray which "
                   "does not contain flexible_types");
     }
@@ -561,7 +561,7 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
     m_read_buffers.resize(m_num_segments);
 
     for (size_t i = 0;i < m_segment_lengths.size(); ++i) {
-      m_segment_lengths[i] = 
+      m_segment_lengths[i] =
           segment_row_start_end[i].second - segment_row_start_end[i].first;
       /*
        * We would like to reuse the sarray_reader_buffer here.
@@ -571,32 +571,32 @@ class sarray_reader: public siterable<sarray_iterator<T> > {
        *  - change sarray.get_reader() to return a shared_ptr and have sarray
        *    inherit from std::enable_shared_from_this. This will allow me to
        *    hand off a shared_ptr to the sarray_reader_buffer and be reference
-       *    counted correctly. However, this is bad since it introduces a 
+       *    counted correctly. However, this is bad since it introduces a
        *    circular reference meaning sarray_reader will never be deleted.
        *  - change sarray.get_reader() to return a shared_ptr and have sarray
-       *    inherit from std::enable_shared_from_this. And modify 
-       *    sarray_reader_buffer to take a weak_ptr to break the circular 
+       *    inherit from std::enable_shared_from_this. And modify
+       *    sarray_reader_buffer to take a weak_ptr to break the circular
        *    reference. Problematic and liable to break things. For instance
        *    if sarray_reader_buffer is constructed from a get_reader() and
        *    the reader is thrown away.
        *  - change sarray_reader_buffer to a regular pointer. Problematic.
        *    like the above.
        *  - Re-implement the sarray_reader_buffer here. Code duplication is ugly.
-       *  - keep the shared_ptr in the sarray_reader_buffer, but give it a 
-       *    shared_ptr that doesn't actually delete the pointer. Not pretty, 
+       *  - keep the shared_ptr in the sarray_reader_buffer, but give it a
+       *    shared_ptr that doesn't actually delete the pointer. Not pretty,
        *    but works.
        */
       std::shared_ptr<sarray_reader<T>> bad_ptr_to_this(this, [](void*){});
-      m_read_buffers[i].init(bad_ptr_to_this, 
-                             segment_row_start_end[i].first, 
+      m_read_buffers[i].init(bad_ptr_to_this,
+                             segment_row_start_end[i].first,
                              segment_row_start_end[i].second);
     }
   }
 };
 
 template <typename T>
-inline size_t sarray_reader<T>::read_rows(size_t row_start, 
-                                          size_t row_end, 
+inline size_t sarray_reader<T>::read_rows(size_t row_start,
+                                          size_t row_end,
                                           sframe_rows& out_obj) {
   ASSERT_MSG(false, "read_rows() to sframe_rows not implemented for "
                     "non-flexible_type templatizations of sarray");
@@ -605,8 +605,8 @@ inline size_t sarray_reader<T>::read_rows(size_t row_start,
 
 
 template <>
-inline size_t sarray_reader<flexible_type>::read_rows(size_t row_start, 
-                                                      size_t row_end, 
+inline size_t sarray_reader<flexible_type>::read_rows(size_t row_start,
+                                                      size_t row_end,
                                                       sframe_rows& out_obj) {
   DASSERT_NE(reader, NULL);
   return reader->read_rows(row_start, row_end, out_obj);

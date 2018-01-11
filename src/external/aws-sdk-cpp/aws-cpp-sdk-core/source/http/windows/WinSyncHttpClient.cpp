@@ -1,12 +1,12 @@
 /*
   * Copyright 2010-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-  * 
+  *
   * Licensed under the Apache License, Version 2.0 (the "License").
   * You may not use this file except in compliance with the License.
   * A copy of the License is located at
-  * 
+  *
   *  http://aws.amazon.com/apache2.0
-  * 
+  *
   * or in the "license" file accompanying this file. This file is distributed
   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
   * express or implied. See the License for the specific language governing
@@ -161,7 +161,7 @@ void WinSyncHttpClient::LogRequestInternalFailure() const
         error,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         messageBuffer,
-        WINDOWS_ERROR_MESSAGE_BUFFER_SIZE, 
+        WINDOWS_ERROR_MESSAGE_BUFFER_SIZE,
         nullptr);
     AWS_LOGSTREAM_WARN(GetLogTag(), "Send request failed: " << messageBuffer);
 
@@ -195,7 +195,7 @@ std::shared_ptr<HttpResponse> WinSyncHttpClient::BuildSuccessResponse(const Aws:
             for (unsigned i = 2; i < keyValuePair.size(); ++i)
             {
                 headerValue += ":";
-                headerValue += keyValuePair[i];                 
+                headerValue += keyValuePair[i];
             }
 
             response->AddHeader(headerName, StringUtils::Trim(headerValue.c_str()));
@@ -254,13 +254,13 @@ std::shared_ptr<HttpResponse> WinSyncHttpClient::BuildSuccessResponse(const Aws:
     return response;
 }
 
-std::shared_ptr<HttpResponse> WinSyncHttpClient::MakeRequest(HttpRequest& request, 
-                                                                 Aws::Utils::RateLimits::RateLimiterInterface* readLimiter, 
+std::shared_ptr<HttpResponse> WinSyncHttpClient::MakeRequest(HttpRequest& request,
+                                                                 Aws::Utils::RateLimits::RateLimiterInterface* readLimiter,
                                                                  Aws::Utils::RateLimits::RateLimiterInterface* writeLimiter) const
 {
 	//we URL encode right before going over the wire to avoid double encoding problems with the signer.
 	URI& uriRef = request.GetUri();
-	uriRef.SetPath(URI::URLEncodePath(uriRef.GetPath()));	
+	uriRef.SetPath(URI::URLEncodePath(uriRef.GetPath()));
 
     AWS_LOGSTREAM_TRACE(GetLogTag(), "Making " << HttpMethodMapper::GetNameForHttpMethod(request.GetMethod()) <<
 			" request to uri " << uriRef.GetURIString(true));

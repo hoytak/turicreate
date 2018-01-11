@@ -136,4 +136,3 @@ struct Curl_multi {
 };
 
 #endif /* HEADER_CURL_MULTIHANDLE_H */
-

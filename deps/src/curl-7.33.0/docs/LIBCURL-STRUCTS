@@ -78,7 +78,7 @@ for older and later versions as things don't change drastically that often.
   doing so. Since connections are kept in the connection cache after use, the
   original SessionHandle may no longer be around when the time comes to shut
   down a particular connection. For this purpose, libcurl holds a special
-  dummy 'closure_handle' SessionHandle in the Curl_multi struct to 
+  dummy 'closure_handle' SessionHandle in the Curl_multi struct to
 
   FTP uses two TCP connections for a typical transfer but it keeps both in
   this single struct and thus can be considered a single connection for most
@@ -199,7 +199,7 @@ for older and later versions as things don't change drastically that often.
     PROTOPT_CLOSEACTION - this protocol has actions to do before closing the
     connection. This flag is no longer used by code, yet still set for a bunch
     protocol handlers.
-  
+
     PROTOPT_DIRLOCK - "direction lock". The SSH protocols set this bit to
     limit which "direction" of socket actions that the main engine will
     concern itself about.
@@ -221,7 +221,7 @@ for older and later versions as things don't change drastically that often.
 
 
   1.6 Curl_share
-  
+
   The libcurl share API allocates a Curl_share struct, exposed to the external
   API as "CURLSH *".
 
@@ -236,7 +236,7 @@ for older and later versions as things don't change drastically that often.
   The Curl_share struct can currently hold cookies, DNS cache and the SSL
   session cache.
 
-  
+
   1.7 CookieInfo
 
   This is the main cookie struct. It holds all known cookies and related

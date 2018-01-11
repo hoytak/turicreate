@@ -15,7 +15,7 @@
 #define GIL_CONVOLVE_HPP
 
 /*!
-/// \file 
+/// \file
 /// \brief 2D seperable convolutions and correlations
 ///
 /// \author Hailin Jin and Lubomir Bourdev \n
@@ -43,7 +43,7 @@ namespace boost { namespace gil {
 enum convolve_boundary_option  {
     convolve_option_output_ignore,  /// do nothing to the output
     convolve_option_output_zero,    /// set the output to zero
-    convolve_option_extend_padded,  /// assume the source boundaries to be padded already 
+    convolve_option_extend_padded,  /// assume the source boundaries to be padded already
     convolve_option_extend_zero,    /// assume the source boundaries to be zero
     convolve_option_extend_constant /// assume the source boundaries to be the boundary value
 };
@@ -85,7 +85,7 @@ void correlate_rows_imp(const SrcView& src, const Kernel& ker, const DstView& ds
                 correlator(&buffer.front(),&buffer.front()+width+1-ker.size(),
                            ker.begin(),it_dst);
                 it_dst+=width+1-ker.size();
-                if (option==convolve_option_output_zero) 
+                if (option==convolve_option_output_zero)
                     std::fill_n(it_dst,ker.right_size(),dst_zero);
             }
         }

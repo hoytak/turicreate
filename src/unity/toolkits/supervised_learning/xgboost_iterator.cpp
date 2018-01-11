@@ -365,17 +365,17 @@ void MakeColPage(const RowBatch &batch,
 }
 
 /**
- * ColumnBatchIterator backed by DiskPageType 
+ * ColumnBatchIterator backed by DiskPageType
  */
 class ColBatchIter: public utils::IIterator<ColBatch> {
  public:
-  ColBatchIter(void) { 
+  ColBatchIter(void) {
     is_inited = false;
     num_io_threads = std::max<size_t>(2, (thread::cpu_count() / 2));
     pool = std::make_shared<thread_pool>(num_io_threads);
   }
-  ~ColBatchIter(void) { 
-    this->Clear(); 
+  ~ColBatchIter(void) {
+    this->Clear();
     pool->join();
   }
   void BeforeFirst(void) {
@@ -430,7 +430,7 @@ class ColBatchIter: public utils::IIterator<ColBatch> {
     async_loaders_.clear();
     col_index_.clear();
     col_data_.clear();
-    pages_.clear(); 
+    pages_.clear();
   }
   void SetPages(std::vector<DiskPageType>& pages_) {
     this->pages_ = std::move(pages_);
@@ -484,7 +484,7 @@ class ColBatchIter: public utils::IIterator<ColBatch> {
   bool is_inited = false;
   size_t num_io_threads = 2;
   std::shared_ptr<thread_pool> pool;
-  // the selected column indices 
+  // the selected column indices
   std::vector<bst_uint> col_index_;
   // column sparse pages
   std::vector<DiskPageType> pages_;
@@ -539,21 +539,21 @@ class DiskPagedFMatrix: public IFMatrix {
   virtual void InitColAccess(const std::vector<bool> &enabled,
                              float pkeep, size_t max_row_perbatch) {
     if (this->HaveColAccess()) return;
-    // The parameter "enabled" is deprecated. 
+    // The parameter "enabled" is deprecated.
     // Assume enabled is all true that we are using all columns.
     ASSERT_TRUE(std::all_of(enabled.begin(), enabled.end(), [](bool x) { return x; }));
     this->InitColData(pkeep, max_row_perbatch);
 
     // Report summary of column density
     size_t ncol = NumCol();
-    std::vector<float> col_density; 
+    std::vector<float> col_density;
     for (size_t i = 0; i < ncol; ++i) { col_density.push_back(GetColDensity(i)); }
     std::sort(col_density.begin(), col_density.end());
     std::vector<size_t> quantiles {0, ncol/4, ncol/2, ncol*3/4, ncol-1};
     std::stringstream ss;
     ss << "Feature density quantile (0%, 25%, 50%, 100%): ";
     for (auto i : quantiles) ss << col_density[i] << " ";
-    logstream(LOG_INFO) << "Number of features after expand: " 
+    logstream(LOG_INFO) << "Number of features after expand: "
                             << col_density.size() << std::endl;
     logstream(LOG_INFO) << ss.str() << std::endl;
   }
@@ -596,7 +596,7 @@ class DiskPagedFMatrix: public IFMatrix {
    * \param pkeep probability to keep a row
    */
   void InitColData(float pkeep, size_t max_row_perbatch) {
-    // Init data structures 
+    // Init data structures
     buffered_rowset_.clear();
     buffered_rowset_.reserve(info.num_row());
     col_size_.clear();
@@ -667,7 +667,7 @@ DMatrixMLData::DMatrixMLData(const ml_data &data,
     for(const auto& kvp: class_weights.get<flex_dict>()){
       size_t index = metadata->target_indexer()
                              ->immutable_map_value_to_index(kvp.first);
-      DASSERT_TRUE(index != size_t(-1)); 
+      DASSERT_TRUE(index != size_t(-1));
       _class_weights[index] = kvp.second.get<flex_float>();
     }
   }
@@ -683,13 +683,13 @@ DMatrixMLData::DMatrixMLData(const ml_data &data,
     in_parallel([&](size_t thread_idx, size_t num_threads){
       flexible_type true_value, predicted_value;
       size_t target_index = 0;
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
+      for(auto it = data.get_iterator(thread_idx, num_threads);
                                            !it.done(); ++it) {
         if (is_categorical) {
           target_index = it->target_index();
           info.labels[it.row_index()] = target_index;
           if (has_class_weights) {
-            // target_index may not exist in _class_weights which is filled up 
+            // target_index may not exist in _class_weights which is filled up
             // based on training data. Default weight is 1 for new class.
             if (_class_weights.count(target_index) != 0) {
               info.weights[it.row_index()] = _class_weights.at(target_index);
@@ -725,17 +725,17 @@ DMatrixMLData::DMatrixMLData(const ml_data &data,
     const size_t max_row_size_in_bytes = data.max_row_size() * sizeof(RowBatch::Entry);
     max_row_per_batch = cache_size_per_batch / (max_row_size_in_bytes);
     num_batches = (data.num_rows() + max_row_per_batch - 1) / max_row_per_batch;
-    logstream(LOG_INFO) << "Auto tune batch size... Memory limit (MB): " << memory_limit_mb << "MB" 
+    logstream(LOG_INFO) << "Auto tune batch size... Memory limit (MB): " << memory_limit_mb << "MB"
                         << std::endl;
     logstream(LOG_INFO) << " Max cache per batch: " << cache_size_per_batch/float(1024 * 1024) << "MB"
                         << " Max row size: " << max_row_size_in_bytes << "B" << std::endl;
     logstream(LOG_INFO) << "Number of batches: "  << num_batches
-                        << " Max row per batch: " << max_row_per_batch 
-                        << std::endl; 
+                        << " Max row per batch: " << max_row_per_batch
+                        << std::endl;
   } else {
     max_row_per_batch = (data.num_rows() + num_batches - 1) / num_batches;
     logstream(LOG_INFO) << "Fixed number of batches: "  << num_batches
-                        << " Max row per batch: " << max_row_per_batch 
+                        << " Max row per batch: " << max_row_per_batch
                         << std::endl;
   }
 

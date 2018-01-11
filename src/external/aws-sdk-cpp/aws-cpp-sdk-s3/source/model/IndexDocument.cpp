@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-IndexDocument::IndexDocument() : 
+IndexDocument::IndexDocument() :
     m_suffixHasBeenSet(false)
 {
 }
 
-IndexDocument::IndexDocument(const XmlNode& xmlNode) : 
+IndexDocument::IndexDocument(const XmlNode& xmlNode) :
     m_suffixHasBeenSet(false)
 {
   *this = xmlNode;

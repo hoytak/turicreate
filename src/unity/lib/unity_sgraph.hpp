@@ -27,7 +27,7 @@ class sgraph;
 typedef lazy_eval_operation_dag<sgraph> unity_graph_dag_type;
 typedef lazy_eval_future<sgraph> sgraph_future;
 
-/** 
+/**
  * \ingroup unity
  * The \ref turi::unity_sgraph and \ref turi::unity_sgraph_base classes
  * implement a graph object on the server side which is exposed to the
@@ -103,7 +103,7 @@ class unity_sgraph: public unity_sgraph_base {
     /**
      * Returns a sframe of edges satisfying certain constraints.
      * source_vids and target_vids arrays must match up in length, and denote
-     * source->target edges. For instance: i-->j will return the edge i--> if it 
+     * source->target edges. For instance: i-->j will return the edge i--> if it
      * exists. Wildcards are supported by setting the flexible_type to UNDEFINED.
      * For instance, i-->UNDEFINED will match every edge with source i. And
      * UNDEFINED-->j will match every edge with target j.
@@ -114,10 +114,10 @@ class unity_sgraph: public unity_sgraph_base {
      * The edge must further match the values specified by the field_constraint.
      *
      * \ref source_vids A list of source vertices or wildcards (UNDEFINED).
-     *                  Must match the length of target_vids. See above for 
+     *                  Must match the length of target_vids. See above for
      *                  semantics.
      * \ref target_vids A list of target vertices or wildcards (UNDEFINED).
-     *                  Must match the length of source_vids. See above for 
+     *                  Must match the length of source_vids. See above for
      *                  semantics.
      * \ref field_constraint A mapping of string-->value. Only edges which
      *              contain a field with the particular value will be returned.
@@ -148,7 +148,7 @@ class unity_sgraph: public unity_sgraph_base {
      * 'id_field_name' must therefore exist in the 'vertices' dataframe. If the
      * vertex with the given ID already exists, all field values will
      * overwrite. This function can therefore be also used to perform
-     * modification of graph data. An exception is thrown on failure. 
+     * modification of graph data. An exception is thrown on failure.
      */
     std::shared_ptr<unity_sgraph_base> add_vertices(
         std::shared_ptr<unity_sframe_base> vertices,
@@ -202,7 +202,7 @@ class unity_sgraph: public unity_sgraph_base {
 
     /**
      * Returns a new graph corresponding to the current graph with the field
-     * "field" renamed to "newfield". 
+     * "field" renamed to "newfield".
      */
     std::shared_ptr<unity_sgraph_base> copy_vertex_field(
         std::string field, std::string newfield, size_t group=0);
@@ -246,7 +246,7 @@ class unity_sgraph: public unity_sgraph_base {
 
     /**
      * Returns a new graph corresponding to the current graph with the field
-     * "field" renamed to "newfield". 
+     * "field" renamed to "newfield".
      */
     std::shared_ptr<unity_sgraph_base> copy_edge_field(
         std::string field, std::string newfield,
@@ -327,7 +327,7 @@ class unity_sgraph: public unity_sgraph_base {
     void load(iarchive& iarc);
 
     /**
-     * Save the sgraph using reference to SFrames in other locations. 
+     * Save the sgraph using reference to SFrames in other locations.
      *
      * \see unity_sframe::save_frame_reference
      */
@@ -344,7 +344,7 @@ class unity_sgraph: public unity_sgraph_base {
     bool save_graph(std::string target_dir, std::string format);
 
     /**
-     * Loads the graph from the given file in a 
+     * Loads the graph from the given file in a
      * non-portable binary format. File can be on disk, or on HDFS.
      * Returns true on success, false on failure.
      */

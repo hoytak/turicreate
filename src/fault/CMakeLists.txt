@@ -18,7 +18,7 @@ make_library(fault_comm
   sockets/async_request_socket.cpp
   sockets/async_reply_socket.cpp
   sockets/socket_receive_pollset.cpp
-  REQUIRES 
+  REQUIRES
   zeromq
   network
   util
@@ -26,7 +26,7 @@ make_library(fault_comm
   logger
   globals
 )
-set_property(TARGET fault_comm APPEND PROPERTY COMPILE_DEFINITIONS FAKE_ZOOKEEPER) 
+set_property(TARGET fault_comm APPEND PROPERTY COMPILE_DEFINITIONS FAKE_ZOOKEEPER)
 
 if (HAS_ZOOKEEPER)
 # Libraries should not link both fault_comm_zookeeper and fault_comm together
@@ -45,7 +45,7 @@ make_library(fault_comm_zookeeper
   sockets/async_request_socket.cpp
   sockets/async_reply_socket.cpp
   sockets/socket_receive_pollset.cpp
-  REQUIRES 
+  REQUIRES
   zeromq
   zookeeper_util
   network
@@ -68,7 +68,7 @@ make_library(fault
   query_object_server_replica.cpp
   query_object_server_process.cpp
   query_object_server_manager.cpp
-  REQUIRES 
+  REQUIRES
   zeromq
   libsodium
   boost

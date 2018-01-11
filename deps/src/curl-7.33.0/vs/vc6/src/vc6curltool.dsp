@@ -7,21 +7,21 @@
 CFG=curltool - Win32 using libcurl LIB Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vc6curltool.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vc6curltool.mak" CFG="curltool - Win32 using libcurl LIB Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "curltool - Win32 using libcurl DLL Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE "curltool - Win32 using libcurl DLL Release" (based on "Win32 (x86) Console Application")
 !MESSAGE "curltool - Win32 using libcurl LIB Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE "curltool - Win32 using libcurl LIB Release" (based on "Win32 (x86) Console Application")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -126,7 +126,7 @@ LINK32=link.exe
 # ADD BASE LINK32 libcurl.lib wldap32.lib ws2_32.lib advapi32.lib kernel32.lib /nologo /subsystem:console /pdb:none /machine:I386 /out:"lib-release/curl.exe" /libpath:"..\lib\lib-release" /fixed:no
 # ADD LINK32 libcurl.lib wldap32.lib ws2_32.lib advapi32.lib kernel32.lib /nologo /subsystem:console /pdb:none /machine:I386 /out:"lib-release/curl.exe" /libpath:"..\lib\lib-release" /fixed:no
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 

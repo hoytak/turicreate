@@ -5,7 +5,7 @@ $(function() {
   });
   xData.sort(function (a,b){ return b-a;});
 
-  // Define the three functions 
+  // Define the three functions
   function target(x){
     if (x > randn()) {
       y = 1.0;
@@ -19,7 +19,7 @@ $(function() {
      x = 15.0 * x;
      return 0.5 + 0.5 * ((Math.exp(y) - Math.exp(-x)) / (Math.exp(y) + Math.exp(-x)));
   }
-  
+
   function classifier(x, y){
     return  logistic_function(x) > y;
   }

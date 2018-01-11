@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-QueueConfiguration::QueueConfiguration() : 
+QueueConfiguration::QueueConfiguration() :
     m_idHasBeenSet(false),
     m_queueArnHasBeenSet(false),
     m_eventsHasBeenSet(false),
@@ -37,7 +37,7 @@ QueueConfiguration::QueueConfiguration() :
 {
 }
 
-QueueConfiguration::QueueConfiguration(const XmlNode& xmlNode) : 
+QueueConfiguration::QueueConfiguration(const XmlNode& xmlNode) :
     m_idHasBeenSet(false),
     m_queueArnHasBeenSet(false),
     m_eventsHasBeenSet(false),

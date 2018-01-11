@@ -36,7 +36,7 @@ class Visitor(object):
 
 
     def visit_list(self, nodes, *args, **kwargs):
-        
+
         result = []
         for node in nodes:
             result.append(self.visit(node, *args, **kwargs))
@@ -60,7 +60,7 @@ class Visitor(object):
 
 
 class Mutator(Visitor):
-    
+
     def mutateDefault(self, node):
         for field in node._fields:
             value = getattr(node, field)
@@ -69,19 +69,19 @@ class Mutator(Visitor):
                     if isinstance(item, _ast.AST):
                         new_item = self.mutate(item)
                         if new_item is not None:
-                            value[i] = new_item 
+                            value[i] = new_item
                     else:
                         pass
-                    
+
             elif  isinstance(value, _ast.AST):
                 new_value = self.mutate(value)
                 if new_value is not None:
                     setattr(node, field, new_value)
 
         return None
-    
+
     def mutate(self, node, *args, **kwargs):
-        
+
         node_name = type(node).__name__
 
         attr = 'mutate' + node_name
@@ -95,4 +95,3 @@ class Mutator(Visitor):
         else:
             mehtod = getattr(self, 'mutate' + node_name)
             return mehtod(node, *args, **kwargs)
-

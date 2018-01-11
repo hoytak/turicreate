@@ -12,7 +12,7 @@
 
 namespace turi {
 
-/** 
+/**
  * Utility to check the value types.
  */
 void topk_indexer::valdidate_types(const flexible_type & value) const {
@@ -28,7 +28,7 @@ void topk_indexer::valdidate_types(const flexible_type & value) const {
   }
 }
 
-/** 
+/**
  * Initialize the index mapping and setup.
  */
 void topk_indexer::initialize() {
@@ -42,7 +42,7 @@ void topk_indexer::initialize() {
   }
 }
 
-/** 
+/**
  * Call this when all calls to map_value_to_index are completed.
  */
 void topk_indexer::finalize() {
@@ -75,11 +75,11 @@ void topk_indexer::finalize() {
 }
 
 
-/** 
+/**
  * Returns the index associated with the "value" value.
  *
  */
-void topk_indexer::insert_or_update(const flexible_type& value, 
+void topk_indexer::insert_or_update(const flexible_type& value,
                             size_t thread_idx, size_t count) {
   DASSERT_FALSE(threadlocal_accumulator.empty());
   DASSERT_LT(thread_idx, threadlocal_accumulator.size());
@@ -100,7 +100,7 @@ void topk_indexer::insert_or_update(const flexible_type& value,
   }
 }
 
-/** 
+/**
  * Returns the index associated with the value.
  */
 size_t topk_indexer::lookup(const flexible_type& value) const {
@@ -117,7 +117,7 @@ size_t topk_indexer::lookup(const flexible_type& value) const {
   }
 }
 
-/** 
+/**
  * Returns the index associated with the value.
  */
 size_t topk_indexer::lookup_counts(const flexible_type& value) const {
@@ -136,7 +136,7 @@ size_t topk_indexer::lookup_counts(const flexible_type& value) const {
 }
 
 
-/** 
+/**
  * Returns the value "value" associated an index.
  */
 flexible_type topk_indexer::inverse_lookup(size_t idx) const {
@@ -162,7 +162,7 @@ void topk_indexer::delete_all_marked() {
   // Define struct
   typedef struct cv_pair {
     size_t count;
-    flexible_type value; 
+    flexible_type value;
   } cv_pair;
   std::vector<cv_pair> cv_pair_array;
   // Now add back the ones that are not marked for deletion.
@@ -189,18 +189,18 @@ void topk_indexer::delete_all_marked() {
 
   counts.clear();
   values.clear();
-  size_t global_index = 0; 
+  size_t global_index = 0;
   // Rebuild global index map
   for (size_t i=0 ; i < cv_pair_array.size(); i++){
     hash_value wt(cv_pair_array[i].value);
     index_lookup[wt] = global_index;
     counts.push_back(cv_pair_array[i].count);
     values.push_back(cv_pair_array[i].value);
-    global_index++; 
-  } 
+    global_index++;
+  }
 }
 
-/** 
+/**
  * Retain only top-k.
  */
 void topk_indexer::retain_only_top_k_values() {
@@ -222,7 +222,7 @@ void topk_indexer::retain_only_top_k_values() {
        hash_value hash_b(values[b]);
        return hash_a < hash_b;
      } else {
-       return counts[a] < counts[b]; 
+       return counts[a] < counts[b];
      }
     });
     indices.resize(botk);
@@ -234,7 +234,7 @@ void topk_indexer::retain_only_top_k_values() {
   }
 }
 
-/** 
+/**
  * Retain only values with count >= threshold
  */
 void topk_indexer::retain_min_count_values() {
@@ -287,7 +287,7 @@ void topk_indexer::load_version(turi::iarchive& iarc, size_t version) {
        >> threshold
        >> max_threshold;
 
-  // Rebuild the hash-table. 
+  // Rebuild the hash-table.
   for(size_t i = 0; i < values.size(); i++) {
     hash_value wt(values[i]);
     index_lookup[wt] = i;

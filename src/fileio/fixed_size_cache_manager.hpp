@@ -18,7 +18,7 @@
 namespace turi {
 namespace fileio {
 
-//forward declaration 
+//forward declaration
 class fixed_size_cache_manager;
 
 typedef std::string cache_id_type;
@@ -26,7 +26,7 @@ typedef std::string cache_id_type;
  * \ingroup fileio
  *
  * A struct that contains either an array buffer or a file resource.
- * This struct cannot be created by anything else other than the 
+ * This struct cannot be created by anything else other than the
  * fixed_size_cache_manager.
  *
  * This struct is not generally thread safe.
@@ -35,7 +35,7 @@ struct cache_block {
  private:
 
   // Construct an in-memory cache block
-  cache_block(cache_id_type cache_id, size_t max_capacity, 
+  cache_block(cache_id_type cache_id, size_t max_capacity,
               fixed_size_cache_manager* owning_cache_manager);
 
  public:
@@ -134,7 +134,7 @@ struct cache_block {
   size_t maximum_capacity = 0;
   // current capacity of the data in memory
   size_t capacity = 0;
-  // actual content size 
+  // actual content size
   size_t size = 0;
   // begin of the data in memory
   char* data = NULL;
@@ -155,7 +155,7 @@ struct cache_block {
   /**
    * If this points to an in memory cache, release the memory.
    * If this points to a file, delete it.
-   */ 
+   */
   void clear();
 
   friend class fixed_size_cache_manager;
@@ -170,13 +170,13 @@ struct cache_block {
  *  - For every new cache block requested:
  *    - If there is FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE free bytes,
  *      a new cache block of FILEIO_INITIAL_CAPACITY_PER_FILE is allocated, where
- *      the new cache block is permitted to grow up to 
+ *      the new cache block is permitted to grow up to
  *      FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE. The capacity is not charged as utilization
  *      until it is actually used. i.e. utilization is only incremented by
  *      FILEIO_INITIAL_CACHE_CAPACITY_PER_FILE. Then as more memory is allocated for the
  *      cache, then utilization is incremented again.
  *    - If there is < FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE free bytes available:
- *      The largest cache block is evicted. If there is 
+ *      The largest cache block is evicted. If there is
  *      FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE free bytes, Goto the first case.
  *      Otherwise, create a new cache block with all the remaining free bytes.
  *
@@ -205,12 +205,12 @@ class fixed_size_cache_manager {
 
   /**
    * Allocate a new cache block of up to some maximum capcity.
-   * If the cache_id already exists, the data will be lost. 
+   * If the cache_id already exists, the data will be lost.
    *
    * Returns a pointer to the cache block.
    * Thread safe.
    */
-  std::shared_ptr<cache_block> new_cache(cache_id_type cache_id); 
+  std::shared_ptr<cache_block> new_cache(cache_id_type cache_id);
 
   /**
    * Returns the pointer to the cache_block assocaited with the cache_id,
@@ -222,7 +222,7 @@ class fixed_size_cache_manager {
 
   /**
    * Free the data in the cache block. Delete the allocated memory or temp file
-   * associated with the cache. 
+   * associated with the cache.
    *
    * NOT thread safe to call on the same block.
    */

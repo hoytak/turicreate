@@ -79,7 +79,7 @@ typedef std::function<void(fast_edge_scope&)> fast_triple_apply_fn_type;
  * 3. Vertex locking is ommited for simplification. (we can add it later if needed).
  *
  * \param g The target graph to perform the transformation.
- * \param apply_fn The user defined function that will be applied on each edge scope. 
+ * \param apply_fn The user defined function that will be applied on each edge scope.
  * \param vertex_fields A subset of vertex data columns that the apply_fn will access.
  * \param mutated_vertex_fields A subset of columns in \ref vertex_fields that the apply_fn will modify.
  */

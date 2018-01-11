@@ -5,7 +5,7 @@
  */
 #include <unity/toolkits/factorization/model_factory.hpp>
 #include <unity/toolkits/sgd/basic_sgd_solver.hpp>
-#include <unity/toolkits/sgd/sgd_interface.hpp> 
+#include <unity/toolkits/sgd/sgd_interface.hpp>
 #include <unity/toolkits/factorization/ranking_sgd_solver_explicit.hpp>
 #include <unity/toolkits/factorization/ranking_sgd_solver_implicit.hpp>
 
@@ -19,7 +19,7 @@ SUPPRESS_SOLVERS();
 namespace turi { namespace factorization {
 
 std::pair<std::shared_ptr<factorization_model>,
-          std::shared_ptr<sgd::sgd_solver_base> > 
+          std::shared_ptr<sgd::sgd_solver_base> >
 create_model_and_solver(const v2::ml_data& train_data,
                         std::map<std::string, flexible_type> options,
                         const std::string& loss_type,
@@ -46,4 +46,3 @@ create_model_and_solver(const v2::ml_data& train_data,
 }
 
 }}
-  

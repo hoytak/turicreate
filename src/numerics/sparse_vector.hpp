@@ -62,33 +62,33 @@ class sparse_vector {
 
     void insert(index_type idx, value_type val){
       auto it = _find_element(idx);
-      if(it != _data.end() && it->first == idx) { 
+      if(it != _data.end() && it->first == idx) {
         it->second = val;
       } else {
-        _data.insert(it, {idx, val}); 
+        _data.insert(it, {idx, val});
       }
     }
 
     inline operator arma::Col<value_type>() const {
       arma::Col<value_type> ret(size());
       ret.zeros();
-      for(auto p : *this) { 
+      for(auto p : *this) {
         ret(p.first) = p.second;
       }
-      return ret; 
+      return ret;
     }
-    
+
     inline operator arma::Row<value_type>() const {
       arma::Row<value_type> ret(size());
       ret.zeros();
-      for(auto p : *this) { 
+      for(auto p : *this) {
         ret(p.first) = p.second;
       }
-      return ret; 
+      return ret;
     }
 
     inline arma::Col<value_type> to_dense() const {
-      return (arma::Col<value_type>)(*this); 
+      return (arma::Col<value_type>)(*this);
     }
 
     inline size_t num_nonzeros() const { return _data.size(); }
@@ -119,7 +119,7 @@ class sparse_vector {
         return it->second;
       } else {
         value_type& ret = _data.insert(it, {idx, 0})->second;
-        return ret; 
+        return ret;
       }
     }
 
@@ -154,8 +154,8 @@ class sparse_vector {
   void save(turi::oarchive& oarc) const {
     size_t version = 1;
 
-    oarc << version; 
-    
+    oarc << version;
+
     oarc << (size_t)_size << (size_t)_data.size();
     for (const auto& p : _data) {
       oarc << (size_t)p.first << (double)p.second;
@@ -167,8 +167,8 @@ class sparse_vector {
   void load(turi::iarchive& iarc) {
     size_t version;
     iarc >> version;
-    ASSERT_EQ(version, 1); 
-    
+    ASSERT_EQ(version, 1);
+
 
     size_t nnz;
     iarc >> _size;
@@ -226,12 +226,12 @@ class sparse_vector {
     }
 
 
-    void _internal_check() const { 
+    void _internal_check() const {
 #ifndef NDEBUG
-      for(size_t i = 0; i < _data.size(); ++i) { 
-        DASSERT_LT(_data[i].first, _size); 
+      for(size_t i = 0; i < _data.size(); ++i) {
+        DASSERT_LT(_data[i].first, _size);
         if(i != 0) {
-          DASSERT_LT(_data[i-1].first, _data[i].first); 
+          DASSERT_LT(_data[i-1].first, _data[i].first);
         }
       }
 #endif
@@ -240,10 +240,10 @@ class sparse_vector {
 
 template <typename T, typename I, typename F>
 GL_HOT_INLINE_FLATTEN
-static inline T bi_aggregate(const sparse_vector<T, I>& a, const sparse_vector<T, I>& b, F&& bi_func) { 
-  
-  T d = 0; 
-    
+static inline T bi_aggregate(const sparse_vector<T, I>& a, const sparse_vector<T, I>& b, F&& bi_func) {
+
+  T d = 0;
+
   auto it_a = a.begin();
   auto it_b = b.begin();
 
@@ -276,13 +276,13 @@ static inline T bi_aggregate(const sparse_vector<T, I>& a, const sparse_vector<T
     }
   }
 
-  return d;  
+  return d;
 }
 
 
 template <typename T, typename Index>
 T dot(const sparse_vector<T, Index>& a, const sparse_vector<T, Index>& b) {
-  return bi_aggregate(a, b, [](T x, T y) { return x*y; }); 
+  return bi_aggregate(a, b, [](T x, T y) { return x*y; });
 }
 
 template <typename T, typename Index, typename... Args>

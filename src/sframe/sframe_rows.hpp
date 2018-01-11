@@ -27,7 +27,7 @@ class iarchive;
  * iterator interface.
  *
  * sframe_rows are fast and cheap to copy, and also allow values to be modified.
- * Internally, sframe_rows are built on a copy-on-write architecture thus 
+ * Internally, sframe_rows are built on a copy-on-write architecture thus
  * allowing for safe mutation. Most accessor methods have a "constant" version
  * which should be used if no value modifications are to be made. For instance:
  *  - sframe_rows::begin() vs sframe_rows::cbegin()
@@ -35,10 +35,10 @@ class iarchive;
  *
  * The sframe_rows object is a relatively shallow wrapper over an
  *
- *    vector<shared_ptr<vector<flexible_type>>> 
+ *    vector<shared_ptr<vector<flexible_type>>>
  *
  * where each shared_ptr<vector<flexible_type>> represents a single column.
- * The column set can be directly accessed and modified using 
+ * The column set can be directly accessed and modified using
  * sframe_rows::get_columns() (returns a reference to the underlying vector)
  * or sframe_rows::cget_columns()
  *
@@ -66,12 +66,12 @@ class sframe_rows {
     other.m_is_unique = false;
   }
   /**
-   * Move constructor. 
+   * Move constructor.
    */
   sframe_rows(sframe_rows&&) = default;
 
   /**
-   * Assignment operator. The assignment operator is fast as only 
+   * Assignment operator. The assignment operator is fast as only
    * pointers are copied in a copy on write fashion.
    */
   sframe_rows& operator=(const sframe_rows& other)  {
@@ -86,7 +86,7 @@ class sframe_rows {
    */
   sframe_rows& operator=(sframe_rows&&) = default;
 
-  /// Returns the number of columns 
+  /// Returns the number of columns
   inline size_t num_columns() const {
     return m_decoded_columns.size();
   }
@@ -113,7 +113,7 @@ class sframe_rows {
 
   /**
    * Adds to the right of the sframe_rows, a collection of decoded columns
-   * 
+   *
    * \code
    * add_decoded_column(std::move(source))
    * \endcode
@@ -160,7 +160,7 @@ class sframe_rows {
   struct const_iterator;
 
   /**
-   * An row object which refererences a row of the sframe_rows 
+   * An row object which refererences a row of the sframe_rows
    * and mimics a std::vector<flexible_type>.
    *
    * \code
@@ -185,9 +185,9 @@ class sframe_rows {
    public:
     inline row() = default;
 
-    
+
     /**
-     * Makes the current row object have the same reference as another 
+     * Makes the current row object have the same reference as another
      * row object.
      */
     void copy_reference(const row& other) {
@@ -285,12 +285,12 @@ class sframe_rows {
     friend struct const_iterator;
     friend class sframe_rows;
 
-    /** 
+    /**
      * Iterator over values of a row
      */
-    struct const_iterator: 
-        public boost::iterator_facade<const_iterator, 
-                                      const flexible_type, 
+    struct const_iterator:
+        public boost::iterator_facade<const_iterator,
+                                      const flexible_type,
                                       boost::random_access_traversal_tag> {
           /// Pointer to the input range. NULL if end iterator.
           const row* m_source = nullptr;
@@ -303,27 +303,27 @@ class sframe_rows {
          private:
           friend class boost::iterator_core_access;
           /// advances the iterator. See boost::iterator_facade
-          inline void increment() { 
+          inline void increment() {
             ++m_current_idx;
           }
           /// advances the iterator. See boost::iterator_facade
-          inline void advance(size_t n) { 
+          inline void advance(size_t n) {
             m_current_idx += n;
           }
 
           /// Tests for iterator equality. See boost::iterator_facade
           inline bool equal(const const_iterator& other) const {
-            return this->m_source == other.m_source && 
+            return this->m_source == other.m_source &&
                 this->m_current_idx == other.m_current_idx;
           }
 
           /// Dereference. See boost::iterator_facade
-          inline const flexible_type& dereference() const { 
+          inline const flexible_type& dereference() const {
             return m_source->fast_at(m_current_idx);
           }
 
           /// Dereference. See boost::iterator_facade
-          const ssize_t distance_to(const const_iterator& other) const { 
+          const ssize_t distance_to(const const_iterator& other) const {
             return other.m_current_idx - m_current_idx;
           }
         };
@@ -347,12 +347,12 @@ class sframe_rows {
   /**
    * A constant iterator across rows of sframe_rows
    */
-  struct const_iterator: 
-      public boost::iterator_facade<const_iterator, 
-                                    const row, 
+  struct const_iterator:
+      public boost::iterator_facade<const_iterator,
+                                    const row,
                                     boost::random_access_traversal_tag> {
     /// Pointer to the input range. NULL if end iterator.
-    const sframe_rows* m_source = NULL; 
+    const sframe_rows* m_source = NULL;
     row m_row;
     /// default constructor
     const_iterator() {}
@@ -361,27 +361,27 @@ class sframe_rows {
    private:
     friend class boost::iterator_core_access;
     /// advances the iterator. See boost::iterator_facade
-    inline void increment() { 
+    inline void increment() {
       ++m_row.m_current_row_number;
     }
     /// advances the iterator. See boost::iterator_facade
-    inline void advance(size_t n) { 
+    inline void advance(size_t n) {
       m_row.m_current_row_number += n;
     }
 
     /// Tests for iterator equality. See boost::iterator_facade
     inline bool equal(const const_iterator& other) const {
-        return this->m_source == other.m_source && 
+        return this->m_source == other.m_source &&
             m_row.m_current_row_number == other.m_row.m_current_row_number;
     }
 
     /// Dereference. See boost::iterator_facade
-    inline const row& dereference() const { 
+    inline const row& dereference() const {
       return m_row;
     }
 
     /// Dereference. See boost::iterator_facade
-    const ssize_t distance_to(const const_iterator& other) const { 
+    const ssize_t distance_to(const const_iterator& other) const {
       return other.m_row.m_current_row_number - m_row.m_current_row_number;
     }
   };
@@ -389,12 +389,12 @@ class sframe_rows {
   /**
    * A non-constant interator over rows of sframe_rows
    */
-  struct iterator: 
-      public boost::iterator_facade<iterator, 
-                                    row, 
+  struct iterator:
+      public boost::iterator_facade<iterator,
+                                    row,
                                     boost::random_access_traversal_tag> {
     /// Pointer to the input range. NULL if end iterator.
-    const sframe_rows* m_source = NULL; 
+    const sframe_rows* m_source = NULL;
     mutable row m_row;
     /// default constructor
     iterator() {}
@@ -403,27 +403,27 @@ class sframe_rows {
    private:
     friend class boost::iterator_core_access;
     /// advances the iterator. See boost::iterator_facade
-    inline void increment() { 
+    inline void increment() {
       ++m_row.m_current_row_number;
     }
     /// advances the iterator. See boost::iterator_facade
-    inline void advance(size_t n) { 
+    inline void advance(size_t n) {
       m_row.m_current_row_number += n;
     }
 
     /// Tests for iterator equality. See boost::iterator_facade
     inline bool equal(const iterator& other) const {
-        return this->m_source == other.m_source && 
+        return this->m_source == other.m_source &&
             m_row.m_current_row_number == other.m_row.m_current_row_number;
     }
 
     /// Dereference. See boost::iterator_facade
-    inline row& dereference() const { 
+    inline row& dereference() const {
       return m_row;
     }
 
     /// Dereference. See boost::iterator_facade
-    const ssize_t distance_to(const iterator& other) const { 
+    const ssize_t distance_to(const iterator& other) const {
       return other.m_row.m_current_row_number - m_row.m_current_row_number;
     }
   };
@@ -481,14 +481,14 @@ class sframe_rows {
   /**
    * Reads a particular row of the sframe_rows object.
    */
-  inline const row operator[](size_t i) const { 
+  inline const row operator[](size_t i) const {
     return row(this, i);
   }
 
   /**
    * gets a mutable reference to a particular row of the sframe_rows object
    */
-  inline row operator[](size_t i) { 
+  inline row operator[](size_t i) {
     if (!m_is_unique) ensure_unique();
     return row(this, i);
   }

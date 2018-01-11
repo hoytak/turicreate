@@ -25,7 +25,7 @@ class EXPORT LinearModel : public Model {
                     const std::string& description);
 
     LinearModel(const Model &model);
-    
+
     /**
      * Set the weights.
      *
@@ -41,7 +41,7 @@ class EXPORT LinearModel : public Model {
      * @return Result type with errors.
      */
     Result setOffsets(std::vector<double> offsets);
-    
+
     /**
      * Get offsets/intercepts.
      *
@@ -55,7 +55,7 @@ class EXPORT LinearModel : public Model {
      * @return weights.
      */
     std::vector< std::vector<double>> getWeights();
-    
+
 };
 }
 

@@ -127,7 +127,7 @@ class LinearRegressionTest(unittest.TestCase):
                 'training_rmse': lambda x: abs(x - self.rmse) < 1e-5,
                 'training_time': lambda x: x >= 0}
         self.fields_ans = self.get_ans.keys()
-    
+
     def test__list_fields(self):
         """
         Check the _list_fields function. Compare with the answer.

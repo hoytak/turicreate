@@ -27,7 +27,7 @@ const std::string COMPONENT_ID_COLUMN = "component_id";
  *
  * Implements weighted union, and path compression.
  *
- * The \ref union_gorup, and \ref find_root operations are 
+ * The \ref union_gorup, and \ref find_root operations are
  * thread safe for finding connected components.
  */
 class union_find_cc {
@@ -141,7 +141,7 @@ sframe compute_connected_component(sgraph& g) {
         size_t src_component_id = union_find.find_root(src_vid);
         size_t dst_component_id = union_find.find_root(dst_vid);
 
-        // Union two components 
+        // Union two components
         if (src_component_id != dst_component_id) {
           union_find.union_group(src_component_id, dst_component_id);
           ++num_changed;

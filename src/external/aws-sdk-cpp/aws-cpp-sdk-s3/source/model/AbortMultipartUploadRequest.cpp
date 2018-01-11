@@ -25,7 +25,7 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws::Http;
 
-AbortMultipartUploadRequest::AbortMultipartUploadRequest() : 
+AbortMultipartUploadRequest::AbortMultipartUploadRequest() :
     m_bucketHasBeenSet(false),
     m_keyHasBeenSet(false),
     m_uploadIdHasBeenSet(false),

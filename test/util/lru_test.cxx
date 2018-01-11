@@ -41,12 +41,12 @@ struct lru_test {
     auto iter = s.begin();
     TS_ASSERT_EQUALS((*iter), "d"); ++iter;
     TS_ASSERT_EQUALS((*iter), "e"); ++iter;
-    TS_ASSERT_EQUALS((*iter), "f"); 
+    TS_ASSERT_EQUALS((*iter), "f");
 
     auto riter = s.rbegin();
     TS_ASSERT_EQUALS((*riter), "f"); ++riter;
     TS_ASSERT_EQUALS((*riter), "e"); ++riter;
-    TS_ASSERT_EQUALS((*riter), "d"); 
+    TS_ASSERT_EQUALS((*riter), "d");
   }
 
   void test_lru_query() {

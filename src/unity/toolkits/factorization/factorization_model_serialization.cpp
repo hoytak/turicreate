@@ -24,7 +24,7 @@ void factorization_model::local_save_impl(turi::oarchive& oarc) const {
 
   std::map<std::string, variant_type> data;
 
-  data["options"]             = to_variant(options); 
+  data["options"]             = to_variant(options);
   data["n_total_dimensions"]  = to_variant(n_total_dimensions);
   data["index_sizes"]         = to_variant(index_sizes);
   data["index_offsets"]       = to_variant(index_offsets);
@@ -40,7 +40,7 @@ void factorization_model::local_save_impl(turi::oarchive& oarc) const {
   // Step 2: Save the metadata and side information.
 
   oarc << metadata;
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Step 3: Run the internal save function.
 
@@ -50,7 +50,7 @@ void factorization_model::local_save_impl(turi::oarchive& oarc) const {
 ////////////////////////////////////////////////////////////////////////////////
 
 void factorization_model::local_load_version(turi::iarchive& iarc, size_t version) {
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Step 1: Load the data for the base model.
 
@@ -76,7 +76,7 @@ void factorization_model::local_load_version(turi::iarchive& iarc, size_t versio
 #undef __EXTRACT
 
   iarc >> metadata;
-  
+
   loss_model = get_loss_model_profile(loss_model_name);
 
   load_version(iarc, version);
@@ -96,10 +96,10 @@ factorization_model::factory_load(
     turi::iarchive& iarc) {
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Step 1: Get the parameters relevant for instantiating the model 
+  // Step 1: Get the parameters relevant for instantiating the model
 
   std::string factor_mode_str = variant_get_value<std::string>(serialization_parameters.at("factor_mode"));
-  flex_int num_factors_if_known     = variant_get_value<flex_int>(serialization_parameters.at("num_factors_if_known")); 
+  flex_int num_factors_if_known     = variant_get_value<flex_int>(serialization_parameters.at("num_factors_if_known"));
 
   ////////////////////////////////////////////////////////////////////////////////
   // Step 2: Instantiate the model
@@ -116,7 +116,7 @@ factorization_model::factory_load(
       ASSERT_MSG(false, ("DESERIALIZE ERROR: For factorization_machine, "
                          "num_factors_if_known must be DYNAMIC (-1) or 8."));
     }
-    
+
   } else if(factor_mode_str == "matrix_factorization") {
 
     if(num_factors_if_known == DYNAMIC) {
@@ -144,7 +144,7 @@ factorization_model::factory_load(
   ////////////////////////////////////////////////////////////////////////////////
   // Step 3: Deserialize the model
 
-  m->local_load_version(iarc, version); 
+  m->local_load_version(iarc, version);
 
   return m;
 }

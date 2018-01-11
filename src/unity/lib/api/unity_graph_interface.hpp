@@ -21,10 +21,10 @@ namespace turi {
 
 /**
  * The \ref turi::unity_graph and \ref turi::unity_sgraph_base classes
- * implement a graph object on the server side which is exposed to the 
- * client via the cppipc system. The unity_graph is a lazily evaluated, immutable 
+ * implement a graph object on the server side which is exposed to the
+ * client via the cppipc system. The unity_graph is a lazily evaluated, immutable
  * graph datastructure where most operations do not take time, and instead,
- * the graph is only fully constructed when accessed. See 
+ * the graph is only fully constructed when accessed. See
  * \ref turi::unity_graph for detailed documentation on the functions.
  */
 class unity_sgraph_base {

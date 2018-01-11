@@ -36,7 +36,7 @@ struct test_row_bounds  {
   // combinations of bounds, threads, sizes, and types
 
   enum class target_column_type {NONE, NUMERICAL, CATEGORICAL};
-  
+
   void run_row_bounds_check_test(size_t n, std::string run_string, target_column_type target_type,
                                  std::vector<size_t> untranslated_columns = {}) {
 
@@ -44,8 +44,8 @@ struct test_row_bounds  {
     globals::set_global("TURI_ML_DATA_STATS_PARALLEL_ACCESS_THRESHOLD", 7);
 
     // This must hold if we are going to have deterministic indexing
-    ASSERT_LE(n, 10000); 
-    
+    ASSERT_LE(n, 10000);
+
 
     random::seed(0);
 
@@ -63,9 +63,9 @@ struct test_row_bounds  {
 
     sframe raw_data = make_random_sframe(n, run_string, false);
 
-    if(target_column) 
+    if(target_column)
       raw_data.set_column_name(0, "target");
-    
+
     std::vector<std::vector<flexible_type> > ref_data = testing_extract_sframe_data(raw_data);
 
     std::map<std::string, ml_column_mode> mode_overrides;
@@ -77,7 +77,7 @@ struct test_row_bounds  {
       if(raw_data.column_type(c_idx) == flex_type_enum::INTEGER)
         mode_overrides[raw_data.column_name(c_idx)] = ml_column_mode::CATEGORICAL;
     }
-    
+
     std::string print_str = run_string;
 
     if(target_column)
@@ -92,8 +92,8 @@ struct test_row_bounds  {
 
     ml_data data;
 
-    data.fill(raw_data, (target_column ? "target" : ""), mode_overrides); 
-    
+    data.fill(raw_data, (target_column ? "target" : ""), mode_overrides);
+
     ////////////////////////////////////////////////////////////////////////////////
 
     std::vector<std::pair<size_t, size_t> > row_segments
@@ -104,7 +104,7 @@ struct test_row_bounds  {
 
     for(const std::pair<size_t, size_t>& row_bounds : row_segments) {
 
-      sframe sliced_raw_data = slice_sframe(raw_data, row_bounds.first, row_bounds.second); 
+      sframe sliced_raw_data = slice_sframe(raw_data, row_bounds.first, row_bounds.second);
 
       ml_data data_row_sliced;
       data_row_sliced.fill(raw_data, row_bounds, (target_column ? "target" : ""), mode_overrides);
@@ -113,21 +113,21 @@ struct test_row_bounds  {
       data_true.fill(sliced_raw_data, (target_column ? "target" : ""), mode_overrides);
 
       ml_data data_sliced = data.slice(row_bounds.first, row_bounds.second);
-      
+
       // Now go through and make sure they are equal.
       data_row_sliced.metadata()->_debug_is_equal(data_true.metadata());
 
-      ASSERT_EQ(data_row_sliced.num_rows(), data_true.num_rows()); 
-      ASSERT_EQ(data_sliced.num_rows(), data_true.num_rows()); 
+      ASSERT_EQ(data_row_sliced.num_rows(), data_true.num_rows());
+      ASSERT_EQ(data_sliced.num_rows(), data_true.num_rows());
 
-      in_parallel([&](size_t thread_idx, size_t num_threads) { 
-      
+      in_parallel([&](size_t thread_idx, size_t num_threads) {
+
           std::vector<ml_data_entry> x1, x2, x3;
           std::vector<flexible_type> xf1, xf2, xf3;
           std::vector<flexible_type> row_x1, row_x2, row_x3;
-      
-          auto it_1 = data_row_sliced.get_iterator(thread_idx, num_threads); 
-          auto it_2 = data_true.get_iterator(thread_idx, num_threads); 
+
+          auto it_1 = data_row_sliced.get_iterator(thread_idx, num_threads);
+          auto it_2 = data_true.get_iterator(thread_idx, num_threads);
           auto it_3 = data_sliced.get_iterator(thread_idx, num_threads);
 
           for(;!it_1.done();++it_1, ++it_2, ++it_3) {
@@ -136,31 +136,31 @@ struct test_row_bounds  {
 
             ASSERT_EQ(it_1.row_index(), it_2.row_index());
             ASSERT_EQ(it_1.row_index(), it_3.row_index());
-            
+
             ////////////////////////////////////////////////////////////////////////////////
             // Test that the sliced creation and the creation from sliced are identical
-        
+
             it_1->fill(x1);
             it_2->fill(x2);
             it_3->fill(x3);
 
-            ASSERT_TRUE(x1 == x2); 
-        
-            ASSERT_TRUE(it_1->target_index() == it_2->target_index()); 
+            ASSERT_TRUE(x1 == x2);
+
+            ASSERT_TRUE(it_1->target_index() == it_2->target_index());
             ASSERT_TRUE(it_1->target_value() == it_2->target_value());
-        
-            ASSERT_TRUE(it_1->target_value() == it_3->target_value()); 
+
+            ASSERT_TRUE(it_1->target_value() == it_3->target_value());
 
             ////////////////////////////////////////////////////////////////////////////////
             // Test reference to the original data, including the sliced data.
-        
+
             row_x1 = translate_row_to_original(data_row_sliced.metadata(), x1);
             row_x2 = translate_row_to_original(data_true.metadata(), x2);
             row_x3 = translate_row_to_original(data_sliced.metadata(), x3);
-        
+
             ASSERT_EQ(row_x1.size(), row_x2.size());
             ASSERT_EQ(row_x1.size(), row_x3.size());
-        
+
             for(size_t ri = 0; ri < row_x1.size(); ++ri) {
               ASSERT_TRUE(ml_testing_equals(row_x1.at(ri), row_x2.at(ri)));
               ASSERT_TRUE(ml_testing_equals(row_x1.at(ri), row_x3.at(ri)));
@@ -173,7 +173,7 @@ struct test_row_bounds  {
             it_2->fill_untranslated_values(xf2);
             it_3->fill_untranslated_values(xf3);
 
-            ASSERT_TRUE(xf1 == xf2); 
+            ASSERT_TRUE(xf1 == xf2);
             ASSERT_TRUE(xf1 == xf3);
           }
           ASSERT_TRUE(it_2.done());
@@ -273,7 +273,7 @@ struct test_row_bounds  {
     // One with just a lot of stuff
     run_row_bounds_check_test(10, "Zcuvd", target_column_type::NONE);
   }
-  
+
   void test_untranslated_columns_nn_1() {
     run_row_bounds_check_test(109, "nn", target_column_type::NONE, {1});
   }
@@ -319,7 +319,7 @@ struct test_row_bounds  {
     run_row_bounds_check_test(109, "cnsnscsnccccccccncss", target_column_type::NONE, {19});
   }
 
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // All the ones with targets
 
@@ -412,12 +412,12 @@ struct test_row_bounds  {
     // One with just a lot of stuff
     run_row_bounds_check_test(10, "Zcuvd", target_column_type::NUMERICAL);
   }
-  
+
   void test_row_bounds_16_null_tn() {
     // two large blocks of values
     run_row_bounds_check_test(1000, "", target_column_type::NUMERICAL);
   }
-  
+
   void test_untranslated_columns_nn_1_num() {
     run_row_bounds_check_test(109, "nn", target_column_type::NUMERICAL, {1});
   }
@@ -462,7 +462,7 @@ struct test_row_bounds  {
   void test_untranslated_columns_many_2_num() {
     run_row_bounds_check_test(109, "cnsnscsnccccccccncss", target_column_type::NUMERICAL, {19});
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // All the ones with targets
 
@@ -560,7 +560,7 @@ struct test_row_bounds  {
     // two large blocks of values
     run_row_bounds_check_test(1000, "", target_column_type::CATEGORICAL);
   }
-  
+
   void test_untranslated_columns_nn_1_cat() {
     run_row_bounds_check_test(109, "nn", target_column_type::CATEGORICAL, {1});
   }
@@ -605,7 +605,7 @@ struct test_row_bounds  {
   void test_untranslated_columns_many_2_cat() {
     run_row_bounds_check_test(109, "cnsnscsnccccccccncss", target_column_type::CATEGORICAL, {19});
   }
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_test_row_bounds, test_row_bounds)

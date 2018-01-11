@@ -35,9 +35,9 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_max_field(FIELD *field, int maxgrow)
-|   
+|
 |   Description   :  Set the maximum growth for a dynamic field. If maxgrow=0
 |                    the field may grow to any possible size.
 |
@@ -70,5 +70,5 @@ int set_max_field(FIELD *field, int maxgrow)
     }
   RETURN(E_OK);
 }
-		  
+
 /* fld_max.c ends here */

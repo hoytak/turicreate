@@ -9,7 +9,7 @@
 
 namespace turi {
 namespace variant_converter_impl {
-std::function<variant_type(const std::vector<variant_type>&)> 
+std::function<variant_type(const std::vector<variant_type>&)>
     get_toolkit_function_from_closure(const function_closure_info& closure) {
   auto native_execute_function = get_unity_global_singleton()
       ->get_toolkit_function_registry()

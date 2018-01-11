@@ -45,7 +45,7 @@ struct set_val: lazy_eval_operation_base<int> {
   virtual void execute(int& output,
                        const std::vector<int*>& parents) {
     std::cout << "Set to " << val << "\n";
-    output = val; 
+    output = val;
   }
 };
 
@@ -105,7 +105,7 @@ struct lazy_eval_test {
     std::cout << "Delete All\n";
     delete five; delete two; delete seven; delete nine;
     dag.cleanup();
-    
+
   }
 
 
@@ -131,7 +131,7 @@ struct lazy_eval_test {
     TS_ASSERT_EQUALS((*twenty_three)(), 23);
 
     std::cout << "Delete 7, 23\n";
-    delete twenty_three; delete seven; eighteen->reset(); 
+    delete twenty_three; delete seven; eighteen->reset();
     std::cout << dag;
     dag.cleanup();
     std::cout << "Evaluate 18\n";
@@ -144,9 +144,9 @@ struct lazy_eval_test {
     lazy_eval_future<int>* eleven= dag.add_operation(new adder, {nine, two});
     TS_ASSERT_EQUALS((*eleven)(), 11);
     std::cout << "Delete 9\n";
-    delete nine; 
+    delete nine;
     std::cout << dag;
-    eleven->reset(); 
+    eleven->reset();
     dag.cleanup();
     std::cout << "Evaluate 11\n";
     TS_ASSERT_EQUALS((*eleven)(), 11);

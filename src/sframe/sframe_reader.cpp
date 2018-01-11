@@ -10,7 +10,7 @@
 
 namespace turi {
 
-void sframe_reader::init(const sframe& frame, size_t num_segments) { 
+void sframe_reader::init(const sframe& frame, size_t num_segments) {
   Dlog_func_entry();
   typedef sarray_reader<flexible_type> array_reader_type;
   ASSERT_MSG(!inited, "SFrame reader already inited");
@@ -36,11 +36,11 @@ void sframe_reader::init(const sframe& frame, size_t num_segments) {
   }
 }
 
-void sframe_reader::init(const sframe& frame, const std::vector<size_t>& segment_lengths) { 
+void sframe_reader::init(const sframe& frame, const std::vector<size_t>& segment_lengths) {
   Dlog_func_entry();
   typedef sarray_reader<flexible_type> array_reader_type;
   ASSERT_MSG(!inited, "SFrame reader already inited");
-  // Verify that lengths match up 
+  // Verify that lengths match up
   index_info = frame.get_index_info();
   size_t sum = 0;
   for (size_t s: segment_lengths) sum += s;
@@ -65,8 +65,8 @@ sframe_reader::iterator sframe_reader::end(size_t segmentid) const {
 }
 
 
-size_t sframe_reader::read_rows(size_t row_start, 
-                                size_t row_end, 
+size_t sframe_reader::read_rows(size_t row_start,
+                                size_t row_end,
                                 std::vector<std::vector<flexible_type> >& out_obj) {
   std::shared_ptr<std::vector<flexible_type> > coldata = column_pool.get_new_buffer();
   for (size_t i = 0;i < column_data.size(); ++i) {
@@ -92,8 +92,8 @@ size_t sframe_reader::read_rows(size_t row_start,
   return out_obj.size();
 }
 
-size_t sframe_reader::read_rows(size_t row_start, 
-                                size_t row_end, 
+size_t sframe_reader::read_rows(size_t row_start,
+                                size_t row_end,
                                 sframe_rows& out_obj) {
   // sframe_rows is made up of a collection of columns
   out_obj.resize(column_data.size());

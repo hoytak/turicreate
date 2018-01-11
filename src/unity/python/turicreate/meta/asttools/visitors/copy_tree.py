@@ -22,7 +22,7 @@ class CopyVisitor(Visitor):
     def visitDefault(self, node):
         Node = type(node)
         new_node = Node()
-        
+
         for _field in Node._fields:
             if hasattr(node, _field):
                 field = getattr(node, _field)
@@ -34,13 +34,13 @@ class CopyVisitor(Visitor):
                         else:
                             new_item = item
                         new_list.append(new_item)
-                        
+
                     setattr(new_node, _field, new_list)
                 elif isinstance(field, ast.AST):
                     setattr(new_node, _field, self.visit(field))
                 else:
                     setattr(new_node, _field, field)
-        
+
         for _attr in node._attributes:
             if hasattr(node, _attr):
                 setattr(new_node, _attr, getattr(node, _attr))

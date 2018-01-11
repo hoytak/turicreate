@@ -3,8 +3,8 @@ body {
     background-color: white;
 
 /*  --------- FONT FAMILY --------
-   following are some optional font families. Usually a family 
-	is safer to choose than a specific font, 
+   following are some optional font families. Usually a family
+	is safer to choose than a specific font,
 	which may not be on the users computer		*/
 /    font-family:Georgia, Palatino, serif;
     font-family: "Open Sans", "Book Antiqua", Palatino, serif;
@@ -14,14 +14,14 @@ body {
 /    font-family:"Times New Roman", Times, serif;
 
 /*	-------------- COLOR OPTIONS ------------
- 	following are additional color options for base font
-	you could uncomment another one to easily change the base color 
-	or add one to a specific element style below         */		
+	following are additional color options for base font
+	you could uncomment another one to easily change the base color
+	or add one to a specific element style below         */
     color: #333333; /* dark gray not black */
 /    color: #000000; /* black */
-/    color: #666666; /* medium gray  black */	
+/    color: #666666; /* medium gray  black */
 /    color: #E3E3E3; /* very light gray */
-/    color: white; 
+/    color: white;
 
     line-height: 100%;
     max-width: 800px;
@@ -37,7 +37,7 @@ p {
 /    max-width: 540px;
     max-width: 960px;
     margin-bottom: 5px;
-    font-weight: 400;    
+    font-weight: 400;
 /    color: #333333
 }
 
@@ -108,7 +108,7 @@ ul {
 }
 
 li {
-     line-height:150%    
+     line-height:150%
 }
 
 li ul, li ul {
@@ -143,7 +143,7 @@ li code, p code {
 code.r, code.cpp {
     display: block;
     word-wrap: break-word;
-    border: 1px solid #606AAA;        
+    border: 1px solid #606AAA;
 }
 
 aside {
@@ -169,7 +169,7 @@ blockquote cite:before {
     /content: '\2014 \00A0';
 }
 
-blockquote p, blockquote li {  
+blockquote p, blockquote li {
     color: #666;
 }
 hr {
@@ -188,7 +188,7 @@ table {
 	border-left: 1px solid #919699;
 	border-spacing: 0;
 }
-	
+
 table th {
 	padding: 4px 8px 4px 8px;
   text-align: center;
@@ -199,11 +199,11 @@ table th {
 }
 table th p {
 	font-weight: bold;
-	margin-bottom: 0px; 
+	margin-bottom: 0px;
 }
-	
+
 table td {
-	padding: 8px;	
+	padding: 8px;
 	vertical-align: top;
 	border-bottom: 1px solid #919699;
 	border-right: 1px solid #919699;
@@ -215,11 +215,11 @@ table td:last-child {
 }
 
 table td p {
-	margin-bottom: 0px; 
+	margin-bottom: 0px;
 }
 table td p + p  {
-	margin-top: 5px; 
+	margin-top: 5px;
 }
 table td p + p + p {
-	margin-top: 5px; 
+	margin-top: 5px;
 }

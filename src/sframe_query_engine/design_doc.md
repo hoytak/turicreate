@@ -1,36 +1,36 @@
 # SFrame Query Operator Design Doc
 
-The new SFrame Query Engine design doc is to allow for greater performance 
+The new SFrame Query Engine design doc is to allow for greater performance
 optimizations by increasing abstraction of data representation from computation,
 and to set the path for going distributed.
 
-The basic design follows most query execution design principles, we have a 
+The basic design follows most query execution design principles, we have a
 logical query graph, a query optimizer that translates the logical query graph
 to a physical plan, and a physical plan executor that runs the plan.
 
 ## Operator
 All operators are implemented in operator/
-New operators have to be added to the enumeration operator_types in 
+New operators have to be added to the enumeration operator_types in
 operator_properties.hpp and operator_properties.cpp.
 
-Every operator has 2 components, a logical component which aids in planning, 
-and a physical component which just performs execution. An operator may or may 
-not take other operators as inputs. 
+Every operator has 2 components, a logical component which aids in planning,
+and a physical component which just performs execution. An operator may or may
+not take other operators as inputs.
 
 ### Physical Operator
 The physical component of the operator is implemented as a class which inherits
-from the query_operator base class.  (For a simple example, see 
-operators/transform.hpp) 
+from the query_operator base class.  (For a simple example, see
+operators/transform.hpp)
 
 To create a new operator, add to the enum in operator_properties and define
 your new new operator as a class operator_impl<enum> (the operator itself
 is just a specialization of the operator_impl class around the enum)
-The functions which must be implemented are 
+The functions which must be implemented are
  - attributes(): describes the attributes of the operator.
  - name(): a printable name of the operator
  - execute(): which reads elements from its inputs, and generates output
 Optionally:
- - print(): Makes a human readable description of the operator. 
+ - print(): Makes a human readable description of the operator.
             Defaults to just name()
 
 ### Logical Operator
@@ -44,7 +44,7 @@ elements:
  - *operator_parameters* (map of string->flexible_type>: The parameters for
  the operator. This is operator
  dependent and is defined by the operator itself. Generally, users of
- the planner node should not need this, and should just call 
+ the planner node should not need this, and should just call
 
  operator_impl<enum>::make_planner_node() to create an operator node
  - *any_operator_parameters* (map of string->any): Non-portable parameters.
@@ -53,7 +53,7 @@ elements:
  are defined here.
 
 To define a logical operator you must add to the operator_type enumeration
-and define a specialization of the planner_node_traits class 
+and define a specialization of the planner_node_traits class
 (once again, see operators/transform.hpp for a simple example) which describes
 
 A constructor for the the logical node:
@@ -68,14 +68,14 @@ A type inference routine:
 A length inference routine:
     operator_impl<enum>::infer_length(...)
 
-### Logical Operator Invariances 
+### Logical Operator Invariances
 
 The logical operator graph is simple and is just a shared_ptr of planner_node
 objects, each of which just contains a bunch of runtime attributes. This allows
 the planner graph to be easily modified. However, it is important that all
 modifications obey certain invariances for sanity.
 
-Assuming I have a function 
+Assuming I have a function
    mutate(std::shared_ptr<planner_node> X)
 
 The invariant any planner graph modification functions have to maintain is:
@@ -100,7 +100,7 @@ information, etc) becomes well defined.
 
 ### Other notes
 Note that not every logical operator needs to have a physical equivalent (the
-query optimizer or executor can eliminate the operators or make new ones), 
+query optimizer or executor can eliminate the operators or make new ones),
 but every physical operator must have a logical equivalent.
 
 For convenience, operators may be typedefed to simpler names. For instance,
@@ -123,11 +123,11 @@ Get a printable node name from the enum, or vice versa.
 
 
 ## SArray / Sframe execution process
-unity_sframe / unity_sarray are the outward facing wrappers of the SFrame and 
+unity_sframe / unity_sarray are the outward facing wrappers of the SFrame and
 SArray. These classes will each maintain:
  - A schema (types and column names)
  - Length of the SFrame / Sarray if known
- - A shared_ptr<planner_node> for lazy evaluation. 
+ - A shared_ptr<planner_node> for lazy evaluation.
     - even if the SFrame/SArray is already materialized, this should
       contain an sframe_source or an sarray_source node.
 
@@ -137,14 +137,14 @@ To materialize an SFrame, the following is necessary:
 ## Query Planner
 The query planner class performs 2 stages:
 
-### Query Optimization 
+### Query Optimization
 
 First stage is a query optimization pass, it rewrites the planner_node graph
 to optimize for generating the desired final output. It can rewrite whatever
 component of the graph as it needs as long as it ultimately generates the
-desired output. See Logical Operator Invariances for details on the allowed 
+desired output. See Logical Operator Invariances for details on the allowed
 transformations.
-  
+
 ### Query Execution
 
 The output graph is then partitioned into sections to be executed by the
@@ -154,11 +154,11 @@ The subplan executor takes a vector<shared_ptr<planner_node> > and returns an
 sframe which is the result of the concatenation of executing each of the plans.
 
 ## Global Lock
-Planner nodes are ... not very parallel. 
+Planner nodes are ... not very parallel.
 Many different objects (like unity_sframe / unity_sarray) contain planner_nodes,
-but the planner_nodes reference each other to get things done. 
+but the planner_nodes reference each other to get things done.
 So adding locks to the higher level objects (unity_sframe / unity_sarray) do
-not keep things safe. 
+not keep things safe.
 
-A better solution could be introduced here, but for now a global lock will 
+A better solution could be introduced here, but for now a global lock will
 resolve all issues.

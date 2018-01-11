@@ -34,7 +34,7 @@ class sframe;
  *  ... do some thing with val ...
  * }
  *
- * // Reader for the entire sframe 
+ * // Reader for the entire sframe
  * reader = sframe_reader_buffer<flexible_type>(mysframe, 0, (size_t)(-1));
  * ...
  * \endcode
@@ -66,7 +66,7 @@ class sframe_reader_buffer {
     m_row_start = row_start;
     m_row_end = std::min(row_end, m_reader->size());
     m_buffer_size = internal_buffer_size;
-    m_buffer.clear(); 
+    m_buffer.clear();
   }
 
   /// Return the next element in the reader.
@@ -150,7 +150,7 @@ inline void sframe_reader_buffer::refill() {
 
 
 inline void sframe_reader_buffer::clear() {
-  m_buffer.clear(); 
+  m_buffer.clear();
   m_row_start = m_original_row_start;
   m_iter = m_original_row_start;
   m_buffer_pos = 0;

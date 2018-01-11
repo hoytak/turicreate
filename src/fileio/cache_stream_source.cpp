@@ -24,7 +24,7 @@ cache_stream_source::cache_stream_source(cache_id_type cache_id) {
     in_array = NULL;
     array_size = 0;
     array_cur_pos = 0;
-    logstream(LOG_INFO) << "Reading " << cache_id << " from " 
+    logstream(LOG_INFO) << "Reading " << cache_id << " from "
                         << in_block->get_filename() << std::endl;
     in_file = std::make_shared<general_fstream_source>(in_block->get_filename());
   }
@@ -85,7 +85,7 @@ size_t cache_stream_source::file_size() const {
 
 std::shared_ptr<std::istream> cache_stream_source::get_underlying_stream() {
   if (in_array) {
-    return 
+    return
         std::make_shared<boost::iostreams::stream<boost::iostreams::array_source>>(
             in_block->get_pointer(), in_block->get_pointer_size());
   } else {

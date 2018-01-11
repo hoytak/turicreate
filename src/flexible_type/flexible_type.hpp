@@ -49,7 +49,7 @@ namespace turi {
  *  - \ref flex_vec
  *  - \ref flex_list
  *  - \ref flex_dict
- *  - \ref flex_image 
+ *  - \ref flex_image
  *  - \ref flex_undefined
  *
  * It is nearly every operator overloaded which
@@ -195,7 +195,7 @@ namespace turi {
  * ### Visitors
  * Of the most powerful feature of the flexible_type, is the visitor mechanism
  * which is designed in a very similar manner to that of the boost::variant.
- * See \ref flexible_type::apply_visitor(Visitor) or 
+ * See \ref flexible_type::apply_visitor(Visitor) or
  * \ref flexible_type::apply_mutating_visitor(Visitor) for details.
  *
  *
@@ -205,7 +205,7 @@ namespace turi {
  * of useful functions are provided.
  *
  * Runtime Capability Queries:
- *  - \ref flex_type_has_binary_op . Checks if binary operators between certain 
+ *  - \ref flex_type_has_binary_op . Checks if binary operators between certain
  *  types are supported.
  *  - \ref flex_type_is_convertible . Checks if certain type conversions can
  *  be performed.
@@ -218,7 +218,7 @@ namespace turi {
  *  - \ref has_direct_conversion_to_flexible_type . Can be casted to a flexible_type.
  *
  * ### Performance
- * Performance of the flexible_type is generally extremely good. With modern 
+ * Performance of the flexible_type is generally extremely good. With modern
  * compilers (sometimes with inlining limit bumped up) can sometimes produce
  * code which is equivalent to, or runs as fast as the version using native
  * types especially if certain type constraints are set-up before hand.
@@ -229,16 +229,16 @@ namespace turi {
  *   ... do a whole bunch of stuff on x ...
  * }
  * \endcode
- * 
- * Integers and Floating point values are stored in-place inside the 
- * flexible_type. All other types are somewhat more complex (strings, 
+ *
+ * Integers and Floating point values are stored in-place inside the
+ * flexible_type. All other types are somewhat more complex (strings,
  * vectors etc) and are optimized by copy on write. i.e.
  * \code
  * flexible_type a = "hello world";
  * flexible_type b = a;
  * \endcode
  * Both b and a will reference the same "hello world" until either one of them
- * gets mutated. As such, all inplace operations 
+ * gets mutated. As such, all inplace operations
  * (\ref get(), \ref apply_visitor(Visitor)) require const, but also have a
  * mutating version (\ref mutating_get(), \ref apply_mutating_visitor(Visitor)).
  */
@@ -358,7 +358,7 @@ class flexible_type {
    */
   template <typename T>
   typename std::enable_if<
-      has_direct_conversion_to_flexible_type<T>::value, 
+      has_direct_conversion_to_flexible_type<T>::value,
       flexible_type&>::type operator=(const T& other);
 
 
@@ -380,7 +380,7 @@ class flexible_type {
    */
   template <typename T>
   typename std::enable_if<has_direct_conversion_to_flexible_type<
-                 typename std::remove_reference<T>::type>::value, 
+                 typename std::remove_reference<T>::type>::value,
       flexible_type&>::type  operator=(T&& other);
 
   /**
@@ -449,7 +449,7 @@ class flexible_type {
    * \{
    * Converts the flexible_type to a particular type.
    * Behaves like the implicit cast operators, but explicit.
-   * In particular, this gets around the thorny issue that there is no way 
+   * In particular, this gets around the thorny issue that there is no way
    * to cast to an flex_vec, flex_list or flex_dict even though the
    * implicit cast operators exist. This is due to std::vector<T> having two
    * constructors:
@@ -468,10 +468,10 @@ class flexible_type {
    *  flex_vec v = (flex_vec)f; // fails
    * \endcode
    *
-   * This function provides an explicit cast allowing the following to be 
+   * This function provides an explicit cast allowing the following to be
    * written:
    * \code
-   *  flex_vec v = f.to<flex_vec>(); 
+   *  flex_vec v = f.to<flex_vec>();
    * \endcode
    *
    * Of course, the alternative of is always available.
@@ -574,7 +574,7 @@ class flexible_type {
    * \endcode
    *
    * This function assumes that the function will mutate the value. If
-   * the function does not mutate the value, the alternative 
+   * the function does not mutate the value, the alternative
    * \ref apply_visitor(Visitor) should be used.
    */
   template <typename Visitor>
@@ -604,7 +604,7 @@ class flexible_type {
    * \endcode
    *
    * This function requires that the function does not mutate the value. If
-   * the function does mutate the value, the alternative 
+   * the function does mutate the value, the alternative
    * \ref apply_mutating_visitor(Visitor) should be used.
    */
   template <typename Visitor>
@@ -633,7 +633,7 @@ class flexible_type {
    * but all versions of operator() must return an identical type.
    *
    * This function assumes that the function will mutate the value. If
-   * the function does not mutate the value, the alternative 
+   * the function does not mutate the value, the alternative
    * \ref apply_visitor(Visitor, const flexible_type&) should be used.
    */
   template <typename Visitor>
@@ -660,7 +660,7 @@ class flexible_type {
    * but all versions of operator() must return an identical type.
    *
    * This function assumes that the function will not mutate the value. If
-   * the function does mutate the value, the alternative 
+   * the function does mutate the value, the alternative
    * \ref apply_mutating_visitor(Visitor, const flexible_type&) should be used.
    */
   template <typename Visitor>
@@ -705,7 +705,7 @@ class flexible_type {
    */
   operator flex_dict() const;
 
-  
+
   /**
    * Implicit cast to flex_date_time
    */
@@ -1514,7 +1514,7 @@ inline FLEX_ALWAYS_INLINE const flex_image& flexible_type::get<flex_image>() con
 
 
 //constructors
-inline FLEX_ALWAYS_INLINE flexible_type::flexible_type() noexcept { 
+inline FLEX_ALWAYS_INLINE flexible_type::flexible_type() noexcept {
   val.intval = 0;
   val.stored_type = flex_type_enum::INTEGER;
 }
@@ -1613,8 +1613,8 @@ inline FLEX_ALWAYS_INLINE_FLATTEN flexible_type& flexible_type::operator=(flexib
 }
 
 template <typename T>
-inline FLEX_ALWAYS_INLINE_FLATTEN 
-typename std::enable_if<has_direct_conversion_to_flexible_type<T>::value, 
+inline FLEX_ALWAYS_INLINE_FLATTEN
+typename std::enable_if<has_direct_conversion_to_flexible_type<T>::value,
          flexible_type&>::type
 flexible_type::operator=(const T& other) {
   constexpr flex_type_enum desired_type = has_direct_conversion_to_flexible_type<T>::desired_type;
@@ -1633,9 +1633,9 @@ inline FLEX_ALWAYS_INLINE_FLATTEN flexible_type& flexible_type::operator=(flex_u
 
 
 template <typename T>
-inline FLEX_ALWAYS_INLINE_FLATTEN 
+inline FLEX_ALWAYS_INLINE_FLATTEN
 typename std::enable_if<has_direct_conversion_to_flexible_type<
-                        typename std::remove_reference<T>::type>::value, 
+                        typename std::remove_reference<T>::type>::value,
                         flexible_type&>::type
 flexible_type::operator=(T&& other) {
   typedef typename std::remove_reference<T>::type BASE_T;
@@ -1802,7 +1802,7 @@ template <typename Visitor>
 inline FLEX_ALWAYS_INLINE_FLATTEN auto flexible_type::apply_mutating_visitor(Visitor visitor, const flexible_type& other) -> decltype(visitor(prototype_flex_int, flex_int())) {
   using flexible_type_impl::const_visitor_wrapper;
   switch(other.get_type()) {
-  
+
    case flex_type_enum::INTEGER:
      return apply_mutating_visitor(const_visitor_wrapper<Visitor,
                                          flex_int>{visitor, other.get<flex_int>()});
@@ -1882,14 +1882,14 @@ inline FLEX_ALWAYS_INLINE_FLATTEN auto flexible_type::apply_visitor(Visitor visi
 /*                                                                        */
 /**************************************************************************/
 template<typename T>
-inline FLEX_ALWAYS_INLINE_FLATTEN 
+inline FLEX_ALWAYS_INLINE_FLATTEN
 typename std::enable_if<std::is_integral<T>::value, T>::type
 flexible_type::to() const {
   return apply_visitor(flexible_type_impl::get_int_visitor());
 }
 
 template<typename T>
-inline FLEX_ALWAYS_INLINE_FLATTEN 
+inline FLEX_ALWAYS_INLINE_FLATTEN
 typename std::enable_if<std::is_floating_point<T>::value, T>::type
 flexible_type::to() const {
   return apply_visitor(flexible_type_impl::get_float_visitor());
@@ -2299,9 +2299,9 @@ inline FLEX_ALWAYS_INLINE_FLATTEN void flexible_type::push_back(const flexible_t
 
 
 inline FLEX_ALWAYS_INLINE void flexible_type::save(oarchive& oarc) const {
-  // in earlier versions of the serializer, a 4 byte tag value was saved 
+  // in earlier versions of the serializer, a 4 byte tag value was saved
   // together with the flexible_type. This has now been changed.
-  // However, to continue correctly deserializing previously saved 
+  // However, to continue correctly deserializing previously saved
   // flexible_types we identify it by shifting the type values by 128
   unsigned char c = (128 + (unsigned char)(get_type()));
   oarc << c;

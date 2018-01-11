@@ -10,7 +10,7 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include <flexible_type/flexible_type.hpp> 
+#include <flexible_type/flexible_type.hpp>
 
 namespace turi { namespace query_eval {
 
@@ -22,7 +22,7 @@ struct query_operator_attributes;
  * An enumeration of all operator types.
  */
 enum class planner_node_type : int {
-    CONSTANT_NODE, 
+    CONSTANT_NODE,
     APPEND_NODE,
     BINARY_TRANSFORM_NODE,
     LOGICAL_FILTER_NODE,
@@ -53,7 +53,7 @@ enum class planner_node_type : int {
 std::vector<flex_type_enum> infer_planner_node_type(std::shared_ptr<planner_node> pnode);
 
 /**
- *  Infers the length of the output of a planner node by backtracking its 
+ *  Infers the length of the output of a planner node by backtracking its
  *  dependencies.
  *
  *  Returns -1 if the length cannot be computed without an actual execution.
@@ -65,12 +65,12 @@ int64_t infer_planner_node_length(std::shared_ptr<planner_node> pnode);
  */
 size_t infer_planner_node_num_output_columns(std::shared_ptr<planner_node> pnode);
 
-/** Returns the number of nodes in this planning graph, including pnode. 
+/** Returns the number of nodes in this planning graph, including pnode.
  */
 size_t infer_planner_node_num_dependency_nodes(std::shared_ptr<planner_node> pnode);
 
 /**
- *  Transforms a planner node into the operator. 
+ *  Transforms a planner node into the operator.
  */
 std::shared_ptr<query_operator> planner_node_to_operator(std::shared_ptr<planner_node> pnode);
 
@@ -78,11 +78,11 @@ std::shared_ptr<query_operator> planner_node_to_operator(std::shared_ptr<planner
  */
 std::string planner_node_type_to_name(planner_node_type type);
 
-/**  Get the type of the node from the name. 
+/**  Get the type of the node from the name.
  */
 planner_node_type planner_node_name_to_type(const std::string& name);
 
-/**  Get the attribute struct from the type. 
+/**  Get the attribute struct from the type.
  */
 query_operator_attributes planner_node_type_to_attributes(planner_node_type type);
 
@@ -132,7 +132,7 @@ bool is_source_node(const query_operator_attributes& attr);
 bool is_source_node(const std::shared_ptr<planner_node>& n);
 
 /** Returns true if the output of this node can be parallel sliceable
- *  by the sources on this block, and false otherwise. 
+ *  by the sources on this block, and false otherwise.
  */
 bool is_parallel_slicable(const std::shared_ptr<planner_node>& n);
 
@@ -141,7 +141,7 @@ bool is_parallel_slicable(const std::shared_ptr<planner_node>& n);
 bool is_linear_graph(const std::shared_ptr<planner_node>& n);
 
 /** Returns a set of integers giving the different parallel slicable
- *  units for the inputs of a particular node. If 
+ *  units for the inputs of a particular node. If
  */
 std::vector<size_t> get_parallel_slicable_codes(const std::shared_ptr<planner_node>& n);
 

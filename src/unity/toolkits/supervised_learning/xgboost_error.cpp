@@ -13,17 +13,17 @@
 // will be redirected to turicreate's engine
 namespace xgboost {
 namespace utils {
-/*! 
+/*!
  * \brief handling of Assert error, caused by in-apropriate input
- * \param msg error message 
+ * \param msg error message
  */
 EXPORT void HandleAssertError(const char *msg) {
   ASSERT_MSG(false, "%s", msg);
 }
-/*! 
+/*!
  * \brief handling of Check error, caused by in-apropriate input
  * this need to go back to user
- * \param msg error message 
+ * \param msg error message
  */
 EXPORT void HandleCheckError(const char *msg) {
   std::string errmsg = msg;

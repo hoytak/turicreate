@@ -9,7 +9,7 @@ from libcpp.map cimport map
 from libcpp.list cimport list as cpplist
 
 from .cy_flexible_type cimport flex_type_enum
-from .cy_flexible_type cimport flexible_type 
+from .cy_flexible_type cimport flexible_type
 from .cy_flexible_type cimport flex_list
 
 cdef extern from "<sframe/dataframe.hpp>" namespace "turi":

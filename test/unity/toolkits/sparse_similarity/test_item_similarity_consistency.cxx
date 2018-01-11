@@ -74,12 +74,12 @@ template <typename T>
 void run_approximation_tests(
     const std::string& similarity,
     const std::vector<std::vector<std::pair<size_t, T> > >& data) {
-  
+
   // Allow the use of the degree_approximation_threshold and
   // max_item_neighborhood_size approximations.  This test simply
   // makes sure that the internal consistency checks for these
   // approximation thresholds are hit.
-  
+
   auto data_sa = make_testing_sarray(data);
 
   size_t num_items = 0;
@@ -99,8 +99,8 @@ void run_approximation_tests(
   for(size_t degree_approximation_threshold = 10;
       degree_approximation_threshold < 50;
       degree_approximation_threshold += 10) {
-    
-    for(size_t max_item_neighborhood_size : {2, 5, 10, 20} ) { 
+
+    for(size_t max_item_neighborhood_size : {2, 5, 10, 20} ) {
       for(size_t i = 0; i < training_methods.size(); ++i) {
         const std::string& training_method = training_methods[i];
 
@@ -112,7 +112,7 @@ void run_approximation_tests(
           { "threshold", 0},
           { "sparse_density_estimation_sample_size", 1024 },
           { "training_method", training_method } };
-  
+
         std::cout << ">>>> Now building mode " << training_methods[i] << "." << std::endl;
         auto model = sparse_similarity_lookup::create(similarity, options);
         model->train_from_sparse_matrix_sarray(num_items, data_sa);
@@ -232,7 +232,7 @@ struct item_sim_consistency {
     turi::sparse_sim::cosine cs_sim;
 
     int64_t val = -(turi::sparse_sim::_fixed_precision_scale_factor / 2);
-    
+
     double out = cs_sim.finalize_prediction(val, turi::sparse_sim::cosine::final_item_data_type(), size_t(8));
 
     TS_ASSERT_EQUALS(out, -0.5 / 8);

@@ -100,7 +100,7 @@ void ml_data_side_features::add_and_index_side_data(
   if(unindexed_side_sframe.num_columns() == 1) {
     logprogress_stream << "WARNING: No additional columns provided in side information for feature "
                        << join_column_name << "; ignoring." << std::endl;
-    return; 
+    return;
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +195,7 @@ void ml_data_side_features::add_and_index_side_data(
         log_and_throw(ss.str());
       }
     }
-    
+
     for(size_t c_idx = 0; c_idx < si.rm.metadata_vect.size(); ++c_idx) {
       const std::string& column_name = si.rm.metadata_vect[c_idx]->name;
 
@@ -224,7 +224,7 @@ void ml_data_side_features::add_and_index_side_data(
       std::ostringstream ss;
 
       bool ignore = options.at("ignore_new_columns_after_train");
-      
+
       if(ignore) {
         ss << "Discarding additional columns present in side data on column "
            << join_column_name << " that do not match schema: ";
@@ -263,7 +263,7 @@ void ml_data_side_features::add_and_index_side_data(
       if(column_name != join_column_name)
         unjoined_names.push_back(column_name);
     }
-    
+
     training_mode = false;
   }
 

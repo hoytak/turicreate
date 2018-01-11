@@ -27,29 +27,29 @@ public:
 
   explicit sframe_function_output_iterator() {}
 
-  explicit sframe_function_output_iterator(const ConstRefFunction& f, 
+  explicit sframe_function_output_iterator(const ConstRefFunction& f,
                                            const MoveFunction& f2,
                                            const SFrameRowsFunction& f3)
     : m_f(f), m_f2(f2), m_f3(f3) {}
 
   struct output_proxy {
-    output_proxy(const ConstRefFunction& f, 
+    output_proxy(const ConstRefFunction& f,
                  const MoveFunction& f2,
                  const SFrameRowsFunction& f3) : m_f(f), m_f2(f2), m_f3(f3) { }
 
     output_proxy& operator=(const T& value) {
       m_f(value);
-      return *this; 
+      return *this;
     }
 
     output_proxy& operator=(T&& value) {
       m_f2(std::move(value));
-      return *this; 
+      return *this;
     }
 
     output_proxy& operator=(const sframe_rows& value) {
       m_f3(value);
-      return *this; 
+      return *this;
     }
 
     const ConstRefFunction& m_f;
@@ -57,7 +57,7 @@ public:
     const SFrameRowsFunction& m_f3;
   };
   output_proxy operator*() { return output_proxy(m_f, m_f2, m_f3); }
-  self& operator++() { return *this; } 
+  self& operator++() { return *this; }
   self& operator++(int) { return *this; }
 private:
   ConstRefFunction m_f;
@@ -68,4 +68,3 @@ private:
 } // namespace turi
 
 #endif // TURI_SFRAME_OUTPUT_ITERATOR_HPP
-

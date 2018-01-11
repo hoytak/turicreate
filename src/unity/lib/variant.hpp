@@ -175,5 +175,3 @@ inline typename std::decay<T>::type variant_get_value(const variant_type& v) {
 } // namespace turi
 #include <unity/lib/api/function_closure_info.hpp>
 #endif
-
-

@@ -14,8 +14,8 @@ namespace fileio{
 /**
  * \internal
  * \ingroup fileio
- * icache_stream provides an input stream to a cache object; 
- * this should not be used directly. 
+ * icache_stream provides an input stream to a cache object;
+ * this should not be used directly.
  * \see general_ifstream
  */
 typedef boost::iostreams::stream<turi::fileio_impl::cache_stream_source>
@@ -24,8 +24,8 @@ typedef boost::iostreams::stream<turi::fileio_impl::cache_stream_source>
 /**
  * \internal
  * \ingroup fileio
- * ocache_stream provides an output stream to a cache object; 
- * this should not be used directly. 
+ * ocache_stream provides an output stream to a cache object;
+ * this should not be used directly.
  * \see general_ofstream
  */
 typedef boost::iostreams::stream<turi::fileio_impl::cache_stream_sink>

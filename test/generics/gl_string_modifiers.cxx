@@ -109,14 +109,14 @@ struct test_string_modifiers  {
     _test_string_append_iterator(gl_string("12345678901234567890"), (const char*)(s), (const char*)(s+52),
                                  gl_string("12345678901234567890""ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"));
   }
-  
+
   void _test_string_append_pointer(gl_string s, const char* str, gl_string expected) {
     s.append(str);
     TS_ASSERT(s == expected);
   }
 
   void test_string_append_pointer() {
-    
+
     _test_string_append_pointer(gl_string(), "", gl_string());
     _test_string_append_pointer(gl_string(), "12345", gl_string("12345"));
     _test_string_append_pointer(gl_string(), "12345678901234567890", gl_string("12345678901234567890"));
@@ -130,7 +130,7 @@ struct test_string_modifiers  {
     _test_string_append_pointer(gl_string("12345678901234567890"), "12345678901234567890",
                                 gl_string("1234567890123456789012345678901234567890"));
   }
-  
+
   void _test_string_append_pointer_size(gl_string s, const char* str, size_t n, gl_string expected) {
     s.append(str, n);
     TS_ASSERT(s == expected);
@@ -165,7 +165,7 @@ struct test_string_modifiers  {
     _test_string_append_push_back(gl_string("12345"), 'a', gl_string("12345a"));
     _test_string_append_push_back(gl_string("12345678901234567890"), 'a', gl_string("12345678901234567890a"));
   }
-  
+
   void _test_string_append_size_char(gl_string s, size_t n, char c, gl_string expected) {
     s.append(n, c);
     TS_ASSERT(s == expected);
@@ -226,7 +226,7 @@ struct test_string_modifiers  {
     }
 #endif
   }
-  
+
   void test_string_append_string_size_size_npos(gl_string s, gl_string str, size_t pos, gl_string expected) {
 #ifndef NDEBUG
     auto f = [&](){s.append(str, pos);};
@@ -239,7 +239,7 @@ struct test_string_modifiers  {
     }
 #endif
   }
-  
+
   void test_string_append_string_size_size() {
     _test_string_append_string_size_size(gl_string(), gl_string(), 0, 0, gl_string());
     _test_string_append_string_size_size(gl_string(), gl_string(), 1, 0, gl_string());
@@ -263,7 +263,7 @@ struct test_string_modifiers  {
     _test_string_append_string_size_size(gl_string("12345678901234567890"), gl_string("12345678901234567890"), 5, 10,
                                          gl_string("123456789012345678906789012345"));
 
-    
+
     test_string_append_string_size_size_npos(gl_string(), gl_string(), 0, gl_string());
     test_string_append_string_size_size_npos(gl_string(), gl_string(), 1, gl_string());
     test_string_append_string_size_size_npos(gl_string(), gl_string("12345"), 0, gl_string("12345"));
@@ -283,12 +283,12 @@ struct test_string_modifiers  {
   template < class It>
   void _test_string_assign_iterator(gl_string s, It first, It last, gl_string expected) {
     s.assign(first, last);
-    
+
     TS_ASSERT(s == expected);
   }
 
   void test_string_assign_iterator() {
-    
+
     const char* s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     _test_string_assign_iterator(gl_string(), s, s, gl_string());
     _test_string_assign_iterator(gl_string(), s, s+1, gl_string("A"));
@@ -346,10 +346,10 @@ struct test_string_modifiers  {
                                  gl_string("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"));
   }
 
-  
+
   void _test_string_assign_pointer(gl_string s, const char* str, gl_string expected) {
     s.assign(str);
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -371,12 +371,12 @@ struct test_string_modifiers  {
 
   void _test_string_assign_pointer_size(gl_string s, const char* str, size_t n, gl_string expected) {
     s.assign(str, n);
-    
+
     TS_ASSERT(s == expected);
   }
 
   void test_string_assign_pointer_size() {
-    
+
     _test_string_assign_pointer_size(gl_string(), "", 0, gl_string());
     _test_string_assign_pointer_size(gl_string(), "12345", 3, gl_string("123"));
     _test_string_assign_pointer_size(gl_string(), "12345", 4, gl_string("1234"));
@@ -397,7 +397,7 @@ struct test_string_modifiers  {
 
   void _test_string_assign_rv_string(gl_string s, gl_string str, gl_string expected) {
     s.assign(std::move(str));
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -426,7 +426,7 @@ struct test_string_modifiers  {
 
   void _test_string_assign_size_char(gl_string s, size_t n, char c, gl_string expected) {
     s.assign(n, c);
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -447,7 +447,7 @@ struct test_string_modifiers  {
 
   void _test_string_assign_string(gl_string s, gl_string str, gl_string expected) {
     s.assign(str);
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -479,7 +479,7 @@ struct test_string_modifiers  {
     try
     {
       s.assign(str, pos, n);
-        
+
       TS_ASSERT(pos <= str.size());
       TS_ASSERT(s == expected);
     }
@@ -496,7 +496,7 @@ struct test_string_modifiers  {
     try
     {
       s.assign(str, pos);
-        
+
       TS_ASSERT(pos <= str.size());
       TS_ASSERT(s == expected);
     }
@@ -529,7 +529,7 @@ struct test_string_modifiers  {
     _test_string_assign_string_size_size(gl_string("12345678901234567890"), gl_string("12345"), 1, 3, gl_string("234"));
     _test_string_assign_string_size_size(gl_string("12345678901234567890"), gl_string("12345678901234567890"), 5, 10,
                                          gl_string("6789012345"));
-    
+
     test_string_assign_string_size_size_npos(gl_string(), gl_string(), 0, gl_string());
     test_string_assign_string_size_size_npos(gl_string(), gl_string(), 1, gl_string());
     test_string_assign_string_size_size_npos(gl_string(), gl_string("12345"), 0, gl_string("12345"));
@@ -560,7 +560,7 @@ struct test_string_modifiers  {
   }
 
   void test_string_copy_copy() {
-    
+
     char s[50];
     _test_string_copy_copy(gl_string(""), s, 0, 0);
     _test_string_copy_copy(gl_string(""), s, 0, 1);
@@ -622,13 +622,13 @@ struct test_string_modifiers  {
     _test_string_copy_copy(gl_string("abcdefghijklmnopqrst"), s, 21, 0);
   }
 
-  
+
   void test_string_erase_erase_iter_db1() {
     gl_string l1("123");
     gl_string::const_iterator i = l1.end();
 #ifndef NDEBUG
     TS_ASSERT_THROWS_ANYTHING(l1.erase(i));
-#endif 
+#endif
   }
 
   void test_string_erase_erase_iter_db2() {
@@ -637,48 +637,48 @@ struct test_string_modifiers  {
     gl_string::const_iterator i = l2.begin();
 #ifndef NDEBUG
     TS_ASSERT_THROWS_ANYTHING(l1.erase(i));
-#endif 
+#endif
   }
-  
+
   void test_string_erase_erase_iter_iter_db1() {
     gl_string l1("123");
     gl_string l2("123");
 #ifndef NDEBUG
     auto f = [&](){l1.erase(l2.cbegin(), l1.cbegin()+1);};
     TS_ASSERT_THROWS_ANYTHING(f());
-#endif 
+#endif
   }
-  
+
   void test_string_erase_erase_iter_iter_db2() {
     gl_string l1("123");
     gl_string l2("123");
 #ifndef NDEBUG
     auto f = [&](){l1.erase(l1.cbegin(), l2.cbegin()+1);};
     TS_ASSERT_THROWS_ANYTHING(f());
-#endif 
+#endif
   }
-  
+
   void test_string_erase_erase_iter_iter_db3() {
     gl_string l1("123");
     gl_string l2("123");
 #ifndef NDEBUG
     auto f = [&](){l1.erase(l2.cbegin(), l2.cbegin()+1);};
     TS_ASSERT_THROWS_ANYTHING(f());
-#endif 
+#endif
   }
-  
+
   void test_string_erase_erase_iter_iter_db4() {
     gl_string l1("123");
 #ifndef NDEBUG
     auto f = [&](){l1.erase(l1.cbegin()+1, l1.cbegin());};
     TS_ASSERT_THROWS_ANYTHING(f());
-#endif 
+#endif
   }
   void _test_string_erase_iter_iter(gl_string s, gl_string::difference_type pos, gl_string::difference_type n, gl_string expected) {
     gl_string::const_iterator first = s.cbegin() + pos;
     gl_string::const_iterator last = s.cbegin() + pos + n;
     gl_string::iterator i = s.erase(first, last);
-    
+
     TS_ASSERT(s == expected);
     TS_ASSERT(i - s.begin() == pos);
   }
@@ -740,11 +740,11 @@ struct test_string_modifiers  {
     _test_string_erase_iter_iter(gl_string("abcdefghijklmnopqrst"), 20, 0, gl_string("abcdefghijklmnopqrst"));
   }
 
-  
+
   void _test_string_erase_iter(gl_string s, gl_string::difference_type pos, gl_string expected) {
     gl_string::const_iterator p = s.begin() + pos;
     gl_string::iterator i = s.erase(p);
-    
+
     TS_ASSERT(s == expected);
     TS_ASSERT(i - s.begin() == pos);
   }
@@ -766,7 +766,7 @@ struct test_string_modifiers  {
 
   void _test_string_erase_pop_back(gl_string s, gl_string expected) {
     s.pop_back();
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -777,13 +777,13 @@ struct test_string_modifiers  {
   }
 
   void _test_string_erase_size_size(gl_string s, size_t pos, size_t n, gl_string expected) {
-#ifndef NDEBUG    
+#ifndef NDEBUG
     size_t old_size = s.size();
     gl_string s0 = s;
     try
     {
       s.erase(pos, n);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
     }
@@ -797,17 +797,17 @@ struct test_string_modifiers  {
 
 
   void _test_string_erase_size_size(gl_string s, size_t pos, gl_string expected) {
-#ifndef NDEBUG    
+#ifndef NDEBUG
     size_t old_size = s.size();
     gl_string s0 = s;
     try
     {
       s.erase(pos);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
     }
-    catch (...) 
+    catch (...)
     {
       TS_ASSERT(pos > old_size);
       TS_ASSERT(s == s0);
@@ -818,7 +818,7 @@ struct test_string_modifiers  {
 
   void _test_string_erase_size_size(gl_string s, gl_string expected) {
     s.erase();
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -925,14 +925,14 @@ struct test_string_modifiers  {
     _test_string_erase_size_size(gl_string("abcdefghijklmnopqrst"), gl_string(""));
   }
 
-  
+
   void
   _test_string_insert_iter_char(gl_string& s, gl_string::const_iterator p, char c, gl_string expected)
   {
     bool sufficient_cap = s.size() < s.capacity();
     gl_string::difference_type pos = p - s.begin();
     gl_string::iterator i = s.insert(p, c);
-    
+
     TS_ASSERT(s == expected);
     TS_ASSERT(i - s.begin() == pos);
     TS_ASSERT(*i == c);
@@ -968,14 +968,14 @@ struct test_string_modifiers  {
   }
 
 
-  
+
   template < class It>
   void
   _test_string_insert_iter_iter_iter(gl_string s, gl_string::difference_type pos, It first, It last, gl_string expected)
   {
     gl_string::const_iterator p = s.cbegin() + pos;
     gl_string::iterator i = s.insert(p, first, last);
-    
+
     ASSERT_EQ(i - s.begin(), pos);
     TS_ASSERT(s == expected);
   }
@@ -1026,14 +1026,14 @@ struct test_string_modifiers  {
                                        gl_string("12345678901234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"));
   }
 
-  
+
   void
   _test_string_insert_iter_size_char(gl_string s, gl_string::difference_type pos, size_t n,
                                      char c, gl_string expected)
   {
     gl_string::const_iterator p = s.cbegin() + pos;
     gl_string::iterator i = s.insert(p, n, c);
-    
+
     ASSERT_EQ(i - s.begin(), pos);
     TS_ASSERT(s == expected);
   }
@@ -1106,7 +1106,7 @@ struct test_string_modifiers  {
     _test_string_insert_iter_size_char(gl_string("abcdefghijklmnopqrst"), 20, 20, '1', gl_string("abcdefghijklmnopqrst11111111111111111111"));
   }
 
-  
+
   void
   _test_string_insert_size_pointer(gl_string s, size_t pos, const char* str, gl_string expected)
   {
@@ -1116,7 +1116,7 @@ struct test_string_modifiers  {
     try
     {
       s.insert(pos, str);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
     }
@@ -1223,7 +1223,7 @@ struct test_string_modifiers  {
     try
     {
       s.insert(pos, str, n);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
     }
@@ -1570,7 +1570,7 @@ struct test_string_modifiers  {
     try
     {
       s.insert(pos, n, str);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
     }
@@ -1676,7 +1676,7 @@ struct test_string_modifiers  {
     try
     {
       s.insert(pos, str);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
     }
@@ -1782,7 +1782,7 @@ struct test_string_modifiers  {
     try
     {
       s.insert(pos1, str, pos2, n);
-        
+
       TS_ASSERT(pos1 <= old_size && pos2 <= str.size());
       TS_ASSERT(s == expected);
     }
@@ -1804,7 +1804,7 @@ struct test_string_modifiers  {
     try
     {
       s.insert(pos1, str, pos2);
-        
+
       TS_ASSERT(pos1 <= old_size && pos2 <= str.size());
       TS_ASSERT(s == expected);
     }
@@ -3468,7 +3468,7 @@ struct test_string_modifiers  {
   _test_string_op_plus_equal_char(gl_string s, char str, gl_string expected)
   {
     s += str;
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -3491,7 +3491,7 @@ struct test_string_modifiers  {
   _test_string_op_plus_equal_pointer(gl_string s, const char* str, gl_string expected)
   {
     s += str;
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -3524,7 +3524,7 @@ struct test_string_modifiers  {
   _test_string_op_plus_equal_string(gl_string s, gl_string str, gl_string expected)
   {
     s += str;
-    
+
     TS_ASSERT(s == expected);
   }
 
@@ -3567,7 +3567,7 @@ struct test_string_modifiers  {
     gl_string::const_iterator last = s.begin() + pos1 + n1;
     size_t xlen = last - first;
     s.replace(first, last, f, l);
-    
+
     ASSERT_TRUE(s == expected);
     size_t rlen = std::distance(f, l);
     TS_ASSERT(s.size() == old_size - xlen + rlen);
@@ -4499,7 +4499,7 @@ struct test_string_modifiers  {
     gl_string::const_iterator last = s.begin() + pos1 + n1;
     size_t xlen = last - first;
     s.replace(first, last, n2, c);
-    
+
     ASSERT_TRUE(s == expected);
     size_t rlen = n2;
     TS_ASSERT(s.size() == old_size - xlen + rlen);
@@ -4745,7 +4745,7 @@ struct test_string_modifiers  {
     gl_string::const_iterator last = s.begin() + pos1 + n1;
     size_t xlen = last - first;
     s.replace(first, last, str);
-    
+
     TS_ASSERT(s == expected);
     size_t rlen = str.size();
     TS_ASSERT(s.size() == old_size - xlen + rlen);
@@ -4993,7 +4993,7 @@ struct test_string_modifiers  {
     try
     {
       s.replace(pos, n1, str);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
       size_t xlen = std::min(n1, old_size - pos);
@@ -5330,7 +5330,7 @@ struct test_string_modifiers  {
     try
     {
       s.replace(pos, n1, str, n2);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
       size_t xlen = std::min(n1, old_size - pos);
@@ -6600,7 +6600,7 @@ struct test_string_modifiers  {
     try
     {
       s.replace(pos, n1, n2, c);
-        
+
       TS_ASSERT(pos <= old_size);
       TS_ASSERT(s == expected);
       size_t xlen = std::min(n1, old_size - pos);
@@ -6935,7 +6935,7 @@ struct test_string_modifiers  {
     try
     {
       s.replace(pos1, n1, str);
-        
+
       TS_ASSERT(pos1 <= old_size);
       TS_ASSERT(s == expected);
       size_t xlen = std::min(n1, old_size - pos1);
@@ -7272,7 +7272,7 @@ struct test_string_modifiers  {
     try
     {
       s.replace(pos1, n1, str, pos2, n2);
-        
+
       TS_ASSERT(pos1 <= old_size && pos2 <= str.size());
       TS_ASSERT(s == expected);
       size_t xlen = std::min(n1, old_size - pos1);
@@ -7299,7 +7299,7 @@ struct test_string_modifiers  {
     try
     {
       s.replace(pos1, n1, str, pos2);
-        
+
       TS_ASSERT(pos1 <= old_size && pos2 <= str.size());
       TS_ASSERT(s == expected);
       size_t xlen = std::min(n1, old_size - pos1);
@@ -13084,7 +13084,7 @@ struct test_string_modifiers  {
     test_string_replace_size_size_string_size_size_npos(gl_string("abcdefghij"), 9, 2, gl_string("12345"), 5, gl_string("abcdefghi"));
     test_string_replace_size_size_string_size_size_npos(gl_string("abcdefghij"), 9, 2, gl_string("12345"), 6, gl_string("can't happen"));
   }
-  
+
   void
   _test_string_swap_swap(gl_string s1, gl_string s2)
   {

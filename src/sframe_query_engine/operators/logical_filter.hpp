@@ -28,7 +28,7 @@ template<>
 class operator_impl<planner_node_type::LOGICAL_FILTER_NODE> : public query_operator {
  public:
 
-  planner_node_type type() const { return planner_node_type::LOGICAL_FILTER_NODE; } 
+  planner_node_type type() const { return planner_node_type::LOGICAL_FILTER_NODE; }
 
   static std::string name() { return "logical_filter"; }
 
@@ -50,7 +50,7 @@ class operator_impl<planner_node_type::LOGICAL_FILTER_NODE> : public query_opera
     // if it is all zero, we can skip the left data
     for (auto& row: *col) {
       if (!(row[0].is_zero())) return false;
-    } 
+    }
     return true;
   }
 
@@ -110,11 +110,11 @@ class operator_impl<planner_node_type::LOGICAL_FILTER_NODE> : public query_opera
       context.emit(output_buffer);
     }
   }
-  
+
   static std::shared_ptr<planner_node> make_planner_node(
       std::shared_ptr<planner_node> left,
       std::shared_ptr<planner_node> right) {
-    return planner_node::make_shared(planner_node_type::LOGICAL_FILTER_NODE, 
+    return planner_node::make_shared(planner_node_type::LOGICAL_FILTER_NODE,
                                      std::map<std::string, flexible_type>(),
                                      std::map<std::string, any>(),
                                      {left, right});
@@ -122,7 +122,7 @@ class operator_impl<planner_node_type::LOGICAL_FILTER_NODE> : public query_opera
 
   static std::shared_ptr<query_operator> from_planner_node(
       std::shared_ptr<planner_node> pnode) {
-    ASSERT_EQ((int)pnode->operator_type, 
+    ASSERT_EQ((int)pnode->operator_type,
               (int)planner_node_type::LOGICAL_FILTER_NODE);
     ASSERT_EQ(pnode->inputs.size(), 2);
     return std::make_shared<operator_impl>();
@@ -130,7 +130,7 @@ class operator_impl<planner_node_type::LOGICAL_FILTER_NODE> : public query_opera
 
   static std::vector<flex_type_enum> infer_type(
       std::shared_ptr<planner_node> pnode) {
-    ASSERT_EQ((int)pnode->operator_type, 
+    ASSERT_EQ((int)pnode->operator_type,
               (int)planner_node_type::LOGICAL_FILTER_NODE);
     ASSERT_EQ(pnode->inputs.size(), 2);
     return infer_planner_node_type(pnode->inputs[0]);
@@ -139,7 +139,7 @@ class operator_impl<planner_node_type::LOGICAL_FILTER_NODE> : public query_opera
   static int64_t infer_length(std::shared_ptr<planner_node> pnode) {
     return -1;
   }
-  
+
   static std::string repr(std::shared_ptr<planner_node> pnode, pnode_tagger& get_tag) {
     ASSERT_EQ(pnode->inputs.size(), 2);
     return std::string("Filter(") + get_tag(pnode->inputs[0]) + "[" + get_tag(pnode->inputs[1]) + "])";

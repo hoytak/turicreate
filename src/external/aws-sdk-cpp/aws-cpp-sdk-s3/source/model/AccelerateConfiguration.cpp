@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-AccelerateConfiguration::AccelerateConfiguration() : 
+AccelerateConfiguration::AccelerateConfiguration() :
     m_statusHasBeenSet(false)
 {
 }
 
-AccelerateConfiguration::AccelerateConfiguration(const XmlNode& xmlNode) : 
+AccelerateConfiguration::AccelerateConfiguration(const XmlNode& xmlNode) :
     m_statusHasBeenSet(false)
 {
   *this = xmlNode;

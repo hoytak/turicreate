@@ -78,17 +78,17 @@ void calculate_item_processing_colwise(
   if(items_per_user != nullptr) {
     items_per_user->assign(n, 0);
   }
-  
+
   logprogress_stream << "Gathering per-item and per-user statistics." << std::endl;
 
   table_printer table( { {"Elapsed Time (Item Statistics)", 0}, {"% Complete", 0} } );
 
   table.print_header();
-  
+
   atomic<size_t> row_idx = 0;
   size_t next_to_print = 0;
   mutex print_lock;
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Now, iterate through the data in parallel.
 
@@ -101,7 +101,7 @@ void calculate_item_processing_colwise(
     }
 
     for(size_t idx_a = 0; idx_a < item_list.size(); idx_a++) {
-          
+
       const size_t item_a = item_list[idx_a].first;
       const auto& value_a = item_list[idx_a].second;
 
@@ -119,7 +119,7 @@ void calculate_item_processing_colwise(
 
       atomic_increment(item_info[item_a].num_users);
     }
-    
+
     size_t processed_row_idx = (++row_idx);
 
     if(processed_row_idx % 1000 == 0) {
@@ -128,9 +128,9 @@ void calculate_item_processing_colwise(
     }
   };
 
-  // Now, just do the iteration. 
+  // Now, just do the iteration.
   iterate_through_sparse_item_array(data, process_row_f);
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Now, finalize the vertices.
 

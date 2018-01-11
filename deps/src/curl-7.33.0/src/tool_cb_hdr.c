@@ -222,4 +222,3 @@ static char *parse_filename(const char *ptr, size_t len)
 
   return copy;
 }
-

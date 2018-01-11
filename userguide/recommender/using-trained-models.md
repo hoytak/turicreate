@@ -48,8 +48,8 @@ already seen.
 
 ```python
 data = turicreate.SFrame({'user_id': ["Ann", "Ann", "Ann", "Brian", "Brian", "Brian"],
-                  		'item_id': ["Item1", "Item2", "Item4", "Item2", "Item3", "Item5"],
-                  		'rating': [1, 3, 2, 5, 4, 2]})
+				'item_id': ["Item1", "Item2", "Item4", "Item2", "Item3", "Item5"],
+				'rating': [1, 3, 2, 5, 4, 2]})
 m = turicreate.factorization_recommender.create(data, target='rating')
 
 recommendations = m.recommend()
@@ -110,9 +110,9 @@ be done by passing in side information to `create()`.  For example:
 
 ```python
 user_info = turicreate.SFrame({'user_id': ['Ann', 'Brian'],
-                       		 'age_category': ['2', '3']})
+				 'age_category': ['2', '3']})
 m_side_info = turicreate.factorization_recommender.create(data, target='rating',
-           		      		                            user_data=user_info)
+					                            user_data=user_info)
 ```
 
 Now, we can add side information for the new user at recommendation
@@ -137,7 +137,7 @@ Given Charlie's age category, the model can incorporate what it knows about the 
 ```python
 m_item_sim = turicreate.item_similarity_recommender.create(data)
 new_obs_data = turicreate.SFrame({'user_id' : ['Charlie', 'Charlie'],
-	                        	'item_id' : ['Item1', 'Item5']})
+					'item_id' : ['Item1', 'Item5']})
 recommendations = m_item_sim.recommend(['Charlie'], new_observation_data = new_obs_data)
 ```
 
@@ -157,7 +157,7 @@ excluding those undesirable items via the `exclude` keyword argument.
 
 ```python
 exclude_pairs = turicreate.SFrame({'user_id' : ['Ann'],
-                           		 'item_id' : ['Item3']})
+					 'item_id' : ['Item3']})
 
 recommendations = m.recommend(['Ann'], k = 5, exclude = exclude_pairs)
 ```

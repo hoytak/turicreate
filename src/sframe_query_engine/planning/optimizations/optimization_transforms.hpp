@@ -45,8 +45,8 @@ class opt_transform {
   /** A description string that gets logged when the transformation is
    *  applied.
    */
-  virtual std::string description() = 0; 
-  
+  virtual std::string description() = 0;
+
   /** Does the transform apply to a particular node type?
    */
   virtual bool transform_applies(planner_node_type t) = 0;

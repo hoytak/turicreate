@@ -11,11 +11,11 @@
 #include <flexible_type/string_escape.hpp>
 
 /*
- * Must of this is obtained from 
+ * Must of this is obtained from
  * http://boost-spirit.com/home/articles/qi-example/creating-your-own-parser-component-for-spirit-qi/
  */
 
-namespace parser_impl { 
+namespace parser_impl {
 
 /*
  * \internal
@@ -23,7 +23,7 @@ namespace parser_impl {
  *
  */
 struct parser_config {
-  // If any of these character occurs outside of quoted string, 
+  // If any of these character occurs outside of quoted string,
   // the string will be terminated
   std::string restrictions;
   // If the delimiter string is seen anywhere outside of a quoted string,
@@ -37,16 +37,16 @@ struct parser_config {
   char double_quote = true;
 };
 
-BOOST_SPIRIT_TERMINAL_EX(restricted_string); 
+BOOST_SPIRIT_TERMINAL_EX(restricted_string);
 
-} // namespace parser_impl 
+} // namespace parser_impl
 
-namespace boost { 
+namespace boost {
 namespace spirit {
 
 
 template <typename T1>
-struct use_terminal<qi::domain, 
+struct use_terminal<qi::domain,
     terminal_ex<parser_impl::tag::restricted_string, fusion::vector1<T1> > >
   : mpl::true_ {};
 
@@ -55,7 +55,7 @@ struct use_terminal<qi::domain,
 
 namespace parser_impl {
 
-// anonynous namespace 
+// anonynous namespace
 namespace {
 /**
  * A buffer which allocates up to STACK_BUF_SIZE
@@ -86,12 +86,12 @@ struct stack_buffer {
     return altbuf;
   }
 };
-} // anonynous namespace 
+} // anonynous namespace
 
 /*
  * \internal
  * This class defines a string parser which allows the parser writer to define
- * a list of characters which are not permitted in unquoted strings. Quoted 
+ * a list of characters which are not permitted in unquoted strings. Quoted
  * strings have no restrictions on what characters they can contain.
  * Usage:
  * \code
@@ -125,11 +125,11 @@ struct string_parser
     START_FIELD, IN_FIELD, IN_QUOTED_FIELD,
   };
 
-  static inline bool test_is_delimiter(const char* c, const char* end, 
+  static inline bool test_is_delimiter(const char* c, const char* end,
                                        const char* delimiter, const char* delimiter_end) {
   // if I have more delimiter characters than the length of the string
   // quit.
-    if (delimiter_end - delimiter > end - c) return false; 
+    if (delimiter_end - delimiter > end - c) return false;
     while (delimiter != delimiter_end) {
       if ((*c) != (*delimiter)) return false;
       ++c; ++delimiter;
@@ -142,7 +142,7 @@ struct string_parser
 
   // This function is called during the actual parsing process
   template <typename Iterator, typename Context, typename Skipper, typename Attribute>
-  bool parse(Iterator& first, Iterator const& last, 
+  bool parse(Iterator& first, Iterator const& last,
              Context&, Skipper const& skipper, Attribute& attr) const {
     boost::spirit::qi::skip_over(first, last, skipper);
     Iterator cur = first;
@@ -150,7 +150,7 @@ struct string_parser
     const char* delimiter_begin = config.delimiter.c_str();
     const char* delimiter_end = delimiter_begin + config.delimiter.length();
 
-    tokenizer_state state = tokenizer_state::START_FIELD; 
+    tokenizer_state state = tokenizer_state::START_FIELD;
     bool keep_parsing = true;
     char quote_char = 0;
     // this is set to true for the character immediately after an escape character
@@ -164,20 +164,20 @@ struct string_parser
 
       // Next character in file
       char c = *cur;
-      if(state != tokenizer_state::IN_QUOTED_FIELD && 
+      if(state != tokenizer_state::IN_QUOTED_FIELD &&
          config.restrictions.find(c) != std::string::npos) break;
 
-      bool is_delimiter = 
-          // current state is not in a quoted field since delimiters in quoted 
+      bool is_delimiter =
+          // current state is not in a quoted field since delimiters in quoted
           // fields are fine.
           (state != tokenizer_state::IN_QUOTED_FIELD) &&
           // and there is a delimiter
-          has_delimiter && 
+          has_delimiter &&
           // and current character matches first character of delimiter
-          // and delimiter is either a single character, or we need to do a 
+          // and delimiter is either a single character, or we need to do a
           // more expensive test.
           delimiter_first_char == c &&
-           (delimiter_is_singlechar || 
+           (delimiter_is_singlechar ||
             test_is_delimiter(cur, last, delimiter_begin, delimiter_end));
 
       if (is_delimiter) break;
@@ -247,8 +247,8 @@ struct string_parser
 };
 } // namespace parser_impl
 
-namespace boost { 
-namespace spirit { 
+namespace boost {
+namespace spirit {
 namespace qi {
 
 // This is the factory function object invoked in order to create

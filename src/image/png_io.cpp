@@ -14,14 +14,14 @@
 
 #ifndef int_p_NULL
 #define int_p_NULL (int*)NULL
-#endif 
+#endif
 
 #include <boost/gil/extension/io/png_io.hpp>
 
 namespace turi {
 
 const size_t PNG_HEADER_SIZE = 4;
-const size_t BIT_DEPTH = 8; 
+const size_t BIT_DEPTH = 8;
 
 /**
  * Simple struct for in-memory read_only source.
@@ -48,7 +48,7 @@ void png_memwrite_func(png_structp png_ptr, png_bytep data, png_size_t size)
   }
 
   memcpy(png_buff->data + png_buff->length, data, size);
-  png_buff->length += size;  
+  png_buff->length += size;
 
 }
 
@@ -154,7 +154,7 @@ void setup_png_writer(png_structp* outpng_ptr, png_infop* out_info_ptr, size_t w
 
   int color_type = png_color_type(channels);
 
-  png_set_IHDR(png_ptr, info_ptr, width, height, BIT_DEPTH, color_type, 
+  png_set_IHDR(png_ptr, info_ptr, width, height, BIT_DEPTH, color_type,
       PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
 
@@ -192,7 +192,7 @@ void parse_png(const char* data, size_t length,
   png_infop info_ptr;
   setup_png_reader(data, length, &png_ptr, &info_ptr);
 
-  // Construct the simple in memory buffer 
+  // Construct the simple in memory buffer
   png_memory_buffer source;
   source.data = (char*)data;
   source.length = length;
@@ -237,7 +237,7 @@ void parse_png(const char* data, size_t length,
 }
 
 void encode_png(const char* data ,size_t width, size_t height, size_t channels, char** out_data, size_t& out_length){
-  //Beginning of setup 
+  //Beginning of setup
   png_structp png_ptr;
   png_infop info_ptr;
   setup_png_writer(&png_ptr, &info_ptr, width, height, channels);
@@ -246,12 +246,12 @@ void encode_png(const char* data ,size_t width, size_t height, size_t channels, 
   png_byte** row_pointers = (png_byte**) png_malloc(png_ptr, height * sizeof(png_byte *));
   for (size_t y = 0; y < height; ++y){
     char* row =(char*) png_malloc(png_ptr, sizeof(char) * channels * width);
-    row_pointers[y] = (png_byte *) row; 
+    row_pointers[y] = (png_byte *) row;
     for (size_t x = 0; x < width; ++x){
-      for (size_t z = 0; z < channels; ++z){ 
+      for (size_t z = 0; z < channels; ++z){
         *row++ = *data++;
         }
-      } 
+      }
     }
 
   // Construct in memory-buffer
@@ -260,13 +260,13 @@ void encode_png(const char* data ,size_t width, size_t height, size_t channels, 
   destination.length = 0;
   destination.offset = 0;
 
-  // Writing decoded data into buffer 
+  // Writing decoded data into buffer
   png_set_write_fn(png_ptr, &destination, png_memwrite_func, png_mem_flush);
   png_set_rows(png_ptr, info_ptr, row_pointers);
   png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
   //Copying buffer to output
-  out_length = destination.length; 
+  out_length = destination.length;
 
   /**
    * destination.data is allocated using malloc realloc. This cannot
@@ -284,7 +284,7 @@ void encode_png(const char* data ,size_t width, size_t height, size_t channels, 
   }
   png_free(png_ptr, row_pointers);
 
-  png_destroy_write_struct(&png_ptr, &info_ptr); 
+  png_destroy_write_struct(&png_ptr, &info_ptr);
 }
 
 void decode_png(const char* data, size_t length, char** out_data, size_t& out_length) {
@@ -292,13 +292,13 @@ void decode_png(const char* data, size_t length, char** out_data, size_t& out_le
   if (data == NULL){
     log_and_throw("Trying to decode image with NULL data pointer");
   }
-  
+
   // Begin of setup
   png_structp png_ptr;
   png_infop info_ptr;
   setup_png_reader(data, length, &png_ptr, &info_ptr);
 
-  // Construct the simple in memory buffer 
+  // Construct the simple in memory buffer
   png_memory_buffer source;
   source.data = (char*)data;
   source.length = length;

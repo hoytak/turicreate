@@ -33,23 +33,23 @@ void unity_server_initializer::init_extensions(
   namespace fs = boost::filesystem;
   fs::path root_path(root_path_);
   // look for shared libraries I can load
-  std::vector<fs::path> candidate_paths {root_path / "*.so", 
-                                               root_path / "*.dylib", 
+  std::vector<fs::path> candidate_paths {root_path / "*.so",
+                                               root_path / "*.dylib",
                                                root_path / "*.dll"};
 
   // we exclude all of our own libraries
-  std::vector<fs::path> exclude_paths {root_path / "*libunity*.so", 
+  std::vector<fs::path> exclude_paths {root_path / "*libunity*.so",
                                        root_path / "*libunity*.dylib",
                                        root_path / "*libunity*.dll"};
 
   std::set<std::string> exclude_files;
 
-  for (auto exclude_candidates: exclude_paths) { 
+  for (auto exclude_candidates: exclude_paths) {
     auto globres = get_glob_files(exclude_candidates.string());
     for (auto file : globres) exclude_files.insert(file.first);
   }
 
-  for (auto candidates: candidate_paths) { 
+  for (auto candidates: candidate_paths) {
     for (auto file : get_glob_files(candidates.string())) {
       // exclude files in the exclusion list
       if (exclude_files.count(file.first)) {

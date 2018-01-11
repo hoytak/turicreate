@@ -23,7 +23,7 @@ using namespace turi::fileio;
 using namespace turi::dml;
 
 struct dml_function_invocation_test  {
- 
+
  public:
   std::string working_dir;
 
@@ -65,7 +65,7 @@ struct dml_function_invocation_test  {
       TS_ASSERT_EQUALS(args.get_type(kvp.first), std::string("flexible_type"));
     }
 
-    // Act & Assert: To dict. 
+    // Act & Assert: To dict.
     variant_map_type args_dict = args.to_dict();
     for (const auto& kvp: args_dict) {
       TS_ASSERT_EQUALS(variant_get_value<flexible_type>(kvp.second),
@@ -73,7 +73,7 @@ struct dml_function_invocation_test  {
     }
 
 
-    // Act & Assert: To string 
+    // Act & Assert: To string
     std::string str_args = args.to_str();
     std::string ans = "{\"convergence_threshold\":[\"flexible_type\",0.01], "
                        "\"l1_penalty\":[\"flexible_type\",0], "
@@ -86,7 +86,7 @@ struct dml_function_invocation_test  {
     TS_ASSERT_EQUALS(str_args, ans);
 
 
-    // Act & Assert: From string 
+    // Act & Assert: From string
     dml_function_invocation args2;
     args2.from_str(str_args);
     for (const auto& kvp: options) {
@@ -95,7 +95,7 @@ struct dml_function_invocation_test  {
       TS_ASSERT_EQUALS(args.get_type(kvp.first), std::string("flexible_type"));
     }
     TS_ASSERT(!args.exists(std::string("cricket")));
-    
+
 
   }
 
@@ -121,24 +121,24 @@ struct dml_function_invocation_test  {
     args.from_dict(params, working_dir);
     TS_ASSERT(args.exists("sf"));
     TS_ASSERT_EQUALS(args.get_type("sf"), std::string("SFrame"));
-    TS_ASSERT_EQUALS(get_variant_which_name(args.get_value("sf").which()), 
+    TS_ASSERT_EQUALS(get_variant_which_name(args.get_value("sf").which()),
                      std::string("SFrame"));
     TS_ASSERT(args.exists("sa"));
     TS_ASSERT_EQUALS(args.get_type("sa"), std::string("SArray"));
-    TS_ASSERT_EQUALS(get_variant_which_name(args.get_value("sa").which()), 
+    TS_ASSERT_EQUALS(get_variant_which_name(args.get_value("sa").which()),
                      std::string("SArray"));
     TS_ASSERT(args.exists("sg"));
     TS_ASSERT_EQUALS(args.get_type("sg"), std::string("SGraph"));
-    TS_ASSERT_EQUALS(get_variant_which_name(args.get_value("sg").which()), 
+    TS_ASSERT_EQUALS(get_variant_which_name(args.get_value("sg").which()),
                      std::string("SGraph"));
 
-    // Act & Assert: To dict. 
+    // Act & Assert: To dict.
     variant_map_type args_dict = args.to_dict();
     for (const auto& kvp: args_dict) {
       TS_ASSERT(params.find(kvp.first) != args_dict.end());
     }
 
-    // Act & Assert: To string 
+    // Act & Assert: To string
     std::string cwd = working_dir;
     std::string str_args = args.to_str();
     std::string ans = "{\"sa\":[\"SArray\",\"" + cwd + "/sa\"], " +
@@ -147,7 +147,7 @@ struct dml_function_invocation_test  {
     TS_ASSERT_EQUALS(str_args, ans);
 
 
-    // Act & Assert: From string 
+    // Act & Assert: From string
     dml_function_invocation args2;
     args2.from_str(str_args);
     for (const auto& kvp: params) {
@@ -172,8 +172,8 @@ struct dml_function_invocation_test  {
     sframe X = data;
     X = X.remove_column(X.column_index("target"));
 
-    // Setup the arguments. 
-    std::map<std::string, flexible_type> options = { 
+    // Setup the arguments.
+    std::map<std::string, flexible_type> options = {
       {"convergence_threshold", 1e-2},
       {"step_size", 1.0},
       {"lbfgs_memory_level", 3},
@@ -182,8 +182,8 @@ struct dml_function_invocation_test  {
       {"l1_penalty", 0.0},
       {"l2_penalty", 0.0}
     };
- 
-    // Train the model. 
+
+    // Train the model.
     std::shared_ptr<linear_regression> model;
     model.reset(new linear_regression);
     model->init(X,y);
@@ -192,34 +192,34 @@ struct dml_function_invocation_test  {
 
     variant_map_type params;
     params["model"] = model;
-    
+
     // Act & Assert: From dict.
     // --------------------------------------------------------------
     dml_function_invocation args;
     args.from_dict(params, working_dir);
     TS_ASSERT(args.exists("model"));
-    std::map<std::string, flexible_type> _options = 
+    std::map<std::string, flexible_type> _options =
          variant_get_value<std::shared_ptr<linear_regression>>(
                     args.get_value("model"))->get_current_options();
     for (auto& kvp: options){
       TS_ASSERT(_options[kvp.first] == kvp.second);
     }
     TS_ASSERT(model->is_trained() == true);
-    
-    // Act & Assert: To dict. 
+
+    // Act & Assert: To dict.
     variant_map_type args_dict = args.to_dict();
     for (const auto& kvp: args_dict) {
       TS_ASSERT(params.find(kvp.first) != args_dict.end());
     }
 
-    // Act & Assert: To string 
+    // Act & Assert: To string
     std::string cwd = working_dir;
     std::string str_args = args.to_str();
     std::string ans = "{\"model\":[\"Model\",\"" + cwd + "/model\"]}";
     TS_ASSERT_EQUALS(str_args, ans);
 
 
-    // Act & Assert: From string 
+    // Act & Assert: From string
     dml_function_invocation args2;
     args2.from_str(str_args);
     for (const auto& kvp: params) {
@@ -236,7 +236,7 @@ struct dml_function_invocation_test  {
     model->params["graph"] = to_variant(g);
     variant_map_type params;
     params["model"] = model;
-    
+
     // Act & Assert: From dict.
     // --------------------------------------------------------------
     dml_function_invocation args;
@@ -245,21 +245,21 @@ struct dml_function_invocation_test  {
     auto m2 = variant_get_value<std::shared_ptr<simple_model>>(args.get_value("model"));
     TS_ASSERT(m2->params.count("graph") > 0);
     auto g2 = variant_get_value<std::shared_ptr<unity_sgraph>>(m2->params["graph"]);
-    
-    // Act & Assert: To dict. 
+
+    // Act & Assert: To dict.
     variant_map_type args_dict = args.to_dict();
     for (const auto& kvp: args_dict) {
       TS_ASSERT(params.find(kvp.first) != args_dict.end());
     }
 
-    // Act & Assert: To string 
+    // Act & Assert: To string
     std::string cwd = working_dir;
     std::string str_args = args.to_str();
     std::string ans = "{\"model\":[\"Model\",\"" + cwd + "/model\"]}";
     TS_ASSERT_EQUALS(str_args, ans);
 
 
-    // Act & Assert: From string 
+    // Act & Assert: From string
     dml_function_invocation args2;
     args2.from_str(str_args);
     for (const auto& kvp: params) {

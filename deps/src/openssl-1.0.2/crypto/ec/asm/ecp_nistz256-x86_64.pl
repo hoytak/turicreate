@@ -599,7 +599,7 @@ __ecp_nistz256_mul_montq:
 	adc	\$0, $acc0
 
 	########################################################################
-	# Second reduction step	
+	# Second reduction step
 	mov	$acc1, $t1
 	shl	\$32, $acc1
 	mulq	$poly3
@@ -646,7 +646,7 @@ __ecp_nistz256_mul_montq:
 	adc	\$0, $acc1
 
 	########################################################################
-	# Third reduction step	
+	# Third reduction step
 	mov	$acc2, $t1
 	shl	\$32, $acc2
 	mulq	$poly3
@@ -693,7 +693,7 @@ __ecp_nistz256_mul_montq:
 	adc	\$0, $acc2
 
 	########################################################################
-	# Final reduction step	
+	# Final reduction step
 	mov	$acc3, $t1
 	shl	\$32, $acc3
 	mulq	$poly3
@@ -706,7 +706,7 @@ __ecp_nistz256_mul_montq:
 	 mov	$acc5, $t1
 	adc	\$0, $acc2
 
-	########################################################################	
+	########################################################################
 	# Branch-less conditional subtraction of P
 	sub	\$-1, $acc4		# .Lpoly[0]
 	 mov	$acc0, $t2
@@ -2060,7 +2060,7 @@ $code.=<<___;
 	movq	%xmm1, $r_ptr
 	call	__ecp_nistz256_sqr_mont$x	# p256_sqr_mont(res_y, S);
 ___
-{	
+{
 ######## ecp_nistz256_div_by_2(res_y, res_y); ##########################
 # operate in 4-5-6-7 "name space" that matches squaring output
 #
@@ -2149,7 +2149,7 @@ $code.=<<___;
 	lea	$M(%rsp), $b_ptr
 	mov	$acc4, $acc6			# harmonize sub output and mul input
 	xor	%ecx, %ecx
-	mov	$acc4, $S+8*0(%rsp)		# have to save:-(	
+	mov	$acc4, $S+8*0(%rsp)		# have to save:-(
 	mov	$acc5, $acc2
 	mov	$acc5, $S+8*1(%rsp)
 	cmovz	$acc0, $acc3

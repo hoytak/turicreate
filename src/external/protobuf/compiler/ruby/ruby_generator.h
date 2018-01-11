@@ -61,4 +61,3 @@ class LIBPROTOC_EXPORT Generator
 }  // namespace google
 
 #endif  // GOOGLE_PROTOBUF_COMPILER_RUBY_GENERATOR_H__
-

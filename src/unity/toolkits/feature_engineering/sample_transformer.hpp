@@ -15,17 +15,17 @@ namespace sdk_model {
 namespace feature_engineering {
 
 /**
- * transformer_base example toolkit 
+ * transformer_base example toolkit
  * ---------------------------------------------
- * 
- * This example class also serves as test cases for the transformer 
- * base class. Copy the class verbatim and change things for your 
+ *
+ * This example class also serves as test cases for the transformer
+ * base class. Copy the class verbatim and change things for your
  * transformer goodness.
- * 
+ *
  * Methods that must be implemented
  * -----------------------------------------
- * 
- * Functions that should always be implemented. 
+ *
+ * Functions that should always be implemented.
  *
  *  init_transformers
  *  fit
@@ -34,7 +34,7 @@ namespace feature_engineering {
  *  get_version
  *  save_impl
  *  load_version
- *    
+ *
  * This class interfaces with the TransformerBaseNative class in Python and works
  * end to end once the following set of fuctions are implemented by the user.
  *
@@ -43,7 +43,7 @@ namespace feature_engineering {
  * -----------------------------------------------------------------------------
  *
  * This class does the wonderously complicated task of transforming your data
- * to a constant, no matter what you give it. 
+ * to a constant, no matter what you give it.
  *
  */
 class EXPORT sample_transformer : public transformer_base {
@@ -88,7 +88,7 @@ class EXPORT sample_transformer : public transformer_base {
   /**
    * Initialize the transformer.
    */
-  void init_transformer(const std::map<std::string, 
+  void init_transformer(const std::map<std::string,
                         flexible_type>& _options);
 
   /**
@@ -102,7 +102,7 @@ class EXPORT sample_transformer : public transformer_base {
    * Transform the given data.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "transform" in python.
@@ -113,7 +113,7 @@ class EXPORT sample_transformer : public transformer_base {
   // Helper functions.
   // --------------------------------------------------------------------------
   inline double get_constant() { return constant;}
-  
+
   // Functions that all transformers need to register. Can be copied verbatim
   // for other classes.
   // --------------------------------------------------------------------------
@@ -124,10 +124,10 @@ class EXPORT sample_transformer : public transformer_base {
   REGISTER_CLASS_MEMBER_FUNCTION(sample_transformer::transform, "data");
   REGISTER_CLASS_MEMBER_FUNCTION(sample_transformer::get_current_options);
   REGISTER_CLASS_MEMBER_FUNCTION(sample_transformer::list_fields);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options",
                                      sample_transformer::get_default_options);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get", 
-                                     sample_transformer::get_value_from_state, 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get",
+                                     sample_transformer::get_value_from_state,
                                      "key");
   END_CLASS_MEMBER_REGISTRATION
 

@@ -8,7 +8,7 @@
 #include <string>
 #include <cppipc/cppipc.hpp>
 #include <cppipc/magic_macros.hpp>
-GENERATE_INTERFACE_AND_PROXY(test_object_base,  test_object_proxy, 
+GENERATE_INTERFACE_AND_PROXY(test_object_base,  test_object_proxy,
                               (std::string, ping, (std::string))
                               (std::string, return_big_object, (size_t))
                               (int, add_one, (int)(std::string))
@@ -31,9 +31,9 @@ GENERATE_INTERFACE_AND_PROXY(test_object_base,  test_object_proxy,
 //   virtual std::string ping(std::string) = 0;
 //   virtual int add_one(int) = 0;
 //   virtual int add(int, int) = 0;
-// 
+//
 //   virtual ~test_object_base() { }
-// 
+//
 //   REGISTRATION_BEGIN(test_object_base)
 //   REGISTER(test_object_base::ping)
 //   REGISTER(test_object_base::add_one)
@@ -45,7 +45,7 @@ GENERATE_INTERFACE_AND_PROXY(test_object_base,  test_object_proxy,
 //  public:
 //   cppipc::object_proxy<test_object_base> proxy;
 //
-//   inline test_object_proxy(cppipc::comm_client& comm):proxy(comm){ } 
+//   inline test_object_proxy(cppipc::comm_client& comm):proxy(comm){ }
 //   inline std::string ping(std::string s) {
 //     return proxy.call(&test_object_base::ping, s);
 //   }

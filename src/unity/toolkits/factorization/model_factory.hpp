@@ -218,7 +218,7 @@ namespace turi { namespace factorization {
  *
  */
 std::pair<std::shared_ptr<factorization_model>,
-          std::shared_ptr<sgd::sgd_solver_base> > 
+          std::shared_ptr<sgd::sgd_solver_base> >
 create_model_and_solver(const v2::ml_data& train_data,
                         std::map<std::string, flexible_type> options,
                         const std::string& loss_type,
@@ -230,4 +230,3 @@ create_model_and_solver(const v2::ml_data& train_data,
 }}
 
 #endif /* TURI_FACTORIZATION_MODEL_CREATION_FACTORY_H_ */
-

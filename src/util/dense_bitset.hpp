@@ -16,13 +16,13 @@
 #include <util/bitops.hpp>
 
 namespace turi {
-  
+
   /**  \ingroup util
    *  Implements an atomic dense bitset
    */
   class dense_bitset {
   public:
-    
+
     /// Constructs a bitset of 0 length
     dense_bitset() : array(NULL), len(0), arrlen(0) {
     }
@@ -39,10 +39,10 @@ namespace turi {
       arrlen = 0;
       *this = db;
     }
-    
+
     /// destructor
     ~dense_bitset() {free(array);}
-  
+
     /// Make a copy of the bitset db
     inline dense_bitset& operator=(const dense_bitset& db) {
       resize(db.size());
@@ -51,13 +51,13 @@ namespace turi {
       memcpy(array, db.array, sizeof(size_t) * arrlen);
       return *this;
     }
-  
+
     /** Resizes the current bitset to hold n bits.
     Existing bits will not be changed. If the array size is increased,
     the value of the new bits are undefined.
-    
+
     \Warning When shirnking, the current implementation may still leave the
-    "deleted" bits in place which will mess up the popcount. 
+    "deleted" bits in place which will mess up the popcount.
     */
     inline void resize(size_t n) {
       len = n;
@@ -74,17 +74,17 @@ namespace turi {
         std::fill(&array[prev_arrlen], &array[arrlen], 0);
       }
     }
-  
+
     /// Sets all bits to 0
     inline void clear() {
       std::fill(&array[0], &array[arrlen], 0);
     }
-    
+
     inline bool empty() const {
       for (size_t i = 0; i < arrlen; ++i) if (array[i]) return false;
       return true;
     }
-    
+
     /// Sets all bits to 1
     inline void fill() {
       for (size_t i = 0;i < arrlen; ++i) array[i] = (size_t) - 1;
@@ -95,7 +95,7 @@ namespace turi {
     inline void prefetch(size_t b) const{
       __builtin_prefetch(&(array[b / (8 * sizeof(size_t))]));
     }
-    
+
     /// Returns the value of the bit b
     inline bool get(size_t b) const{
       size_t arrpos, bitpos;
@@ -108,36 +108,36 @@ namespace turi {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t mask(size_t(1) << size_t(bitpos)); 
+      const size_t mask(size_t(1) << size_t(bitpos));
       return __sync_fetch_and_or(array + arrpos, mask) & mask;
     }
-    
+
     //! Atomically xors a bit with 1
     inline bool xor_bit(size_t b) {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t mask(size_t(1) << size_t(bitpos)); 
+      const size_t mask(size_t(1) << size_t(bitpos));
       return __sync_fetch_and_xor(array + arrpos, mask) & mask;
     }
- 
-    //! Returns the value of the word containing the bit b 
+
+    //! Returns the value of the word containing the bit b
     inline size_t containing_word(size_t b) {
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
       return array[arrpos];
     }
 
-    //! Returns the value of the word containing the bit b 
+    //! Returns the value of the word containing the bit b
     inline size_t get_containing_word_and_zero(size_t b) {
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
       return fetch_and_store(array[arrpos], size_t(0));
     }
 
-    /** 
-     * \brief Transfers approximately b bits from another bitset to this bitset 
-     * 
+    /**
+     * \brief Transfers approximately b bits from another bitset to this bitset
+     *
      * "Moves" at least b bits from the other bitset to this bitset
      * starting from the given position.
      * At return, b will contain the actual number of bits moved,
@@ -160,8 +160,8 @@ namespace turi {
      * However, the implementation here may transfer more than b bits.
      * ( up to b + 2 * wordsize_in_bits )
      */
-    inline void transfer_approximate_unsafe(dense_bitset& other, 
-                                            size_t& start, 
+    inline void transfer_approximate_unsafe(dense_bitset& other,
+                                            size_t& start,
                                             size_t& b) {
       // must be identical in length
       ASSERT_EQ(other.len, len);
@@ -173,7 +173,7 @@ namespace turi {
       // ok. we will only look at arrpos
       size_t transferred = 0;
       while(transferred < b) {
-        if (other.array[arrpos] > 0) { 
+        if (other.array[arrpos] > 0) {
           transferred += num_bits_on(other.array[arrpos]);
           array[arrpos] |= other.array[arrpos];
           other.array[arrpos] = 0;
@@ -195,7 +195,7 @@ namespace turi {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t mask(size_t(1) << size_t(bitpos)); 
+      const size_t mask(size_t(1) << size_t(bitpos));
       bool ret = array[arrpos] & mask;
       array[arrpos] |= mask;
       return ret;
@@ -222,8 +222,8 @@ namespace turi {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t test_mask(size_t(1) << size_t(bitpos)); 
-      const size_t clear_mask(~test_mask); 
+      const size_t test_mask(size_t(1) << size_t(bitpos));
+      const size_t clear_mask(~test_mask);
       return __sync_fetch_and_and(array + arrpos, clear_mask) & test_mask;
     }
 
@@ -235,8 +235,8 @@ namespace turi {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t test_mask(size_t(1) << size_t(bitpos)); 
-      const size_t clear_mask(~test_mask); 
+      const size_t test_mask(size_t(1) << size_t(bitpos));
+      const size_t clear_mask(~test_mask);
       bool ret = array[arrpos] & test_mask;
       array[arrpos] &= clear_mask;
       return ret;
@@ -266,7 +266,7 @@ namespace turi {
       const dense_bitset* db;
       bit_pos_iterator():pos(-1),db(NULL) {}
       bit_pos_iterator(const dense_bitset* const db, size_t pos):pos(pos),db(db) {}
-      
+
       size_t operator*() const {
         return pos;
       }
@@ -288,22 +288,22 @@ namespace turi {
         return other.pos != pos;
       }
     };
-    
+
     typedef bit_pos_iterator iterator;
     typedef bit_pos_iterator const_iterator;
 
-    
+
     bit_pos_iterator begin() const {
       size_t pos;
       if (first_bit(pos) == false) pos = size_t(-1);
       return bit_pos_iterator(this, pos);
     }
-    
+
     bit_pos_iterator end() const {
       return bit_pos_iterator(this, (size_t)(-1));
     }
 
-    /** Returns true with b containing the position of the 
+    /** Returns true with b containing the position of the
         first bit set to true.
         If such a bit does not exist, this function returns false.
     */
@@ -318,7 +318,7 @@ namespace turi {
     }
 
 
-    /** Returns true with b containing the position of the 
+    /** Returns true with b containing the position of the
         first bit set to false.
         If such a bit does not exist, this function returns false.
     */
@@ -391,7 +391,7 @@ namespace turi {
     inline size_t size() const {
       return len;
     }
-    
+
     /// Serializes this bitset to an archive
     inline void save(oarchive& oarc) const {
       oarc <<len << arrlen;
@@ -484,7 +484,7 @@ namespace turi {
       arrpos = b / (8 * sizeof(size_t));
       bitpos = b & (8 * sizeof(size_t) - 1);
     }
-  
+
     // returns 0 on failure
     inline size_t next_bit_in_block(const size_t& b, const size_t& block) const {
       size_t belowselectedbit = size_t(-1) - (((size_t(1) << b) - 1)|(size_t(1)<<b));
@@ -538,8 +538,8 @@ namespace turi {
 
 
 
-  
-  
+
+
   /**
   Like bitset, but of a fixed length as defined by the template parameter
   */
@@ -550,33 +550,33 @@ namespace turi {
     fixed_dense_bitset() {
       clear();
     }
-    
+
    /// Make a copy of the bitset db
     fixed_dense_bitset(const fixed_dense_bitset<len> &db) {
       *this = db;
     }
 
-    /** Initialize this fixed dense bitset by copying 
+    /** Initialize this fixed dense bitset by copying
         ceil(len/(wordlen)) words from mem
     */
     void initialize_from_mem(void* mem, size_t memlen) {
       memcpy(array, mem, memlen);
     }
-    
+
     /// destructor
     ~fixed_dense_bitset() {}
-  
+
     /// Make a copy of the bitset db
     inline fixed_dense_bitset<len>& operator=(const fixed_dense_bitset<len>& db) {
       memcpy(array, db.array, sizeof(size_t) * arrlen);
       return *this;
     }
-  
+
     /// Sets all bits to 0
     inline void clear() {
       memset((void*)array, 0, sizeof(size_t) * arrlen);
     }
-    
+
     /// Sets all bits to 1
     inline void fill() {
       for (size_t i = 0;i < arrlen; ++i) array[i] = -1;
@@ -587,12 +587,12 @@ namespace turi {
       for (size_t i = 0; i < arrlen; ++i) if (array[i]) return false;
       return true;
     }
-    
+
     /// Prefetches the word containing the bit b
     inline void prefetch(size_t b) const{
       __builtin_prefetch(&(array[b / (8 * sizeof(size_t))]));
     }
-    
+
     /// Returns the value of the bit b
     inline bool get(size_t b) const{
       size_t arrpos, bitpos;
@@ -605,12 +605,12 @@ namespace turi {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t mask(size_t(1) << size_t(bitpos)); 
+      const size_t mask(size_t(1) << size_t(bitpos));
       return __sync_fetch_and_or(array + arrpos, mask) & mask;
     }
 
 
-    //! Returns the value of the word containing the bit b 
+    //! Returns the value of the word containing the bit b
     inline size_t containing_word(size_t b) {
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
@@ -626,7 +626,7 @@ namespace turi {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t mask(size_t(1) << size_t(bitpos)); 
+      const size_t mask(size_t(1) << size_t(bitpos));
       bool ret = array[arrpos] & mask;
       array[arrpos] |= mask;
       return ret;
@@ -656,8 +656,8 @@ namespace turi {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t test_mask(size_t(1) << size_t(bitpos)); 
-      const size_t clear_mask(~test_mask); 
+      const size_t test_mask(size_t(1) << size_t(bitpos));
+      const size_t clear_mask(~test_mask);
       return __sync_fetch_and_and(array + arrpos, clear_mask) & test_mask;
     }
 
@@ -669,8 +669,8 @@ namespace turi {
       // use CAS to set the bit
       size_t arrpos, bitpos;
       bit_to_pos(b, arrpos, bitpos);
-      const size_t test_mask(size_t(1) << size_t(bitpos)); 
-      const size_t clear_mask(~test_mask); 
+      const size_t test_mask(size_t(1) << size_t(bitpos));
+      const size_t clear_mask(~test_mask);
       bool ret = array[arrpos] & test_mask;
       array[arrpos] &= clear_mask;
       return ret;
@@ -687,7 +687,7 @@ namespace turi {
       const fixed_dense_bitset* db;
       bit_pos_iterator():pos(-1),db(NULL) {}
       bit_pos_iterator(const fixed_dense_bitset* const db, size_t pos):pos(pos),db(db) {}
-      
+
       size_t operator*() const {
         return pos;
       }
@@ -709,22 +709,22 @@ namespace turi {
         return other.pos != pos;
       }
     };
-    
+
     typedef bit_pos_iterator iterator;
     typedef bit_pos_iterator const_iterator;
 
-    
+
     bit_pos_iterator begin() const {
       size_t pos;
       if (first_bit(pos) == false) pos = size_t(-1);
       return bit_pos_iterator(this, pos);
     }
-    
+
     bit_pos_iterator end() const {
       return bit_pos_iterator(this, (size_t)(-1));
     }
 
-    /** Returns true with b containing the position of the 
+    /** Returns true with b containing the position of the
         first bit set to true.
         If such a bit does not exist, this function returns false.
     */
@@ -738,7 +738,7 @@ namespace turi {
       return false;
     }
 
-    /** Returns true with b containing the position of the 
+    /** Returns true with b containing the position of the
         first bit set to false.
         If such a bit does not exist, this function returns false.
     */
@@ -778,12 +778,12 @@ namespace turi {
       }
       return false;
     }
-    
+
     ///  Returns the number of bits in this bitset
     inline size_t size() const {
       return len;
     }
-    
+
     /// Serializes this bitset to an archive
     inline void save(oarchive& oarc) const {
       //oarc <<len << arrlen;
@@ -880,7 +880,7 @@ namespace turi {
       arrpos = b / (8 * sizeof(size_t));
       bitpos = b & (8 * sizeof(size_t) - 1);
     }
-  
+
 
     // returns 0 on failure
     inline size_t next_bit_in_block(const size_t &b, const size_t &block) const {
@@ -906,7 +906,7 @@ namespace turi {
       array[arrlen - 1] &= ((size_t(1) << lastbits) - 1);
     }
 
- 
+
     static const size_t arrlen;
     size_t array[len / (sizeof(size_t) * 8) + (len % (sizeof(size_t) * 8) > 0)];
   };
@@ -915,4 +915,3 @@ namespace turi {
   const size_t fixed_dense_bitset<len>::arrlen = len / (sizeof(size_t) * 8) + (len % (sizeof(size_t) * 8) > 0);
 }
 #endif
-

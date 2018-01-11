@@ -20,9 +20,9 @@ typedef struct {
 } alphaARG;
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void *Make_Alpha_Type(va_list *ap)
-|   
+|
 |   Description   :  Allocate structure for alpha type argument.
 |
 |   Return Values :  Pointer to argument structure or NULL on error
@@ -38,10 +38,10 @@ static void *Make_Alpha_Type(va_list * ap)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void *Copy_Alpha_Type(const void * argp)
-|   
-|   Description   :  Copy structure for alpha type argument.  
+|
+|   Description   :  Copy structure for alpha type argument.
 |
 |   Return Values :  Pointer to argument structure or NULL on error.
 +--------------------------------------------------------------------------*/
@@ -49,7 +49,7 @@ static void *Copy_Alpha_Type(const void * argp)
 {
   const alphaARG *ap = (const alphaARG *)argp;
   alphaARG *result = (alphaARG *)malloc(sizeof(alphaARG));
-  
+
   if (result)
     {
       *result = *ap;
@@ -58,25 +58,25 @@ static void *Copy_Alpha_Type(const void * argp)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void Free_Alpha_Type( void * argp )
-|   
+|
 |   Description   :  Free structure for alpha type argument.
 |
 |   Return Values :  -
 +--------------------------------------------------------------------------*/
 static void Free_Alpha_Type(void * argp)
 {
-  if (argp) 
+  if (argp)
     free(argp);
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Check_Alpha_Field(
 |                                      FIELD * field,
 |                                      const void * argp)
-|   
+|
 |   Description   :  Validate buffer content to be a valid alpha value
 |
 |   Return Values :  TRUE  - field is valid
@@ -89,26 +89,26 @@ static bool Check_Alpha_Field(FIELD * field, const void * argp)
   int  l = -1;
   unsigned char *s;
 
-  while(*bp && *bp==' ') 
+  while(*bp && *bp==' ')
     bp++;
   if (*bp)
     {
       s = bp;
-      while(*bp && isalpha(*bp)) 
+      while(*bp && isalpha(*bp))
 	bp++;
       l = (int)(bp-s);
-      while(*bp && *bp==' ') 
+      while(*bp && *bp==' ')
 	bp++;
     }
   return ((*bp || (l < width)) ? FALSE : TRUE);
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Check_Alpha_Character(
 |                                      int c,
 |                                      const void * argp)
-|   
+|
 |   Description   :  Check a character for the alpha type.
 |
 |   Return Values :  TRUE  - character is valid

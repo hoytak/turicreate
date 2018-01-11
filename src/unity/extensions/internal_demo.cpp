@@ -38,8 +38,8 @@ std::string _replicate(const std::map<std::string, flexible_type>& input) {
 }
 
 
-flexible_type _replicate_column(const std::map<std::string, flexible_type>& input, 
-                                std::string column, 
+flexible_type _replicate_column(const std::map<std::string, flexible_type>& input,
+                                std::string column,
                                 size_t times) {
   flexible_type val = input.at(column);
   if (times == 0) return FLEX_UNDEFINED;
@@ -109,7 +109,7 @@ class demo_class: public toolkit_class_base {
   REGISTER_SETTER("two", demo_class::two_setter);
 
   REGISTER_CLASS_MEMBER_DOCSTRING(demo_class::concat, "Concatenates the values one and two")
-  REGISTER_CLASS_MEMBER_DOCSTRING("concat_more", 
+  REGISTER_CLASS_MEMBER_DOCSTRING("concat_more",
                                   "Concatenates the values one and two and the argument three")
   END_CLASS_MEMBER_REGISTRATION
 };
@@ -182,5 +182,3 @@ BEGIN_CLASS_REGISTRATION
 REGISTER_CLASS(demo_class)
 REGISTER_CLASS(demo_vector)
 END_CLASS_REGISTRATION
-
-

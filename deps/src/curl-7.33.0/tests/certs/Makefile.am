@@ -63,4 +63,3 @@ SRPFILES = \
   srp-verifier-db
 
 EXTRA_DIST = $(CERTFILES) $(SRPFILES)
-

@@ -353,7 +353,7 @@ class l2_rescaling: public standardization_interface {
   void transform(DenseMatrix &points) const {
     DASSERT_EQ(points.n_cols, total_size);
     for (size_t i = 0; i < points.n_rows; i++) {
-      points.row(i) /= scale.t(); 
+      points.row(i) /= scale.t();
     }
   }
 
@@ -365,8 +365,8 @@ class l2_rescaling: public standardization_interface {
    */
   void inverse_transform(DenseVector &point) const {
     DASSERT_EQ(point.size(), total_size);
-    for(size_t i = 0; i < point.size(); ++i) { 
-      point[i] *= scale[i]; 
+    for(size_t i = 0; i < point.size(); ++i) {
+      point[i] *= scale[i];
     }
   }
 
@@ -381,8 +381,8 @@ class l2_rescaling: public standardization_interface {
    */
   void inverse_transform(SparseVector &point) const {
     DASSERT_EQ(point.size(), total_size);
-    for(auto& p : point) { 
-      p.second *= scale(p.first); 
+    for(auto& p : point) {
+      p.second *= scale(p.first);
     }
 
   }
@@ -395,8 +395,8 @@ class l2_rescaling: public standardization_interface {
    */
   void transform(SparseVector &point) const {
     DASSERT_EQ(point.size(), total_size);
-    for(auto& p : point) { 
-      p.second /= scale(p.first); 
+    for(auto& p : point) {
+      p.second /= scale(p.first);
     }
   }
 

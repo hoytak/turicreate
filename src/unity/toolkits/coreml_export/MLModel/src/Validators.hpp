@@ -50,9 +50,9 @@ namespace CoreML {
      * @return Result type of this operation.
      */
     Result validateRegressorInterface(const Specification::ModelDescription& interface);
-    
-    
-    
+
+
+
     /*
      * Validate model interface describes a valid classifier
      *
@@ -62,7 +62,7 @@ namespace CoreML {
     template<typename T, typename U>
     Result validateClassifierInterface(const T& model,
                                        const U& modelParameters);
-   
+
     /*
      * Validate optional inputs/outputs.
      * For most models, optional is not allowed (all inputs/outputs required).

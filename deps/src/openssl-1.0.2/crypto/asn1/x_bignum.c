@@ -139,5 +139,3 @@ static int bn_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
         }
         return 1;
 }
-
-

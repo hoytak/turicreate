@@ -34,7 +34,7 @@ def count_words(sa, to_lower=True,
     Parameters
     ----------
     sa : SArray[str | dict | list]
-        Input data to be tokenized and counted. 
+        Input data to be tokenized and counted.
 
     to_lower : bool, optional
         If True, all strings are converted to lower case before counting.
@@ -135,7 +135,7 @@ def count_ngrams(sa, n=2, method="word", to_lower=True,
     Parameters
     ----------
     sa : SArray[str | dict | list]
-        Input text data. 
+        Input text data.
 
     n : int, optional
         The number of words in each n-gram. An ``n`` value of 1 returns word
@@ -266,7 +266,7 @@ def tf_idf(dataset):
     Parameters
     ----------
     dataset : SArray[str | dict | list]
-        Input text data. 
+        Input text data.
 
     Returns
     -------

@@ -25,7 +25,7 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws::Http;
 
-GetObjectAclRequest::GetObjectAclRequest() : 
+GetObjectAclRequest::GetObjectAclRequest() :
     m_bucketHasBeenSet(false),
     m_keyHasBeenSet(false),
     m_versionIdHasBeenSet(false),

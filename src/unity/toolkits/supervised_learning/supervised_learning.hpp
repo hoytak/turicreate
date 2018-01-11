@@ -44,24 +44,24 @@ typedef sparse_vector<double>  SparseVector;
 
 /**
  * An enumeration over the possible types of prediction that are supported.
- * \see prediction_type_enum_from_name 
+ * \see prediction_type_enum_from_name
  */
 enum class prediction_type_enum: char {
-  NA = 0,                /**< NA: Default/Not-applicable.*/       
-  CLASS = 1, 
-  CLASS_INDEX = 2,       /**< Index of the class (performance reasons) .*/       
-  PROBABILITY = 3, 
-  MAX_PROBABILITY = 4,   /**< Max probability for classify .*/       
-  MARGIN = 5, 
-  RANK = 6, 
-  PROBABILITY_VECTOR = 7 /** < A vector of probabilities .*/ 
+  NA = 0,                /**< NA: Default/Not-applicable.*/
+  CLASS = 1,
+  CLASS_INDEX = 2,       /**< Index of the class (performance reasons) .*/
+  PROBABILITY = 3,
+  MAX_PROBABILITY = 4,   /**< Max probability for classify .*/
+  MARGIN = 5,
+  RANK = 6,
+  PROBABILITY_VECTOR = 7 /** < A vector of probabilities .*/
 };
 
 /**
  * Given the printable name of a prediction_type_enum type, it returns the name.
- * 
+ *
  * \param[in] name Name of the prediction_type_enum type.
- * \returns prediction_type_enum 
+ * \returns prediction_type_enum
  */
 inline prediction_type_enum prediction_type_enum_from_name(const std::string& name) {
   static std::map<std::string, prediction_type_enum> type_map{
@@ -83,26 +83,26 @@ inline prediction_type_enum prediction_type_enum_from_name(const std::string& na
 
 
 /**
- * Create a supervised learning model. 
+ * Create a supervised learning model.
  * ---------------------------------------
  *
- * \param[in] X          : An SFrame of features. 
- * \param[in] y          : An SFrame with a single column containing the target. 
+ * \param[in] X          : An SFrame of features.
+ * \param[in] y          : An SFrame with a single column containing the target.
  * \param[in] model_name : Model name to be created (same as model->name())
- * \param[out] A created supervised learning model. 
+ * \param[out] A created supervised learning model.
  */
 
 std::shared_ptr<supervised_learning_model_base> create(
-               sframe X, sframe y, std::string model_name, 
+               sframe X, sframe y, std::string model_name,
                const variant_map_type& kwargs);
 
 /**
  * Supervised_learning model base class.
  * ---------------------------------------
  *
- *  Base class for handling supervised learning class. This class is meant to 
+ *  Base class for handling supervised learning class. This class is meant to
  *  be a guide to aid model writing and not a hard and fast rule of how the
- *  code must be structured. 
+ *  code must be structured.
  *
  *  Each supervised learning C++ toolkit contains the following:
  *
@@ -111,8 +111,8 @@ std::shared_ptr<supervised_learning_model_base> create(
  *            with python. You can add basic types, vectors, SFrames etc.
  *
  *  *) ml_mdata: A globally consistent object with column wise metadata. This
- *               metadata changes with time (even after training). If you 
- *               want to freeze the metadata after training, you have to do 
+ *               metadata changes with time (even after training). If you
+ *               want to freeze the metadata after training, you have to do
  *               so yourself.
  *
  *  *) train_feature_size: Feature sizes (i.e column sizes) during train time.
@@ -124,7 +124,7 @@ std::shared_ptr<supervised_learning_model_base> create(
  *              options, option ranges, type etc. This must be initialized only
  *              once in the set_options() function.
  *
- * 
+ *
  * Functions that should always be implemented. Here are some notes about
  * each of these functions that may help guide you in writing your model.
  *
@@ -133,25 +133,25 @@ std::shared_ptr<supervised_learning_model_base> create(
  *          the name holds the key to everything. The unity_server can construct
  *          model_base objects and they can be cast to a model of this type.
  *          The name determine how the casting happens. The init_models()
- *          function in unity_server.cpp will give you an idea of how 
+ *          function in unity_server.cpp will give you an idea of how
  *          this interface happens.
  *
- * *) train: A train function for the model. 
+ * *) train: A train function for the model.
  *
- * *) predict_single_example: A predict function for the model for single 
+ * *) predict_single_example: A predict function for the model for single
  *             example. If this is implemented, batch predictions and evaluation
  *             need not be implemented.
  *
- * *) predict: A predict function for the model for batch predictions. 
+ * *) predict: A predict function for the model for batch predictions.
  *             The result of this function can be an SArray of predictions.
  *             One for each value of the input SFrame.
- *             
- * *) evaluate: An evaluattion function for the model for evaluations. 
+ *
+ * *) evaluate: An evaluattion function for the model for evaluations.
  *              The result of this function must be an updated evaluation_stats
  *              map which can be queried with the get_evaluation_stats().
  *
  * *) save: Save the model with the turicreate iarc. Turi is a server-client
- *          module. DO NOT SAVE ANYTHING in the client side. Make sure that 
+ *          module. DO NOT SAVE ANYTHING in the client side. Make sure that
  *          everything is in the server side. For example: You might be tempted
  *          do keep options that the user provides into the server side but
  *          DO NOT do that because save and load will break things for you!
@@ -159,7 +159,7 @@ std::shared_ptr<supervised_learning_model_base> create(
  * *) load: Load the model with the turicreate oarc.
  *
  * *) init_options: Init the options
- *    
+ *
  *
  * This class interfaces with the SupervisedLearning class in Python and works
  * end to end once the following set of fuctions are implemented by the user.
@@ -168,7 +168,7 @@ std::shared_ptr<supervised_learning_model_base> create(
  * Example Class
  * -----------------------------------------------------------------------------
  *
- * See the file supervised_learning_model.cxx for an example of how to use 
+ * See the file supervised_learning_model.cxx for an example of how to use
  * this class in building your supervised learning method.
  *
  *
@@ -201,13 +201,13 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * \ref model_base for details.
    */
   virtual std::string name() = 0;
-  
+
 
   /**
    * Train a supervised_learning model.
    */
   virtual void train() = 0;
-  
+
 
   /**
    * Gets the model version number
@@ -224,16 +224,16 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * Load the object using Turi's iarc.
    */
   virtual void load_version(turi::iarchive& iarc, size_t version) = 0;
-  
+
   /**
    * Initialize the options.
    *
    * \param[in] _options Options to set
    */
   virtual void init_options(const std::map<std::string,flexible_type>& _options) = 0;
-  
+
   /**
-   * Get metadata mapping. 
+   * Get metadata mapping.
    */
   std::vector<std::vector<flexible_type>> get_metadata_mapping();
 
@@ -242,9 +242,9 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * Trees and NeuralNetworks integration
    * -------------------------------------------------------------------------
    */
-  
+
   /**
-   * Predict for a single example. 
+   * Predict for a single example.
    *
    * \param[in] x  Single example.
    * \param[in] output_type Type of prediction.
@@ -259,7 +259,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   }
 
   /**
-   * Predict for a single example. 
+   * Predict for a single example.
    *
    * \param[in] x  Single example.
    * \param[in] output_type Type of prediction.
@@ -274,7 +274,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   }
 
   /**
-   * Predict for a single example. 
+   * Predict for a single example.
    *
    * \param[in] x  Single example.
    * \param[in] output_type Type of prediction.
@@ -287,7 +287,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
           const prediction_type_enum& output_type=prediction_type_enum::NA) {
     return 0.0;
   }
-  
+
   /**
    * Evaluate the model.
    *
@@ -295,7 +295,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * \param[in] evaluation_type Evalution type.
    *
    * \note Already assumes that data is of the right shape. Test data
-   * must contain target column also. 
+   * must contain target column also.
    *
    */
   virtual std::map<std::string, variant_type> evaluate(const ml_data&
@@ -333,7 +333,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
 
 
   /**
-   * Extract features! 
+   * Extract features!
    */
   virtual std::shared_ptr<sarray<flexible_type>> extract_features(
       const sframe& X, const std::map<std::string, flexible_type>& options){
@@ -349,7 +349,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * \returns ret   SFrame containing {row_id, class, output_type}.
    *
    * \note Already assumes that data is of the right shape.
-   * \note Default throws error, model supporting this method should override 
+   * \note Default throws error, model supporting this method should override
    * this function.
    */
   virtual sframe predict_topk(const sframe& test_data,
@@ -381,7 +381,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    *
    * \note Already assumes that data is of the right shape.
    */
-  virtual sframe classify(const ml_data& test_data, 
+  virtual sframe classify(const ml_data& test_data,
                           const std::string& output_type="");
 
   /**
@@ -393,37 +393,37 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
     ml_data data = construct_ml_data_using_current_metadata(X);
     return classify(data, output_type);
   };
-  
+
   /**
    * Fast path predictions given a row of flexible_types.
    *
    * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] output_type Output type. 
+   * \param[in] output_type Output type.
    */
   virtual gl_sarray fast_predict(
       const std::vector<flexible_type>& rows,
-      const std::string& output_type="", 
+      const std::string& output_type="",
       const std::string& missing_value_action ="error");
-  
+
   /**
    * Fast path predictions given a row of flexible_types.
    *
    * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] output_type Output type. 
+   * \param[in] output_type Output type.
    */
   virtual gl_sframe fast_predict_topk(
       const std::vector<flexible_type>& rows,
-      const std::string& output_type="", 
+      const std::string& output_type="",
       const std::string& missing_value_action ="error",
       const size_t topk = 5) {
     log_and_throw("Not implemented yet");
   }
-  
+
   /**
    * Fast path predictions given a row of flexible_types
    *
    * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] output_type Output type. 
+   * \param[in] output_type Output type.
    */
   virtual gl_sframe fast_classify(
       const std::vector<flexible_type>& rows,
@@ -447,11 +447,11 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    *
    */
   virtual void init(
-      const sframe& X, const sframe& y, 
-      const sframe& valid_X=sframe(), 
+      const sframe& X, const sframe& y,
+      const sframe& valid_X=sframe(),
       const sframe& valid_y=sframe(),
       ml_missing_value_action mva = ml_missing_value_action::ERROR);
-  
+
   /**
    * A setter for models that use Eigen for model coefficients.
    */
@@ -473,7 +473,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   void set_tracking_metric(std::vector<std::string> _metrics){
     tracking_metrics = _metrics;
   }
-  
+
   /**
    * Set the Extra Warnings output. These warnings include telling the user
    * about low-variance features, etc...
@@ -488,12 +488,12 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   virtual void set_default_evaluation_metric(){
     set_evaluation_metric({"max_error", "rmse"});
   }
-  
+
   /**
    * Set the default evaluation metric for progress tracking.
    */
   virtual void set_default_tracking_metric(){
-    set_tracking_metric({"max_error", "rmse"}); 
+    set_tracking_metric({"max_error", "rmse"});
   }
 
   /**
@@ -530,9 +530,9 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    *
    */
   ml_data construct_ml_data_using_current_metadata(
-    const sframe& X, const sframe& y, 
+    const sframe& X, const sframe& y,
     ml_missing_value_action mva = ml_missing_value_action::ERROR) const;
-  
+
   /**
    * Construct ml-data from the predictors using the current
    * value of the metadata.
@@ -544,7 +544,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    *
    */
   ml_data construct_ml_data_using_current_metadata(
-    const sframe& X, 
+    const sframe& X,
     ml_missing_value_action mva = ml_missing_value_action::ERROR) const;
 
   /**
@@ -567,7 +567,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * \returns Number of examples.
    */
   size_t num_examples() const;
-  
+
   /**
    * Get the number of features in the model (unpacked)
    *
@@ -616,7 +616,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * Get metrics strings.
    */
   std::vector<std::string> get_metrics()  const;
-  
+
   /**
    * Get tracking metrics strings.
    */
@@ -629,7 +629,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    *
    */
   void display_regression_training_summary(std::string model_display_name) const;
-  
+
   /**
    * Display model training data summary for classifier.
    *
@@ -642,14 +642,14 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * Methods with no current implementation (or empty implementations)
    * -------------------------------------------------------------------------
    */
-  
+
   /**
    * Initialize things that are specific to your model.
    *
    * \param[in] data ML-Data object created by the init function.
    *
    */
-  virtual void model_specific_init(const ml_data& data, 
+  virtual void model_specific_init(const ml_data& data,
                                    const ml_data& validation_data) { }
 
   /**
@@ -660,7 +660,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   /**
    *  API interface through the unity server.
    *
-   *  Train the model 
+   *  Train the model
    */
   void api_train(gl_sframe data, const std::string& target,
                  gl_sframe validation_data,
@@ -669,15 +669,15 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   /**
    *  API interface through the unity server.
    *
-   *  Run prediction. 
+   *  Run prediction.
    */
   gl_sarray api_predict(gl_sframe data, std::string missing_value_action,
                         std::string output_type);  // TODO: This should be const
 
 
-  /** Export to CoreML. 
+  /** Export to CoreML.
    */
-  virtual void export_to_coreml(const std::string& filename) {} 
+  virtual void export_to_coreml(const std::string& filename) {}
 
 #define SUPERVISED_LEARNING_METHODS_REGISTRATION(name, class_name)             \
                                                                                \
@@ -710,11 +710,11 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
 /**
  * Fast prediction path for in-memory predictions on a list of rows.
  * \param[in] model Supervised learning model.
- * \param[in] rows  List of rows to make a prediction with. 
+ * \param[in] rows  List of rows to make a prediction with.
  */
 gl_sarray _fast_predict(
-    std::shared_ptr<supervised_learning_model_base> model, 
-    const std::vector<flexible_type>& rows, 
+    std::shared_ptr<supervised_learning_model_base> model,
+    const std::vector<flexible_type>& rows,
     const std::string& output_type = "probability",
     const std::string& missing_value_action = "error");
 
@@ -722,10 +722,10 @@ gl_sarray _fast_predict(
  * Fast path for in-memory predictions on a list of rows.
  *
  * \param[in] model Supervised learning model.
- * \param[in] rows  List of rows to make a prediction with. 
+ * \param[in] rows  List of rows to make a prediction with.
  */
 gl_sframe _fast_predict_topk(
-    std::shared_ptr<supervised_learning_model_base> model, 
+    std::shared_ptr<supervised_learning_model_base> model,
     const std::vector<flexible_type>& rows,
     const std::string& output_type = "probability",
     const std::string& missing_value_action = "error",
@@ -735,17 +735,17 @@ gl_sframe _fast_predict_topk(
  * Fast path for in-memory predictions on a list of rows.
  *
  * \param[in] model Supervised learning model.
- * \param[in] rows  List of rows to make a prediction with. 
+ * \param[in] rows  List of rows to make a prediction with.
  */
 gl_sframe _fast_classify(
-    std::shared_ptr<supervised_learning_model_base> model, 
+    std::shared_ptr<supervised_learning_model_base> model,
     const std::vector<flexible_type>& rows,
     const std::string& missing_value_action = "error");
 
 /**
  * Get the metadata mapping.
  *
- * \param[in] model Supervised learning model. 
+ * \param[in] model Supervised learning model.
  */
 std::vector<std::vector<flexible_type>> _get_metadata_mapping(
     std::shared_ptr<supervised_learning_model_base> model);
@@ -763,11 +763,10 @@ std::string _classifier_model_selector(std::shared_ptr<unity_sframe> _X);
 /**
  * Rule-based method for getting a list of potential models.
  */
-std::vector<std::string> _classifier_available_models(size_t num_classes, 
+std::vector<std::string> _classifier_available_models(size_t num_classes,
                                          std::shared_ptr<unity_sframe> _X);
 
 } // supervised
 } // turicreate
 
 #endif
-

@@ -5,7 +5,7 @@ setClass('xgb.DMatrix')
 #'
 #' Get a new DMatrix containing the specified rows of
 #' orginal xgb.DMatrix object
-#' 
+#'
 #' @examples
 #' data(agaricus.train, package='xgboost')
 #' train <- agaricus.train
@@ -13,7 +13,7 @@ setClass('xgb.DMatrix')
 #' dsub <- slice(dtrain, 1:3)
 #' @rdname slice
 #' @export
-#' 
+#'
 slice <- function(object, ...){
     UseMethod("slice")
 }

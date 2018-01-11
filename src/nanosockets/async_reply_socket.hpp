@@ -20,17 +20,17 @@ namespace nanosockets {
  * \ingroup nanosockets
  *
  * A nanomsg asynchronous reply socket.
- * 
+ *
  * The Asynchronous reply socket is the target endpoint of the the
  * asynchronous request socket (\ref async_request_socket). The reply socket
  * listens on an endpoint, and the request socket sends requests to an endpoint.
  * Endpoints are standard Zeromq style endpoint addresses , for instance,
  * tcp://[ip]:[port], or ipc://[filename] (interprocess socket) or
- * inproc://[handlename] (inprocess socket). 
+ * inproc://[handlename] (inprocess socket).
  * Ipc sockets are emulated on windows using TCP.
  *
- * The asynchronous reply socket is constructed with a callback which is 
- * called whenever a request is received. The callback may be called in 
+ * The asynchronous reply socket is constructed with a callback which is
+ * called whenever a request is received. The callback may be called in
  * parallel; up to the value of nthreads. For instance, a simple echo service
  * can be built with:
  *

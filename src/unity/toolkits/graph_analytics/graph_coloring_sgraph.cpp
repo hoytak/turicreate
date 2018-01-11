@@ -131,7 +131,7 @@ size_t compute_coloring(sgraph& g) {
         COLOR_COLUMN, // first argument in lambda is the color column in g
         ret,          // second argument in lambda is from here.
         flex_type_enum::FLOAT,
-        [&](const flexible_type& x, flexible_type& y) { 
+        [&](const flexible_type& x, flexible_type& y) {
           flex_vec& vec = y.mutable_get<flex_vec>();
           std::sort(vec.begin(), vec.end());
           int new_color = find_min_value_not_in_set(vec);
@@ -210,7 +210,7 @@ toolkit_function_response_type  exec(toolkit_function_invocation& invoke) {
   toolkit_function_response_type response;
   response.params["model"] = to_variant(std::make_shared<simple_model>(params));
   response.success = true;
-  return response; 
+  return response;
 }
 
 static const variant_map_type MODEL_FIELDS{
@@ -248,7 +248,7 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
   model_spec.toolkit_execute_function = get_model_fields;
   return {main_spec, option_spec, model_spec};
 }
-} // end of namespace graph_coloring 
+} // end of namespace graph_coloring
 
 
 

@@ -27,7 +27,7 @@ ftp
 lib1501
 </tool>
  <name>
-FTP with multi interface and slow LIST response 
+FTP with multi interface and slow LIST response
  </name>
  <command>
 ftp://%HOSTIP:%FTPPORT/1501/

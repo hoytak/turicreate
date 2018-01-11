@@ -138,7 +138,7 @@ struct fp_rule_mining_test  {
     }
 //     void testConvictionScoreRules(void){
 //       rule_list my_rules = setupRuleList();
-// 
+//
 //       std::vector<double> conviction_scores = my_rules.score_rules(CONVICTION_SCORE);
 //       std::vector<double> expected_scores = { (1 - 7.0/20.0) / (1 - 5.0/10.0),
 //                                               (1 - 5.0/20.0) / (1 - 5.0/10.0),

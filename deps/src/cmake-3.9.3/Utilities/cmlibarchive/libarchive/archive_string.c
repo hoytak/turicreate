@@ -112,7 +112,7 @@ struct archive_string_conv {
 #if HAVE_ICONV
 	iconv_t				 cd;
 	iconv_t				 cd_w;/* Use at archive_mstring on
-				 	       * Windows. */
+					       * Windows. */
 #endif
 	/* A temporary buffer for normalization. */
 	struct archive_string		 utftmp;
@@ -370,7 +370,7 @@ archive_wstrncat(struct archive_wstring *as, const wchar_t *p, size_t n)
 struct archive_string *
 archive_strcat(struct archive_string *as, const void *p)
 {
-	/* strcat is just strncat without an effective limit. 
+	/* strcat is just strncat without an effective limit.
 	 * Assert that we'll never get called with a source
 	 * string over 16MB.
 	 * TODO: Review all uses of strcat in the source
@@ -853,7 +853,7 @@ archive_string_append_from_wcs(struct archive_string *as,
 static struct archive_string_conv *
 find_sconv_object(struct archive *a, const char *fc, const char *tc)
 {
-	struct archive_string_conv *sc; 
+	struct archive_string_conv *sc;
 
 	if (a == NULL)
 		return (NULL);
@@ -872,7 +872,7 @@ find_sconv_object(struct archive *a, const char *fc, const char *tc)
 static void
 add_sconv_object(struct archive *a, struct archive_string_conv *sc)
 {
-	struct archive_string_conv **psc; 
+	struct archive_string_conv **psc;
 
 	/* Add a new sconv to sconv list. */
 	psc = &(a->sconv);
@@ -1114,7 +1114,7 @@ static struct archive_string_conv *
 create_sconv_object(const char *fc, const char *tc,
     unsigned current_codepage, int flag)
 {
-	struct archive_string_conv *sc; 
+	struct archive_string_conv *sc;
 
 	sc = calloc(1, sizeof(*sc));
 	if (sc == NULL)
@@ -1798,8 +1798,8 @@ archive_string_default_conversion_for_write(struct archive *a)
 void
 archive_string_conversion_free(struct archive *a)
 {
-	struct archive_string_conv *sc; 
-	struct archive_string_conv *sc_next; 
+	struct archive_string_conv *sc;
+	struct archive_string_conv *sc_next;
 
 	for (sc = a->sconv; sc != NULL; sc = sc_next) {
 		sc_next = sc->next;
@@ -2039,7 +2039,7 @@ iconv_strncat_in_locale(struct archive_string *as, const void *_p,
 
 		if (errno == EILSEQ || errno == EINVAL) {
 			/*
-		 	 * If an output charset is UTF-8 or UTF-16BE/LE,
+			 * If an output charset is UTF-8 or UTF-16BE/LE,
 			 * unknown character should be U+FFFD
 			 * (replacement character).
 			 */
@@ -2535,7 +2535,7 @@ utf16_to_unicode(uint32_t *pwc, const char *s, size_t n, int be)
 	else
 		uc = archive_le16dec(utf16);
 	utf16 += 2;
-		
+
 	/* If this is a surrogate pair, assemble the full code point.*/
 	if (IS_HIGH_SURROGATE_LA(uc)) {
 		unsigned uc2;
@@ -2551,8 +2551,8 @@ utf16_to_unicode(uint32_t *pwc, const char *s, size_t n, int be)
 			uc = combine_surrogate_pair(uc, uc2);
 			utf16 += 2;
 		} else {
-	 		/* Undescribed code point should be U+FFFD
-		 	* (replacement character). */
+			/* Undescribed code point should be U+FFFD
+			* (replacement character). */
 			*pwc = UNICODE_R_CHAR;
 			return (-2);
 		}
@@ -2566,8 +2566,8 @@ utf16_to_unicode(uint32_t *pwc, const char *s, size_t n, int be)
 	 * values.
 	 */
 	if (IS_SURROGATE_PAIR_LA(uc) || uc > UNICODE_MAX) {
-	 	/* Undescribed code point should be U+FFFD
-	 	* (replacement character). */
+		/* Undescribed code point should be U+FFFD
+		* (replacement character). */
 		*pwc = UNICODE_R_CHAR;
 		return (((int)(utf16 - s)) * -1);
 	}
@@ -3005,7 +3005,7 @@ archive_string_normalize_C(struct archive_string *as, const void *_p,
 
 			if (n2 == spair || always_replace)
 				/* uc2 is converted from a surrogate pair.
-			 	 * this should be treated as a changed code. */
+				 * this should be treated as a changed code. */
 				uc2ptr = NULL;
 			else
 				uc2ptr = s;
@@ -4110,7 +4110,7 @@ archive_mstring_copy_mbs_len_l(struct archive_mstring *aes,
 
 		/*
 		 * Translate multi-bytes from some character-set to UTF-8.
-		 */ 
+		 */
 		sc->cd = sc->cd_w;
 		r = archive_strncpy_l(&(aes->aes_utf8), mbs, len, sc);
 		sc->cd = cd;
@@ -4122,7 +4122,7 @@ archive_mstring_copy_mbs_len_l(struct archive_mstring *aes,
 
 		/*
 		 * Append the UTF-8 string into wstring.
-		 */ 
+		 */
 		flag = sc->flag;
 		sc->flag &= ~(SCONV_NORMALIZATION_C
 				| SCONV_TO_UTF16| SCONV_FROM_UTF16);

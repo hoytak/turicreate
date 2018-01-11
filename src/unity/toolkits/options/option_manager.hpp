@@ -6,17 +6,17 @@
 #ifndef TURI_OPTION_MANAGER_H_
 #define TURI_OPTION_MANAGER_H_
 
-#include <string> 
-#include <vector> 
+#include <string>
+#include <vector>
 #include <map>
 
-#include <unity/toolkits/options/option_info.hpp> 
+#include <unity/toolkits/options/option_info.hpp>
 
 namespace turi {
 
-class flexible_type; 
+class flexible_type;
 
-/**  
+/**
  * \ingroup toolkit_util
  * A general purpose option manager class.  Functions like a
  *  std::map<std::string, flexible_type>, but permits type checking,
@@ -32,29 +32,29 @@ class option_manager {
                           flexible_type default_value,
                           double lower_bound,
                           double upper_bound,
-                          bool allowed_overwrite = false); 
+                          bool allowed_overwrite = false);
 
   /// Convenience overload for create_option.
   void create_integer_option(const std::string& name,
                              const std::string& description,
-                             flexible_type default_value, 
+                             flexible_type default_value,
                              flex_int lower_bound,
                              flex_int upper_bound,
-                             bool allowed_overwrite = false); 
-  
+                             bool allowed_overwrite = false);
+
   /// Convenience overload for create_option.
   void create_categorical_option(const std::string& name,
                                  const std::string& description,
                                  const flexible_type& default_value,
                                  const std::vector<flexible_type>& allowed_possible_values,
-                                 bool allowed_overwrite = false); 
+                                 bool allowed_overwrite = false);
 
   /// Convenience overload for create_option.
   void create_string_option(const std::string& name,
                             const std::string& description,
                             const flexible_type& default_value,
-                            bool allowed_overwrite = false); 
-  
+                            bool allowed_overwrite = false);
+
   /// Convenience overload for create_option.
   void create_boolean_option(const std::string& name,
                              const std::string& description,
@@ -63,13 +63,13 @@ class option_manager {
 
   /// Convenience overload for create_option.
   //  \warning: This is meant as a last resort if you cannot use any of the above
-  //  options. It does not do any clever error checking. 
+  //  options. It does not do any clever error checking.
   void create_flexible_type_option(const std::string& name,
                                    const std::string& description,
                                    const flexible_type& default_value,
                                    bool allowed_overwrite = false);
 
-  /**  Create an option as dictated by option_handling::option_info.   
+  /**  Create an option as dictated by option_handling::option_info.
    *
    *   By default, if an option of the same name exists as the one
    *   being created, an error is raised (cause it's probably a
@@ -77,8 +77,8 @@ class option_manager {
    *   option is overwritten.  The use case of this is when one module
    *   wraps another and has to change some of its options / defaults.
    */
-  void create_option(const option_handling::option_info&, bool allowed_overwrite = false); 
-  
+  void create_option(const option_handling::option_info&, bool allowed_overwrite = false);
+
   /** Set one of the options.  This values is checked against the
    *  requirements given by the option instance.
    */
@@ -89,31 +89,31 @@ class option_manager {
    */
   void set_options(const std::map<std::string, flexible_type>& options);
 
-  /** Delete one of the options. This removes the option from 
+  /** Delete one of the options. This removes the option from
    *  options_reference_lookup_map and _current_option_values,
-   *  but does not remove it from the vector options_reference. 
+   *  but does not remove it from the vector options_reference.
    *  Useful for loading from older model versions with obsolete option names.
    */
   void delete_option(const std::string& name);
 
-  /** Delete a set of options. This removes the options from 
+  /** Delete a set of options. This removes the options from
    *  options_reference_lookup_map and _current_option_values,
-   *  but does not remove them from the vector options_reference. 
+   *  but does not remove them from the vector options_reference.
    *  Useful for loading from older model versions with obsolete option names.
    */
-  void delete_options(const std::vector<std::string>& names);  
+  void delete_options(const std::vector<std::string>& names);
 
   /** Update the name of an option. Useful for loading from older model versions.
-   *  If an option exists with old_name, create a new option with new_name, 
+   *  If an option exists with old_name, create a new option with new_name,
    *  copy over values from the old_name, then remove the old option.
-   */  
+   */
   void update_option_name(const std::string& old_name, const std::string& new_name);
 
-  /** Update the name of a set of options. 
+  /** Update the name of a set of options.
    *  Useful for loading from older model versions.
-   *  If an option exists with old_name, create a new option with new_name, 
+   *  If an option exists with old_name, create a new option with new_name,
    *  copy over values from the old_name, then remove the old option.
-   */  
+   */
   void update_option_names(const std::map<std::string, std::string>& name_map);
 
   /// Returns the option information struct for each of the set
@@ -129,15 +129,15 @@ class option_manager {
    */
   std::map<std::string, flexible_type> get_default_options() const;
 
-  /// Returns the value of the option 
+  /// Returns the value of the option
   const flexible_type& value(const std::string& name) const;
 
-  /// Returns the description of the option name.  
+  /// Returns the description of the option name.
   const std::string& description(const std::string& name) const;
 
-  /// Returns true if an option exists and false otherwise 
+  /// Returns true if an option exists and false otherwise
   bool is_option(const std::string& name) const;
-  
+
   /// Serialization -- save
   void save(turi::oarchive& oarc) const;
 
@@ -145,12 +145,12 @@ class option_manager {
   void load(turi::iarchive& iarc);
 
  private:
-  
+
   // A stored cache of the algorithm option information
   std::map<std::string, size_t> options_reference_lookup_map;
 
   std::vector<option_handling::option_info> options_reference;
-  
+
   std::map<std::string, flexible_type> _current_option_values;
 
 };
@@ -158,5 +158,3 @@ class option_manager {
 }
 
 #endif /* TURI_OPTION_MANAGER_H_ */
-
-

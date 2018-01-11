@@ -18,13 +18,13 @@
 // TODO: List of todo's for this file
 //------------------------------------------------------------------------------
 // 1. Feature: Armijo cubic interpolation line search.
-// 2. Feature: Wolfe cubic interpolation line search. 
+// 2. Feature: Wolfe cubic interpolation line search.
 // 3. Optimization: Add accepted function value to the ls_return structure
 //    (reduces 1 func eval per iteration)
 //
 
 namespace turi {
-  
+
 namespace optimization {
 
 
@@ -36,28 +36,28 @@ namespace optimization {
 
 
 /** "Zoom" phase for More and Thuente line seach.
- * 
+ *
  * \note Applicable for smooth functions only.
- * 
+ *
  * This code is a C++ port of Jorge Nocedal's implementaiton of More and
  * Thuente [2] line search. This code was availiable at
- * http://www.ece.northwestern.edu/~nocedal/lbfgs.html 
+ * http://www.ece.northwestern.edu/~nocedal/lbfgs.html
  *
  * Nocedal's Condition for Use: This software is freely available for
  * educational or commercial purposes. We expect that all publications
  * describing work using this software quote at least one of the references
  * given below. This software is released under the BSD License
- * 
+ *
  * The purpose of cstep is to compute a safeguarded step for a linesearch and
  * to update an interval of uncertainty for a minimizer of the function.
- * 
+ *
  * The parameter stx contains the step with the least function value. The
  * parameter stp contains the current step. It is assumed that the derivative
  * at stx is negative in the direction of the step. If brackt is set true then
  * a minimizer has been bracketed in an interval of uncertainty with endpoints
  * stx and sty.
- * 
- * 
+ *
+ *
  * \param[in] stx  Best step obtained so far.
  * \param[in] fx   Function value at the best step so far.
  * \param[in] dx   Directional derivative at the best step so far.
@@ -72,33 +72,33 @@ namespace optimization {
  * \param[in] stpmax Max step size.
  *
  *
- */   
-inline bool cstep(double &stx, double &fx, double &dx, 
-           double &sty, double &fy, double &dy, 
-           double &stp, double &fp,  double &dp, 
+ */
+inline bool cstep(double &stx, double &fx, double &dx,
+           double &sty, double &fy, double &dy,
+           double &stp, double &fp,  double &dp,
            bool &brackt, double stpmin, double stpmax){
 
 
   const double p66 = 0.66;
   bool info = false;
-  
+
   // Check the input parameters for errors.
   // This should not happen.
   if ((brackt && (stp <= std::min(stx,sty) || stp >= std::max(stx,sty)))
       || (dx*(stp-stx) >= LS_ZERO) || (stpmax < stpmin)){
      return info;
   }
-  
-  
+
+
   // Determine if the derivatives have opposite sign.
   double sgnd = dp*(dx/std::abs(dx));
-  
+
   // Local variables
   bool bound;
   double theta, s, gamma, p, q, r, stpc, stpq, stpf;
 
   // First case.
-  // ------------------------------------------------------------------------- 
+  // -------------------------------------------------------------------------
   // A higher function value. The minimum is bracketed. If the cubic step is
   // closer to stx than the quadratic step, the cubic step is taken, else the
   // average of the cubic and quadratic steps is taken.
@@ -126,10 +126,10 @@ inline bool cstep(double &stx, double &fx, double &dx,
     }
 
     brackt = true;
-    
-  } 
-  // Second case. 
-  // ------------------------------------------------------------------------- 
+
+  }
+  // Second case.
+  // -------------------------------------------------------------------------
   // A lower function value and derivatives of opposite sign. The
   // minimum is bracketed. If the cubic step is closer to stx than the
   // quadratic (secant) step, the cubic step is taken, else the quadratic step
@@ -143,9 +143,9 @@ inline bool cstep(double &stx, double &fx, double &dx,
     s = std::max(std::abs(theta), std::max(std::abs(dx),std::abs(dp)));
     gamma = s*sqrt(pow(theta/s,2) - (dx/s)*(dp/s));
 
-    if (stp > stx) 
+    if (stp > stx)
        gamma = -gamma;
-       
+
     p = (gamma - dp) + theta;
     q = ((gamma - dp) + gamma) + dx;
     r = p/q;
@@ -158,8 +158,8 @@ inline bool cstep(double &stx, double &fx, double &dx,
     }
     brackt = true;
   }
-  // Third case. 
-  // ------------------------------------------------------------------------- 
+  // Third case.
+  // -------------------------------------------------------------------------
   // A lower function value, derivatives of the same sign, and the
   // magnitude of the derivative decreases.  The cubic step is only used if the
   // cubic tends to infinity in the direction of the step or if the minimum of
@@ -194,23 +194,23 @@ inline bool cstep(double &stx, double &fx, double &dx,
     }
 
     stpq = stp + (dp/(dp-dx))*(stx - stp);
-    if (brackt){ 
+    if (brackt){
        if (std::abs(stp-stpc) < std::abs(stp-stpq)){
           stpf = stpc;
        }else{
           stpf = stpq;
        }
     }else{
-       if (std::abs(stp-stpc) > std::abs(stp-stpq)){ 
+       if (std::abs(stp-stpc) > std::abs(stp-stpq)){
           stpf = stpc;
        }else{
           stpf = stpq;
-       } 
+       }
     }
-  
+
   }
-  // Fourth case. 
-  // ------------------------------------------------------------------------- 
+  // Fourth case.
+  // -------------------------------------------------------------------------
   // A lower function value, derivatives of the same sign, and the magnitude of
   // the derivative does not decrease. If the minimum is not bracketed, the
   // step is either stpmin or stpmax, else the cubic step is taken.
@@ -222,7 +222,7 @@ inline bool cstep(double &stx, double &fx, double &dx,
         s = std::max(std::abs(theta), std::max(std::abs(dy),std::abs(dp)));
         gamma = s*sqrt(pow(theta/s,2) - (dy/s)*(dp/s));
 
-        if (stp > sty){ 
+        if (stp > sty){
             gamma = -gamma;
         }
         p = (gamma - dp) + theta;
@@ -236,8 +236,8 @@ inline bool cstep(double &stx, double &fx, double &dx,
         stpf = stpmin;
      }
   }
-  
-  // Update the interval of uncertainty. 
+
+  // Update the interval of uncertainty.
   // This update does not depend on the new step or the case analysis above.
   if (fp > fx){
      sty = stp;
@@ -254,13 +254,13 @@ inline bool cstep(double &stx, double &fx, double &dx,
      fx = fp;
      dx = dp;
   }
-  
+
   // Compute the new step and safeguard it.
   stpf = std::min(stpmax,stpf);
   stpf = std::max(stpmin,stpf);
   stp = stpf;
   if (brackt && bound){
-     if (sty > stx){ 
+     if (sty > stx){
         stp = std::min(stx+p66*(sty-stx),stp);
      }else{
         stp = std::max(stx+p66*(sty-stx),stp);
@@ -269,30 +269,30 @@ inline bool cstep(double &stx, double &fx, double &dx,
 
   // cstep-failed
   if (info == false){
-     logprogress_stream << "Warning:" 
+     logprogress_stream << "Warning:"
                         << " Unable to interpolate step size intervals."
                         << std::endl;
   }
   return info;
 
-} 
+}
 
 
 
 /**
  *
- * Compute step sizes for line search methods to satisfy Strong Wolfe conditions. 
+ * Compute step sizes for line search methods to satisfy Strong Wolfe conditions.
  *
  * \note Applicable for smooth functions only.
  *
  * This code is a C++ port of Jorge Nocedal's implementaiton of More and
- * Thuente [2] line search. This code was availiable at 
- * http://www.ece.northwestern.edu/~nocedal/lbfgs.html 
+ * Thuente [2] line search. This code was availiable at
+ * http://www.ece.northwestern.edu/~nocedal/lbfgs.html
  *
  *   Line search based on More' and Thuente [1] to find a step which satisfies
  *   a Wolfe conditions for sufficient decrease condition and a curvature
  *   condition.
- *   
+ *
  *   At each stage the function updates an interval of uncertainty with
  *   endpoints. The interval of uncertainty is initially chosen so that it
  *   contains a minimizer of the modified function
@@ -315,7 +315,7 @@ inline bool cstep(double &stx, double &fx, double &dx,
  *  Guaranteed Sufficient Decrease." ACM Transactions on Mathematical Software
  *  20, no. 3 (1994): 286-307.
  *
- * (2) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2. 
+ * (2) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2.
  *                         New York: Springer, 1999.
  * \param[in] model Any model with a first order optimization interface.
  * \param[in] init_step Initial step size
@@ -327,27 +327,27 @@ inline bool cstep(double &stx, double &fx, double &dx,
 */
 template <typename Vector>
 inline ls_return more_thuente(
-    first_order_opt_interface& model, 
-    double init_step, 
-    double init_func_value, 
-    DenseVector point, 
-    Vector gradient, 
+    first_order_opt_interface& model,
+    double init_step,
+    double init_func_value,
+    DenseVector point,
+    Vector gradient,
     DenseVector direction,
-    const std::shared_ptr<smooth_regularizer_interface> reg=NULL){ 
+    const std::shared_ptr<smooth_regularizer_interface> reg=NULL){
 
 
     // Initialize the return object
     ls_return stats;
-    
+
     // Input checking: Initial step size can't be zero.
     if (init_step <= LS_ZERO){
       logprogress_stream << " Error:"
-                         <<" \nInitial step step less than "<< LS_ZERO 
+                         <<" \nInitial step step less than "<< LS_ZERO
                          << "." << std::endl;
       return stats;
     }
 
-    
+
     // Check that the initia direction is a descent direction.
     // This can only occur of your gradients were computed incorrectly
     // or the problem is non-convex.
@@ -369,15 +369,15 @@ inline ls_return more_thuente(
     //               step
     //
     // g           : Gradient w.r.t() x and step (vector) at the current point
-    //               
+    //
     double stx = LS_ZERO;
     double fx = init_func_value;
     double dgx = Dphi0;                   // Derivative of f(x + s d) w.r.t() s
-    
+
     double sty = LS_ZERO;
     double fy = init_func_value;
     double dgy = Dphi0;
-    
+
     double stp = init_step;
     double f = init_func_value;
     double dg = Dphi0;
@@ -385,7 +385,7 @@ inline ls_return more_thuente(
     DenseVector reg_gradient(gradient.size());
 
     // Interval [stmax, stmin] of uncertainty
-    double stmax = LS_ZERO;               
+    double stmax = LS_ZERO;
     double stmin = LS_MAX_STEP_SIZE;
 
     // Flags and local variables
@@ -398,7 +398,7 @@ inline ls_return more_thuente(
     double width2 = 2*width;
 
 
-    // Constants used in this code. 
+    // Constants used in this code.
     // (Based on http://www.ece.northwestern.edu/~nocedal/lbfgs.html)
     const double p5 = 0.5;
     const double p66 = 0.66;
@@ -419,21 +419,21 @@ inline ls_return more_thuente(
 
 
 
-      // Force the step to be within the bounds 
+      // Force the step to be within the bounds
       stp = std::max(stp,LS_ZERO);
       stp = std::min(stp,LS_MAX_STEP_SIZE);
 
       // If an unusual termination is to occur then let 'stp' be the lowest point
       // obtained so far.
-      if (   (stats.func_evals >= LS_MAX_ITER) 
-          || (infoc == false) 
+      if (   (stats.func_evals >= LS_MAX_ITER)
+          || (infoc == false)
           || (brackt && (stmax-stmin <= LS_ZERO))){
 
-         logprogress_stream << "Warning:" 
+         logprogress_stream << "Warning:"
             << " Unusual termination criterion reached."
             << "\nReturning the best step found so far."
             << " This typically happens when the number of features is much"
-            << " larger than the number of training samples. Consider pruning" 
+            << " larger than the number of training samples. Consider pruning"
             << " features manually or increasing the regularization value."
             << std::endl;
          stp = stx;
@@ -459,15 +459,15 @@ inline ls_return more_thuente(
       // Termination checking
       // Note: There are many good checks and balances used in Nocedal's code
       // Some of them are overly defensive and should not happen.
-      
+
       // Rounding errors
       if ( (brackt && ((stp <= stmin) || (stp >= stmax))) || (infoc == false)){
           logprogress_stream << "Warning: Rounding errors"
             << " prevent further progress. \nThere may not be a step which"
             << " satisfies the sufficient decrease and curvature conditions."
-            << " \nTolerances may be too small or dataset may be poorly scaled." 
+            << " \nTolerances may be too small or dataset may be poorly scaled."
             << " This typically happens when the number of features is much"
-            << " larger than the number of training samples. Consider pruning" 
+            << " larger than the number of training samples. Consider pruning"
             << " features manually or increasing the regularization value."
             << std::endl;
           stats.step_size = stp;
@@ -476,7 +476,7 @@ inline ls_return more_thuente(
       }
 
       // Step is more than LS_MAX_STEP_SIZE
-      if ((stp >= LS_MAX_STEP_SIZE) && (f <= ftest) && (dg <= wolfe_func_dec)){ 
+      if ((stp >= LS_MAX_STEP_SIZE) && (f <= ftest) && (dg <= wolfe_func_dec)){
         logprogress_stream << "Warning: Reached max step size."
                            << std::endl;
         stats.step_size = stp;
@@ -504,15 +504,15 @@ inline ls_return more_thuente(
       }
 
       // Relative width of the interval of uncertainty is reached.
-      if (brackt && (stmax-stmin <= LS_ZERO)){ 
+      if (brackt && (stmax-stmin <= LS_ZERO)){
         logprogress_stream << "Error: \nInterval of uncertainty"
                            << "lower than step size limit." << std::endl;
         stats.status = false;
         return stats;
       }
-      
+
       // Wolfe conditions W1 and W2 are satisfied! Woo!
-      if ((f <= ftest) && (std::abs(dg) <= -wolfe_curvature)){ 
+      if ((f <= ftest) && (std::abs(dg) <= -wolfe_curvature)){
         stats.step_size = stp;
         stats.status = true;
         return stats;
@@ -520,7 +520,7 @@ inline ls_return more_thuente(
 
       // Stage 1 is a search for steps for which the modified function has
       // a nonpositive value and nonnegative derivative.
-      if ( stage1 && (f <= ftest) && (dg >= wolfe_curvature)){ 
+      if ( stage1 && (f <= ftest) && (dg >= wolfe_curvature)){
              stage1 = false;
       }
 
@@ -529,9 +529,9 @@ inline ls_return more_thuente(
       // obtained a step for which the modified function has a nonpositive
       // function value and nonnegative derivative, and if a lower function
       // value has been  obtained but the decrease is not sufficient.
-      
-      if (stage1 && (f <= fx) && (f > ftest)){ 
-      
+
+      if (stage1 && (f <= fx) && (f > ftest)){
+
          // Define the modified function and derivative values.
          double fm = f - stp*wolfe_func_dec;
          double fxm = fx - stx*wolfe_func_dec;
@@ -539,15 +539,15 @@ inline ls_return more_thuente(
          double dgm = dg - wolfe_func_dec;
          double dgxm = dgx - wolfe_func_dec;
          double dgym = dgy - wolfe_func_dec;
-      
+
          // Call cstep to update the interval of uncertainty and to compute the
          // new step.
-         infoc = cstep(stx,fxm, dgxm, 
-                       sty, fym, dgym, 
-                       stp, fm, dgm, 
+         infoc = cstep(stx,fxm, dgxm,
+                       sty, fym, dgym,
+                       stp, fm, dgm,
                        brackt,
                        stmin,stmax);
-      
+
          // Reset the function and gradient values for f.
          fx = fxm + stx*wolfe_func_dec;
          fy = fym + sty*wolfe_func_dec;
@@ -555,18 +555,18 @@ inline ls_return more_thuente(
          dgy = dgym + wolfe_func_dec;
 
       }else{
-      
+
          // Call cstep to update the interval of uncertainty and to compute the
          // new step.
-         infoc = cstep(stx,fx, dgx, 
-                       sty, fy, dgy, 
-                       stp, f, dg, 
+         infoc = cstep(stx,fx, dgx,
+                       sty, fy, dgy,
+                       stp, f, dg,
                        brackt,
                        stmin,stmax);
-        
+
       }
 
-      
+
       // Force a sufficient decrease in the size of the interval of uncertainty.
       if (brackt){
          if (std::abs(sty-stx) >= p66*width2){
@@ -594,7 +594,7 @@ inline ls_return more_thuente(
  * decrease in function values at each iteration.
  *
  * References:
- * (1) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2. 
+ * (1) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2.
  *                         New York: Springer, 1999.
  *
  * \param[in] model Any model with a first order optimization interface.
@@ -609,12 +609,12 @@ inline ls_return more_thuente(
 */
 template <typename Vector>
 inline ls_return armijo_backtracking(
-    first_order_opt_interface& model, 
-    double init_step, 
-    double init_func_value, 
-    DenseVector point, 
-    Vector gradient, 
-    DenseVector direction){ 
+    first_order_opt_interface& model,
+    double init_step,
+    double init_func_value,
+    DenseVector point,
+    Vector gradient,
+    DenseVector direction){
 
     // Step 1: Initialize the function
     // ------------------------------------------------------------------------
@@ -638,10 +638,10 @@ inline ls_return armijo_backtracking(
         stats.status = true;
         return stats;
 
-      } 
-      
+      }
+
       step_size *= 0.5;
-      stats.func_evals += 1; 
+      stats.func_evals += 1;
 
     }
 
@@ -659,7 +659,7 @@ inline ls_return armijo_backtracking(
  * values at each iteration.
  *
  * References:
- * (1) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2. 
+ * (1) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2.
  *                         New York: Springer, 1999.
  *
  * \param[in] model Any model with a first order optimization interface.
@@ -675,13 +675,13 @@ inline ls_return armijo_backtracking(
 */
 template <typename Vector>
 inline ls_return backtracking(
-    first_order_opt_interface& model, 
-    double init_step, 
-    double init_func_value, 
-    DenseVector point, 
-    Vector gradient, 
+    first_order_opt_interface& model,
+    double init_step,
+    double init_func_value,
+    DenseVector point,
+    Vector gradient,
     DenseVector direction,
-    const std::shared_ptr<regularizer_interface> reg=NULL){ 
+    const std::shared_ptr<regularizer_interface> reg=NULL){
 
     // Step 1: Initialize the function
     // ------------------------------------------------------------------------
@@ -701,7 +701,7 @@ inline ls_return backtracking(
       }
 
       delta_point = new_point - point;
-      if (model.compute_function_value(new_point) <= 
+      if (model.compute_function_value(new_point) <=
              init_func_value + dot(gradient, delta_point)
                             + 0.5 * squared_norm(delta_point) /step_size){
 
@@ -709,10 +709,10 @@ inline ls_return backtracking(
         stats.status = true;
         return stats;
 
-      } 
-      
+      }
+
       step_size *= 0.5;
-      stats.func_evals += 1; 
+      stats.func_evals += 1;
 
     }
 
@@ -726,4 +726,4 @@ inline ls_return backtracking(
 
 } // turicreate
 
-#endif 
+#endif

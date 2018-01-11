@@ -32,8 +32,8 @@ bool toolkit_class_registry::register_toolkit_class(
     }
   }
   for (size_t i = 0;i < classes.size(); ++i) {
-    success &= register_toolkit_class(classes[i].name, 
-                              classes[i].constructor, 
+    success &= register_toolkit_class(classes[i].name,
+                              classes[i].constructor,
                               classes[i].description);
   }
   return success;
@@ -48,7 +48,7 @@ std::shared_ptr<model_base> toolkit_class_registry::get_toolkit_class(
   }
 }
 
-std::map<std::string, flexible_type> 
+std::map<std::string, flexible_type>
 toolkit_class_registry::get_toolkit_class_description(const std::string& class_name) {
   if (descriptions.count(class_name)) {
     return descriptions[class_name];

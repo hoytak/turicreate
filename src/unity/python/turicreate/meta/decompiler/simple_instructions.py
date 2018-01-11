@@ -82,7 +82,7 @@ CMP_OPMAP = {'>=' :_ast.GtE,
 
 def make_const(arg, lineno=0, col_offset=0):
     kw = {'lineno':lineno, 'col_offset':col_offset}
-    
+
     if isinstance(arg, str):
         const = _ast.Str(s=arg, **kw)
     elif isinstance(arg, (int, float, complex)):
@@ -96,9 +96,9 @@ def make_const(arg, lineno=0, col_offset=0):
         const = _ast.Tuple(elts=elts, ctx=_ast.Load(), **kw)
     else:
         const = arg
-    
+
     return const
-    
+
 class SimpleInstructions(object):
 
     def LOAD_CONST(self, instr):
@@ -205,7 +205,7 @@ class SimpleInstructions(object):
 
         value = self.ast_stack.pop()
         value = self.process_ifexpr(value)
-        
+
         if isinstance(value, _ast.Import):
 
             if value.from_:
@@ -226,14 +226,14 @@ class SimpleInstructions(object):
                         value.names[0].asname = as_name
 
             self.ast_stack.append(value)
-            
+
         elif isinstance(value, (_ast.Attribute)) and isinstance(value.value, (_ast.Import)):
             asname = instr.arg
             value = value.value
             value.names[0].asname = asname
-            
+
             self.ast_stack.append(value)
-            
+
         elif isinstance(value, (_ast.ClassDef, _ast.FunctionDef)):
             as_name = instr.arg
             value.name = as_name
@@ -251,22 +251,22 @@ class SimpleInstructions(object):
 
             assign = _ast.Assign(targets=[assname], value=value, lineno=instr.lineno, col_offset=0)
             self.ast_stack.append(assign)
-    
+
     @py3op
     def STORE_LOCALS(self, instr):
         'remove Locals from class def'
         self.ast_stack.pop()
-        
+
     def STORE_GLOBAL(self, instr):
-        
+
         if not isinstance(self.ast_stack[0], _ast.Global):
             self.ast_stack.insert(0, _ast.Global(names=[]))
-            
+
         if instr.arg not in self.ast_stack[0].names:
             self.ast_stack[0].names.append(instr.arg)
-            
+
         self.STORE_NAME(instr)
-    
+
     def RETURN_VALUE(self, instr):
         value = self.ast_stack.pop()
         value = self.process_ifexpr(value)
@@ -365,27 +365,27 @@ class SimpleInstructions(object):
         self.ast_stack.append(discard)
 
     def ROT_TWO(self, instr):
-        
+
         one = self.ast_stack.pop()
         two = self.ast_stack.pop()
-        
+
         if self.ilst[0].opname == 'STORE_NAME':
-            
+
             kw = dict(lineno=instr.lineno, col_offset=0)
             stores = []
             while self.ilst[0].opname == 'STORE_NAME':
                 stores.append(self.ilst.pop(0))
-                
+
             assert len(stores) <= 3, stores
             elts_load = [one, two]
             if len(stores) == 3:
                 elts_load.insert(0, self.ast_stack.pop())
-                
+
             tup_load = _ast.Tuple(elts=elts_load[::-1], ctx=_ast.Load(), **kw)
-            
+
             elts_store = [_ast.Name(id=store.arg, ctx=_ast.Store(), **kw) for store in stores]
             tup_store = _ast.Tuple(elts=elts_store, ctx=_ast.Store(), **kw)
-            
+
             assgn = _ast.Assign(value=tup_load, targets=[tup_store], **kw)
             self.ast_stack.append(assgn)
 #            self.ast_stack.append(tup_store)
@@ -527,13 +527,13 @@ class SimpleInstructions(object):
 
         expr = self.ast_stack.pop()
         if isinstance(expr, _ast.Assign):
-            assgn = expr 
+            assgn = expr
             assgn.targets.append(ast_tuple)
-            
+
             value_dup = self.ast_stack.pop()
-            
+
             assert cmp_ast(assgn.value, value_dup)
-            
+
         else:
             assgn = _ast.Assign(targets=[ast_tuple], value=expr, lineno=instr.lineno, col_offset=0)
         self.ast_stack.append(assgn)
@@ -572,7 +572,7 @@ class SimpleInstructions(object):
             globals_ = None
 
         exec_ = _ast.Exec(body=expr, globals=globals_, locals=locals_, lineno=instr.lineno, col_offset=0)
-        
+
         self.ast_stack.append(exec_)
 
     def DUP_TOP(self, instr):
@@ -581,10 +581,10 @@ class SimpleInstructions(object):
 
         self.ast_stack.append(expr)
         self.ast_stack.append(expr)
-    
+
     @py3op
     def DUP_TOP_TWO(self, instr):
-        
+
         expr1 = self.ast_stack.pop()
         expr2 = self.ast_stack.pop()
 
@@ -593,39 +593,39 @@ class SimpleInstructions(object):
         self.ast_stack.append(expr2)
         self.ast_stack.append(expr1)
 
-    
+
     def DUP_TOPX(self, instr):
 
         exprs = []
         for i in range(instr.oparg):
             expr = self.ast_stack.pop()
             exprs.insert(0, expr)
-            
+
         self.ast_stack.extend(exprs)
         self.ast_stack.extend(exprs)
-        
+
     def ROT_THREE(self, instr):
         expr1 = self.ast_stack.pop()
         expr2 = self.ast_stack.pop()
         expr3 = self.ast_stack.pop()
-        
+
         self.ast_stack.append(expr1)
         self.ast_stack.append(expr3)
         self.ast_stack.append(expr2)
-        
-        
+
+
     def ROT_FOUR(self, instr):
         expr1 = self.ast_stack.pop()
         expr2 = self.ast_stack.pop()
         expr3 = self.ast_stack.pop()
         expr4 = self.ast_stack.pop()
-        
+
         self.ast_stack.append(expr1)
         self.ast_stack.append(expr4)
         self.ast_stack.append(expr3)
         self.ast_stack.append(expr2)
-        
-        
+
+
 
 
     def PRINT_ITEM(self, instr):
@@ -833,19 +833,19 @@ class SimpleInstructions(object):
         lower = self.ast_stack.pop()
         value = self.ast_stack.pop()
         expr = self.ast_stack.pop()
-        
+
         kw = dict(lineno=instr.lineno, col_offset=0)
         slice = _ast.Slice(lower=lower, step=None, upper=upper, **kw)
         subscr = _ast.Subscript(value=value, slice=slice, ctx=_ast.Store(), **kw)
-        
+
         if isinstance(expr, _ast.AugAssign):
             assign = expr
             result = cmp_ast(expr.target, subscr)
-            
+
             assert result
         else:
             assign = _ast.Assign(targets=[subscr], value=expr, **kw)
-            
+
         self.ast_stack.append(assign)
 
     def DELETE_SLICE_0(self, instr):
@@ -901,18 +901,18 @@ class SimpleInstructions(object):
         index = self.ast_stack.pop()
         value = self.ast_stack.pop()
         expr = self.ast_stack.pop()
-        
+
         expr = self.process_ifexpr(expr)
-        
+
         if isinstance(expr, _ast.AugAssign):
             self.ast_stack.append(expr)
         else:
             kw = dict(lineno=instr.lineno, col_offset=0)
-    
+
             index = self.format_slice(index, kw)
-    
+
             subscr = _ast.Subscript(value=value, slice=index, ctx=_ast.Store(), **kw)
-    
+
             assign = _ast.Assign(targets=[subscr], value=expr, **kw)
             self.ast_stack.append(assign)
 
@@ -928,7 +928,7 @@ class SimpleInstructions(object):
 
         delete = _ast.Delete(targets=[subscr], **kw)
         self.ast_stack.append(delete)
-    
+
     @py2op
     def RAISE_VARARGS(self, instr):
         nargs = instr.oparg
@@ -950,10 +950,10 @@ class SimpleInstructions(object):
     @RAISE_VARARGS.py3op
     def RAISE_VARARGS(self, instr):
         nargs = instr.oparg
-        
+
         cause = None
         exc = None
-        
+
         if nargs > 1:
             cause = self.ast_stack.pop()
         if nargs > 0:
@@ -962,12 +962,12 @@ class SimpleInstructions(object):
         raise_ = _ast.Raise(exc=exc, cause=cause,
                             lineno=instr.lineno, col_offset=0)
         self.ast_stack.append(raise_)
-    
+
     @py3op
     def EXTENDED_ARG(self, instr):
         code = self.ast_stack.pop()
         argument_names = self.ast_stack.pop()
-        
+
         assert len(argument_names.elts) == (instr.oparg - 1)
         args = []
         kw = dict(lineno=instr.lineno, col_offset=0)
@@ -979,8 +979,7 @@ class SimpleInstructions(object):
         for arg in args:
             self.ast_stack.append(arg)
         self.ast_stack.append(code)
-        
+
     @EXTENDED_ARG.py2op
     def EXTENDED_ARG(self, instr):
         raise Exception("This is not available in python 2.x")
-        

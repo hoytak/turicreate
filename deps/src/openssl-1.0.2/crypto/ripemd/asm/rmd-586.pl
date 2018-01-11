@@ -24,7 +24,7 @@ $KL2=0x6ED9EBA1;
 $KL3=0x8F1BBCDC;
 $KL4=0xA953FD4E;
 $KR0=0x50A28BE6;
-$KR1=0x5C4DD124; 
+$KR1=0x5C4DD124;
 $KR2=0x6D703EF3;
 $KR3=0x7A6D76E9;
 
@@ -55,7 +55,7 @@ $KR3=0x7A6D76E9;
 	 9, 7,15,11, 8, 6, 6,14,12,13, 5,14,13,13, 7, 5,
 	15, 5, 8,11,14,14, 6,14, 6, 9,12, 9,12, 5,15, 8,
 	 8, 5,12, 9,12, 5,14, 6, 8,13, 6, 5,15,13,11,11,
- 	);
+	);
 
 &ripemd160_block("ripemd160_block_asm_data_order");
 &asm_finish();
@@ -531,28 +531,28 @@ sub ripemd160_block
 	# &mov($tmp2,	&wparam(0)); # Moved into last round
 
 	 &mov($tmp1,	&DWP( 4,$tmp2,"",0));	# ctx->B
- 	&add($D,	$tmp1);	
+	&add($D,	$tmp1);
 	 &mov($tmp1,	&swtmp(16+2));		# $c
 	&add($D,	$tmp1);
 
 	 &mov($tmp1,	&DWP( 8,$tmp2,"",0));	# ctx->C
-	&add($E,	$tmp1);	
+	&add($E,	$tmp1);
 	 &mov($tmp1,	&swtmp(16+3));		# $d
 	&add($E,	$tmp1);
 
 	 &mov($tmp1,	&DWP(12,$tmp2,"",0));	# ctx->D
-	&add($A,	$tmp1);	
+	&add($A,	$tmp1);
 	 &mov($tmp1,	&swtmp(16+4));		# $e
 	&add($A,	$tmp1);
 
 
 	 &mov($tmp1,	&DWP(16,$tmp2,"",0));	# ctx->E
-	&add($B,	$tmp1);	
+	&add($B,	$tmp1);
 	 &mov($tmp1,	&swtmp(16+0));		# $a
 	&add($B,	$tmp1);
 
 	 &mov($tmp1,	&DWP( 0,$tmp2,"",0));	# ctx->A
-	&add($C,	$tmp1);	
+	&add($C,	$tmp1);
 	 &mov($tmp1,	&swtmp(16+1));		# $b
 	&add($C,	$tmp1);
 
@@ -588,4 +588,3 @@ sub ripemd160_block
 	&ret();
 	&function_end_B($name);
 	}
-

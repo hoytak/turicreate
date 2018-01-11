@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -29,7 +29,7 @@ public class CustomEval implements IEvaluation {
     private static final Log logger = LogFactory.getLog(CustomEval.class);
 
     String evalMetric = "custom_error";
-        
+
     @Override
     public String getMetric() {
         return evalMetric;
@@ -54,7 +54,7 @@ public class CustomEval implements IEvaluation {
                 error++;
             }
         }
-            
+
         return error/labels.length;
     }
 }

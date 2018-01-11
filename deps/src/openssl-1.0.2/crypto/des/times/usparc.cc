@@ -28,4 +28,3 @@ options    des ecb/s
 16 r1 i    324730.60  68.3%
  4 r2 i     63535.10  13.4%	<-- very very weird, must be cache problems.
 -DDES_UNROLL -DDES_RISC1 -DDES_PTR
-

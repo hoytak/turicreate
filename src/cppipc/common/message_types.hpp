@@ -17,14 +17,14 @@ namespace cppipc {
 namespace nanosockets = turi::nanosockets;
 /**
  * \ingroup cppipc
- * The contents of the message used to call a function from 
+ * The contents of the message used to call a function from
  * the client to the server.
  */
 struct EXPORT call_message {
   /// Default constructor
   call_message(): objectid(0), body(NULL), zmqbodyused(false) {}
-  /** 
-   * constructs a call_message from a zmq_msg_vector. 
+  /**
+   * constructs a call_message from a zmq_msg_vector.
    * Will also, as a side effect, clear the zmq_msg_vector.
    * Any existing contents in the call_message will be cleared.
    * Returns true on success, false if the format is incorrect.
@@ -47,22 +47,22 @@ struct EXPORT call_message {
   std::map<std::string, std::string> properties; /// Other properties
 
   nanosockets::nn_msg_t bodybuf; /** When receiving, this will contain the actual contents
-                       of the body */  
+                       of the body */
   const char* body; /// The serialized arguments of the call. May point into bodybuf
   size_t bodylen; /// The length of the body.
 
   /*
-   * The need to have the seperate zmqbodybuf is that zeromq messages are 
+   * The need to have the seperate zmqbodybuf is that zeromq messages are
    * "intelligent". If they are small, they are managed in place inside
    * the nn_msg_t directly. Only if they are big, then a malloc is used.
    * However, zeromq does not provide me an easy way to figure out when this is
-   * the case, and I would like to maintain the zero-copy behavior of the 
+   * the case, and I would like to maintain the zero-copy behavior of the
    * messages as much as possible. The solution is therefore to use zmq_msg_move
    * to move the the body contents into a new nn_msg_t, then take pointers
    * into that.
    *
    * zmqbodyused should only be set on receiving. i.e. by the construct
-   * call. 
+   * call.
    */
   bool zmqbodyused; /// True if bodybuf is used and body is from bodybuf
 
@@ -74,10 +74,10 @@ struct EXPORT call_message {
 
 /**
  * \ingroup cppipc
- * The reply status. 
+ * The reply status.
  */
 enum class reply_status:size_t {
-  OK, ///< Call was successful 
+  OK, ///< Call was successful
   BAD_MESSAGE, ///< The object requested did not exist
   NO_OBJECT, ///< The object requested did not exist
   NO_FUNCTION, ///< The function requested did not exist
@@ -98,8 +98,8 @@ enum class reply_status:size_t {
 struct EXPORT reply_message {
   /// Default constructor
   reply_message(): body(NULL), bodylen(0),zmqbodyused(false) {}
-  /** 
-   * Constructs a reply_message from a zmq_msg_vector. 
+  /**
+   * Constructs a reply_message from a zmq_msg_vector.
    * Will also, as a side effect, clear the zmq_msg_vector
    * Any existing contents in the reply_message will be cleared;
    * Returns true on success, false if the format is incorrect.
@@ -120,22 +120,22 @@ struct EXPORT reply_message {
   reply_status status; /// The status of the call.
   std::map<std::string, std::string> properties; /// Other properties
   nanosockets::nn_msg_t bodybuf; /** When receiving, this will contain the actual contents
-                       of the body */  
+                       of the body */
   char* body; /// The serialized contents of the reply. May point into bodybuf
-  size_t bodylen; /// The length of the body. 
+  size_t bodylen; /// The length of the body.
 
   /*
-   * The need to have the seperate zmqbodybuf is that zeromq messages are 
+   * The need to have the seperate zmqbodybuf is that zeromq messages are
    * "intelligent". If they are small, they are managed in place inside
    * the nn_msg_t directly. Only if they are big, then a malloc is used.
    * However, zeromq does not provide me an easy way to figure out when this is
-   * the case, and I would like to maintain the zero-copy behavior of the 
+   * the case, and I would like to maintain the zero-copy behavior of the
    * messages as much as possible. The solution is therefore to use zmq_msg_move
    * to move the the body contents into a new nn_msg_t, then take pointers
    * into that.
    *
    * zmqbodyused should only be set on receiving. i.e. by the construct
-   * call. 
+   * call.
    */
   bool zmqbodyused; /// True if bodybuf is used and body is from bodybuf
 
@@ -168,15 +168,15 @@ std::string reply_status_to_string(reply_status);
 
 class ipcexception : public std::exception {
   public:
-    ipcexception(reply_status s, 
-                 std::string custom_errstring = "") 
-        :status(s), errorcode(0), custom_errstring(custom_errstring) { 
+    ipcexception(reply_status s,
+                 std::string custom_errstring = "")
+        :status(s), errorcode(0), custom_errstring(custom_errstring) {
       make_error_string();
     }
-    ipcexception(reply_status s, 
+    ipcexception(reply_status s,
                  int errorcode,
-                 std::string custom_errstring = "") 
-        :status(s), errorcode(errorcode), custom_errstring(custom_errstring){ 
+                 std::string custom_errstring = "")
+        :status(s), errorcode(errorcode), custom_errstring(custom_errstring){
       make_error_string();
     }
 
@@ -209,10 +209,10 @@ class ipcexception : public std::exception {
     void make_error_string() {
       std::stringstream strm;
       if (errorcode == 0) {
-        strm << reply_status_to_string(status) 
+        strm << reply_status_to_string(status)
              << ". " << custom_errstring;
       } else {
-        strm << reply_status_to_string(status) + ": " << errorcode 
+        strm << reply_status_to_string(status) + ": " << errorcode
              << ". " << custom_errstring;
       }
       strm.flush();

@@ -47,7 +47,7 @@ songs.head(5)
 Notice we had to reassign the resulting column back to our SFrame.  This
 is because the content of the SFrame's columns (a separate data
 structure called an
-[SArray](https://apple.github.io/turicreate/docs/api/generated/turicreate.SArray.html)) 
+[SArray](https://apple.github.io/turicreate/docs/api/generated/turicreate.SArray.html))
 is immutable.  SFrames can add and subtract columns liberally though, as
 it essentially is just a carrier of references to SArrays.
 

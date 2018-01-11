@@ -6,7 +6,7 @@
 /**
  * \file int128_types.hpp
  * Defines the int128_t and uint128_t type.
- * Goes through various compiler checks to find the existance of int128_t 
+ * Goes through various compiler checks to find the existance of int128_t
  * and use it if available. Requires a particular CMake script be executed
  * on configure to check for the int128_t variants.
  *
@@ -73,7 +73,7 @@ static inline uint128_t BuildUint128(uint64_t high, uint64_t low) {
 /// Enables printing of uint128_t values
 static inline std::ostream& operator<<(std::ostream& out, const uint128_t& x) {
   std::ostringstream s;
-  s << std::hex << (uint64_t(x >> 64)) << uint64_t(x); 
+  s << std::hex << (uint64_t(x >> 64)) << uint64_t(x);
   out << s.str();
   return out;
 }

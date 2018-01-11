@@ -7,7 +7,7 @@
 #define FAULT_SOCKET_QUERY_OBJECT_REPLICATION_HPP
 
 class query_object_replication {
-  
+
 };
 
 

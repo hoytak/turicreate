@@ -326,4 +326,3 @@ class TreeModelMixin(object):
 
     def _export_coreml_impl(self, filename, context):
         tc.extensions._xgboost_export_as_model_asset(self.__proxy__, filename, context)
-

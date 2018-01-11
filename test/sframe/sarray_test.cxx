@@ -88,7 +88,7 @@ struct sarray_test {
        iarc >> array2;
        auto reader = array2.get_reader();
        // read the data we wrote the last time
-       std::vector<size_t> flattened_data; 
+       std::vector<size_t> flattened_data;
        for (size_t i = 0;i < data.size(); ++i) {
          flattened_data.insert(flattened_data.end(),
                                data[i].begin(), data[i].end());
@@ -235,7 +235,7 @@ struct sarray_test {
 
 
     // perform the same operation on the in memory data
-    
+
     std::vector<std::vector<size_t> > data2(num_segments);
     for (size_t i = 0;i < 4; ++i) {
       std::transform(data[i].begin(), data[i].end(),
@@ -338,7 +338,7 @@ struct sarray_test {
     std::vector<std::string> flattened_data;
     for(auto d: data) flattened_data.insert(flattened_data.end(), d.begin(), d.end());
     // write a flexible_type sarray
-    { 
+    {
       sarray<flexible_type> array;
       array.open_for_write(4);
       array.set_type(turi::flex_type_enum::STRING);
@@ -367,7 +367,7 @@ struct sarray_test {
     }
 
     // write again to a string array
-    { 
+    {
       sarray<std::string> array;
       array.open_for_write(4);
       TS_ASSERT_EQUALS(array.num_segments(), 4);
@@ -396,7 +396,7 @@ struct sarray_test {
 
   void test_sarray_save_empty() {
     // flexible_type array
-    { 
+    {
       sarray<flexible_type> array;
       array.open_for_write(4);
       array.set_type(turi::flex_type_enum::STRING);
@@ -411,7 +411,7 @@ struct sarray_test {
     }
 
     // string array
-    { 
+    {
       sarray<std::string> array;
       array.open_for_write(4);
       array.close();
@@ -447,7 +447,7 @@ struct sarray_test {
       for (size_t i = 0;i < data.size(); ++i) {
         TS_ASSERT_EQUALS(data[i], newdata[i]);
       }
-      
+
       // copy array2 into array_out
       array_out = array_out.append(array);
       TS_ASSERT_EQUALS(array_out.num_segments(), 8);
@@ -475,7 +475,7 @@ struct sarray_test {
         TS_ASSERT_EQUALS(data[i % data.size()], newdata[i]);
       }
     }
-    // make sure I can still access array_out after destruction of 
+    // make sure I can still access array_out after destruction of
     // array and array2
     std::vector<size_t> newdata;
     turi::copy(array_out, std::inserter(newdata, newdata.end()));

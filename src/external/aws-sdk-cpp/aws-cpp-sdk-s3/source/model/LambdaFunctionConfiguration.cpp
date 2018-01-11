@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-LambdaFunctionConfiguration::LambdaFunctionConfiguration() : 
+LambdaFunctionConfiguration::LambdaFunctionConfiguration() :
     m_idHasBeenSet(false),
     m_lambdaFunctionArnHasBeenSet(false),
     m_eventsHasBeenSet(false),
@@ -37,7 +37,7 @@ LambdaFunctionConfiguration::LambdaFunctionConfiguration() :
 {
 }
 
-LambdaFunctionConfiguration::LambdaFunctionConfiguration(const XmlNode& xmlNode) : 
+LambdaFunctionConfiguration::LambdaFunctionConfiguration(const XmlNode& xmlNode) :
     m_idHasBeenSet(false),
     m_lambdaFunctionArnHasBeenSet(false),
     m_eventsHasBeenSet(false),

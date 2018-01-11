@@ -285,7 +285,7 @@ class ActivityClassifier(_CustomModel):
         from ._model_architecture import _define_model
         import mxnet as _mx
         context = _mxnet_utils.get_mxnet_context(max_devices=state['num_sessions'])
-        _, _pred_model = _define_model(state['features'], state['_target_id_map'], 
+        _, _pred_model = _define_model(state['features'], state['_target_id_map'],
                                        state['prediction_window'],
                                        state['_predictions_in_chunk'], context)
 
@@ -686,7 +686,7 @@ class ActivityClassifier(_CustomModel):
         """
         Return a classification, for each ``prediction_window`` examples in the
         ``dataset``, using the trained activity classification model. The output
-        SFrame contains predictions as both class labels as well as probabilities 
+        SFrame contains predictions as both class labels as well as probabilities
         that the predicted value is the associated label.
 
         Parameters
@@ -700,7 +700,7 @@ class ActivityClassifier(_CustomModel):
             The frequency of the predictions which is one of:
 
             - 'per_row': Each prediction is returned ``prediction_window`` times.
-            - 'per_window': Return a single prediction for each 
+            - 'per_window': Return a single prediction for each
               ``prediction_window`` rows in ``dataset`` per ``session_id``.
 
         Returns
@@ -737,7 +737,7 @@ class ActivityClassifier(_CustomModel):
     def predict_topk(self, dataset, output_type='probability', k=3, output_frequency='per_row'):
         """
         Return top-k predictions for the ``dataset``, using the trained model.
-        Predictions are returned as an SFrame with three columns: `prediction_id`, 
+        Predictions are returned as an SFrame with three columns: `prediction_id`,
         `class`, and `probability`, or `rank`, depending on the ``output_type``
         parameter.
 
@@ -761,7 +761,7 @@ class ActivityClassifier(_CustomModel):
             The frequency of the predictions which is one of:
 
             - 'per_row': Each prediction is returned ``prediction_window`` times.
-            - 'per_window': Return a single prediction for each 
+            - 'per_window': Return a single prediction for each
               ``prediction_window`` rows in ``dataset`` per ``session_id``.
 
         Returns

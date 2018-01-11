@@ -66,5 +66,3 @@ def _is_non_string_iterable(obj):
 def _is_string(obj):
     return (( _sys.version_info.major == 3 and isinstance(obj, str))
             or (_sys.version_info.major == 2 and isinstance(obj, basestring)))
-
-

@@ -15,12 +15,12 @@ extern "C" {
 namespace turi {
 namespace lambda {
 
-  // we need to limit the maximum number of lambda workers. 
+  // we need to limit the maximum number of lambda workers.
   // There are issues if there are too many.
   const size_t MAX_LUALAMBDA_WORKERS = 16;
 
   lualambda_master& lualambda_master::get_instance() {
-    static lualambda_master instance(std::min<size_t>(MAX_LUALAMBDA_WORKERS, 
+    static lualambda_master instance(std::min<size_t>(MAX_LUALAMBDA_WORKERS,
                                                       std::max<size_t>(thread::cpu_count(), 1)));
       return instance;
   };
@@ -112,7 +112,7 @@ namespace lambda {
     }
   }
 
-  /// single argument version 
+  /// single argument version
   std::vector<flexible_type> lualambda_master::bulk_eval(size_t lambda_hash, const std::vector<flexible_type>& args, bool skip_undefined, int seed) {
     size_t worker_id = pop_worker();
     std::vector<flexible_type> ret;

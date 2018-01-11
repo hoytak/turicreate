@@ -33,9 +33,7 @@ project(sframe)
      sframe_saving_impl.cpp
      rolling_aggregate.cpp
    REQUIRES
-     random flexible_type fileio parallel lz4 
-     cancel_serverside_ops serialization libjson globals 
+     random flexible_type fileio parallel lz4
+     cancel_serverside_ops serialization libjson globals
     EXTERNAL_VISIBILITY
  )
-
-

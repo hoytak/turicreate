@@ -1,4 +1,4 @@
-# Activity Classifier 
+# Activity Classifier
 
 Activity classification is the task of identifying a pre-defined set of physical actions using motion-sensory inputs. Such sensors include accelerometers, gyroscopes, thermostats, and more found in most handheld devices today.
 

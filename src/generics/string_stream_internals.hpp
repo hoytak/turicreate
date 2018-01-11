@@ -6,7 +6,7 @@
 #ifndef TURI_STRING_STREAM_INTERNALS_H_
 #define TURI_STRING_STREAM_INTERNALS_H_
 
-#include <iostream> 
+#include <iostream>
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -15,11 +15,11 @@ namespace turi { namespace gl_string_internals {
 template<class _Traits>
 std::basic_istream<char, _Traits>& stream_in(std::basic_istream<char, _Traits>& is, gl_string& str) {
 
-  using namespace std; 
-  
+  using namespace std;
+
   try {
     typename basic_istream<char, _Traits>::sentry sen(is);
-      
+
     if (sen) {
       str.clear();
       streamsize n = is.width();
@@ -63,7 +63,7 @@ std::basic_istream<char, _Traits>& stream_in(std::basic_istream<char, _Traits>& 
 template <class _Traits>
 std::basic_istream<char, _Traits>&
 getline(std::basic_istream<char, _Traits>& is, gl_string& str, char dlm) {
-  
+
   using namespace std;
   try {
     typename basic_istream<char, _Traits>::sentry sen(is, true);
@@ -100,4 +100,3 @@ getline(std::basic_istream<char, _Traits>& is, gl_string& str, char dlm) {
 }}
 
 #endif /* _STRING_STREAM_INTERNALS_H_ */
-

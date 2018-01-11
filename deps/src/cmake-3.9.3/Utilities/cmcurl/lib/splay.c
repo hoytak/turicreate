@@ -271,4 +271,3 @@ int Curl_splayremovebyaddr(struct Curl_tree *t,
 
   return 0;
 }
-

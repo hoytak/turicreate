@@ -16,7 +16,7 @@ namespace turi {
  * \ingroup util
  * Implements a buffer pool around collections of T.
  * The buffer is lazily allocated; but only up to 2 * buffer_size entries can
- * exist. 
+ * exist.
  */
 template <typename T>
 class buffer_pool {
@@ -26,7 +26,7 @@ class buffer_pool {
   }
 
   /**
-   * Initializes the buffer pool to a certain capacity. 
+   * Initializes the buffer pool to a certain capacity.
    * Can be called in parallel
    */
   inline void init(size_t buffer_size) {
@@ -52,7 +52,7 @@ class buffer_pool {
         m_free_buffers.pop();
         return ret;
       }
-    }  
+    }
     // allocate a new buffer
     std::shared_ptr<T> new_buffer = std::make_shared<T>();
     std::lock_guard<turi::mutex> guard(m_buffer_lock);
@@ -82,11 +82,11 @@ class buffer_pool {
   /// Lock for m_buffer_pool
   turi::mutex m_buffer_lock;
   size_t m_buffer_size;
-  // 
+  //
   /**
    * additional buffers used for returning stuff, decompression, etc.
    * Here we are using a free-list mechanism.
-   * When m_free_buffers go empty, we loop through m_buffer_pool 
+   * When m_free_buffers go empty, we loop through m_buffer_pool
    * in search of all "unique" pointers which can then be added to the
    * free-list. This allows buffer release to be optional. Though, actively
    * releasing has performance benefits.

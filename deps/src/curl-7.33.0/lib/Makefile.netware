@@ -745,4 +745,3 @@ $(LIBCARES_PATH)/libcares.$(LIBEXT):
 ca-bundle.crt: mk-ca-bundle.pl
 	@echo Creating $@
 	@-$(PERL) $< -b -n $@
-

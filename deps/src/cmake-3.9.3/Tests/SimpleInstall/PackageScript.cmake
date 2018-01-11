@@ -7,4 +7,3 @@ foreach(var ${res})
   file(APPEND ${CMAKE_INSTALL_PREFIX}/AllVariables.txt
              "${var} \"${${var}}\"\n")
 endforeach()
-

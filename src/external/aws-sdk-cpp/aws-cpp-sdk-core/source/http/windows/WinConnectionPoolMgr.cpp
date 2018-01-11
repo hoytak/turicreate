@@ -1,12 +1,12 @@
 /*
   * Copyright 2010-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-  * 
+  *
   * Licensed under the Apache License, Version 2.0 (the "License").
   * You may not use this file except in compliance with the License.
   * A copy of the License is located at
-  * 
+  *
   *  http://aws.amazon.com/apache2.0
-  * 
+  *
   * or in the "license" file accompanying this file. This file is distributed
   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
   * express or implied. See the License for the specific language governing
@@ -25,7 +25,7 @@ using namespace Aws::Utils::Logging;
 using namespace Aws::Http;
 
 WinConnectionPoolMgr::WinConnectionPoolMgr(void* iOpenHandle,
-                                                   unsigned maxConnectionsPerHost, 
+                                                   unsigned maxConnectionsPerHost,
                                                    long requestTimeoutMs,
                                                    long connectTimeoutMs) :
     m_iOpenHandle(iOpenHandle),
@@ -73,8 +73,8 @@ void* WinConnectionPoolMgr::AquireConnectionForHost(const Aws::String& host, uin
 
     //let's go ahead and prevent that nasty little race condition.
     {
-        std::lock_guard<std::mutex> hostsLocker(m_hostConnectionsMutex);  
-        Aws::Map<Aws::String, HostConnectionContainer*>::iterator foundPool = m_hostConnections.find(ss.str());  
+        std::lock_guard<std::mutex> hostsLocker(m_hostConnectionsMutex);
+        Aws::Map<Aws::String, HostConnectionContainer*>::iterator foundPool = m_hostConnections.find(ss.str());
 
         if (foundPool != m_hostConnections.end())
         {
@@ -123,8 +123,8 @@ void WinConnectionPoolMgr::ReleaseConnectionForHost(const Aws::String& host, uns
         Aws::StringStream ss;
         ss << host << ":" << port;
         AWS_LOG_DEBUG(GetLogTag(), "Releasing connection to endpoint %s.", ss.str().c_str());
-        Aws::Map<Aws::String, HostConnectionContainer*>::iterator foundPool; 
-        
+        Aws::Map<Aws::String, HostConnectionContainer*>::iterator foundPool;
+
         //protect reads and writes on the connectionPool itself.
         {
             std::lock_guard<std::mutex> hostsLocker(m_hostConnectionsMutex);

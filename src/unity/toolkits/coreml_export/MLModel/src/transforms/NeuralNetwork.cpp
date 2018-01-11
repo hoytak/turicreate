@@ -6,5 +6,3 @@
 #include "NeuralNetwork.hpp"
 
 using namespace CoreML;
-
-

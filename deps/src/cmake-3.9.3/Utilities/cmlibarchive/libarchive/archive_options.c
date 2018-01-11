@@ -215,4 +215,3 @@ parse_option(const char **s, const char **m, const char **o, const char **v)
 
 	return end;
 }
-

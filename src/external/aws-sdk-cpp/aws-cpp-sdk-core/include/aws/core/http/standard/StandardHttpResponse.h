@@ -73,7 +73,7 @@ namespace Aws
                 void AddHeader(const Aws::String&, const Aws::String&);
 
             private:
-                StandardHttpResponse(const StandardHttpResponse&);                
+                StandardHttpResponse(const StandardHttpResponse&);
 
                 Aws::Map<Aws::String, Aws::String> headerMap;
                 Utils::Stream::ResponseStream bodyStream;
@@ -82,5 +82,3 @@ namespace Aws
         } // namespace Standard
     } // namespace Http
 } // namespace Aws
-
-

@@ -32,9 +32,9 @@ evalerror <- function(preds, dtrain) {
 }
 print ('start training with early Stopping setting')
 
-bst <- xgb.train(param, dtrain, num_round, watchlist, 
+bst <- xgb.train(param, dtrain, num_round, watchlist,
                  objective = logregobj, eval_metric = evalerror, maximize = FALSE,
                  early.stop.round = 3)
-bst <- xgb.cv(param, dtrain, num_round, nfold = 5, 
+bst <- xgb.cv(param, dtrain, num_round, nfold = 5,
               objective = logregobj, eval_metric = evalerror,
               maximize = FALSE, early.stop.round = 3)

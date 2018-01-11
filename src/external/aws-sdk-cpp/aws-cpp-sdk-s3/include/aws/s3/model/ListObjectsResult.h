@@ -61,25 +61,25 @@ namespace Model
      */
     inline ListObjectsResult& WithIsTruncated(bool value) { SetIsTruncated(value); return *this;}
 
-    
+
     inline const Aws::String& GetMarker() const{ return m_marker; }
 
-    
+
     inline void SetMarker(const Aws::String& value) { m_marker = value; }
 
-    
+
     inline void SetMarker(Aws::String&& value) { m_marker = value; }
 
-    
+
     inline void SetMarker(const char* value) { m_marker.assign(value); }
 
-    
+
     inline ListObjectsResult& WithMarker(const Aws::String& value) { SetMarker(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithMarker(Aws::String&& value) { SetMarker(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithMarker(const char* value) { SetMarker(value); return *this;}
 
     /**
@@ -159,118 +159,118 @@ namespace Model
      */
     inline ListObjectsResult& WithNextMarker(const char* value) { SetNextMarker(value); return *this;}
 
-    
+
     inline const Aws::Vector<Object>& GetContents() const{ return m_contents; }
 
-    
+
     inline void SetContents(const Aws::Vector<Object>& value) { m_contents = value; }
 
-    
+
     inline void SetContents(Aws::Vector<Object>&& value) { m_contents = value; }
 
-    
+
     inline ListObjectsResult& WithContents(const Aws::Vector<Object>& value) { SetContents(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithContents(Aws::Vector<Object>&& value) { SetContents(value); return *this;}
 
-    
+
     inline ListObjectsResult& AddContents(const Object& value) { m_contents.push_back(value); return *this; }
 
-    
+
     inline ListObjectsResult& AddContents(Object&& value) { m_contents.push_back(value); return *this; }
 
-    
+
     inline const Aws::String& GetName() const{ return m_name; }
 
-    
+
     inline void SetName(const Aws::String& value) { m_name = value; }
 
-    
+
     inline void SetName(Aws::String&& value) { m_name = value; }
 
-    
+
     inline void SetName(const char* value) { m_name.assign(value); }
 
-    
+
     inline ListObjectsResult& WithName(const Aws::String& value) { SetName(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithName(Aws::String&& value) { SetName(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithName(const char* value) { SetName(value); return *this;}
 
-    
+
     inline const Aws::String& GetPrefix() const{ return m_prefix; }
 
-    
+
     inline void SetPrefix(const Aws::String& value) { m_prefix = value; }
 
-    
+
     inline void SetPrefix(Aws::String&& value) { m_prefix = value; }
 
-    
+
     inline void SetPrefix(const char* value) { m_prefix.assign(value); }
 
-    
+
     inline ListObjectsResult& WithPrefix(const Aws::String& value) { SetPrefix(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithPrefix(Aws::String&& value) { SetPrefix(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithPrefix(const char* value) { SetPrefix(value); return *this;}
 
-    
+
     inline const Aws::String& GetDelimiter() const{ return m_delimiter; }
 
-    
+
     inline void SetDelimiter(const Aws::String& value) { m_delimiter = value; }
 
-    
+
     inline void SetDelimiter(Aws::String&& value) { m_delimiter = value; }
 
-    
+
     inline void SetDelimiter(const char* value) { m_delimiter.assign(value); }
 
-    
+
     inline ListObjectsResult& WithDelimiter(const Aws::String& value) { SetDelimiter(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithDelimiter(Aws::String&& value) { SetDelimiter(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithDelimiter(const char* value) { SetDelimiter(value); return *this;}
 
-    
+
     inline int GetMaxKeys() const{ return m_maxKeys; }
 
-    
+
     inline void SetMaxKeys(int value) { m_maxKeys = value; }
 
-    
+
     inline ListObjectsResult& WithMaxKeys(int value) { SetMaxKeys(value); return *this;}
 
-    
+
     inline const Aws::Vector<CommonPrefix>& GetCommonPrefixes() const{ return m_commonPrefixes; }
 
-    
+
     inline void SetCommonPrefixes(const Aws::Vector<CommonPrefix>& value) { m_commonPrefixes = value; }
 
-    
+
     inline void SetCommonPrefixes(Aws::Vector<CommonPrefix>&& value) { m_commonPrefixes = value; }
 
-    
+
     inline ListObjectsResult& WithCommonPrefixes(const Aws::Vector<CommonPrefix>& value) { SetCommonPrefixes(value); return *this;}
 
-    
+
     inline ListObjectsResult& WithCommonPrefixes(Aws::Vector<CommonPrefix>&& value) { SetCommonPrefixes(value); return *this;}
 
-    
+
     inline ListObjectsResult& AddCommonPrefixes(const CommonPrefix& value) { m_commonPrefixes.push_back(value); return *this; }
 
-    
+
     inline ListObjectsResult& AddCommonPrefixes(CommonPrefix&& value) { m_commonPrefixes.push_back(value); return *this; }
 
     /**

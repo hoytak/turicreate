@@ -15,4 +15,3 @@
 \description{
 Predicted values based on xgb.Booster.handle object.
 }
-

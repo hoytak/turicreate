@@ -7,11 +7,11 @@
 #include <cmath>
 
 namespace CoreML {
-    
+
     namespace Specification {
-        
+
 #pragma mark Model container and metadata/interface
-        
+
         bool operator==(const Model& a, const Model& b) {
             if (a.specificationversion() != b.specificationversion()) {
                 return false;
@@ -22,7 +22,7 @@ namespace CoreML {
             if (a.Type_case() != b.Type_case()) {
                 return false;
             }
-            
+
             // if everything else matches, check the model-specific parameters
             switch (a.Type_case()) {
                 case Model::kPipelineClassifier:
@@ -71,7 +71,7 @@ namespace CoreML {
                     return true;
             }
         }
-        
+
         bool operator==(const Metadata& a,
                         const Metadata& b) {
             if (a.shortdescription() != b.shortdescription()) {
@@ -88,7 +88,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const ModelDescription& a,
                         const ModelDescription& b) {
             if (a.input() != b.input()) {
@@ -108,7 +108,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const FeatureDescription& a,
                         const FeatureDescription& b) {
             if (a.name() != b.name()) {
@@ -122,7 +122,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool isEquivalent(const FeatureDescription& a,
                           const FeatureDescription& b) {
             if (a.name() != b.name()) {
@@ -133,7 +133,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         static inline bool compareArrayTypes(const Specification::FeatureType& x,
                                              const Specification::FeatureType& y) {
             const auto& xp = x.multiarraytype();
@@ -151,7 +151,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         static inline bool compareDictionaryTypes(const Specification::FeatureType& x,
                                                   const Specification::FeatureType& y) {
             const auto& xp = x.dictionarytype();
@@ -161,7 +161,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         static inline bool compareImageTypes(const Specification::FeatureType& x,
                                              const Specification::FeatureType& y) {
             const auto& xp = x.imagetype();
@@ -177,24 +177,24 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const FeatureType& a,
                         const FeatureType& b) {
-            
+
             // TODO : commenting out the below, because it breaks pipeline validator.
             // Pipeline validator assumes that T -> optional<T> should be allowed, but
             // it's using this operator== to test that, and failing.
             // We should eventually fix that by making a notion of "is valid as type" method
             // for FeatureType, such that T is always a valid optional<T> but not the other
             // way around.
-            
+
             /*
             if (a.isoptional() != b.isoptional()) {
                 return false;
             }
             */
-            
-            
+
+
             if (a.Type_case() != b.Type_case()) {
                 return false;
             }
@@ -214,9 +214,9 @@ namespace CoreML {
                     return true;
             }
         }
-        
+
 #pragma mark Pipelines
-        
+
         bool operator==(const Pipeline& a,
                         const Pipeline& b) {
             if (a.models_size() != b.models_size()) {
@@ -229,19 +229,19 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const PipelineClassifier& a,
                         const PipelineClassifier& b) {
             return a.pipeline() == b.pipeline();
         }
-        
+
         bool operator==(const PipelineRegressor& a,
                         const PipelineRegressor& b) {
             return a.pipeline() == b.pipeline();
         }
-        
+
 #pragma mark Regressors
-        
+
         bool operator==(const GLMRegressor& a,
                         const GLMRegressor& b) {
             if (a.weights() != b.weights()) {
@@ -255,12 +255,12 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const GLMRegressor_DoubleArray& a,
                         const GLMRegressor_DoubleArray& b) {
             return a.value() == b.value();
         }
-        
+
         bool operator==(const SupportVectorRegressor& a,
                         const SupportVectorRegressor& b) {
             if (a.kernel() != b.kernel()) {
@@ -284,7 +284,7 @@ namespace CoreML {
                     return false;
             }
         }
-        
+
         bool operator==(const Kernel& a,
                         const Kernel& b) {
             if (a.kernel_case() != b.kernel_case()) {
@@ -303,12 +303,12 @@ namespace CoreML {
                     return false;
             }
         }
-        
+
         bool operator==(const RBFKernel& a,
                         const RBFKernel& b) {
             return a.gamma() == b.gamma();
         }
-        
+
         bool operator==(const PolyKernel& a,
                         const PolyKernel& b) {
             if (a.degree() != b.degree()) {
@@ -322,7 +322,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const SigmoidKernel& a,
                         const SigmoidKernel& b) {
             if (a.gamma() != b.gamma()) {
@@ -333,17 +333,17 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const Coefficients& a,
                         const Coefficients& b) {
             return a.alpha() == b.alpha();
         }
-        
+
         bool operator==(const SparseVector& a,
                         const SparseVector& b) {
             return a.nodes() == b.nodes();
         }
-        
+
         bool operator==(const SparseNode& a,
                         const SparseNode& b) {
             if (a.index() != b.index()) {
@@ -354,12 +354,12 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const DenseVector& a,
                         const DenseVector& b) {
             return a.values() == b.values();
         }
-        
+
         bool operator==(const TreeEnsembleRegressor& a,
                         const TreeEnsembleRegressor& b) {
             if (a.postevaluationtransform() != b.postevaluationtransform()) {
@@ -367,7 +367,7 @@ namespace CoreML {
             }
             return a.treeensemble() == b.treeensemble();
         }
-        
+
         bool operator==(const TreeEnsembleParameters& a,
                         const TreeEnsembleParameters& b) {
             if (a.nodes() != b.nodes()) {
@@ -381,7 +381,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const TreeEnsembleParameters_TreeNode& a,
                         const TreeEnsembleParameters_TreeNode& b) {
             if (a.treeid() != b.treeid()) {
@@ -416,7 +416,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const TreeEnsembleParameters_TreeNode_EvaluationInfo& a,
                         const TreeEnsembleParameters_TreeNode_EvaluationInfo& b) {
             if (a.evaluationindex() != b.evaluationindex()) {
@@ -427,7 +427,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const NeuralNetworkRegressor& a,
                         const NeuralNetworkRegressor& b) {
             if (a.layers() != b.layers()) {
@@ -438,19 +438,19 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const NeuralNetworkLayer& a,
                         const NeuralNetworkLayer& b) {
             if (a.layer_case() != b.layer_case()) {
                 return false;
             }
-            
+
             // TODO -- not implemented!
             // for now, all neural network layers are not equal.
             assert(false);
             return false;
         }
-        
+
         bool operator==(const NeuralNetworkPreprocessing& a,
                         const NeuralNetworkPreprocessing& b) {
             if (a.featurename() != b.featurename()) {
@@ -468,7 +468,7 @@ namespace CoreML {
                     return false;
             }
         }
-        
+
         bool operator==(const NeuralNetworkImageScaler& a,
                         const NeuralNetworkImageScaler& b) {
             if (a.redbias() != b.redbias()) {
@@ -488,7 +488,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const NeuralNetworkMeanImage& a,
                         const NeuralNetworkMeanImage& b) {
             if (a.meanimage() != b.meanimage()) {
@@ -496,9 +496,9 @@ namespace CoreML {
             }
             return true;
         }
-        
+
 #pragma mark Classifiers
-        
+
         bool operator==(const GLMClassifier& a,
                         const GLMClassifier& b) {
             if (a.weights() != b.weights()) {
@@ -525,12 +525,12 @@ namespace CoreML {
                     return true;
             }
         }
-        
+
         bool operator==(const GLMClassifier_DoubleArray& a,
                         const GLMClassifier_DoubleArray& b) {
             return a.value() == b.value();
         }
-        
+
         bool operator==(const SupportVectorClassifier& a,
                         const SupportVectorClassifier& b) {
             if (a.kernel() != b.kernel()) {
@@ -580,7 +580,7 @@ namespace CoreML {
                     return true;
             }
         }
-        
+
         bool operator==(const TreeEnsembleClassifier& a,
                         const TreeEnsembleClassifier& b) {
             if (a.treeensemble() != b.treeensemble()) {
@@ -602,7 +602,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const NeuralNetworkClassifier& a,
                         const NeuralNetworkClassifier& b) {
             if (a.layers() != b.layers()) {
@@ -623,7 +623,7 @@ namespace CoreML {
                     return true;
             }
         }
-        
+
 #pragma mark Generic models
 
         bool operator==(const NeuralNetwork& a,
@@ -636,7 +636,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
 #pragma mark Feature engineering
 
         bool operator==(const OneHotEncoder& a,
@@ -666,12 +666,12 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const Imputer& a, const Imputer& b) {
             if (a.ImputedValue_case() != b.ImputedValue_case()) {
                 return false;
             }
-            
+
             switch (a.ImputedValue_case()) {
                 case Imputer::kImputedDoubleValue:
                     if( !(a.imputeddoublevalue() == b.imputeddoublevalue())) {
@@ -711,12 +711,12 @@ namespace CoreML {
                     // OK to return here, as this just means it's uninitialized.
                     return true;
             }
-            
+
             // Now test the replacement value.
             if (a.ReplaceValue_case() != b.ReplaceValue_case()) {
                 return false;
             }
-            
+
             switch(a.ReplaceValue_case()) {
                 case Imputer::kReplaceDoubleValue: {
                     if( ! ( (std::isnan(a.replacedoublevalue()) && std::isnan(b.replacedoublevalue()))
@@ -739,16 +739,16 @@ namespace CoreML {
                     break;
                 }
             }
-            
+
             // Done testing all of this.
             return true;
         }
-        
+
         bool operator==(const FeatureVectorizer& a,
                         const FeatureVectorizer& b) {
             return a.inputlist() == b.inputlist();
         }
-        
+
         bool operator==(const FeatureVectorizer_InputColumn& a,
                         const FeatureVectorizer_InputColumn& b) {
             if (a.inputcolumn() != b.inputcolumn()) {
@@ -759,7 +759,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const DictVectorizer& a,
                         const DictVectorizer& b) {
             if (a.Map_case() != b.Map_case()) {
@@ -774,7 +774,7 @@ namespace CoreML {
                     return true;
             }
         }
-        
+
         bool operator==(const Scaler& a,
                         const Scaler& b) {
             if (a.shiftvalue() != b.shiftvalue()) {
@@ -785,7 +785,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const CategoricalMapping& a,
                         const CategoricalMapping& b) {
             if (a.MappingType_case() != b.MappingType_case()) {
@@ -800,19 +800,19 @@ namespace CoreML {
                     return true;
             }
         }
-        
+
         bool operator==(const Normalizer& a,
                         const Normalizer& b) {
             return a.normtype() == b.normtype();
         }
-                
+
         bool operator==(const ArrayFeatureExtractor& a,
                         const ArrayFeatureExtractor& b) {
             return a.extractindex() == b.extractindex();
         }
-        
+
 #pragma mark Data structures
-        
+
         template<typename T>
         bool vectorsEqual(const T& a, const T& b) {
             if (a.vector_size() != b.vector_size()) {
@@ -825,22 +825,22 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const Int64Vector& a,
                         const Int64Vector& b) {
             return vectorsEqual(a, b);
         }
-        
+
         bool operator==(const StringVector& a,
                         const StringVector& b) {
             return vectorsEqual(a, b);
         }
-        
+
         bool operator==(const DoubleVector& a,
                         const DoubleVector& b) {
             return vectorsEqual(a, b);
         }
-        
+
         template<typename T>
         bool mapsEqual(const T& a, const T& b) {
             if (a.map_size() != b.map_size()) {
@@ -853,12 +853,12 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         bool operator==(const StringToInt64Map& a,
                         const StringToInt64Map& b) {
             return mapsEqual(a, b);
         }
-        
+
         bool operator==(const Int64ToStringMap& a,
                         const Int64ToStringMap& b) {
             return mapsEqual(a, b);
@@ -867,10 +867,10 @@ namespace CoreML {
                         const StringToDoubleMap& b) {
             return mapsEqual(a, b);
         }
-        
+
         bool operator==(const Int64ToDoubleMap& a,
                         const Int64ToDoubleMap& b){
             return mapsEqual(a, b);
         }
-        
+
     }}

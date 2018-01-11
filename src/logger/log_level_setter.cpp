@@ -13,5 +13,3 @@ log_level_setter::log_level_setter(int loglevel) {
 log_level_setter::~log_level_setter() {
   global_logger().set_log_level(prev_level);
 }
-
-

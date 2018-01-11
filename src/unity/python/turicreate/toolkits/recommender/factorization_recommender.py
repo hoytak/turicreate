@@ -404,7 +404,7 @@ class FactorizationRecommender(_Recommender):
         '''__init__(self)'''
         self.__proxy__ = model_proxy
 
-    
+
     @classmethod
     def _native_name(cls):
         return "factorization_recommender"

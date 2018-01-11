@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
   }
   grp.join_all();
   size_t rt = zmq_stopwatch_stop(t);
-  std::cout << rt << "\n"; 
+  std::cout << rt << "\n";
 
   std::cout << "Failure Counter: \n";
   for (size_t i = 0;i < failed_count.size(); ++i) {
@@ -83,5 +83,5 @@ int main(int argc, char** argv) {
   std::cout << "\n";
   pollset.stop_poll_thread();
   delete reqsock;
-  return 0;  
+  return 0;
 }

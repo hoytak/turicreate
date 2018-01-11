@@ -15,13 +15,13 @@ using namespace turi;
 using namespace turi::graph_testing_utils;
 
 /**
- * Test suite for distributed linear regression. 
+ * Test suite for distributed linear regression.
  */
 struct label_propagation_test  {
  public:
 
   void test_default() {
-    std::map<std::string, flexible_type> options = { 
+    std::map<std::string, flexible_type> options = {
       {"label_field", "label"},
       {"threshold", 0.0001},
       {"self_weight", 1.0},
@@ -30,21 +30,21 @@ struct label_propagation_test  {
       {"weight_field", ""}
     };
 
-    size_t n = runner.get_default_num_workers_from_env(); 
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(options, n);
   }
 
   void test_weighted() {
-    std::map<std::string, flexible_type> options = { 
+    std::map<std::string, flexible_type> options = {
       {"label_field", "label"},
       {"threshold", 0.0001},
       {"self_weight", 1.0},
       {"undirected", 1},
       {"max_iterations", 30},
-      {"weight_field", "data"} 
+      {"weight_field", "data"}
     };
 
-    size_t n = runner.get_default_num_workers_from_env(); 
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(options, n);
   }
 
@@ -80,7 +80,7 @@ struct label_propagation_test  {
       // Act
       auto m = variant_get_value<std::shared_ptr<simple_model>>(ret);
 
-      // Assert 
+      // Assert
       {
         std::shared_ptr<unity_sgraph> result_g;
         result_g = variant_get_value<std::shared_ptr<unity_sgraph>>(m->params.at("graph"));

@@ -49,7 +49,7 @@ set(  FORM_SRCS
              fty_num.c
              fty_regex.c
    )
-             
+
 include_directories(${CMAKE_FORM_SOURCE_DIR})
 add_library(cmForm ${FORM_SRCS} )
 target_link_libraries(cmForm ${CURSES_LIBRARY})

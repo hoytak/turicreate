@@ -189,7 +189,7 @@
 	#include <cwchar>  /* need wide characters */
 	#include <string>
 
-    namespace libjson {	   
+    namespace libjson {
 	   #ifdef JSON_EXPOSE_BASE64
 		  inline static json_string encode64(const unsigned char * binary, size_t bytes) json_nothrow {
 			 return JSONBase64::json_encode64(binary, bytes);
@@ -199,38 +199,38 @@
 			 return JSONBase64::json_decode64(encoded);
 		  }
 	   #endif
-	   
+
 	   //useful if you have json that you don't want to parse, just want to strip to cut down on space
 	   inline static json_string strip_white_space(const json_string & json) json_nothrow {
 		  return JSONWorker::RemoveWhiteSpaceAndComments(json, false);
 	   }
-		
+
 		#ifndef JSON_STRING_HEADER
 			inline static std::string to_std_string(const json_string & str){
 				#if defined(JSON_UNICODE) ||defined(JSON_MEMORY_CALLBACKS) || defined(JSON_MEMORY_POOL)
-					return std::string(str.begin(), str.end());		
+					return std::string(str.begin(), str.end());
 				#else
 					return str;
 				#endif
 			}
 			inline static std::wstring to_std_wstring(const json_string & str){
 				#if (!defined(JSON_UNICODE)) || defined(JSON_MEMORY_CALLBACKS) || defined(JSON_MEMORY_POOL)
-					return std::wstring(str.begin(), str.end());		
+					return std::wstring(str.begin(), str.end());
 				#else
 					return str;
 				#endif
 			}
-			
+
 			inline static json_string to_json_string(const std::string & str){
 				#if defined(JSON_UNICODE) ||defined(JSON_MEMORY_CALLBACKS) || defined(JSON_MEMORY_POOL)
-					return json_string(str.begin(), str.end());		
+					return json_string(str.begin(), str.end());
 				#else
 					return str;
 				#endif
 			}
 			inline static json_string to_json_string(const std::wstring & str){
 				#if (!defined(JSON_UNICODE)) || defined(JSON_MEMORY_CALLBACKS) || defined(JSON_MEMORY_POOL)
-					return json_string(str.begin(), str.end());		
+					return json_string(str.begin(), str.end());
 				#else
 					return str;
 				#endif

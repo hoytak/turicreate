@@ -600,7 +600,7 @@ static int pthread_condattr_setpshared(pthread_condattr_t *a, int s)
   return 0;
 }
 
-static int pthread_rwlock_init(pthread_rwlock_t *l, pthread_rwlockattr_t *a) 
+static int pthread_rwlock_init(pthread_rwlock_t *l, pthread_rwlockattr_t *a)
 {
   (void) a;
   InitializeSRWLock(l);

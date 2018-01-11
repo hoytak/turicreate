@@ -18,8 +18,8 @@ namespace turi {
     turi::mutex mutex;
     turi::conditional conditional;
     mutable int needed;
-    mutable int called;   
-    
+    mutable int called;
+
     mutable bool barrier_sense;
     mutable bool barrier_release;
     bool alive;
@@ -48,7 +48,7 @@ namespace turi {
       needed = numthreads;
       fiber_handles.resize(needed);
     }
-    
+
     /// Wait on the barrier until numthreads has called wait
     inline void wait() const {
       if (!alive) return;
@@ -68,7 +68,7 @@ namespace turi {
         // is already awake)
         for (size_t i = 0;i < to_wake.size() - 1; ++i) {
           fiber_control::schedule_tid(to_wake[i]);
-        } 
+        }
       } else {
         // while no one has broadcasted, sleep
         while(barrier_release != listening_on && alive) {
@@ -79,6 +79,6 @@ namespace turi {
       mutex.unlock();
     }
   }; // end of conditional
-  
+
 }
-#endif 
+#endif

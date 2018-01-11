@@ -28,7 +28,7 @@ template <>
 struct operator_impl<planner_node_type::UNION_NODE> : public query_operator {
  public:
 
-  planner_node_type type() const { return planner_node_type::UNION_NODE; } 
+  planner_node_type type() const { return planner_node_type::UNION_NODE; }
 
   static std::string name() { return "union"; }
 
@@ -40,7 +40,7 @@ struct operator_impl<planner_node_type::UNION_NODE> : public query_operator {
   }
 
   inline operator_impl(size_t _num_inputs = 2) : num_inputs(_num_inputs) {}
-  
+
   inline std::shared_ptr<query_operator> clone() const {
     return std::make_shared<operator_impl>(*this);
   }
@@ -83,7 +83,7 @@ struct operator_impl<planner_node_type::UNION_NODE> : public query_operator {
   static std::shared_ptr<planner_node> make_planner_node(
       std::shared_ptr<planner_node> left,
       std::shared_ptr<planner_node> right) {
-    return planner_node::make_shared(planner_node_type::UNION_NODE, 
+    return planner_node::make_shared(planner_node_type::UNION_NODE,
                                      std::map<std::string, flexible_type>(),
                                      std::map<std::string, any>(),
                                      {left, right});
@@ -126,7 +126,7 @@ struct operator_impl<planner_node_type::UNION_NODE> : public query_operator {
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::UNION_NODE);
     return infer_planner_node_length(pnode->inputs[0]);
   }
-  
+
   static std::string repr(std::shared_ptr<planner_node> pnode, pnode_tagger& get_tag) {
     std::ostringstream ss;
     ss << "Union(";

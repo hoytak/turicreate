@@ -114,7 +114,7 @@ namespace Aws
              * Create SecureRandomBytes instance
              */
             AWS_CORE_API std::shared_ptr<SecureRandomBytes> CreateSecureRandomBytesImplementation();
-          
+
             /**
              * Set the global factory for MD5 Hash providers
              */
@@ -151,4 +151,3 @@ namespace Aws
         } // namespace Crypto
     } // namespace Utils
 } // namespace Aws
-

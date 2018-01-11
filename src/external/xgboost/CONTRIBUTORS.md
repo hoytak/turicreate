@@ -14,7 +14,7 @@ Committers are people who have made substantial contribution to the project and 
 * [Michael Benesty](https://github.com/pommedeterresautee)
   - Micheal is a lawyer, data scientist in France, he is the creator of xgboost interactive analysis module in R.
 * [Yuan Tang](https://github.com/terrytangyuan)
-  - Yuan is a data scientist in Chicago, US. He contributed mostly in R and Python packages. 
+  - Yuan is a data scientist in Chicago, US. He contributed mostly in R and Python packages.
 
 Become a Comitter
 -----------------

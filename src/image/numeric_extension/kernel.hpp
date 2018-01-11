@@ -83,7 +83,7 @@ class kernel_1d_fixed : public detail::kernel_1d_adaptor<array<T,Size> > {
 public:
     kernel_1d_fixed() {}
     explicit kernel_1d_fixed(std::size_t center_in) : parent_t(center_in) {}
-    
+
     template <typename FwdIterator>
     explicit kernel_1d_fixed(FwdIterator elements, std::size_t center_in) : parent_t(center_in) {
         detail::copy_n(elements,Size,this->begin());

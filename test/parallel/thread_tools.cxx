@@ -44,7 +44,7 @@ void test_group_exception_forwarding(){
 
   thread_group group;
 
-  
+
   thread thr3;
   thr3.launch(thread_assert_false);
   try {
@@ -53,12 +53,12 @@ void test_group_exception_forwarding(){
   catch(const char* c) {
     logstream(LOG_INFO) << "Exception " << c << " forwarded successfully!" << std::endl;
   }
-  
-  
+
+
   for (size_t i = 0;i < 10; ++i) {
     group.launch(thread_assert_false);
   }
-  
+
   size_t numcaught = 0;
   try {
     group.join();
@@ -83,7 +83,7 @@ void test_pool(){
     }
     pool.set_cpu_affinity(j % 2);
   }
-  
+
   pool.join();
   TS_ASSERT_EQUALS(testval.value, 0);
 }
@@ -100,7 +100,7 @@ void test_pool_exception_forwarding(){
   parallel_task_queue pool(thpool);
 
 
-  
+
   thread thr3;
   thr3.launch(thread_assert_false);
   try {
@@ -109,15 +109,15 @@ void test_pool_exception_forwarding(){
   catch(std::string c) {
     logstream(LOG_INFO) << "Exception " << c << " forwarded successfully!" << std::endl;
   }
-  
-  
+
+
   for (size_t i = 0;i < 10; ++i) {
     pool.launch(thread_assert_false);
     if (i == 50) {
       thpool.set_cpu_affinity(true);
     }
   }
-  
+
   size_t numcaught = 0;
   while (1) {
     try {

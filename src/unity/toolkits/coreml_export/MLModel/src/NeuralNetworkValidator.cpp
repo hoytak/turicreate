@@ -222,7 +222,7 @@ namespace CoreML {
         // TODO: is there a bound on the number of inputs and outputs here?
         return validateActivationParams(layer.activation());
     }
-    
+
     //    PoolingLayerParams pooling = 8;
     static Result validatePoolingLayer(const Specification::NeuralNetworkLayer& layer) {
         Result r;
@@ -853,17 +853,17 @@ namespace CoreML {
     static Result validateNeuralNetwork(const Specification::ModelDescription& interface,
                                         const T& nn, std::set<std::string>& outputBlobNames) {
         Result r;
-        
+
         if (interface.input_size() == 0) {
             return Result(ResultType::INVALID_MODEL_INTERFACE,
                           "Neural networks require at least one input.");
         }
-        
+
         if (interface.output_size() == 0) {
             return Result(ResultType::INVALID_MODEL_INTERFACE,
                           "Neural networks produce at least one output.");
         }
-        
+
         if (std::all_of(interface.input().begin(), interface.input().end(),
                         [](const Specification::FeatureDescription& input) {
                             return input.type().isoptional();
@@ -871,8 +871,8 @@ namespace CoreML {
             return Result(ResultType::INVALID_MODEL_INTERFACE,
                           "Neural networks require at least one non-optional input.");
         }
-        
-        
+
+
         // Check the inputs and output types
         if (!std::all_of(interface.input().begin(),
                          interface.input().end(),
@@ -884,7 +884,7 @@ namespace CoreML {
                                            "Neural Networks only accept arrays or images as inputs.");
                              }
 
-        
+
         // For each named data blob, which node produced it
         std::map<std::string, Specification::NeuralNetworkLayer> blobNameToProducingLayer;
 
@@ -918,13 +918,13 @@ namespace CoreML {
             }
             else { // Array
                 // we already checked that it's already an array or image
-                
+
                 // only vector-like (rank 1) or image-like (rank 3) inputs are allowed
                 if (!(input.type().multiarraytype().shape().size() == 1
                     || input.type().multiarraytype().shape().size() == 3)) {
                     return Result(ResultType::INVALID_MODEL_INTERFACE, "Input arrays to neural networks must be rank 1 (single vectors) or rank 3 (image-like arrays).");
                 }
-                
+
                 blobNameToShape[input.name()] = std::vector<int>(input.type().multiarraytype().shape().begin(),
                                                                  input.type().multiarraytype().shape().end());
             }
@@ -936,11 +936,11 @@ namespace CoreML {
 
             validateSpecLayerFn validateConvertFn = getValidateFunctionFromTag(layer.layer_case());
             r = validateConvertFn(layer);
-            
+
             if (!r.good()) {
                 return r;
             }
-            
+
             // Check for topological defects: the layer's input must have been produced by a blob we have
             // already seen. Also, check that the same output isn't being produced in two different places.
             for (const auto& input: layer.input()) {
@@ -962,11 +962,11 @@ namespace CoreML {
             }
 
         } // loop over layers
-        
+
         return Result();
-        
+
     }
-    
+
     template <>
     Result validate<MLModelType_neuralNetworkClassifier>(const Specification::Model& format) {
         // must have classifier parameters
@@ -974,14 +974,14 @@ namespace CoreML {
         if (!r.good()) {
             return r;
         }
-        
+
         std::set<std::string> outputBlobNames;
         r = validateNeuralNetwork(format.description(), format.neuralnetworkclassifier(), outputBlobNames);
-        
+
         if (!r.good()) {
             return r;
         }
-        
+
         std::string probBlob = format.neuralnetworkclassifier().labelprobabilitylayername();
         // Check if the probability blob name was provided in the proto
         if (probBlob.compare("") != 0) {
@@ -991,7 +991,7 @@ namespace CoreML {
                 return Result(ResultType::INVALID_MODEL_PARAMETERS, err);
             }
         }
-        
+
         // Now, we need to check that all the model's output names are either blob names or the extra outputs
         // for a classifier
         for (const auto& output : format.description().output()) {
@@ -1004,9 +1004,9 @@ namespace CoreML {
                 }
             }
         }
-        
+
         return r;
-        
+
     }
 
     template <>
@@ -1016,16 +1016,16 @@ namespace CoreML {
         if (!r.good()) {
             return r;
         }
-        
-        std::set<std::string> outputBlobNames;        
+
+        std::set<std::string> outputBlobNames;
         return validateNeuralNetwork(format.description(), format.neuralnetworkregressor(), outputBlobNames);
     }
 
     template <>
     Result validate<MLModelType_neuralNetwork>(const Specification::Model& format) {
-        
+
         const auto& interface = format.description();
-        
+
         // This isn't true for classifiers and regressors -- need to template specialize it to make these work
         if (!std::all_of(interface.output().begin(),
                          interface.output().end(),
@@ -1036,29 +1036,29 @@ namespace CoreML {
                              return Result(ResultType::INVALID_MODEL_INTERFACE,
                                            "Neural Networks only return arrays as outputs.");
                          }
-        
+
         std::set<std::string> outputBlobNames;
-        
+
         Result r = validateNeuralNetwork(format.description(), format.neuralnetwork(), outputBlobNames);
-        
+
         if (r.good()) {
             // Make sure that all of the model interface's outputs are actually produced by some blob
             for (const auto& output : format.description().output()) {
-                
+
                 const std::string& name = output.name();
-                
+
                 std::string err;
                 if (outputBlobNames.count(name) == 0) {
                     err = "Interface specifies output: " + name + ", but no node in the network produces it.";
                     return Result(ResultType::INVALID_MODEL_INTERFACE, err);
                 }
                 outputBlobNames.erase(name);
-                
+
             }
         }
-        
+
         return r;
-        
+
     }
 
 }

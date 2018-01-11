@@ -19,4 +19,3 @@
 using namespace Aws;
 
 AmazonStreamingWebServiceRequest::~AmazonStreamingWebServiceRequest() {}
-

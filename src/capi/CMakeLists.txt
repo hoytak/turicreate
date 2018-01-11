@@ -1,7 +1,7 @@
 
 project(turi_capi)
 
-set(capi_sources 
+set(capi_sources
     impl/capi_error_handling.cpp
     impl/capi_flexible_type.cpp
     impl/capi_flex_dict.cpp
@@ -32,10 +32,10 @@ if(APPLE)
 endif()
 
 
-if(${_build_framework}) 
+if(${_build_framework})
 
 make_library(TuriCore
-  SOURCES 
+  SOURCES
   ${capi_sources}
    REQUIRES
    ${capi_dependencies}
@@ -63,7 +63,7 @@ make_library(TuriCore
   add_custom_command(TARGET TuriCore
     POST_BUILD
     COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/framework/process_framework.sh"
-    --name TuriCore 
+    --name TuriCore
     --src-headers "${CMAKE_CURRENT_SOURCE_DIR}"
     --framework "${CMAKE_CURRENT_BINARY_DIR}/TuriCore.framework"
     --install-location "${_install_location}")
@@ -74,7 +74,7 @@ make_library(TuriCore
 else()
   #build out as a regular library
   make_library(turi
-  SOURCES 
+  SOURCES
   ${capi_sources}
    REQUIRES
    ${capi_dependencies}

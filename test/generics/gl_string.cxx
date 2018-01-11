@@ -199,7 +199,7 @@ void verify_consistency(const gl_string& v) {
 void stress_test(size_t n_tests) {
 
   auto gen_element = [](){ return char(random::fast_uniform<int>(32, 127)); };
-  
+
   gl_string v;
   std::string v_ref;
 
@@ -461,7 +461,7 @@ void stress_test(size_t n_tests) {
 
       if(n1 > n2) std::swap(n1, n2);
 
-      v = v.substr(n1, n2 - n1); 
+      v = v.substr(n1, n2 - n1);
       v_ref = v_ref.substr(n1, n2 - n1);
     });
 
@@ -470,7 +470,7 @@ void stress_test(size_t n_tests) {
       v+= v;
       v_ref += v_ref;
     });
-  
+
   for(size_t i = 0; i < n_tests; ++i) {
     size_t idx = random::fast_uniform<size_t>(0, operations.size() - 1);
     operations[idx]();

@@ -24,10 +24,10 @@ namespace turi {
     arc >> idload;
     registry_map_type::const_iterator iter = global_registry.find(idload);
     if(iter == global_registry.end()) {
-      logstream(LOG_FATAL) 
-        << "Cannot load object with hashed type [" << idload 
+      logstream(LOG_FATAL)
+        << "Cannot load object with hashed type [" << idload
         << "] from stream!" << std::endl
-        << "\t A possible cause of this problem is that the type" 
+        << "\t A possible cause of this problem is that the type"
         << std::endl
         << "\t is never explicity used in this program.\n\n" << std::endl;
       return NULL;
@@ -36,7 +36,7 @@ namespace turi {
     // for this type
     return iter->second(arc);
   }
-  
+
 
 } // end of namespace turi
 
@@ -44,4 +44,3 @@ namespace turi {
 std::ostream& operator<<(std::ostream& out, const turi::any& any) {
   return any.print(out);
 } // end of operator << for any
-

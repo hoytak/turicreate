@@ -43,12 +43,12 @@ gl_sframe generate_data(std::map<std::string, flexible_type> opts) {
 /**
  * Construct a model from data and options.
  */
-std::shared_ptr<sample_transformer> init_model(gl_sframe data, 
+std::shared_ptr<sample_transformer> init_model(gl_sframe data,
                        std::map<std::string, flexible_type> opts) {
 
   std::shared_ptr<sample_transformer> model;
   model.reset(new sample_transformer);
-  
+
   // Init and train
   std::map<std::string, flexible_type> kwargs;
   kwargs["constant"] = opts["constant"];
@@ -96,10 +96,10 @@ void check_model(std::shared_ptr<sample_transformer> model,
 
   // Answers.
   size_t constant = opts.at("constant");
-  std::map<std::string, flexible_type> options = { 
+  std::map<std::string, flexible_type> options = {
     {"constant", constant}
   };
-  std::map<std::string, flexible_type> default_options = { 
+  std::map<std::string, flexible_type> default_options = {
     {"constant", 0.5}
   };
   std::vector<std::string> _list_fields_ans = {
@@ -132,7 +132,7 @@ void check_model(std::shared_ptr<sample_transformer> model,
   // Check list_fields
   _list_fields = model->list_fields();
   for(const auto& f: _list_fields_ans){
-    TS_ASSERT(std::find(_list_fields.begin(), _list_fields.end(), f) 
+    TS_ASSERT(std::find(_list_fields.begin(), _list_fields.end(), f)
                                                     != _list_fields.end());
   }
 
@@ -156,28 +156,28 @@ void run_sample_transformer_test(std::map<std::string, flexible_type> opts) {
 
 
 /**
- *  Check linear supervised 
+ *  Check linear supervised
 */
 struct sample_transformer_test  {
- 
+
   public:
 
   void test_sample_transformer_basic_2d() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 100}, 
-      {"constant", 1}, 
-      {"features", 1}}; 
+      {"examples", 100},
+      {"constant", 1},
+      {"features", 1}};
     run_sample_transformer_test(opts);
   }
-  
+
   void test_sample_transformer_small() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 1000}, 
-      {"constant", 0}, 
-      {"features", 10}}; 
+      {"examples", 1000},
+      {"constant", 0},
+      {"features", 10}};
     run_sample_transformer_test(opts);
   }
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_sample_transformer_test, sample_transformer_test)

@@ -14,4 +14,3 @@ options    des ecb/s
  4 r2 p    107873.88  72.2%
  4 r1 p    107685.83  72.1%
 -DDES_UNROLL
-

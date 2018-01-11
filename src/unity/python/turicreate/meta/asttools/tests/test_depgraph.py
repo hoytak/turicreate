@@ -19,7 +19,7 @@ from ...asttools.tests import AllTypesTested, skip_networkx
 
 tested = AllTypesTested()
 
- 
+
 def binop_method(op):
     def test_binop(self):
         source = 'c = a %s b' % (op,)
@@ -300,4 +300,3 @@ if __name__ == "__main__":
     unittest.main(exit=False)
 
     print(tested.tested())
-

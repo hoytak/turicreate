@@ -13,7 +13,7 @@ using namespace turi::supervised::xgboost;
 
 //// Supervised learning extensions ////
 /**
- * Get feature importance for boosted trees model 
+ * Get feature importance for boosted trees model
  */
 gl_sframe _xgboost_feature_importance(
   std::shared_ptr<supervised_learning_model_base> model) {
@@ -25,10 +25,10 @@ gl_sframe _xgboost_feature_importance(
 }
 
 /**
- * Get feature importance for boosted trees model 
+ * Get feature importance for boosted trees model
  */
 std::string _xgboost_get_tree(
-  std::shared_ptr<supervised_learning_model_base> model, 
+  std::shared_ptr<supervised_learning_model_base> model,
   size_t tree_id) {
   auto bst_model = std::dynamic_pointer_cast<xgboost_model>(model);
   if (bst_model == nullptr) {
@@ -38,7 +38,7 @@ std::string _xgboost_get_tree(
 }
 
 /**
- * Get feature importance for boosted trees model 
+ * Get feature importance for boosted trees model
  */
 std::vector<std::string> _xgboost_dump_model(
   std::shared_ptr<supervised_learning_model_base> model,

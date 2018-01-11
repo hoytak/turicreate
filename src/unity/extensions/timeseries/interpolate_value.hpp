@@ -9,7 +9,7 @@
 #include <flexible_type/flexible_type.hpp>
 
 namespace turi {
-namespace timeseries { 
+namespace timeseries {
 
 /**
  * Simple interface for 2-D interpolation required for re-sample.
@@ -24,11 +24,11 @@ namespace timeseries {
  *
  * Interpolates the value at t, using the values at (t1, v1), (t2, v2)
  * \code
-    linear = [](const flexible_type& t, 
+    linear = [](const flexible_type& t,
         const flexible_type& t1, const flexible_type& t2,
         const flexible_type& v1, const flexible_type& v2) {
       return v1 + (v2 - v2) * (t - t1) / (t2 - t1);
-    } 
+    }
  *
  * \endcode
  */
@@ -44,7 +44,7 @@ class interpolator_value {
   virtual bool support_type(flex_type_enum type) const = 0;
 
   /**
-   * Sets the input types and returns the output type. 
+   * Sets the input types and returns the output type.
    *
    * Default implementation assumes there is ony one input, and output
    * type is the same as input type.
@@ -61,11 +61,11 @@ class interpolator_value {
   virtual std::string name() const = 0;
 
   /**
-   * Interpolate the value at t, given the (t1, v1) and (t2, v2) 
+   * Interpolate the value at t, given the (t1, v1) and (t2, v2)
    */
   virtual flexible_type interpolate(
-    const flexible_type& t,  const flexible_type& t1, const flexible_type& t2, 
-    const flexible_type& v1, const flexible_type& v2) const = 0; 
+    const flexible_type& t,  const flexible_type& t1, const flexible_type& t2,
+    const flexible_type& v1, const flexible_type& v2) const = 0;
 
  protected:
   virtual flex_type_enum set_input_type(flex_type_enum type) {
@@ -77,8 +77,8 @@ class zero_fill : public interpolator_value {
  public:
 
   bool support_type(flex_type_enum type) const {
-    return (type == flex_type_enum::INTEGER) || 
-           (type == flex_type_enum::FLOAT) || 
+    return (type == flex_type_enum::INTEGER) ||
+           (type == flex_type_enum::FLOAT) ||
            (type == flex_type_enum::VECTOR);
   }
 
@@ -88,8 +88,8 @@ class zero_fill : public interpolator_value {
 
   flexible_type interpolate(const flexible_type& t,  const flexible_type& t1,
                             const flexible_type& t2, const flexible_type& v1,
-                            const flexible_type& v2) const { 
-    if (v1.get_type() == flex_type_enum::VECTOR || 
+                            const flexible_type& v2) const {
+    if (v1.get_type() == flex_type_enum::VECTOR ||
         v2.get_type() == flex_type_enum::VECTOR) {
       // First or last may be None.
       if (v1.get_type() == flex_type_enum::VECTOR) {
@@ -97,9 +97,9 @@ class zero_fill : public interpolator_value {
       } else {
         return flexible_type(flex_vec(v2.size(), 0));
       }
-    } else if (((v1.get_type() == flex_type_enum::INTEGER) || 
-                 (v1.get_type() == flex_type_enum::FLOAT))  && 
-        ((v2.get_type() == flex_type_enum::INTEGER) || 
+    } else if (((v1.get_type() == flex_type_enum::INTEGER) ||
+                 (v1.get_type() == flex_type_enum::FLOAT))  &&
+        ((v2.get_type() == flex_type_enum::INTEGER) ||
                  (v2.get_type() == flex_type_enum::FLOAT))) {
       return flexible_type(0);
     } else {
@@ -113,7 +113,7 @@ class forward_fill: public interpolator_value {
  public:
 
   bool support_type(flex_type_enum type) const {
-    return true; 
+    return true;
   }
 
   std::string name() const {
@@ -122,7 +122,7 @@ class forward_fill: public interpolator_value {
 
   flexible_type interpolate(const flexible_type& t,  const flexible_type& t1,
                             const flexible_type& t2, const flexible_type& v1,
-                            const flexible_type& v2) const { 
+                            const flexible_type& v2) const {
     return t1 <= t2 ? v1 : v2;
   }
 };
@@ -132,7 +132,7 @@ class nearest : public interpolator_value {
  public:
 
   bool support_type(flex_type_enum type) const {
-    return true; 
+    return true;
   }
 
   std::string name() const {
@@ -141,10 +141,10 @@ class nearest : public interpolator_value {
 
   flexible_type interpolate(const flexible_type& t,  const flexible_type& t1,
                             const flexible_type& t2, const flexible_type& v1,
-                            const flexible_type& v2) const { 
-    size_t del_t1 = t.get<flex_date_time>().posix_timestamp() 
+                            const flexible_type& v2) const {
+    size_t del_t1 = t.get<flex_date_time>().posix_timestamp()
                         - t1.get<flex_date_time>().posix_timestamp();
-    size_t del_t2 = t2.get<flex_date_time>().posix_timestamp() 
+    size_t del_t2 = t2.get<flex_date_time>().posix_timestamp()
                         -  t.get<flex_date_time>().posix_timestamp();
     return (del_t1 <= del_t2) ? v1 : v2;
   }
@@ -155,7 +155,7 @@ class backward_fill : public interpolator_value {
  public:
 
   bool support_type(flex_type_enum type) const {
-    return true; 
+    return true;
   }
 
   std::string name() const {
@@ -164,7 +164,7 @@ class backward_fill : public interpolator_value {
 
   flexible_type interpolate(const flexible_type& t,  const flexible_type& t1,
                             const flexible_type& t2, const flexible_type& v1,
-                            const flexible_type& v2) const { 
+                            const flexible_type& v2) const {
     return (t2 >= t1) ? v2 : v1;
   }
 };
@@ -174,7 +174,7 @@ class none_fill: public interpolator_value {
  public:
 
   bool support_type(flex_type_enum type) const {
-    return true; 
+    return true;
   }
 
   std::string name() const {
@@ -183,7 +183,7 @@ class none_fill: public interpolator_value {
 
   flexible_type interpolate(const flexible_type& t,  const flexible_type& t1,
                             const flexible_type& t2, const flexible_type& v1,
-                            const flexible_type& v2) const { 
+                            const flexible_type& v2) const {
     return FLEX_UNDEFINED;
   }
 };
@@ -193,8 +193,8 @@ class linear_interpolation : public interpolator_value {
  public:
 
   bool support_type(flex_type_enum type) const {
-    return (type == flex_type_enum::INTEGER) || 
-           (type == flex_type_enum::FLOAT) || 
+    return (type == flex_type_enum::INTEGER) ||
+           (type == flex_type_enum::FLOAT) ||
            (type == flex_type_enum::VECTOR);
   }
 
@@ -204,12 +204,12 @@ class linear_interpolation : public interpolator_value {
 
   flexible_type interpolate(const flexible_type& t,  const flexible_type& t1,
                             const flexible_type& t2, const flexible_type& v1,
-                            const flexible_type& v2) const { 
-    if ((((v1.get_type() == flex_type_enum::INTEGER) || 
-               (v1.get_type() == flex_type_enum::FLOAT))  && 
-         ((v2.get_type() == flex_type_enum::INTEGER) || 
+                            const flexible_type& v2) const {
+    if ((((v1.get_type() == flex_type_enum::INTEGER) ||
+               (v1.get_type() == flex_type_enum::FLOAT))  &&
+         ((v2.get_type() == flex_type_enum::INTEGER) ||
                 (v2.get_type() == flex_type_enum::FLOAT))) ||
-       ((v1.get_type() == flex_type_enum::VECTOR) && 
+       ((v1.get_type() == flex_type_enum::VECTOR) &&
           (v2.get_type() == flex_type_enum::VECTOR))) {
      const auto& _t  =  t.get<flex_date_time>();
      const auto& _t1 = t1.get<flex_date_time>();
@@ -226,16 +226,16 @@ class linear_interpolation : public interpolator_value {
   }
 
   flex_type_enum set_input_type(flex_type_enum type) {
-    if ((type == flex_type_enum::INTEGER) || (type == flex_type_enum::FLOAT)) { 
+    if ((type == flex_type_enum::INTEGER) || (type == flex_type_enum::FLOAT)) {
       return flex_type_enum::FLOAT;
     } else if (type == flex_type_enum::VECTOR) {
       return flex_type_enum::VECTOR;
     } else {
       DASSERT_TRUE(false);
-    } 
+    }
   }
 };
-           
+
 
 /**
  * Helper function to convert string interpolation operators to the built-in
@@ -243,7 +243,7 @@ class linear_interpolation : public interpolator_value {
  */
 EXPORT inline std::shared_ptr<interpolator_value> get_builtin_interpolator(const
     std::string& fill_method) {
-  std::shared_ptr<interpolator_value> interpolation_fn; 
+  std::shared_ptr<interpolator_value> interpolation_fn;
   if (fill_method == "__builtin__zero__") {
     interpolation_fn.reset(new zero_fill());
   } else if (fill_method == "__builtin__nearest__") {

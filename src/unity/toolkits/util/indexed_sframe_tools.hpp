@@ -15,7 +15,7 @@ namespace turi {
 class flexible_type;
 template <typename T> class sarray;
 
-/** 
+/**
  * \ingroup toolkit_util
  * Constructs a vector of the unique values present in an sframe
  *  column having integer type.  The resulting vector is in sorted order,
@@ -24,14 +24,14 @@ template <typename T> class sarray;
  */
 std::vector<size_t> get_unique_values(std::shared_ptr<sarray<flexible_type> > indexed_column);
 
-/** 
+/**
  * \ingroup toolkit_util
  * Convenience function: Same as get_unique_values, but returns the
  *  result as an sarray.
  */
 std::shared_ptr<sarray<flexible_type> > make_unique(std::shared_ptr<sarray<flexible_type> > indexed_column);
 
-/** 
+/**
  * \ingroup toolkit_util
  * Creates an in-memory group lookup table from one integer column to
  * another.  In this representation, all the items in one column

@@ -278,7 +278,7 @@ toolkit_function_response_type get_model_fields(toolkit_function_invocation& inv
 
 /**
  * This function is used to backtrack the "parent" for each vertex so that the
- * shortest path for the vertex can be queried. 
+ * shortest path for the vertex can be queried.
  */
 std::vector<variant_type> _shortest_path_traverse_function(std::map<std::string, flexible_type>& src,
                                                            std::map<std::string, flexible_type>& edge,
@@ -289,7 +289,7 @@ std::vector<variant_type> _shortest_path_traverse_function(std::map<std::string,
     src["__parent__"] = src["row_id"];
   }
   if (dst["distance"] == src["distance"] + edge[weight_field]) {
-    dst["__parent__"] = std::max((flex_int)dst["__parent__"], 
+    dst["__parent__"] = std::max((flex_int)dst["__parent__"],
                                  (flex_int)src["row_id"]);
   }
   return {to_variant(src), to_variant(edge), to_variant(dst)};
@@ -297,7 +297,7 @@ std::vector<variant_type> _shortest_path_traverse_function(std::map<std::string,
 
 
 /**
- * Compute the shortest path between a set of vertices A, and a set of 
+ * Compute the shortest path between a set of vertices A, and a set of
  * vertices B. In other words, find the shortest path between any vertex in A
  * and any vertex B. Will return all the shortest paths of the same length.
  */
@@ -363,12 +363,12 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
   std::vector<vertex_data> vertices(g.num_vertices());
 
   // load all the vertex data into memory
-  {  
+  {
     parallel_for(0, g.get_num_partitions(),
                  [&](size_t segid) {
                   auto& vertex_frame = g.vertex_partition(segid);
                   auto reader = vertex_frame.get_reader(1);
-                   for(auto iter = reader->begin(0); 
+                   for(auto iter = reader->begin(0);
                        iter != reader->end(0);
                        ++iter) {
                      auto numeric_id = (*iter)[numeric_id_idx];
@@ -406,7 +406,7 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
 
 
   sgraph_compute::sgraph_engine<flexible_type> ga;
-  
+
   sgraph_compute::triple_apply_fn_type apply_fn =
       [&](sgraph_compute::edge_scope& scope) {
         double weight = (weight_idx == (size_t)(-1)) ? 1.0 : (double)(scope.edge()[weight_idx]);
@@ -423,10 +423,10 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
         if (source.distance > 0 && dest.distance >= 0) {
           // source propagation
           /*
-           * logprogress_stream 
-           *     << "Source Propagation: "  
+           * logprogress_stream
+           *     << "Source Propagation: "
            *     << source.id << ":" << source.distance
-           *     << " --> " 
+           *     << " --> "
            *     << dest.id << ":" << dest.distance << std::endl;
            */
           double new_cost = source.distance + weight;
@@ -440,7 +440,7 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
         }
         else if (dest.distance < 0 && source.distance <= 0) {
           // dest propagation. distances are negated and go downwards
-          // be careful of the signs of the compareisons 
+          // be careful of the signs of the compareisons
           double new_cost = dest.distance - weight;
           if (source.distance == 0 ||
               source.distance < new_cost) {
@@ -460,7 +460,7 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
           bool path_found_before = false;
           paths_discovered_lock.lock();
           auto paths_discovered_iter = paths_discovered.find(edge_pair);
-          if (paths_discovered_iter != paths_discovered.end() && 
+          if (paths_discovered_iter != paths_discovered.end() &&
               paths_discovered_iter->second <= path_cost) {
             // we found the exact entry with an as good or better path listed.
             path_found_before = true;
@@ -477,7 +477,7 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
                 outpath.push_back(x.id);
               }
               else break;
-            } 
+            }
 
             flex_list target_path;
             x = dest;
@@ -488,13 +488,13 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
                 target_path.push_back(x.id);
               }
               else break;
-            } 
-            
+            }
+
             std::vector<flexible_type> path(outpath.rbegin(), outpath.rend());
             path.insert(path.end(), target_path.begin(), target_path.end());
             /*
-             * logprogress_stream << "Discovering path of cost " << path_cost 
-             *                    << " meeting at " 
+             * logprogress_stream << "Discovering path of cost " << path_cost
+             *                    << " meeting at "
              *                    << source.id << " " << dest.id << std::endl;
              */
             shortest_paths_accumulated_lock.lock();
@@ -520,7 +520,7 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
       log_and_throw(std::string("Toolkit cancelled by user."));
     }
     num_changed = 0;
-    sgraph_compute::triple_apply(g, apply_fn, std::vector<std::string>(), 
+    sgraph_compute::triple_apply(g, apply_fn, std::vector<std::string>(),
                                  std::vector<std::string>());
     logprogress_stream << "Num vertices updated: "  << num_changed.load() << std::endl;
     if (num_changed == 0) {
@@ -531,12 +531,12 @@ std::vector<flexible_type> _all_shortest_paths(std::shared_ptr<unity_sgraph> sou
       size_t acceleration_changes = 0;
       for (size_t i = 0;i < vertices.size(); ++i) {
         if (vertices[i].parent != -1) {
-          if (vertices[i].distance > 0 && 
+          if (vertices[i].distance > 0 &&
               vertices[i].distance > vertices[vertices[i].parent].distance + vertices[i].parent_weight) {
             vertices[i].distance = vertices[vertices[i].parent].distance + vertices[i].parent_weight;
             ++acceleration_changes;
           }
-          else if (vertices[i].distance < 0 && 
+          else if (vertices[i].distance < 0 &&
                    vertices[i].distance < vertices[vertices[i].parent].distance - vertices[i].parent_weight) {
             vertices[i].distance = vertices[vertices[i].parent].distance - vertices[i].parent_weight;
             ++acceleration_changes;
@@ -575,7 +575,7 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
 
   REGISTER_NAMED_FUNCTION("_toolkits.graph.sssp.shortest_path_traverse_function",
                           _shortest_path_traverse_function, "src", "edge", "dst", "source_vid", "weight_field");
-  REGISTER_DOCSTRING(_shortest_path_traverse_function, 
+  REGISTER_DOCSTRING(_shortest_path_traverse_function,
                      "Computes for each vertex, it's parent vertex (i.e. the shortest path "
                      "originating from the source vertex must reach the current vertex "
                      "via the parent vertex.");
@@ -583,7 +583,7 @@ EXPORT std::vector<toolkit_function_specification> get_toolkit_function_registra
   REGISTER_NAMED_FUNCTION("_toolkits.graph.sssp.all_shortest_paths",
                           _all_shortest_paths, "graph", "sources", "dests", "weight_field");
 
-  REGISTER_DOCSTRING(_all_shortest_paths, 
+  REGISTER_DOCSTRING(_all_shortest_paths,
                  "Compute the shortest path between a set of vertices A, and a set of "
                  "vertices B. In other words, find the shortest path between any vertex in A "
                  "and any vertex B. Will return all the shortest paths of the same length."

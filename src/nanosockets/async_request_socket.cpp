@@ -88,7 +88,7 @@ int async_request_socket::request_master(zmq_msg_vector& msgs,
       if (rc != 0 && receive_poller && receive_poller() == false) break;
       if (rc != 0 && timeout > 0 && ti.current_time() > timeout) break;
     } while(rc == EAGAIN);
-  } 
+  }
   // restore available socket
   lock.lock();
   available.push_back(wait_socket);
@@ -115,7 +115,7 @@ int async_request_socket::create_socket(size_t i) {
       print_zmq_error("Unexpected error on connection");
       return rc;
     }
-  } 
+  }
   return 0;
 }
 

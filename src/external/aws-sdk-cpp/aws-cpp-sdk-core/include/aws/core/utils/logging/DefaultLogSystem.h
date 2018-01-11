@@ -56,7 +56,7 @@ namespace Aws
                 virtual ~DefaultLogSystem();
 
                 /**
-                 * Structure containing semaphores, queue etc... 
+                 * Structure containing semaphores, queue etc...
                  */
                 struct LogSynchronizationData
                 {

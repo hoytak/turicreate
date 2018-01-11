@@ -22,7 +22,7 @@ class object_factory_base {
   /**
    * Creates an object with type "objectname" on the server
    * and returns the object ID of the object
-   */ 
+   */
   virtual size_t make_object(std::string objectname) = 0;
 
   /**
@@ -47,7 +47,7 @@ class object_factory_base {
 
   /**
    * Takes a list of active objects on the client side and garbage collects
-   * the objects on the server that are now unused by the client. 
+   * the objects on the server that are now unused by the client.
    *
    * If active_list is true, the object_ids refer to the list of objects that
    * are still active: in other words, the server should delete any objects that

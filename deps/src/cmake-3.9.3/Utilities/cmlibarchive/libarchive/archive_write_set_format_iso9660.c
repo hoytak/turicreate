@@ -652,11 +652,11 @@ struct iso_option {
 #define VOLUME_IDENTIFIER_SIZE		32
 
 	/*
-	 * Usage  : !zisofs [DEFAULT] 
+	 * Usage  : !zisofs [DEFAULT]
 	 *        :    Disable to generate RRIP 'ZF' extension.
 	 *        : zisofs
 	 *        :    Make files zisofs file and generate RRIP 'ZF'
- 	 *        :    extension. So you do not need mkzftree utility
+	 *        :    extension. So you do not need mkzftree utility
 	 *        :    for making zisofs.
 	 *        :    When the file size is less than one Logical Block
 	 *        :    size, that file will not zisofs'ed since it does
@@ -689,7 +689,7 @@ struct iso9660 {
 	uint64_t		 bytes_remaining;
 	int			 need_multi_extent;
 
-	/* Temporary string buffer for Joliet extension. */ 
+	/* Temporary string buffer for Joliet extension. */
 	struct archive_string	 utf16be;
 	struct archive_string	 mbs;
 
@@ -1369,9 +1369,9 @@ iso9660_options(struct archive_write *a, const char *key, const char *value)
 			    !(value[0] >= '0' && value[0] <= '9') ||
 			    value[1] != '\0')
 				goto invalid_value;
-                	iso9660->zisofs.compression_level = value[0] - '0';
+			iso9660->zisofs.compression_level = value[0] - '0';
 			iso9660->opt.compression_level = 1;
-                	return (ARCHIVE_OK);
+			return (ARCHIVE_OK);
 #else
 			archive_set_error(&a->archive,
 			    ARCHIVE_ERRNO_MISC,
@@ -1976,7 +1976,7 @@ iso9660_close(struct archive_write *a)
 	}
 
 	/* Setup the locations of all file contents. */
- 	isoent_setup_file_location(iso9660, blocks);
+	isoent_setup_file_location(iso9660, blocks);
 	blocks += iso9660->total_file_block;
 	if (iso9660->opt.boot && iso9660->opt.boot_info_table) {
 		ret = setup_boot_information(a);
@@ -3061,8 +3061,8 @@ set_directory_record_rr(unsigned char *bp, int dr_len,
 					 *    | 08 | 00 | ROOT component.
 					 *    +----+----+ ("/")
 					 *
-				 	 * Root component has to appear
-				 	 * at the first component only.
+					 * Root component has to appear
+					 * at the first component only.
 					 */
 					if (nc != NULL) {
 						cf = nc++;
@@ -7026,13 +7026,13 @@ isoent_make_path_table(struct archive_write *a)
 			return (r);
 	}
 
- 	/* Update nlink. */
+	/* Update nlink. */
 	isofile_connect_hardlink_files(iso9660);
 
 	/* Step 1.
 	 * - Renew a value of the depth of that directories.
 	 * - Resolve hardlinks.
- 	 * - Convert pathnames to ISO9660 name or UCS2(joliet).
+	 * - Convert pathnames to ISO9660 name or UCS2(joliet).
 	 * - Sort files by each directory.
 	 */
 	r = isoent_traverse_tree(a, &(iso9660->primary));
@@ -7883,7 +7883,7 @@ zisofs_extract_init(struct archive_write *a, struct zisofs_extract *zisofs,
 		    + zisofs->block_pointers_avail, p, xsize);
 		zisofs->block_pointers_avail += xsize;
 		avail -= xsize;
-	    	if (zisofs->block_pointers_avail
+		if (zisofs->block_pointers_avail
 		    == zisofs->block_pointers_size) {
 			/* We've got all block pointers and initialize
 			 * related variables.	*/
@@ -8113,7 +8113,7 @@ zisofs_rewind_boot_file(struct archive_write *a)
 	free(rbuff);
 	free(zext.block_pointers);
 	if (zext.stream_valid && inflateEnd(&(zext.stream)) != Z_OK) {
-        	archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
+		archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
 		    "Failed to clean up compressor");
 		ret = ARCHIVE_FATAL;
 	}
@@ -8161,4 +8161,3 @@ zisofs_free(struct archive_write *a)
 }
 
 #endif /* HAVE_ZLIB_H */
-

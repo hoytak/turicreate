@@ -13,7 +13,7 @@
 #include <sframe_query_engine/operators/operator_properties.hpp>
 #include <flexible_type/flexible_type.hpp>
 
-#include <array> 
+#include <array>
 
 namespace turi {
 namespace query_eval {
@@ -112,9 +112,9 @@ class opt_append_on_source : public opt_append_transform {
                                                                 new_sf.num_rows());
       opt_manager->replace_node(n, new_pnode);
       return true;
-    } 
+    }
 
-    // Try append as sarray 
+    // Try append as sarray
     auto sarray_append_result = try_sarray_append(n);
     if (sarray_append_result.first) {
       auto& new_sa = sarray_append_result.second;

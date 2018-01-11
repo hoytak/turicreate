@@ -12,7 +12,7 @@
 
 namespace cppipc {
 
-// Set the interrupted flag and take the currently running command as 
+// Set the interrupted flag and take the currently running command as
 // the one we want to cancel
 void cancel_handler(int param) {
   console_cancel_handler::get_instance().set_cancel_flag(true);

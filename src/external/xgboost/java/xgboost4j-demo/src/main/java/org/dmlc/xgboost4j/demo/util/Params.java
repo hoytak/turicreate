@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -28,18 +28,18 @@ import java.util.AbstractMap;
  */
 public class Params implements Iterable<Entry<String, Object>>{
     List<Entry<String, Object>> params = new ArrayList<>();
-    
+
     /**
      * put param key-value pair
      * @param key
-     * @param value 
+     * @param value
      */
     public void put(String key, Object value) {
         params.add(new AbstractMap.SimpleEntry<>(key, value));
     }
-    
+
     @Override
-    public String toString(){ 
+    public String toString(){
         String paramsInfo = "";
         for(Entry<String, Object> param : params) {
             paramsInfo += param.getKey() + ":" + param.getValue() + "\n";

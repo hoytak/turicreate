@@ -270,7 +270,7 @@ void internalJSONNode::Set(const json_string & val) json_nothrow {
 	   _value._number = (json_number)val;
 	   #if(defined(JSON_CASTABLE) || !defined(JSON_LESS_MEMORY) || defined(JSON_WRITE_PRIORITY))
 		  _string = NumberToString::_itoa<json_int_t>(val);
-	   #else 
+	   #else
 		  clearString(_string);
 	   #endif
 	   SetFetched(true);
@@ -282,7 +282,7 @@ void internalJSONNode::Set(const json_string & val) json_nothrow {
 	   _value._number = val;
 	   #if(defined(JSON_CASTABLE) || !defined(JSON_LESS_MEMORY) || defined(JSON_WRITE_PRIORITY))
 		  _string = NumberToString::_ftoa(val);
-	   #else 
+	   #else
 		  clearString(_string);
 	   #endif
 	   SetFetched(true);
@@ -609,7 +609,7 @@ internalJSONNode::operator bool() const json_nothrow {
 		  return (long)_value._number;
 	   #else
 		  JSON_ASSERT(type() == JSON_NUMBER, json_global(ERROR_UNDEFINED) + JSON_TEXT("(long long)"));
-		  #ifdef LONG_LONG_MAX			 
+		  #ifdef LONG_LONG_MAX
 			 JSON_ASSERT(_value._number < LONG_LONG_MAX, _string + json_global(ERROR_UPPER_RANGE) + JSON_TEXT("long long"));
 		  #elif defined(LLONG_MAX)
 			 JSON_ASSERT(_value._number < LLONG_MAX, _string + json_global(ERROR_UPPER_RANGE) + JSON_TEXT("long long"));
@@ -661,16 +661,16 @@ internalJSONNode::operator bool() const json_nothrow {
 	   #endif
     }
 #endif
-	
+
 	/*
 	 These functions are to allow allocation to be completely controlled by the callbacks
 	 */
-	
+
 #ifdef JSON_MEMORY_POOL
 	#include "JSONMemoryPool.h"
 	static memory_pool<INTERNALNODEPOOL> json_internal_mempool;
 #endif
-	
+
 void internalJSONNode::deleteInternal(internalJSONNode * ptr) json_nothrow {
 	#ifdef JSON_MEMORY_POOL
 		ptr -> ~internalJSONNode();
@@ -682,7 +682,7 @@ void internalJSONNode::deleteInternal(internalJSONNode * ptr) json_nothrow {
 		delete ptr;
 	#endif
 }
-	
+
 internalJSONNode * internalJSONNode::newInternal(char mytype) {
 	#ifdef JSON_MEMORY_POOL
 		return new((internalJSONNode*)json_internal_mempool.allocate()) internalJSONNode(mytype);
@@ -692,7 +692,7 @@ internalJSONNode * internalJSONNode::newInternal(char mytype) {
 		return new internalJSONNode(mytype);
 	#endif
 }
-	
+
 #ifdef JSON_READ_PRIORITY
 internalJSONNode * internalJSONNode::newInternal(const json_string & unparsed) {
 	#ifdef JSON_MEMORY_POOL
@@ -703,7 +703,7 @@ internalJSONNode * internalJSONNode::newInternal(const json_string & unparsed) {
 		return new internalJSONNode(unparsed);
 	#endif
 }
-	
+
 internalJSONNode * internalJSONNode::newInternal(const json_string & name_t, const json_string & value_t) {
 	#ifdef JSON_MEMORY_POOL
 		return new((internalJSONNode*)json_internal_mempool.allocate()) internalJSONNode(name_t, value_t);
@@ -713,9 +713,9 @@ internalJSONNode * internalJSONNode::newInternal(const json_string & name_t, con
 		return new internalJSONNode(name_t, value_t);
 	#endif
 }
-	
+
 #endif
-	
+
 internalJSONNode * internalJSONNode::newInternal(const internalJSONNode & orig) {
 	#ifdef JSON_MEMORY_POOL
 		return new((internalJSONNode*)json_internal_mempool.allocate()) internalJSONNode(orig);

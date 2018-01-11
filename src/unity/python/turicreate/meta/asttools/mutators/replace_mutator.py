@@ -17,7 +17,7 @@ from ...asttools.visitors import Visitor
 
 class Replacer(Visitor):
     '''
-    Visitor to replace nodes. 
+    Visitor to replace nodes.
     '''
 
     def __init__(self, old, new):
@@ -49,12 +49,12 @@ class Replacer(Visitor):
 def replace_nodes(root, old, new):
 
     '''
-    Replace the old node with the new one. 
+    Replace the old node with the new one.
     Old must be an indirect child of root
-     
+
     :param root: ast node that contains an indirect reference to old
     :param old: node to replace
-    :param new: node to replace `old` with 
+    :param new: node to replace `old` with
     '''
 
     rep = Replacer(old, new)
@@ -89,4 +89,3 @@ class NodeRemover(Visitor):
                 pass
 
         return
-

@@ -42,21 +42,21 @@ namespace CoreML {
     FeatureType::FeatureType(const Specification::FeatureType& wrapped)
     : m_type(std::make_shared<Specification::FeatureType>(wrapped)) {
     }
-    
+
     // simple types
 #define WRAP_SIMPLE_TYPE(T, U) \
 FeatureType FeatureType::T() { return FeatureType(U); }
-    
+
     WRAP_SIMPLE_TYPE(Int64, MLFeatureTypeType_int64Type)
     WRAP_SIMPLE_TYPE(String, MLFeatureTypeType_stringType)
     WRAP_SIMPLE_TYPE(Image, MLFeatureTypeType_imageType) /* TODO image is not simple type */
     WRAP_SIMPLE_TYPE(Double, MLFeatureTypeType_doubleType)
-    
+
     // parametric types
     FeatureType FeatureType::Array(const std::vector<uint64_t> shape, MLArrayDataType dataType) {
         FeatureType out(MLFeatureTypeType_multiArrayType);
         Specification::ArrayFeatureType *params = out->mutable_multiarraytype();
-        
+
         for (uint64_t s : shape) {
             params->add_shape(s);
         }
@@ -67,12 +67,12 @@ FeatureType FeatureType::T() { return FeatureType(U); }
     FeatureType FeatureType::Array(const std::vector<uint64_t> shape) {
         return Array(shape,MLArrayDataTypeDOUBLE);
     }
-    
+
     FeatureType FeatureType::Dictionary(MLDictionaryFeatureTypeKeyType keyType) {
         FeatureType out(MLFeatureTypeType_dictionaryType);
 
         Specification::DictionaryFeatureType *params = out->mutable_dictionarytype();
-        
+
         switch (keyType) {
             case MLDictionaryFeatureTypeKeyType_int64KeyType:
                 params->mutable_int64keytype();
@@ -86,32 +86,32 @@ FeatureType FeatureType::T() { return FeatureType(U); }
 
         return out;
     }
-    
+
     // operators
     const Specification::FeatureType& FeatureType::operator*() const {
         return *m_type;
     }
-    
+
     Specification::FeatureType& FeatureType::operator*() {
         return *m_type;
     }
-    
+
     const Specification::FeatureType* FeatureType::operator->() const {
         return m_type.get();
     }
-    
+
     Specification::FeatureType* FeatureType::operator->() {
         return m_type.get();
     }
-    
+
     bool FeatureType::operator==(const FeatureType& other) const {
         return *m_type == *other.m_type;
     }
-    
+
     bool FeatureType::operator!=(const FeatureType& other) const {
         return !(*this == other);
     }
-    
+
     static void dataTypeToString(std::stringstream& ss, Specification::FeatureType::TypeCase tag) {
         switch (tag) {
             case Specification::FeatureType::kMultiArrayType:
@@ -134,8 +134,8 @@ FeatureType FeatureType::T() { return FeatureType(U); }
                 break;
         }
     }
-    
-    
+
+
     static void keyTypeToString(std::stringstream& ss, Specification::DictionaryFeatureType::KeyTypeCase tag) {
         switch (tag) {
             case Specification::DictionaryFeatureType::KEYTYPE_NOT_SET:
@@ -149,12 +149,12 @@ FeatureType FeatureType::T() { return FeatureType(U); }
                 break;
         }
     }
-    
+
     // methods
     std::string FeatureType::toString() const {
         std::stringstream ss;
         Specification::FeatureType::TypeCase tag = m_type->Type_case();
-        
+
         switch (tag) {
             case Specification::FeatureType::kMultiArrayType:
             {
@@ -176,7 +176,7 @@ FeatureType FeatureType::T() { return FeatureType(U); }
                         ss << "Invalid";
                         break;
                 }
-                
+
                 for (int i=0; i<params.shape_size(); i++) {
                     ss << ",";
                     ss << params.shape(i);
@@ -221,11 +221,11 @@ FeatureType FeatureType::T() { return FeatureType(U); }
             }
             default:
                 dataTypeToString(ss, tag);
-                
+
         }
         return ss.str() + (m_type->isoptional() ? "?" : "");
     }
-    
+
     Specification::FeatureType* FeatureType::allocateCopy() {
         // we call new here, but don't free!
         // this method should only be called immediately prior to passing the

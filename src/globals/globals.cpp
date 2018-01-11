@@ -29,7 +29,7 @@ struct value_and_value_check {
   value_and_value_check& operator=(const value_and_value_check<T>&) = default;
   value_and_value_check& operator=(value_and_value_check<T>&&) = default;
 
-  value_and_value_check(T* value, std::function<bool(T)> value_check): 
+  value_and_value_check(T* value, std::function<bool(T)> value_check):
       value(value), value_check(value_check) { }
 
   T* value = NULL;
@@ -74,7 +74,7 @@ struct get_value_visitor: public boost::static_visitor<flexible_type> {
 struct set_value_visitor: public boost::static_visitor<bool> {
   flexible_type new_value;
   bool operator()(value_and_value_check<double>& val) const {
-    if (new_value.get_type() == flex_type_enum::INTEGER || 
+    if (new_value.get_type() == flex_type_enum::INTEGER ||
         new_value.get_type() == flex_type_enum::FLOAT) {
       return val.set_value((double)new_value);
     } else {
@@ -82,7 +82,7 @@ struct set_value_visitor: public boost::static_visitor<bool> {
     }
   }
   bool operator()(value_and_value_check<int64_t>& val) const {
-    if (new_value.get_type() == flex_type_enum::INTEGER || 
+    if (new_value.get_type() == flex_type_enum::INTEGER ||
         new_value.get_type() == flex_type_enum::FLOAT) {
       return val.set_value((int64_t)new_value);
     } else {
@@ -151,8 +151,8 @@ std::map<std::string, size_t>& get_global_registry_map() {
   return global_registry_map;
 }
 
-register_global<double>::register_global(std::string name, 
-                             double* value, 
+register_global<double>::register_global(std::string name,
+                             double* value,
                              bool runtime_modifiable,
                              std::function<bool(double)> value_check) {
   if (get_global_registry_map().count(name)) {
@@ -161,21 +161,21 @@ register_global<double>::register_global(std::string name,
   }
   get_global_registry_map()[name] = get_global_registry().size();
   get_global_registry().push_back(
-      global_value{name, 
-                   value_and_value_check<double>{value, value_check}, 
+      global_value{name,
+                   value_and_value_check<double>{value, value_check},
                    runtime_modifiable});
   if (runtime_modifiable) {
-    logstream(LOG_INFO) << "Registering runtime modifiable configuration variable " << name 
+    logstream(LOG_INFO) << "Registering runtime modifiable configuration variable " << name
                         << " = " << (*value) << " (double)" << std::endl;
   } else {
-    logstream(LOG_INFO) << "Registering environment modifiable configuration variable " << name 
+    logstream(LOG_INFO) << "Registering environment modifiable configuration variable " << name
                         << " = " << (*value) << " (double)" << std::endl;
   }
 }
 
 
-register_global<int64_t>::register_global(std::string name, 
-                             int64_t* value, 
+register_global<int64_t>::register_global(std::string name,
+                             int64_t* value,
                              bool runtime_modifiable,
                              std::function<bool(int64_t)> value_check) {
   if (get_global_registry_map().count(name)) {
@@ -184,20 +184,20 @@ register_global<int64_t>::register_global(std::string name,
   }
   get_global_registry_map()[name] = get_global_registry().size();
   get_global_registry().push_back(
-      global_value{name, 
-                   value_and_value_check<int64_t>{value, value_check}, 
+      global_value{name,
+                   value_and_value_check<int64_t>{value, value_check},
                    runtime_modifiable});
   if (runtime_modifiable) {
-    logstream(LOG_INFO) << "Registering runtime modifiable configuration variable " << name 
+    logstream(LOG_INFO) << "Registering runtime modifiable configuration variable " << name
                         << " = " << (*value) << " (int64_t)" << std::endl;
   } else {
-    logstream(LOG_INFO) << "Registering environment modifiable configuration variable " << name 
+    logstream(LOG_INFO) << "Registering environment modifiable configuration variable " << name
                         << " = " << (*value) << " (int64_t)" << std::endl;
   }
 }
 
-register_global<std::string>::register_global(std::string name, 
-                             std::string* value, 
+register_global<std::string>::register_global(std::string name,
+                             std::string* value,
                              bool runtime_modifiable,
                              std::function<bool(std::string)> value_check) {
   if (get_global_registry_map().count(name)) {
@@ -211,14 +211,14 @@ register_global<std::string>::register_global(std::string name,
   }
   get_global_registry_map()[name] = get_global_registry().size();
   get_global_registry().push_back(
-      global_value{name, 
-                   value_and_value_check<std::string>{value, value_check}, 
+      global_value{name,
+                   value_and_value_check<std::string>{value, value_check},
                    runtime_modifiable});
   if (runtime_modifiable) {
-    logstream(LOG_INFO) << "Registering runtime modifiable configuration variable " << name 
+    logstream(LOG_INFO) << "Registering runtime modifiable configuration variable " << name
                         << " = " << (*value) << " (string)" << std::endl;
   } else {
-    logstream(LOG_INFO) << "Registering environment modifiable configuration variable " << name 
+    logstream(LOG_INFO) << "Registering environment modifiable configuration variable " << name
                         << " = " << (*value) << " (string)" << std::endl;
   }
 }
@@ -275,16 +275,16 @@ void initialize_globals_from_environment(std::string root_path) {
       set_value_from_string_visitor visitor;
       visitor.new_value = *envval;
       if (i.value.apply_visitor(visitor)) {
-        logstream(LOG_INFO) << "Setting configuration variable " << i.name 
+        logstream(LOG_INFO) << "Setting configuration variable " << i.name
                             << " to " << visitor.new_value << std::endl;
       } else {
-        logstream(LOG_EMPH) << "Cannot set configuration variable " << i.name 
+        logstream(LOG_EMPH) << "Cannot set configuration variable " << i.name
                             << " to " << visitor.new_value << std::endl;
       }
     }
   }
 
-  // these two special variables cannot be environment overidden, 
+  // these two special variables cannot be environment overidden,
   // so set them  last
   GLOBALS_MAIN_PROCESS_PATH = root_path;
 //   logstream(LOG_INFO) << "Main process path: " << GLOBALS_MAIN_PROCESS_PATH << std::endl;

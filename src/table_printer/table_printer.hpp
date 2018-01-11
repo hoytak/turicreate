@@ -195,7 +195,7 @@ struct progress_time {
  * -- a row is recorded in the sframe every track_interval calls to
  * one of the progress printing calls.  It may be turned off by
  * setting track_interval to be 0.
- * 
+ *
  */
 class table_printer {
 
@@ -226,8 +226,8 @@ class table_printer {
    */
   void set_output_stream(std::ostream& out_stream) {
     alt_output_stream = &out_stream;
-  }  
-  
+  }
+
   /** Prints the header.
    *
    *  Example output:
@@ -280,10 +280,10 @@ class table_printer {
 
   /** Same as print row but take a vector of one particular type.  May
    *  be flexible type. **/
-  template <typename T> 
+  template <typename T>
   void print_row(const std::vector<T>& row_string) const {
     ASSERT_EQ(row_string.size(), format.size());
-    
+
     std::ostringstream ss;
 
     ss << '|';
@@ -301,15 +301,15 @@ class table_printer {
     double time_ms = lowres_tt.ms();
     return (time_ms >= next_timed_print);
   }
-  
+
   /** Print a row associated with the progress of an algorithm, but
-   *  print at most once a second. 
+   *  print at most once a second.
    */
   template <typename... Args>
   inline GL_HOT_INLINE void print_timed_progress_row(const Args&... columns) {
 
     double time_ms = lowres_tt.ms();
-    
+
     if(time_ms >= next_timed_print) {
       std::lock_guard<mutex> pl_guard(print_lock);
 
@@ -323,11 +323,11 @@ class table_printer {
         next_timed_print += 1000.0 * MIN_SECONDS_BETWEEN_TICK_PRINTS;
 
         // If that wasn't good enough
-        if(next_timed_print < time_ms) 
+        if(next_timed_print < time_ms)
           next_timed_print = time_ms + 1000.0 * MIN_SECONDS_BETWEEN_TICK_PRINTS;
       }
 
-      _print_progress_row(columns...); 
+      _print_progress_row(columns...);
 
       // Turn off the tracking if people don't want it, i.e. by
       // passing 0 as the track interval to the constructor.
@@ -355,12 +355,12 @@ class table_printer {
   inline GL_HOT_INLINE void print_progress_row(size_t tick, const Args&... columns) {
 
     size_t ticks_so_far = ++num_ticks_so_far;
-    
+
     if(register_tick(tick, ticks_so_far)) {
       std::lock_guard<mutex> pl_guard(print_lock);
-      _print_progress_row(columns...); 
+      _print_progress_row(columns...);
     }
-    
+
     if(((ticks_so_far - 1) % track_interval) == 0) {
       _track_progress(columns...);
     }
@@ -381,21 +381,21 @@ class table_printer {
     for (const auto& c : _cols) {
       cols.push_back(std::string(c));
     }
-    
+
     size_t ticks_so_far = ++num_ticks_so_far;
-    
+
     if(register_tick(tick, ticks_so_far)) {
       std::lock_guard<mutex> pl_gaurd(print_lock);
       print_row(cols);
     }
-    
+
     if(((ticks_so_far - 1) % track_interval) == 0) {
-      track_progress_row(cols); 
+      track_progress_row(cols);
     }
   }
 
 
-  
+
   /** Returns the elapsed time since class creation.  This is the
    *  value used if progress_time() is passed in to print_row.
    */
@@ -457,7 +457,7 @@ private:
   };
 
  private:
-  
+
   /** Do the printing (in one place, since it's line origin is printed
    *  in debug mode.
    */
@@ -474,39 +474,39 @@ private:
   std::vector<std::pair<std::string, size_t> > format;
 
   timer tt;
-  rdtsc_time lowres_tt; 
+  rdtsc_time lowres_tt;
 
   ////////////////////////////////////////
   // Controlling the output printing
 
-  std::ostream* alt_output_stream = nullptr; 
-  
+  std::ostream* alt_output_stream = nullptr;
+
   //////////////////////////////////////////
   //  Controlling interval printing of things.
 
   atomic<double> time_of_first_tick;
-  atomic<size_t> value_of_first_tick; 
-  
-  atomic<size_t> num_ticks_so_far; 
+  atomic<size_t> value_of_first_tick;
+
+  atomic<size_t> num_ticks_so_far;
   atomic<size_t> next_tick_to_print;
-  size_t tick_interval = 0; 
-  
+  size_t tick_interval = 0;
+
   mutex print_lock;
   mutex tick_interval_lock;
 
 
-  double next_timed_print = -1; 
+  double next_timed_print = -1;
 
-  
-  /**  The ticks_so_far thing is stored in the 
+
+  /**  The ticks_so_far thing is stored in the
    *
-   */ 
-  inline bool register_tick(size_t tick, size_t ticks_so_far) { 
+   */
+  inline bool register_tick(size_t tick, size_t ticks_so_far) {
 
     // RULES:
     //
-    //   1. Always print the first 5 ticks seen. 
-    // 
+    //   1. Always print the first 5 ticks seen.
+    //
     //   2. On the fifth row printed, choose a schedule based on how
     //   long those took.  After that, some intervals will be always
     //   printed, but then the next_tick_to_print option will
@@ -515,30 +515,30 @@ private:
     if(ticks_so_far == 1) {
       value_of_first_tick = tick;
       time_of_first_tick = tt.current_time();
-      
+
       return true;
-      
+
     } else if(ticks_so_far < 5) {
       return true;
-    
+
     } else if (ticks_so_far == 5) {
 
-      // Make sure the ticks_so_far == 1 case has written this correctly. 
+      // Make sure the ticks_so_far == 1 case has written this correctly.
       while(time_of_first_tick == -1.0);
-      
-      tick_interval = set_up_time_printing_interval(tick); 
-      
-      // Set this to the next multiple of tick_interval after tick. 
+
+      tick_interval = set_up_time_printing_interval(tick);
+
+      // Set this to the next multiple of tick_interval after tick.
       size_t nttp = ( (tick + 1) + tick_interval);
       size_t rounded_nttp = nttp - nttp % tick_interval;
       if(rounded_nttp <= tick)
         rounded_nttp += tick_interval;
 
-      // This unlocks any other threads hung in the while loop in the >5 case. 
+      // This unlocks any other threads hung in the while loop in the >5 case.
       next_tick_to_print = rounded_nttp;
 
-      // Print this row. 
-      return true; 
+      // Print this row.
+      return true;
 
       // Now the typical case
     } else if(ticks_so_far > 5) {
@@ -549,19 +549,19 @@ private:
       }
 
       size_t next_tick = next_tick_to_print;
-      
+
       if(tick < next_tick) {
         return always_print(ticks_so_far - 1);
-        
+
       } else {
 
         DASSERT_GT(tick_interval, 0);
-        
-        std::lock_guard<mutex> til_gaurd(tick_interval_lock); 
+
+        std::lock_guard<mutex> til_gaurd(tick_interval_lock);
 
         if(tick < next_tick_to_print) {
-          return always_print(ticks_so_far - 1); 
-        } else { 
+          return always_print(ticks_so_far - 1);
+        } else {
 
           while(next_tick_to_print <= tick)
             next_tick_to_print += tick_interval;
@@ -572,14 +572,14 @@ private:
 
     }
 
-    return true; 
+    return true;
   }
 
   /**  Sets up the time interval at which things are printed.
    */
   size_t set_up_time_printing_interval(size_t tick);
-  
-  
+
+
   /** Returns true if the given tick should always be printed.  This
    *  prevents the common case of models going too quickly to actually print results
    *
@@ -628,7 +628,7 @@ private:
     track_progress_row(track_row_buffer);
   }
 
-  inline GL_HOT_NOINLINE void 
+  inline GL_HOT_NOINLINE void
   track_progress_row(const std::vector<flexible_type>& track_row_buffer) {
 
     size_t n = track_row_buffer.size();

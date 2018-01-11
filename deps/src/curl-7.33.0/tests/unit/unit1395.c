@@ -81,7 +81,3 @@ UNITTEST_START
   return fails;
 
 UNITTEST_STOP
-
-
-
-

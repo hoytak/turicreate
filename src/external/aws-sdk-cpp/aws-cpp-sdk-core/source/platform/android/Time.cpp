@@ -1,12 +1,12 @@
 /*
   * Copyright 2010-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-  * 
+  *
   * Licensed under the Apache License, Version 2.0 (the "License").
   * You may not use this file except in compliance with the License.
   * A copy of the License is located at
-  * 
+  *
   *  http://aws.amazon.com/apache2.0
-  * 
+  *
   * or in the "license" file accompanying this file. This file is distributed
   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
   * express or implied. See the License for the specific language governing
@@ -27,7 +27,7 @@ namespace Time
 
 // TODO: verify this is ok legally, push into separate file?
 
-// timegm doesn't exist for some forms of android.  Chromium has a substitute 
+// timegm doesn't exist for some forms of android.  Chromium has a substitute
 // implementation that we cut-and-paste here,
 // including the full license notice from Chromium
 
@@ -66,7 +66,7 @@ namespace Time
 
 // 32-bit Android has only timegm64() and not timegm().
 // We replicate the behaviour of timegm() when the result overflows time_t.
-time_t TimeGM(struct tm* const t) 
+time_t TimeGM(struct tm* const t)
 {
     // time_t is signed on Android.
     static const time_t kTimeMax = ~(1L << (sizeof(time_t) * CHAR_BIT - 1));
@@ -79,14 +79,14 @@ time_t TimeGM(struct tm* const t)
     return result;
 }
 
-#else 
+#else
 
 time_t TimeGM(struct tm* const t)
 {
     return timegm(t);
 }
 
-#endif 
+#endif
 
 void LocalTime(tm* t, std::time_t time)
 {

@@ -22,7 +22,7 @@ extern "C" {
 #endif
 namespace turi {
 namespace nanosockets {
-int SEND_TIMEOUT = 3000; 
+int SEND_TIMEOUT = 3000;
 int RECV_TIMEOUT = 7000;
 
 void set_send_timeout(int ms) {
@@ -43,30 +43,30 @@ void set_conservative_socket_parameters(int z_socket) {
   assert(rc == 0);
   rc = nn_setsockopt(z_socket, NN_SOL_SOCKET, NN_RCVMAXSIZE, &(rcvmaxsize), sizeof(rcvmaxsize));
   assert(rc == 0);
-  
+
 }
 
 /**
  * Given a string, returns a zeromq localhost tcp address (ex:
- * tcp://127.15.21.22:11111).  
+ * tcp://127.15.21.22:11111).
  *
  * On windows we don't get zeromq IPC sockets. Hence, the easiest thing to do
  * is to remap ipc sockets to tcp addresses.
  *
  * When the server is started with address=default mode, on *nix systems we
  * map to ipc://something or order. Instead, on windows systems
- * we must map to tcp://[arbitrary local IP] where there is optimally, 
+ * we must map to tcp://[arbitrary local IP] where there is optimally,
  * a 1-1 correspondence between the local IP and the PID.
- * 
+ *
  * So, here are the rules:
  * - We cannot generate any port number <= 1024
  * - Lets about 127.0.0.1 because too many stuff like to live there
- * - 127.0.0.0 is invalid. (network address) 
+ * - 127.0.0.0 is invalid. (network address)
  * - 127.255.255.255 is invalid (broadcast address)
  */
 std::string hash_string_to_tcp_address(const std::string& s) {
   std::string md5sum = turi::md5_raw(s);
-  // we get approximately 5 bytes of entropy (yes really somewhat less) 
+  // we get approximately 5 bytes of entropy (yes really somewhat less)
 
   unsigned char addr[4];
   addr[0] = 127;
@@ -86,7 +86,7 @@ std::string hash_string_to_tcp_address(const std::string& s) {
   }
 
   // ok generate the string
-  std::stringstream strm; 
+  std::stringstream strm;
   strm << "tcp://" << (int)(addr[0]) << "."
                    << (int)(addr[1]) << "."
                    << (int)(addr[2]) << "."

@@ -40,25 +40,25 @@ namespace Model
 
     void AddToNode(Aws::Utils::Xml::XmlNode& parentNode) const;
 
-    
+
     inline const Aws::Vector<ObjectIdentifier>& GetObjects() const{ return m_objects; }
 
-    
+
     inline void SetObjects(const Aws::Vector<ObjectIdentifier>& value) { m_objectsHasBeenSet = true; m_objects = value; }
 
-    
+
     inline void SetObjects(Aws::Vector<ObjectIdentifier>&& value) { m_objectsHasBeenSet = true; m_objects = value; }
 
-    
+
     inline Delete& WithObjects(const Aws::Vector<ObjectIdentifier>& value) { SetObjects(value); return *this;}
 
-    
+
     inline Delete& WithObjects(Aws::Vector<ObjectIdentifier>&& value) { SetObjects(value); return *this;}
 
-    
+
     inline Delete& AddObjects(const ObjectIdentifier& value) { m_objectsHasBeenSet = true; m_objects.push_back(value); return *this; }
 
-    
+
     inline Delete& AddObjects(ObjectIdentifier&& value) { m_objectsHasBeenSet = true; m_objects.push_back(value); return *this; }
 
     /**

@@ -14,4 +14,4 @@ make_boost_test(fast_power_test.cxx REQUIRES util logger random)
 
 make_boost_test(cityhash_tc.cxx REQUIRES util logger random flexible_type)
 make_boost_test(2d_sparse_parallel_array.cxx REQUIRES util logger random)
-make_boost_test(lru_test.cxx) 
+make_boost_test(lru_test.cxx)

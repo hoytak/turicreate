@@ -17,22 +17,22 @@ namespace archive_detail {
   /** Serializes a map */
   template <typename OutArcType, typename T, typename U>
   struct serialize_impl<OutArcType, boost::unordered_map<T,U>, false > {
-  static void exec(OutArcType& oarc, 
+  static void exec(OutArcType& oarc,
                    const boost::unordered_map<T,U>& vec){
-    serialize_iterator(oarc, 
+    serialize_iterator(oarc,
                        vec.begin(), vec.end(), vec.size());
   }
   };
 
   /** deserializes a map  */
-      
+
   template <typename InArcType, typename T, typename U>
   struct deserialize_impl<InArcType, boost::unordered_map<T,U>, false > {
   static void exec(InArcType& iarc, boost::unordered_map<T,U>& vec){
     vec.clear();
     // get the number of elements to deserialize
     size_t length = 0;
-    iarc >> length;    
+    iarc >> length;
     // iterate through and send to the output iterator
     for (size_t x = 0; x < length ; ++x){
       std::pair<T, U> v;
@@ -42,7 +42,7 @@ namespace archive_detail {
   }
   };
 
-} // archive_detail  
+} // archive_detail
 } // turicreate
 
 
@@ -55,22 +55,22 @@ namespace archive_detail {
   /** Serializes a map */
   template <typename OutArcType, typename T, typename U>
   struct serialize_impl<OutArcType, std::unordered_map<T,U>, false > {
-  static void exec(OutArcType& oarc, 
+  static void exec(OutArcType& oarc,
                    const std::unordered_map<T,U>& vec){
-    serialize_iterator(oarc, 
+    serialize_iterator(oarc,
                        vec.begin(), vec.end(), vec.size());
   }
   };
 
   /** deserializes a map  */
-      
+
   template <typename InArcType, typename T, typename U>
   struct deserialize_impl<InArcType, std::unordered_map<T,U>, false > {
   static void exec(InArcType& iarc, std::unordered_map<T,U>& vec){
     vec.clear();
     // get the number of elements to deserialize
     size_t length = 0;
-    iarc >> length;    
+    iarc >> length;
     // iterate through and send to the output iterator
     for (size_t x = 0; x < length ; ++x){
       std::pair<T, U> v;
@@ -80,11 +80,10 @@ namespace archive_detail {
   }
   };
 
-} // archive_detail  
+} // archive_detail
 } // turicreate
 
 #endif
 
 
-#endif 
-
+#endif

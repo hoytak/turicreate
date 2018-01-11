@@ -35,23 +35,23 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int field_info(const FIELD *field,
 |                                   int *rows, int *cols,
 |                                   int *frow, int *fcol,
 |                                   int *nrow, int *nbuf)
-|   
+|
 |   Description   :  Retrieve infos about the fields creation parameters.
 |
 |   Return Values :  E_OK           - success
 |                    E_BAD_ARGUMENT - invalid field pointer
 +--------------------------------------------------------------------------*/
 int field_info(const FIELD *field,
-	       int *rows, int *cols, 
-	       int *frow, int *fcol, 
+	       int *rows, int *cols,
+	       int *frow, int *fcol,
 	       int *nrow, int *nbuf)
 {
-  if (!field) 
+  if (!field)
     RETURN(E_BAD_ARGUMENT);
 
   if (rows) *rows = field->rows;
@@ -62,13 +62,13 @@ int field_info(const FIELD *field,
   if (nbuf) *nbuf = field->nbuf;
   RETURN(E_OK);
 }
-	
+
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int dynamic_field_info(const FIELD *field,
 |                                           int *drows, int *dcols,
 |                                           int *maxgrow)
-|   
+|
 |   Description   :  Retrieve information about a dynamic fields current
 |                    dynamic parameters.
 |

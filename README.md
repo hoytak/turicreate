@@ -1,6 +1,6 @@
 <img align="right" src="https://docs-assets.developer.apple.com/turicreate/turi-dog.svg" alt="Turi Create" width="100">
 
-# Turi Create 
+# Turi Create
 
 Turi Create simplifies the development of custom machine learning models. You
 don't have to be a machine learning expert to add recommendations, object
@@ -21,7 +21,7 @@ If you want your app to recognize specific objects in images, you can build your
 ```python
 import turicreate as tc
 
-# Load data 
+# Load data
 data = tc.SFrame('photoLabel.sframe')
 
 # Create a model
@@ -33,7 +33,7 @@ predictions = model.predict(data)
 # Export to Core ML
 model.export_coreml('MyClassifier.mlmodel')
 ```
- 
+
 It's easy to use the resulting model in an [iOS application](https://developer.apple.com/documentation/vision/classifying_images_with_vision_and_core_ml):
 
 <p align="center"><img src="https://docs-assets.developer.apple.com/published/a2c37bce1f/689f61a6-1087-4112-99d9-bbfb326e3138.png" alt="Turi Create" width="600"></p>
@@ -75,7 +75,7 @@ Installation
 For detailed instructions for different varieties of Linux see [LINUX\_INSTALL.md](LINUX_INSTALL.md).
 For common installation issues see [INSTALL\_ISSUES.md](INSTALL_ISSUES.md).
 
-We recommend using virtualenv to use, install, or build Turi Create. 
+We recommend using virtualenv to use, install, or build Turi Create.
 
 ```shell
 pip install virtualenv
@@ -113,7 +113,7 @@ more details on how to use Turi Create.
 GPU Support
 -----------
 
-Turi Create **does not require a GPU**, but certain models can be accelerated by the use of a GPU. 
+Turi Create **does not require a GPU**, but certain models can be accelerated by the use of a GPU.
 To enable GPU support after installation of the `turicreate` package, please perform the following steps:
 
  * Install CUDA 8.0 ([instructions](http://docs.nvidia.com/cuda/cuda-installation-guide-linux/))

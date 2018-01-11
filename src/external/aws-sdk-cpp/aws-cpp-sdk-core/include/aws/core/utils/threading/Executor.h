@@ -37,7 +37,7 @@ namespace Aws
             */
             class AWS_CORE_API Executor
             {
-            public:                
+            public:
                 virtual ~Executor() = default;
 
                 /**

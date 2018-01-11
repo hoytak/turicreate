@@ -29,7 +29,7 @@ async_request_socket::async_request_socket(void* zmq_ctx,
                                std::vector<std::string> slavekeys,
                                const std::string public_key,
                                const std::string secret_key,
-                               const std::string server_public_key): 
+                               const std::string server_public_key):
       public_key(public_key),
       secret_key(secret_key),
       server_public_key(server_public_key) {
@@ -101,7 +101,7 @@ async_request_socket::async_request_socket(void* zmq_ctx,
   global_lock.unlock();
   // register the key value store callback
   if (zk_keyval != NULL) {
-    zk_kv_callback_id = zk_keyval->add_callback(boost::bind(&async_request_socket::keyval_change, 
+    zk_kv_callback_id = zk_keyval->add_callback(boost::bind(&async_request_socket::keyval_change,
                                                             this, _1, _2, _3, _4));
   }
   last_any_id = 0;

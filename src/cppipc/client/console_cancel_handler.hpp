@@ -22,7 +22,7 @@
 namespace cppipc {
 
 class EXPORT console_cancel_handler {
- public: 
+ public:
   static console_cancel_handler& get_instance();
 
   // Guarantees that if this returns false, new handler wasn't set

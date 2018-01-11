@@ -47,11 +47,11 @@ public:
     gl_gframe gf_vertices = g.vertices();
     gl_gframe gf_edges = g.edges();
 
-    // add vertex field to graph 
+    // add vertex field to graph
     g.add_vertex_field(0, "zeros");
     _assert_sframe_equals(gf_vertices.sort("__id"), g.get_vertices().sort("__id"));
 
-    // remove vertex field from graph 
+    // remove vertex field from graph
     g.remove_vertex_field("zeros");
     _assert_sframe_equals(gf_vertices.sort("__id"), g.get_vertices().sort("__id"));
 
@@ -85,17 +85,17 @@ public:
     gl_gframe gf_vertices = g.vertices();
     gl_gframe gf_edges = g.edges();
 
-    // add vertex field to graph 
+    // add vertex field to graph
     g.add_edge_field(0, "zeros");
     _assert_sframe_equals(gf_edges.sort({"__src_id", "__dst_id"}),
         g.get_edges().sort({"__src_id", "__dst_id"}));
 
-    // remove vertex field from graph 
+    // remove vertex field from graph
     g.remove_edge_field("zeros");
     _assert_sframe_equals(gf_edges.sort({"__src_id", "__dst_id"}),
         g.get_edges().sort({"__src_id", "__dst_id"}));
 
-    // add a column to edge gframe affects graph 
+    // add a column to edge gframe affects graph
     gf_edges.add_column(1, "ones");
     _assert_sframe_equals(gf_edges.sort({"__src_id", "__dst_id"}),
         g.get_edges().sort({"__src_id", "__dst_id"}));
@@ -120,7 +120,7 @@ public:
         g.get_edges().sort({"__src_id", "__dst_id"}));
   }
 
-  void _assert_flexvec_equals(const std::vector<flexible_type>& sa, 
+  void _assert_flexvec_equals(const std::vector<flexible_type>& sa,
       const std::vector<flexible_type>& sb) {
     TS_ASSERT_EQUALS(sa.size(), sb.size());
     for (size_t i = 0;i < sa.size() ;++i) {

@@ -20,7 +20,7 @@
 namespace turi {
 namespace query_eval {
 
-std::shared_ptr<sframe> 
+std::shared_ptr<sframe>
     groupby_aggregate(
       const std::shared_ptr<planner_node>& source,
       const std::vector<std::string>& source_column_names,
@@ -49,7 +49,7 @@ std::shared_ptr<sframe>
       log_and_throw("Output columns names are not unique");
     }
   }
-  
+
   std::map<std::string, size_t> source_column_to_index;
   for (size_t i = 0;i < source_column_names.size(); ++i) {
     source_column_to_index[source_column_names[i]] = i;
@@ -117,7 +117,7 @@ std::shared_ptr<sframe>
     relevant_source_indices[i] = source_column_to_index.at(relevant_column_names[i]);
     relevant_column_to_index[relevant_column_names[i]] = i;
   }
-  auto frame_with_relevant_cols = op_project::make_planner_node(source, 
+  auto frame_with_relevant_cols = op_project::make_planner_node(source,
                                                                 relevant_source_indices);
 
 
@@ -149,7 +149,7 @@ std::shared_ptr<sframe>
         }
 
         root_candidate_name = group.second->name() + root_candidate_name;
-      } else { 
+      } else {
         if(group.first.size() != 2)
           log_and_throw("arg functions takes exactly two arguments");
         root_candidate_name += group.first[1] + " for " + group.second->name() + " of " + group.first[0];
@@ -204,7 +204,7 @@ std::shared_ptr<sframe>
   logstream(LOG_INFO) << "Filling group container: " << std::endl;
   timer ti;
   planner().materialize(frame_with_relevant_cols,
-                        [&](size_t segmentid, 
+                        [&](size_t segmentid,
                             const std::shared_ptr<sframe_rows>& rows)->bool {
                           if (rows == nullptr) return true;
                           for (auto& row: *rows) {

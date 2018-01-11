@@ -1517,7 +1517,7 @@ zisofs_read_data(struct archive_read *a,
 			zisofs->block_pointers_avail += xsize;
 			avail -= xsize;
 			p += xsize;
-		    	if (zisofs->block_pointers_avail
+			if (zisofs->block_pointers_avail
 			    == zisofs->block_pointers_size) {
 				/* We've got all block pointers and initialize
 				 * related variables.	*/
@@ -1896,7 +1896,7 @@ parse_file_info(struct archive_read *a, struct file_info *parent,
 	 * NUMBER of RRIP "PX" extension.
 	 * Note: Old mkisofs did not record that FILE SERIAL NUMBER
 	 * in ISO images.
-	 * Note2: xorriso set 0 to the location of a symlink file. 
+	 * Note2: xorriso set 0 to the location of a symlink file.
 	 */
 	if (file->size == 0 && location >= 0) {
 		/* If file->size is zero, its location points wrong place,
@@ -1950,7 +1950,7 @@ parse_file_info(struct archive_read *a, struct file_info *parent,
 			 * made by makefs is not zero and its location is
 			 * the same as those of next regular file. That is
 			 * the same as hard like file and it causes unexpected
-			 * error. 
+			 * error.
 			 */
 			if (file->size > 0 &&
 			    (file->mode & AE_IFMT) == AE_IFLNK) {
@@ -2733,7 +2733,7 @@ next_cache_entry(struct archive_read *a, struct iso9660 *iso9660,
 			 * If directory entries all which are descendant of
 			 * rr_moved are still remaining, expose their.
 			 */
-			if (iso9660->re_files.first != NULL && 
+			if (iso9660->re_files.first != NULL &&
 			    iso9660->rr_moved != NULL &&
 			    iso9660->rr_moved->rr_moved_has_re_only)
 				/* Expose "rr_moved" entry. */

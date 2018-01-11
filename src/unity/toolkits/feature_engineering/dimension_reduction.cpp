@@ -470,4 +470,3 @@ void random_projection::load_version(iarchive& iarc, size_t version) {
 } // namespace feature_engineering
 } // namespace sdk_model
 } // namespace turi
-

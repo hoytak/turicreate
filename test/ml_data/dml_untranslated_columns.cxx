@@ -228,13 +228,13 @@ struct test_untranslated_coulmns  {
             for(size_t ref_creation_type : {0, 1}) {
 
               ml_data_row_reference row_ref;
-              
+
               if(ref_creation_type == 0) {
                 row_ref = *it;
               } else {
                 // Translate through the single row use case.
                 const auto& raw_row = ref_data.at(it_idx);
-                DASSERT_EQ(raw_row.size(), raw_data.num_columns()); 
+                DASSERT_EQ(raw_row.size(), raw_data.num_columns());
 
                 flex_dict v(raw_row.size());
                 for(size_t i = 0; i < raw_row.size(); ++i) {
@@ -245,7 +245,7 @@ struct test_untranslated_coulmns  {
 
                 row_ref = ml_data_row_reference::from_row(data.metadata(), v);
               }
-              
+
               for(size_t type_idx : {0, 1, 2} ) {
 
                 switch(type_idx) {
@@ -271,7 +271,7 @@ struct test_untranslated_coulmns  {
                 row_ref.fill_untranslated_values(untranslated_row);
 
                 ASSERT_EQ(untranslated_row.size(), untranslated_columns.size());
-              
+
                 // Now recombine the original columns
                 row_x.clear();
                 size_t uc_idx = 0;

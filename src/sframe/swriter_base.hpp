@@ -32,7 +32,7 @@ class swriter_base {
   virtual ~swriter_base() { };
 
   /** Sets the number of parallel output segments.
-   *  Returns true if the number of segments is set successfully, 
+   *  Returns true if the number of segments is set successfully,
    *  false otherwise. Generally speaking, once an output iterator has been
    *  obtained, the number of segments can no longer be changed.
    *
@@ -47,7 +47,7 @@ class swriter_base {
   /// Gets an output iterator to the specified segment
   virtual iterator get_output_iterator(size_t segmentid) = 0;
 
-  /** 
+  /**
    * Closes the array completely. This implicitly closes all segments.
    * After the writer is closed, no segments can be written.
    * And only after the write is finalized, that the result of the swriter
@@ -59,4 +59,3 @@ class swriter_base {
 /// \}
 } // namespace turi
 #endif
-

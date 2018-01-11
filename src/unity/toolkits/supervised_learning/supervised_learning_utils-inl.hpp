@@ -15,7 +15,7 @@
 #include <ml_data/ml_data.hpp>
 #include <ml_data/metadata.hpp>
 #include <util/testing_utils.hpp>
-// Supervised learning includes. 
+// Supervised learning includes.
 #include <toolkits/supervised_learning/supervised_learning.hpp>
 
 // Types
@@ -27,14 +27,14 @@
 /// SKD
 #include <unity/lib/toolkit_function_macros.hpp>
 #include <serialization/serialization_includes.hpp>
- 
+
 
 namespace turi {
 namespace supervised {
 
 
 /**
- * Get standard errors from hessian. 
+ * Get standard errors from hessian.
  */
 inline arma::vec get_stderr_from_hessian(
     const arma::mat& hessian) {
@@ -98,7 +98,7 @@ inline void check_empty_data(sframe X){
 }
 
 /**
- * Check that the types of each set of feature columns match and 
+ * Check that the types of each set of feature columns match and
  * that they have the same number of columns.
  */
 inline void check_feature_column_types_match(sframe train, sframe valid) {
@@ -115,7 +115,7 @@ inline void check_feature_column_types_match(sframe train, sframe valid) {
       ss.str("");
       ss << "The type of " << train.column_name(i) << " in the training set "
          << "is not the same in the training set and the provided validation "
-         << "set (" << flex_type_enum_to_name(ctype1) 
+         << "set (" << flex_type_enum_to_name(ctype1)
          << " vs. " << flex_type_enum_to_name(ctype2) << ")."
          << std::endl;
       log_and_throw(ss.str());
@@ -150,7 +150,7 @@ inline void check_feature_column_types(sframe X, bool support_image_type=false){
 
 /**
  * Check that the target types are right.
- * 
+ *
  * Regression vs classifier:
  *
  * One user in our forum complained that he got an error message for logistic
@@ -174,37 +174,37 @@ inline void check_target_column_type(std::string model_name, sframe y){
   }
 
   // classifier tasks.
-  if(model_name == "classifier_svm" || 
-     model_name == "classifier_logistic_regression" || 
-     model_name == "random_forest_classifier" || 
-     model_name == "decision_tree_classifier" || 
+  if(model_name == "classifier_svm" ||
+     model_name == "classifier_logistic_regression" ||
+     model_name == "random_forest_classifier" ||
+     model_name == "decision_tree_classifier" ||
      model_name == "boosted_trees_classifier"){
 
     flex_type_enum ctype = y.column_type(0);
     if (ctype != flex_type_enum::INTEGER && ctype != flex_type_enum::STRING){
       ss.str("");
-      ss << "Column type of target '" << y.column_name(0) 
-         << "' must be int or str." 
+      ss << "Column type of target '" << y.column_name(0)
+         << "' must be int or str."
          << std::endl;
       log_and_throw(ss.str());
     }
 
   } else {
-    
+
     flex_type_enum ctype = y.column_type(0);
     if ((ctype != flex_type_enum::INTEGER) && (ctype !=
           flex_type_enum::FLOAT)){
       ss.str("");
-      ss << "Column type of target '" << y.column_name(0) 
-         << "' must be int or float." 
+      ss << "Column type of target '" << y.column_name(0)
+         << "' must be int or float."
          << std::endl;
       log_and_throw(ss.str());
     }
-  } 
+  }
 }
 
 /**
- * Setup an SFrame as test input to predict, predict_topk, or classify function. 
+ * Setup an SFrame as test input to predict, predict_topk, or classify function.
  */
 inline sframe setup_test_data_sframe(const sframe& sf,
                                      std::shared_ptr<supervised_learning_model_base> model,
@@ -236,10 +236,10 @@ inline sframe setup_test_data_sframe(const sframe& sf,
 
 
 /**
- * Get the missing value enum from the string. 
+ * Get the missing value enum from the string.
  *
- * [in] Missing value action as seen by the user. 
- * \returns Missing value action enum  
+ * [in] Missing value action as seen by the user.
+ * \returns Missing value action enum
  */
 inline ml_missing_value_action get_missing_value_enum_from_string(
                             const std::string & missing_value_str) {
@@ -256,29 +256,29 @@ inline ml_missing_value_action get_missing_value_enum_from_string(
 }
 
 /**
- * Fill the ml_data_row with an EigenVector using reference encoding for 
+ * Fill the ml_data_row with an EigenVector using reference encoding for
  * categorical variables. Here, the 0"th" category is used as the reference
- * category. 
+ * category.
  *
- * [in,out] An ml_data_row_reference object from which we are reading. 
- * [in,out] An eigen expression (could be a sparse, dense, or row of a matrix) 
+ * [in,out] An ml_data_row_reference object from which we are reading.
+ * [in,out] An eigen expression (could be a sparse, dense, or row of a matrix)
  */
 template <typename ArmaExpr>
 GL_HOT_INLINE_FLATTEN
 inline void fill_reference_encoding(
-    const ml_data_row_reference& row_ref, 
+    const ml_data_row_reference& row_ref,
     ArmaExpr && x) {
 
   x.zeros();
   size_t offset = 0;
 
   row_ref.unpack(
-      
+
       // The function to write out the data to x.
       [&](ml_column_mode mode, size_t column_index,
           size_t feature_index, double value,
           size_t index_size, size_t index_offset) {
-        
+
         if(UNLIKELY(feature_index >= index_size))
           return;
 
@@ -297,11 +297,11 @@ inline void fill_reference_encoding(
 
       },
 
-      /** 
+      /**
        * The function to advance the offset, called after each column
        *  is finished.
        */
-      [&](ml_column_mode mode, size_t column_index, 
+      [&](ml_column_mode mode, size_t column_index,
                       size_t index_size) GL_GCC_ONLY(GL_HOT_INLINE_FLATTEN) {
            offset += (index_size - (mode_is_categorical(mode) ? 1 : 0));
       });
@@ -412,7 +412,7 @@ inline std::vector<std::string> make_progress_string(
     const std::vector<std::string>& valid_eval,
     float speed, bool padding_valid_eval) {
 
-  std::vector<std::string> ret; 
+  std::vector<std::string> ret;
   ret.push_back(std::to_string(iter));
   ret.push_back(std::to_string(examples));
   ret.push_back(std::to_string(time));
@@ -433,8 +433,8 @@ inline std::vector<std::string> make_progress_string(
  * the provided headers.
  */
 inline std::vector<std::pair<std::string, size_t>> make_progress_header(
-    supervised_learning_model_base& smodel, 
-    const std::vector<std::string>& stat_headers, 
+    supervised_learning_model_base& smodel,
+    const std::vector<std::string>& stat_headers,
     bool has_validation_data) {
 
   auto header = std::vector<std::pair<std::string, size_t>>();
@@ -449,7 +449,7 @@ inline std::vector<std::pair<std::string, size_t>> make_progress_header(
 
   for (const auto& m: metrics) {
     header.push_back({std::string("Training-") + m, 6});
-    if (has_validation_data) 
+    if (has_validation_data)
       header.push_back({std::string("Validation-") + m, 6});
   }
 
@@ -457,13 +457,13 @@ inline std::vector<std::pair<std::string, size_t>> make_progress_header(
 }
 
 inline std::vector<std::string> make_progress_row_string(
-    supervised_learning_model_base& smodel, 
-    const ml_data& data, 
+    supervised_learning_model_base& smodel,
+    const ml_data& data,
     const ml_data& valid_data,
     const std::vector<std::string>& stats) {
 
   auto train_eval = std::vector<std::string>();
-  for (auto& kv : smodel.evaluate(data, "train")) { 
+  for (auto& kv : smodel.evaluate(data, "train")) {
     train_eval.push_back(std::to_string(variant_get_value<double>(kv.second)));
   }
 
@@ -481,7 +481,7 @@ inline std::vector<std::string> make_progress_row_string(
 
   // TODO: Right now the model evaluator decides whether or not to add padding
   // for missing validation statistics.
-  // bool padding = (valid_data.num_rows() > 0); 
+  // bool padding = (valid_data.num_rows() > 0);
   for (size_t i = 0 ; i < train_eval.size(); ++i) {
     ret.push_back(train_eval[i]);
     if (!valid_eval.empty()) {
@@ -496,13 +496,13 @@ inline std::vector<std::string> make_progress_row_string(
 
 /**
  * Get the class weights based on the user options and target metadata.
- * 
+ *
  * \param[in] options
  * \param[in] metadata
  * \returns Class weights
  */
-inline flexible_type get_class_weights_from_options( 
-                const option_manager& options, 
+inline flexible_type get_class_weights_from_options(
+                const option_manager& options,
                 const std::shared_ptr<ml_metadata>& metadata){
 
   size_t num_classes = 2;
@@ -523,15 +523,15 @@ inline flexible_type get_class_weights_from_options(
   // Case 2 ('auto'): Sample inversely proportional to class frequency.
   } else if (class_weights_option == "auto") {
 
-    // Weight inversely proportional to class frequency 
-    // w_c = (1/n_c) / (sum(i in C, 1/n_i)) 
+    // Weight inversely proportional to class frequency
+    // w_c = (1/n_c) / (sum(i in C, 1/n_i))
     float total = 0;
     for(size_t i = 0; i < num_classes; i++){
       DASSERT_TRUE(stats->count(i) > 0);
       total += 1.0 / stats->count(i);
     }
     for(size_t i = 0; i < num_classes; i++){
-      class_weights[i] = {indexer->map_index_to_value(i), 
+      class_weights[i] = {indexer->map_index_to_value(i),
                    1.0 / (total * stats->count(i))};
     }
 
@@ -546,17 +546,17 @@ inline flexible_type get_class_weights_from_options(
         ss << "The parameter class_weight does not contain a weight for the "
            << "class " << indexer->map_index_to_value(i) << "."
            << " Make sure that the types of the keys in the class_weight "
-           << "dictionary are the same as the type of the target column." 
+           << "dictionary are the same as the type of the target column."
            << std::endl;
         log_and_throw(ss.str());
-      } 
+      }
     }
 
     // Save those weights. (Can't save flexible_type to flex_dict)
     size_t i = 0;
     for(const auto& kvp: class_weights_option.get<flex_dict>()){
 
-      // Weights must be numeric 
+      // Weights must be numeric
       bool error = false;
       if (kvp.second.get_type() != flex_type_enum::INTEGER &&
           kvp.second.get_type() != flex_type_enum::FLOAT) {
@@ -574,17 +574,17 @@ inline flexible_type get_class_weights_from_options(
       // Throw an error message if not numeric and not in range.
       if (error == true){
         std::stringstream ss;
-        ss << "The class_weight parameter for the class " << kvp.first 
+        ss << "The class_weight parameter for the class " << kvp.first
            << " must be a positive numeric value."
            << std::endl;
         log_and_throw(ss.str());
-      } 
+      }
     }
 
   // Error: Weights are not of dictioanry, None, or 'auto' type.
   } else {
     std::stringstream ss;
-    ss << "The class_weights parameter cannot be of type " 
+    ss << "The class_weights parameter cannot be of type "
        << flex_type_enum_to_name(class_weights_option.get_type()) << "."
        << " Class weights must be a dictionary, None or 'auto'" << std::endl;
     log_and_throw(ss.str());
@@ -592,37 +592,37 @@ inline flexible_type get_class_weights_from_options(
 
 
   return class_weights;
- 
-} 
+
+}
 
 /**
  * Get number of examples per class
- * 
+ *
  * \param[in] metadata
  * \returns Break down of examples per class.
  *
  * \warning For now, this only does it for binary classificaiton problems.
  *
  */
-inline std::map<flexible_type, size_t> get_num_examples_per_class( 
+inline std::map<flexible_type, size_t> get_num_examples_per_class(
                 std::shared_ptr<ml_metadata> metadata){
 
   std::map<flexible_type, size_t> examples_per_class;
   for(size_t k = 0; k < metadata->target_index_size(); k++){
-    examples_per_class[metadata->target_indexer()->map_index_to_value(k)] = 
+    examples_per_class[metadata->target_indexer()->map_index_to_value(k)] =
                       metadata->target_statistics()->count(k);
   }
   return examples_per_class;
-} 
+}
 
 /**
  * Get the set of classes.
- * 
+ *
  * \param[in] ml_metadata
  * \returns Get the set of all classes in the model.
  *
  */
-inline std::vector<flexible_type> get_class_names( 
+inline std::vector<flexible_type> get_class_names(
                 std::shared_ptr<ml_metadata> metadata){
 
   std::vector<flexible_type> classes;
@@ -631,7 +631,7 @@ inline std::vector<flexible_type> get_class_names(
     classes[k] = metadata->target_indexer()->map_index_to_value(k);
   }
   return classes;
-} 
+}
 
 /**
  * Get feature names from the metadata.
@@ -773,13 +773,13 @@ inline void get_one_hot_encoded_coefs(const arma::vec&
 */
 inline sframe get_coefficients_as_sframe(
          const arma::vec& coefs,
-         std::shared_ptr<ml_metadata> metadata, 
+         std::shared_ptr<ml_metadata> metadata,
          const arma::vec& std_err) {
 
   DASSERT_TRUE(coefs.size() > 0);
   DASSERT_TRUE(metadata);
 
-  // Classifiers need to provide target_metada to print out the class in 
+  // Classifiers need to provide target_metada to print out the class in
   // the coefficients.
   bool is_classifier = metadata->target_is_categorical();
   bool has_stderr = std_err.size() > 0;
@@ -900,8 +900,8 @@ inline sframe get_coefficients_as_sframe(
          const arma::vec& coefs,
          std::shared_ptr<ml_metadata> metadata) {
   arma::vec EMPTY;
-  return get_coefficients_as_sframe(coefs, metadata, EMPTY); 
-} 
+  return get_coefficients_as_sframe(coefs, metadata, EMPTY);
+}
 
 /**
  * Get number of examples per class

@@ -22,9 +22,9 @@ typedef struct {
 } integerARG;
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void *Make_Integer_Type( va_list * ap )
-|   
+|
 |   Description   :  Allocate structure for integer type argument.
 |
 |   Return Values :  Pointer to argument structure or NULL on error
@@ -43,10 +43,10 @@ static void *Make_Integer_Type(va_list * ap)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void *Copy_Integer_Type(const void * argp)
-|   
-|   Description   :  Copy structure for integer type argument.  
+|
+|   Description   :  Copy structure for integer type argument.
 |
 |   Return Values :  Pointer to argument structure or NULL on error.
 +--------------------------------------------------------------------------*/
@@ -65,25 +65,25 @@ static void *Copy_Integer_Type(const void * argp)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void Free_Integer_Type(void * argp)
-|   
+|
 |   Description   :  Free structure for integer type argument.
 |
 |   Return Values :  -
 +--------------------------------------------------------------------------*/
 static void Free_Integer_Type(void * argp)
 {
-  if (argp) 
+  if (argp)
     free(argp);
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Check_Integer_Field(
 |                                                    FIELD * field,
 |                                                    const void * argp)
-|   
+|
 |   Description   :  Validate buffer content to be a valid integer value
 |
 |   Return Values :  TRUE  - field is valid
@@ -126,11 +126,11 @@ static bool Check_Integer_Field(FIELD * field, const void * argp)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Check_Integer_Character(
 |                                      int c,
 |                                      const void * argp)
-|   
+|
 |   Description   :  Check a character for the integer type.
 |
 |   Return Values :  TRUE  - character is valid

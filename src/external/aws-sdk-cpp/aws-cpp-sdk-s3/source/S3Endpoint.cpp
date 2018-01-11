@@ -89,4 +89,3 @@ namespace S3Endpoint
 } // namespace S3Endpoint
 } // namespace S3
 } // namespace Aws
-

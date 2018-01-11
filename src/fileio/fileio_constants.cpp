@@ -67,7 +67,7 @@ static bool check_cache_file_location(std::string val) {
 #else
       boost::algorithm::is_any_of(";"));
 #endif
-  if (paths.size() == 0) 
+  if (paths.size() == 0)
     throw std::string("Value cannot be empty");
   for (std::string path: paths) {
     if (!boost::filesystem::is_directory(path))
@@ -79,7 +79,7 @@ static bool check_cache_file_location(std::string val) {
 static bool check_cache_file_hdfs_location(std::string val) {
   if (get_protocol(val) == "hdfs") {
     if (get_file_status(val) == file_status::DIRECTORY) {
-      // test hdfs write permission by createing a test directory 
+      // test hdfs write permission by createing a test directory
       namespace fs = boost::filesystem;
       std::string host, port, hdfspath;
       std::tie(host, port, hdfspath) = parse_hdfs_url(val);
@@ -108,11 +108,11 @@ EXPORT std::string S3_ENDPOINT;
 // TODO: Where is the right place for this? Probably not here...
 EXPORT int64_t NUM_GPUS = -1;
 
-REGISTER_GLOBAL(int64_t, FILEIO_MAXIMUM_CACHE_CAPACITY, true); 
-REGISTER_GLOBAL(int64_t, FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE, true) 
+REGISTER_GLOBAL(int64_t, FILEIO_MAXIMUM_CACHE_CAPACITY, true);
+REGISTER_GLOBAL(int64_t, FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE, true)
 REGISTER_GLOBAL(int64_t, FILEIO_READER_BUFFER_SIZE, false);
-REGISTER_GLOBAL(int64_t, FILEIO_WRITER_BUFFER_SIZE, false); 
-REGISTER_GLOBAL(std::string, S3_ENDPOINT, true); 
+REGISTER_GLOBAL(int64_t, FILEIO_WRITER_BUFFER_SIZE, false);
+REGISTER_GLOBAL(std::string, S3_ENDPOINT, true);
 REGISTER_GLOBAL(int64_t, NUM_GPUS, true);
 
 
@@ -136,7 +136,7 @@ REGISTER_GLOBAL_WITH_CHECKS(std::string,
                             check_cache_file_hdfs_location);
 
 std::string get_cache_file_locations() {
-  return CACHE_FILE_LOCATIONS; 
+  return CACHE_FILE_LOCATIONS;
 }
 
 void set_cache_file_locations(std::string value) {
@@ -180,8 +180,8 @@ static bool set_max_remote_fs_cache_entries(int64_t val) {
 }
 
 EXPORT size_t FILEIO_MAX_REMOTE_FS_CACHE_ENTRIES = 0;
-REGISTER_GLOBAL_WITH_CHECKS(int64_t, 
-                            FILEIO_MAX_REMOTE_FS_CACHE_ENTRIES, 
+REGISTER_GLOBAL_WITH_CHECKS(int64_t,
+                            FILEIO_MAX_REMOTE_FS_CACHE_ENTRIES,
                             true,
                             set_max_remote_fs_cache_entries);
 }

@@ -16,10 +16,10 @@ class general_ifstream;
  * \ingroup fileio
  *
  * The block cache implements a simple key-value store for extremely large
- * values (~16MB at least). Every key can only be written to exactly once, 
+ * values (~16MB at least). Every key can only be written to exactly once,
  * and allows for arbitrary range reads (i.e. read byte X to byte Y of this key)
  *
- * Essentially every value is stored as a single file inside the 
+ * Essentially every value is stored as a single file inside the
  * storage_prefix parameter set at \ref init.
  *
  * The block_cache is safe for concurrent use.
@@ -27,12 +27,12 @@ class general_ifstream;
  * Use On a Distributed File System
  * --------------------------------
  *
- * The storage prefix be located on a distributed filesystem 
+ * The storage prefix be located on a distributed filesystem
  * (for instance HDFS or NFS). In which case, *every* machine sharing the same
  * storage prefix also shares keys.
  *
  * When sharing a storage prefix with other processes on a distributed
- * filesystem, the atomicity guarantees of the filesystem becomes important. 
+ * filesystem, the atomicity guarantees of the filesystem becomes important.
  *
  * In particular, on HDFS, you may find keys in a "indeterminate" state, where
  * it cannot be written to, but cannot be queried (because the writer has
@@ -76,7 +76,7 @@ class block_cache {
    *
    * Essentially, every value is stored as a separate file inside the directory.
    */
-  void init(const std::string& storage_prefix, 
+  void init(const std::string& storage_prefix,
             size_t max_file_handle_cache=16);
 
   /**
@@ -114,11 +114,11 @@ class block_cache {
    *
    * \param key The key to read
    * \param output A reference to the output string
-   * \param start Optional, denotes the start offset of the value to read. 
+   * \param start Optional, denotes the start offset of the value to read.
    *              Defaults to 0.
    * \param end Optional, denotes the end offset of the value to read. The byte
-   *            at end is not read. i.e. to read the first 5 bytes of the file, 
-   *            you call read(key, output, 0, 5); Defaults to the length of the 
+   *            at end is not read. i.e. to read the first 5 bytes of the file,
+   *            you call read(key, output, 0, 5); Defaults to the length of the
    *            file.
    *
    * Note that the number of bytes read can be 0 if:
@@ -129,7 +129,7 @@ class block_cache {
    *
    * \returns A value less than 0 on failure.
    */
-  int64_t read(const std::string& key, 
+  int64_t read(const std::string& key,
             char* output,
             size_t start = 0,
             size_t end = (size_t)(-1)) ;
@@ -137,7 +137,7 @@ class block_cache {
   /**
    * string overload. Note the char* reader is faster.
    */
-  int64_t read(const std::string& key, 
+  int64_t read(const std::string& key,
             std::string& output,
             size_t start = 0,
             size_t end = (size_t)(-1)) ;
@@ -155,12 +155,12 @@ class block_cache {
    */
   size_t file_handle_cache_misses() const;
 
-  /** Sets the maximum number of files managed. 
+  /** Sets the maximum number of files managed.
    * If 0, there is no max capacity.
    */
   size_t get_max_capacity();
 
-  /** Gets the maximum number of files managed. 
+  /** Gets the maximum number of files managed.
    * If 0, there is no max capacity.
    */
   void set_max_capacity(size_t);
@@ -170,8 +170,8 @@ class block_cache {
    *
    * Location of storage:
    *   - If temp files are located on HDFS, the cache just writes
-   *   through and is always located on HDFS. 
-   *   - If temp files are located on local disk, the cache is set to the 
+   *   through and is always located on HDFS.
+   *   - If temp files are located on local disk, the cache is set to the
    *   cache:// file system. This allows for a degree of in-memory caching.
    *
    * File handle LRU cache size:
@@ -186,7 +186,7 @@ class block_cache {
   /// whether the block_cache is initialized
   bool m_initialized = false;
 
-  /// The storage prefix 
+  /// The storage prefix
   std::string m_storage_prefix;
 
   /// Lock on internal datastructures
@@ -199,7 +199,7 @@ class block_cache {
   size_t m_max_capacity = 0;
 
   /**
-   * A lock on each key. 
+   * A lock on each key.
    * The key is hashed and key_lock[hash] is used to lock the key.
    */
   mutex key_lock[KEY_LOCK_SIZE];

@@ -9,7 +9,7 @@ namespace turi {
 /**
  * \ingroup unity
  * An options map is a map from string to a flexible_type.
- * Also see variant_map_type 
+ * Also see variant_map_type
  */
 typedef std::map<std::string, flexible_type> options_map_t;
 }

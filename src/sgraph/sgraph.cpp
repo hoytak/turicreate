@@ -86,7 +86,7 @@ void sgraph::bootstrap_vertex_id_type(flex_type_enum id_type) {
   }
   for (auto& g: m_edge_groups) {
     for (auto& sf : g.second) {
-      init_empty_sframe(sf, {SRC_COLUMN_NAME, DST_COLUMN_NAME}, 
+      init_empty_sframe(sf, {SRC_COLUMN_NAME, DST_COLUMN_NAME},
                         {INTERNAL_ID_TYPE, INTERNAL_ID_TYPE});
     }
   }
@@ -191,7 +191,7 @@ sframe sgraph::get_vertices(const std::vector<flexible_type>& vid_vec,
   // We need to filter some vertices
   std::function<bool(const std::vector<flexible_type>&)> filter_fn;
 
-  std::function<bool(const std::vector<flexible_type>&)> value_filter = 
+  std::function<bool(const std::vector<flexible_type>&)> value_filter =
       [&](const std::vector<flexible_type>& row) {
         for (auto& kv : value_constraint) {
           const flexible_type& actual = row[kv.first];
@@ -268,10 +268,10 @@ sframe sgraph::get_edges(const std::vector<flexible_type>& source_vids,
   size_t src_column_idx = egroup[0].column_index(SRC_COLUMN_NAME);
   size_t dst_column_idx = egroup[0].column_index(DST_COLUMN_NAME);
 
-  // lambda for transform edge ids 
+  // lambda for transform edge ids
   std::function<std::vector<flexible_type>(const std::vector<flexible_type>&,
                                            const std::vector<flexible_type>& source_vids,
-                                           const std::vector<flexible_type>& target_vids)> 
+                                           const std::vector<flexible_type>& target_vids)>
       edge_id_transform = [&](const std::vector<flexible_type>& row,
                               const std::vector<flexible_type>& source_vids,
                               const std::vector<flexible_type>& target_vids) {
@@ -402,7 +402,7 @@ sframe sgraph::get_edges(const std::vector<flexible_type>& source_vids,
                                   "", edge_sframe.num_segments());
 
         // The filter function checks the id constraints and then value constraints
-        std::function<bool(const std::vector<flexible_type>&)> filter_fn = 
+        std::function<bool(const std::vector<flexible_type>&)> filter_fn =
             [&](const std::vector<flexible_type>& row) {
               size_t src_idx = row[src_column_idx];
               size_t dst_idx = row[dst_column_idx];
@@ -468,7 +468,7 @@ void sgraph::commit_vertex_buffer(size_t group,
   // maintain the same column names and column types.
   std::vector<std::string> all_column_names = get_vertex_fields(group);
   std::vector<flex_type_enum> all_column_types = get_vertex_field_types(group);
-  std::unordered_map<std::string, flex_type_enum> all_columns; 
+  std::unordered_map<std::string, flex_type_enum> all_columns;
   for (size_t i = 0; i < all_column_names.size(); ++i) {
     all_columns[all_column_names[i]] = all_column_types[i];
   }
@@ -691,8 +691,8 @@ void sgraph::commit_edge_buffer(size_t groupa,
   local_timer.start();
   logstream(LOG_EMPH) << "Aggregating unique vertices..." << std::endl;
   std::vector<sarray<flexible_type>> unique_vertex_ids(vid_buffer.size());
-  parallel_for(0, vid_buffer.size(), [&](size_t i) { 
-    vid_buffer[i]->close(); 
+  parallel_for(0, vid_buffer.size(), [&](size_t i) {
+    vid_buffer[i]->close();
     auto& vid_array = unique_vertex_ids[i];
     {
       vid_array.open_for_write(1);
@@ -723,7 +723,7 @@ void sgraph::commit_edge_buffer(size_t groupa,
     size_t groupid, partitionid;
     timer timer;
     std::vector<std::string> column_names;
-    std::vector<flex_type_enum> column_types; 
+    std::vector<flex_type_enum> column_types;
     if (i < m_num_partitions) {
       groupid = groupa;
       partitionid = i;
@@ -763,7 +763,7 @@ void sgraph::commit_edge_buffer(size_t groupa,
     vertices_added += new_vertices_cnt;
     new_vertices = new_vertices.add_column(std::make_shared<sarray<flexible_type>>(new_raw_id_sarray),
                                            VID_COLUMN_NAME);
-    logstream(LOG_INFO) << "Finish writing new vertices in partition " << partitionid 
+    logstream(LOG_INFO) << "Finish writing new vertices in partition " << partitionid
                         << " in " << timer.current_time() << " secs" << std::endl;
 
     sframe& old_vertices = vertex_partition(partitionid, groupid);
@@ -882,7 +882,7 @@ void sgraph::commit_edge_buffer(size_t groupa,
         sframe& old_edges = edge_partition(i, j, groupa, groupb);
         ASSERT_TRUE(union_columns(old_edges, normalized_edges));
 
-        size_t prev_size = old_edges.num_rows(); 
+        size_t prev_size = old_edges.num_rows();
         old_edges = old_edges.append(normalized_edges);
         edges_added += (old_edges.num_rows() - prev_size);
       });
@@ -1207,7 +1207,7 @@ bool sgraph::add_edge_field(const std::vector<std::shared_ptr<sarray<flexible_ty
  * Extracts the data for a particular field of a group of vertices.
  * The column must exist. Assertion failure otherwise.
  */
-std::vector<std::shared_ptr<sarray<flexible_type>>> 
+std::vector<std::shared_ptr<sarray<flexible_type>>>
 sgraph::fetch_vertex_data_field(std::string column_name, size_t groupid) const {
   std::vector<std::shared_ptr<sarray<flexible_type>>> ret;
   auto& vgroups = vertex_group(groupid);
@@ -1222,7 +1222,7 @@ sgraph::fetch_vertex_data_field(std::string column_name, size_t groupid) const {
  * and return std::vector<std::vector<flexible_type>>
  * The column must exist. Assertion failure otherwise.
  */
-std::vector<std::vector<flexible_type>> 
+std::vector<std::vector<flexible_type>>
 sgraph::fetch_vertex_data_field_in_memory(std::string column_name, size_t groupid) const {
   std::vector<std::vector<flexible_type>> ret;
   auto& vgroups = vertex_group(groupid);
@@ -1241,7 +1241,7 @@ sgraph::fetch_vertex_data_field_in_memory(std::string column_name, size_t groupi
  * Extracts the data for a particular field of a group of edges.
  * The column must exist. Assertion failure otherwise.
  */
-std::vector<std::shared_ptr<sarray<flexible_type>>> 
+std::vector<std::shared_ptr<sarray<flexible_type>>>
 sgraph::fetch_edge_data_field(std::string column_name, size_t groupa, size_t groupb) const {
   std::vector<std::shared_ptr<sarray<flexible_type>>> ret;
   auto& egroups = edge_group(groupa, groupb);
@@ -1424,7 +1424,7 @@ bool sgraph::union_columns(sframe& left, sframe& right) {
       if ((left_type != flex_type_enum::UNDEFINED) && (right_type != flex_type_enum::UNDEFINED)
           && (left_type != right_type)) {
         logstream(LOG_INFO) << "Column type does not match for field : " << col
-                            << " " << flex_type_enum_to_name(left_type) << "!=" 
+                            << " " << flex_type_enum_to_name(left_type) << "!="
                             << flex_type_enum_to_name(right_type) << std::endl;
         return false;
       }
@@ -1494,7 +1494,7 @@ void sgraph::fast_validate_add_edges(const sframe& edges, size_t groupa, size_t 
     bootstrap_vertex_id_type(src_vid_type);
   } else if (m_vid_type != src_vid_type) {
     log_and_throw(
-      std::string("Input edge data source id type does not match existing type: ") 
+      std::string("Input edge data source id type does not match existing type: ")
       + flex_type_enum_to_name(m_vid_type)
     );
   }

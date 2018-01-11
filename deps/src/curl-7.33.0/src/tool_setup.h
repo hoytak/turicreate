@@ -72,4 +72,3 @@
 #endif
 
 #endif /* HEADER_CURL_TOOL_SETUP_H */
-

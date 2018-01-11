@@ -1,8 +1,8 @@
 #' Plot a boosted tree model
-#' 
-#' Read a tree model text dump. 
+#'
+#' Read a tree model text dump.
 #' Plotting only works for boosted tree model (not linear model).
-#' 
+#'
 #' @importFrom data.table data.table
 #' @importFrom data.table set
 #' @importFrom data.table rbindlist
@@ -25,35 +25,35 @@
 #'
 #' @return A \code{DiagrammeR} of the model.
 #'
-#' @details 
-#' 
+#' @details
+#'
 #' The content of each node is organised that way:
-#' 
+#'
 #' \itemize{
 #'  \item \code{feature} value ;
 #'  \item \code{cover}: the sum of second order gradient of training data classified to the leaf, if it is square loss, this simply corresponds to the number of instances in that branch. Deeper in the tree a node is, lower this metric will be ;
 #'  \item \code{gain}: metric the importance of the node in the model.
-#' } 
-#' 
+#' }
+#'
 #' Each branch finishes with a leaf. For each leaf, only the \code{cover} is indicated.
 #' It uses \href{https://github.com/knsv/mermaid/}{Mermaid} library for that purpose.
-#'  
+#'
 #' @examples
 #' data(agaricus.train, package='xgboost')
-#' 
-#' #Both dataset are list with two items, a sparse matrix and labels 
-#' #(labels = outcome column which will be learned). 
+#'
+#' #Both dataset are list with two items, a sparse matrix and labels
+#' #(labels = outcome column which will be learned).
 #' #Each column of the sparse Matrix is a feature in one hot encoding format.
 #' train <- agaricus.train
-#' 
-#' bst <- xgboost(data = train$data, label = train$label, max.depth = 2, 
+#'
+#' bst <- xgboost(data = train$data, label = train$label, max.depth = 2,
 #'                eta = 1, nthread = 2, nround = 2,objective = "binary:logistic")
-#' 
+#'
 #' #agaricus.test$data@@Dimnames[[2]] represents the column names of the sparse matrix.
 #' xgb.plot.tree(agaricus.train$data@@Dimnames[[2]], model = bst)
-#' 
+#'
 #' @export
-#' 
+#'
 xgb.plot.tree <- function(feature_names = NULL, filename_dump = NULL, model = NULL, n_first_tree = NULL, CSSstyle = NULL, width = NULL, height = NULL){
 
   if (!(class(CSSstyle) %in% c("character", "NULL") && length(CSSstyle) <= 1)) {

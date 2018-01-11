@@ -65,4 +65,3 @@ if(WXWINDOWS_FOUND)
 else()
   message(SEND_ERROR "wxWindows not found by Use_wxWindows.cmake")
 endif()
-

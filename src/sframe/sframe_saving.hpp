@@ -20,25 +20,25 @@ class sframe;
  * Saves an SFrame to another index file location using the most naive method:
  * decode rows, and write them
  */
-void sframe_save_naive(const sframe& sf, 
+void sframe_save_naive(const sframe& sf,
                        std::string index_file);
 
 /**
  * Saves an SFrame to another index file location using a more efficient method,
  * block by block.
  */
-void sframe_save_blockwise(const sframe& sf, 
+void sframe_save_blockwise(const sframe& sf,
                            std::string index_file);
 
 /**
  * Automatically determines the optimal strategy to save an sframe
  */
-void sframe_save(const sframe& sf, 
+void sframe_save(const sframe& sf,
                  std::string index_file);
 
 /**
  * Performs an "incomplete save" to a target index file location.
- * All this ensures is that the sframe's contents are located on the 
+ * All this ensures is that the sframe's contents are located on the
  * same "file-system" (protocol) as the index file. Essentially the reference
  * save is guaranteed to be valid for only as long as no other SFrame files are
  * deleted.
@@ -52,7 +52,7 @@ void sframe_save(const sframe& sf,
  *
  * \param sf The SFrame to save
  * \param index_file The output file location
- * 
+ *
  */
 void sframe_save_weak_reference(const sframe& sf,
                                 std::string index_file);

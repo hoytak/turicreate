@@ -128,4 +128,3 @@ int tool_ftruncate64(int fd, curl_off_t where)
 }
 
 #endif /* WIN32  && ! __MINGW64__ */
-

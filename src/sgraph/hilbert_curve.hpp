@@ -23,7 +23,7 @@ namespace turi {
 /**
  * For an n*n square and a hilbert index (s) ranging from 0 to n*n-1, this
  * function returns the coordinate of the s^th position along the hilbert
- * curve. n must be at least 2 and must be a power of 2. 
+ * curve. n must be at least 2 and must be a power of 2.
  *
  * Algorithm from Figure 14-8 in Hacker's Delight.
  */
@@ -70,9 +70,9 @@ inline std::pair<size_t, size_t> hilbert_index_to_coordinate(size_t s, size_t n)
 
 
 /**
- * For an n*n square and a coordinate within the square. Returns the 
+ * For an n*n square and a coordinate within the square. Returns the
  * hilbert index  which is the position of the coordinate along the hilbert curve.
- * n must be at least 2 and must be a power of 2. 
+ * n must be at least 2 and must be a power of 2.
  *
  * Algorithm from Figure 14-9 in Hacker's Delight.
  */
@@ -87,7 +87,7 @@ inline size_t coordinate_to_hilbert_index(std::pair<size_t, size_t> coord, size_
   n = __builtin_ctz(n); // convert to the "Order" of the curve. i.e. log(n)
   int i;
   size_t state, s, row;
-  size_t x = coord.first; 
+  size_t x = coord.first;
   size_t y = coord.second;
 
   state = 0;                            // Initialize.

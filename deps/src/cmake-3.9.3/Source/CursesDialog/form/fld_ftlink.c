@@ -35,14 +35,14 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  FIELDTYPE *link_fieldtype(
 |                                FIELDTYPE *type1,
 |                                FIELDTYPE *type2)
-|   
+|
 |   Description   :  Create a new fieldtype built from the two given types.
 |                    They are connected by an logical 'OR'.
-|                    If an error occurs, errno is set to                    
+|                    If an error occurs, errno is set to
 |                       E_BAD_ARGUMENT  - invalid arguments
 |                       E_SYSTEM_ERROR  - system error (no memory)
 |
@@ -64,7 +64,7 @@ FIELDTYPE *link_fieldtype(FIELDTYPE * type1, FIELDTYPE * type2)
 	  if ((type1->status & _HAS_CHOICE) || (type2->status & _HAS_CHOICE) )
 	    nftyp->status |= _HAS_CHOICE;
 	  nftyp->left  = type1;
-	  nftyp->right = type2; 
+	  nftyp->right = type2;
 	  type1->ref++;
 	  type2->ref++;
 	}

@@ -189,4 +189,3 @@
  # ./Configure dist; make clean
  # cd ..
  # diff -ur openssl-orig openssl-work > mydiffs.patch
-

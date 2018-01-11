@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-ReplicationRule::ReplicationRule() : 
+ReplicationRule::ReplicationRule() :
     m_iDHasBeenSet(false),
     m_prefixHasBeenSet(false),
     m_statusHasBeenSet(false),
@@ -37,7 +37,7 @@ ReplicationRule::ReplicationRule() :
 {
 }
 
-ReplicationRule::ReplicationRule(const XmlNode& xmlNode) : 
+ReplicationRule::ReplicationRule(const XmlNode& xmlNode) :
     m_iDHasBeenSet(false),
     m_prefixHasBeenSet(false),
     m_statusHasBeenSet(false),

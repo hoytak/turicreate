@@ -36,7 +36,7 @@ void ml_data_row_reference::fill_untranslated_values(std::vector<flexible_type>&
  *  correspond to the columns in metadata.  Missing columns are
  *  treated as missing values.
  *
- *  Returns a single row reference. 
+ *  Returns a single row reference.
  */
 ml_data_row_reference ml_data_row_reference::from_row(
     const std::shared_ptr<ml_metadata>& metadata, const flex_dict& row,
@@ -44,10 +44,10 @@ ml_data_row_reference ml_data_row_reference::from_row(
 
   ////////////////////////////////////////////////////////////////////////////////
   // First, unpack the row vector with mappings.
-  
+
   bool has_target = false;
   std::vector<size_t> col_indices(row.size());
-  
+
   for(size_t i = 0; i < row.size(); ++i) {
     if(row[i].first.get_type() != flex_type_enum::STRING) {
       log_and_throw((std::string("Key type for column_name to value dictionary; expected string, got ")
@@ -55,7 +55,7 @@ ml_data_row_reference ml_data_row_reference::from_row(
     }
 
     const flex_string& col_name = row[i].first.get<flex_string>();
-    
+
     if(metadata->has_target() && col_name == metadata->target_column_name()) {
       col_indices[i] = metadata->num_columns();
       has_target = true;
@@ -63,10 +63,10 @@ ml_data_row_reference ml_data_row_reference::from_row(
       col_indices[i] = metadata->column_index(col_name, true);
     }
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
-  // Next, build the data_block we're going to dump it in to. 
-  
+  // Next, build the data_block we're going to dump it in to.
+
   std::shared_ptr<ml_data_internal::ml_data_block> data_block(new ml_data_internal::ml_data_block);
 
   data_block->metadata = metadata;
@@ -83,7 +83,7 @@ ml_data_row_reference ml_data_row_reference::from_row(
     size_t col_idx = col_indices[i];
     if(col_idx == size_t(-1))
       continue;
-    
+
     const auto& v = row[i].second;
     data[col_idx][0] = v;
 
@@ -94,7 +94,7 @@ ml_data_row_reference ml_data_row_reference::from_row(
           data_block->rm.metadata_vect[col_idx]->mode);
     }
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Handle any untranslated columns properly.
 
@@ -111,11 +111,11 @@ ml_data_row_reference ml_data_row_reference::from_row(
       }
     }
   }
-    
+
   // Single use for the mapping of one item.
   static std::vector<size_t> row2data_idx_map = {0};
 
-  // Do the unpacking. 
+  // Do the unpacking.
   ml_data_internal::fill_row_buffer_from_column_buffer(
       row2data_idx_map,
       data_block->translated_rows,
@@ -126,7 +126,7 @@ ml_data_row_reference ml_data_row_reference::from_row(
       /* immutable_metadata = */ true,
       none_action);
 
-  // Build the reference. 
+  // Build the reference.
   ml_data_row_reference row_ref;
   row_ref.data_block = data_block;
   row_ref.current_in_block_index = 0;

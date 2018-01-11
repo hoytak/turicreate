@@ -494,5 +494,3 @@ tool_hugehelp.c:
 
 $(LIBCARES_PATH)/libcares.$(LIBEXT):
 	$(MAKE) -C $(LIBCARES_PATH) -f Makefile.netware lib
-
-

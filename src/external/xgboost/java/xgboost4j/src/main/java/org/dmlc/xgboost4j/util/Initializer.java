@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -27,12 +27,12 @@ import org.apache.commons.logging.LogFactory;
  */
 public class Initializer {
     private static final Log logger = LogFactory.getLog(Initializer.class);
-    
+
     static boolean initialized = false;
     public static final String nativePath = "./lib";
     public static final String nativeResourcePath = "/lib/";
     public static final String[] libNames = new String[] {"xgboostjavawrapper"};
-    
+
     public static synchronized void InitXgboost() throws IOException {
         if(initialized == false) {
             for(String libName: libNames) {
@@ -41,17 +41,17 @@ public class Initializer {
             initialized = true;
         }
     }
-    
+
     /**
      * load native library, this method will first try to load library from java.library.path, then try to load library in jar package.
      * @param libName
-     * @throws IOException 
+     * @throws IOException
      */
     private static void smartLoad(String libName) throws IOException {
         addNativeDir(nativePath);
         try {
              System.loadLibrary(libName);
-         } 
+         }
          catch (UnsatisfiedLinkError e) {
              try {
                  NativeUtils.loadLibraryFromJar(nativeResourcePath + System.mapLibraryName(libName));
@@ -61,11 +61,11 @@ public class Initializer {
              }
          }
     }
-    
+
     /**
      * add libPath to java.library.path, then native library in libPath would be load properly
      * @param libPath
-     * @throws IOException 
+     * @throws IOException
      */
     public static void addNativeDir(String libPath) throws IOException {
         try {
@@ -83,10 +83,10 @@ public class Initializer {
             field.set(null, tmp);
         } catch (IllegalAccessException  e) {
             logger.error(e.getMessage());
-            throw new IOException("Failed to get permissions to set library path"); 
+            throw new IOException("Failed to get permissions to set library path");
         } catch (NoSuchFieldException e) {
             logger.error(e.getMessage());
-            throw new IOException("Failed to get field handle to set library path"); 
+            throw new IOException("Failed to get field handle to set library path");
         }
     }
 }

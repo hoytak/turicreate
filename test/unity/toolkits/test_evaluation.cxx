@@ -40,7 +40,7 @@ struct evaluation_test {
       true_max_error = std::max(true_max_error, err);
     }
     double true_rmse = std::pow(total / (double) num_observations, .5);
- 
+
     std::shared_ptr<sarray<flexible_type> > predictions_sa = make_testing_sarray(
           flex_type_enum::FLOAT, predictions);
     std::shared_ptr<sarray<flexible_type> > targets_sa = make_testing_sarray(
@@ -91,15 +91,15 @@ struct evaluation_test {
       size_t n_bins = 100;
       size_t bin = std::floor((double) predictions[i] * (double) n_bins);
       if (bin == n_bins) bin -= 1;
-      //logprogress_stream << predictions[i] 
-      //                   << " " 
+      //logprogress_stream << predictions[i]
+      //                   << " "
       //                   << bin
       //                   << " "
       //                   << targets[i]
-      //                   << " " 
+      //                   << " "
       //                   << std::endl;
     }
- 
+
     std::shared_ptr<sarray<flexible_type> > predictions_sa = make_testing_sarray(
           flex_type_enum::FLOAT, predictions);
     std::shared_ptr<sarray<flexible_type> > targets_sa = make_testing_sarray(
@@ -111,8 +111,8 @@ struct evaluation_test {
 
     // Act
     std::map<std::string, flexible_type> kwargs {
-               {"average", FLEX_UNDEFINED}, 
-               {"binary", true}}; 
+               {"average", FLEX_UNDEFINED},
+               {"binary", true}};
     variant_type result = evaluation::_supervised_streaming_evaluator(
              unity_targets_sa, unity_predictions_sa, "roc_curve", kwargs);
 
@@ -120,7 +120,7 @@ struct evaluation_test {
     //logprogress_stream << "Now printing." << std::endl;
     //auto sf = *(variant_get_value<std::shared_ptr<unity_sframe>>(result))->get_underlying_sframe();
     //sf.debug_print();
-    
+
   }
 
 
@@ -153,7 +153,7 @@ struct evaluation_test {
         }
       }
     }
- 
+
     std::shared_ptr<sarray<flexible_type> > predictions_sa = make_testing_sarray(
           flex_type_enum::FLOAT, predictions);
     std::shared_ptr<sarray<flexible_type> > targets_sa = make_testing_sarray(
@@ -162,17 +162,17 @@ struct evaluation_test {
     unity_targets_sa->construct_from_sarray(targets_sa);
     std::shared_ptr<unity_sarray> unity_predictions_sa= std::make_shared<unity_sarray>();
     unity_predictions_sa->construct_from_sarray(predictions_sa);
-     
+
     std::map<std::string, flexible_type> kwargs {
-               {"average", "micro"}, 
-               {"binary", true}}; 
+               {"average", "micro"},
+               {"binary", true}};
     variant_type result = evaluation::_supervised_streaming_evaluator(
              unity_targets_sa, unity_predictions_sa, "roc_curve", kwargs);
     variant_type accuracy = evaluation::_supervised_streaming_evaluator(
                         unity_targets_sa, unity_predictions_sa, "accuracy");
     double true_accuray = (double)(true_positive + true_negative) / num_observations;
     TS_ASSERT(std::abs(variant_get_value<double>(accuracy) - true_accuray) < 1e-15);
- 
+
   }
 
 };

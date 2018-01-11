@@ -104,4 +104,3 @@ Notes
   the two first lines of script (ie. after the "echo" and the "COMPILE" lines).
   NB: This will probably only function if "--disable-shared" was used, otherwise
   who knows what would result ...
-

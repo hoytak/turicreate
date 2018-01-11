@@ -16,15 +16,15 @@ namespace zookeeper_util {
 
 
 /**
- * This is a fake class used to mock the key_value object in the event that 
+ * This is a fake class used to mock the key_value object in the event that
  * zookeeper is unnecessary.
- */ 
+ */
 class key_value {
  public:
-  
-  ///  Joins a zookeeper cluster. 
+
+  ///  Joins a zookeeper cluster.
   ///  Zookeeper nodes will be created in the prefix "prefix".
-  inline key_value(std::vector<std::string> zkhosts, 
+  inline key_value(std::vector<std::string> zkhosts,
                    std::string prefix,
                    std::string serveridentifier) {}
   /// destructor
@@ -36,13 +36,13 @@ class key_value {
   inline bool insert(const std::string& key, const std::string& value) { return true; }
 
   /** Modifies the value in the key value store. Returns true on success.
-   * False on failure. This instance must own the key (created the key) 
+   * False on failure. This instance must own the key (created the key)
    * to modify its value.
    */
   inline bool modify(const std::string& key, const std::string& value) {return true; }
 
   /** Removed a key in the key value store. Returns true on success.
-   * False on failure. This instance must own the key (created the key) 
+   * False on failure. This instance must own the key (created the key)
    * to delete the key.
    */
   inline bool erase(const std::string& key) { return true; }
@@ -57,17 +57,17 @@ class key_value {
   typedef boost::function<void(key_value*,
                                const std::vector<std::string>& out_newkeys,
                                const std::vector<std::string>& out_deletedkeys,
-                               const std::vector<std::string>& out_modifiedkeys) 
+                               const std::vector<std::string>& out_modifiedkeys)
                           >  callback_type;
 
-  /** Adds a callback which will be triggered when any key/value 
-   * changes. The callback arguments will be the key_value object, 
+  /** Adds a callback which will be triggered when any key/value
+   * changes. The callback arguments will be the key_value object,
    * and the new complete key-value mapping.
    * Calling this function will a NULL argument deletes
-   * the callback. Note that the callback may be triggered in a different thread. 
+   * the callback. Note that the callback may be triggered in a different thread.
    *
    * Returns the id of the callback. Calling remove_callback with the id
-   * disables the callback. 
+   * disables the callback.
    */
   int add_callback(callback_type fn) {
     return 0;
@@ -85,4 +85,3 @@ class key_value {
 } // namespace zookeeper
 } // namespace turi
 #endif
-

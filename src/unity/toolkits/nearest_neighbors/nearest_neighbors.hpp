@@ -12,7 +12,7 @@
 #include <unity/lib/variant_deep_serialize.hpp>
 
 // Data structure utils
-#include <sframe/sframe_iterators.hpp> 
+#include <sframe/sframe_iterators.hpp>
 #include <unity/toolkits/ml_data_2/ml_data.hpp>
 #include <unity/toolkits/ml_data_2/metadata.hpp>
 #include <unity/toolkits/ml_data_2/row_slicing_utilities.hpp>
@@ -36,8 +36,8 @@ namespace nearest_neighbors {
 
 typedef std::tuple<std::vector<std::string>, function_closure_info, double> dist_component_type;
 
-} 
-} 
+}
+}
 
 BEGIN_OUT_OF_PLACE_SAVE(arc, turi::nearest_neighbors::dist_component_type, d) {
   std::map<std::string, turi::variant_type> data;
@@ -57,7 +57,7 @@ BEGIN_OUT_OF_PLACE_LOAD(arc, turi::nearest_neighbors::dist_component_type, d) {
   __EXTRACT(column_names);
   __EXTRACT(weight);
 #undef __EXTRACT
-  arc >> distance_info;  
+  arc >> distance_info;
   d = std::make_tuple(column_names, distance_info, weight);
 
 } END_OUT_OF_PLACE_LOAD()
@@ -97,7 +97,7 @@ class neighbor_candidates;
  * \return std::pair<size_t, size_t> Row and column index in the upper
  * triangular matrix.
  */
- std::pair<size_t, size_t> upper_triangular_indices(const size_t i, 
+ std::pair<size_t, size_t> upper_triangular_indices(const size_t i,
                                                     const size_t n);
 
 /**
@@ -123,7 +123,7 @@ std::string extract_distance_function_name(
  * \param num_query_examples size_t Number of total reference query points.
  * \param dimension size_t Number of (unpacked) features in each data point.
  * \param max_thread_memory Max memory to use in each thread (in bytes).
- * \param min_ref_blocks Lower bound on the number of reference blocks to use. 
+ * \param min_ref_blocks Lower bound on the number of reference blocks to use.
  * \param min_query_blocks Lower bound on the number of reference blocks to use.
  *
  * \return num_blocks A pair of block sizes, (num_ref_blocks, num_query_blocks)
@@ -216,7 +216,7 @@ void append_neighbors_to_sframe(
 /**
  * Nearest neighbors model base class
  * -----------------------------------------------------------------------------
- * 
+ *
  * Base class for computing k-nearest neighbors queries, inherited by both the
  * ball tree and LSH structure. Each nearest neighbors model contains the
  * following;
@@ -230,11 +230,11 @@ void append_neighbors_to_sframe(
  *     A globally consistent object with target metadata. For nearest neighbors
  *     this is merely used to index reference and query rows; it is not
  *     predicted as in supervised learning.
- * 
+ *
  * - num_examples:
  *     Number of rows in the reference data.
  *
- * - num_features: 
+ * - num_features:
  *     Number of features in the reference and query  data. This counts dense
  *     and sparse vectors as single features.
  *
@@ -265,7 +265,7 @@ void append_neighbors_to_sframe(
  *     A predict function for the model for batch predictions. The result of
  *     this function can be an SArray of predictions. One for each value of the
  *     input SFrame.
- *             
+ *
  * - evaluate:
  *     An evaluattion function for the model for evaluations. The result of this
  *     function must be an updated evaluation_stats map which can be queried
@@ -303,7 +303,7 @@ class EXPORT nearest_neighbors_model : public ml_model_base {
    * Methods that may be overriden in derived classes.
    * ---------------------------------------------------------------------------
    */
- public: 
+ public:
 
   nearest_neighbors_model();
   /**
@@ -359,7 +359,7 @@ class EXPORT nearest_neighbors_model : public ml_model_base {
    *
    * \note Already assumes that data is of the right shape.
    */
-  virtual sframe query(const sframe& X, const size_t k, 
+  virtual sframe query(const sframe& X, const size_t k,
                        const double radius) const;
 
   /**
@@ -435,8 +435,8 @@ class EXPORT nearest_neighbors_model : public ml_model_base {
    * option manager should throw errors if the options do not satisfy the option
    * manager's conditions.
    *
-   * \param[in] opts Options to set 
-   */  
+   * \param[in] opts Options to set
+   */
   virtual void init_options(const std::map<std::string,flexible_type>& _opts) = 0;
 
 
@@ -492,10 +492,10 @@ class EXPORT nearest_neighbors_model : public ml_model_base {
   std::shared_ptr<v2::ml_metadata> get_metadata() const;
 
   /**
-   * Check the query schema against the create schema. 
+   * Check the query schema against the create schema.
    * \param[in] X SFrame
    *
-   */  
+   */
   void check_schema_for_query(const sframe& X) const;
 
   /**
@@ -537,10 +537,10 @@ class EXPORT nearest_neighbors_model : public ml_model_base {
    *
    * \param[in] y SFrame Label data.
    */
-  void validate_distance_components(const std::vector<dist_component_type>& composite_params, 
-                                    const sframe& X); 
+  void validate_distance_components(const std::vector<dist_component_type>& composite_params,
+                                    const sframe& X);
 
-  /** 
+  /**
    * Check that the feature types are valid for a particular distance component.
    * Return the row data type.
    *
@@ -549,7 +549,7 @@ class EXPORT nearest_neighbors_model : public ml_model_base {
    * \param[in] distance_name std::string
    * \param[in] weight double
    *
-   */  
+   */
   void validate_distance_component(const std::vector<std::string> column_names,
                                    const sframe& X,
                                    const function_closure_info distance_name,
@@ -597,7 +597,7 @@ class EXPORT nearest_neighbors_model : public ml_model_base {
  *
  * - print_candidates:
  *      Print all of the candidates with logprogress_stream.
- * 
+ *
  * - sort_candidates:
  *      Sort the candidates, from smallest to largest distances (the first
  *      element of each pair in the candidates vector/heap).
@@ -618,7 +618,7 @@ class neighbor_candidates {
  public:
 
   // each candidate is both an index and distance
-  std::vector<std::pair<double, size_t>> candidates;  
+  std::vector<std::pair<double, size_t>> candidates;
 
   neighbor_candidates(size_t lbl, size_t a, double b, bool c);
 
@@ -646,7 +646,7 @@ class neighbor_candidates {
 
   /**
    * Evaluate a specified reference point as a nearest neighbor candidate.
-   * 
+   *
    * \param[in] point std::pair<double, int> Reference point to consider.
    * Consists of the distance to the query point and the index of the reference
    * point.

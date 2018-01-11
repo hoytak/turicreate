@@ -481,4 +481,3 @@
 #endif
 
 #endif /* __CURL_SYSTEM_H */
-

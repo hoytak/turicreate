@@ -16,14 +16,14 @@ namespace turi {
    * \ingroup group_serialization
    *  \brief Inheritting from this class will prevent the serialization
    *         of the derived class. Used for debugging purposes.
-   * 
+   *
    *  Inheritting from this class will result in an assertion failure
    * if any attempt is made to serialize or deserialize the derived
    * class. This is largely used for debugging purposes to enforce
-   * that certain types are never serialized 
+   * that certain types are never serialized
    */
   struct unsupported_serialize {
-    void save(oarchive& archive) const {      
+    void save(oarchive& archive) const {
       ASSERT_MSG(false, "trying to serialize an unserializable object");
     }
     void load(iarchive& archive) {
@@ -35,13 +35,13 @@ namespace turi {
 
 /**
 \ingroup group_serialization
-\brief A macro which disables the serialization of type so that 
-it will fault at runtime. 
+\brief A macro which disables the serialization of type so that
+it will fault at runtime.
 
 Writing TURI_UNSERIALIZABLE(T) for some typename T in the global namespace
 will result in an assertion failure if any attempt is made to serialize or
 deserialize the type T.  This is largely used for debugging purposes to enforce
-that certain types are never serialized. 
+that certain types are never serialized.
 */
 #define TURI_UNSERIALIZABLE(tname) \
   BEGIN_OUT_OF_PLACE_LOAD(arc, tname, tval) \
@@ -54,4 +54,3 @@ that certain types are never serialized.
 
 
 #endif
-

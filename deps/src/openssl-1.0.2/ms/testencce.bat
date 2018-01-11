@@ -94,4 +94,3 @@ echo OK
 del %out1% >nul 2>&1
 del %tmp1% >nul 2>&1
 :err
-

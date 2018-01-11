@@ -309,7 +309,7 @@ size_t unity_sketch::num_elements_processed() {
   return m_rows_processed_by_threads.value;
 }
 
-std::map<flexible_type, std::shared_ptr<unity_sketch_base>> 
+std::map<flexible_type, std::shared_ptr<unity_sketch_base>>
 unity_sketch::element_sub_sketch(const std::vector<flexible_type>& keys) {
   if (m_stored_type != flex_type_enum::VECTOR && m_stored_type != flex_type_enum::DICT) {
     log_and_throw("sub_element_sketch is only available for SArray of dictionary or array type");
@@ -577,7 +577,7 @@ void unity_sketch::numeric_sketch_struct::combine(const numeric_sketch_struct& o
 void unity_sketch::numeric_sketch_struct::accumulate(double dval) {
   if(std::isnan(dval))
     return;
-  
+
   quantiles->add(dval);
 
   min = std::min(min, dval);
@@ -609,7 +609,7 @@ void unity_sketch::discrete_sketch_struct::reset() {
 void unity_sketch::discrete_sketch_struct::accumulate(const flexible_type& val) {
   if(val.get_type() == flex_type_enum::FLOAT && std::isnan(val.get<flex_float>()))
     return;
-  
+
   count->add(val);
   frequent->add(val);
   unique->add(val);

@@ -101,7 +101,7 @@ JSONNode JSONPreparse::isValidNumber(json_string::const_iterator & ptr, json_str
     json_string::const_iterator start = ptr;
     bool decimal = false;
     bool scientific = false;
-    
+
     //first letter is weird
     switch(*ptr){
 	   #ifndef JSON_STRICT
@@ -110,7 +110,7 @@ JSONNode JSONPreparse::isValidNumber(json_string::const_iterator & ptr, json_str
 		  break;
 	   case JSON_TEXT('+'):
 	   #endif
-		  
+
 	   case JSON_TEXT('-'):
 	   case JSON_TEXT('1'):
 	   case JSON_TEXT('2'):
@@ -151,7 +151,7 @@ JSONNode JSONPreparse::isValidNumber(json_string::const_iterator & ptr, json_str
 					   throw false;
 				}
 				break;
-				
+
 			 #ifndef JSON_STRICT
 			 case JSON_TEXT('x'):
 				while(isHex(*++ptr)){};
@@ -172,7 +172,7 @@ JSONNode JSONPreparse::isValidNumber(json_string::const_iterator & ptr, json_str
 				while((*++ptr >= JSON_TEXT('0')) && (*ptr <= JSON_TEXT('7'))){};
 				if ((*ptr != JSON_TEXT('8')) && (*ptr != JSON_TEXT('9'))){
 				    return JSONNode(json_global(EMPTY_JSON_STRING), FetchNumber(json_string(start, ptr - 1)));
-				} 
+				}
 				throw false;
 			 case JSON_TEXT('8'):
 			 case JSON_TEXT('9'):
@@ -219,7 +219,7 @@ JSONNode JSONPreparse::isValidNumber(json_string::const_iterator & ptr, json_str
 		  throw false;
     }
     ++ptr;
-    
+
     //next digits
     while (true){
 	   switch(*ptr){
@@ -294,7 +294,7 @@ JSONNode JSONPreparse::isValidMember(json_string::const_iterator & ptr, json_str
     //ptr is on the first character of the member
     //ptr will end up immediately after the last character in the member
     if (ptr == end) throw false;
-    
+
     switch(*ptr){
 	   case JSON_TEXT('\"'):{
            return JSONNode::stringType(isValidString(++ptr, end));
@@ -337,7 +337,7 @@ json_string JSONPreparse::isValidString(json_string::const_iterator & ptr, json_
     //ptr is pointing to the first character after the quote
     //ptr will end up behind the closing "
     json_string::const_iterator start = ptr;
-    
+
     while(ptr != end){
 	   switch(*ptr){
 		  case JSON_TEXT('\\'):
@@ -488,7 +488,7 @@ JSONNode JSONPreparse::isValidRoot(const json_string & json) json_throws(std::in
 			   RETURN_NODE(isValidArray(++it, end), comment);
 	   }
     } catch (...){}
-    
+
     #ifndef JSON_NO_EXCEPTIONS
 	   throw std::invalid_argument(json_global(EMPTY_STD_STRING));
     #else

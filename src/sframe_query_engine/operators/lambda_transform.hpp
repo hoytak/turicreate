@@ -21,7 +21,7 @@ namespace query_eval {
  */
 
 /**
- * A "transform" operator that applies a python lambda function to a 
+ * A "transform" operator that applies a python lambda function to a
  * single stream of input.
  */
 template<>
@@ -68,7 +68,7 @@ class operator_impl<planner_node_type::LAMBDA_TRANSFORM_NODE> : public query_ope
         // need column names to evalute on sframe
         m_lambda->eval(m_column_names, *rows, out);
       }
-    
+
       for (size_t i = 0;i < out.size(); ++i) {
         (*output)[i][0] = convert_value_to_output_type(out[i], m_output_type);
       }
@@ -88,7 +88,7 @@ class operator_impl<planner_node_type::LAMBDA_TRANSFORM_NODE> : public query_ope
     auto lambda_function = std::make_shared<lambda::pylambda_function>(lambda_str);
     lambda_function->set_skip_undefined(skip_undefined);
     lambda_function->set_random_seed(random_seed);
-    return planner_node::make_shared(planner_node_type::LAMBDA_TRANSFORM_NODE, 
+    return planner_node::make_shared(planner_node_type::LAMBDA_TRANSFORM_NODE,
                                      {{"output_type", (int)(output_type)},
                                       {"lambda_str", lambda_str},
                                       {"skip_undefined", (int)(skip_undefined)},
@@ -109,9 +109,9 @@ class operator_impl<planner_node_type::LAMBDA_TRANSFORM_NODE> : public query_ope
     ASSERT_TRUE(pnode->operator_parameters.count("random_seed"));
     ASSERT_TRUE(pnode->any_operator_parameters.count("lambda_fn"));
 
-    flex_type_enum output_type = 
+    flex_type_enum output_type =
         (flex_type_enum)(flex_int)(pnode->operator_parameters["output_type"]);
-    flex_list column_names_list = 
+    flex_list column_names_list =
         (pnode->operator_parameters["column_names"]).get<flex_list>();
     std::vector<std::string> column_names(column_names_list.begin(), column_names_list.end());
 
@@ -160,7 +160,7 @@ class operator_impl<planner_node_type::LAMBDA_TRANSFORM_NODE> : public query_ope
   /**
    * Helper function to convert flexible_type value to expected type.
    */
-  static flexible_type convert_value_to_output_type(const flexible_type& val, 
+  static flexible_type convert_value_to_output_type(const flexible_type& val,
                                                     flex_type_enum type) {
     if (val.get_type() == type ||
         val.get_type() == flex_type_enum::UNDEFINED ||
@@ -170,16 +170,16 @@ class operator_impl<planner_node_type::LAMBDA_TRANSFORM_NODE> : public query_ope
       flexible_type res(type);
       res.soft_assign(val);
       return res;
-    } else if ( (val.get_type() == flex_type_enum::VECTOR && 
-                 type == flex_type_enum::LIST) 
-               || (val.get_type() == flex_type_enum::LIST && 
+    } else if ( (val.get_type() == flex_type_enum::VECTOR &&
+                 type == flex_type_enum::LIST)
+               || (val.get_type() == flex_type_enum::LIST &&
                    type == flex_type_enum::VECTOR)) {
       // empty lists / vectors cast between each other.
       flexible_type res(type);
       res.soft_assign(val);
       return res;
     } else {
-      std::string message = "Cannot convert " + std::string(val) + 
+      std::string message = "Cannot convert " + std::string(val) +
           " to " + flex_type_enum_to_name(type);
       logstream(LOG_ERROR) <<  message << std::endl;
       throw(bad_cast(message));

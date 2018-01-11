@@ -9,7 +9,7 @@ from cpython.version cimport PY_MAJOR_VERSION
 
 cdef string _attempt_cast_str_to_cpp(py_s) except *:
     """
-    The last resort conversion routine for strings cast 
+    The last resort conversion routine for strings cast
     """
 
     cdef bint success
@@ -19,7 +19,7 @@ cdef string _attempt_cast_str_to_cpp(py_s) except *:
     # However, the cast to str can succeed even if it's actually a
     # bytes class -- e.g. np.string_.
     if PY_MAJOR_VERSION >= 3:
-    
+
         try:
             py_s = bytes(py_s)
             success = True
@@ -43,7 +43,7 @@ cdef string _attempt_cast_str_to_cpp(py_s) except *:
     if success:
         return unsafe_str_to_cpp(py_s)
 
-    # Now,see about the unicode route. 
+    # Now,see about the unicode route.
     if PY_MAJOR_VERSION == 2:
         try:
             new_py_s = unicode(py_s)

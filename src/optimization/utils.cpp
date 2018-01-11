@@ -15,7 +15,7 @@
 // 3. Model computes residual?
 
 namespace turi {
-  
+
 namespace optimization {
 
 /**
@@ -26,7 +26,7 @@ namespace optimization {
 void set_default_solver_options(const first_order_opt_interface& model, const
     DenseVector& point, const std::string solver, std::map<std::string,
     flexible_type>& opts){
-    
+
   std::stringstream msg;
 
   if (model.num_variables() != point.size()){
@@ -35,7 +35,7 @@ void set_default_solver_options(const first_order_opt_interface& model, const
         " variables." << std::endl;
       log_and_throw(msg.str());
   }
-  
+
   // Check that all solver options are present and make sure types are right too.
   for (const auto& kvp:  default_solver_options) {
     if (opts.count(kvp.first) == 0){
@@ -45,39 +45,39 @@ void set_default_solver_options(const first_order_opt_interface& model, const
     if(not(opts[kvp.first].get_type() == ctype)){
       msg << "Optimization Error: Option "
           << kvp.first << " must be of type " << flex_type_enum_to_name(ctype)
-          << std::endl; 
+          << std::endl;
       log_and_throw(msg.str());
-    } 
+    }
   }
-  
+
   // Check that the options make sense.
   // --------------------------------------------------------------------------
   if (opts["max_iterations"] <= 0){
-    msg << "Optimization Error: Called " << solver 
+    msg << "Optimization Error: Called " << solver
         << " with <= 0 iterations." << std::endl;
     log_and_throw(msg.str());
   }
   if (model.num_examples() == 0){
-    msg << "Optimization Error: Called " << solver 
+    msg << "Optimization Error: Called " << solver
         << " on a model with no data" << std::endl;
     log_and_throw(msg.str());
   }
   if (model.num_variables()== 0){
-    msg << "Optimization Error: Called " << solver 
+    msg << "Optimization Error: Called " << solver
         << " on a model with no variables." << std::endl;
     log_and_throw(msg.str());
   }
   if (opts["convergence_threshold"] < optimization::OPTIMIZATION_ZERO){
-    msg << "Option convergence threshold cannot be lower than " 
-       << std::scientific << std::setprecision(5) 
+    msg << "Option convergence threshold cannot be lower than "
+       << std::scientific << std::setprecision(5)
        << optimization::OPTIMIZATION_ZERO << "." << std::endl;
     log_and_throw(msg.str());
   }
   if (opts["step_size"] < optimization::LS_ZERO || opts["step_size"]
       > optimization::LS_MAX_STEP_SIZE){
-    msg << "Step size (a.k.a learning rate) must be in [" 
-        << std::scientific << std::setprecision(5) 
-        << optimization::LS_ZERO << "," 
+    msg << "Step size (a.k.a learning rate) must be in ["
+        << std::scientific << std::setprecision(5)
+        << optimization::LS_ZERO << ","
         << optimization::LS_MAX_STEP_SIZE<< "]." << std::endl;
     log_and_throw(msg.str());
   }
@@ -88,20 +88,20 @@ void set_default_solver_options(const first_order_opt_interface& model, const
 
   // Solver specific options
   // --------------------------------------------------------------------------
-  
-  // SGD 
+
+  // SGD
   if (solver == "sgd"){
     if (opts["mini_batch_size"] <= 0){
-      msg << "Optimization Error: Called " << solver 
+      msg << "Optimization Error: Called " << solver
           << "with minibatch size of 0." << std::endl;
       log_and_throw(msg.str());
     }
   }
 
-  // L-BFGS 
+  // L-BFGS
   if (solver == "lbfgs" || solver == "l-bfgs"){
     if (opts["lbfgs_memory_level"] <= 0){
-      msg << "L-BFGS memory level must be more than 1." 
+      msg << "L-BFGS memory level must be more than 1."
           << std::endl;
       log_and_throw(msg.str());
     }
@@ -129,7 +129,7 @@ double compute_residual(const DenseVector& gradient){
 }
 
 /**
- * Check gradient of first_order_optimization_iterface models at a point. 
+ * Check gradient of first_order_optimization_iterface models at a point.
 */
 bool check_gradient(first_order_opt_interface& model, const DenseVector&
     point, const DenseVector& gradient, const size_t mbStart, const size_t
@@ -139,7 +139,7 @@ bool check_gradient(first_order_opt_interface& model, const DenseVector&
   // Check that the dimensions match
   if (gradient.n_cols != point.n_cols){
     logprogress_stream << "Gradient is (" << gradient.n_rows << "x" << gradient.n_cols
-                  <<") which is mismatched with dimension of point (" 
+                  <<") which is mismatched with dimension of point ("
                   << point.n_cols << ")" <<  std::endl;
     return false;
   }
@@ -150,10 +150,10 @@ bool check_gradient(first_order_opt_interface& model, const DenseVector&
                   << model.num_examples() << " examples." << std::endl;
     return false;
   }
-  
+
   if (mbEnd > model.num_examples()){
     logprogress_stream << "Trying to index example" << mbEnd
-                  << " but the model has " << model.num_examples() 
+                  << " but the model has " << model.num_examples()
                   << " examples." << std::endl;
     return false;
   }
@@ -162,13 +162,13 @@ bool check_gradient(first_order_opt_interface& model, const DenseVector&
   size_t n = point.n_cols;                 // Dimension
   DenseVector new_point = point;           // New point
   double f_l, f_r, grad_i;
-  double rel_toler;                     
+  double rel_toler;
 
-  // Check gradient using central difference. 
+  // Check gradient using central difference.
   // Required (n+1) function computations.
   for(size_t i=0; i < n; i++){
 
-    // Compute function values at both ends. 
+    // Compute function values at both ends.
     // (More accurate than forward difference)
     new_point(i) = point(i) - FINITE_DIFFERENCE_EPSILON;
     f_l = model.compute_function_value(new_point, mbStart, mbSize);
@@ -177,15 +177,15 @@ bool check_gradient(first_order_opt_interface& model, const DenseVector&
     new_point(i) = point(i) + FINITE_DIFFERENCE_EPSILON;
     f_r = model.compute_function_value(new_point, mbStart, mbSize);
     new_point(i) = point(i);
-    
+
     grad_i = (f_r - f_l) / (2 * FINITE_DIFFERENCE_EPSILON);
-    
+
     // Check for relative gradiends (Safeguard against poor scaling)
     rel_toler = std::abs(gradient(i) - grad_i) / std::max(std::abs(gradient(i)), 1.0);
 
     // Expect the gradient to be atleast as accurate as 1e-3
     if(rel_toler >= 1e-3){
-      
+
       logprogress_stream << "Gradient mismatch " << std::endl;
       logprogress_stream << "Index           : " << i << std::endl;
       logprogress_stream << "Minibatch start : " << mbStart << std::endl;
@@ -198,12 +198,12 @@ bool check_gradient(first_order_opt_interface& model, const DenseVector&
   }
   return true;
 
-} 
+}
 
 
 
 /**
- * Check gradient of first_order_optimization_iterface models at a point. 
+ * Check gradient of first_order_optimization_iterface models at a point.
  *
 */
 bool check_gradient(first_order_opt_interface& model, const DenseVector&
@@ -220,7 +220,7 @@ bool check_gradient(first_order_opt_interface& model, const DenseVector&
 
 
 /**
- * Check hessian of second_order_optimization_iterface models at a point. 
+ * Check hessian of second_order_optimization_iterface models at a point.
  *
 */
 bool check_hessian(second_order_opt_interface& model, const DenseVector& point,
@@ -242,13 +242,13 @@ bool check_hessian(second_order_opt_interface& model, const DenseVector& point,
   size_t n = point.size();                 // Dimension
   DenseVector new_point = point;           // New point
   double f_ip_jp, f_ip_jn, f_in_jp, f_in_jn, hessian_ij;
-  double rel_toler;                     
-  
+  double rel_toler;
+
 
   // Required 4n^2 function computations but is more accurate than forward
   // differences.
   for(size_t i=0; i < n; i++){
-  
+
     for(size_t j=0; j < n; j++){
 
       // Compute function values at 4 points
@@ -264,7 +264,7 @@ bool check_hessian(second_order_opt_interface& model, const DenseVector& point,
       f_ip_jp = model.compute_function_value(new_point);
       new_point(i) = point(i);
       new_point(j) = point(j);
-      
+
       // Point 2:
       if (i != j){
         new_point(i) = point(i) + FINITE_DIFFERENCE_EPSILON;
@@ -275,8 +275,8 @@ bool check_hessian(second_order_opt_interface& model, const DenseVector& point,
       f_ip_jn = model.compute_function_value(new_point);
       new_point(i) = point(i);
       new_point(j) = point(j);
-      
-      
+
+
       // Point 3:
       if (i != j){
         new_point(i) = point(i) - FINITE_DIFFERENCE_EPSILON;
@@ -287,7 +287,7 @@ bool check_hessian(second_order_opt_interface& model, const DenseVector& point,
       f_in_jp = model.compute_function_value(new_point);
       new_point(i) = point(i);
       new_point(j) = point(j);
-      
+
       // Point 4:
       if (i != j){
         new_point(i) = point(i) - FINITE_DIFFERENCE_EPSILON;
@@ -298,20 +298,20 @@ bool check_hessian(second_order_opt_interface& model, const DenseVector& point,
       f_in_jn = model.compute_function_value(new_point);
       new_point(i) = point(i);
       new_point(j) = point(j);
-      
+
       hessian_ij = (f_ip_jp + f_in_jn - f_ip_jn - f_in_jp) / (4
           * pow(FINITE_DIFFERENCE_EPSILON,2));
-      
+
       // Check for relative gradiends (Safeguard against poor scaling)
       rel_toler = std::abs(hessian(i,j) - hessian_ij) / std::max(std::abs(hessian(i,j)),
           1.0);
 
       // Expect the gradient to be atleast as accurate as 1e-3
       if(rel_toler >= 1e-3){
-        
+
         logprogress_stream << "Hessian mismatch " << std::endl;
         logprogress_stream << "Index           : " << i << "," << j << std::endl;
-        logprogress_stream << "Should be around " << hessian_ij << " but is " 
+        logprogress_stream << "Should be around " << hessian_ij << " but is "
                            << hessian(i,j) << std::endl;
         return false;
       }
@@ -319,7 +319,7 @@ bool check_hessian(second_order_opt_interface& model, const DenseVector& point,
   }
 
   return true;
-} 
+}
 
 
 
@@ -347,10 +347,10 @@ std::string translate_solver_status(const OPTIMIZATION_STATUS& status){
 	      ret = "TERMINATED: Time limit reached.";
         break;
      case OPTIMIZATION_STATUS::OPT_INTERRUPTED:
- 	      ret = "TERMINATED: Terminated by user.";
+	      ret = "TERMINATED: Terminated by user.";
         break;
      case OPTIMIZATION_STATUS::OPT_NUMERIC_ERROR:
- 	      ret = "TERMINATED: Terminated due to numerical difficulties.";
+	      ret = "TERMINATED: Terminated due to numerical difficulties.";
         break;
      case OPTIMIZATION_STATUS::OPT_NUMERIC_OVERFLOW:
         ret = "TERMINATED: Terminated due to numerical overflow error. ";
@@ -419,7 +419,7 @@ void log_solver_summary_stats(const solver_return& stats){
     ss << "Number of Passes  = " << stats.num_passes << std::endl;
     ss << "Function evals    = " << stats.func_evals << std::endl;
     ss << "Gradient evals    = " << stats.gradient_evals  << std::endl;
-    ss << "Solver Status     = " << translate_solver_status(stats.status) 
+    ss << "Solver Status     = " << translate_solver_status(stats.status)
                               << std::endl;
     logstream(LOG_INFO) << ss.str() << std::endl;
     ss.str("");

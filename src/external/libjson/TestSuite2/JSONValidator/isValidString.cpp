@@ -39,11 +39,11 @@ void testJSONValidator__isValidString::testSuddenEnd(void){
     assertNotValid("he\\", isValidString, ':');
     assertNotValid("he\\\"", isValidString, ':');  //escaped quote
     assertNotValid("he\\\"llo\\\"", isValidString, ':');  //two esacaped quotes
-	
+
 	//--- void testJSONValidator__isValidString::testNormal(void){
 	assertNotValid("hello", isValidString, ':');
     assertNotValid("he\\\"ll\\\"o", isValidString, ':');
-	
+
 	//--- void testJSONValidator__isValidString::testUnicode(void){
 	assertNotValid("he\\u1234llo", isValidString, ':');
     assertNotValid("he\\u0FF", isValidString, ':');
@@ -51,7 +51,7 @@ void testJSONValidator__isValidString::testSuddenEnd(void){
 	assertNotValid("he\\u0", isValidString, ':');
 	assertNotValid("he\\u", isValidString, ':');
 	assertNotValid("he\\", isValidString, ':');
-	
+
 	//strict stuff
 	assertNotValid("he\\xFF", isValidString, ':');
 	assertNotValid("he\\xF", isValidString, ':');

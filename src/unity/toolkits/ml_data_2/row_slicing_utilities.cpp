@@ -23,15 +23,15 @@ row_slicer::row_slicer(const std::shared_ptr<ml_metadata>& metadata,
                        const std::vector<size_t>& _columns_to_pick) {
 
   if(_columns_to_pick.empty()) {
-    pick_from_flexible_type = false; 
+    pick_from_flexible_type = false;
     return;
   }
-  
+
   if(!std::is_sorted(_columns_to_pick.begin(), _columns_to_pick.end())) {
-    ASSERT_MSG(false, "Selected columns must be in sorted order."); 
+    ASSERT_MSG(false, "Selected columns must be in sorted order.");
     return;
   }
-  
+
   ////////////////////////////////////////////////////////////
   // First go through and get the types of the given columns.
   pick_from_flexible_type = metadata->is_untranslated_column(_columns_to_pick.front()) ;
@@ -47,27 +47,27 @@ row_slicer::row_slicer(const std::shared_ptr<ml_metadata>& metadata,
     for(size_t c : _columns_to_pick) {
       if(c == i) return true;
     }
-    
-    return false; 
-  }; 
+
+    return false;
+  };
 
   if(pick_from_flexible_type) {
     // Go through and get the ones that
-    flex_type_columns_to_pick.clear(); 
+    flex_type_columns_to_pick.clear();
 
     // The indexing on the untranslated columns is dependent on the
     // untranslated ordering and count, so we have to translate the indices.
-    size_t untranslated_column_count = 0; 
+    size_t untranslated_column_count = 0;
     for(size_t c_idx = 0; c_idx < metadata->num_columns(); ++c_idx) {
-      
+
       if(is_included(c_idx))
-        flex_type_columns_to_pick.push_back(untranslated_column_count); 
+        flex_type_columns_to_pick.push_back(untranslated_column_count);
 
       if(metadata->is_untranslated_column(c_idx))
         ++untranslated_column_count;
     }
   } else {
-    // We can just copy the indices over. 
+    // We can just copy the indices over.
     column_pick_mask.assign(metadata->num_columns(), false);
 
     for(size_t c : _columns_to_pick)
@@ -77,7 +77,7 @@ row_slicer::row_slicer(const std::shared_ptr<ml_metadata>& metadata,
     index_offsets.assign(metadata->num_columns(), 0);
     index_sizes.assign(metadata->num_columns(), 0);
 
-    size_t cum_sum = 0; 
+    size_t cum_sum = 0;
     for(size_t i = 0; i < metadata->num_columns(); ++i) {
       if(column_pick_mask[i]) {
         index_sizes[i] = metadata->index_size(i);
@@ -87,54 +87,25 @@ row_slicer::row_slicer(const std::shared_ptr<ml_metadata>& metadata,
     }
 
     // Finally, set the number of dimensions
-    _num_dimensions = cum_sum; 
+    _num_dimensions = cum_sum;
   }
 }
 
 
 /**  Take a row, represented by a pair of translated and
  *   untranslated columns (either of which may be empty), and
- *   use it to fill a sparse vector with the result. 
+ *   use it to fill a sparse vector with the result.
  */
 void row_slicer::slice(sparse_vector& dest,
                        const std::vector<ml_data_entry>& x_t, const std::vector<flexible_type>&) const {
 
-  ASSERT_MSG(!pick_from_flexible_type, "Cannot be used for untranslated columns."); 
-
-  dest.resize(_num_dimensions);
-  dest.zeros();
-
-  for(const ml_data_entry& v : x_t) {
-    DASSERT_LT(v.column_index, index_sizes.size()); 
-    if(!column_pick_mask[v.column_index])
-      continue;
-
-    // Gracefully disregard new values
-    if(v.index >= index_sizes[v.column_index])
-      continue;
-
-    
-    dest(v.index + index_offsets[v.column_index]) = v.value; 
-  }
-}
-
-
-
-/**  Take a row, represented by a pair of translated and
- *   untranslated columns (either of which may be empty), and
- *   use it to fill a dense vector with the result. 
- */
-void row_slicer::slice(dense_vector& dest,
-                       const std::vector<ml_data_entry>& x_t, const std::vector<flexible_type>& x_u) const {
-
-  ASSERT_MSG(!pick_from_flexible_type, "Cannot be used for untranslated columns."); 
+  ASSERT_MSG(!pick_from_flexible_type, "Cannot be used for untranslated columns.");
 
   dest.resize(_num_dimensions);
   dest.zeros();
 
   for(const ml_data_entry& v : x_t) {
     DASSERT_LT(v.column_index, index_sizes.size());
-    
     if(!column_pick_mask[v.column_index])
       continue;
 
@@ -142,13 +113,42 @@ void row_slicer::slice(dense_vector& dest,
     if(v.index >= index_sizes[v.column_index])
       continue;
 
-    dest[v.index + index_offsets[v.column_index]] = v.value; 
+
+    dest(v.index + index_offsets[v.column_index]) = v.value;
+  }
+}
+
+
+
+/**  Take a row, represented by a pair of translated and
+ *   untranslated columns (either of which may be empty), and
+ *   use it to fill a dense vector with the result.
+ */
+void row_slicer::slice(dense_vector& dest,
+                       const std::vector<ml_data_entry>& x_t, const std::vector<flexible_type>& x_u) const {
+
+  ASSERT_MSG(!pick_from_flexible_type, "Cannot be used for untranslated columns.");
+
+  dest.resize(_num_dimensions);
+  dest.zeros();
+
+  for(const ml_data_entry& v : x_t) {
+    DASSERT_LT(v.column_index, index_sizes.size());
+
+    if(!column_pick_mask[v.column_index])
+      continue;
+
+    // Gracefully disregard new values
+    if(v.index >= index_sizes[v.column_index])
+      continue;
+
+    dest[v.index + index_offsets[v.column_index]] = v.value;
   }
 }
 
 /**  Take a row, represented by a pair of translated and
  *   untranslated columns (either of which may be empty), and
- *   use it to fill an untranslated row with the result. 
+ *   use it to fill an untranslated row with the result.
  */
 void row_slicer::slice(std::vector<flexible_type>& dest,
                        const std::vector<ml_data_entry>& x_t, const std::vector<flexible_type>& x_u) const {
@@ -158,7 +158,7 @@ void row_slicer::slice(std::vector<flexible_type>& dest,
   dest.resize(flex_type_columns_to_pick.size());
 
   for(size_t i = 0; i < flex_type_columns_to_pick.size(); ++i) {
-    DASSERT_LT(flex_type_columns_to_pick[i], x_u.size()); 
+    DASSERT_LT(flex_type_columns_to_pick[i], x_u.size());
     dest[i] = x_u[flex_type_columns_to_pick[i]];
   }
 }
@@ -177,7 +177,7 @@ void row_slicer::save(turi::oarchive& oarc) const {
   data["column_pick_mask"]          = to_variant(column_pick_mask);
   data["index_offsets"]             = to_variant(index_offsets);
   data["index_sizes"]               = to_variant(index_sizes);
-  data["_num_dimensions"]           = to_variant(_num_dimensions); 
+  data["_num_dimensions"]           = to_variant(_num_dimensions);
 
   variant_deep_save(data, oarc);
 
@@ -187,21 +187,21 @@ void row_slicer::save(turi::oarchive& oarc) const {
 /** Serialization -- load.
  */
 void row_slicer::load(turi::iarchive& iarc) {
-  
+
 #define __EXTRACT(var) var = variant_get_value<decltype(var)>(data.at(#var));
 
   std::map<std::string, variant_type> data;
   variant_deep_load(data, iarc);
-  
+
   __EXTRACT(pick_from_flexible_type);
   __EXTRACT(flex_type_columns_to_pick);
   __EXTRACT(column_pick_mask);
   __EXTRACT(index_offsets);
   __EXTRACT(index_sizes);
   __EXTRACT(_num_dimensions);
-  
+
 #undef __EXTRACT
-  
+
 }
 
 }}

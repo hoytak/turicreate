@@ -29,7 +29,7 @@ class simple_model: public model_base {
   std::string name() { return "simple_model"; };
 
   /**
-   * Constructs a simple_model from a variant map. 
+   * Constructs a simple_model from a variant map.
    * A copy of the map is taken and stored.
    */
   explicit simple_model(const variant_map_type& params) : params(params) {}
@@ -38,7 +38,7 @@ class simple_model: public model_base {
   /// Lists all the keys stored in the variant map
   std::vector<std::string> list_keys();
 
-  /** 
+  /**
    * Gets the value of a key in the variant map. Throws an error if the key
    * is not found. opts is ignored.
    */
@@ -59,7 +59,7 @@ class simple_model: public model_base {
    * Loads a model previously saved at a particular version number.
    * Should raise an exception on failure.
    */
-  void load_version(iarchive& iarc, size_t version); 
+  void load_version(iarchive& iarc, size_t version);
 
   /// Destructor
   ~simple_model();

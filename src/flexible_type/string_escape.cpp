@@ -6,10 +6,10 @@
 #include <flexible_type/string_escape.hpp>
 namespace turi {
 
-void escape_string(const std::string& val, 
-                   char escape_char, 
+void escape_string(const std::string& val,
+                   char escape_char,
                    bool use_escape_char,
-                   char quote_char, 
+                   char quote_char,
                    bool use_quote_char,
                    bool double_quote,
                    std::string& output, size_t& output_len) {
@@ -53,7 +53,7 @@ void escape_string(const std::string& val,
          // do not "double escape" if we have \u or \x. i.e. \u does not emit \\u
          if (i < val.size() - 1 && (val[i+1] == 'u' || val[i+1] == 'x')) {
            (*cur_out++) = c;
-         } else { 
+         } else {
            (*cur_out++) = escape_char;
            (*cur_out++) = '\\';
          }
@@ -167,11 +167,11 @@ size_t write_utf8(size_t code_point, char* c) {
     (*c++) = (((code_point >> 6) & 0x3F) + 0x80);
     (*c++) = ((code_point & 0x3F) + 0x80);
     return 4;
-  } 
+  }
   return 0;
 }
 
-size_t unescape_string(char* cal, size_t length, char escape_char, 
+size_t unescape_string(char* cal, size_t length, char escape_char,
                      char quote_char, bool double_quote) {
   // to avoid allocating a new string, we are do this entirely in-place
   // This works because for all the escapes we have here, the output string
@@ -221,10 +221,10 @@ size_t unescape_string(char* cal, size_t length, char escape_char,
          // we need to have at least 6 characters \uHHHH
          // But if the hex value HHHH is between 0xD800 and D8FF, it is a
          // surrogate pair, and we need to decode another 6 characters \uHHHH
-         // see 
+         // see
          // http://en.wikipedia.org/wiki/UTF-16
          if (in + 6 <= length) {
-           size_t unicode_val = 0; 
+           size_t unicode_val = 0;
            bool unicode_value_is_good = false;
            size_t unicode_block_length = 0;
            if (parse_hex_block(cal + in + 2, unicode_val)) {
@@ -233,14 +233,14 @@ size_t unescape_string(char* cal, size_t length, char escape_char,
                // we need one more code point
                size_t unicode_high_surrogate = unicode_val;
                size_t unicode_low_surrogate = 0;
-               bool low_surrogate_is_good = 
+               bool low_surrogate_is_good =
                    in + 12 <= length &&   // there is enough length for the next block
                    cal[in + 6] == escape_char && // next block is also \uHHHH
                    cal[in + 7] == 'u' &&
                    parse_hex_block(cal + in + 8, unicode_low_surrogate);
                // low surrogate must be within the acceptable range
                low_surrogate_is_good = low_surrogate_is_good &&
-                   unicode_low_surrogate >= 0xDC00 && 
+                   unicode_low_surrogate >= 0xDC00 &&
                    unicode_low_surrogate <= 0xDFFF;
                if (low_surrogate_is_good) {
                  unicode_val = ((unicode_high_surrogate - 0xD800) << 10) +
@@ -258,7 +258,7 @@ size_t unescape_string(char* cal, size_t length, char escape_char,
              // so we increment unicode_block_length - 1
              in += unicode_block_length - 1;
              // encode unicode_val to UTF-8
-             size_t bytes_written = write_utf8(unicode_val, cal + out); 
+             size_t bytes_written = write_utf8(unicode_val, cal + out);
              if (bytes_written != 0) {
                out += bytes_written;
                break;
@@ -268,14 +268,14 @@ size_t unescape_string(char* cal, size_t length, char escape_char,
        default:
          cal[out++] = cal[in]; // do nothing
       }
-    } 
-    else if (double_quote && 
-             cal[in]  == quote_char && 
+    }
+    else if (double_quote &&
+             cal[in]  == quote_char &&
              in + 1 < length && cal[in+1] == quote_char) {
       cal[out++] = quote_char;
       ++in;
     } else {
-      cal[out++] = cal[in]; 
+      cal[out++] = cal[in];
     }
     ++in;
   }
@@ -283,9 +283,9 @@ size_t unescape_string(char* cal, size_t length, char escape_char,
 }
 
 
-void unescape_string(std::string& cal, char escape_char, 
+void unescape_string(std::string& cal, char escape_char,
                      char quote_char, bool double_quote) {
-  size_t new_length = unescape_string(&(cal[0]), cal.length(), 
+  size_t new_length = unescape_string(&(cal[0]), cal.length(),
                                       escape_char, quote_char, double_quote);
   cal.resize(new_length);
 }

@@ -144,7 +144,7 @@ toolkit_function_response_type get_similar_items(toolkit_function_invocation& in
  */
 toolkit_function_response_type get_popularity_baseline(toolkit_function_invocation& invoke);
 
-/** Returns information about the intersection of users between two items. 
+/** Returns information about the intersection of users between two items.
  */
 toolkit_function_response_type get_item_intersection_info(toolkit_function_invocation& invoke);
 

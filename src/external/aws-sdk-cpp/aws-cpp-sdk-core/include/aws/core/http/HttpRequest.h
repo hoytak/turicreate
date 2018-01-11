@@ -131,7 +131,7 @@ namespace Aws
             const URI& GetUri() const { return m_uri; }
             /**
              * Converts the URI into a string and returns it. If includeQueryString is set to true, the query string
-             * will be included in the returned value. 
+             * will be included in the returned value.
              */
             inline Aws::String GetURIString(bool includeQueryString = true) const
             {
@@ -376,6 +376,3 @@ namespace Aws
 
     } // namespace Http
 } // namespace Aws
-
-
-

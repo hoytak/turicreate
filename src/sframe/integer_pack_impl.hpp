@@ -145,7 +145,7 @@ static inline void unpack_1(const uint8_t* src, size_t nout_values, uint64_t* ou
   uint8_t c = (*src++);
   // the first byte, if incomplete, annoying is going to live
   // in the most significant bits of c. Thus if nout_value % 8 != 0,
-  // I need to do a bit of shifting. 
+  // I need to do a bit of shifting.
   c >>= ((8 - (nout_values % 8)) % 8);
   switch(nout_values % 8) {
     do {         c = (*src++);

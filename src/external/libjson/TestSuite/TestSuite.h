@@ -55,11 +55,11 @@ public:
 #endif
 	static void TestSharedString(void);
     static void TestFinal(void);
-	
-	
-	
-	
-	
+
+
+
+
+
 #ifdef JSON_LIBRARY
 	static void testParsingItself(JSONNODE * x){
 	   #if defined(JSON_WRITE_PRIORITY) && defined(JSON_READ_PRIORITY)
@@ -106,4 +106,3 @@ public:
 };
 
 #endif
-

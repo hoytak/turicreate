@@ -16,12 +16,12 @@ using namespace turi;
 using namespace turi::sketches;
 
 struct space_saving_test {
-  template <typename SketchType> 
-  double random_integer_length_test(size_t len, 
+  template <typename SketchType>
+  double random_integer_length_test(size_t len,
                                     size_t random_range,
                                     double epsilon) {
     SketchType ss(epsilon);
-    
+
     std::vector<size_t> v(len);
     std::map<size_t, size_t> true_counter;
     for (size_t i = 0;i < len; ++i) {
@@ -57,8 +57,8 @@ struct space_saving_test {
     return rt;
   }
 
-  template <typename SketchType> 
-  double parallel_combine_test(size_t len, 
+  template <typename SketchType>
+  double parallel_combine_test(size_t len,
                                size_t random_range,
                                double epsilon) {
     std::vector<SketchType> ssarr(16, SketchType(epsilon));
@@ -105,7 +105,7 @@ struct space_saving_test {
     }
     std::cout << "\n Time: " << ti.current_time() << "\n";
   }
-  
+
   void test_stuff() {
     turi::random::seed(1001);
     std::vector<size_t> lens{1024, 65536, 256*1024};
@@ -113,17 +113,17 @@ struct space_saving_test {
     std::vector<double> epsilon{0.1,0.01,0.005};
     global_logger().set_log_level(LOG_INFO);
 
-    size_t n_idx = lens.size() * ranges.size() * epsilon.size(); 
+    size_t n_idx = lens.size() * ranges.size() * epsilon.size();
 
     in_parallel([&](size_t thread_idx, size_t n_threads) {
         for(size_t run_idx = thread_idx; run_idx < n_idx; run_idx += n_threads) {
-            
+
           auto len   = lens[ run_idx / (epsilon.size() * ranges.size()) ];
           auto range = ranges[ (run_idx / epsilon.size()) % ranges.size()];
           auto eps   = epsilon[run_idx % epsilon.size()];
-        
+
           auto result1 = random_integer_length_test<space_saving<flex_int> >(len, range, eps);
-          logstream(LOG_INFO) << "integer:   Array length: " << len << "\t" 
+          logstream(LOG_INFO) << "integer:   Array length: " << len << "\t"
                     << "Numeric Range: " << range << "\t"
                     << "Epsilon:   " << eps << "  \t"
                     << result1
@@ -131,58 +131,58 @@ struct space_saving_test {
 
           auto result2 = random_integer_length_test<space_saving<flexible_type> >(len, range, eps);
 
-          logstream(LOG_INFO) << "flex type: Array length: " << len << "\t" 
+          logstream(LOG_INFO) << "flex type: Array length: " << len << "\t"
                     << "Numeric Range: " << range << "\t"
                     << "Epsilon:   " << eps << "  \t"
                     << result2
                     << std::endl;
-          
+
           auto result3 = random_integer_length_test<space_saving_flextype>(len, range, eps);
 
-          logstream(LOG_INFO) << "_flextype: Array length: " << len << "\t" 
-                    << "Numeric Range: " << range << "\t"
-                    << "Epsilon:   " << eps << "  \t"
-                    << result3
-                    << std::endl;
-        }
-      }); 
-        
-    std::cout << "\n\nReset random seed and repeating with \'parallel\' test\n";
-    turi::random::seed(1001);
-      
-    in_parallel([&](size_t thread_idx, size_t n_threads) {
-        for(size_t run_idx = thread_idx; run_idx < n_idx; run_idx += n_threads) {
-          
-          auto len   = lens[ run_idx / (epsilon.size() * ranges.size()) ];
-          auto range = ranges[ (run_idx / epsilon.size()) % ranges.size()];
-          auto eps   = epsilon[run_idx % epsilon.size()];
-        
-          auto result1 = parallel_combine_test<space_saving<flex_int> >(len, range, eps);
-          logstream(LOG_INFO) << "integer:   Array length: " << len << "\t" 
-                    << "Numeric Range: " << range << "\t"
-                    << "Epsilon:   " << eps << "  \t"
-                    << result1
-                    << std::endl;
-
-          auto result2 = parallel_combine_test<space_saving<flexible_type> >(len, range, eps);
-          logstream(LOG_INFO) << "flex type: Array length: " << len << "\t" 
-                    << "Numeric Range: " << range << "\t"
-                    << "Epsilon:   " << eps << "  \t"
-                    << result2
-                    << std::endl;
-
-          auto result3 = parallel_combine_test<space_saving_flextype>(len, range, eps);
-          logstream(LOG_INFO) << "_flextype: Array length: " << len << "\t" 
+          logstream(LOG_INFO) << "_flextype: Array length: " << len << "\t"
                     << "Numeric Range: " << range << "\t"
                     << "Epsilon:   " << eps << "  \t"
                     << result3
                     << std::endl;
         }
       });
-      
+
+    std::cout << "\n\nReset random seed and repeating with \'parallel\' test\n";
+    turi::random::seed(1001);
+
+    in_parallel([&](size_t thread_idx, size_t n_threads) {
+        for(size_t run_idx = thread_idx; run_idx < n_idx; run_idx += n_threads) {
+
+          auto len   = lens[ run_idx / (epsilon.size() * ranges.size()) ];
+          auto range = ranges[ (run_idx / epsilon.size()) % ranges.size()];
+          auto eps   = epsilon[run_idx % epsilon.size()];
+
+          auto result1 = parallel_combine_test<space_saving<flex_int> >(len, range, eps);
+          logstream(LOG_INFO) << "integer:   Array length: " << len << "\t"
+                    << "Numeric Range: " << range << "\t"
+                    << "Epsilon:   " << eps << "  \t"
+                    << result1
+                    << std::endl;
+
+          auto result2 = parallel_combine_test<space_saving<flexible_type> >(len, range, eps);
+          logstream(LOG_INFO) << "flex type: Array length: " << len << "\t"
+                    << "Numeric Range: " << range << "\t"
+                    << "Epsilon:   " << eps << "  \t"
+                    << result2
+                    << std::endl;
+
+          auto result3 = parallel_combine_test<space_saving_flextype>(len, range, eps);
+          logstream(LOG_INFO) << "_flextype: Array length: " << len << "\t"
+                    << "Numeric Range: " << range << "\t"
+                    << "Epsilon:   " << eps << "  \t"
+                    << result3
+                    << std::endl;
+        }
+      });
+
   }
 
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_space_saving_test, space_saving_test)

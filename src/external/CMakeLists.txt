@@ -1,6 +1,6 @@
 project(TuriExternalDependencies)
 
-#3rd party source 
+#3rd party source
 subdirs(
   libjson
   armadillo

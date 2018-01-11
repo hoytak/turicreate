@@ -24,7 +24,7 @@ void gl_grouped_timeseries::group(const gl_sframe &sf,
                             m_time_index_name);
   if(find_ret != column_names.end()) {
     std::stringstream ss;
-    ss << "Cannot group timeseries by the index column." 
+    ss << "Cannot group timeseries by the index column."
        << " To group the TimeSeries by a part of it's timestamp, use the special"
        << " types declared in 'turicreate.TimeSeries.date_part'" << std::endl;
     log_and_throw(ss.str());
@@ -39,13 +39,13 @@ void gl_grouped_timeseries::group(const gl_sframe &sf,
       std::stringstream ss;
       ss << "Cannot group on the column '" << col << "'."
          << " Column does not exist in the input data." << std::endl;
-      log_and_throw(ss.str()); 
+      log_and_throw(ss.str());
     }
   }
   m_key_col_names = column_names;
   m_value_col_names = sf.column_names();
   auto it = std::find(m_value_col_names.begin(), m_value_col_names.end(),
-                      m_time_index_name); 
+                      m_time_index_name);
   m_value_col_names.erase(it); // remove index.
 
   // Add the time index as the last sort column

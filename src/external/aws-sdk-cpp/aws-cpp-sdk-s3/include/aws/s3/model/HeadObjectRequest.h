@@ -42,25 +42,25 @@ namespace Model
 
     Aws::Http::HeaderValueCollection GetRequestSpecificHeaders() const override;
 
-    
+
     inline const Aws::String& GetBucket() const{ return m_bucket; }
 
-    
+
     inline void SetBucket(const Aws::String& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(Aws::String&& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(const char* value) { m_bucketHasBeenSet = true; m_bucket.assign(value); }
 
-    
+
     inline HeadObjectRequest& WithBucket(const Aws::String& value) { SetBucket(value); return *this;}
 
-    
+
     inline HeadObjectRequest& WithBucket(Aws::String&& value) { SetBucket(value); return *this;}
 
-    
+
     inline HeadObjectRequest& WithBucket(const char* value) { SetBucket(value); return *this;}
 
     /**
@@ -207,25 +207,25 @@ namespace Model
      */
     inline HeadObjectRequest& WithIfUnmodifiedSince(Aws::Utils::DateTime&& value) { SetIfUnmodifiedSince(value); return *this;}
 
-    
+
     inline const Aws::String& GetKey() const{ return m_key; }
 
-    
+
     inline void SetKey(const Aws::String& value) { m_keyHasBeenSet = true; m_key = value; }
 
-    
+
     inline void SetKey(Aws::String&& value) { m_keyHasBeenSet = true; m_key = value; }
 
-    
+
     inline void SetKey(const char* value) { m_keyHasBeenSet = true; m_key.assign(value); }
 
-    
+
     inline HeadObjectRequest& WithKey(const Aws::String& value) { SetKey(value); return *this;}
 
-    
+
     inline HeadObjectRequest& WithKey(Aws::String&& value) { SetKey(value); return *this;}
 
-    
+
     inline HeadObjectRequest& WithKey(const char* value) { SetKey(value); return *this;}
 
     /**
@@ -459,19 +459,19 @@ namespace Model
      */
     inline HeadObjectRequest& WithSSECustomerKeyMD5(const char* value) { SetSSECustomerKeyMD5(value); return *this;}
 
-    
+
     inline const RequestPayer& GetRequestPayer() const{ return m_requestPayer; }
 
-    
+
     inline void SetRequestPayer(const RequestPayer& value) { m_requestPayerHasBeenSet = true; m_requestPayer = value; }
 
-    
+
     inline void SetRequestPayer(RequestPayer&& value) { m_requestPayerHasBeenSet = true; m_requestPayer = value; }
 
-    
+
     inline HeadObjectRequest& WithRequestPayer(const RequestPayer& value) { SetRequestPayer(value); return *this;}
 
-    
+
     inline HeadObjectRequest& WithRequestPayer(RequestPayer&& value) { SetRequestPayer(value); return *this;}
 
   private:

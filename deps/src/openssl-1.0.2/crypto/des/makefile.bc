@@ -14,7 +14,7 @@ LFLAGS  = -ml $(WINDOWS)
 	$(CC) $(CFLAGS) $*.c
 
 .obj.exe:
-	$(CC) $(LFLAGS) -e$*.exe $*.obj libdes.lib  
+	$(CC) $(LFLAGS) -e$*.exe $*.obj libdes.lib
 
 all: $(LIB) destest.exe rpw.exe des.exe speed.exe
 
@@ -46,5 +46,3 @@ destest.exe: destest.obj libdes.lib
 rpw.exe:     rpw.obj libdes.lib
 speed.exe:   speed.obj libdes.lib
 des.exe:     des.obj libdes.lib
-
-

@@ -23,7 +23,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-CreateMultipartUploadRequest::CreateMultipartUploadRequest() : 
+CreateMultipartUploadRequest::CreateMultipartUploadRequest() :
     m_aCLHasBeenSet(false),
     m_bucketHasBeenSet(false),
     m_cacheControlHasBeenSet(false),

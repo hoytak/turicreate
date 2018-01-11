@@ -1,15 +1,15 @@
 #' Contruct xgb.DMatrix object
-#' 
+#'
 #' Contruct xgb.DMatrix object from dense matrix, sparse matrix or local file.
-#' 
-#' @param data a \code{matrix} object, a \code{dgCMatrix} object or a character 
+#'
+#' @param data a \code{matrix} object, a \code{dgCMatrix} object or a character
 #'   indicating the data file.
 #' @param info a list of information of the xgb.DMatrix object
 #' @param missing Missing is only used when input is dense matrix, pick a float
 #'     value that represents missing value. Sometime a data use 0 or other extreme value to represents missing values.
 #
 #' @param ... other information to pass to \code{info}.
-#' 
+#'
 #' @examples
 #' data(agaricus.train, package='xgboost')
 #' train <- agaricus.train
@@ -17,7 +17,7 @@
 #' xgb.DMatrix.save(dtrain, 'xgb.DMatrix.data')
 #' dtrain <- xgb.DMatrix('xgb.DMatrix.data')
 #' @export
-#' 
+#'
 xgb.DMatrix <- function(data, info = list(), missing = NA, ...) {
   if (typeof(data) == "character") {
     handle <- .Call("XGDMatrixCreateFromFile_R", data, as.integer(FALSE),

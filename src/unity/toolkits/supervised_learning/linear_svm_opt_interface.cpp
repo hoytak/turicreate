@@ -59,8 +59,8 @@ namespace supervised {
 * Constructor for linear svm solver object
 */
 linear_svm_scaled_logistic_opt_interface::linear_svm_scaled_logistic_opt_interface(
-    const ml_data& _data, 
-    const ml_data& _valid_data, 
+    const ml_data& _data,
+    const ml_data& _valid_data,
     linear_svm& _model) {
 
 
@@ -72,7 +72,7 @@ linear_svm_scaled_logistic_opt_interface::linear_svm_scaled_logistic_opt_interfa
 
   // Initialize reader and other data
   examples = data.num_rows();
-#ifdef HAS_DISTRIBUTED 
+#ifdef HAS_DISTRIBUTED
   auto dc = distributed_control_global::get_instance();
   dc->all_reduce(examples);
 #endif
@@ -142,10 +142,10 @@ size_t linear_svm_scaled_logistic_opt_interface::num_classes() const{
 /**
  * Get strings needed to print the header for the progress table.
  */
-std::vector<std::pair<std::string, size_t>> 
+std::vector<std::pair<std::string, size_t>>
 linear_svm_scaled_logistic_opt_interface::get_status_header(const std::vector<std::string>& stat_headers) {
   bool has_validation_data = (valid_data.num_rows() > 0);
-  auto header = make_progress_header(smodel, stat_headers, has_validation_data); 
+  auto header = make_progress_header(smodel, stat_headers, has_validation_data);
   return header;
 }
 
@@ -153,16 +153,16 @@ linear_svm_scaled_logistic_opt_interface::get_status_header(const std::vector<st
  * Get strings needed to print a row of the progress table.
  */
 std::vector<std::string> linear_svm_scaled_logistic_opt_interface::get_status(
-    const DenseVector& coefs, 
+    const DenseVector& coefs,
     const std::vector<std::string>& stats) {
 
   // Copy coefficients, rescale, and update the model.
   DenseVector coefs_tmp = coefs;
   rescale_solution(coefs_tmp);
-  smodel.set_coefs(coefs_tmp); 
+  smodel.set_coefs(coefs_tmp);
 
   auto ret = make_progress_row_string(smodel, data, valid_data, stats);
-  return ret; 
+  return ret;
 }
 
 /**
@@ -198,7 +198,7 @@ void linear_svm_scaled_logistic_opt_interface::compute_first_order_statistics(co
   std::vector<double> f(n_threads, 0.0);
   std::vector<DenseVector> G(n_threads, arma::zeros(primal_variables));
 
-  // Dense data. 
+  // Dense data.
   if (this->is_dense) {
     in_parallel([&](size_t thread_idx, size_t num_threads) {
       DenseVector x(primal_variables);
@@ -211,7 +211,7 @@ void linear_svm_scaled_logistic_opt_interface::compute_first_order_statistics(co
           scaler->transform(x);
         }
 
-        // Map 
+        // Map
         class_idx = it->target_index();
         y = class_idx * 2 - 1.0;
         margin = -gamma * (y * dot(x, point) - 1);
@@ -237,7 +237,7 @@ void linear_svm_scaled_logistic_opt_interface::compute_first_order_statistics(co
           scaler->transform(x);
         }
 
-        // Map 
+        // Map
         class_idx = it->target_index();
         y = class_idx * 2 - 1.0;
         margin = -gamma * (y * dot(x, point) - 1);

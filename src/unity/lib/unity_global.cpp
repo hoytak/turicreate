@@ -81,7 +81,7 @@ namespace turi {
        break;
      case 1:
        {
-         std::shared_ptr<unity_sgraph> g = 
+         std::shared_ptr<unity_sgraph> g =
              std::static_pointer_cast<unity_sgraph>(variant_get_ref<std::shared_ptr<unity_sgraph_base>>(v));
          oarc << *g;
          break;
@@ -98,7 +98,7 @@ namespace turi {
        break;
      case 4:
        {
-         std::shared_ptr<unity_sframe> s = 
+         std::shared_ptr<unity_sframe> s =
              std::static_pointer_cast<unity_sframe>(variant_get_ref<std::shared_ptr<unity_sframe_base>>(v));
          oarc << *s;
          break;
@@ -106,7 +106,7 @@ namespace turi {
        break;
      case 5:
        {
-         std::shared_ptr<unity_sarray> s = 
+         std::shared_ptr<unity_sarray> s =
              std::static_pointer_cast<unity_sarray>(variant_get_ref<std::shared_ptr<unity_sarray_base>>(v));
          oarc << *s;
          break;
@@ -120,7 +120,7 @@ namespace turi {
            oarc << elem.first;
            model_variant_deep_save(elem.second, oarc);
          }
-         break; 
+         break;
        }
      case 7:
        {
@@ -129,7 +129,7 @@ namespace turi {
          for(const auto& elem : varvec) {
            model_variant_deep_save(elem, oarc);
          }
-         break; 
+         break;
        }
      default:
        break;
@@ -194,7 +194,7 @@ namespace turi {
            varmap[key] = std::move(value);
          }
          variant_set_value<variant_map_type>(v, varmap);
-         break; 
+         break;
        }
      case 7:
        {
@@ -208,7 +208,7 @@ namespace turi {
            varvec[i] = std::move(value);
          }
          variant_set_value<variant_vector_type>(v, varvec);
-         break; 
+         break;
        }
      default:
        break;
@@ -545,7 +545,7 @@ namespace turi {
     }
     char* buf = new char[fsize];
     fin.read(buf, fsize);
-    auto f = boost::algorithm::boyer_moore_search(buf, buf + fsize, 
+    auto f = boost::algorithm::boyer_moore_search(buf, buf + fsize,
                                                   substring.begin(), substring.end());
     // return is true if found
 #if BOOST_VERSION >= 106100

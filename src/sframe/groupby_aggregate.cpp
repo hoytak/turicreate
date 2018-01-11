@@ -53,14 +53,14 @@ sframe groupby_aggregate(const sframe& source,
   for (const auto& group: groups) {
     // check that the column name is valid
     if (group.first.size() > 0) {
-      for(size_t index = 0; index < group.first.size();index++) { 
+      for(size_t index = 0; index < group.first.size();index++) {
         auto& col_name = group.first[index];
         if (!source.contains_column(col_name)) {
           log_and_throw("SFrame does not contain column " + col_name);
         }
 
         if(turi::registered_arg_functions.count(group.second->name()) != 0 && index > 0)
-          continue; 
+          continue;
         // check that the types are valid
         size_t column_number = source.column_index(col_name);
         if (!group.second->support_type(source.column_type(column_number))) {
@@ -118,13 +118,13 @@ sframe groupby_aggregate(const sframe& source,
           } else {
             root_candidate_name += "_" + col_name;
           }
-        }  
+        }
         root_candidate_name = group.second->name() + root_candidate_name;
       } else {
-        
-        if(group.first.size() != 2) 
+
+        if(group.first.size() != 2)
           log_and_throw("arg functions takes exactly two arguments");
-        root_candidate_name += group.first[1] + " for " + group.second->name() + " of " + group.first[0];  
+        root_candidate_name += group.first[1] + " for " + group.second->name() + " of " + group.first[0];
       }
       candidate_name = root_candidate_name;
       size_t ctr = 1;
@@ -142,8 +142,8 @@ sframe groupby_aggregate(const sframe& source,
     for(auto col_name : group.first) {
       input_types.push_back(source.column_type(source.column_index(col_name)));
     }
-    // this statement is valid for argmax and argmin as well, because their 
-    // set_input_types(...) simply return input_types. 
+    // this statement is valid for argmax and argmin as well, because their
+    // set_input_types(...) simply return input_types.
     auto output_type = group.second->set_input_types(input_types);
     column_types.push_back(output_type);
   }

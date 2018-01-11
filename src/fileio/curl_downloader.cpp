@@ -42,19 +42,19 @@ int download_url(std::string url, std::string output_file) {
     if (f == NULL) return errno;
     CURLcode res;
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    /* example.com is redirected, so we tell libcurl to follow redirection */ 
+    /* example.com is redirected, so we tell libcurl to follow redirection */
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &download_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)(f));
     turi::fileio::set_curl_options(curl);
-    /* Perform the request, res will get the return code */ 
+    /* Perform the request, res will get the return code */
     res = curl_easy_perform(curl);
-    /* Check for errors */ 
+    /* Check for errors */
     if(res != CURLE_OK) {
       logprogress_stream << "Failed to download " << url << ": " << curl_easy_strerror(res);
     }
-    /* always cleanup */ 
+    /* always cleanup */
     curl_easy_cleanup(curl);
     fclose(f);
     return res;
@@ -80,7 +80,7 @@ std::tuple<int, bool, std::string> download_url(std::string url) {
       if (fin.good()) {
         return std::make_tuple(0, false, stripped); // strip the file://
       }
-      // if we cannot open, it could simply be because the file name has escape 
+      // if we cannot open, it could simply be because the file name has escape
       // characters in it which we do not understand. For instance:
       // file:///home/user/test%20x.txt (where %20 should be a space character).
       // In this case, curl will still be able to understand that it.

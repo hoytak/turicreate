@@ -321,7 +321,7 @@ next_line(struct archive_read *a,
 {
 	ssize_t len;
 	int quit;
-	
+
 	quit = 0;
 	if (*avail == 0) {
 		*nl = 0;
@@ -513,7 +513,7 @@ bid_keyword_list(const char *p,  ssize_t len, int unset, int last_is_path)
 				value = 1;
 			}
 			/* A keyword should have a its value unless
-			 * "/unset" operation. */ 
+			 * "/unset" operation. */
 			if (!unset && value == 0)
 				return (-1);
 		}
@@ -661,7 +661,7 @@ detect_form(struct archive_read *a, int *is_form_d)
 				--avail;
 				--len;
 			}
-			/* Skip comment or empty line. */ 
+			/* Skip comment or empty line. */
 			if (p[0] == '#' || p[0] == '\n' || p[0] == '\r') {
 				p += len;
 				avail -= len;

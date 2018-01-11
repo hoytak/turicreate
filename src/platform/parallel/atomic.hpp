@@ -17,8 +17,8 @@ namespace turi_impl {
   template<typename T, bool IsIntegral>
   class atomic_impl {};
   /**
-   * \internal  
-   * \brief atomic object 
+   * \internal
+   * \brief atomic object
    * A templated class for creating atomic numbers.
    */
   template<typename T>
@@ -29,13 +29,13 @@ namespace turi_impl {
 
     //! Creates an atomic number with value "value"
     atomic_impl(const T& value = T()) : value(value) { }
-    
+
     //! Performs an atomic increment by 1, returning the new value
     T inc() { return __sync_add_and_fetch(&value, 1);  }
 
     //! Performs an atomic decrement by 1, returning the new value
     T dec() { return __sync_sub_and_fetch(&value, 1);  }
-    
+
     //! Lvalue implicit cast
     operator T() const { return value; }
 
@@ -44,13 +44,13 @@ namespace turi_impl {
 
     //! Performs an atomic decrement by 1, returning the new value
     T operator--() { return dec(); }
-    
+
     //! Performs an atomic increment by 'val', returning the new value
     T inc(const T val) { return __sync_add_and_fetch(&value, val);  }
-    
+
     //! Performs an atomic decrement by 'val', returning the new value
     T dec(const T val) { return __sync_sub_and_fetch(&value, val);  }
-    
+
     //! Performs an atomic increment by 'val', returning the new value
     T operator+=(const T val) { return inc(val); }
 
@@ -59,7 +59,7 @@ namespace turi_impl {
 
     //! Performs an atomic increment by 1, returning the old value
     T inc_ret_last() { return __sync_fetch_and_add(&value, 1);  }
-    
+
     //! Performs an atomic decrement by 1, returning the old value
     T dec_ret_last() { return __sync_fetch_and_sub(&value, 1);  }
 
@@ -71,14 +71,14 @@ namespace turi_impl {
 
     //! Performs an atomic increment by 'val', returning the old value
     T inc_ret_last(const T val) { return __sync_fetch_and_add(&value, val);  }
-    
+
     //! Performs an atomic decrement by 'val', returning the new value
     T dec_ret_last(const T val) { return __sync_fetch_and_sub(&value, val);  }
 
     //! Performs an atomic exchange with 'val', returning the previous value
     T exchange(const T val) { return __sync_lock_test_and_set(&value, val);  }
   };
-  
+
   // specialization for floats and doubles
   template<typename T>
   class atomic_impl <T, false>: public IS_POD_TYPE {
@@ -88,13 +88,13 @@ namespace turi_impl {
 
     //! Creates an atomic number with value "value"
     atomic_impl(const T& value = T()) : value(value) { }
-    
+
     //! Performs an atomic increment by 1, returning the new value
     T inc() { return inc(1);  }
 
     //! Performs an atomic decrement by 1, returning the new value
     T dec() { return dec(1);  }
-    
+
     //! Lvalue implicit cast
     operator T() const { return value; }
 
@@ -103,29 +103,29 @@ namespace turi_impl {
 
     //! Performs an atomic decrement by 1, returning the new value
     T operator--() { return dec(); }
-    
+
     //! Performs an atomic increment by 'val', returning the new value
-    T inc(const T val) { 
+    T inc(const T val) {
       T prev_value;
       T new_value;
       do {
         prev_value = value;
         new_value = prev_value + val;
       } while(!atomic_compare_and_swap(value, prev_value, new_value));
-      return new_value; 
+      return new_value;
     }
-    
+
     //! Performs an atomic decrement by 'val', returning the new value
-    T dec(const T val) { 
+    T dec(const T val) {
       T prev_value;
       T new_value;
       do {
         prev_value = value;
         new_value = prev_value - val;
       } while(!atomic_compare_and_swap(value, prev_value, new_value));
-      return new_value; 
+      return new_value;
     }
-    
+
     //! Performs an atomic increment by 'val', returning the new value
     T operator+=(const T val) { return inc(val); }
 
@@ -134,7 +134,7 @@ namespace turi_impl {
 
     //! Performs an atomic increment by 1, returning the old value
     T inc_ret_last() { return inc_ret_last(1);  }
-    
+
     //! Performs an atomic decrement by 1, returning the old value
     T dec_ret_last() { return dec_ret_last(1);  }
 
@@ -145,25 +145,25 @@ namespace turi_impl {
     T operator--(int) { return dec_ret_last(); }
 
     //! Performs an atomic increment by 'val', returning the old value
-    T inc_ret_last(const T val) { 
+    T inc_ret_last(const T val) {
       T prev_value;
       T new_value;
       do {
         prev_value = value;
         new_value = prev_value + val;
       } while(!atomic_compare_and_swap(value, prev_value, new_value));
-      return prev_value; 
+      return prev_value;
     }
-    
+
     //! Performs an atomic decrement by 'val', returning the new value
-    T dec_ret_last(const T val) { 
+    T dec_ret_last(const T val) {
       T prev_value;
       T new_value;
       do {
         prev_value = value;
         new_value = prev_value - val;
       } while(!atomic_compare_and_swap(value, prev_value, new_value));
-      return prev_value; 
+      return prev_value;
     }
 
     //! Performs an atomic exchange with 'val', returning the previous value
@@ -175,11 +175,10 @@ template <typename T>
 class atomic: public turi_impl::atomic_impl<T, std::is_integral<T>::value> {
  public:
   //! Creates an atomic number with value "value"
-  atomic(const T& value = T()): 
+  atomic(const T& value = T()):
     turi_impl::atomic_impl<T, std::is_integral<T>::value>(value) { }
- 
+
 };
 
 } // namespace turi
 #endif
-

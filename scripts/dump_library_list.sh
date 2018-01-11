@@ -61,7 +61,7 @@ arlist=""
 otherlibs=""
 for i in $new_command; do
   if [[ ($i =~ .*\.a$) && !($i =~ ^-.*$) ]]; then
-    # if (filename ends with ".a") 
+    # if (filename ends with ".a")
     #    if filename begins with build_prefix
     #       arlist = arlist + filename
     #    else
@@ -73,7 +73,7 @@ for i in $new_command; do
       otherlibs="$otherlibs $filename"
     fi
   elif [[ ($i =~ .*\.so$) || ($i =~ .*\.dll$) || ($i =~ .*\.pyd$) ]]; then
-    # else if (filename ends with ".so") 
+    # else if (filename ends with ".so")
     #    otherlibs += i
     filename=$(my_realpath "$i")
     otherlibs="$otherlibs $filename"
@@ -81,14 +81,14 @@ for i in $new_command; do
     # else if (parameter begins with -l"
     #    otherlibs += i
     otherlibs="$otherlibs $i"
-  else 
-    # else 
+  else
+    # else
     #    (all other options)
     #    options += i
     options="$options $i"
   fi
 done
-# sort and unique the arlist. This simply uses "tr" to replace spaces with 
+# sort and unique the arlist. This simply uses "tr" to replace spaces with
 # newline characters so we can sort and uniq it
 arlist=$(echo "${arlist}" | tr ' ' '\n' | sort -u | uniq )
 # write out

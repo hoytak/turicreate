@@ -304,7 +304,7 @@ protected:
   storage_mode_enum storage_mode_ = storage_mode_enum::AUTO;
 
   size_t num_batches_ = 0;
-  
+
   void _export_xgboost_model(const std::string& filename,
       bool is_classifier, bool is_random_forest,
       const std::map<std::string, flexible_type>& context);

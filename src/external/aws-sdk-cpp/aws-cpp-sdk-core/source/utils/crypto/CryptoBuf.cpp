@@ -104,7 +104,7 @@ namespace Aws
                     if (cryptoBuffer.GetLength() && m_cipher)
                     {
                         CryptoBuffer putBackArea(m_putBack);
-                                                
+
                         m_isBuf = CryptoBuffer({&putBackArea, &cryptoBuffer});
                         //in the very unlikely case that the cipher had less output than the source stream.
                         assert(seekTo <= index);

@@ -6,4 +6,3 @@ adjust the flags in this Makefile to improve matters.
 Also in README.COMPILATION.PROBLEMS are some hints that may help
 if your build produces an executable which is unable to correctly
 handle so-called 'large files' -- files of size 2GB or more.
-

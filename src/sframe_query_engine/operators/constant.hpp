@@ -30,7 +30,7 @@ struct operator_impl<planner_node_type::CONSTANT_NODE> : public query_operator {
   planner_node_type type() const { return planner_node_type::CONSTANT_NODE; }
 
   static std::string name() { return "constant"; }
-  
+
   static query_operator_attributes attributes() {
     query_operator_attributes ret;
     ret.attribute_bitfield = query_operator_attributes::SOURCE;
@@ -42,7 +42,7 @@ struct operator_impl<planner_node_type::CONSTANT_NODE> : public query_operator {
   : m_value(value)
   , m_len(len)
   { }
-  
+
   inline std::string print() const {
     return std::string("constant(") + (std::string)m_value + ")";
   }
@@ -68,8 +68,8 @@ struct operator_impl<planner_node_type::CONSTANT_NODE> : public query_operator {
                                             flex_type_enum type,
                                             size_t count) {
     ASSERT_TRUE(val.get_type() == type || val.get_type() == flex_type_enum::UNDEFINED);
-    return planner_node::make_shared(planner_node_type::CONSTANT_NODE, 
-                                     {{"value", val}, 
+    return planner_node::make_shared(planner_node_type::CONSTANT_NODE,
+                                     {{"value", val},
                                        {"type", (int)type},
                                        {"begin_index", 0},
                                        {"end_index", count}});
@@ -77,7 +77,7 @@ struct operator_impl<planner_node_type::CONSTANT_NODE> : public query_operator {
 
   static std::shared_ptr<query_operator> from_planner_node(
       std::shared_ptr<planner_node> pnode) {
-    
+
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::CONSTANT_NODE);
     ASSERT_TRUE(pnode->operator_parameters.count("value"));
     ASSERT_TRUE(pnode->operator_parameters.count("begin_index"));
@@ -101,7 +101,7 @@ struct operator_impl<planner_node_type::CONSTANT_NODE> : public query_operator {
                    (flex_int)pnode->operator_parameters["begin_index"];
     return count;
   }
-  
+
   static std::string repr(std::shared_ptr<planner_node> pnode, pnode_tagger&) {
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::CONSTANT_NODE);
     ASSERT_TRUE(pnode->operator_parameters.count("value"));

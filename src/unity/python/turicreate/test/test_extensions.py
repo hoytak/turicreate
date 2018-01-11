@@ -74,7 +74,7 @@ class VariantCheckTest(unittest.TestCase):
         self.variant_turnaround({'a':[sa,{'a':sa,'b':'c'}]})
         self.variant_turnaround({'a':[sa,sf,{'a':sa,'b':'c'}],
             'b':sf, 'c':['a','b','c','d']})
-        
+
     def test_stress(self):
 
         random.seed(0)
@@ -113,7 +113,7 @@ class VariantCheckTest(unittest.TestCase):
 
         for depth in [2,3,4,5,10]:
             for i in range(10):
-                
+
                 A.flextype_encodable = True
 
                 obj = _make(depth)
@@ -121,7 +121,7 @@ class VariantCheckTest(unittest.TestCase):
                 # Test that it's losslessly encoded and decoded
                 self.variant_turnaround(obj)
 
-                # Test that if it can be 
+                # Test that if it can be
                 if _debug_is_flexible_type_encoded(obj):
                     self.assertTrue(A.flextype_encodable)
                 else:

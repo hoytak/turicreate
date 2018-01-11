@@ -29,14 +29,14 @@ namespace S3
 namespace Model
 {
 
-TopicConfigurationDeprecated::TopicConfigurationDeprecated() : 
+TopicConfigurationDeprecated::TopicConfigurationDeprecated() :
     m_idHasBeenSet(false),
     m_eventsHasBeenSet(false),
     m_topicHasBeenSet(false)
 {
 }
 
-TopicConfigurationDeprecated::TopicConfigurationDeprecated(const XmlNode& xmlNode) : 
+TopicConfigurationDeprecated::TopicConfigurationDeprecated(const XmlNode& xmlNode) :
     m_idHasBeenSet(false),
     m_eventsHasBeenSet(false),
     m_topicHasBeenSet(false)

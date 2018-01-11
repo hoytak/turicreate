@@ -45,4 +45,4 @@ bool is_process_running(size_t pid);
 boost::optional<std::string> getenv_str(const char* variable_name);
 
 } // namespace turi
-#endif // PROCESS_UTIL_HPP 
+#endif // PROCESS_UTIL_HPP

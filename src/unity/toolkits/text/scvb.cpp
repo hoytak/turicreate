@@ -23,8 +23,8 @@ namespace text {
  * Train a model using SCVB0 algorithm.
  */
 void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool verbose) {
-  
-  // Do nothing if the number of iterations is zero. 
+
+  // Do nothing if the number of iterations is zero.
   if (model->num_iterations == 0)
     return;
 
@@ -35,7 +35,7 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
 
   logprogress_stream << "Running SCVB0" << std::endl;
 
-  // Initialize a set of estimates from current word_topic_counts 
+  // Initialize a set of estimates from current word_topic_counts
   N_phi = arma::zeros(model->vocab_size, model->num_topics);
   for (size_t i = 0; i < (size_t) N_phi.n_rows; ++i) {
     for (size_t j = 0; j < (size_t) N_phi.n_cols; ++j) {
@@ -55,7 +55,7 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
   size_t token_count = 0;
 
   for (size_t iteration = 0; iteration < model->num_iterations; ++iteration) {
-    
+
     // Get the learning rate for this iteration.
     double rho = compute_rho(iteration, s, tau, kappa);
     model->current_iteration = iteration;
@@ -65,7 +65,7 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
     for (size_t seg = 0; seg < dataset->num_segments(); ++seg) {
 
       auto iter = reader->begin(seg);
-      auto enditer = reader->end(seg);   
+      auto enditer = reader->end(seg);
 
       // For each document
       while (iter != enditer) {
@@ -78,7 +78,7 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
         size_t C_j = 0;
         size_t Z_j = 0;
         for (auto z = fdv.begin(); z != fdv.end(); z++) {
-          C_j += (size_t)(z->second); 
+          C_j += (size_t)(z->second);
           Z_j += 1;
         }
 
@@ -93,9 +93,9 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
           for (size_t burnin = 0; burnin < model->num_burnin; ++burnin) {
             // Iterate through tokens
             for (auto z = fdv.begin(); z != fdv.end(); z++) {
-              size_t word_id = model->metadata[0]->map_without_insertion_value_to_index(z->first); 
+              size_t word_id = model->metadata[0]->map_without_insertion_value_to_index(z->first);
               DASSERT_LT(word_id, model->vocab_size);
-              auto gamma_ij = compute_gamma(word_id); 
+              auto gamma_ij = compute_gamma(word_id);
               update_N_theta_j(gamma_ij, z->second, C_j, rho);
             }
           }
@@ -108,7 +108,7 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
           for (auto z = tokens.begin(); z != tokens.end(); z++) {
 
             // Get the integer id of the word
-            size_t word_id = model->metadata[0]->map_without_insertion_value_to_index(z->first);  
+            size_t word_id = model->metadata[0]->map_without_insertion_value_to_index(z->first);
 
             // Get the number of times it occurred in the document
             size_t freq = z->second;
@@ -129,13 +129,13 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
             {
               std::unique_lock<turi::mutex> global_lock(model->lock);
               update_N_phi(rho);
-              update_N_Z(rho);        
+              update_N_Z(rho);
             }
 
             if (verbose) {
-              logprogress_stream << "Iteration " << iteration 
-                << ". Tokens/second: " 
-                << token_count / ti.current_time() 
+              logprogress_stream << "Iteration " << iteration
+                << ". Tokens/second: "
+                << token_count / ti.current_time()
                 << std::endl;
               token_count = 0;
               ti.start();
@@ -143,16 +143,16 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
 
               if (verbose) {
                 logprogress_stream << "M: " << M << std::endl;
-                logprogress_stream << "num_words: " << model->num_words << std::endl; 
-                logprogress_stream << std::setw(16) << "sum(N_theta_j) " 
+                logprogress_stream << "num_words: " << model->num_words << std::endl;
+                logprogress_stream << std::setw(16) << "sum(N_theta_j) "
                                    << arma::sum(N_theta_j) << std::endl;
-                logprogress_stream << std::setw(16) << "sum(N_phi) " 
+                logprogress_stream << std::setw(16) << "sum(N_phi) "
                                    << model->arma::sum(word_topic_counts) << std::endl;
-                logprogress_stream << std::setw(16) << "sum(N_phi_hat) " 
+                logprogress_stream << std::setw(16) << "sum(N_phi_hat) "
                                    << arma::sum(N_phi_hat) << std::endl;
-                logprogress_stream << std::setw(16) << "sum(N_Z) " 
+                logprogress_stream << std::setw(16) << "sum(N_Z) "
                                    << arma::sum(N_Z) << std::endl;
-                logprogress_stream << std::setw(16) << "sum(N_Z_hat) " 
+                logprogress_stream << std::setw(16) << "sum(N_Z_hat) "
                                    << arma::sum(N_Z_hat) << std::endl;
               }
 
@@ -172,7 +172,7 @@ void scvb0_solver::train(std::shared_ptr<sarray<flexible_type>> dataset, bool ve
                 // for (size_t j = 0; j < num_words_to_show; ++j) {
                 //   ss << top_words.second[j] << " ";
                 // }
-                logprogress_stream << ss.str() << std::endl; 
+                logprogress_stream << ss.str() << std::endl;
                 ss.str("");
               }
 

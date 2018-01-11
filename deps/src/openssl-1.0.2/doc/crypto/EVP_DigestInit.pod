@@ -37,7 +37,7 @@ EVP digest routines
  #define EVP_MAX_MD_SIZE 64	/* SHA512 */
 
  int EVP_MD_type(const EVP_MD *md);
- int EVP_MD_pkey_type(const EVP_MD *md);	
+ int EVP_MD_pkey_type(const EVP_MD *md);
  int EVP_MD_size(const EVP_MD *md);
  int EVP_MD_block_size(const EVP_MD *md);
 
@@ -226,14 +226,14 @@ digest name passed on the command line.
  OpenSSL_add_all_digests();
 
  if(!argv[1]) {
- 	printf("Usage: mdtest digestname\n");
+	printf("Usage: mdtest digestname\n");
 	exit(1);
  }
 
  md = EVP_get_digestbyname(argv[1]);
 
  if(!md) {
- 	printf("Unknown message digest %s\n", argv[1]);
+	printf("Unknown message digest %s\n", argv[1]);
 	exit(1);
  }
 
@@ -246,7 +246,7 @@ digest name passed on the command line.
 
  printf("Digest is: ");
  for(i = 0; i < md_len; i++)
- 	printf("%02x", md_value[i]);
+	printf("%02x", md_value[i]);
  printf("\n");
 
  /* Call this once before exit. */

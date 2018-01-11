@@ -30,7 +30,7 @@ mkdir -p $cmake_build_directory
 
 cp -r $cmake_directory/ $cmake_build_directory
 
-if [ -f $cmake_build_directory/cmake-$cmake_version/configure ]; then 
+if [ -f $cmake_build_directory/cmake-$cmake_version/configure ]; then
   cmake_build_directory=$cmake_build_directory/cmake-$cmake_version/
 fi
 
@@ -49,4 +49,3 @@ make install
 set +e
 
 exit 0
-

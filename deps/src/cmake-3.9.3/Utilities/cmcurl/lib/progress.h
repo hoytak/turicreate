@@ -74,4 +74,3 @@ long Curl_pgrsLimitWaitTime(curl_off_t cursize,
 
 
 #endif /* HEADER_CURL_PROGRESS_H */
-

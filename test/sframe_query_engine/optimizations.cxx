@@ -34,14 +34,14 @@ static const size_t n = 17;
 struct node {
   std::array<std::shared_ptr<planner_node>, 8> v;
   std::set< std::array<std::shared_ptr<planner_node>, 2> > history;
-  
+
   void pull_history(const std::vector<node>& nv) {
     for(const node& n : nv) {
       history.insert(n.history.begin(), n.history.end());
       history.insert({n.v[0], n.v[3]});
     }
   }
-}; 
+};
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -57,12 +57,12 @@ static void add_sliced_info(node& ret, size_t m) {
 
 static node source_sarray() {
   std::vector<flexible_type> data(n);
-  
+
   for (size_t i = 0; i < n; ++i)
     data[i] = random::fast_uniform<size_t>(0,9);
 
   auto sa = std::make_shared<sarray<flexible_type>>();
-  
+
   sa->open_for_write();
   turi::copy(data.begin(), data.end(), *sa);
   sa->close();
@@ -103,19 +103,19 @@ static node empty_sarray() {
   ret.history.insert({ret.v[0], ret.v[3]});
 
   add_sliced_info(ret, 0);
-  
+
   return ret;
 }
 
 static node zero_source_sarray() {
 
   std::vector<flexible_type> data(n);
-  
+
   for (size_t i = 0; i < n; ++i)
     data[i] = 0;
 
   auto sa = std::make_shared<sarray<flexible_type>>();
-  
+
   sa->open_for_write();
   turi::copy(data.begin(), data.end(), *sa);
   sa->close();
@@ -138,19 +138,19 @@ static node zero_source_sarray() {
   add_sliced_info(ret, data.size());
 
   ret.history.insert({ret.v[0], ret.v[3]});
-  
+
   return ret;
 }
 
 static node binary_source_sarray() {
   std::vector<flexible_type> data(n);
-  
+
   for (size_t i = 0; i < n; ++i) {
     data[i] = (i < 4) ? 1 : random::fast_uniform<int>(0,1);
   }
 
   auto sa = std::make_shared<sarray<flexible_type>>();
-  
+
   sa->open_for_write();
   turi::copy(data.begin(), data.end(), *sa);
   sa->close();
@@ -173,7 +173,7 @@ static node binary_source_sarray() {
   add_sliced_info(ret, data.size());
 
   ret.history.insert({ret.v[0], ret.v[3]});
-  
+
   return ret;
 }
 
@@ -181,11 +181,11 @@ static node binary_source_sarray() {
 static node source_sframe(size_t n_columns) {
 
   std::vector<std::vector<flexible_type> > data(n_columns);
-  
+
   for(size_t i = 0; i < n_columns; ++i) {
     data[i].resize(n);
 
-    for(size_t j = 0; j < n; ++j) { 
+    for(size_t j = 0; j < n; ++j) {
       data[i][j] = random::fast_uniform<size_t>(0,9);
     }
   }
@@ -193,9 +193,9 @@ static node source_sframe(size_t n_columns) {
   std::vector<std::shared_ptr<sarray<flexible_type> > > sa_l(n_columns);
 
   for(size_t i = 0; i < n_columns; ++i) {
-    
+
     auto sa = std::make_shared<sarray<flexible_type> >();
-  
+
     sa->open_for_write();
     turi::copy(data[i].begin(), data[i].end(), *sa);
     sa->close();
@@ -299,7 +299,7 @@ static node empty_sframe(size_t n_columns) {
   add_sliced_info(ret, 0);
 
   ret.history.insert({ret.v[0], ret.v[3]});
-  
+
   return ret;
 }
 
@@ -309,13 +309,13 @@ static node empty_sframe(size_t n_columns) {
 
 static node make_union(node n1, node n2) {
 
-  node ret; 
+  node ret;
 
   for(size_t i = 0; i < n1.v.size(); ++i)
     ret.v[i] = op_union::make_planner_node(n1.v[i], n2.v[i]);
 
   ret.pull_history({n1, n2});
-  
+
   return ret;
 }
 
@@ -327,7 +327,7 @@ static node make_project(node n1, const std::vector<size_t>& indices) {
     ret.v[i] = op_project::make_planner_node(n1.v[i], indices);
 
   ret.pull_history({n1});
-  
+
   return ret;
 }
 
@@ -341,14 +341,14 @@ static node make_transform(node n1) {
     for(size_t i = 0; i < r.size(); ++i) {
       out += r[i];
     }
-    return out % 10; 
+    return out % 10;
   };
-  
+
   for(size_t i = 0; i < n1.v.size(); ++i)
     ret.v[i] = op_transform::make_planner_node(n1.v[i], tr, flex_type_enum::INTEGER);
 
   ret.pull_history({n1});
-  
+
   return ret;
 }
 
@@ -361,18 +361,18 @@ static node make_generalized_transform(node n1, size_t n_out) {
     size_t prod = 1;
     for(size_t i = 0; i < r1.size(); ++i)
       prod *= (1 + i + size_t(r1[i]));
-    
+
     size_t src_idx = 0;
     for(size_t i = 0; i < n_out; ++i) {
       size_t idx_1 = (src_idx % r1.size()); ++src_idx;
       size_t idx_2 = (src_idx % r1.size()); ++src_idx;
-          
+
       r2[i] = (prod + r1[idx_1] + r1[idx_2]) % 10;
     }
   };
-      
+
   node ret;
-  
+
   for(size_t i = 0; i < n1.v.size(); ++i)
     ret.v[i] = op_generalized_transform::make_planner_node(n1.v[i], f, output_types);
 
@@ -380,16 +380,16 @@ static node make_generalized_transform(node n1, size_t n_out) {
 
   return ret;
 }
-  
+
 static node make_logical_filter(node n1, node n2) {
 
   node ret;
-  
+
   for(size_t i = 0; i < n1.v.size(); ++i)
     ret.v[i] = op_logical_filter::make_planner_node(n1.v[i], n2.v[i]);
 
   ret.pull_history({n1, n2});
-  
+
   return ret;
 }
 
@@ -402,37 +402,37 @@ static node make_append(node n1, node n2) {
     ret.v[i] = op_append::make_planner_node(n1.v[i], n2.v[i]);
 
   ret.pull_history({n1, n2});
-  
+
   return ret;
 }
 
 static void check_sframes(sframe sf1, sframe sf2, std::string tag) {
-  
+
   std::vector<std::vector<std::vector<flexible_type> > > results(2);
-  
+
   sf1.get_reader()->read_rows(0, sf1.num_rows(), results[0]);
   sf2.get_reader()->read_rows(0, sf2.num_rows(), results[1]);
-  
-  bool all_okay = true; 
+
+  bool all_okay = true;
 
   for(size_t i = 1; i < results.size() && all_okay; ++i) {
     if(results[0].size() != results[i].size()) { all_okay = false; break; }
-        
+
     for(size_t j = 0; j < results[0].size() && all_okay; ++j) {
       if(results[0][j].size() != results[i][j].size()) { all_okay = false; break; }
-      
+
       for(size_t k = 0; k < results[0][j].size(); ++k) {
-        if(results[0][j][k] != results[i][j][k]) { all_okay = false;  break; } // 
+        if(results[0][j][k] != results[i][j][k]) { all_okay = false;  break; } //
       }
     }
   }
-  
+
   if(!all_okay) {
 
     logprogress_stream << "ERROR (left) NO-OPT != OPT (right) [run=" << tag << "]" << std::endl;
 
     logprogress_stream << "------------------PATTERN--------------------"  << std::endl;
-    
+
     for(size_t j = 0; j < results[0].size(); ++j) {
 
       auto get_pattern = [&](size_t k, int i) -> char {
@@ -463,7 +463,7 @@ static void check_sframes(sframe sf1, sframe sf2, std::string tag) {
       }
 
       ss << "] != [ ";
-        
+
       for(size_t k = 0; k < results[1][j].size(); ++k) {
         ss << get_pattern(k, results[1][j][k]) << " ";
       }
@@ -485,7 +485,7 @@ static void check_sframes(sframe sf1, sframe sf2, std::string tag) {
       }
 
       ss << "] != [ ";
-        
+
       for(size_t k = 0; k < results[1][j].size(); ++k) {
         ss << int(results[1][j][k]) << " ";
       }
@@ -499,7 +499,7 @@ static void check_sframes(sframe sf1, sframe sf2, std::string tag) {
 
     std::vector<uint64_t> left_hashes(results[0][0].size(), 0);
     std::vector<uint64_t> right_hashes(results[1][0].size(), 0);
-    
+
     for(size_t j = 0; j < results[0].size(); ++j) {
       for(size_t k = 0; k < results[0][j].size(); ++k) {
         left_hashes[k] = hash64(left_hashes[k], results[0][j][k]);
@@ -525,8 +525,8 @@ static void check_sframes(sframe sf1, sframe sf2, std::string tag) {
         }
       }
     }
-    
-    ASSERT_TRUE(false); 
+
+    ASSERT_TRUE(false);
   }
 }
 
@@ -537,13 +537,13 @@ static void check_sframes(sframe sf1, sframe sf2, std::string tag) {
 static void run(size_t line, node n) {
   global_logger().set_log_level(LOG_INFO);
   materialize_options no_opt;
-  no_opt.disable_optimization = true; 
-  
+  no_opt.disable_optimization = true;
+
   materialize_options naive;
-  naive.naive_mode = true; 
-  
+  naive.naive_mode = true;
+
   std::vector<sframe> out(4);
-  
+
   logprogress_stream << std::endl;
   logprogress_stream << "################################################################" << std::endl;
   logprogress_stream << ">>> Prewarming Optimizations                                 <<<" << std::endl;
@@ -557,9 +557,9 @@ static void run(size_t line, node n) {
     sframe sf_1 = planner().materialize(history_vect[i][0], no_opt);
     sframe sf_2 = planner().materialize(history_vect[i][1], materialize_options());
 
-    check_sframes(sf_1, sf_2, "mixed-graph-materialize"); 
+    check_sframes(sf_1, sf_2, "mixed-graph-materialize");
   }
-   
+
   logprogress_stream << std::endl;
   logprogress_stream << "################################################################" << std::endl;
   logprogress_stream << ">>> Optimization Disabled                                    <<<" << std::endl;
@@ -578,16 +578,16 @@ static void run(size_t line, node n) {
   logprogress_stream << "################################################################" << std::endl;
   logprogress_stream << ">>> Optimization Enabled                                     <<<" << std::endl;
   logprogress_stream << ">>> " << line << std::endl;
-  
+
   out[2] = planner().materialize(n.v[2], materialize_options());
 
   logprogress_stream << std::endl;
   logprogress_stream << "################################################################" << std::endl;
   logprogress_stream << ">>> Optimization Enabled, history of evaluation              <<<" << std::endl;
   logprogress_stream << ">>> " << line << std::endl;
-  
+
   out[3] = planner().materialize(n.v[3], materialize_options());
-  
+
   check_sframes(out[0], out[1], "naive");
   check_sframes(out[0], out[2], "Opt");
   check_sframes(out[0], out[3], "Opt-with-history");
@@ -596,7 +596,7 @@ static void run(size_t line, node n) {
 
 struct opts  {
  public:
- 
+
   void test_union_sarray() {
     node out = make_union(source_sarray(), source_sarray());
     _RUN(out);
@@ -609,24 +609,24 @@ struct opts  {
 
   void test_union_project_sframe() {
     random::seed(0);
-    
+
     node n = source_sframe(5);
-    
+
     for(size_t i = 0; i < 20; ++i) {
 
       std::vector<size_t> indices;
-      
+
       for(size_t i = 0; i < 5; ++i)
         indices.push_back(random::fast_uniform<size_t>(0, 9));
 
       if(i % 2 == 0)
         n = make_union(n, source_sframe(5));
-      else 
+      else
         n = make_union(source_sframe(5), n);
-                       
+
       n = make_project(n, indices);
     }
-    
+
     _RUN(n);
   }
 
@@ -634,7 +634,7 @@ struct opts  {
 
     node n1 = make_transform(source_sframe(2));
     node n2 = make_transform(source_sframe(2));
-    
+
     node n = make_union(n1, n2);
     n = make_project(n, {0});
 
@@ -645,34 +645,34 @@ struct opts  {
 
     node n1 = make_transform(source_sframe(2));
     node n2 = make_transform(source_sframe(2));
-    
+
     node n = make_union(n1, n2);
     n = make_project(n, {1});
 
     _RUN(n);
   }
-  
+
 
   void test_union_project_switch_places() {
 
     node n = source_sframe(2);
     node old_n = source_sframe(2);
-    
+
     n = make_union(n, old_n);
     old_n = n;
     n = make_project(n, {3,0});
 
     n = make_union(n, old_n);
-    
+
     _RUN(n);
   }
-  
+
   void test_union_project_recursive_sframe_2() {
     random::seed(0);
 
     node n = source_sframe(5);
     node old_n = source_sframe(5);
-    
+
     for(size_t i = 0; i < 20; ++i) {
 
       std::vector<size_t> indices;
@@ -682,17 +682,17 @@ struct opts  {
 
       if(random::fast_uniform<size_t>(0, 1) == 0)
         n = make_union(n, old_n);
-      else 
+      else
         n = make_union(old_n, n);
-      
+
       old_n = n;
-      
+
       n = make_project(n, indices);
     }
-    
+
     _RUN(n);
   }
-  
+
   void test_union_project_recursive_sframe_3() {
     random::seed(0);
 
@@ -700,23 +700,23 @@ struct opts  {
     node old_n = source_sframe(5);
 
     std::vector<node> nodes;
-    
+
     for(size_t i = 0; i < 10; ++i) {
 
       std::vector<size_t> indices;
-      
+
       for(size_t i = 0; i < 5; ++i)
         indices.push_back(random::fast_uniform<size_t>(0, 9));
 
       if(random::fast_uniform<size_t>(0, 1) == 0)
         n = make_union(n, old_n);
-      else 
+      else
         n = make_union(old_n, n);
 
       nodes.push_back(n);
-      
+
       old_n = n;
-      
+
       n = make_project(n, indices);
 
       nodes.push_back(n);
@@ -724,14 +724,14 @@ struct opts  {
       n = make_union(n, nodes[random::fast_uniform<size_t>(0, nodes.size() - 1)]);
       n = make_union(n, nodes[random::fast_uniform<size_t>(0, nodes.size() - 1)]);
     }
-    
+
     _RUN(n);
   }
 
   void test_project_union_transform() {
     node n = source_sframe(5);
     node out = make_union(n, make_transform(make_project(n, {1, 2}) ) );
-    _RUN(out); 
+    _RUN(out);
   }
 
   void test_eliminate_identity_projection_1() {
@@ -747,15 +747,15 @@ struct opts  {
                          make_transform(source_sframe(5)));
     node n2 = make_union(make_transform(source_sframe(5)),
                          make_transform(source_sframe(5)));
-    
+
     node n = make_union(n1, n2);
 
     n = make_project(n, {1, 0, 3, 2});
     n = make_project(n, {3, 2, 1, 0});
-    
+
     _RUN(n);
   }
-  
+
   void test_eliminate_identity_projection_3() {
     random::seed(0);
 
@@ -763,16 +763,16 @@ struct opts  {
                          make_transform(source_sframe(5)));
     node n2 = make_union(make_transform(source_sframe(5)),
                          make_transform(source_sframe(5)));
-    
+
     node n = make_union(n1, n2);
 
     std::vector<size_t> idx = {0, 1, 2, 3};
-    
+
     for(size_t i = 0; i < 50; ++i) {
       random::shuffle(idx);
       n = make_project(n, idx);
     }
-          
+
     _RUN(n);
   }
 
@@ -782,14 +782,14 @@ struct opts  {
                          make_transform(source_sframe(5)));
     node n2 = make_union(make_transform(source_sframe(5)),
                          make_transform(source_sframe(5)));
-    
+
     node n3 = make_union(n1, n2);
-    
+
     node n = make_project(n3, {0, 1, 2, 3});
-    
+
     _RUN(n);
   }
-  
+
   void test_project_union_transform_recursive_1() {
     random::seed(0);
 
@@ -812,7 +812,7 @@ struct opts  {
     for(size_t i = 0; i < 20; ++i) {
 
       std::vector<size_t> indices;
-      
+
       for(size_t j = 0; j < 2; ++j)
         indices.push_back(random::fast_uniform<size_t>(0, 5 + i - 1));
 
@@ -841,11 +841,11 @@ struct opts  {
   }
 
   void test_append_on_source() {
-    node n = make_append(source_sframe(5), 
+    node n = make_append(source_sframe(5),
                          source_sframe(5));
     _RUN(n);
   }
-  
+
   void test_project_append_exchange_1() {
     node n1 = source_sframe(5);
     node n2 = source_sframe(5);
@@ -882,7 +882,7 @@ struct opts  {
     node n2 = binary_source_sarray();
 
     node n = make_project(make_logical_filter(n1, n2), {1, 3});
-    
+
     _RUN(n);
   }
 
@@ -891,13 +891,13 @@ struct opts  {
     node n2 = binary_source_sarray();
 
     node lf = make_logical_filter(n1, n2);
-    
+
     node n = make_union(make_project(lf, {0,2,3}),
                         make_project(lf, {1,4}));
 
     _RUN(n);
   }
-  /* 
+  /*
    * TODO: These cases are currently impossible to produce
    * via the regular SFrame API since binary operations across of stuff of
    * unknown sizes will force materialization to check their size,
@@ -938,7 +938,7 @@ struct opts  {
     node n2 = zero_source_sarray();
 
     node n = make_project(make_logical_filter(n1, n2), {1, 3});
-    
+
     _RUN(n);
   }
 
@@ -1021,7 +1021,7 @@ struct opts  {
 
     _RUN(n);
   }
-  
+
   void test_union_project_merge() {
     node n = source_sframe(5);
     n = make_generalized_transform(n, 5);
@@ -1030,32 +1030,32 @@ struct opts  {
 
     _RUN(n);
   }
-  
+
   void test_union_project_merge_2() {
     node n = source_sframe(5);
 
     node n_src = make_generalized_transform(n, 10);
-    
+
     n = n_src;
-    
+
     for(size_t i = 0; i < 10; ++i)
-      n = make_union(n, make_project(n_src, {i})); 
+      n = make_union(n, make_project(n_src, {i}));
 
     _RUN(n);
   }
 
   void test_union_project_merge_2b() {
-    
+
     node n_src = make_generalized_transform(source_sframe(10), 10);
-    
+
     node n = n_src;
-    
+
     for(size_t i = 0; i < 10; ++i)
       n = make_union(make_project(n, {0, 2, 1, 4, 3, 6, 5, 8, 7, 9}), make_project(n_src, {i}));
-    
+
     _RUN(n);
   }
-  
+
   void test_union_project_merge_3() {
     random::seed(0);
 
@@ -1075,14 +1075,14 @@ struct opts  {
   }
 
   void test_union_project_merge_4() {
-    
+
     node n_src = make_generalized_transform(source_sframe(5), 100);
 
     node n = make_union(make_project(n_src, {0}), make_project(n_src, {1}));
-    
+
     for(size_t i = 2; i < 100; ++i) {
       n = make_union(n, make_project(n_src, {i}));
-    } 
+    }
 
     _RUN(n);
   }
@@ -1100,7 +1100,7 @@ struct opts  {
       size_t idx_3 = random::fast_uniform<size_t>(0, node_list.size() - 1);
 
       std::vector<size_t> project_indices(5);
-      for(size_t& idx : project_indices) 
+      for(size_t& idx : project_indices)
         idx = random::fast_uniform<size_t>(0, 9);
 
       node_list.push_back(make_union(node_list[idx_1], make_project(node_list[idx_2], project_indices)));
@@ -1108,12 +1108,12 @@ struct opts  {
     }
 
     n = make_union(node_list[0], node_list[1]);
-    
+
     for(size_t i = 2; i < node_list.size(); ++i) {
       size_t idx = random::fast_uniform<size_t>(0, 14);
       n = make_union(n, make_project(node_list[i], {idx}));
     }
-    
+
     _RUN(n);
   }
 
@@ -1194,7 +1194,7 @@ struct opts  {
     _RUN(n);
   }
 
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_opts, opts)

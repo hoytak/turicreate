@@ -94,7 +94,7 @@ archive_read_extract2(struct archive *_a, struct archive_entry *entry,
 		r = ARCHIVE_WARN;
 	if (r != ARCHIVE_OK)
 		/* If _write_header failed, copy the error. */
- 		archive_copy_error(&a->archive, ad);
+		archive_copy_error(&a->archive, ad);
 	else if (!archive_entry_size_is_set(entry) || archive_entry_size(entry) > 0)
 		/* Otherwise, pour data into the entry. */
 		r = copy_data(_a, ad);

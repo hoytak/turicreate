@@ -23,12 +23,12 @@ namespace fs = boost::filesystem;
 struct raii_deleter {
   raii_deleter(const std::string& shmname,
                const std::string& tagfile)
-      :m_shmname(shmname), m_tagfilename(tagfile) { 
+      :m_shmname(shmname), m_tagfilename(tagfile) {
   }
-  ~raii_deleter() { 
+  ~raii_deleter() {
     // failed deletion is ok
     try {
-      boost::interprocess::shared_memory_object::remove(m_shmname.c_str()); 
+      boost::interprocess::shared_memory_object::remove(m_shmname.c_str());
     } catch (...) { }
 
     // failed deletion is ok
@@ -52,7 +52,7 @@ static fs::path shared_memory_tagfile_path() {
 }
 
 void garbage_collect() {
-  auto taglist = 
+  auto taglist =
       fileio::get_directory_listing(shared_memory_tagfile_path().generic_string());
 
   // enumerate all files in [TMPDIR]/glshm_[userid]
@@ -60,7 +60,7 @@ void garbage_collect() {
   for (auto& file: taglist) {
     auto shmname = fileio::get_filename(file.first);
     std::ifstream fin(file.first.c_str());
-    size_t pid = 0; 
+    size_t pid = 0;
     fin >> pid;
     if (pid != 0 && is_process_running(pid) == false) {
       // use the raii deleter's destructor to delete the shared memory and the
@@ -71,7 +71,7 @@ void garbage_collect() {
 }
 
 
-std::shared_ptr<raii_deleter> 
+std::shared_ptr<raii_deleter>
 register_shared_memory_name(std::string m_name) {
   garbage_collect();
 

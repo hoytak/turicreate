@@ -63,7 +63,7 @@ void linear_svm::model_specific_init(const ml_data& data,
 
   if (ml_mdata->target_index_size() != 2){
     std::stringstream ss;
-    ss << "Linear SVM currently only supports binary classification. " 
+    ss << "Linear SVM currently only supports binary classification. "
        << "Use the boosted_trees_classifier for multi-class classification."
        << std::endl;
     log_and_throw(ss.str());
@@ -76,10 +76,10 @@ void linear_svm::model_specific_init(const ml_data& data,
 
   // Examples per class
   state["num_classes"] = 2;
-  state["num_examples_per_class"] = 
+  state["num_examples_per_class"] =
                     to_variant(get_num_examples_per_class(ml_mdata));
   state["num_coefficients"] = variables;
-  
+
   // Create an interface to the solver.
   // --------------------------------------------------------------------------
   scaled_logistic_svm_interface.reset(new
@@ -95,60 +95,60 @@ void linear_svm::init_options(const std::map<std::string,
     flexible_type>&_opts){
 
   options.create_real_option(
-      "convergence_threshold", 
-      "Convergence threshold for training", 
+      "convergence_threshold",
+      "Convergence threshold for training",
       0.01,
       optimization::OPTIMIZATION_ZERO,
       optimization::OPTIMIZATION_INFTY,
-      false); 
-  
+      false);
+
   options.create_integer_option(
-      "max_iterations", 
-      "Maximum number of iterations to perform during training", 
+      "max_iterations",
+      "Maximum number of iterations to perform during training",
       10,
       1,
       std::numeric_limits<int>::max(),
-      false); 
-  
+      false);
+
   options.create_categorical_option(
-      "solver", 
-      "Solver used for training", 
+      "solver",
+      "Solver used for training",
       "auto",
       {flexible_type("auto"), flexible_type("lbfgs")},
-      false); 
-  
+      false);
+
   options.create_real_option(
-      "penalty", 
-      "Penalty on the mis-classification loss", 
+      "penalty",
+      "Penalty on the mis-classification loss",
       1.0,
       optimization::OPTIMIZATION_ZERO,
       optimization::OPTIMIZATION_INFTY,
-      false); 
-  
+      false);
+
   options.create_integer_option(
-      "lbfgs_memory_level", 
-      "Number of previous iterations to cache for LBFGS", 
+      "lbfgs_memory_level",
+      "Number of previous iterations to cache for LBFGS",
       11,
       1,
       std::numeric_limits<int>::max(),
-      false); 
-  
+      false);
+
   options.create_boolean_option(
-      "feature_rescaling", 
-      "Rescale features to have unit L2-Norm", 
+      "feature_rescaling",
+      "Rescale features to have unit L2-Norm",
       true,
-      false); 
+      false);
 
   options.create_flexible_type_option(
-      "class_weights", 
-      "Weights (during training) assigned to each class.", 
+      "class_weights",
+      "Weights (during training) assigned to each class.",
       flex_undefined(),
-      true); 
+      true);
 
   // Set options!
   options.set_options(_opts);
   add_or_update_state(flexmap_to_varmap(options.current_option_values()));
-  
+
 }
 
 
@@ -160,16 +160,16 @@ void linear_svm::train() {
   if(get_option_value("feature_rescaling")){
     scaled_logistic_svm_interface->init_feature_rescaling();
   }
-  
+
   // Set class weights
-  flexible_type class_weights = 
+  flexible_type class_weights =
                       get_class_weights_from_options(options, ml_mdata);
   state["class_weights"] =  to_variant(class_weights);
   size_t i = 0;
   flex_dict _class_weights(variant_get_value<size_t>(state.at("num_classes")));
   for(const auto& kvp: class_weights.get<flex_dict>()){
-    _class_weights[i++] = 
-        {ml_mdata->target_indexer()->immutable_map_value_to_index(kvp.first), 
+    _class_weights[i++] =
+        {ml_mdata->target_indexer()->immutable_map_value_to_index(kvp.first),
          kvp.second.get<flex_float>()};
   }
   scaled_logistic_svm_interface->set_class_weights(_class_weights);
@@ -187,12 +187,12 @@ void linear_svm::train() {
   // Box constriants for L1 loss SVM
   float penalty = options.value("penalty");
   std::string solver = options.value("solver");
- 
+
   // Auto solver
   if(solver == "auto"){
     solver = "lbfgs";
   }
-  this->set_options({{"solver", solver}}); 
+  this->set_options({{"solver", solver}});
 
   // Call the solvers
   // ---------------------------------------------------------------------------
@@ -235,7 +235,7 @@ void linear_svm::train() {
   state["training_loss"] = stats.func_value;  // minimized negative log-likelihood
   state["training_solver_status"] = (std::string)
     translate_solver_status(stats.status);
-  
+
   // Store progress table.
   std::shared_ptr<unity_sframe> unity_progress = std::make_shared<unity_sframe>();
   unity_progress->construct_from_sframe(stats.progress_table);
@@ -247,23 +247,23 @@ void linear_svm::train() {
 
 
 /**
- * Predict for a single example. 
+ * Predict for a single example.
  */
 flexible_type linear_svm::predict_single_example(
-         const DenseVector& x, 
+         const DenseVector& x,
          const prediction_type_enum& output_type){
   double margin = dot(x, coefs);
   switch (output_type) {
     // Margin
     case prediction_type_enum::MARGIN:
       return margin;
-    
+
     // Class Index
     case prediction_type_enum::CLASS_INDEX:
-      return (margin >= 0.0); 
+      return (margin >= 0.0);
 
     // Class
-    case prediction_type_enum::CLASS: 
+    case prediction_type_enum::CLASS:
     {
       size_t class_id = (margin >= 0.0);
       return  ml_mdata->target_indexer()->map_index_to_value(class_id);
@@ -282,10 +282,10 @@ flexible_type linear_svm::predict_single_example(
 }
 
 /**
- * Predict for a single example. 
+ * Predict for a single example.
  */
 flexible_type linear_svm::predict_single_example(
-         const SparseVector& x, 
+         const SparseVector& x,
          const prediction_type_enum& output_type){
   double margin = dot(x, coefs);
   switch (output_type) {
@@ -297,7 +297,7 @@ flexible_type linear_svm::predict_single_example(
       case prediction_type_enum::CLASS_INDEX:
       return (margin >= 0.0);
     // Class
-    case prediction_type_enum::CLASS: 
+    case prediction_type_enum::CLASS:
     {
       size_t class_id = (margin >= 0.0);
       return  ml_mdata->target_indexer()->map_index_to_value(class_id);
@@ -318,7 +318,7 @@ flexible_type linear_svm::predict_single_example(
 /**
  * Classify.
  */
-sframe linear_svm::classify(const ml_data& test_data, 
+sframe linear_svm::classify(const ml_data& test_data,
                             const std::string& output_type){
   sframe sf_class;
   sf_class = sf_class.add_column(predict(test_data, "class"), "class");
@@ -329,7 +329,7 @@ sframe linear_svm::classify(const ml_data& test_data,
  * Fast Classify.
  */
 gl_sframe linear_svm::fast_classify(
-    const std::vector<flexible_type>& rows, 
+    const std::vector<flexible_type>& rows,
     const std::string& missing_value_action) {
   // Class predictions
   gl_sframe sf_class;
@@ -341,7 +341,7 @@ gl_sframe linear_svm::fast_classify(
  * Turi Serialization Save
  */
 void linear_svm::save_impl(turi::oarchive& oarc) const {
-  
+
   // State
   variant_deep_save(state, oarc);
 
@@ -365,13 +365,13 @@ void linear_svm::set_coefs(const DenseVector& _coefs) {
  * Turi Serialization Load
  */
 void linear_svm::load_version(turi::iarchive& iarc, size_t version) {
-  ASSERT_MSG(version <= SVM_MODEL_VERSION, 
+  ASSERT_MSG(version <= SVM_MODEL_VERSION,
         "This model version cannot be loaded. Please re-save your model.");
   if (version < 5) {
     log_and_throw("Cannot load a model saved using a version prior to GLC-1.7.");
   }
 
-  // State  
+  // State
   variant_deep_load(state, iarc);
 
   // Everything else
@@ -400,10 +400,10 @@ size_t linear_svm::get_version() const{
   //  3 - Version 1.4
   //  4 - Version 1.5
   //  5 - Version 1.7
-  return SVM_MODEL_VERSION;  
+  return SVM_MODEL_VERSION;
 }
-  
-void linear_svm::export_to_coreml(const std::string& filename) { 
+
+void linear_svm::export_to_coreml(const std::string& filename) {
 
   std::string prob_column_name = ml_mdata->target_column_name() + "Probability";
   CoreML::Pipeline  pipeline = CoreML::Pipeline::Classifier(ml_mdata->target_column_name(), prob_column_name, "");
@@ -462,11 +462,11 @@ void linear_svm::export_to_coreml(const std::string& filename) {
   pipeline.addOutput(ml_mdata->target_column_name(), target_output_data_type);
   pipeline.addOutput(prob_column_name, target_additional_data_type);
 
-  
-  std::map<std::string, flexible_type> context = { 
-    {"model_type", "linear_svm"}, 
-    {"version", std::to_string(get_version())}, 
-    {"class", name()}, 
+
+  std::map<std::string, flexible_type> context = {
+    {"model_type", "linear_svm"},
+    {"version", std::to_string(get_version())},
+    {"class", name()},
     {"short_description", "Linear SVM Model."}};
 
   // Add metadata

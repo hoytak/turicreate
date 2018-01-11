@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-RequestPaymentConfiguration::RequestPaymentConfiguration() : 
+RequestPaymentConfiguration::RequestPaymentConfiguration() :
     m_payerHasBeenSet(false)
 {
 }
 
-RequestPaymentConfiguration::RequestPaymentConfiguration(const XmlNode& xmlNode) : 
+RequestPaymentConfiguration::RequestPaymentConfiguration(const XmlNode& xmlNode) :
     m_payerHasBeenSet(false)
 {
   *this = xmlNode;

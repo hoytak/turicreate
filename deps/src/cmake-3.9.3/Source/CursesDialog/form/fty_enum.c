@@ -23,9 +23,9 @@ typedef struct {
 } enumARG;
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void *Make_Enum_Type( va_list * ap )
-|   
+|
 |   Description   :  Allocate structure for enumeration type argument.
 |
 |   Return Values :  Pointer to argument structure or NULL on error
@@ -54,10 +54,10 @@ static void *Make_Enum_Type(va_list * ap)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void *Copy_Enum_Type( const void * argp )
-|   
-|   Description   :  Copy structure for enumeration type argument.  
+|
+|   Description   :  Copy structure for enumeration type argument.
 |
 |   Return Values :  Pointer to argument structure or NULL on error.
 +--------------------------------------------------------------------------*/
@@ -77,16 +77,16 @@ static void *Copy_Enum_Type(const void * argp)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static void Free_Enum_Type( void * argp )
-|   
+|
 |   Description   :  Free structure for enumeration type argument.
 |
 |   Return Values :  -
 +--------------------------------------------------------------------------*/
 static void Free_Enum_Type(void * argp)
 {
-  if (argp) 
+  if (argp)
     free(argp);
 }
 
@@ -96,11 +96,11 @@ static void Free_Enum_Type(void * argp)
 #define EXACT   2
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
-|   Function      :  static int Compare(const unsigned char * s,  
+|   Facility      :  libnform
+|   Function      :  static int Compare(const unsigned char * s,
 |                                       const unsigned char * buf,
 |                                       bool  ccase )
-|   
+|
 |   Description   :  Check whether or not the text in 'buf' matches the
 |                    text in 's', at least partial.
 |
@@ -108,7 +108,7 @@ static void Free_Enum_Type(void * argp)
 |                    PARTIAL   - buffer matches partially
 |                    EXACT     - buffer matches exactly
 +--------------------------------------------------------------------------*/
-static int Compare(const unsigned char *s, const unsigned char *buf, 
+static int Compare(const unsigned char *s, const unsigned char *buf,
 		   bool ccase)
 {
   SKIP_SPACE(buf); /* Skip leading spaces in both texts */
@@ -117,17 +117,17 @@ static int Compare(const unsigned char *s, const unsigned char *buf,
   if (*buf=='\0')
     {
       return (((*s)!='\0') ? NOMATCH : EXACT);
-    } 
-  else 
+    }
+  else
     {
       if (ccase)
 	{
 	  while(*s++ == *buf)
 	    {
 	      if (*buf++=='\0') return EXACT;
-	    } 
-	} 
-      else 
+	    }
+	}
+      else
 	{
 	  while(toupper(*s++)==toupper(*buf))
 	    {
@@ -139,7 +139,7 @@ static int Compare(const unsigned char *s, const unsigned char *buf,
      matches with s. So if only blanks are following, we have a partial
      match otherwise there is no match */
   SKIP_SPACE(buf);
-  if (*buf) 
+  if (*buf)
     return NOMATCH;
 
   /* If it happens that the reference buffer is at its end, the partial
@@ -148,11 +148,11 @@ static int Compare(const unsigned char *s, const unsigned char *buf,
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Check_Enum_Field(
 |                                      FIELD * field,
 |                                      const void  * argp)
-|   
+|
 |   Description   :  Validate buffer content to be a valid enumeration value
 |
 |   Return Values :  TRUE  - field is valid
@@ -166,13 +166,13 @@ static bool Check_Enum_Field(FIELD * field, const void  * argp)
   unsigned char *bp = (unsigned char *)field_buffer(field,0);
   char *s, *t, *p;
   int res;
-  
+
   while( kwds && (s=(*kwds++)) )
     {
       if ((res=Compare((unsigned char *)s,bp,ccase))!=NOMATCH)
 	{
 	  p=t=s; /* t is at least a partial match */
-	  if ((unique && res!=EXACT)) 
+	  if ((unique && res!=EXACT))
 	    {
 	      while( kwds && (p = *kwds++) )
 		{
@@ -187,7 +187,7 @@ static bool Check_Enum_Field(FIELD * field, const void  * argp)
 			t = (char *)0;
 		    }
 		}
-	    }	  
+	    }
 	  if (t)
 	    {
 	      set_field_buffer(field,0,t);
@@ -203,10 +203,10 @@ static bool Check_Enum_Field(FIELD * field, const void  * argp)
 static const char *dummy[] = { (char *)0 };
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Next_Enum(FIELD * field,
 |                                          const void * argp)
-|   
+|
 |   Description   :  Check for the next enumeration value
 |
 |   Return Values :  TRUE  - next value found and loaded
@@ -223,7 +223,7 @@ static bool Next_Enum(FIELD * field, const void * argp)
   if (kwds) {
     while(cnt--)
       {
-	if (Compare((unsigned char *)(*kwds++),bp,ccase)==EXACT) 
+	if (Compare((unsigned char *)(*kwds++),bp,ccase)==EXACT)
 	  break;
       }
     if (cnt<=0)
@@ -238,11 +238,11 @@ static bool Next_Enum(FIELD * field, const void * argp)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  static bool Previous_Enum(
 |                                          FIELD * field,
 |                                          const void * argp)
-|   
+|
 |   Description   :  Check for the previous enumeration value
 |
 |   Return Values :  TRUE  - previous value found and loaded
@@ -259,13 +259,13 @@ static bool Previous_Enum(FIELD * field, const void * argp)
   if (kwds) {
     while(cnt--)
       {
-	if (Compare((unsigned char *)(*kwds--),bp,ccase)==EXACT) 
+	if (Compare((unsigned char *)(*kwds--),bp,ccase)==EXACT)
 	  break;
       }
-    
+
     if (cnt<=0)
       kwds  = &args->kwds[args->count-1];
-    
+
     if ((cnt>=0) || (Compare((const unsigned char *)dummy,bp,ccase)==EXACT))
       {
 	set_field_buffer(field,0,*kwds);

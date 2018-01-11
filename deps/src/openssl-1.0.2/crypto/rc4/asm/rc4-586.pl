@@ -411,4 +411,3 @@ $idx="edx";
 &function_end_B("RC4_options");
 
 &asm_finish();
-

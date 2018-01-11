@@ -11,7 +11,7 @@ int GetFtpFile(void)
   CURL *curl;
   CURLcode res;
   curl = curl_easy_init();
-  if(curl) 
+  if(curl)
     {
     /* Get curl 7.9.2 from sunet.se's FTP site: */
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
@@ -75,7 +75,7 @@ int GetWebFiles(char *url1, char *url2)
     }
 
   curl = curl_easy_init();
-  if(curl) 
+  if(curl)
     {
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
     curl_easy_setopt(curl, CURLOPT_HEADER, 1);
@@ -83,7 +83,7 @@ int GetWebFiles(char *url1, char *url2)
     /* Using proxy */
     if ( proxy_type > 0 )
       {
-      curl_easy_setopt(curl, CURLOPT_PROXY, proxy); 
+      curl_easy_setopt(curl, CURLOPT_PROXY, proxy);
       switch (proxy_type)
         {
         case 2:
@@ -93,7 +93,7 @@ int GetWebFiles(char *url1, char *url2)
           curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
           break;
         default:
-          curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);           
+          curl_easy_setopt(curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
         }
       }
 

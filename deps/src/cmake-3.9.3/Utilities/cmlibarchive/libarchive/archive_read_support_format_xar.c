@@ -1054,7 +1054,7 @@ atol8(const char *p, size_t char_cnt)
 {
 	int64_t l;
 	int digit;
-        
+
 	l = 0;
 	while (char_cnt-- > 0) {
 		if (*p >= '0' && *p <= '7')
@@ -1092,7 +1092,7 @@ atohex(unsigned char *b, size_t bsize, const char *p, size_t psize)
 			x |= p[1] - '0';
 		else
 			return (-1);
-		
+
 		*b++ = x;
 		bsize--;
 		p += 2;

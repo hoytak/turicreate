@@ -241,7 +241,7 @@ finally:
 
         pruned = ''
         self.assertPruned(source, pruned, symbols=['a', 'd', 'e', 'f'])
-    
+
     @py2only
     def test_exec(self):
         source = 'exec a'
@@ -492,4 +492,3 @@ if __name__ == "__main__":
     unittest.main(exit=False)
 
     print(tested.tested())
-

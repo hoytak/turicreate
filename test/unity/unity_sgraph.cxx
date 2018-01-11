@@ -1,4 +1,4 @@
-/*  
+/*
  * Copyright (c) 2013 Turi Inc.
  *     All rights reserved.
  *
@@ -166,7 +166,7 @@ struct unity_graph_test {
     size_t group, groupa, groupb;
     group = groupa = groupb = 0;
 
-    for (size_t i = 0; i < 7; ++i) { 
+    for (size_t i = 0; i < 7; ++i) {
       std::shared_ptr<unity_sgraph_base> graph1(new unity_sgraph);
       std::shared_ptr<unity_sgraph_base> graph2(graph1->add_vertices(sfa, "a", group));
       std::shared_ptr<unity_sgraph_base> graph3(graph1->add_edges(sfb, "a", "b", groupa, groupb));
@@ -314,7 +314,7 @@ struct unity_graph_test {
     TS_ASSERT_EQUALS(vt.values["__src_id"][0], 4);
     TS_ASSERT_EQUALS(vt.values["__dst_id"][0], 5);
 
-    vt = graph6->get_edges({1, flex_undefined()}, {flex_undefined(), 5}, 
+    vt = graph6->get_edges({1, flex_undefined()}, {flex_undefined(), 5},
                            empty_constraint, groupa, groupb)->_head(size_t(-1));
     TS_ASSERT_EQUALS(vt.nrows(), 2);
   }
@@ -351,7 +351,7 @@ struct unity_graph_test {
 
 
     dfa.types["__moo"] = flex_type_enum::INTEGER;
-    dfa.values["__moo"] = std::vector<flexible_type>(dfa.values["c"].size(), 
+    dfa.values["__moo"] = std::vector<flexible_type>(dfa.values["c"].size(),
                                                      flexible_type(flex_type_enum::INTEGER));
 
 
@@ -386,7 +386,7 @@ struct unity_graph_test {
     ASSERT_TRUE(exception);
 
 
-    // attempt to add edges of src/target type which is different from when I 
+    // attempt to add edges of src/target type which is different from when I
     // add_vertices
     create_test_dataframe_b(dfb);
     for (size_t i = 0;i < dfb.values["b"].size(); ++i) {

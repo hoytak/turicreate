@@ -108,5 +108,3 @@ cat $PREFIX-sv.prm $PREFIX-sv.key  $PREFIX-sv.crt $PREFIX-sv.dhp >$PREFIX-sv.pem
 chmod o-r $PREFIX-sv.prm
 
 echo "$PREFIX-sv.pem done"
-
-

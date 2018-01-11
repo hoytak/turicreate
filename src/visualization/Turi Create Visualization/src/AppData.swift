@@ -7,7 +7,7 @@ import Cocoa
 
 final class SharedData {
     static let shared = SharedData() //lazy init, and it only runs once
-    
+
     // Application Objects
     var vegaContainer: VegaContainer? = nil;
     var save_image:NSMenuItem? = nil;

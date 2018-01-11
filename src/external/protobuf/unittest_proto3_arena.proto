@@ -203,4 +203,3 @@ enum ForeignEnum {
 // TestEmptyMessage is used to test behavior of unknown fields.
 message TestEmptyMessage {
 }
-

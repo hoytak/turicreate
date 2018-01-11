@@ -45,7 +45,7 @@ gl_sframe generate_data(std::map<std::string, flexible_type> opts) {
 /**
  * Construct a model from data and options.
  */
-std::shared_ptr<one_hot_encoder> init_model(gl_sframe data, 
+std::shared_ptr<one_hot_encoder> init_model(gl_sframe data,
                        std::map<std::string, flexible_type> opts) {
 
   std::shared_ptr<one_hot_encoder> model;
@@ -97,7 +97,7 @@ void check_model(std::shared_ptr<one_hot_encoder> model,
   flexible_type _get;
 
   // Answers.
-  std::map<std::string, flexible_type> default_options = { 
+  std::map<std::string, flexible_type> default_options = {
     {"output_column_name", "encoded_features"},
     {"max_categories", FLEX_UNDEFINED},
   };
@@ -110,7 +110,7 @@ void check_model(std::shared_ptr<one_hot_encoder> model,
   };
   std::map<std::string, flexible_type> options;
   for (const auto& kvp: default_options){
-    if (opts.count(kvp.first) == 0) { 
+    if (opts.count(kvp.first) == 0) {
       options[kvp.first] = kvp.second;
     } else {
       options[kvp.first] = opts[kvp.first];
@@ -139,7 +139,7 @@ void check_model(std::shared_ptr<one_hot_encoder> model,
   // Check list_fields
   _list_fields = model->list_fields();
   for(const auto& f: _list_fields_ans){
-    TS_ASSERT(std::find(_list_fields.begin(), _list_fields.end(), f) 
+    TS_ASSERT(std::find(_list_fields.begin(), _list_fields.end(), f)
                                                     != _list_fields.end());
   }
   TS_ASSERT_EQUALS(_list_fields.size(), _list_fields_ans.size());
@@ -167,36 +167,36 @@ void run_one_hot_encoder_test(std::map<std::string, flexible_type> opts) {
  *  Run tests.
 */
 struct one_hot_encoder_test  {
- 
+
   public:
 
   void test_one_hot_encoder_basic_2d() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 10}, 
-      {"exclude", false}, 
-      {"max_categories", 10000}, 
-      {"features", 1}}; 
+      {"examples", 10},
+      {"exclude", false},
+      {"max_categories", 10000},
+      {"features", 1}};
     run_one_hot_encoder_test(opts);
   }
-  
+
   void test_one_hot_encoder_small() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 100}, 
-      {"exclude", false}, 
-      {"max_categories", 10000}, 
-      {"features", 10}}; 
+      {"examples", 100},
+      {"exclude", false},
+      {"max_categories", 10000},
+      {"features", 10}};
     run_one_hot_encoder_test(opts);
   }
 
   void test_one_hot_encoder_medium() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 10000}, 
-      {"exclude", false}, 
-      {"max_categories", 10000}, 
-      {"features", 10}}; 
+      {"examples", 10000},
+      {"exclude", false},
+      {"max_categories", 10000},
+      {"features", 10}};
     run_one_hot_encoder_test(opts);
   }
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_one_hot_encoder_test, one_hot_encoder_test)

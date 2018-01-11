@@ -46,7 +46,7 @@ class AllTypesTested(object):
         return all_ast_nodes - self.nodenames
 
 def assert_ast_eq(testcase, orig_ast, expected_ast):
-    
+
     if not cmp_ast(orig_ast, expected_ast):
         str1 = str_ast(orig_ast, indent=' ', newline='\n')
         str2 = str_ast(expected_ast, indent=' ', newline='\n')
@@ -54,12 +54,12 @@ def assert_ast_eq(testcase, orig_ast, expected_ast):
         testcase.fail(msg)
 
 
-try: 
+try:
     import networkx
     have_networkx = True
 except:
     have_networkx = False
-    
+
 skip_networkx = unittest.skipIf(not have_networkx, "Require networkx for these tests")
 
 

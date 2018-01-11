@@ -106,5 +106,3 @@ sub RC5_32_encrypt
 	 &ret();
 	&function_end_B($name);
 	}
-
-

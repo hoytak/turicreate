@@ -134,7 +134,7 @@ namespace {
     size_t src_partition = partition_address.get_src_vertex_partition().partition;
     size_t dst_partition = partition_address.get_dst_vertex_partition().partition;
 
-    logstream(LOG_INFO) << "Do work on partition " 
+    logstream(LOG_INFO) << "Do work on partition "
                         << partition_address.partition1
                         << ", " << partition_address.partition2
                         << "\nNumber of vertices: " << m_graph.vertex_partition(src_partition).size()
@@ -231,10 +231,10 @@ namespace {
       edge_data_ptr = &(g.edge_partition(src_partition, dst_partition));
 
       // Initialize the sframe storing updated edge data.
-      m_mutating_edge_data = 
+      m_mutating_edge_data =
           std::find_if(edge_fields_info.begin(),
                        edge_fields_info.end(),
-                       [](const field_info& f) { 
+                       [](const field_info& f) {
                          return f.is_mutable;
                        }) != edge_fields_info.end();
 
@@ -310,10 +310,10 @@ namespace {
 
     bool m_mutating_edge_data;
 
-    // sframe storing the mutated edge data. 
+    // sframe storing the mutated edge data.
     sframe m_mutated_edges;
 
-    // output iterator of m_mutated_edges 
+    // output iterator of m_mutated_edges
     std::vector<sframe::iterator> m_mutated_edge_data_writer;
 
     // The field id of the mutated edge fields

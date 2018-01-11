@@ -1,7 +1,7 @@
 export CC  = gcc
 export CXX = g++
 export MPICXX = mpicxx
-export LDFLAGS=  -L../lib -pthread -lm  -lrt 
+export LDFLAGS=  -L../lib -pthread -lm  -lrt
 export CFLAGS = -Wall -O3 -msse2  -Wno-unknown-pragmas -fPIC -I../include  -std=c++0x
 
 # specify tensor path
@@ -15,7 +15,7 @@ lib:
 	cd ..;make;cd -
 mpi:
 	cd ..;make mpi;cd -
-# programs 
+# programs
 speed_test.o: speed_test.cc ../include/*.h lib mpi
 model_recover.o: model_recover.cc ../include/*.h lib
 local_recover.o: local_recover.cc ../include/*.h lib
@@ -28,13 +28,13 @@ model_recover: model_recover.o  $(RABIT_OBJ)
 local_recover: local_recover.o  $(RABIT_OBJ)
 lazy_recover: lazy_recover.o  $(RABIT_OBJ)
 
-$(BIN) : 
-	$(CXX) $(CFLAGS) -o $@ $(filter %.cpp %.o %.c %.cc, $^) -lrabit_mock $(LDFLAGS) 
+$(BIN) :
+	$(CXX) $(CFLAGS) -o $@ $(filter %.cpp %.o %.c %.cc, $^) -lrabit_mock $(LDFLAGS)
 
-$(OBJ) : 
+$(OBJ) :
 	$(CXX) -c $(CFLAGS) -o $@ $(firstword $(filter %.cpp %.c %.cc, $^) )
 
-$(MPIBIN) : 
+$(MPIBIN) :
 	$(MPICXX) $(CFLAGS) -o $@ $(filter %.cpp %.o %.c %.cc, $^) $(LDFLAGS) -lrabit_mpi
 
 clean:

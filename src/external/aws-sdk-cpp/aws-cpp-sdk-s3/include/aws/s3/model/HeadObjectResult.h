@@ -63,25 +63,25 @@ namespace Model
      */
     inline HeadObjectResult& WithDeleteMarker(bool value) { SetDeleteMarker(value); return *this;}
 
-    
+
     inline const Aws::String& GetAcceptRanges() const{ return m_acceptRanges; }
 
-    
+
     inline void SetAcceptRanges(const Aws::String& value) { m_acceptRanges = value; }
 
-    
+
     inline void SetAcceptRanges(Aws::String&& value) { m_acceptRanges = value; }
 
-    
+
     inline void SetAcceptRanges(const char* value) { m_acceptRanges.assign(value); }
 
-    
+
     inline HeadObjectResult& WithAcceptRanges(const Aws::String& value) { SetAcceptRanges(value); return *this;}
 
-    
+
     inline HeadObjectResult& WithAcceptRanges(Aws::String&& value) { SetAcceptRanges(value); return *this;}
 
-    
+
     inline HeadObjectResult& WithAcceptRanges(const char* value) { SetAcceptRanges(value); return *this;}
 
     /**
@@ -809,49 +809,49 @@ namespace Model
      */
     inline HeadObjectResult& WithSSEKMSKeyId(const char* value) { SetSSEKMSKeyId(value); return *this;}
 
-    
+
     inline const StorageClass& GetStorageClass() const{ return m_storageClass; }
 
-    
+
     inline void SetStorageClass(const StorageClass& value) { m_storageClass = value; }
 
-    
+
     inline void SetStorageClass(StorageClass&& value) { m_storageClass = value; }
 
-    
+
     inline HeadObjectResult& WithStorageClass(const StorageClass& value) { SetStorageClass(value); return *this;}
 
-    
+
     inline HeadObjectResult& WithStorageClass(StorageClass&& value) { SetStorageClass(value); return *this;}
 
-    
+
     inline const RequestCharged& GetRequestCharged() const{ return m_requestCharged; }
 
-    
+
     inline void SetRequestCharged(const RequestCharged& value) { m_requestCharged = value; }
 
-    
+
     inline void SetRequestCharged(RequestCharged&& value) { m_requestCharged = value; }
 
-    
+
     inline HeadObjectResult& WithRequestCharged(const RequestCharged& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline HeadObjectResult& WithRequestCharged(RequestCharged&& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline const ReplicationStatus& GetReplicationStatus() const{ return m_replicationStatus; }
 
-    
+
     inline void SetReplicationStatus(const ReplicationStatus& value) { m_replicationStatus = value; }
 
-    
+
     inline void SetReplicationStatus(ReplicationStatus&& value) { m_replicationStatus = value; }
 
-    
+
     inline HeadObjectResult& WithReplicationStatus(const ReplicationStatus& value) { SetReplicationStatus(value); return *this;}
 
-    
+
     inline HeadObjectResult& WithReplicationStatus(ReplicationStatus&& value) { SetReplicationStatus(value); return *this;}
 
   private:

@@ -61,61 +61,61 @@ namespace Model
      */
     inline PutBucketAclRequest& WithACL(BucketCannedACL&& value) { SetACL(value); return *this;}
 
-    
+
     inline const AccessControlPolicy& GetAccessControlPolicy() const{ return m_accessControlPolicy; }
 
-    
+
     inline void SetAccessControlPolicy(const AccessControlPolicy& value) { m_accessControlPolicyHasBeenSet = true; m_accessControlPolicy = value; }
 
-    
+
     inline void SetAccessControlPolicy(AccessControlPolicy&& value) { m_accessControlPolicyHasBeenSet = true; m_accessControlPolicy = value; }
 
-    
+
     inline PutBucketAclRequest& WithAccessControlPolicy(const AccessControlPolicy& value) { SetAccessControlPolicy(value); return *this;}
 
-    
+
     inline PutBucketAclRequest& WithAccessControlPolicy(AccessControlPolicy&& value) { SetAccessControlPolicy(value); return *this;}
 
-    
+
     inline const Aws::String& GetBucket() const{ return m_bucket; }
 
-    
+
     inline void SetBucket(const Aws::String& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(Aws::String&& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(const char* value) { m_bucketHasBeenSet = true; m_bucket.assign(value); }
 
-    
+
     inline PutBucketAclRequest& WithBucket(const Aws::String& value) { SetBucket(value); return *this;}
 
-    
+
     inline PutBucketAclRequest& WithBucket(Aws::String&& value) { SetBucket(value); return *this;}
 
-    
+
     inline PutBucketAclRequest& WithBucket(const char* value) { SetBucket(value); return *this;}
 
-    
+
     inline const Aws::String& GetContentMD5() const{ return m_contentMD5; }
 
-    
+
     inline void SetContentMD5(const Aws::String& value) { m_contentMD5HasBeenSet = true; m_contentMD5 = value; }
 
-    
+
     inline void SetContentMD5(Aws::String&& value) { m_contentMD5HasBeenSet = true; m_contentMD5 = value; }
 
-    
+
     inline void SetContentMD5(const char* value) { m_contentMD5HasBeenSet = true; m_contentMD5.assign(value); }
 
-    
+
     inline PutBucketAclRequest& WithContentMD5(const Aws::String& value) { SetContentMD5(value); return *this;}
 
-    
+
     inline PutBucketAclRequest& WithContentMD5(Aws::String&& value) { SetContentMD5(value); return *this;}
 
-    
+
     inline PutBucketAclRequest& WithContentMD5(const char* value) { SetContentMD5(value); return *this;}
 
     /**

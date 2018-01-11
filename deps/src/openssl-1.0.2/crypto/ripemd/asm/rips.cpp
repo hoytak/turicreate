@@ -28,7 +28,7 @@ void GetTSC(unsigned long& tsc)
   __asm mov a, eax;
   tsc=a;
 }
-#endif      
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,4 +79,3 @@ void main(int argc,char *argv[])
 			e1-s1,e2-s2,(double)((e1-s1)-(e2-s2))/2);
 		}
 	}
-

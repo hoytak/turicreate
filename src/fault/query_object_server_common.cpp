@@ -40,4 +40,3 @@ bool replica_election(turi::zookeeper_util::key_value* zk_keyval,
 
 
 } // namespace
-

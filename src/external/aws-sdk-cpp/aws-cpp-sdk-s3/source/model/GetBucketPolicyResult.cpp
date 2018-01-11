@@ -27,7 +27,7 @@ GetBucketPolicyResult::GetBucketPolicyResult()
 {
 }
 
-GetBucketPolicyResult::GetBucketPolicyResult(GetBucketPolicyResult&& toMove) : 
+GetBucketPolicyResult::GetBucketPolicyResult(GetBucketPolicyResult&& toMove) :
     m_policy(std::move(toMove.m_policy))
 {
 }

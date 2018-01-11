@@ -16,15 +16,15 @@ struct countsketch_test {
 
   /**
    * Create a set of random integers to be used to benchmark
-   * the countsketch sketch. 
+   * the countsketch sketch.
    * One can choose the number of unique values and the distribution
-   * of each element's frequency. 
+   * of each element's frequency.
    * See the documentation for test_benchmark for more details.
    */
-  std::vector<std::pair<size_t, size_t>> item_counts(size_t num_unique_items, 
+  std::vector<std::pair<size_t, size_t>> item_counts(size_t num_unique_items,
       size_t count_per_item,
       bool exponential) {
- 
+
     std::vector<std::pair<size_t, size_t>> v;
     float alpha = 1.0;  // parameter for exponential distribution
 
@@ -39,23 +39,23 @@ struct countsketch_test {
             return lhs.second < rhs.second; } );
     return v;
   }
- 
+
   /**
    * Run an experiment (described more fully in the documentation for test_benchmark).
    *
    * \param m a synthetic dataset
    * \param sketch a sketch object
    * \param num_to_compare the number of objects for which we want to compute RMSE
-   * \param verbose 
+   * \param verbose
    */
   template<typename T>
-  std::map<std::string, double> run_experiment(std::vector<std::pair<size_t, size_t>> m, 
-                                               T sketch,  
-                                               size_t num_to_compare, 
+  std::map<std::string, double> run_experiment(std::vector<std::pair<size_t, size_t>> m,
+                                               T sketch,
+                                               size_t num_to_compare,
                                                bool verbose) {
 
     std::map<std::string, double> result;
-   
+
     // Compute sketch
     turi::timer ti;
     ti.start();
@@ -69,7 +69,7 @@ struct countsketch_test {
     std::vector<size_t> items;
     std::vector<int64_t> estimated;
     std::vector<int64_t> actual;
-    for (size_t i = 0; i < num_to_compare; ++i) { 
+    for (size_t i = 0; i < num_to_compare; ++i) {
       size_t item = m[i].first;
       size_t true_value = m[i].second;
       int64_t estimate = sketch.estimate(item);
@@ -77,8 +77,8 @@ struct countsketch_test {
       items.push_back(item);
       estimated.push_back(estimate);
       actual.push_back((int64_t) true_value);
-      if (verbose) 
-        std::cout << item << " : " << true_value << " : " << estimate << std::endl; 
+      if (verbose)
+        std::cout << item << " : " << true_value << " : " << estimate << std::endl;
     }
     result["rmse_rare"] = rmse<int64_t>(estimated, actual);
 
@@ -86,19 +86,19 @@ struct countsketch_test {
     items.clear();
     estimated.clear();
     actual.clear();
-    for (size_t i = m.size()-1; i > m.size() - num_to_compare; --i) { 
+    for (size_t i = m.size()-1; i > m.size() - num_to_compare; --i) {
       size_t item = m[i].first;
       size_t true_value = m[i].second;
-      int64_t estimate = sketch.estimate(item); 
+      int64_t estimate = sketch.estimate(item);
 
       items.push_back(item);
       estimated.push_back(estimate);
       actual.push_back((int64_t) true_value);
-      if (verbose) 
-        std::cout << item << " : " << true_value << " : " << estimate << std::endl; 
- 
+      if (verbose)
+        std::cout << item << " : " << true_value << " : " << estimate << std::endl;
+
     }
-    result["rmse_common"] = rmse<int64_t>(estimated, actual); 
+    result["rmse_common"] = rmse<int64_t>(estimated, actual);
 
     // Compute the density of the sketch, i.e. the ratio of nonzeros
     result["density"] = sketch.density();
@@ -113,7 +113,7 @@ struct countsketch_test {
   double rmse(std::vector<T> y, std::vector<T> yhat) {
     DASSERT_EQ(y.size(), yhat.size());
     double rmse = 0;
-    for (size_t i = 0; i < y.size(); ++i) { 
+    for (size_t i = 0; i < y.size(); ++i) {
       rmse += std::pow((double) y[i] - (double) yhat[i], 2.0);
     }
     return std::sqrt(rmse / (double) y.size());
@@ -150,23 +150,23 @@ struct countsketch_test {
     for (auto kv : items) {
       std::cout << kv.first << ":" << kv.second << ":" << cm.estimate(kv.first) << std::endl;
     }
- 
+
     for (auto kv : items) {
       std::cout << kv.first << ":" << kv.second << ":" << cs.estimate(kv.first) << std::endl;
     }
-  } 
+  }
 
 
   /**
    * This benchmark compares the RMSE for predicting the frequency of objects in a stream when
-   * for two sketches: the CountMin sketch and the CountSketch. 
+   * for two sketches: the CountMin sketch and the CountSketch.
    * The synthetic data set we create has a fixed number of objects (in this case simply integers)
    * and we create a stream where each object is observed a given number of times. We consider
    * the situation where the frequency is uniform across all items and where the frequency
    * has a geometric distribution (more or less); we keep the expected frequency per user fixed.
    *
    * Two metrics are chosen at this point: RMSE for the 20 most common items and RMSE for the 20
-   * least common items. 
+   * least common items.
    *
    * We vary the width and depth of each sketch.
    *
@@ -187,7 +187,7 @@ struct countsketch_test {
     bool verbose = false;
     turi::random::seed(1002);
 
-    // Set up synthetic data 
+    // Set up synthetic data
     size_t num_to_compare = 20;               // number of items to use when computing RMSE
     size_t num_unique = 100000;   // number of unique objects
     size_t mean_count_per_item = 15;          // expected number of observations per object
@@ -195,7 +195,7 @@ struct countsketch_test {
     // Set up experiment
     std::vector<size_t> num_hash{5, 10};      // number of hash functions to use for each sketch
     std::vector<size_t> bits{8, 10, 12, 14};  // number of bins to use for each sketch (2^bits)
-     
+
     // Set up reporting
     std::cout.precision(5);
     std::cout << "\nsketch\t# hash\t# bits\t# uniq\texpon.\trmse_r\trmse_c\t"
@@ -227,10 +227,10 @@ struct countsketch_test {
             double rate = (double) res["count"] / res["elapsed"] / 1000000;
 
             // Compute "compression ratio": The size of the sketch / the number of unique elements
-            double ratio = (double) (h * (1<<b)) / (double) num_unique; 
+            double ratio = (double) (h * (1<<b)) / (double) num_unique;
 
-            std::cout << sk << "\t" << h << "\t" << b << "\t" << 
-              num_unique << "\t" << expo << "\t" << 
+            std::cout << sk << "\t" << h << "\t" << b << "\t" <<
+              num_unique << "\t" << expo << "\t" <<
               res["rmse_rare"] << "\t" << res["rmse_common"] << "\t" <<
               rate << "\t" << ratio << "\t" << res["density"] << std::endl;
           }

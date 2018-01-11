@@ -35,7 +35,7 @@ int main() {
       ASSERT_EQ(data[i + 2LL * 1024 * 1024 * 1024], 1);
       ASSERT_EQ(data[i + 4LL * 1024 * 1024 * 1024], 2);
     }
-    
+
     // test seeks past 4GB boundary
     char c[256];
     f.seekg(2LL*1024*1024*1024, std::ios_base::beg);

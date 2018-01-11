@@ -14,8 +14,8 @@
 namespace turi {
 namespace query_eval {
 
-typedef std::function<void (const sframe_rows::row&, 
-                            sframe_rows::row&)> generalized_transform_type; 
+typedef std::function<void (const sframe_rows::row&,
+                            sframe_rows::row&)> generalized_transform_type;
 
 /**
  * \ingroup sframe_query_engine
@@ -24,7 +24,7 @@ typedef std::function<void (const sframe_rows::row&,
  */
 
 /**
- * The generalized transform operator is like the transform operator 
+ * The generalized transform operator is like the transform operator
  * but produces a vector output.
  */
 template<>
@@ -36,19 +36,19 @@ class operator_impl<planner_node_type::GENERALIZED_TRANSFORM_NODE> : public quer
 
   static query_operator_attributes attributes() {
     query_operator_attributes ret;
-    ret.attribute_bitfield = query_operator_attributes::LINEAR; 
+    ret.attribute_bitfield = query_operator_attributes::LINEAR;
     ret.num_inputs = 1;
     return ret;
   }
 
   ////////////////////////////////////////////////////////////////////////////////
 
-  inline operator_impl(const generalized_transform_type& f, 
-                       const std::vector<flex_type_enum>& output_types, 
+  inline operator_impl(const generalized_transform_type& f,
+                       const std::vector<flex_type_enum>& output_types,
                        int random_seed=-1)
       : m_transform_fn(f), m_output_types(output_types), m_random_seed(random_seed)
   { }
-  
+
   inline std::shared_ptr<query_operator> clone() const {
     return std::make_shared<operator_impl>(*this);
   }
@@ -88,7 +88,7 @@ class operator_impl<planner_node_type::GENERALIZED_TRANSFORM_NODE> : public quer
       type_list[i] = flex_int(output_types[i]);
     }
 
-    return planner_node::make_shared(planner_node_type::GENERALIZED_TRANSFORM_NODE, 
+    return planner_node::make_shared(planner_node_type::GENERALIZED_TRANSFORM_NODE,
                                      {{"output_types", type_list},
                                       {"random_seed", random_seed}},
                                      {{"function", any(fn)}},
@@ -127,7 +127,7 @@ class operator_impl<planner_node_type::GENERALIZED_TRANSFORM_NODE> : public quer
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::GENERALIZED_TRANSFORM_NODE);
     return infer_planner_node_length(pnode->inputs[0]);
   }
-  
+
   static std::string repr(std::shared_ptr<planner_node> pnode, pnode_tagger&) {
     size_t n_outs = infer_length(pnode);
 
@@ -149,7 +149,7 @@ class operator_impl<planner_node_type::GENERALIZED_TRANSFORM_NODE> : public quer
   int m_random_seed;
 };
 
-typedef operator_impl<planner_node_type::GENERALIZED_TRANSFORM_NODE> op_generalized_transform; 
+typedef operator_impl<planner_node_type::GENERALIZED_TRANSFORM_NODE> op_generalized_transform;
 
 /// \}
 } // query_eval

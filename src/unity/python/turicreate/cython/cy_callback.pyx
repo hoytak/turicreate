@@ -18,19 +18,19 @@ cdef extern from "<lambda/python_callbacks.hpp>" namespace "turi::python":
         string exception_string
 
     void register_python_exception(const python_exception_info*)
-    
+
 cdef void register_exception(object e):
     """
-    Provides a translation for handling exceptions between python and c++. 
+    Provides a translation for handling exceptions between python and c++.
 
     Process any possible exceptions by adding in information that can
-    aid in the debugging of the callback functions functions. 
+    aid in the debugging of the callback functions functions.
     """
 
     cdef python_exception_info pei
     cdef str traceback_str = traceback.format_exc()
     cdef str ex_str = "Exception in python callback function evaluation: \n"
-    
+
     try:
         ex_str += repr(e)
     except Exception, e:

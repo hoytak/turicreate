@@ -34,9 +34,9 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_field_pad(FIELD *field, int ch)
-|   
+|
 |   Description   :  Set the pad character used to fill the field. This must
 |                    be a printable character.
 |
@@ -63,9 +63,9 @@ int set_field_pad(FIELD  * field, int ch)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int field_pad(const FIELD *field)
-|   
+|
 |   Description   :  Retrieve the fields pad character.
 |
 |   Return Values :  The pad character.

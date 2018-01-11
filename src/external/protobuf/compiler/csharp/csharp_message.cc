@@ -431,7 +431,7 @@ void MessageGenerator::GenerateMergingMethods(io::Printer* printer) {
     "}\n");
   // Merge non-oneof fields
   for (int i = 0; i < descriptor_->field_count(); i++) {
-    if (!descriptor_->field(i)->containing_oneof()) {      
+    if (!descriptor_->field(i)->containing_oneof()) {
       scoped_ptr<FieldGeneratorBase> generator(
           CreateFieldGeneratorInternal(descriptor_->field(i)));
       generator->GenerateMergingCode(printer);

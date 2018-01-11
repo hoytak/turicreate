@@ -318,4 +318,3 @@ namespace Aws
         };
     } // namespace Auth
 } // namespace Aws
-

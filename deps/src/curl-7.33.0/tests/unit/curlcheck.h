@@ -95,4 +95,3 @@ unit_test_abort:                                \
   }                                             \
   return unitfail;                              \
   }
-

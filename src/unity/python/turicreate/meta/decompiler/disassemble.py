@@ -29,11 +29,11 @@ def disassemble(co):
 def print_code(co, lasti= -1, level=0):
     """Disassemble a code object."""
     code = co.co_code
-    
+
     for constant in co.co_consts:
         print( '|              |' * level, end=' ')
         print( 'constant:', constant)
-        
+
     labels = findlabels(code)
     linestarts = dict(findlinestarts(co))
     n = len(code)

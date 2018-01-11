@@ -23,7 +23,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-PutBucketCorsRequest::PutBucketCorsRequest() : 
+PutBucketCorsRequest::PutBucketCorsRequest() :
     m_bucketHasBeenSet(false),
     m_cORSConfigurationHasBeenSet(false),
     m_contentMD5HasBeenSet(false)

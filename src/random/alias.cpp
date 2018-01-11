@@ -39,7 +39,7 @@ alias_sampler::alias_sampler(const std::vector<double>& p) {
 
     if (q[l] < 1) {
       S.emplace_back(l);
-      L.pop_back(); 
+      L.pop_back();
     }
   }
   /** For testing purposes
@@ -66,4 +66,3 @@ size_t alias_sampler::sample() {
 
 };
 };
-

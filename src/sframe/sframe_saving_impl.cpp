@@ -24,10 +24,10 @@ void advance_column_blocks_to_next_block(
       ++block.current_segment_number;
       if (block.current_segment_number < block.num_segments) {
         // open then ext segment
-        auto current_segment_file = 
+        auto current_segment_file =
             block.column_index.segment_files[block.current_segment_number];
         block.segment_address = block_manager.open_column(current_segment_file);
-        block.num_blocks_in_current_segment = 
+        block.num_blocks_in_current_segment =
             block_manager.num_blocks_in_column(block.segment_address);
         // segment is empty. keep going...
         if (block.num_blocks_in_current_segment == 0) {

@@ -78,8 +78,8 @@ void ml_metadata::setup_cached_values() {
   // Build the row metadata objects
 
   cached_rm_without_target.setup(columns, false);
-  
-  if(has_target()) { 
+
+  if(has_target()) {
     std::vector<ml_data_internal::column_metadata_ptr> full_columns_with_target;
     full_columns_with_target.reserve(columns.size() + 1);
     full_columns_with_target.assign(columns.begin(), columns.end());

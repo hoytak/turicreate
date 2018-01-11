@@ -15,7 +15,7 @@
 #define GIL_CHANNEL_NUMERIC_OPERATIONS_HPP
 
 /*!
-/// \file               
+/// \file
 /// \brief Structures for channel-wise numeric operations
 /// \author Hailin Jin and Lubomir Bourdev \n
 ///         Adobe Systems Incorporated

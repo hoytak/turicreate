@@ -35,20 +35,20 @@ Pass = lambda node: _ast.Pass(lineno=node.lineno, col_offset=node.col_offset)
 class PruneVisitor(Visitor):
     '''
     Visitor to remove ast nodes
-    
+
     :param symbols: set of symbol that are removable.
-    
+
     '''
     def __init__(self, symbols, mode='exclusive'):
         self.remove_symbols = symbols
-        
+
         if mode not in ['exclusive', 'inclusive']:
             raise TypeError("mode must be one of 'exclusive' or 'inclusive'")
-        
+
         self.mode = mode
 
     visitDefault = removable
-    
+
     def reduce(self, body):
         '''
         remove nodes from a list
@@ -184,4 +184,3 @@ class PruneVisitor(Visitor):
 
     def visitRaise(self, node):
         return False
-

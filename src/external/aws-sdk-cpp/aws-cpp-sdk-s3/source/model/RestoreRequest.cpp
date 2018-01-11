@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-RestoreRequest::RestoreRequest() : 
+RestoreRequest::RestoreRequest() :
     m_days(0),
     m_daysHasBeenSet(false)
 {
 }
 
-RestoreRequest::RestoreRequest(const XmlNode& xmlNode) : 
+RestoreRequest::RestoreRequest(const XmlNode& xmlNode) :
     m_days(0),
     m_daysHasBeenSet(false)
 {

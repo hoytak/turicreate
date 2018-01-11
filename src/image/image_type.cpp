@@ -36,7 +36,7 @@ void image_type::load(iarchive& iarc) {
   }
 }
 
-const unsigned char* image_type::get_image_data() const { 
+const unsigned char* image_type::get_image_data() const {
   if (m_image_data_size > 0){
     return (const unsigned char*)&m_image_data[0];
   } else{

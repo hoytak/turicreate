@@ -106,4 +106,3 @@ history <- xgb.cv(data = dtrain, nround=3, nthread = 2, nfold = 5, metrics=list(
                   max.depth =3, eta = 1, objective = "binary:logistic")
 print(history)
 }
-

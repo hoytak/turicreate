@@ -123,4 +123,3 @@ def create_module(sym, data_shapes, label_shapes, label_names, gpus=''):
         label_shapes=label_shapes
     )
     return mod
-

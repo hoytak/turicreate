@@ -527,7 +527,7 @@ $code.=<<___;
 	# "above" modulo cache-line size, which effectively precludes
 	# possibility of memory disambiguation logic failure when
 	# accessing the table.
-	# 
+	#
 	lea	64+8(%rsp,%r11,8),$tp
 	mov	%rdx,$A[1]
 
@@ -910,7 +910,7 @@ my $bptr="%rdx";	# const void *table,
 my $nptr="%rcx";	# const BN_ULONG *nptr,
 my $n0  ="%r8";		# const BN_ULONG *n0);
 my $num ="%r9";		# int num, has to be divisible by 8
-			# int pwr 
+			# int pwr
 
 my ($i,$j,$tptr)=("%rbp","%rcx",$rptr);
 my @A0=("%r10","%r11");
@@ -975,7 +975,7 @@ $code.=<<___;
 	sub	%r11,%rsp
 .Lpwr_sp_done:
 	and	\$-64,%rsp
-	mov	$num,%r10	
+	mov	$num,%r10
 	neg	$num
 
 	##############################################################
@@ -1856,7 +1856,7 @@ ___
 }
 $code.=<<___;
 	mov	$num,%r10		# prepare for back-to-back call
-	neg	$num			# restore $num	
+	neg	$num			# restore $num
 	ret
 .size	bn_sqr8x_internal,.-bn_sqr8x_internal
 ___
@@ -1922,7 +1922,7 @@ $code.=<<___;
 	sub	%r11,%rsp
 .Lfrom_sp_done:
 	and	\$-64,%rsp
-	mov	$num,%r10	
+	mov	$num,%r10
 	neg	$num
 
 	##############################################################
@@ -2071,7 +2071,7 @@ $code.=<<___;
 	mov	\$0,%r10
 	cmovc	%r10,%r11
 	sub	%r11,%rsp
-.Lmulx4xsp_done:	
+.Lmulx4xsp_done:
 	and	\$-64,%rsp		# ensure alignment
 	##############################################################
 	# Stack layout
@@ -2174,7 +2174,7 @@ $code.=<<___;
 	# "above" modulo cache-line size, which effectively precludes
 	# possibility of memory disambiguation logic failure when
 	# accessing the table.
-	# 
+	#
 	lea	64+8*4+8(%rsp,%r11,8),$tptr
 
 	mov	%rdx,$bi
@@ -2481,7 +2481,7 @@ $code.=<<___;
 	sub	%r11,%rsp
 .Lpwrx_sp_done:
 	and	\$-64,%rsp
-	mov	$num,%r10	
+	mov	$num,%r10
 	neg	$num
 
 	##############################################################

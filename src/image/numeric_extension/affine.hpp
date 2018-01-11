@@ -17,7 +17,7 @@
 #include <boost/gil/utilities.hpp>     // point2
 
 ////////////////////////////////////////////////////////////////////////////////////////
-/// \file               
+/// \file
 /// \brief support for affine transformations
 /// \author Lubomir Bourdev and Hailin Jin \n
 ///         Adobe Systems Incorporated
@@ -77,7 +77,7 @@ concept MappingFunctionConcept {
     typename mapping_traits<MapFn>::result_type;   where PointNDConcept<result_type>;
 
     template <typename Domain> { where PointNDConcept<Domain> }
-    result_type transform(MapFn&, const Domain& src); 
+    result_type transform(MapFn&, const Domain& src);
 };
 */
 

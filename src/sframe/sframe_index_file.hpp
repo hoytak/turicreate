@@ -42,12 +42,12 @@ struct sframe_index_file_information {
   std::string file_name;
 
   void save(oarchive& oarc) const {
-    oarc << version << nsegments << ncolumns 
+    oarc << version << nsegments << ncolumns
          << nrows << column_names << column_files << metadata;
   }
 
   void load(iarchive& iarc) {
-    iarc >> version >> nsegments >> ncolumns 
+    iarc >> version >> nsegments >> ncolumns
          >> nrows >> column_names >> column_files >> metadata;
   }
 };
@@ -55,7 +55,7 @@ struct sframe_index_file_information {
  * Reads an sframe index file from disk.
  * Raises an exception on failure.
  *
- * This function will also automatically de-relativize the 
+ * This function will also automatically de-relativize the
  * \ref sframe_index_file_information::column_files to get absolute paths
  */
 sframe_index_file_information read_sframe_index_file(std::string index_file);
@@ -64,11 +64,11 @@ sframe_index_file_information read_sframe_index_file(std::string index_file);
  * Writes an sframe index file to disk.
  * Raises an exception on failure.
  *
- * This function will also automatically relativize the 
+ * This function will also automatically relativize the
  * \ref sframe_index_file_information::column_files to get relative paths
  * when writing to disk
  */
-void write_sframe_index_file(std::string index_file, 
+void write_sframe_index_file(std::string index_file,
                              const sframe_index_file_information& info);
 
 /// \}

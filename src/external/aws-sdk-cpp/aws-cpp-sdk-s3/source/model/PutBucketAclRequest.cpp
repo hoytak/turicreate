@@ -23,7 +23,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-PutBucketAclRequest::PutBucketAclRequest() : 
+PutBucketAclRequest::PutBucketAclRequest() :
     m_aCLHasBeenSet(false),
     m_accessControlPolicyHasBeenSet(false),
     m_bucketHasBeenSet(false),

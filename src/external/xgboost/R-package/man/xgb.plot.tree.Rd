@@ -55,4 +55,3 @@ bst <- xgboost(data = train$data, label = train$label, max.depth = 2,
 #agaricus.test$data@Dimnames[[2]] represents the column names of the sparse matrix.
 xgb.plot.tree(agaricus.train$data@Dimnames[[2]], model = bst)
 }
-

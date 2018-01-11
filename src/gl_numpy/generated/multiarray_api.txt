@@ -2446,4 +2446,3 @@ Allocates zeroed memory for array data.
   PyArray_CheckAnyScalarExact(PyObject *obj)
 
 return true an object is exactly a numpy scalar
-

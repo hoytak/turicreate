@@ -158,7 +158,7 @@ struct archive_entry {
 #define AE_ENCRYPTION_DATA 1
 #define AE_ENCRYPTION_METADATA 2
 	char encryption;
-	
+
 	void *mac_metadata;
 	size_t mac_metadata_size;
 

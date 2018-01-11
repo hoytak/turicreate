@@ -21,7 +21,7 @@ WRAPPER_PATH = os.path.dirname(__file__) + '/../wrapper'
 hadoop_binary = 'hadoop'
 hadoop_streaming_jar = None
 
-# code 
+# code
 hadoop_home = os.getenv('HADOOP_HOME')
 if hadoop_home is not None:
     if hadoop_binary is None:
@@ -71,10 +71,10 @@ parser.add_argument('-mem', '--memory_mb', default=-1, type=int,
                         'so that each node can occupy all the mapper slots in a machine for maximum performance')
 if hadoop_binary is None:
     parser.add_argument('-hb', '--hadoop_binary', required = True,
-                        help="path to hadoop binary file")  
+                        help="path to hadoop binary file")
 else:
-    parser.add_argument('-hb', '--hadoop_binary', default = hadoop_binary, 
-                        help="path to hadoop binary file")  
+    parser.add_argument('-hb', '--hadoop_binary', default = hadoop_binary,
+                        help="path to hadoop binary file")
 
 if hadoop_streaming_jar is None:
     parser.add_argument('-hs', '--hadoop_streaming_jar', required = True,
@@ -110,16 +110,16 @@ def hadoop_streaming(nworker, worker_args, worker_envs, use_yarn):
             if os.path.exists(f):
                 fset.add(f)
                 if i == 0:
-                    args.command[i] = './' + args.command[i].split('/')[-1]                    
+                    args.command[i] = './' + args.command[i].split('/')[-1]
                 else:
-                    args.command[i] = args.command[i].split('/')[-1]    
+                    args.command[i] = args.command[i].split('/')[-1]
     if args.command[0].endswith('.py'):
         flst = [WRAPPER_PATH + '/rabit.py',
                 WRAPPER_PATH + '/librabit_wrapper.so',
                 WRAPPER_PATH + '/librabit_wrapper_mock.so']
         for f in flst:
             if os.path.exists(f):
-                fset.add(f)            
+                fset.add(f)
     kmap = {}
     kmap['env'] = 'mapred.child.env'
     # setup keymaps

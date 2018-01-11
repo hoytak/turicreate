@@ -32,7 +32,7 @@ void run_kmeans_test(std::map<std::string, flexible_type> opts) {
   }
 
   // Define options
-  std::map<std::string, flexible_type> options = { 
+  std::map<std::string, flexible_type> options = {
     {"num_clusters", num_clusters},
     {"max_iterations", max_iterations}
   };
@@ -57,7 +57,7 @@ void run_kmeans_test(std::map<std::string, flexible_type> opts) {
   archive_write.open_directory_for_write("kmeans_cxx_test");
   turi::oarchive oarc(archive_write);
   oarc << *model;
-  archive_write.close(); 
+  archive_write.close();
 
   // Load it
   dir_archive archive_read;
@@ -67,7 +67,7 @@ void run_kmeans_test(std::map<std::string, flexible_type> opts) {
 
   // Check that stuff in the loaded model is correct
   TS_ASSERT(model->is_trained());
-  
+
   for (auto& kvp: options){
     TS_ASSERT(_options[kvp.first] == kvp.second);
   }
@@ -78,7 +78,7 @@ void run_kmeans_test(std::map<std::string, flexible_type> opts) {
  *  Check kmeans model
 */
 struct kmeans_test  {
- 
+
   public:
 
   void test_kmeans_basic_2d() {
@@ -87,7 +87,7 @@ struct kmeans_test  {
       {"num_clusters", 2},
       {"max_iterations", 10},
       {"custom_centers", false},
-      {"feature_column_types", "nn"}}; 
+      {"feature_column_types", "nn"}};
     run_kmeans_test(opts);
   }
 
@@ -97,7 +97,7 @@ struct kmeans_test  {
       {"num_clusters", 2},
       {"max_iterations", 0},
       {"custom_centers", true},
-      {"feature_column_types", "nn"}}; 
+      {"feature_column_types", "nn"}};
     run_kmeans_test(opts);
   }
 
@@ -107,18 +107,18 @@ struct kmeans_test  {
       {"num_clusters", 2},
       {"max_iterations", 0},
       {"custom_centers", false},
-      {"feature_column_types", "nn"}}; 
+      {"feature_column_types", "nn"}};
     run_kmeans_test(opts);
   }
-  
+
   void test_kmeans_dict_input() {
     std::map<std::string, flexible_type> opts = {
       {"num_examples", 20},
       {"num_clusters", 3},
       {"max_iterations", 10},
       {"custom_centers", false},
-      {"feature_column_types", "d"}}; 
-    run_kmeans_test(opts);    
+      {"feature_column_types", "d"}};
+    run_kmeans_test(opts);
   }
 
   void test_kmeans_vector_input() {
@@ -127,8 +127,8 @@ struct kmeans_test  {
       {"num_clusters", 3},
       {"max_iterations", 10},
       {"custom_centers", false},
-      {"feature_column_types", "v"}}; 
-    run_kmeans_test(opts);    
+      {"feature_column_types", "v"}};
+    run_kmeans_test(opts);
   }
 };
 

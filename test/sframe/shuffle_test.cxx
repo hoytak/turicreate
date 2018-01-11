@@ -43,7 +43,7 @@ struct shuffle_test {
       sframe sframe_in = create_input_sframe(num_rows);
 
       // shuffle the sframe into odd rows and even rows.
-      std::function<size_t(const std::vector<flexible_type>&)> hash_fn = 
+      std::function<size_t(const std::vector<flexible_type>&)> hash_fn =
         [&](const std::vector<flexible_type>& row) {
           return (size_t)(row[0] % 2 == 0);
         };
@@ -129,7 +129,7 @@ struct shuffle_test {
      * rows into any number of output sframes.
      */
     void __test_shuffle__(sframe sframe_in, size_t n) {
-      std::function<size_t(const std::vector<flexible_type>&)> hash_fn = 
+      std::function<size_t(const std::vector<flexible_type>&)> hash_fn =
         [&](const std::vector<flexible_type>& row) {
           return (size_t)(row[0] % n == 0);
         };

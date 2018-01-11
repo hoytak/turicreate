@@ -13,21 +13,21 @@ namespace nearest_neighbors {
 
 
 
-/** 
- * Check if the data is empty. 
- * 
- * \param[in] X SFrame. 
- */  
+/**
+ * Check if the data is empty.
+ *
+ * \param[in] X SFrame.
+ */
 void check_empty_data(const sframe& X);
 
-/** 
+/**
 * Check that the feature and label types are valid.
 *
 * \param[in] X SFrame Feature data
 * \param[in] y SFrame Labels
 * \param[in] model_name std::string name of the model
 * \param[in] distance std::string distance option
-*/  
+*/
 void check_column_types(const sframe& X, const sframe& y,
                         std::string model_name, std::string distance);
 
@@ -36,7 +36,7 @@ void check_column_types(const sframe& X, const sframe& y,
  *
  * \param[in] model_name Name of the model.
  * \returns List of keys of option names relevant to a model.
- */   
+ */
 std::vector<std::string> get_model_option_keys(std::string model_name);
 
 
@@ -106,8 +106,8 @@ toolkit_function_response_type list_keys(toolkit_function_invocation& invoke);
 // toolkit_function_response_type train(toolkit_function_invocation& invoke);
 variant_map_type train(variant_map_type& invoke);
 
-/** 
- * Query function for the nearest neighbors toolkit. 
+/**
+ * Query function for the nearest neighbors toolkit.
  *
  * \param[in] invoke tookit_invocation object
  * \returns SFrame with labels of queries, reference points in the nearest
@@ -120,8 +120,8 @@ variant_map_type train(variant_map_type& invoke);
  */
 toolkit_function_response_type query(toolkit_function_invocation& invoke);
 
-/** 
- * Similarity graph function for the nearest neighbors toolkit. 
+/**
+ * Similarity graph function for the nearest neighbors toolkit.
  *
  * \param[in] invoke tookit_invocation object
  * \returns SFrame with labels of queries, reference points in the nearest
@@ -142,4 +142,4 @@ std::vector<toolkit_function_specification> get_toolkit_function_registration();
 } // namespace nearest_neighbors
 } // namespace turi
 
-#endif 
+#endif

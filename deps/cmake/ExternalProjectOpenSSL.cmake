@@ -4,7 +4,7 @@ if(APPLE)
   # the ./Configure script
 ExternalProject_Add(ex_libssl
   PREFIX ${CMAKE_SOURCE_DIR}/deps/build/libssl
-  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2 
+  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND ./Configure darwin64-x86_64-cc no-idea no-mdc2 no-rc5 -fPIC --prefix=<INSTALL_DIR>
@@ -14,7 +14,7 @@ ExternalProject_Add(ex_libssl
 elseif(WIN32)
 ExternalProject_Add(ex_libssl
   PREFIX ${CMAKE_SOURCE_DIR}/deps/build/libssl
-  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2 
+  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND ./Configure mingw64 no-idea no-mdc2 no-rc5 --prefix=<INSTALL_DIR>
@@ -33,7 +33,7 @@ ExternalProject_Add(ex_libssl
   )
 endif()
 
-if(APPLE) 
+if(APPLE)
         add_library(libssla STATIC IMPORTED)
         set_property(TARGET libssla PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a)
 

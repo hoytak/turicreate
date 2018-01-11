@@ -759,4 +759,3 @@ L<SSL_get_psk_identity(3)|SSL_get_psk_identity(3)>
 The L<ssl(3)|ssl(3)> document appeared in OpenSSL 0.9.2
 
 =cut
-

@@ -156,7 +156,7 @@ CONFIG_CLEAN_VPATH_FILES =
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
-am__v_lt_1 = 
+am__v_lt_1 =
 anyauthput_SOURCES = anyauthput.c
 anyauthput_OBJECTS = anyauthput.$(OBJEXT)
 anyauthput_LDADD = $(LDADD)
@@ -471,12 +471,12 @@ am__v_P_1 = :
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN     " $@;
-am__v_GEN_1 = 
+am__v_GEN_1 =
 AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
-am__v_at_1 = 
-DEFAULT_INCLUDES = 
+am__v_at_1 =
+DEFAULT_INCLUDES =
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -489,7 +489,7 @@ LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 AM_V_CC = $(am__v_CC_@AM_V@)
 am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
 am__v_CC_0 = @echo "  CC      " $@;
-am__v_CC_1 = 
+am__v_CC_1 =
 CCLD = $(CC)
 LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -497,7 +497,7 @@ LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
-am__v_CCLD_1 = 
+am__v_CCLD_1 =
 SOURCES = 10-at-a-time.c anyauthput.c certinfo.c chkspeed.c \
 	cookie_interface.c debug.c externalsocket.c fileupload.c \
 	fopen.c ftp-wildcard.c ftpget.c ftpgetinfo.c ftpgetresp.c \
@@ -807,187 +807,187 @@ clean-checkPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-10-at-a-time$(EXEEXT): $(10_at_a_time_OBJECTS) $(10_at_a_time_DEPENDENCIES) $(EXTRA_10_at_a_time_DEPENDENCIES) 
+10-at-a-time$(EXEEXT): $(10_at_a_time_OBJECTS) $(10_at_a_time_DEPENDENCIES) $(EXTRA_10_at_a_time_DEPENDENCIES)
 	@rm -f 10-at-a-time$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(10_at_a_time_OBJECTS) $(10_at_a_time_LDADD) $(LIBS)
 
-anyauthput$(EXEEXT): $(anyauthput_OBJECTS) $(anyauthput_DEPENDENCIES) $(EXTRA_anyauthput_DEPENDENCIES) 
+anyauthput$(EXEEXT): $(anyauthput_OBJECTS) $(anyauthput_DEPENDENCIES) $(EXTRA_anyauthput_DEPENDENCIES)
 	@rm -f anyauthput$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(anyauthput_OBJECTS) $(anyauthput_LDADD) $(LIBS)
 
-certinfo$(EXEEXT): $(certinfo_OBJECTS) $(certinfo_DEPENDENCIES) $(EXTRA_certinfo_DEPENDENCIES) 
+certinfo$(EXEEXT): $(certinfo_OBJECTS) $(certinfo_DEPENDENCIES) $(EXTRA_certinfo_DEPENDENCIES)
 	@rm -f certinfo$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(certinfo_OBJECTS) $(certinfo_LDADD) $(LIBS)
 
-chkspeed$(EXEEXT): $(chkspeed_OBJECTS) $(chkspeed_DEPENDENCIES) $(EXTRA_chkspeed_DEPENDENCIES) 
+chkspeed$(EXEEXT): $(chkspeed_OBJECTS) $(chkspeed_DEPENDENCIES) $(EXTRA_chkspeed_DEPENDENCIES)
 	@rm -f chkspeed$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(chkspeed_OBJECTS) $(chkspeed_LDADD) $(LIBS)
 
-cookie_interface$(EXEEXT): $(cookie_interface_OBJECTS) $(cookie_interface_DEPENDENCIES) $(EXTRA_cookie_interface_DEPENDENCIES) 
+cookie_interface$(EXEEXT): $(cookie_interface_OBJECTS) $(cookie_interface_DEPENDENCIES) $(EXTRA_cookie_interface_DEPENDENCIES)
 	@rm -f cookie_interface$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(cookie_interface_OBJECTS) $(cookie_interface_LDADD) $(LIBS)
 
-debug$(EXEEXT): $(debug_OBJECTS) $(debug_DEPENDENCIES) $(EXTRA_debug_DEPENDENCIES) 
+debug$(EXEEXT): $(debug_OBJECTS) $(debug_DEPENDENCIES) $(EXTRA_debug_DEPENDENCIES)
 	@rm -f debug$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(debug_OBJECTS) $(debug_LDADD) $(LIBS)
 
-externalsocket$(EXEEXT): $(externalsocket_OBJECTS) $(externalsocket_DEPENDENCIES) $(EXTRA_externalsocket_DEPENDENCIES) 
+externalsocket$(EXEEXT): $(externalsocket_OBJECTS) $(externalsocket_DEPENDENCIES) $(EXTRA_externalsocket_DEPENDENCIES)
 	@rm -f externalsocket$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(externalsocket_OBJECTS) $(externalsocket_LDADD) $(LIBS)
 
-fileupload$(EXEEXT): $(fileupload_OBJECTS) $(fileupload_DEPENDENCIES) $(EXTRA_fileupload_DEPENDENCIES) 
+fileupload$(EXEEXT): $(fileupload_OBJECTS) $(fileupload_DEPENDENCIES) $(EXTRA_fileupload_DEPENDENCIES)
 	@rm -f fileupload$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(fileupload_OBJECTS) $(fileupload_LDADD) $(LIBS)
 
-fopen$(EXEEXT): $(fopen_OBJECTS) $(fopen_DEPENDENCIES) $(EXTRA_fopen_DEPENDENCIES) 
+fopen$(EXEEXT): $(fopen_OBJECTS) $(fopen_DEPENDENCIES) $(EXTRA_fopen_DEPENDENCIES)
 	@rm -f fopen$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(fopen_OBJECTS) $(fopen_LDADD) $(LIBS)
 
-ftp-wildcard$(EXEEXT): $(ftp_wildcard_OBJECTS) $(ftp_wildcard_DEPENDENCIES) $(EXTRA_ftp_wildcard_DEPENDENCIES) 
+ftp-wildcard$(EXEEXT): $(ftp_wildcard_OBJECTS) $(ftp_wildcard_DEPENDENCIES) $(EXTRA_ftp_wildcard_DEPENDENCIES)
 	@rm -f ftp-wildcard$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(ftp_wildcard_OBJECTS) $(ftp_wildcard_LDADD) $(LIBS)
 
-ftpget$(EXEEXT): $(ftpget_OBJECTS) $(ftpget_DEPENDENCIES) $(EXTRA_ftpget_DEPENDENCIES) 
+ftpget$(EXEEXT): $(ftpget_OBJECTS) $(ftpget_DEPENDENCIES) $(EXTRA_ftpget_DEPENDENCIES)
 	@rm -f ftpget$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(ftpget_OBJECTS) $(ftpget_LDADD) $(LIBS)
 
-ftpgetinfo$(EXEEXT): $(ftpgetinfo_OBJECTS) $(ftpgetinfo_DEPENDENCIES) $(EXTRA_ftpgetinfo_DEPENDENCIES) 
+ftpgetinfo$(EXEEXT): $(ftpgetinfo_OBJECTS) $(ftpgetinfo_DEPENDENCIES) $(EXTRA_ftpgetinfo_DEPENDENCIES)
 	@rm -f ftpgetinfo$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(ftpgetinfo_OBJECTS) $(ftpgetinfo_LDADD) $(LIBS)
 
-ftpgetresp$(EXEEXT): $(ftpgetresp_OBJECTS) $(ftpgetresp_DEPENDENCIES) $(EXTRA_ftpgetresp_DEPENDENCIES) 
+ftpgetresp$(EXEEXT): $(ftpgetresp_OBJECTS) $(ftpgetresp_DEPENDENCIES) $(EXTRA_ftpgetresp_DEPENDENCIES)
 	@rm -f ftpgetresp$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(ftpgetresp_OBJECTS) $(ftpgetresp_LDADD) $(LIBS)
 
-ftpsget$(EXEEXT): $(ftpsget_OBJECTS) $(ftpsget_DEPENDENCIES) $(EXTRA_ftpsget_DEPENDENCIES) 
+ftpsget$(EXEEXT): $(ftpsget_OBJECTS) $(ftpsget_DEPENDENCIES) $(EXTRA_ftpsget_DEPENDENCIES)
 	@rm -f ftpsget$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(ftpsget_OBJECTS) $(ftpsget_LDADD) $(LIBS)
 
-ftpupload$(EXEEXT): $(ftpupload_OBJECTS) $(ftpupload_DEPENDENCIES) $(EXTRA_ftpupload_DEPENDENCIES) 
+ftpupload$(EXEEXT): $(ftpupload_OBJECTS) $(ftpupload_DEPENDENCIES) $(EXTRA_ftpupload_DEPENDENCIES)
 	@rm -f ftpupload$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(ftpupload_OBJECTS) $(ftpupload_LDADD) $(LIBS)
 
-getinfo$(EXEEXT): $(getinfo_OBJECTS) $(getinfo_DEPENDENCIES) $(EXTRA_getinfo_DEPENDENCIES) 
+getinfo$(EXEEXT): $(getinfo_OBJECTS) $(getinfo_DEPENDENCIES) $(EXTRA_getinfo_DEPENDENCIES)
 	@rm -f getinfo$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(getinfo_OBJECTS) $(getinfo_LDADD) $(LIBS)
 
-getinmemory$(EXEEXT): $(getinmemory_OBJECTS) $(getinmemory_DEPENDENCIES) $(EXTRA_getinmemory_DEPENDENCIES) 
+getinmemory$(EXEEXT): $(getinmemory_OBJECTS) $(getinmemory_DEPENDENCIES) $(EXTRA_getinmemory_DEPENDENCIES)
 	@rm -f getinmemory$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(getinmemory_OBJECTS) $(getinmemory_LDADD) $(LIBS)
 
-http-post$(EXEEXT): $(http_post_OBJECTS) $(http_post_DEPENDENCIES) $(EXTRA_http_post_DEPENDENCIES) 
+http-post$(EXEEXT): $(http_post_OBJECTS) $(http_post_DEPENDENCIES) $(EXTRA_http_post_DEPENDENCIES)
 	@rm -f http-post$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(http_post_OBJECTS) $(http_post_LDADD) $(LIBS)
 
-httpcustomheader$(EXEEXT): $(httpcustomheader_OBJECTS) $(httpcustomheader_DEPENDENCIES) $(EXTRA_httpcustomheader_DEPENDENCIES) 
+httpcustomheader$(EXEEXT): $(httpcustomheader_OBJECTS) $(httpcustomheader_DEPENDENCIES) $(EXTRA_httpcustomheader_DEPENDENCIES)
 	@rm -f httpcustomheader$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(httpcustomheader_OBJECTS) $(httpcustomheader_LDADD) $(LIBS)
 
-httpput$(EXEEXT): $(httpput_OBJECTS) $(httpput_DEPENDENCIES) $(EXTRA_httpput_DEPENDENCIES) 
+httpput$(EXEEXT): $(httpput_OBJECTS) $(httpput_DEPENDENCIES) $(EXTRA_httpput_DEPENDENCIES)
 	@rm -f httpput$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(httpput_OBJECTS) $(httpput_LDADD) $(LIBS)
 
-https$(EXEEXT): $(https_OBJECTS) $(https_DEPENDENCIES) $(EXTRA_https_DEPENDENCIES) 
+https$(EXEEXT): $(https_OBJECTS) $(https_DEPENDENCIES) $(EXTRA_https_DEPENDENCIES)
 	@rm -f https$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(https_OBJECTS) $(https_LDADD) $(LIBS)
 
-imap$(EXEEXT): $(imap_OBJECTS) $(imap_DEPENDENCIES) $(EXTRA_imap_DEPENDENCIES) 
+imap$(EXEEXT): $(imap_OBJECTS) $(imap_DEPENDENCIES) $(EXTRA_imap_DEPENDENCIES)
 	@rm -f imap$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(imap_OBJECTS) $(imap_LDADD) $(LIBS)
 
-multi-app$(EXEEXT): $(multi_app_OBJECTS) $(multi_app_DEPENDENCIES) $(EXTRA_multi_app_DEPENDENCIES) 
+multi-app$(EXEEXT): $(multi_app_OBJECTS) $(multi_app_DEPENDENCIES) $(EXTRA_multi_app_DEPENDENCIES)
 	@rm -f multi-app$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(multi_app_OBJECTS) $(multi_app_LDADD) $(LIBS)
 
-multi-debugcallback$(EXEEXT): $(multi_debugcallback_OBJECTS) $(multi_debugcallback_DEPENDENCIES) $(EXTRA_multi_debugcallback_DEPENDENCIES) 
+multi-debugcallback$(EXEEXT): $(multi_debugcallback_OBJECTS) $(multi_debugcallback_DEPENDENCIES) $(EXTRA_multi_debugcallback_DEPENDENCIES)
 	@rm -f multi-debugcallback$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(multi_debugcallback_OBJECTS) $(multi_debugcallback_LDADD) $(LIBS)
 
-multi-double$(EXEEXT): $(multi_double_OBJECTS) $(multi_double_DEPENDENCIES) $(EXTRA_multi_double_DEPENDENCIES) 
+multi-double$(EXEEXT): $(multi_double_OBJECTS) $(multi_double_DEPENDENCIES) $(EXTRA_multi_double_DEPENDENCIES)
 	@rm -f multi-double$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(multi_double_OBJECTS) $(multi_double_LDADD) $(LIBS)
 
-multi-post$(EXEEXT): $(multi_post_OBJECTS) $(multi_post_DEPENDENCIES) $(EXTRA_multi_post_DEPENDENCIES) 
+multi-post$(EXEEXT): $(multi_post_OBJECTS) $(multi_post_DEPENDENCIES) $(EXTRA_multi_post_DEPENDENCIES)
 	@rm -f multi-post$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(multi_post_OBJECTS) $(multi_post_LDADD) $(LIBS)
 
-multi-single$(EXEEXT): $(multi_single_OBJECTS) $(multi_single_DEPENDENCIES) $(EXTRA_multi_single_DEPENDENCIES) 
+multi-single$(EXEEXT): $(multi_single_OBJECTS) $(multi_single_DEPENDENCIES) $(EXTRA_multi_single_DEPENDENCIES)
 	@rm -f multi-single$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(multi_single_OBJECTS) $(multi_single_LDADD) $(LIBS)
 
-persistant$(EXEEXT): $(persistant_OBJECTS) $(persistant_DEPENDENCIES) $(EXTRA_persistant_DEPENDENCIES) 
+persistant$(EXEEXT): $(persistant_OBJECTS) $(persistant_DEPENDENCIES) $(EXTRA_persistant_DEPENDENCIES)
 	@rm -f persistant$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(persistant_OBJECTS) $(persistant_LDADD) $(LIBS)
 
-pop3s$(EXEEXT): $(pop3s_OBJECTS) $(pop3s_DEPENDENCIES) $(EXTRA_pop3s_DEPENDENCIES) 
+pop3s$(EXEEXT): $(pop3s_OBJECTS) $(pop3s_DEPENDENCIES) $(EXTRA_pop3s_DEPENDENCIES)
 	@rm -f pop3s$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(pop3s_OBJECTS) $(pop3s_LDADD) $(LIBS)
 
-pop3slist$(EXEEXT): $(pop3slist_OBJECTS) $(pop3slist_DEPENDENCIES) $(EXTRA_pop3slist_DEPENDENCIES) 
+pop3slist$(EXEEXT): $(pop3slist_OBJECTS) $(pop3slist_DEPENDENCIES) $(EXTRA_pop3slist_DEPENDENCIES)
 	@rm -f pop3slist$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(pop3slist_OBJECTS) $(pop3slist_LDADD) $(LIBS)
 
-post-callback$(EXEEXT): $(post_callback_OBJECTS) $(post_callback_DEPENDENCIES) $(EXTRA_post_callback_DEPENDENCIES) 
+post-callback$(EXEEXT): $(post_callback_OBJECTS) $(post_callback_DEPENDENCIES) $(EXTRA_post_callback_DEPENDENCIES)
 	@rm -f post-callback$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(post_callback_OBJECTS) $(post_callback_LDADD) $(LIBS)
 
-postinmemory$(EXEEXT): $(postinmemory_OBJECTS) $(postinmemory_DEPENDENCIES) $(EXTRA_postinmemory_DEPENDENCIES) 
+postinmemory$(EXEEXT): $(postinmemory_OBJECTS) $(postinmemory_DEPENDENCIES) $(EXTRA_postinmemory_DEPENDENCIES)
 	@rm -f postinmemory$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(postinmemory_OBJECTS) $(postinmemory_LDADD) $(LIBS)
 
-postit2$(EXEEXT): $(postit2_OBJECTS) $(postit2_DEPENDENCIES) $(EXTRA_postit2_DEPENDENCIES) 
+postit2$(EXEEXT): $(postit2_OBJECTS) $(postit2_DEPENDENCIES) $(EXTRA_postit2_DEPENDENCIES)
 	@rm -f postit2$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(postit2_OBJECTS) $(postit2_LDADD) $(LIBS)
 
-progressfunc$(EXEEXT): $(progressfunc_OBJECTS) $(progressfunc_DEPENDENCIES) $(EXTRA_progressfunc_DEPENDENCIES) 
+progressfunc$(EXEEXT): $(progressfunc_OBJECTS) $(progressfunc_DEPENDENCIES) $(EXTRA_progressfunc_DEPENDENCIES)
 	@rm -f progressfunc$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(progressfunc_OBJECTS) $(progressfunc_LDADD) $(LIBS)
 
-resolve$(EXEEXT): $(resolve_OBJECTS) $(resolve_DEPENDENCIES) $(EXTRA_resolve_DEPENDENCIES) 
+resolve$(EXEEXT): $(resolve_OBJECTS) $(resolve_DEPENDENCIES) $(EXTRA_resolve_DEPENDENCIES)
 	@rm -f resolve$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(resolve_OBJECTS) $(resolve_LDADD) $(LIBS)
 
-rtsp$(EXEEXT): $(rtsp_OBJECTS) $(rtsp_DEPENDENCIES) $(EXTRA_rtsp_DEPENDENCIES) 
+rtsp$(EXEEXT): $(rtsp_OBJECTS) $(rtsp_DEPENDENCIES) $(EXTRA_rtsp_DEPENDENCIES)
 	@rm -f rtsp$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(rtsp_OBJECTS) $(rtsp_LDADD) $(LIBS)
 
-sendrecv$(EXEEXT): $(sendrecv_OBJECTS) $(sendrecv_DEPENDENCIES) $(EXTRA_sendrecv_DEPENDENCIES) 
+sendrecv$(EXEEXT): $(sendrecv_OBJECTS) $(sendrecv_DEPENDENCIES) $(EXTRA_sendrecv_DEPENDENCIES)
 	@rm -f sendrecv$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(sendrecv_OBJECTS) $(sendrecv_LDADD) $(LIBS)
 
-sepheaders$(EXEEXT): $(sepheaders_OBJECTS) $(sepheaders_DEPENDENCIES) $(EXTRA_sepheaders_DEPENDENCIES) 
+sepheaders$(EXEEXT): $(sepheaders_OBJECTS) $(sepheaders_DEPENDENCIES) $(EXTRA_sepheaders_DEPENDENCIES)
 	@rm -f sepheaders$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(sepheaders_OBJECTS) $(sepheaders_LDADD) $(LIBS)
 
-sftpget$(EXEEXT): $(sftpget_OBJECTS) $(sftpget_DEPENDENCIES) $(EXTRA_sftpget_DEPENDENCIES) 
+sftpget$(EXEEXT): $(sftpget_OBJECTS) $(sftpget_DEPENDENCIES) $(EXTRA_sftpget_DEPENDENCIES)
 	@rm -f sftpget$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(sftpget_OBJECTS) $(sftpget_LDADD) $(LIBS)
 
-simple$(EXEEXT): $(simple_OBJECTS) $(simple_DEPENDENCIES) $(EXTRA_simple_DEPENDENCIES) 
+simple$(EXEEXT): $(simple_OBJECTS) $(simple_DEPENDENCIES) $(EXTRA_simple_DEPENDENCIES)
 	@rm -f simple$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(simple_OBJECTS) $(simple_LDADD) $(LIBS)
 
-simplepost$(EXEEXT): $(simplepost_OBJECTS) $(simplepost_DEPENDENCIES) $(EXTRA_simplepost_DEPENDENCIES) 
+simplepost$(EXEEXT): $(simplepost_OBJECTS) $(simplepost_DEPENDENCIES) $(EXTRA_simplepost_DEPENDENCIES)
 	@rm -f simplepost$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(simplepost_OBJECTS) $(simplepost_LDADD) $(LIBS)
 
-simplesmtp$(EXEEXT): $(simplesmtp_OBJECTS) $(simplesmtp_DEPENDENCIES) $(EXTRA_simplesmtp_DEPENDENCIES) 
+simplesmtp$(EXEEXT): $(simplesmtp_OBJECTS) $(simplesmtp_DEPENDENCIES) $(EXTRA_simplesmtp_DEPENDENCIES)
 	@rm -f simplesmtp$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(simplesmtp_OBJECTS) $(simplesmtp_LDADD) $(LIBS)
 
-simplessl$(EXEEXT): $(simplessl_OBJECTS) $(simplessl_DEPENDENCIES) $(EXTRA_simplessl_DEPENDENCIES) 
+simplessl$(EXEEXT): $(simplessl_OBJECTS) $(simplessl_DEPENDENCIES) $(EXTRA_simplessl_DEPENDENCIES)
 	@rm -f simplessl$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(simplessl_OBJECTS) $(simplessl_LDADD) $(LIBS)
 
-smtp-multi$(EXEEXT): $(smtp_multi_OBJECTS) $(smtp_multi_DEPENDENCIES) $(EXTRA_smtp_multi_DEPENDENCIES) 
+smtp-multi$(EXEEXT): $(smtp_multi_OBJECTS) $(smtp_multi_DEPENDENCIES) $(EXTRA_smtp_multi_DEPENDENCIES)
 	@rm -f smtp-multi$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(smtp_multi_OBJECTS) $(smtp_multi_LDADD) $(LIBS)
 
-smtp-tls$(EXEEXT): $(smtp_tls_OBJECTS) $(smtp_tls_DEPENDENCIES) $(EXTRA_smtp_tls_DEPENDENCIES) 
+smtp-tls$(EXEEXT): $(smtp_tls_OBJECTS) $(smtp_tls_DEPENDENCIES) $(EXTRA_smtp_tls_DEPENDENCIES)
 	@rm -f smtp-tls$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(smtp_tls_OBJECTS) $(smtp_tls_LDADD) $(LIBS)
 
-url2file$(EXEEXT): $(url2file_OBJECTS) $(url2file_DEPENDENCIES) $(EXTRA_url2file_DEPENDENCIES) 
+url2file$(EXEEXT): $(url2file_OBJECTS) $(url2file_DEPENDENCIES) $(EXTRA_url2file_DEPENDENCIES)
 	@rm -f url2file$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(url2file_OBJECTS) $(url2file_LDADD) $(LIBS)
 

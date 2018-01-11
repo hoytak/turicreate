@@ -5,7 +5,7 @@
  *
  *	!!! ATTENTION !!!
  *
- *	libjson currently has three number parsing methods, they are being merged 
+ *	libjson currently has three number parsing methods, they are being merged
  *	behind the scenes, but all three interfaces must be consistent, so every set
  *	of numbers need to be tested in all three spots
  *
@@ -75,7 +75,7 @@ void testNumberToString__isNumeric::testPositive_ScientificNotation(void){
 		assertFalse(NumberToString::isNumeric(JSON_TEXT("1.e12.3")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("1.0e123")));
 		assertFalse(NumberToString::isNumeric(JSON_TEXT("1.0e12.3")));
-		
+
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("0e2")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("1e2")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("0.e2")));
@@ -96,7 +96,7 @@ void testNumberToString__isNumeric::testNegative_ScientificNotation(void){
 		assertFalse(NumberToString::isNumeric(JSON_TEXT("-1.e12.3")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("-1.0e123")));
 		assertFalse(NumberToString::isNumeric(JSON_TEXT("-1.0e12.3")));
-		
+
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("-0e2")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("-1e2")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("-0.e2")));
@@ -124,7 +124,7 @@ void testNumberToString__isNumeric::testPositive_SignedScientificNotation(void){
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("1.0e+123")));
 		assertFalse(NumberToString::isNumeric(JSON_TEXT("1.0e-12.3")));
 		assertFalse(NumberToString::isNumeric(JSON_TEXT("1.0e+12.3")));
-		
+
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("0e2")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("1e2")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("0.e2")));
@@ -154,7 +154,7 @@ void testNumberToString__isNumeric::testNegative_SignedScientificNotation(void){
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("-1.0e+123")));
 		assertFalse(NumberToString::isNumeric(JSON_TEXT("-1.0e-12.3")));
 		assertFalse(NumberToString::isNumeric(JSON_TEXT("-1.0e+12.3")));
-		
+
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("-0e-2")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("-1e-2")));
 		assertTrue(NumberToString::isNumeric(JSON_TEXT("-0.e-2")));
@@ -207,13 +207,13 @@ void testNumberToString__isNumeric::testStrict(void){
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("+1.0e-12.3")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("+1.0e+12.3")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("+1.e12.3")));
-	
+
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("0x12FF")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("0128")));  //legal because in STRICT mode, this is not octal, leading zero is ignored
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("0123")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("-0128")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("-0123")));
-	
+
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("0xABCD")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("0124")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("+1")));
@@ -238,12 +238,12 @@ void testNumberToString__isNumeric::testStrict(void){
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("+1.e+2")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("+0.0e+2")));
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("+1.0e+2")));
-	
+
 			assertFalse(NumberToString::isNumeric(JSON_TEXT("1e-0123")));  //not valid because of negative and leading zero
 		#endif
 	#endif
 }
-	
+
 
 /**
  *	Tests that the extra common notations that libjson supports all
@@ -271,7 +271,7 @@ void testNumberToString__isNumeric::testNotStrict(void){
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("+1.0e-123")));
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("+1.0e+123")));
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("+1.e123")));
-	
+
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("0x12FF")));
 			#ifdef JSON_OCTAL
 				assertFalse(NumberToString::isNumeric(JSON_TEXT("0128")));  //because of the 8
@@ -284,8 +284,8 @@ void testNumberToString__isNumeric::testNotStrict(void){
 				assertTrue(NumberToString::isNumeric(JSON_TEXT("-0128")));  //because the leading 0 is ignored
 				assertTrue(NumberToString::isNumeric(JSON_TEXT("-0123")));
 			#endif
-	
-	
+
+
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("0xABCD")));
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("0124")));
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("+0")));
@@ -312,7 +312,7 @@ void testNumberToString__isNumeric::testNotStrict(void){
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("+1.e+2")));
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("+0.0e+2")));
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("+1.0e+2")));
-	
+
 			assertTrue(NumberToString::isNumeric(JSON_TEXT("1e-0123")));
 		#endif
 	#endif

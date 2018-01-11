@@ -14,7 +14,7 @@
 namespace turi { namespace ml_data_internal {
 
 static const size_t ROW_READ_CHECKSUM = 0x259e2e6d7a32c5c0ULL;
-static constexpr size_t N_INTEGERS_PER_REFERENCE_BLOCK = 128; 
+static constexpr size_t N_INTEGERS_PER_REFERENCE_BLOCK = 128;
 
 void row_data_block::load(turi::iarchive& iarc) {
 
@@ -23,26 +23,26 @@ void row_data_block::load(turi::iarchive& iarc) {
 
   ASSERT_EQ(version, 1);
 
-  bool all_integers; 
+  bool all_integers;
   iarc >> all_integers;
 
   size_t entry_data_size = 0;
   iarc >> entry_data_size;
   entry_data.resize(entry_data_size);
-    
+
   if(all_integers) {
-      
+
     // All integers.  Just do it directly,
     for(size_t i = 0; i < entry_data_size; i += N_INTEGERS_PER_REFERENCE_BLOCK) {
       size_t limit = std::min<size_t>(entry_data_size - i, N_INTEGERS_PER_REFERENCE_BLOCK);
       integer_pack::frame_of_reference_decode_128(iarc, limit, reinterpret_cast<uint64_t*>(entry_data.data() + i) );
     }
   } else {
-        
+
     // A mix.  The most complicated one.
     size_t n_integers = 0;
     iarc >> n_integers;
-        
+
     size_t n_doubles = 0;
     iarc >> n_doubles;
 
@@ -53,22 +53,22 @@ void row_data_block::load(turi::iarchive& iarc) {
 
     // First, unpack the bitset.  This specifies whether things
     // are doubles or integers.
-      
+
     dense_bitset bs, bs_dbl;
     iarc >> bs >> bs_dbl;
-      
+
     std::vector<uint64_t> other_doubles;
-      
+
     typedef const uint64_t* __restrict__ read_ptr_type;
     typedef uint64_t* __restrict__ write_ptr_type;
-      
+
     read_ptr_type double_read_ptr;
     read_ptr_type double_as_int_read_ptr;
-      
+
     {
       double* double_write_ptr;
       uint64_t* double_as_int_write_ptr;
-      
+
       if(n_doubles < n_doubles_as_ints) {
         other_doubles.resize(n_doubles);
         double_write_ptr = reinterpret_cast<double*>(other_doubles.data());
@@ -81,7 +81,7 @@ void row_data_block::load(turi::iarchive& iarc) {
 
       double_read_ptr = reinterpret_cast<read_ptr_type>(double_write_ptr);
       double_as_int_read_ptr = reinterpret_cast<read_ptr_type>(double_as_int_write_ptr);
-        
+
       // Unpack the doubles
       turi::deserialize(iarc, double_write_ptr, n_doubles*sizeof(double));
 
@@ -91,11 +91,11 @@ void row_data_block::load(turi::iarchive& iarc) {
         integer_pack::frame_of_reference_decode_128(iarc, read_count, double_as_int_write_ptr + i);
       }
     }
-      
+
     // Now, go through and pull all the integers out.
     std::vector<uint64_t> integer_buffer;
     integer_buffer.resize(n_integers);
-      
+
     // All integers.  Just do it directly,
     for(size_t i = 0; i < n_integers; i += N_INTEGERS_PER_REFERENCE_BLOCK) {
       size_t limit = std::min<size_t>(n_integers - i, N_INTEGERS_PER_REFERENCE_BLOCK);
@@ -119,17 +119,17 @@ void row_data_block::load(turi::iarchive& iarc) {
       }
     }
   }
-  
+
   iarc >> additional_data;
 
-  uint64_t read_check = 0; 
+  uint64_t read_check = 0;
   iarc >> read_check;
   ASSERT_EQ(read_check, ROW_READ_CHECKSUM);
 }
 
 void row_data_block::save(turi::oarchive& oarc) const {
-  
-  // Save the version. 
+
+  // Save the version.
   size_t version = 1;
   oarc << version;
 
@@ -142,9 +142,9 @@ void row_data_block::save(turi::oarchive& oarc) const {
   integers.reserve(entry_data.size());
   doubles.reserve(entry_data.size());
 
-  dense_bitset bs(entry_data.size()); 
+  dense_bitset bs(entry_data.size());
   bs.clear();
-    
+
   for (size_t i = 0; i < entry_data.size(); ++i) {
     if (entry_data[i].index_value <= std::numeric_limits<uint32_t>::max()) {
       integers.push_back(entry_data[i].index_value);
@@ -153,14 +153,14 @@ void row_data_block::save(turi::oarchive& oarc) const {
       doubles.push_back(entry_data[i].double_value);
     }
   }
-  
+
   // Now, split off the doubles that can be encoded as integers.
   std::vector<uint64_t> doubles_as_ints;
   doubles_as_ints.reserve(doubles.size());
   dense_bitset bs_dbl(doubles.size());
   bs_dbl.clear();
 
-  size_t dbl_write_pos = 0; 
+  size_t dbl_write_pos = 0;
   for(size_t i = 0; i < doubles.size(); ++i) {
     if(double(uint64_t(doubles[i])) == doubles[i]) {
       doubles_as_ints.push_back(doubles[i]);
@@ -172,20 +172,20 @@ void row_data_block::save(turi::oarchive& oarc) const {
   doubles.resize(dbl_write_pos);
 
   // Now, based on the distribution of the integers, choose one
-  // mode.  Almost all doubles? just do all doubles.  
+  // mode.  Almost all doubles? just do all doubles.
 
   bool all_integers = (doubles.size() == 0 && doubles_as_ints.size() == 0);
-  
+
   oarc << all_integers;
 
   ////////////////////////////////////////////////////////////////////////////////
   // Now, we need to actually go through and save all the data in one of several ways.
-    
+
   size_t entry_data_size = entry_data.size();
   oarc << entry_data_size;
 
-  if(all_integers) { 
-        
+  if(all_integers) {
+
     // All integers.  Just do it directly,
     for(size_t i = 0; i < entry_data_size; i += N_INTEGERS_PER_REFERENCE_BLOCK) {
       size_t limit = std::min<size_t>(entry_data_size - i, N_INTEGERS_PER_REFERENCE_BLOCK);
@@ -197,7 +197,7 @@ void row_data_block::save(turi::oarchive& oarc) const {
     // the decoding based on what is present.
     size_t n_integers = integers.size();
     oarc << n_integers;
-      
+
     size_t n_doubles = doubles.size();
     oarc << n_doubles;
 
@@ -205,11 +205,11 @@ void row_data_block::save(turi::oarchive& oarc) const {
     oarc << n_doubles_as_ints;
 
     // Store the bitmasks.
-    oarc << bs << bs_dbl;        
-      
+    oarc << bs << bs_dbl;
+
     // Store the doubles.
     turi::serialize(oarc, doubles.data(), n_doubles*sizeof(double));
-      
+
     // Store the doubles_as_ints.
     for(size_t i = 0; i < n_doubles_as_ints; i += N_INTEGERS_PER_REFERENCE_BLOCK) {
       size_t limit = std::min<size_t>(n_doubles_as_ints - i, N_INTEGERS_PER_REFERENCE_BLOCK);
@@ -222,10 +222,10 @@ void row_data_block::save(turi::oarchive& oarc) const {
       integer_pack::frame_of_reference_encode_128(integers.data() + i, limit, oarc);
     }
   }
-  
+
   oarc << additional_data;
 
-  oarc << size_t(ROW_READ_CHECKSUM); 
+  oarc << size_t(ROW_READ_CHECKSUM);
 }
 
 size_t ML_DATA_TARGET_ROW_BYTE_MINIMUM = 256*1024;
@@ -419,7 +419,7 @@ size_t fill_row_buffer_from_column_buffer(
   std::vector<double> value_vect;
   std::vector<std::pair<size_t, double> > idx_value_vect;
   std::vector<size_t> exclusion_indices;
-  
+
   size_t max_row_size = 0;
 
   block_output.entry_data.clear();
@@ -550,7 +550,7 @@ size_t fill_row_buffer_from_column_buffer(
               v_d = get_missing_numeric_value(0);
             } else {
               v_d = v;
-              
+
               /**  Update Statistics  **/
               if(track_statistics) {
                 value_vect = {v_d};
@@ -560,7 +560,7 @@ size_t fill_row_buffer_from_column_buffer(
 
             /**  Write out the data in the proper format. **/
             write_value(v_d);
-            
+
             break;
           }
 
@@ -666,7 +666,7 @@ size_t fill_row_buffer_from_column_buffer(
         case ml_column_mode::DICTIONARY:
           {
             DASSERT_TRUE(exclusion_indices.empty());
-            
+
             // Top level dictionary is missing
             if (v.get_type() == flex_type_enum::UNDEFINED) {
 
@@ -750,23 +750,23 @@ size_t fill_row_buffer_from_column_buffer(
                           idx_value_vect.begin(), idx_value_vect.end(),
                           [&](const std::pair<size_t, double>& p) {
 
-                            // Is it in the exclusion_indices? 
+                            // Is it in the exclusion_indices?
                             auto fit = std::lower_bound(
                                 exclusion_indices.begin(), exclusion_indices.end(), p.first);
-                            
+
                             return (fit != exclusion_indices.end() && *fit == p.first);
                           });
                       idx_value_vect.resize(it - idx_value_vect.begin());
                     }
-                    
+
                     exclusion_indices.clear();
                   };
                   rm_missing_values();
                 }
-                
+
                 m_stats->update_dict_statistics(thread_idx, idx_value_vect);
               }
-              
+
               break;
             }
 

@@ -12,7 +12,7 @@
 #include <memory>
 #include <perf/memory_info.hpp>
 #include <unity/toolkits/util/algorithmic_utils.hpp>
-#include <sgraph/sgraph_compute.hpp> 
+#include <sgraph/sgraph_compute.hpp>
 #include <unity/toolkits/recsys/user_item_graph.hpp>
 #include <sframe/sframe_iterators.hpp>
 #include <unity/toolkits/util/indexed_sframe_tools.hpp>
@@ -34,7 +34,7 @@ recsys_model_base* recsys_itemcf::internal_clone() {
 }
 
 void recsys_itemcf::set_extra_data(const std::map<std::string, variant_type>& extra_data) {
-  
+
   // Only try to load nearest_items if it exists.
   if (extra_data.count("nearest_items") == 0)
     return;
@@ -45,7 +45,7 @@ void recsys_itemcf::set_extra_data(const std::map<std::string, variant_type>& ex
   if (nearest_items.num_rows() == 0)
     return;
 
-  // Check column names 
+  // Check column names
   const std::string& item_column = metadata->column_name(ITEM_COLUMN_INDEX);
 
   if (!(nearest_items.contains_column(item_column)) ||
@@ -72,7 +72,7 @@ void recsys_itemcf::set_extra_data(const std::map<std::string, variant_type>& ex
   }
 
   // index nearest_items
-  // allowing new categorical values 
+  // allowing new categorical values
   auto user_indexer = metadata->indexer(USER_COLUMN_INDEX);
   auto item_indexer = metadata->indexer(ITEM_COLUMN_INDEX);
 
@@ -130,26 +130,26 @@ void recsys_itemcf::init_options(const std::map<std::string, flexible_type>&_opt
   opt.description    = "The name of the column for user ids.";
   opt.default_value  = "user_id";
   opt.parameter_type = option_handling::option_info::STRING;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name           = "item_id";
   opt.description    = "The name of the column for item ids.";
   opt.default_value  = "item_id";
   opt.parameter_type = option_handling::option_info::STRING;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name           = "target";
   opt.description    = "The name of the column of target ratings to be predicted.";
   opt.default_value  = "";
   opt.parameter_type = option_handling::option_info::STRING;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name = "similarity_type";
   opt.description = "Similarity function to use for comparing two items.";
   opt.default_value = "jaccard";
   opt.parameter_type = option_handling::option_info::STRING;
   opt.allowed_values = {"jaccard", "cosine", "pearson"};
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name = "seed_item_set_size";
   opt.description = ("For users that have not yet rated any items, or have only "
@@ -161,7 +161,7 @@ void recsys_itemcf::init_options(const std::map<std::string, flexible_type>&_opt
   opt.upper_bound = std::numeric_limits<flex_int>::max();
   opt.parameter_type = option_handling::option_info::INTEGER;
   options.create_option(opt);
-  
+
   sparse_similarity_lookup::add_options(options);
 
   // Set user specified options
@@ -177,7 +177,7 @@ std::map<std::string, flexible_type> recsys_itemcf::train(const v2::ml_data& dat
   training_timer.start();
 
   auto _item_sim = create_similarity_lookup();
-  
+
   std::map<std::string, flexible_type> ret;
 
   // If there is extra data present, then also add that in.
@@ -202,17 +202,17 @@ std::map<std::string, flexible_type> recsys_itemcf::train(const v2::ml_data& dat
 
     // Get the num_items.
     size_t num_items = data.metadata()->index_size(ITEM_COLUMN_INDEX);
-    
-    // Go through and calculate the means. 
+
+    // Go through and calculate the means.
     std::array<simple_spinlock, 1024> locks;
-    
-    item_mean_score.assign(num_items, 0); 
+
+    item_mean_score.assign(num_items, 0);
 
     // Now, do a pass thorugh the data to calculate all this.
     in_parallel([&](size_t thread_idx, size_t num_threads) {
 
         std::vector<v2::ml_data_entry> x;
-        
+
         for(auto it = data.get_iterator(thread_idx, num_threads); !it.done(); ++it) {
           it.fill_observation(x);
 
@@ -234,20 +234,20 @@ std::map<std::string, flexible_type> recsys_itemcf::train(const v2::ml_data& dat
         item_mean_score[item]
             /= std::max<size_t>(1, data.metadata()->statistics(ITEM_COLUMN_INDEX)->count(item));
       }
-            
+
       item_mean_min = std::min(item_mean_min, item_mean_score[item]);
       item_mean_max = std::max(item_mean_max, item_mean_score[item]);
     }
-    
+
     // Now, choose the most popular items for the candidate seed set.
     size_t seed_count = options.value("seed_item_set_size");
     seed_count = std::min<size_t>(seed_count, num_items);
     new_user_seed_items.resize(seed_count);
 
-    if(seed_count != 0) {     
+    if(seed_count != 0) {
       // Choose a bunch of the most frequent items to use as seed items.
       std::vector<std::pair<size_t, size_t> > item_counts(num_items);
-    
+
       for(size_t i = 0; i < num_items; ++i) {
         item_counts[i] = {data.metadata()->statistics(ITEM_COLUMN_INDEX)->count(i), i};
       }
@@ -257,14 +257,14 @@ std::map<std::string, flexible_type> recsys_itemcf::train(const v2::ml_data& dat
                          return p1.first > p2.first;
                        });
 
-    
+
       for(size_t i = 0; i < seed_count; ++i) {
         size_t index = item_counts[i].second;
         double score = ((item_mean_score[index] - item_mean_min)
                         / (std::max<double>(1.0, item_mean_max - item_mean_min)));
         new_user_seed_items[i] = {index, score};
       }
-      
+
       std::sort(new_user_seed_items.begin(), new_user_seed_items.end());
     }
   }
@@ -274,30 +274,30 @@ std::map<std::string, flexible_type> recsys_itemcf::train(const v2::ml_data& dat
   // This is important; otherwise, it gets calculated and it's
   // meaningless here.
   add_or_update_state({{"training_rmse", FLEX_UNDEFINED}});
-  
+
   logprogress_stream << "Finished training in "
                      << training_timer.current_time() << "s" << std::endl;
-  
+
   return ret;
 }
 
 sframe recsys_itemcf::predict(const v2::ml_data& test_data) const {
-  
+
   std::shared_ptr<sarray<flexible_type> > ret(new sarray<flexible_type>);
 
-  size_t n_threads = thread::cpu_count(); 
-  size_t num_segments = n_threads; 
-  
+  size_t n_threads = thread::cpu_count();
+  size_t num_segments = n_threads;
+
   ret->open_for_write(1);
   ret->set_type(flex_type_enum::FLOAT);
 
   ////////////////////////////////////////////////////////////////////////////////
-    
+
   turi::timer total_timer;
   total_timer.start();
 
   auto trained_user_items_reader = trained_user_items->get_reader();
-  
+
   size_t num_users = metadata->index_size(USER_COLUMN_INDEX);
   size_t n = test_data.size();
   size_t n_left = n;
@@ -306,10 +306,10 @@ sframe recsys_itemcf::predict(const v2::ml_data& test_data) const {
   const size_t block_size = 1024*1024;
   auto it_out = ret->get_output_iterator(0);
   auto it = test_data.get_iterator();
-  
+
   std::vector<double> out_values;
-  
-  // A map from the user idx to the (item_index, out_index) values. 
+
+  // A map from the user idx to the (item_index, out_index) values.
   std::map<size_t, std::vector<std::pair<size_t, size_t> > > user_to_entry_map;
   std::vector<v2::ml_data_entry> x;
   std::vector<std::pair<size_t, double> > scores;
@@ -323,7 +323,7 @@ sframe recsys_itemcf::predict(const v2::ml_data& test_data) const {
   // below is designed to aggregate all of this.
   for(size_t block_start_idx = 0; block_start_idx < n; block_start_idx += block_size) {
     user_to_entry_map.clear();
-    
+
     size_t end_idx = std::min(n_left, block_size);
     size_t count = 0;
 
@@ -333,7 +333,7 @@ sframe recsys_itemcf::predict(const v2::ml_data& test_data) const {
     for(; !it.done() && count < end_idx; ++it) {
 
       it.fill_observation(x);
-        
+
       // the (user, item) pair for which we need to make a prediction
       size_t user = x[USER_COLUMN_INDEX].index;
       size_t item = x[ITEM_COLUMN_INDEX].index;
@@ -358,17 +358,17 @@ sframe recsys_itemcf::predict(const v2::ml_data& test_data) const {
     for(const auto& p : user_to_entry_map) {
       size_t user = p.first;
       const auto& requested_items = p.second;
-          
+
       scores.resize(requested_items.size());
       for(size_t i = 0; i < requested_items.size(); ++i) {
         scores[i].first = requested_items[i].first;
       }
 
       if(user >= num_users) {
-        _score_items(scores, new_user_seed_items); 
+        _score_items(scores, new_user_seed_items);
       } else {
         trained_user_items_reader->read_rows(user, user + 1, user_item_v);
-        DASSERT_EQ(user_item_v.size(), 1); 
+        DASSERT_EQ(user_item_v.size(), 1);
         _score_items(scores, user_item_v.at(0));
       }
 
@@ -391,7 +391,7 @@ sframe recsys_itemcf::predict(const v2::ml_data& test_data) const {
                 std::vector<std::string>{"prediction"});
 }
 
-void recsys_itemcf::_score_items(std::vector<std::pair<size_t, double> >& item_scores, 
+void recsys_itemcf::_score_items(std::vector<std::pair<size_t, double> >& item_scores,
                                  const std::vector<std::pair<size_t, double> >& user_scores) const {
   // Score the items.
   size_t n_scores_given = item_sim->score_items(item_scores, user_scores);
@@ -403,7 +403,7 @@ void recsys_itemcf::_score_items(std::vector<std::pair<size_t, double> >& item_s
     if(&user_scores != &new_user_seed_items) {
       n_scores_given = item_sim->score_items(item_scores, new_user_seed_items);
     }
-    
+
     // If this still didn't fix it, then put in the normalized average
     // ratings.
     if(n_scores_given == 0) {
@@ -413,7 +413,7 @@ void recsys_itemcf::_score_items(std::vector<std::pair<size_t, double> >& item_s
           p.second = 0;
           continue;
         }
-        
+
         p.second = (item_mean_score[item] - item_mean_min)
             / (std::max<double>(1, item_mean_max - item_mean_min));
         DASSERT_LE(p.second, 1);
@@ -523,14 +523,14 @@ std::shared_ptr<sparse_similarity_lookup> recsys_itemcf::create_similarity_looku
 
 void recsys_itemcf::internal_save(turi::oarchive& oarc) const {
   std::map<std::string, variant_type> data;
-  
+
   data["new_user_seed_items"] = to_variant(new_user_seed_items);
   data["item_mean_score"]     = to_variant(item_mean_score);
   data["item_mean_min"]       = to_variant(item_mean_min);
   data["item_mean_max"]       = to_variant(item_mean_max);
 
   variant_deep_save(to_variant(data), oarc);
-  
+
   oarc << item_sim;
 }
 
@@ -549,7 +549,7 @@ void recsys_itemcf::internal_load(turi::iarchive& iarc, size_t version) {
 
     __EXTRACT(ranked_items);
     __EXTRACT(item_mean_score);
-    __EXTRACT(new_user_seed_items); 
+    __EXTRACT(new_user_seed_items);
 
     this->new_user_seed_items.assign(new_user_seed_items.begin(), new_user_seed_items.end());
 
@@ -558,7 +558,7 @@ void recsys_itemcf::internal_load(turi::iarchive& iarc, size_t version) {
     bool has_target;
 
     iarc >> has_target >> type;
-    
+
     std::string similarity_name;
     switch(type) {
       case JACCARD: similarity_name = "jaccard"; break;
@@ -596,7 +596,7 @@ void recsys_itemcf::internal_load(turi::iarchive& iarc, size_t version) {
     }
 
     _opts["max_item_neighborhood_size"] = max_item_neighborhood_size;
-    
+
     // Now, use this data to populate the new model.
     item_sim = sparse_similarity_lookup::create(similarity_name, _opts);
 
@@ -645,17 +645,17 @@ void recsys_itemcf::internal_load(turi::iarchive& iarc, size_t version) {
 
     variant_type data_v;
     variant_deep_load(data_v, iarc);
-    
+
     auto data = variant_get_value<std::map<std::string, variant_type> >(data_v);
-    
+
     __EXTRACT(new_user_seed_items);
     __EXTRACT(item_mean_score);
     __EXTRACT(item_mean_min);
     __EXTRACT(item_mean_max);
-    
+
     iarc >> item_sim;
   }
-  
+
 #undef __EXTRACT
 }
 
@@ -666,7 +666,7 @@ sframe recsys_itemcf::get_similar_items(
   size_t num_items = metadata->index_size(ITEM_COLUMN_INDEX);
 
   // return for all items if the ptr is null or the indexed_items is empty
-  bool return_for_all_items = (items == nullptr); 
+  bool return_for_all_items = (items == nullptr);
   const size_t n_indexed_items = return_for_all_items ? num_items : items->size();
 
   // set allow_new_categorical_values=false to skip items that not in
@@ -770,4 +770,4 @@ sframe recsys_itemcf::get_similar_items(
   return ret;
 }
 
-}} // namespace 
+}} // namespace

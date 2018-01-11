@@ -70,4 +70,3 @@ class MapFieldGenerator : public FieldGeneratorBase {
 }  // namespace google
 
 #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
-

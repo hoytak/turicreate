@@ -41,7 +41,7 @@ namespace turi {
  *
  * \param n the number of output sframe.
  * \param hash_fn the hash function for each row in the input sframe.
- * 
+ *
  * \return A vector of n sframes.
  */
 std::vector<sframe> shuffle(

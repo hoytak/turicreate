@@ -22,7 +22,7 @@ void variant_deep_save(const variant_type& v, oarchive& oarc) {
      break;
    case 1:
      {
-       std::shared_ptr<unity_sgraph> g = 
+       std::shared_ptr<unity_sgraph> g =
            std::static_pointer_cast<unity_sgraph>(variant_get_ref<std::shared_ptr<unity_sgraph_base>>(v));
        oarc << *g;
        break;
@@ -35,7 +35,7 @@ void variant_deep_save(const variant_type& v, oarchive& oarc) {
      break;
    case 4:
      {
-       std::shared_ptr<unity_sframe> s = 
+       std::shared_ptr<unity_sframe> s =
            std::static_pointer_cast<unity_sframe>(variant_get_ref<std::shared_ptr<unity_sframe_base>>(v));
        oarc << *s;
        break;
@@ -43,7 +43,7 @@ void variant_deep_save(const variant_type& v, oarchive& oarc) {
      break;
    case 5:
      {
-       std::shared_ptr<unity_sarray> s = 
+       std::shared_ptr<unity_sarray> s =
            std::static_pointer_cast<unity_sarray>(variant_get_ref<std::shared_ptr<unity_sarray_base>>(v));
        oarc << *s;
        break;
@@ -57,7 +57,7 @@ void variant_deep_save(const variant_type& v, oarchive& oarc) {
          oarc << elem.first;
          variant_deep_save(elem.second, oarc);
        }
-       break; 
+       break;
      }
    case 7:
      {
@@ -66,7 +66,7 @@ void variant_deep_save(const variant_type& v, oarchive& oarc) {
        for(const auto& elem : varvec) {
          variant_deep_save(elem, oarc);
        }
-       break; 
+       break;
      }
    default:
      break;
@@ -129,7 +129,7 @@ void variant_deep_load(variant_type& v, iarchive& iarc) {
          varmap[key] = std::move(value);
        }
        variant_set_value<variant_map_type>(v, varmap);
-       break; 
+       break;
      }
    case 7:
      {
@@ -143,7 +143,7 @@ void variant_deep_load(variant_type& v, iarchive& iarc) {
          varvec[i] = std::move(value);
        }
        variant_set_value<variant_vector_type>(v, varvec);
-       break; 
+       break;
      }
    default:
      break;

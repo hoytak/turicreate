@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-CloudFunctionConfiguration::CloudFunctionConfiguration() : 
+CloudFunctionConfiguration::CloudFunctionConfiguration() :
     m_idHasBeenSet(false),
     m_eventsHasBeenSet(false),
     m_cloudFunctionHasBeenSet(false),
@@ -37,7 +37,7 @@ CloudFunctionConfiguration::CloudFunctionConfiguration() :
 {
 }
 
-CloudFunctionConfiguration::CloudFunctionConfiguration(const XmlNode& xmlNode) : 
+CloudFunctionConfiguration::CloudFunctionConfiguration(const XmlNode& xmlNode) :
     m_idHasBeenSet(false),
     m_eventsHasBeenSet(false),
     m_cloudFunctionHasBeenSet(false),

@@ -20,7 +20,7 @@ namespace turi {
  */
 struct toolkit_function_specification {
   /**
-   * A short name used to identify this toolkit. For instance, 
+   * A short name used to identify this toolkit. For instance,
    * LDA, or PageRank.
    */
   std::string name;
@@ -33,7 +33,7 @@ struct toolkit_function_specification {
   /**
    * Toolkit properties.
    * The following keys are recognized:
-   *  - "arguments": value must a flex_list containing a list of 
+   *  - "arguments": value must a flex_list containing a list of
    *                 the argument names.
    *  - "file": The file which the toolkit was loaded from
    *  - "documentation": A documentation string
@@ -41,10 +41,10 @@ struct toolkit_function_specification {
   std::map<std::string, flexible_type> description;
 
   /**
-   * A pointer to the actual execution function. All parameters to the 
+   * A pointer to the actual execution function. All parameters to the
    * execution are passed in the \ref toolkit_function_invocation struct.
    * Returns an std::pair<bool, options_map> with status results.
-   * 
+   *
    * \note this can be generated easily using toolkit_function_wrapper_impl::make_spec
    */
   std::function<toolkit_function_response_type(toolkit_function_invocation&)> toolkit_execute_function;

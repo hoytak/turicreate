@@ -8,15 +8,15 @@
 
 
 namespace turi {
-  
-  
+
+
 #define QUEUED_RW_LOCK_REQUEST_READ 0
 #define QUEUED_RW_LOCK_REQUEST_WRITE 1
 #define QUEUED_RW_LOCK_REQUEST_NONE 2
 
 /**
  * Fair rw-lock with local-only spinning implemented and
- * modified from 
+ * modified from
  * Scalable Reader-Writer Synchronization for Shared-Memory Multiprocessors.
  * John M. Mellor-Crummey and Michael L. Scott
  *
@@ -24,7 +24,7 @@ namespace turi {
  */
 class queued_rw_lock{
  public:
-  
+
   union state_union {
     volatile uint32_t stateu;
     struct {
@@ -32,9 +32,9 @@ class queued_rw_lock{
       volatile bool blocked;
     } state;
   };
-  
+
   struct request{
-    void* id;  
+    void* id;
     volatile request* volatile next;
     volatile state_union s;
     volatile char lockclass;
@@ -45,7 +45,7 @@ class queued_rw_lock{
   request* volatile next_writer;
  public:
   queued_rw_lock(): tail(NULL), reader_count(0), next_writer(NULL) { }
-  
+
   inline void writelock(request *I) {
     I->lockclass = QUEUED_RW_LOCK_REQUEST_WRITE;
     I->next = NULL;
@@ -66,7 +66,7 @@ class queued_rw_lock{
     }
     else {
       predecessor->s.state.successor_class = QUEUED_RW_LOCK_REQUEST_WRITE;
-    __sync_synchronize();      
+    __sync_synchronize();
       predecessor->next = I;
     }
     // while I->blocked. continue
@@ -76,12 +76,12 @@ class queued_rw_lock{
   }
 
   inline void wrunlock(request *I) {
-    __sync_synchronize(); 
+    __sync_synchronize();
     if (I->next != NULL || !__sync_bool_compare_and_swap(&tail, I, (request*)NULL)) {
       // wait
       while(I->next == NULL) sched_yield();
-     __sync_synchronize(); 
-   
+     __sync_synchronize();
+
       if (I->next->lockclass == QUEUED_RW_LOCK_REQUEST_READ) {
         reader_count.inc();
       }
@@ -95,14 +95,14 @@ class queued_rw_lock{
     I->s.stateu = 0;
     I->s.state.successor_class = QUEUED_RW_LOCK_REQUEST_NONE;
     I->s.state.blocked = true;
-    __sync_synchronize(); 
+    __sync_synchronize();
     request* predecessor = __sync_lock_test_and_set(&tail, I);
     if (predecessor == NULL) {
       reader_count.inc();
       I->s.state.blocked = false;
     }
     else {
-      
+
       state_union tempold, tempnew;
       tempold.state.blocked = true;
       tempold.state.successor_class = QUEUED_RW_LOCK_REQUEST_NONE;
@@ -113,10 +113,10 @@ class queued_rw_lock{
           atomic_compare_and_swap(predecessor->s.stateu,
                                   tempold.stateu,
                                   tempnew.stateu)) {
-        
+
         predecessor->next = I;
         // wait
-        __sync_synchronize(); 
+        __sync_synchronize();
         volatile state_union& is = I->s;
         while(is.state.blocked) sched_yield();
       }
@@ -129,7 +129,7 @@ class queued_rw_lock{
     }
     __sync_synchronize();
     if (I->s.state.successor_class == QUEUED_RW_LOCK_REQUEST_READ) {
-      
+
       // wait
       while(I->next == NULL) sched_yield();
       reader_count.inc();
@@ -147,11 +147,11 @@ class queued_rw_lock{
       }
     }
     if (reader_count.dec() == 0) {
-      __sync_synchronize(); 
+      __sync_synchronize();
       request * w = __sync_lock_test_and_set(&next_writer, (request*)NULL);
       if (w != NULL) {
         w->s.state.blocked = false;
-        __sync_synchronize(); 
+        __sync_synchronize();
       }
     }
   }
@@ -159,4 +159,3 @@ class queued_rw_lock{
 
 }
 #endif
-

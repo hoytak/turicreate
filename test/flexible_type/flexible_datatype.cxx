@@ -42,7 +42,7 @@ struct legacy_flex_date_time {
    * \param _half_hour_offset Additional offset for timezone. In integral increments
    *                          of half-hour.
    */
-  explicit inline legacy_flex_date_time(int64_t _posix_timestamp, int32_t _half_hour_offset = 0) { 
+  explicit inline legacy_flex_date_time(int64_t _posix_timestamp, int32_t _half_hour_offset = 0) {
     first = _posix_timestamp;
     second = _half_hour_offset;
   }
@@ -117,12 +117,12 @@ struct flexible_datatype_test  {
      TS_ASSERT_EQUALS(h.get_type(), flex_type_enum::STRING);
      TS_ASSERT_EQUALS(h.get<flex_string>(), "hello world");
      TS_ASSERT_EQUALS(g.get_type(), flex_type_enum::INTEGER);
-    
+
      std::swap(h, g);
      TS_ASSERT_EQUALS(g.get_type(), flex_type_enum::STRING);
      TS_ASSERT_EQUALS(g.get<flex_string>(), "hello world");
      TS_ASSERT_EQUALS(h.get_type(), flex_type_enum::INTEGER);
-   } 
+   }
   void test_types_long() {
     flexible_type f = 1;
     flexible_type f2 = 2;
@@ -371,22 +371,22 @@ struct flexible_datatype_test  {
 
     dt.set_time_zone_offset(1);
     TS_ASSERT_EQUALS(dt.posix_timestamp(), 441964800);
-    TS_ASSERT_EQUALS(dt.shifted_posix_timestamp(), 
+    TS_ASSERT_EQUALS(dt.shifted_posix_timestamp(),
                      441964800 + flex_date_time::TIMEZONE_RESOLUTION_IN_SECONDS);
 
     dt.set_time_zone_offset(-1);
     TS_ASSERT_EQUALS(dt.posix_timestamp(), 441964800);
-    TS_ASSERT_EQUALS(dt.shifted_posix_timestamp(), 
+    TS_ASSERT_EQUALS(dt.shifted_posix_timestamp(),
                      441964800 - flex_date_time::TIMEZONE_RESOLUTION_IN_SECONDS);
 
     dt.set_time_zone_offset(48);
     TS_ASSERT_EQUALS(dt.posix_timestamp(), 441964800);
-    TS_ASSERT_EQUALS(dt.shifted_posix_timestamp(), 
+    TS_ASSERT_EQUALS(dt.shifted_posix_timestamp(),
                      441964800 + 48 * flex_date_time::TIMEZONE_RESOLUTION_IN_SECONDS);
 
     dt.set_time_zone_offset(-48);
     TS_ASSERT_EQUALS(dt.posix_timestamp(), 441964800);
-    TS_ASSERT_EQUALS(dt.shifted_posix_timestamp(), 
+    TS_ASSERT_EQUALS(dt.shifted_posix_timestamp(),
                      441964800 - 48 * flex_date_time::TIMEZONE_RESOLUTION_IN_SECONDS);
 
     dt.set_time_zone_offset(flex_date_time::EMPTY_TIMEZONE);
@@ -409,13 +409,13 @@ struct flexible_datatype_test  {
     TS_ASSERT_THROWS_ANYTHING(dt.set_microsecond(-1));
     TS_ASSERT_THROWS_ANYTHING(dt.set_microsecond(1000001));
 
-    TS_ASSERT(flex_date_time(441964800) < flex_date_time(441964801)) 
-    TS_ASSERT(flex_date_time(441964801) > flex_date_time(441964800)) 
-    TS_ASSERT(flex_date_time(441964800) == flex_date_time(441964800)) 
-    TS_ASSERT(flex_date_time(441964800) < flex_date_time(441964800, 0, 1)) 
-    TS_ASSERT(flex_date_time(441964800, 0, 1) > flex_date_time(441964800)) 
-    TS_ASSERT(flex_date_time(441964800, 0, 1) == flex_date_time(441964800, 0, 1)) 
-    TS_ASSERT(flex_date_time(441964800, 0, 1) == flex_date_time(441964800, 10, 1)) 
+    TS_ASSERT(flex_date_time(441964800) < flex_date_time(441964801))
+    TS_ASSERT(flex_date_time(441964801) > flex_date_time(441964800))
+    TS_ASSERT(flex_date_time(441964800) == flex_date_time(441964800))
+    TS_ASSERT(flex_date_time(441964800) < flex_date_time(441964800, 0, 1))
+    TS_ASSERT(flex_date_time(441964800, 0, 1) > flex_date_time(441964800))
+    TS_ASSERT(flex_date_time(441964800, 0, 1) == flex_date_time(441964800, 0, 1))
+    TS_ASSERT(flex_date_time(441964800, 0, 1) == flex_date_time(441964800, 10, 1))
 
     dt.set_microsecond_res_timestamp(441964800.5);
     TS_ASSERT_DELTA(dt.microsecond_res_timestamp(), 441964800.5,
@@ -441,7 +441,7 @@ struct flexible_datatype_test  {
         {1LL << 54, flex_date_time::EMPTY_TIMEZONE}, 999999);
     TS_ASSERT_EQUALS(f.get_date_time_microsecond(), 999999);
     TS_ASSERT_EQUALS(f.get_date_time_as_timestamp_and_offset().first, 1LL << 54);
-    TS_ASSERT_EQUALS(f.get_date_time_as_timestamp_and_offset().second, 
+    TS_ASSERT_EQUALS(f.get_date_time_as_timestamp_and_offset().second,
                      flex_date_time::EMPTY_TIMEZONE);
     TS_ASSERT(f.get<flex_date_time>()  == dt);
     TS_ASSERT(f.get<flex_date_time>()  == dt);
@@ -552,12 +552,12 @@ struct flexible_datatype_test  {
 
   void test_types_enum() {
 
-    // For use in variant_type 
-    
+    // For use in variant_type
+
     enum class TestEnum {A, B, C};
 
-    flexible_type_converter<TestEnum> converter; 
-    
+    flexible_type_converter<TestEnum> converter;
+
     flexible_type f = converter.set(TestEnum::A);
     flexible_type f2 = converter.set(TestEnum::A);
     flexible_type f3 = converter.set(TestEnum::B);

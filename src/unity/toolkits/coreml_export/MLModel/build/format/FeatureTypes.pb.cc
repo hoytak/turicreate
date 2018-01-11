@@ -843,7 +843,7 @@ void ImageFeatureType::clear_width() {
   return width_;
 }
 void ImageFeatureType::set_width(::google::protobuf::uint64 value) {
-  
+
   width_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.ImageFeatureType.width)
 }
@@ -857,7 +857,7 @@ void ImageFeatureType::clear_height() {
   return height_;
 }
 void ImageFeatureType::set_height(::google::protobuf::uint64 value) {
-  
+
   height_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.ImageFeatureType.height)
 }
@@ -871,7 +871,7 @@ void ImageFeatureType::clear_colorspace() {
   return static_cast< ::CoreML::Specification::ImageFeatureType_ColorSpace >(colorspace_);
 }
 void ImageFeatureType::set_colorspace(::CoreML::Specification::ImageFeatureType_ColorSpace value) {
-  
+
   colorspace_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.ImageFeatureType.colorSpace)
 }
@@ -1179,7 +1179,7 @@ void ArrayFeatureType::clear_datatype() {
   return static_cast< ::CoreML::Specification::ArrayFeatureType_ArrayDataType >(datatype_);
 }
 void ArrayFeatureType::set_datatype(::CoreML::Specification::ArrayFeatureType_ArrayDataType value) {
-  
+
   datatype_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.ArrayFeatureType.dataType)
 }
@@ -2265,7 +2265,7 @@ bool FeatureType::isoptional() const {
   return isoptional_;
 }
 void FeatureType::set_isoptional(bool value) {
-  
+
   isoptional_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.FeatureType.isOptional)
 }

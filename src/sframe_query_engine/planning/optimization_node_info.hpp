@@ -54,7 +54,7 @@ struct node_info {
   // Buffer stuff used in the optimization
 
   bool node_visited = false;
-  
+
   // Marked as discarded; typically because another node replaced it.
   bool node_discarded = false;
 
@@ -74,7 +74,7 @@ struct node_info {
   }
 
   bool is_source_node() const { return query_eval::is_source_node(attributes); }
-  
+
   bool is_linear_transform() const { return query_eval::is_linear_transform(attributes); }
 
   bool is_sublinear_transform() const { return query_eval::is_sublinear_transform(attributes); }
@@ -93,7 +93,7 @@ struct node_info {
 
     return it->second;
   }
-  
+
   bool has_p(const std::string& s) const {
     auto it = this->pnode->operator_parameters.find(s);
     return (it != this->pnode->operator_parameters.end());
@@ -113,7 +113,7 @@ struct node_info {
     auto it = this->pnode->any_operator_parameters.find(s);
     return (it != this->pnode->any_operator_parameters.end());
   }
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Convenience functions
 

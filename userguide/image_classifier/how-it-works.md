@@ -152,4 +152,3 @@ category
 To give you some perspective, a [user
 study](https://arxiv.org/abs/1409.0575) was made on a dataset with 1000
 classes and measured human performance is about 94%.
-

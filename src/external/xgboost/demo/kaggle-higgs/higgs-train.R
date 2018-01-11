@@ -30,4 +30,3 @@ bst = xgb.train(param, xgmat, nround, watchlist );
 # save out model
 xgb.save(bst, "higgs.model")
 print ('finish training')
-

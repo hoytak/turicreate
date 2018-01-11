@@ -441,5 +441,3 @@ void dir_archive::delete_archive(std::string directory) {
 
 
 } // namespace turi
-
-

@@ -105,4 +105,3 @@ configure_file(
   ${Wrapping_BINARY_DIR}/gl.h
   COPYONLY)
 use_mangled_mesa (${Wrapping_BINARY_DIR} ${Wrapping_BINARY_DIR}/mangled_mesa)
-

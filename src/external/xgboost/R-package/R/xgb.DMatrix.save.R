@@ -1,10 +1,10 @@
 #' Save xgb.DMatrix object to binary file
-#' 
+#'
 #' Save xgb.DMatrix object to binary file
-#' 
+#'
 #' @param DMatrix the DMatrix object
 #' @param fname the name of the binary file.
-#' 
+#'
 #' @examples
 #' data(agaricus.train, package='xgboost')
 #' train <- agaricus.train
@@ -12,7 +12,7 @@
 #' xgb.DMatrix.save(dtrain, 'xgb.DMatrix.data')
 #' dtrain <- xgb.DMatrix('xgb.DMatrix.data')
 #' @export
-#' 
+#'
 xgb.DMatrix.save <- function(DMatrix, fname) {
   if (typeof(fname) != "character") {
     stop("xgb.save: fname must be character")

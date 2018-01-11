@@ -296,4 +296,3 @@ CURLcode FindWin32CACert(struct Configurable *config, const char *bundle_file)
 #endif /* WIN32 */
 
 #endif /* MSDOS || WIN32 */
-

@@ -41,7 +41,7 @@ namespace Aws
         {
         public:
             using Base = HttpClient;
-            
+
             virtual ~WinSyncHttpClient();
 
             /**
@@ -104,4 +104,3 @@ namespace Aws
 
     } // namespace Http
 } // namespace Aws
-

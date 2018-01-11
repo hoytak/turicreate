@@ -19,7 +19,7 @@
 #    xdg-open coverage/index.html
 #################################################################
 
-# Find programs we need 
+# Find programs we need
 FIND_PROGRAM(LCOV_EXECUTABLE lcov DOC "Full path to lcov executable")
 FIND_PROGRAM(GENHTML_EXECUTABLE genhtml DOC "Full path to genhtml executable")
 MARK_AS_ADVANCED(LCOV_EXECUTABLE GENHTML_EXECUTABLE)
@@ -65,4 +65,3 @@ COMMAND ${CMAKE_COMMAND} -E echo "COVERAGE-STEP-4/5: Generate HTML from coverage
 COMMAND ${GENHTML_EXECUTABLE} "coverage.info" --title="libarchive-${LIBARCHIVE_VERSION_STRING}" --show-details --legend --output-directory "./coverage"  >> coverage.log 2>&1
 COMMAND ${CMAKE_COMMAND} -E echo "COVERAGE-STEP-5/5: Open test coverage HTML output in browser: xdg-open ./coverage/index.html"
 COMMENT "Runs testrunner and generates coverage output (formats: .info and .html)")
-

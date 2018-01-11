@@ -97,7 +97,7 @@ class ExprSourceGen(Visitor):
 
     def visitName(self, node):
         self.print(node.id)
-    
+
     @py2op
     def visitarguments(self, node):
         # ('args', 'vararg', 'kwarg', 'defaults')
@@ -157,14 +157,14 @@ class ExprSourceGen(Visitor):
                 self.print(':{:node}', node.varargannotation)
         elif node.kwonlyargs:
             self.print('{0}*', ', ' if i else '')
-        
+
         kwonlyargs = list(node.kwonlyargs)
-        
+
         if kwonlyargs:
             i += 1
             kw_defaults = [None] * (len(kwonlyargs) - len(node.kw_defaults))
             kw_defaults.extend(node.kw_defaults)
-            
+
         while kwonlyargs:
             kw_arg = kwonlyargs.pop(0)
             kw_default = kw_defaults.pop(0)
@@ -172,7 +172,7 @@ class ExprSourceGen(Visitor):
             self.visit(kw_arg)
             if kw_default is not None:
                 self.print('={:node}', kw_default)
-        
+
         if node.kwarg:
             self.print('{0}**{1}', ', ' if i else '', node.kwarg)
             if node.varargannotation:
@@ -243,7 +243,7 @@ class ExprSourceGen(Visitor):
                 print_comma(i)
                 self.print('{:node}', elt)
                 i += 1
-                
+
             if len(node.elts) == 1:
                 self.print(',')
 
@@ -266,7 +266,7 @@ class ExprSourceGen(Visitor):
                 self.print(', {:node}' , node.inst)
             if node.tback:
                 self.print(', {:node}' , node.tback)
-                
+
     @visitRaise.py3op
     def visitRaise(self, node):
         self.print('raise ')
@@ -353,7 +353,7 @@ class ExprSourceGen(Visitor):
         with self.no_indent:
             dim = dims.pop(0)
             self.print('{0:node}', dim)
-            
+
             while dims:
                 dim = dims.pop(0)
                 self.print(', {0:node}', dim)
@@ -474,11 +474,11 @@ class ExprSourceGen(Visitor):
     @py3op
     def visitarg(self, node):
         self.print(node.arg)
-        
+
         if node.annotation:
             with self.no_indent:
                 self.print(':{0:node}', node.annotation)
-    
+
 def visit_expr(node):
     gen = ExprSourceGen()
     gen.visit(node)
@@ -551,7 +551,7 @@ class SourceGen(ExprSourceGen):
             for child in node.body:
                 self.visit(child)
         return
-    
+
     @visitFunctionDef.py3op
     def visitFunctionDef(self, node):
 
@@ -560,13 +560,13 @@ class SourceGen(ExprSourceGen):
 
         args = visit_expr(node.args)
         self.print('def {name}({args})' , name=node.name, args=args)
-        
+
         with self.no_indent:
             if node.returns:
                 self.print(' -> {:node}:', node.returns)
             else:
                 self.print(':', node.returns)
-            
+
         with self.indenter:
             for child in node.body:
                 self.visit(child)
@@ -590,7 +590,7 @@ class SourceGen(ExprSourceGen):
                     self.visit(expr)
             else:
                 self.print('pass')
-                    
+
 
         if node.orelse and len(node.orelse) == 1 and isinstance(node.orelse[0], _ast.If):
             self.print('el'); self.visit(node.orelse[0], indent_first=False)
@@ -685,7 +685,7 @@ class SourceGen(ExprSourceGen):
                     self.visit(expr)
             else:
                 self.print("pass")
-                    
+
 
         if node.orelse:
             self.print('else:')
@@ -716,7 +716,7 @@ class SourceGen(ExprSourceGen):
                     self.visit(stmnt)
             else:
                 self.print('pass')
-                    
+
         for hndlr in node.handlers:
             self.visit(hndlr)
 
@@ -744,7 +744,7 @@ class SourceGen(ExprSourceGen):
                     self.visit(stmnt)
             else:
                 self.print('pass')
-                
+
     @visitExceptHandler.py3op
     def visitExceptHandler(self, node):
         self.print('except')
@@ -760,8 +760,8 @@ class SourceGen(ExprSourceGen):
         with self.indenter:
             for stmnt in node.body:
                 self.visit(stmnt)
-                
-                
+
+
     def visitTryFinally(self, node):
         for item in node.body:
             self.visit(item)
@@ -771,7 +771,7 @@ class SourceGen(ExprSourceGen):
         with self.indenter:
             for item in node.finalbody:
                 self.visit(item)
-    
+
     @py2op
     def visitClassDef(self, node):
 
@@ -820,7 +820,7 @@ class SourceGen(ExprSourceGen):
                     base = bases.pop(0)
                     self.print(", {0:node}", base)
             keywords = list(node.keywords)
-            
+
             if keywords:
                 if i: self.print(', ')
                 i += 1
@@ -829,7 +829,7 @@ class SourceGen(ExprSourceGen):
                 while keywords:
                     base = keywords.pop(0)
                     self.print(", {0:node}", keyword)
-            
+
             if node.starargs:
                 if i: self.print(', ')
                 i += 1
@@ -839,7 +839,7 @@ class SourceGen(ExprSourceGen):
                 if i: self.print(', ')
                 i += 1
                 self.print("*{0:node}", node.kwargs)
-                
+
             self.print(')')
 
             self.print(":")
@@ -854,7 +854,7 @@ class SourceGen(ExprSourceGen):
 def python_source(ast, file=sys.stdout):
     '''
     Generate executable python source code from an ast node.
-      
+
     :param ast: ast node
     :param file: file to write output to.
     '''
@@ -865,13 +865,10 @@ def python_source(ast, file=sys.stdout):
 def dump_python_source(ast):
     '''
     :return: a string containing executable python source code from an ast node.
-      
+
     :param ast: ast node
     :param file: file to write output to.
     '''
     gen = SourceGen()
     gen.visit(ast)
     return gen.dumps()
-
-
-

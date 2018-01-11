@@ -4,9 +4,9 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 #include <string>
-#include <sframe_query_engine/operators/operator_properties.hpp> 
 #include <sframe_query_engine/operators/operator_properties.hpp>
-#include <sframe_query_engine/operators/all_operators.hpp> 
+#include <sframe_query_engine/operators/operator_properties.hpp>
+#include <sframe_query_engine/operators/all_operators.hpp>
 #include <sframe_query_engine/planning/planner_node.hpp>
 #include <sframe_query_engine/query_engine_lock.hpp>
 #include <dot_graph_printer/dot_graph.hpp>
@@ -16,7 +16,7 @@ namespace turi {
 namespace query_eval {
 
 template <template <planner_node_type PType> class FieldExtractionVisitor,
-          class RetType, class... CallArgs> 
+          class RetType, class... CallArgs>
 RetType extract_field(planner_node_type ptype, CallArgs... call_args) {
 
   switch(ptype) {
@@ -57,7 +57,7 @@ RetType extract_field(planner_node_type ptype, CallArgs... call_args) {
       return RetType();
   }
 
-  return RetType(); 
+  return RetType();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,17 +76,17 @@ std::vector<flex_type_enum> infer_planner_node_type(pnode_ptr pnode) {
   }
 
   std::vector<flex_type_enum> retval
-      = extract_field<visitor_infer_type, std::vector<flex_type_enum> >(pnode->operator_type, pnode); 
+      = extract_field<visitor_infer_type, std::vector<flex_type_enum> >(pnode->operator_type, pnode);
 
   if(!retval.empty())
     pnode->any_operator_parameters["__type_memo__"] = retval;
-  
+
   return retval;
-}; 
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <planner_node_type PType> struct visitor_infer_length { 
+template <planner_node_type PType> struct visitor_infer_length {
   static int64_t get(pnode_ptr p) {
     return operator_impl<PType>::infer_length(p);
   }
@@ -94,7 +94,7 @@ template <planner_node_type PType> struct visitor_infer_length {
 
 int64_t infer_planner_node_length(pnode_ptr pnode) {
   std::lock_guard<recursive_mutex> GLOBAL_LOCK(global_query_lock);
-  
+
   if (pnode->any_operator_parameters.count("__length_memo__")) {
     return pnode->any_operator_parameters["__length_memo__"].as<int64_t>();
   }
@@ -103,7 +103,7 @@ int64_t infer_planner_node_length(pnode_ptr pnode) {
 
   if (retval != -1)
     pnode->any_operator_parameters["__length_memo__"] = retval;
-  
+
   return retval;
 }
 
@@ -118,7 +118,7 @@ size_t infer_planner_node_num_output_columns(pnode_ptr pnode) {
 static void _fill_dependency_set(pnode_ptr tip, std::set<pnode_ptr>& seen_nodes) {
 
   if(!seen_nodes.count(tip)) {
-    seen_nodes.insert(tip); 
+    seen_nodes.insert(tip);
 
     for(pnode_ptr input : tip->inputs) {
       _fill_dependency_set(input, seen_nodes);
@@ -126,7 +126,7 @@ static void _fill_dependency_set(pnode_ptr tip, std::set<pnode_ptr>& seen_nodes)
   }
 }
 
-/** Returns the number of nodes in this planning graph, including pnode. 
+/** Returns the number of nodes in this planning graph, including pnode.
  */
 size_t infer_planner_node_num_dependency_nodes(std::shared_ptr<planner_node> pnode) {
   std::lock_guard<recursive_mutex> GLOBAL_LOCK(global_query_lock);
@@ -140,21 +140,21 @@ size_t infer_planner_node_num_dependency_nodes(std::shared_ptr<planner_node> pno
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <planner_node_type PType> struct visitor_planner_to_operator { 
+template <planner_node_type PType> struct visitor_planner_to_operator {
   static std::shared_ptr<query_operator> get(pnode_ptr p) {
     return operator_impl<PType>::from_planner_node(p);
   }
 };
 
 std::shared_ptr<query_operator> planner_node_to_operator(pnode_ptr pnode) {
-  
+
   return extract_field<visitor_planner_to_operator,
       std::shared_ptr<query_operator> >(pnode->operator_type, pnode);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <planner_node_type PType> struct visitor_get_name { 
+template <planner_node_type PType> struct visitor_get_name {
   static std::string get() {
     return operator_impl<PType>::name();
   }
@@ -168,9 +168,9 @@ std::string planner_node_type_to_name(planner_node_type ptype) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/**  Get the type of the node from the name. 
+/**  Get the type of the node from the name.
  */
-planner_node_type planner_node_name_to_type(const std::string& name) { 
+planner_node_type planner_node_name_to_type(const std::string& name) {
 
   static std::map<std::string, planner_node_type> name_to_type_map;
 
@@ -187,12 +187,12 @@ planner_node_type planner_node_name_to_type(const std::string& name) {
     ASSERT_MSG(false, (std::string("Operator name ") + name + " not found.").c_str());
   }
 
-  return it->second; 
+  return it->second;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <planner_node_type PType> struct visitor_get_attributes { 
+template <planner_node_type PType> struct visitor_get_attributes {
   static query_operator_attributes get() {
     return operator_impl<PType>::attributes();
   }
@@ -270,20 +270,20 @@ static size_t _propagate_parallel_slicing(
 
   auto it = visited.find(n);
   if(it != visited.end())
-    return it->second; 
-  
+    return it->second;
+
   if(is_source_node(n)) {
     return 1;
   }
-  
+
   bool linear = is_linear_transform(n);
   bool sublinear = is_sublinear_transform(n);
   if(linear || sublinear) {
     ASSERT_FALSE(n->inputs.empty());
-    
+
     size_t input_consumption = _propagate_parallel_slicing(n->inputs.front(), visited, counter);
     if(input_consumption == size_t(-1))
-      return size_t(-1); 
+      return size_t(-1);
 
     for(size_t i = 1; i < n->inputs.size(); ++i) {
       size_t i_c = _propagate_parallel_slicing(n->inputs[i], visited, counter);
@@ -303,22 +303,22 @@ static size_t _propagate_parallel_slicing(
   }
 
 
-  // This node isn't something we know about. 
-  return size_t(-1); 
+  // This node isn't something we know about.
+  return size_t(-1);
 }
 
 /** Returns true if the output of this node can be parallel sliceable
- *  by the sources on this block, and false otherwise. 
+ *  by the sources on this block, and false otherwise.
  */
 bool is_parallel_slicable(const pnode_ptr& n) {
   std::map<pnode_ptr, size_t> memoizer;
   size_t counter = 1;
 
-  return _propagate_parallel_slicing(n, memoizer, counter) != size_t(-1); 
+  return _propagate_parallel_slicing(n, memoizer, counter) != size_t(-1);
 }
 
 /** Returns a set of integers giving the different parallel slicable
- *  units for the inputs of a particular node. If 
+ *  units for the inputs of a particular node. If
  */
 std::vector<size_t> get_parallel_slicable_codes(const pnode_ptr& n) {
   std::map<pnode_ptr, size_t> memoizer;
@@ -326,10 +326,10 @@ std::vector<size_t> get_parallel_slicable_codes(const pnode_ptr& n) {
 
   std::vector<size_t> codes(n->inputs.size());
   for(size_t i = 0; i < codes.size(); ++i) {
-    codes[i] = _propagate_parallel_slicing(n, memoizer, counter); 
+    codes[i] = _propagate_parallel_slicing(n, memoizer, counter);
   }
 
-  return codes; 
+  return codes;
 }
 
 bool _is_linear_graph(const pnode_ptr& n, std::map<pnode_ptr, bool>& memo) {
@@ -485,7 +485,7 @@ static dot_graph& recursive_print_impl(const std::shared_ptr<planner_node>& node
   bool added = graph.add_vertex(vid, name);
   // return if the vertex has already been added
   if (!added) return graph;
-  
+
   for (auto input : node->inputs) {
     std::string srcvid = std::to_string((ptrdiff_t)(input.get()));
     graph.add_edge(srcvid, vid);

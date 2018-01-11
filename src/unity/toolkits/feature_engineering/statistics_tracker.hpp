@@ -17,7 +17,7 @@
 
 namespace turi {
 
-/**  
+/**
  *
  * Parallel statistics(mean) tracker
  *
@@ -35,8 +35,8 @@ namespace turi {
  * for (const flexible_type& v: sa.range_iterator() {
  *   tracker.insert_or_update(v);
  * }
- * 
- * // Finalize mapping 
+ *
+ * // Finalize mapping
  * tracker.finalize();
  *
  * Lookups
@@ -46,7 +46,7 @@ namespace turi {
  *  size_t counts = tracker.lookup_counts(v); // Returns 0 if not present.
  *
  *  flexible_type v = tracker.inverse_lookup(1) // Fails if index doesn't exist.
- * 
+ *
  * Parallel construction
  * -----------------------
  *
@@ -63,8 +63,8 @@ namespace turi {
  *    for (const flexible_type& k: sa.range_iterator(start_idx, end_idx) {
  *      tracker.insert_or_update(k,1,thread_id);
  *    }
- * 
- * // Finalize 
+ *
+ * // Finalize
  * tracker.finalize();
  *
  *
@@ -79,7 +79,7 @@ class EXPORT statistics_tracker {
    * \param[in] column_name Column name for display.
    *
    */
-  statistics_tracker( const std::string _column_name = "") :  
+  statistics_tracker( const std::string _column_name = "") :
                     column_name(_column_name) {
   }
 
@@ -90,14 +90,14 @@ class EXPORT statistics_tracker {
   statistics_tracker(const statistics_tracker&) = delete;
 
 
-  /** 
-   * Initialize the index mapping and setup. Should be called before 
+  /**
+   * Initialize the index mapping and setup. Should be called before
    * starting the map.
    */
   void initialize();
 
-  /** 
-   * Insert 
+  /**
+   * Insert
    *
    * \param[in] key       Flexible type.
    * \param[in] value     Flexible type.
@@ -106,7 +106,7 @@ class EXPORT statistics_tracker {
    */
   void insert_or_update(const flexible_type& key, flexible_type value,size_t thread_idx = 0) GL_HOT;
 
-  /** 
+  /**
    * Returns the index associated with the value.
    *
    *  \param[in] value Search for the value.
@@ -114,7 +114,7 @@ class EXPORT statistics_tracker {
    */
   size_t lookup(const flexible_type& value) const;
 
-  /** 
+  /**
    * Returns the counts associated with the value.
    *
    *  \param[in] value Search for the value.
@@ -122,7 +122,7 @@ class EXPORT statistics_tracker {
    */
   size_t lookup_counts(const flexible_type& value) const;
 
-  /** 
+  /**
    * Returns the counts associated with the value.
    *
    *  \param[in] value Search for the value.
@@ -130,14 +130,14 @@ class EXPORT statistics_tracker {
    */
   flex_float lookup_means(const flexible_type& value) const;
 
-  /** 
-   * Finalize by dropping indices that dont meet 
+  /**
+   * Finalize by dropping indices that dont meet
    * - Count requirement i.e count >= threshold.
    * - Topk requirement.
    */
   void finalize(size_t num_examples);
 
-  /** 
+  /**
    * Returns the "value" associated with the index.
    *
    * \param[\in] idx  Index associated with the feature value.
@@ -163,7 +163,7 @@ class EXPORT statistics_tracker {
     return keys;
   }
 
-  /** 
+  /**
    * Returns the current version used for the serialization.
    */
   size_t get_version() const;
@@ -194,7 +194,7 @@ class EXPORT statistics_tracker {
   std::vector<size_t> counts;
   std::vector<flex_float> means;
   std::vector<size_t> missing;
-  std::vector<flexible_type> keys; 
+  std::vector<flexible_type> keys;
 
   // Map(value : index)
   hopscotch_map<hash_value, size_t> index_lookup;
@@ -203,7 +203,7 @@ class EXPORT statistics_tracker {
   // Private helper functions.
   // ------------------------------------------------------------------------
 
-  /** 
+  /**
    * Validate feature types.
    */
   void valdidate_types(const flexible_type& value) const;

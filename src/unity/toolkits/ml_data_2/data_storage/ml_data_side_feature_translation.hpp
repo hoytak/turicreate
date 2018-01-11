@@ -31,7 +31,7 @@ static inline void append_raw_to_entry_row(
     entry_value_iterator row_block_ptr,
     std::vector<EntryType>& x_out,
     size_t column_index_offset) {
-  
+
   read_ml_data_row(
       rm,
 

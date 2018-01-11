@@ -34,7 +34,7 @@ struct libtest_trace_cfg libtest_debug_config;
 static time_t epoch_offset; /* for test time tracing */
 static int    known_offset; /* for test time tracing */
 
-static 
+static
 void libtest_debug_dump(const char *timebuf, const char *text, FILE *stream,
                         const unsigned char *ptr, size_t size, int nohex)
 {
@@ -143,4 +143,3 @@ int libtest_debug_cb(CURL *handle, curl_infotype type,
   libtest_debug_dump(timebuf, text, stderr, data, size, trace_cfg->nohex);
   return 0;
 }
-

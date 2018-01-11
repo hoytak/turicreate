@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-ObjectIdentifier::ObjectIdentifier() : 
+ObjectIdentifier::ObjectIdentifier() :
     m_keyHasBeenSet(false),
     m_versionIdHasBeenSet(false)
 {
 }
 
-ObjectIdentifier::ObjectIdentifier(const XmlNode& xmlNode) : 
+ObjectIdentifier::ObjectIdentifier(const XmlNode& xmlNode) :
     m_keyHasBeenSet(false),
     m_versionIdHasBeenSet(false)
 {

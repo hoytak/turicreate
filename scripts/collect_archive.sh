@@ -44,7 +44,7 @@ fi
 echo "Export Map: $exportmap"
 command=$@
 
-# What we are going to do here is to merge all the libraries in 
+# What we are going to do here is to merge all the libraries in
 # collect_archives.txt ($archive) into a single library called collect.a
 #
 # We are then going to rewrite the link command to remove all the occurances
@@ -85,7 +85,7 @@ for i in "${arlist[@]}"; do
         echo "Unpacking $i"
         dir=`basename $i`
         # if directory exists and directory is newer than the file,
-        # ignore. This allows for some optimization later. But now, 
+        # ignore. This allows for some optimization later. But now,
         # we actually delete all the unpacked archive directories so this
         # doesn't actually do anothing here.
         #
@@ -108,7 +108,7 @@ popd
 # Essentially what we are going to do, is to take the original command
 # ex:
 # g++ pika.a chu.a cow.a chicken.a -lalpha -lbeta
-# 
+#
 # And then say  collect_archives.txt contains chu.a and chicken.a
 # We will then remove chu.a and chicken.a from the command line,
 # and replace the first of them with the replace_command. i.e.
@@ -160,7 +160,7 @@ for i in $command; do
       options="$options $replace_command"
       first_matching_archive_found=1
     fi
-  else 
+  else
     options="$options $i"
   fi
 done
@@ -184,7 +184,7 @@ if [[ $OSTYPE != darwin* ]]; then
         if [[ $first == 1 ]]; then
                 excludelibs=""
         fi
-else 
+else
         excludelibs=""
 fi
 # reissue command

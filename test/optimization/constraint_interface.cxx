@@ -34,7 +34,7 @@ struct constraint_interface_test  {
   DenseVector ub;
 
   public:
-    
+
     constraint_interface_test() {
 
       size_t variables = 10;
@@ -53,7 +53,7 @@ struct constraint_interface_test  {
       solution_orthant << 1 <<  0 << 2 <<  0 << 3 <<  0 << 4 <<  0 << 5 <<  0;
       solution_box  << 1 <<  0 << 1 <<  0 << 1 <<  0 << 1 <<  0 << 1 << 0;
 
-      
+
       std::shared_ptr<non_negative_orthant> non_negative;
       non_negative.reset(new non_negative_orthant(variables));
 
@@ -107,7 +107,7 @@ struct constraint_interface_test  {
 
 
     }
-    
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_constraint_interface_test, constraint_interface_test)

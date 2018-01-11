@@ -67,8 +67,8 @@ function set_title(canvas, title){
     canvas.svg.append("text")
 		    .attr("x", width/2)
 		    .attr("y", -20)
-        .attr("text-anchor", "middle")  
-        .style("font-size", 34) 
+        .attr("text-anchor", "middle")
+        .style("font-size", 34)
 		    .attr("font-weight", 500)
 		    .attr("font-family", "Helvetica Neue")
         .text(title);
@@ -80,8 +80,8 @@ function set_yaxis_title(canvas, title){
     canvas.svg.append("text")
 		    .attr("x", -height/2)
 		    .attr("y", -20)
-        .attr("text-anchor", "middle")  
-        .style("font-size", 30) 
+        .attr("text-anchor", "middle")
+        .style("font-size", 30)
 		    .attr("font-weight", 400)
 		    .attr("transform", "rotate(-90)")
 		    .attr("font-family", "Helvetica Neue")
@@ -94,8 +94,8 @@ function set_xaxis_title(canvas, title){
     canvas.svg.append("text")
 		    .attr("x", width/2)
 		    .attr("y", height + 40)
-        .attr("text-anchor", "middle")  
-        .style("font-size", 30) 
+        .attr("text-anchor", "middle")
+        .style("font-size", 30)
 		    .attr("font-weight", 400)
 		    .attr("font-family", "Helvetica Neue")
         .text(title);
@@ -110,7 +110,7 @@ function plot_point(canvas, color, x, y){
 		   .attr("opacity", 0.6)
 		   .attr("r", 7.0)
 		   .attr("cx", canvas.xScale(x))
-    	 .attr("cy", canvas.yScale(y));
+	 .attr("cy", canvas.yScale(y));
     return canvas;
 }
 
@@ -159,7 +159,7 @@ function add_legend_point(canvas, name, color, xloc, yloc, count){
 	    .attr("y", height * yloc - count * 50)
 	    .attr("dy", ".2em")
 	    .style("text-anchor", "start")
-      .attr("font-size", 28) 
+      .attr("font-size", 28)
 	    .attr("font-weight", 300)
 	    .attr("font-family", "Helvetica Neue")
 	    .text(name)
@@ -169,7 +169,7 @@ function add_legend_point(canvas, name, color, xloc, yloc, count){
 		   .attr("opacity", 0.6)
 		   .attr("r", 7.0)
 	    .attr("cx", xloc * width - 40)
-  		.attr("cy", yloc * height - 50 * count);
+		.attr("cy", yloc * height - 50 * count);
   return canvas;
 }
 
@@ -180,7 +180,7 @@ function add_legend_line(canvas, name, xloc, yloc){
       .attr("y", yloc * height )
       .attr("dy", ".2em")
       .style("text-anchor", "start")
-      .attr("font-size", 28) 
+      .attr("font-size", 28)
       .attr("font-weight", 300)
       .attr("font-family", "Helvetica Neue")
       .text(name)

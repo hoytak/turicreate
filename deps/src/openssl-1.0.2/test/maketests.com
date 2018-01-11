@@ -315,7 +315,7 @@ $!
 $     CREATE 'OPT_FILE'
 $DECK
 !
-! Default System Options File To Link Against 
+! Default System Options File To Link Against
 ! The Sharable VAX C Runtime Library.
 !
 SYS$SHARE:VAXCRTL.EXE /SHAREABLE
@@ -344,7 +344,7 @@ $!
 $     CREATE 'OPT_FILE'
 $DECK
 !
-! Default System Options File To Link Against 
+! Default System Options File To Link Against
 ! The Sharable C Runtime Library.
 !
 GNU_CC:[000000]GCCLIB.OLB /LIBRARY
@@ -379,7 +379,7 @@ $!
 $       CREATE 'OPT_FILE'
 $DECK
 !
-! Default System Options File To Link Against 
+! Default System Options File To Link Against
 ! The Sharable DEC C Runtime Library.
 !
 SYS$SHARE:DECC$SHR.EXE /SHAREABLE
@@ -394,7 +394,7 @@ $!
 $       CREATE 'OPT_FILE'
 $DECK
 !
-! Default System Options File For non-VAX To Link Against 
+! Default System Options File For non-VAX To Link Against
 ! The Sharable C Runtime Library.
 !
 SYS$SHARE:CMA$OPEN_LIB_SHR.EXE /SHAREABLE
@@ -415,7 +415,7 @@ $ ENDIF
 $!
 $!  Tell The User What Linker Option File We Are Using.
 $!
-$ WRITE SYS$OUTPUT "Using Linker Option File ",OPT_FILE,"."	
+$ WRITE SYS$OUTPUT "Using Linker Option File ",OPT_FILE,"."
 $!
 $! Time To RETURN.
 $!
@@ -486,7 +486,7 @@ $!  P1 Is NODEBUG, So Compile Without Debugger Information.
 $!
 $   DEBUGGER  = "NODEBUG"
 $   LINKMAP = "NOMAP"
-$   TRACEBACK = "NOTRACEBACK" 
+$   TRACEBACK = "NOTRACEBACK"
 $   GCC_OPTIMIZE = "OPTIMIZE"
 $   CC_OPTIMIZE = "OPTIMIZE"
 $   WRITE SYS$OUTPUT "No Debugger Information Will Be Produced During Compile."
@@ -599,7 +599,7 @@ $       WRITE SYS$OUTPUT -
 $       WRITE SYS$OUTPUT -
          "    64=ARGV  :  Compile with 64-bit (long) pointers (ARGV)."
 $       WRITE SYS$OUTPUT ""
-$! 
+$!
 $!      Time To EXIT.
 $!
 $       EXIT
@@ -636,7 +636,7 @@ $!
 $!  Check To See If We Have VAXC Or DECC.
 $!
 $     IF (ARCH.NES."VAX").OR.(F$TRNLNM("DECC$CC_DEFAULT").NES."")
-$     THEN 
+$     THEN
 $!
 $!      Looks Like DECC, Set To Use DECC.
 $!

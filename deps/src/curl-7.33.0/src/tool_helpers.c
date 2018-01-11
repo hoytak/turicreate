@@ -75,4 +75,3 @@ int SetHTTPrequest(struct Configurable *config, HttpReq req, HttpReq *store)
   warnf(config, "You can only select one HTTP request!\n");
   return 1;
 }
-

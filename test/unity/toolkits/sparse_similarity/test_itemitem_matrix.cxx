@@ -51,7 +51,7 @@ struct test_itemitem_matrix  {
     TS_ASSERT_EQUALS(X.cols(), m);
 
     // Ensure things are contiguous
-    size_t *next_ptr = &(X(0,1));    
+    size_t *next_ptr = &(X(0,1));
     for(size_t i = 0; i < n; ++i) {
       for(size_t j = i + 1; j < m; ++j) {
         DASSERT_TRUE(next_ptr == &(X(i,j)));
@@ -59,7 +59,7 @@ struct test_itemitem_matrix  {
       }
     }
 
-    // Now set them to a value. 
+    // Now set them to a value.
     for(size_t i = 0; i < n; ++i) {
       for(size_t j = i + 1; j < m; ++j) {
         X(i, j) = hash64(i, j);
@@ -73,19 +73,19 @@ struct test_itemitem_matrix  {
       }
     }
 
-    // Make sure the apply all works. 
+    // Make sure the apply all works.
     std::vector<int> hit(n * m, 0);
-    
+
     X.apply_all([&](size_t i, size_t j, size_t value) {
         DASSERT_LT(i, n);
         DASSERT_LT(j, m);
         DASSERT_LT(i, j);
-        
+
         ++hit[i * m + j];
         DASSERT_EQ(value, hash64(i, j));
       });
 
-    // Now, check the hit vector. 
+    // Now, check the hit vector.
     for(size_t i = 0; i < n; ++i) {
       for(size_t j = 0; j < m; ++j) {
         if(i < j) {
@@ -116,7 +116,7 @@ struct test_itemitem_matrix  {
   void test_nonsymmetric_19_20() {
     _test_basic_access(19, 20);
   }
-  
+
   void test_parallel_access() {
     dense_triangular_itemitem_container<size_t> X(19, 43);
 

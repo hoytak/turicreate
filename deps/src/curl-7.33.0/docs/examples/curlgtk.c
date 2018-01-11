@@ -103,4 +103,3 @@ int main(int argc, char **argv)
   gdk_threads_leave();
   return 0;
 }
-

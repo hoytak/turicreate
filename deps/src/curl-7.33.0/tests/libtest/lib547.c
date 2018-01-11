@@ -126,4 +126,3 @@ test_cleanup:
 
   return (int)res;
 }
-

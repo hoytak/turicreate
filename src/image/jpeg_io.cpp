@@ -8,7 +8,7 @@
 //
 // On windows:
 // logger include pthread which includes windows.h which typedefs INT32
-// 
+//
 // jpeglib.h also typedefs INT32
 //
 // jpeglib.h however puts some guard protection to avoid redefining INT32

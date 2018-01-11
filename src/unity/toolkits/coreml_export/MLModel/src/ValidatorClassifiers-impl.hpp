@@ -37,18 +37,18 @@ namespace CoreML {
             case U::CLASSLABELS_NOT_SET:
                 return Result(ResultType::INVALID_MODEL_PARAMETERS, "Classifier models must provide class labels.");
         }
-        
+
         const Specification::ModelDescription& interface = model.description();
-        
+
         // Validate feature descriptions
         Result result = validateFeatureDescriptions(interface);
         if (!result.good()) {
             return result;
         }
-        
+
         const auto& predictedFeatureName = interface.predictedfeaturename();
         const auto& probOutputName = interface.predictedprobabilitiesname();
-        
+
         if (predictedFeatureName == "") {
             return Result(ResultType::INVALID_MODEL_INTERFACE,
                           "Specification is missing classifier predictedFeatureName");
@@ -60,7 +60,7 @@ namespace CoreML {
                 return result;
             }
         }
-        
+
         if (probOutputName != "") {
             // TODO : validate array length below
             // and value type (must be double? different for different classifiers?)
@@ -73,10 +73,10 @@ namespace CoreML {
                 return result;
             }
         }
-        
+
         return Result();
     }
-  
+
 
 
 }

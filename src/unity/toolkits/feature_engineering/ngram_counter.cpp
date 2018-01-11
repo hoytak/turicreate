@@ -16,7 +16,7 @@ namespace feature_engineering {
 
 /**
  * Update a given ngram dictionary with new ngrams from the input token list
- * 
+ *
  * \param[in] ngram_dict      A dictionary mapping from string to counts (could be float or int type)
  * \param[in] word_list       A list of words/tokens to count
  * \param[in] n               The length of the ngram
@@ -32,15 +32,15 @@ void update_ngram_dictionary(std::unordered_map<flex_string, flexible_type>& ngr
 
   for (size_t k = 0; k < word_list.size()-n+1; ++k) {
     // Compute size, preallocate, and form the ngram
-    size_t ngram_len = word_list[k].size(); 
-    for(size_t i = 1; i < n; ++i) 
-       ngram_len += word_list[k+i].get<flex_string>().size() + 1;  
-    std::string ngram_str; 
+    size_t ngram_len = word_list[k].size();
+    for(size_t i = 1; i < n; ++i)
+       ngram_len += word_list[k+i].get<flex_string>().size() + 1;
+    std::string ngram_str;
     ngram_str.reserve(ngram_len);
-  
+
     ngram_str += word_list[k].get<flex_string>();
     for(size_t i = 1; i < n; ++i) {
-      ngram_str += " "; 
+      ngram_str += " ";
       ngram_str += word_list[k+i].get<flex_string>();
     }
 
@@ -119,7 +119,7 @@ flexible_type word_ngram_counter_apply(const flexible_type& input,
       for(const auto& elem: vv) {
         // Check that each element a string
         if (elem.get_type() != flex_type_enum::STRING)
-          log_and_throw("Invalid type. List input to NGramCounter must contain only strings.");          
+          log_and_throw("Invalid type. List input to NGramCounter must contain only strings.");
 
         flex_list tokens_list = transform_utils::tokenize_string(elem.get<flex_string>(), string_filters, to_lower);
 
@@ -141,7 +141,7 @@ flexible_type word_ngram_counter_apply(const flexible_type& input,
 
 /**
  * Update a given ngram dictionary with new ngrams from the input token list
- * 
+ *
  * \param[in] ngram_dict      A dictionary mapping from string to counts (could be float or int type)
  * \param[in] n               The length of the ngram
  * \param[in] weight          An integer or float indicating the weight/count of each ngram
@@ -272,7 +272,7 @@ flexible_type character_ngram_counter_apply(const flexible_type& input,
       for(const auto& elem: vv) {
         // Check that each element a string
         if (elem.get_type() != flex_type_enum::STRING)
-          log_and_throw("Invalid type. List input to NGramCounter must contain only strings.");          
+          log_and_throw("Invalid type. List input to NGramCounter must contain only strings.");
 
         update_character_ngram_dictionary(
           ret_count, elem.get<flex_string>(), n, ignore_punct, ignore_space, to_lower, 1);
@@ -294,55 +294,55 @@ flexible_type character_ngram_counter_apply(const flexible_type& input,
 /**
  * Initialize the options
  */
-void ngram_counter::init_options(const std::map<std::string, 
+void ngram_counter::init_options(const std::map<std::string,
                              flexible_type>&_options){
   // Can only be called once.
   DASSERT_TRUE(options.get_option_info().size() == 0);
 
   options.create_integer_option(
-      "n", 
-      "N", 
+      "n",
+      "N",
       2,
       1,
       std::numeric_limits<int>::max(),
       false);
 
   options.create_boolean_option(
-      "to_lower", 
-      "Convert all capitalized letters to lower case", 
+      "to_lower",
+      "Convert all capitalized letters to lower case",
       true,
       false);
 
   options.create_string_option(
-      "ngram_type", 
-      "Type of ngram (word or character)", 
+      "ngram_type",
+      "Type of ngram (word or character)",
       "word",
       false);
 
   options.create_boolean_option(
-      "ignore_punct", 
-      "Ignore punctuation characters in character ngrams", 
+      "ignore_punct",
+      "Ignore punctuation characters in character ngrams",
       true,
       false);
 
   options.create_boolean_option(
-      "ignore_space", 
-      "Ignore space characters in character ngrams", 
+      "ignore_space",
+      "Ignore space characters in character ngrams",
       true,
       false);
 
   options.create_string_option(
      "output_column_prefix",
      "Prefix of ngram_counter output column",
-      flex_undefined()); 
+      flex_undefined());
 
   options.create_flexible_type_option(
      "delimiters",
      "List of delimiters for tokenization",
      flex_list({"\r", "\v", "\n", "\f", "\t", " ",
-                "!", "#", "$", "%", "&", "'", "(", ")", 
-                "*", "+", ",", "-", ".", "/", ":", ";", 
-                "<", "=", ">", "?", "@", "[", "\\", "]", 
+                "!", "#", "$", "%", "&", "'", "(", ")",
+                "*", "+", ",", "-", ".", "/", ":", ";",
+                "<", "=", ">", "?", "@", "[", "\\", "]",
                 "^", "_", "`", "{", "|", "}", "~"}),
      false);
 
@@ -384,9 +384,9 @@ void ngram_counter::save_impl(turi::oarchive& oarc) const {
  * Load the object using Turi's iarc.
  */
 void ngram_counter::load_version(turi::iarchive& iarc, size_t version){
-  // State  
+  // State
   variant_deep_load(state, iarc);
-  
+
   // Everything else
   iarc >> options
        >> n
@@ -414,7 +414,7 @@ void ngram_counter::set_string_filters(){
     string_filters = transform_utils::ptb_filters;
     return;
   }
-  
+
   if (delimiters.get_type() != flex_type_enum::LIST) {
     log_and_throw("Invalid type. "
         "NGramCounter delimiter must be a list of single-character strings.");
@@ -426,7 +426,7 @@ void ngram_counter::set_string_filters(){
   for (auto elem = delimiter_list.begin(); elem != delimiter_list.end(); ++elem) {
     if (elem->get_type() != flex_type_enum::STRING)
       log_and_throw("Invalid type. NGramCounter delimiters must be strings.");
-    
+
     all_delims += elem->get<flex_string>().substr(0,1);
   }
 
@@ -466,7 +466,7 @@ void ngram_counter::init_transformer(
   ngram_type = _options.at("ngram_type").get<flex_string>();
 
   unprocessed_features = _options.at("features");
-  exclude = _options.at("exclude"); 
+  exclude = _options.at("exclude");
   if ((int) exclude == 1) {
     state["features"] = to_variant(FLEX_UNDEFINED);
     state["excluded_features"] = to_variant(unprocessed_features);
@@ -489,16 +489,16 @@ void ngram_counter::fit(gl_sframe data){
   // Get the set of features to work with.
   feature_columns = transform_utils::get_column_names(
                             data, exclude, unprocessed_features);
-  
+
 
   // Select the features of the right type.
   feature_columns = transform_utils::select_valid_features(data, feature_columns,
-                      {flex_type_enum::STRING, 
-                       flex_type_enum::LIST, 
+                      {flex_type_enum::STRING,
+                       flex_type_enum::LIST,
                        flex_type_enum::DICT});
 
   transform_utils::validate_feature_columns(data.column_names(), feature_columns);
-  
+
   // Store feature types and cols.
   feature_types.clear();
   for (const auto& f: feature_columns) {
@@ -517,7 +517,7 @@ void ngram_counter::fit(gl_sframe data){
 gl_sframe ngram_counter::transform(gl_sframe data){
   DASSERT_TRUE(options.get_option_info().size() > 0);
 
-  //Check if fitting has already ocurred. 
+  //Check if fitting has already ocurred.
   if (!fitted){
     log_and_throw("The NGramCounter must be fitted before .transform() is called.");
   }
@@ -539,7 +539,7 @@ gl_sframe ngram_counter::transform(gl_sframe data){
 
     gl_sarray feat = data[f];
 
-    // Get a unique output column column name 
+    // Get a unique output column column name
     flexible_type output_column_prefix_opt = variant_get_value<flexible_type>(state.at("output_column_prefix"));
 
     std::string output_column_name;
@@ -583,5 +583,5 @@ gl_sframe ngram_counter::transform(gl_sframe data){
 }
 
 } // feature_engineering
-} // sdk_model 
+} // sdk_model
 } // turicreate

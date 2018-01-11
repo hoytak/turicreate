@@ -30,24 +30,24 @@ static const size_t MAX_DOUBLES_PER_BLOCK = 512;
 
 /**
  * Encodes a collection of numbers in data, skipping all UNDEFINED values.
- * It simply loops through the data, collecting a block of up to 
+ * It simply loops through the data, collecting a block of up to
  * MAX_INTEGERS_PER_BLOCK numbers and calls frame_of_reference_encode_128()
  * on it.
  *
  * \note The coding does not store the number of values stored. The decoder
  * \ref decode_number() requires the number of values to decode correctly.
  */
-void encode_number(block_info& info, 
-                   oarchive& oarc, 
+void encode_number(block_info& info,
+                   oarchive& oarc,
                    const std::vector<flexible_type>& data);
 
 /**
- * Decodes a collection of numbers into 'data'. Entries in data which are 
+ * Decodes a collection of numbers into 'data'. Entries in data which are
  * of type flex_type_enum::UNDEFINED will be skipped, and there must be exactly
  * num_undefined number of them. It simply decodes a block using
  * frame_of_reference_decode_128() and fills in data with it.
  *
- * \note We have an explicit implementation here that is equivalent to 
+ * \note We have an explicit implementation here that is equivalent to
  * decode_number_stream for performance reasons since this is a *very* commonly
  * encountered function.
  */
@@ -57,29 +57,29 @@ void decode_number(iarchive& iarc,
 
 /**
  * Encodes a collection of doubles in data, skipping all UNDEFINED values.
- * It simply loops through the data, collecting a block of up to 
+ * It simply loops through the data, collecting a block of up to
  * MAX_INTEGERS_PER_BLOCK numbers and calls frame_of_reference_encode_128()
  * on it.
  *
  * This is the 2nd generation vector decoder. its use is flagged by
- * turning on the block flag BLOCK_ENCODING_EXTENSION. 
+ * turning on the block flag BLOCK_ENCODING_EXTENSION.
  *
  * \note The coding does not store the number of values stored. The decoder
  * \ref decode_number() requires the number of values to decode correctly.
  */
-void encode_double(block_info& info, 
-                   oarchive& oarc, 
+void encode_double(block_info& info,
+                   oarchive& oarc,
                    const std::vector<flexible_type>& data);
 
 /**
- * Decodes a collection of doubles into 'data'. Entries in data which are 
+ * Decodes a collection of doubles into 'data'. Entries in data which are
  * of type flex_type_enum::UNDEFINED will be skipped, and there must be exactly
- * num_undefined number of them. 
+ * num_undefined number of them.
  *
  *
  * This is the 2nd generation floating point encoder. its use is flagged by
- * turning on the block flag BLOCK_ENCODING_EXTENSION. 
- * The format is basically: 
+ * turning on the block flag BLOCK_ENCODING_EXTENSION.
+ * The format is basically:
  * - one byte: encoding format. LEGACY, or INTEGER.
  * If LEGACY:
  *   The old encoder is used
@@ -91,12 +91,12 @@ void decode_double(iarchive& iarc,
                    size_t num_undefined);
 
 /**
- * Decodes a collection of doubles into 'data'. Entries in data which are 
+ * Decodes a collection of doubles into 'data'. Entries in data which are
  * of type flex_type_enum::UNDEFINED will be skipped, and there must be exactly
  * num_undefined number of them. It simply decodes a block using
  * frame_of_reference_decode_128() and fills in data with it.
  *
- * \note We have an explicit implementation here that is equivalent to 
+ * \note We have an explicit implementation here that is equivalent to
  * decode_number_stream for performance reasons since this is a *very* commonly
  * encountered function.
  */
@@ -105,7 +105,7 @@ void decode_double_legacy(iarchive& iarc,
                           size_t num_undefined);
 
 /**
- * Decodes a collection of flexible_type values. The array must be of 
+ * Decodes a collection of flexible_type values. The array must be of
  * contiguous type, but permitting undefined values.
  *
  * See \ref typed_encode() for details.
@@ -127,17 +127,17 @@ bool typed_decode_stream_callback(const block_info& info,
                                   std::function<void(flexible_type)> retcallback);
 
 /**
- * Encodes a collection of flexible_type values. The array must be of 
+ * Encodes a collection of flexible_type values. The array must be of
  * contiguous type, but permitting undefined values.
  *
  * There is a two byte header to the block.
  * - num_types: 1 byte
- *     - if 0, the block is empty. 
+ *     - if 0, the block is empty.
  *     - if 1, the array is of contiguous type (see next byte)
  *     - if 2, the array is of contiguous type, but has missing values.
  * - type: 1 byte.
  * - [undefined bitfield]: if type is 2, this contains a bitfield of
- *   (round_op(#elem / 8) bytes) listing the positions of all the UNDEFINED 
+ *   (round_op(#elem / 8) bytes) listing the positions of all the UNDEFINED
  *   fields)
  * - type specific encoding:
  *     - if integer or float, encode_number() is called
@@ -148,7 +148,7 @@ bool typed_decode_stream_callback(const block_info& info,
  * \note The coding does not store the number of values stored. This is
  * stored in the block_info (block.num_elem)
  */
-void typed_encode(const std::vector<flexible_type>& data, 
+void typed_encode(const std::vector<flexible_type>& data,
                   block_info& info,
                   oarchive& oarc);
 
@@ -210,12 +210,12 @@ static void decode_double_stream(size_t num_elements,
     decode_double_stream_legacy(num_elements, iarc, callback);
     return;
   } else if (reserved == DOUBLE_RESERVED_FLAGS::INTEGER_ENCODING) {
-    decode_number_stream(num_elements, iarc, 
+    decode_number_stream(num_elements, iarc,
                          [=](const flexible_type& val) {
                            flex_float ret = flex_float(val.get<flex_int>());
                            callback(ret);
                          });
-  } 
+  }
 }
 
 
@@ -264,7 +264,7 @@ static void decode_string_stream(size_t num_elements,
  * Decodes num_elements of vectors, calling the callback for each string.
  *
  * This is the 2nd generation vector decoder. its use is flagged by
- * turning on the block flag BLOCK_ENCODING_EXTENSION. 
+ * turning on the block flag BLOCK_ENCODING_EXTENSION.
  */
 template <typename Fn> // Fn is a function like void(flexible_type)
 static void decode_vector_stream(size_t num_elements,
@@ -312,7 +312,7 @@ static void decode_vector_stream(size_t num_elements,
 
 
 /**
- * Decodes a collection of flexible_type values. The array must be of 
+ * Decodes a collection of flexible_type values. The array must be of
  * contiguous type, but permitting undefined values.
  *
  * See \ref typed_encode() for details.
@@ -342,7 +342,7 @@ static bool typed_decode_stream_callback(const block_info& info,
   // only specified if num_undefined > 0
   turi::dense_bitset undefined_bitmap;
 
-  char num_types; 
+  char num_types;
   iarc >> num_types;
   // if it is a multiple type block, we don't perform a type decode
   bool perform_type_decoding = !(info.flags & MULTIPLE_TYPE_BLOCK);
@@ -351,7 +351,7 @@ static bool typed_decode_stream_callback(const block_info& info,
       // empty block
       return true;
     } else if (num_types == 1) {
-      //  one block of contiguous type. 
+      //  one block of contiguous type.
       char c;
       iarc >> c;
       column_type = (flex_type_enum)c;
@@ -381,11 +381,11 @@ static bool typed_decode_stream_callback(const block_info& info,
 
   if (perform_type_decoding) {
     int last_id = 0;
-    auto stream_callback = 
+    auto stream_callback =
         [&](const flexible_type& val) {
           // generate all the undefined
           if (num_undefined) {
-            while(last_id < dsize && 
+            while(last_id < dsize &&
                   undefined_bitmap.get(last_id)) {
               callback(FLEX_UNDEFINED);
               ++last_id;
@@ -396,18 +396,18 @@ static bool typed_decode_stream_callback(const block_info& info,
         };
     size_t elements_to_decode = dsize - num_undefined;
     if (column_type == flex_type_enum::INTEGER) {
-      decode_number_stream(elements_to_decode, iarc, stream_callback); 
+      decode_number_stream(elements_to_decode, iarc, stream_callback);
     } else if (column_type == flex_type_enum::FLOAT) {
       if (info.flags & BLOCK_ENCODING_EXTENSION) {
-        decode_double_stream(elements_to_decode, iarc, stream_callback); 
+        decode_double_stream(elements_to_decode, iarc, stream_callback);
       } else {
-        decode_double_stream_legacy(elements_to_decode, iarc, stream_callback); 
+        decode_double_stream_legacy(elements_to_decode, iarc, stream_callback);
       }
     } else if (column_type == flex_type_enum::STRING) {
-      decode_string_stream(elements_to_decode, iarc, stream_callback); 
+      decode_string_stream(elements_to_decode, iarc, stream_callback);
     } else if (column_type == flex_type_enum::VECTOR) {
-      decode_vector_stream(elements_to_decode, iarc, stream_callback, 
-                           info.flags & BLOCK_ENCODING_EXTENSION); 
+      decode_vector_stream(elements_to_decode, iarc, stream_callback,
+                           info.flags & BLOCK_ENCODING_EXTENSION);
     } else {
       flexible_type_impl::deserializer s{iarc};
       flexible_type ret(column_type);
@@ -422,7 +422,7 @@ static bool typed_decode_stream_callback(const block_info& info,
     }
     // generate the final undefined values
     if (num_undefined) {
-      while(last_id < dsize && 
+      while(last_id < dsize &&
             undefined_bitmap.get(last_id)) {
         callback(FLEX_UNDEFINED);
         ++last_id;

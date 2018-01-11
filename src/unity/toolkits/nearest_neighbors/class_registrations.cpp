@@ -3,7 +3,7 @@
 #include <unity/toolkits/nearest_neighbors/lsh_neighbors.hpp>
 
 namespace turi {
-namespace nearest_neighbors {   
+namespace nearest_neighbors {
 
 
 BEGIN_CLASS_REGISTRATION

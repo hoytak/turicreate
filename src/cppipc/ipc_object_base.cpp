@@ -3,4 +3,3 @@
 namespace cppipc {
   ipc_object_base::~ipc_object_base() {}
 }
-

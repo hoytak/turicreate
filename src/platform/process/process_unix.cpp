@@ -27,7 +27,7 @@ namespace fs = boost::filesystem;
  * The trick however is how to make this reentrant safe.
  *
  * To do so, the autoreap function must unregister the signal handler,
- * add the pid to the list of PIDs to reap, and then re-register the signal 
+ * add the pid to the list of PIDs to reap, and then re-register the signal
  * handler.
  */
 turi::mutex sigchld_handler_lock;
@@ -35,10 +35,10 @@ turi::mutex sigchld_handler_lock;
 // This is an intentional leak of raw pointer because it is used on program termination.
 static std::set<size_t>* __proc_ids_to_reap;
 static std::once_flag __proc_ids_to_reap_initialized;
-static std::set<size_t>& get_proc_ids_to_reap() { 
-  std::call_once(__proc_ids_to_reap_initialized, 
+static std::set<size_t>& get_proc_ids_to_reap() {
+  std::call_once(__proc_ids_to_reap_initialized,
                  []() {
-                  __proc_ids_to_reap = new std::set<size_t>(); 
+                  __proc_ids_to_reap = new std::set<size_t>();
                  });
   return *__proc_ids_to_reap;
 }
@@ -55,7 +55,7 @@ static void sigchld_handler(int sig) {
     }
   }
 }
- 
+
 /**
  * Install the SIGCHLD handler. Should be called
  * with sigchld_handler_lock_acquired
@@ -156,7 +156,7 @@ bool process::popen(const std::string &cmd,
         _exit(1);
       }
       close(child_read_fd);
-      
+
     }
 
     int exec_ret = execvp(&cmd[0], (char**)c_arglist);
@@ -249,7 +249,7 @@ bool process::write_to_child(const void *buf, size_t count) {
     log_and_throw("Cannot write to child, no pipe initialized. "
         "You need to specify open_write_pipe == true.");
 
-  const char* cbuf = (const char*)buf; 
+  const char* cbuf = (const char*)buf;
   while(count > 0) {
     ssize_t cursent = write(m_write_handle, (void*)cbuf, count);
     if (cursent == -1) {

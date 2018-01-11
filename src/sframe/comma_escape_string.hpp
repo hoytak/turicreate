@@ -12,8 +12,8 @@
 namespace turi {
 
 constexpr char replace_char = '\x1F';
- 
-inline void comma_escape_string(const std::string& val, 
+
+inline void comma_escape_string(const std::string& val,
                    std::string& output, size_t& output_len) {
   if (output.size() < 2 * val.size()) {
     output.resize(2 * val.size());
@@ -26,7 +26,7 @@ inline void comma_escape_string(const std::string& val,
      case '\\':
          if (i < val.size() - 1 && (val[i+1] == 'u' || val[i+1] == 'x')) {
            (*cur_out++) = c;
-         }else { 
+         }else {
            (*cur_out++) = '\\';
            (*cur_out++) = c;
          }
@@ -68,11 +68,11 @@ inline void comma_escape_string(const std::string& val,
 }
 
 
-inline void comma_unescape_string(const std::string& val, 
+inline void comma_unescape_string(const std::string& val,
                    std::string& output, size_t& output_len) {
   if (output.size() < val.size()) {
     output.resize(val.size());
-  } 
+  }
   char* cur_out = &(output[0]);
   for (size_t i = 0; i < val.size(); ++i) {
     char c = val[i];
@@ -81,7 +81,7 @@ inline void comma_unescape_string(const std::string& val,
         if (i < val.size() - 1 && (val[i+1] == '\\' )) {
           (*cur_out++) = '\\';
           i++;
-        } 
+        }
         else if (i < val.size() - 1 && (val[i+1] == replace_char )) {
           (*cur_out++) = ',';
           i++;
@@ -110,12 +110,12 @@ inline void comma_unescape_string(const std::string& val,
           (*cur_out++) = '\r';
           i++;
         }
-        else 
+        else
           (*cur_out++) = c;
-        break; 
+        break;
       default:
-        (*cur_out++) = c;  
-    
+        (*cur_out++) = c;
+
     }
   }
   size_t len = cur_out - &(output[0]);

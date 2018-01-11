@@ -14,7 +14,7 @@
 #include <xgboost/src/utils/group_data.h>
 #include "./updater_basemaker-inl.hpp"
 
-// GLC parallel lambda premitive 
+// GLC parallel lambda premitive
 #include <parallel/lambda_omp.hpp>
 #include <parallel/pthread_tools.hpp>
 

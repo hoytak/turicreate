@@ -4,18 +4,18 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 #include <util/cityhash_tc.hpp>
-#include <flexible_type/flexible_type.hpp> 
+#include <flexible_type/flexible_type.hpp>
 #include <logger/assertions.hpp>
 #include <vector>
 
 namespace turi {
 
 uint128_t hash128(const flexible_type& v) {
-  return v.hash128(); 
+  return v.hash128();
 }
 
 uint64_t hash64(const flexible_type& v) {
-  return v.hash(); 
+  return v.hash();
 }
 
 uint128_t hash128(const std::vector<flexible_type>& v) {
@@ -58,4 +58,4 @@ uint64_t hash64_proportion_cutoff(double proportion) {
   return std::min(clip_0, x_half) + std::min(clip_1, x_half);
 }
 
-}; 
+};

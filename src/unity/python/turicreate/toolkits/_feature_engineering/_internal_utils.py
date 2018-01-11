@@ -158,4 +158,3 @@ def pretty_print_list(lst, name = 'features', repr_format=True):
         return "{start}{topk}, ... {last}{end} (total {size} {name})".format(\
                 topk = topk, last = lst[-1], name = name, size = len(lst),
                 start = lst_separator, end = lst_end_separator)
-

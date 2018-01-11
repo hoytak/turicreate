@@ -241,7 +241,7 @@ sframe make_random_sframe(
   std::string base_string = "TESTING STRING!!!  OH YAY!!!!";
 
   uint64_t random_seed = random::fast_uniform<size_t>(0, size_t(-1));
-  
+
   in_parallel([&](size_t thread_idx, size_t num_segments) {
 
     auto it_out = data.get_output_iterator(thread_idx);
@@ -267,7 +267,7 @@ sframe make_random_sframe(
           double v01 = double(hash64(i, hash64(c_idx, random_seed))) / std::numeric_limits<uint64_t>::max();
           return lb + (ub - lb) * v01;
         };
-        
+
         auto rng_dbl_seeded = [&](double lb, double ub, size_t seed){
           double v01 = double(hash64(i, hash64(c_idx, hash64(seed, random_seed)))) / std::numeric_limits<uint64_t>::max();
           return lb + (ub - lb) * v01;
@@ -401,24 +401,24 @@ sframe make_random_sframe(
 }
 
 sframe slice_sframe(const sframe& src, size_t row_lb, size_t row_ub) {
-  
-  ASSERT_LE(row_lb, row_ub); 
-  ASSERT_LE(row_ub, src.num_rows()); 
-  
+
+  ASSERT_LE(row_lb, row_ub);
+  ASSERT_LE(row_ub, src.num_rows());
+
   sframe out;
 
   out.open_for_write(src.column_names(), src.column_types(), "", thread::cpu_count());
   auto reader = src.get_reader();
 
-  // Really inefficient due to the transpose. 
+  // Really inefficient due to the transpose.
   in_parallel([&](size_t thread_index, size_t num_threads) {
-      std::vector<std::vector<flexible_type> > out_values(1); 
+      std::vector<std::vector<flexible_type> > out_values(1);
 
-      size_t num_rows = (row_ub - row_lb); 
+      size_t num_rows = (row_ub - row_lb);
       size_t start_idx = row_lb + (num_rows * thread_index) / num_threads;
       size_t end_idx = row_lb + (num_rows * (thread_index+1)) / num_threads;
       auto it_out = out.get_output_iterator(thread_index);
-      for(size_t i = start_idx; i < end_idx; ++i, ++it_out) { 
+      for(size_t i = start_idx; i < end_idx; ++i, ++it_out) {
         reader->read_rows(i, i+1, out_values);
         *it_out = out_values.front();
       }
@@ -426,7 +426,7 @@ sframe slice_sframe(const sframe& src, size_t row_lb, size_t row_ub) {
 
   out.close();
 
-  return out; 
+  return out;
 }
 
 

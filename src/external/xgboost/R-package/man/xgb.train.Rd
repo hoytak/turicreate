@@ -140,4 +140,3 @@ evalerror <- function(preds, dtrain) {
 param <- list(max.depth = 2, eta = 1, silent = 1, objective=logregobj,eval_metric=evalerror)
 bst <- xgb.train(param, dtrain, nthread = 2, nround = 2, watchlist)
 }
-

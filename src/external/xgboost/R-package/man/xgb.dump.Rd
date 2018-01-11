@@ -42,4 +42,3 @@ xgb.dump(bst, 'xgb.model.dump', with.stats = TRUE)
 # print the model without saving it to a file
 print(xgb.dump(bst))
 }
-

@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-ErrorDocument::ErrorDocument() : 
+ErrorDocument::ErrorDocument() :
     m_keyHasBeenSet(false)
 {
 }
 
-ErrorDocument::ErrorDocument(const XmlNode& xmlNode) : 
+ErrorDocument::ErrorDocument(const XmlNode& xmlNode) :
     m_keyHasBeenSet(false)
 {
   *this = xmlNode;

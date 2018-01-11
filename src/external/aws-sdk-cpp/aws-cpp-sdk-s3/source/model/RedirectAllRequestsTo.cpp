@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-RedirectAllRequestsTo::RedirectAllRequestsTo() : 
+RedirectAllRequestsTo::RedirectAllRequestsTo() :
     m_hostNameHasBeenSet(false),
     m_protocolHasBeenSet(false)
 {
 }
 
-RedirectAllRequestsTo::RedirectAllRequestsTo(const XmlNode& xmlNode) : 
+RedirectAllRequestsTo::RedirectAllRequestsTo(const XmlNode& xmlNode) :
     m_hostNameHasBeenSet(false),
     m_protocolHasBeenSet(false)
 {

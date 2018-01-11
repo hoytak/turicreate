@@ -25,18 +25,18 @@ namespace timeseries {
  * Resample helper: Parse and split operators.
  *
  * \param[in]     sframe            Input data.
- * \param[in]     operators         Operators. 
+ * \param[in]     operators         Operators.
  * \param[in,out] agg_ops_vec       Aggregators used in the timeseries.
- * \param[in,out] ret_column_names  Names of the columns in output timeseries. 
+ * \param[in,out] ret_column_names  Names of the columns in output timeseries.
  */
 void parse_split_log_operators(
-      const gl_sframe& sframe, 
+      const gl_sframe& sframe,
       const std::map<std::string,
-           aggregate::groupby_descriptor_type>& operators, 
+           aggregate::groupby_descriptor_type>& operators,
       std::vector<std::pair<std::vector<std::string>,
                        std::shared_ptr<group_aggregate_value>>>& agg_ops,
       std::vector<std::string>& ret_column_names) {
- 
+
   std::vector<std::shared_ptr<group_aggregate_value>> agg_ops_vec;
   std::vector<std::vector<std::string>> agg_columns_vec;
   for (const auto& op: operators) {
@@ -51,10 +51,10 @@ void parse_split_log_operators(
       aggregator = op.second.m_aggregator;
     }
     agg_columns_vec.push_back(op.second.m_group_columns);
-    ret_column_names.push_back(op.first); 
+    ret_column_names.push_back(op.first);
     agg_ops_vec.push_back(aggregator);
   }
-  
+
   // Log stuff!
   logstream(LOG_INFO) << "\tGroups: ";
   for (auto cols: agg_columns_vec) {
@@ -66,7 +66,7 @@ void parse_split_log_operators(
   logstream(LOG_INFO) << "\tOperations: ";
   for (auto i: agg_ops_vec) logstream(LOG_INFO) << i << ",";
   logstream(LOG_INFO) << std::endl;
-  
+
   // Prepare the operators
   for (size_t i = 0;i < agg_columns_vec.size(); ++i) {
     std::vector<std::string> column_names;
@@ -82,22 +82,22 @@ void parse_split_log_operators(
 }
 
 /**
- * Resample helper: Validate the names and types of the aggregators. 
+ * Resample helper: Validate the names and types of the aggregators.
  *
  * \param[in] sframe          SFrame being operated on.
  * \param[in] agg_ops           Aggregate ops.
- * \param[in] interpolation_fn  Interpolation functions. 
+ * \param[in] interpolation_fn  Interpolation functions.
  */
 void validate_aggregators_and_interpolators(
-        const gl_sframe& sframe, 
+        const gl_sframe& sframe,
         const std::vector<std::pair<std::vector<std::string>,
-               std::shared_ptr<group_aggregate_value>>>& agg_ops, 
-        const interpolator_type& interpolation_fn) { 
-  
+               std::shared_ptr<group_aggregate_value>>>& agg_ops,
+        const interpolator_type& interpolation_fn) {
+
   std::vector<std::string> source_column_names = sframe.column_names();
   std::vector<flex_type_enum> source_types = sframe.column_types();
   DASSERT_EQ(source_types.size(), source_column_names.size());
- 
+
   std::map<std::string, size_t> source_column_to_index;
   for (size_t i = 0;i < source_column_names.size(); ++i) {
     source_column_to_index[source_column_names[i]] = i;
@@ -139,11 +139,11 @@ void validate_aggregators_and_interpolators(
 }
 
 /**
- * 
- * Resample helper: Filter out only the relevant columns. 
+ *
+ * Resample helper: Filter out only the relevant columns.
  *
  * \param[in] agg_ops  Aggregate operations.
- * \param[in,out] relevant_column_names Relevant columns. 
+ * \param[in,out] relevant_column_names Relevant columns.
  */
 void get_relevant_columns(
       const std::vector<std::pair<std::vector<std::string>,
@@ -156,7 +156,7 @@ void get_relevant_columns(
       agg_columns.insert(col_name);
     }
   }
-  
+
   for (const auto& col: agg_columns) {
     // Argmax may contain duplicate columns.
     if (col != "" && std::find(relevant_column_names.begin(),
@@ -167,23 +167,23 @@ void get_relevant_columns(
 }
 
 /**
- * Resample helper: Get the return column types from the aggregates. 
+ * Resample helper: Get the return column types from the aggregates.
  *
  * \param[in]     sframe            SFrame being operated on.
- * \param[in]     ret_column_names  Relevant column names. 
- * \param[in,out] agg_ops           Interpolation functions. 
- * \param[in,out] ret_column_types  Relevant column types. 
+ * \param[in]     ret_column_names  Relevant column names.
+ * \param[in,out] agg_ops           Interpolation functions.
+ * \param[in,out] ret_column_types  Relevant column types.
  */
 void get_return_column_types(
-      const gl_sframe& sframe, 
-      const std::vector<std::string>& ret_column_names, 
+      const gl_sframe& sframe,
+      const std::vector<std::string>& ret_column_names,
       std::vector<std::pair<std::vector<std::string>,
                std::shared_ptr<group_aggregate_value>>>& agg_ops,
-      interpolator_type& interpolation_fn,  
-      std::vector<flex_type_enum>& ret_column_types) { 
+      interpolator_type& interpolation_fn,
+      std::vector<flex_type_enum>& ret_column_types) {
 
-  std::vector<flex_type_enum> source_types = sframe.column_types(); 
-  
+  std::vector<flex_type_enum> source_types = sframe.column_types();
+
   for (const auto& agg_op: agg_ops) {
     std::vector<flex_type_enum> input_types;
     for(auto col_name : agg_op.first) {
@@ -199,15 +199,15 @@ void get_return_column_types(
  * Resample helper: Index the column used by each aggregate.
  *
  * \param[in] sframe             SFrame being operated on.
- * \param[in,out] agg_ops        Interpolation functions. 
+ * \param[in,out] agg_ops        Interpolation functions.
  * \param[in,out] agg_op_col_ids Column IDs (needed for writing)
  */
 void get_column_ids_for_aggregates(
-     const gl_sframe& sframe, 
+     const gl_sframe& sframe,
      const std::vector<std::pair<std::vector<std::string>,
                std::shared_ptr<group_aggregate_value>>>& agg_ops,
      std::vector<std::vector<size_t>>& agg_op_col_ids) {
-  
+
   for (const auto& agg_op: agg_ops) {
     std::vector<size_t> cids;
     for(auto col_name : agg_op.first) {
@@ -226,7 +226,7 @@ void get_column_ids_for_aggregates(
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                     Timeseries functions. 
+//                     Timeseries functions.
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -323,7 +323,7 @@ void gl_timeseries::init(const gl_sframe & input_sf, const std::string & name,
     log_and_throw(std::string(
         "The index column '" + name + "' does not exist in the input sframe."));
   }
-  if(input_sf[name].dtype() != flex_type_enum::DATETIME && 
+  if(input_sf[name].dtype() != flex_type_enum::DATETIME &&
      input_sf[name].dtype() != flex_type_enum::INTEGER) {
     log_and_throw(std::string(
         "The index column '" + name + "' must be of type flex_int or flex_date_time"));
@@ -343,7 +343,7 @@ void gl_timeseries::init(const gl_sframe & input_sf, const std::string & name,
   }
   std::string asc("asc");
   if (!is_sorted && !_check_sorted(refined_input_sf[m_index_col_name],asc)) {
-    logstream(LOG_INFO) << "index column " << m_index_col_name 
+    logstream(LOG_INFO) << "index column " << m_index_col_name
                         << " is not sorted. We will sort it." << std::endl;
 
     // TODO: Temporary row_number column to do a stable sort, better solution!
@@ -370,8 +370,8 @@ gl_timeseries gl_timeseries::resample_wrapper(
         double period,
         const flex_list& downsample_params,
         const flex_list& upsample_params,
-        const std::string& label, 
-        const std::string& close) const { 
+        const std::string& label,
+        const std::string& close) const {
   DASSERT_EQ(downsample_params.size(), 3);
   DASSERT_EQ(upsample_params.size(), 1);
 
@@ -473,11 +473,11 @@ gl_timeseries gl_timeseries::resample(const flex_float& period,
            aggregate::groupby_descriptor_type>& operators,
       interpolator_type interpolation_fn,
       const std::string& label,
-      const std::string& closed) const { 
+      const std::string& closed) const {
 
   _check_if_initialized();
-  
-  // Convert the inputs into the right units & enums. 
+
+  // Convert the inputs into the right units & enums.
   // --------------------------------------------------------------------------
   const size_t MICROSECONDS = 1000000;
   const size_t micro_period = period * MICROSECONDS;
@@ -500,28 +500,28 @@ gl_timeseries gl_timeseries::resample(const flex_float& period,
     cm = LEFT;
   }
 
-  // Parse & validate the input. 
+  // Parse & validate the input.
   // --------------------------------------------------------------------------
   std::vector<std::pair<std::vector<std::string>,
                    std::shared_ptr<group_aggregate_value>>> agg_ops;
   std::vector<std::string> ret_column_names {m_index_col_name};
   parse_split_log_operators(m_sframe, operators, agg_ops, ret_column_names);
-  
-  // Validate the aggregates & column names. 
+
+  // Validate the aggregates & column names.
   validate_aggregators_and_interpolators(m_sframe, agg_ops, interpolation_fn);
 
-  // Filter out only the used columns. 
+  // Filter out only the used columns.
   std::vector<std::string> input_column_names {m_index_col_name};
   get_relevant_columns(agg_ops, input_column_names);
   gl_sframe relevant_sframe = m_sframe[input_column_names];
 
 
-  // Prepare the output time-series. 
+  // Prepare the output time-series.
   // --------------------------------------------------------------------------
   std::vector<flex_type_enum> ret_column_types {this->get_index_col_type()};
   get_return_column_types(relevant_sframe, ret_column_names,
       agg_ops, interpolation_fn, ret_column_types);
-  
+
   std::vector<std::vector<size_t>> agg_op_col_ids;
   get_column_ids_for_aggregates(relevant_sframe, agg_ops, agg_op_col_ids);
 
@@ -544,7 +544,7 @@ gl_timeseries gl_timeseries::resample(const flex_float& period,
         micro_period;
     }
   };
-  
+
   // bucket_id -> timestamp
   auto get_timestamp = [=](const size_t bucket_id) {
     int64_t idx = 0;
@@ -669,9 +669,9 @@ gl_timeseries gl_timeseries::shift(const int64_t & steps){
   // The part of the SFrame that will be part of the result. The rest of the
   // rows will be missing values. sf_cut.size() + num_missing == len_sf
   auto sf_cut = gl_sframe();
-  if (steps < 0) { 
+  if (steps < 0) {
     sf_cut = sframe_no_index[{num_missing,int64_t(len_sf)}];
-  } else { 
+  } else {
     sf_cut = sframe_no_index[{0,int64_t(len_sf) - num_missing}];
   }
 
@@ -727,8 +727,8 @@ void _write_remaining_of_sframe(std::vector<flexible_type> & v,
 
 gl_timeseries gl_timeseries::ts_union(const gl_timeseries & other_ts) {
 
-  std::vector<std::string> col_names; // return column names. 
-  std::vector<flex_type_enum> col_types; // return column types. 
+  std::vector<std::string> col_names; // return column names.
+  std::vector<flex_type_enum> col_types; // return column types.
 
   const std::vector<std::string>& ref_col_names =
     this->m_sframe.column_names();
@@ -755,7 +755,7 @@ gl_timeseries gl_timeseries::ts_union(const gl_timeseries & other_ts) {
   // check if column names match
   for(size_t j=1;j< (other_col_names.size());j++) {
       if(ref_col_names_set.find(other_col_names[j]) == ref_col_names_set.end()) {
-        log_and_throw("Column name '" + other_col_names[j] + 
+        log_and_throw("Column name '" + other_col_names[j] +
          "' in the second TimeSeries does not exist in the first TimeSeries.");
       }
   }
@@ -767,7 +767,7 @@ gl_timeseries gl_timeseries::ts_union(const gl_timeseries & other_ts) {
   for(size_t j=0;j< ref_col_names.size();j++) {
       if(other_sf[ref_col_names[j]].dtype() !=
           this->m_sframe[ref_col_names[j]].dtype()) {
-         log_and_throw("Type of the column '" + ref_col_names[j] + 
+         log_and_throw("Type of the column '" + ref_col_names[j] +
              "' in two TimeSeries being combined.");
       }
   }
@@ -978,7 +978,7 @@ gl_timeseries gl_timeseries::index_join(const gl_timeseries & other_ts,const
 
 gl_timeseries gl_timeseries::slice(const flexible_type &start_time, const
     flexible_type &end_time, const std::string &closed) const {
-  
+
   if(start_time.get_type() != flex_type_enum::DATETIME) {
     log_and_throw("Parameter 'start_time' must be flex_date_time");
   }

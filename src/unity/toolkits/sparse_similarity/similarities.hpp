@@ -265,7 +265,7 @@ class cosine {
   static constexpr bool require_item_locking() { return false; }
   static constexpr bool require_interaction_locking() { return false; }
   static constexpr bool missing_values_are_zero() { return true; }
-  
+
   void update_item(item_data_type& v, double target) const {
     atomic_increment(v, _to_fixed(target * target));
   }
@@ -348,7 +348,7 @@ class cosine {
 
   // Finally, accumulation data types.
   typedef _fixed_precision_type prediction_accumulation_type;
-  
+
   void update_prediction_unsafe(prediction_accumulation_type& p,
                                 const final_interaction_data_type& item_interaction_data,
                                 const final_item_data_type& prediction_item_item_data,

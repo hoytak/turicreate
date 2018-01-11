@@ -50,9 +50,9 @@ Form_Hook typ ## _ ## name ( const FORM *form )\
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_field_init(FORM *form, Form_Hook f)
-|   
+|
 |   Description   :  Assigns an application defined initialization function
 |                    to be called when the form is posted and just after
 |                    the current field changes.
@@ -62,9 +62,9 @@ Form_Hook typ ## _ ## name ( const FORM *form )\
 GEN_HOOK_SET_FUNCTION(field,init)
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  Form_Hook field_init(const FORM *form)
-|   
+|
 |   Description   :  Retrieve field initialization routine address.
 |
 |   Return Values :  The address or NULL if no hook defined.
@@ -72,9 +72,9 @@ GEN_HOOK_SET_FUNCTION(field,init)
 GEN_HOOK_GET_FUNCTION(field,init)
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_field_term(FORM *form, Form_Hook f)
-|   
+|
 |   Description   :  Assigns an application defined finalization function
 |                    to be called when the form is unposted and just before
 |                    the current field changes.
@@ -84,9 +84,9 @@ GEN_HOOK_GET_FUNCTION(field,init)
 GEN_HOOK_SET_FUNCTION(field,term)
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  Form_Hook field_term(const FORM *form)
-|   
+|
 |   Description   :  Retrieve field finalization routine address.
 |
 |   Return Values :  The address or NULL if no hook defined.
@@ -94,9 +94,9 @@ GEN_HOOK_SET_FUNCTION(field,term)
 GEN_HOOK_GET_FUNCTION(field,term)
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_form_init(FORM *form, Form_Hook f)
-|   
+|
 |   Description   :  Assigns an application defined initialization function
 |                    to be called when the form is posted and just after
 |                    a page change.
@@ -106,9 +106,9 @@ GEN_HOOK_GET_FUNCTION(field,term)
 GEN_HOOK_SET_FUNCTION(form,init)
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  Form_Hook form_init(const FORM *form)
-|   
+|
 |   Description   :  Retrieve form initialization routine address.
 |
 |   Return Values :  The address or NULL if no hook defined.
@@ -116,9 +116,9 @@ GEN_HOOK_SET_FUNCTION(form,init)
 GEN_HOOK_GET_FUNCTION(form,init)
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_form_term(FORM *form, Form_Hook f)
-|   
+|
 |   Description   :  Assigns an application defined finalization function
 |                    to be called when the form is unposted and just before
 |                    a page change.
@@ -128,9 +128,9 @@ GEN_HOOK_GET_FUNCTION(form,init)
 GEN_HOOK_SET_FUNCTION(form,term)
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  Form_Hook form_term(const FORM *form)
-|   
+|
 |   Description   :  Retrieve form finalization routine address.
 |
 |   Return Values :  The address or NULL if no hook defined.

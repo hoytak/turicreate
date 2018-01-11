@@ -71,15 +71,15 @@ class unity_global: public unity_global_base {
   /**
    * Load toolkit class from file.
    *
-   * Returns variant_map varmap  
+   * Returns variant_map varmap
    *  - varmap['archive_version'] if 0, is the legacy version. 1 is the current version.
-   * 
+   *
    * Archive version 1:
    *
    *  - varmap['model_name'] stores the C++ model name. Always available
    *  - varmap['model'] stores the unity toolkit class object pointer.
    *  May not be always available.
-   *  - varmap['side_data'] stores a varmap of any additional side data 
+   *  - varmap['side_data'] stores a varmap of any additional side data
    *    serialized along with the model. May not be always available.
    *
    *
@@ -325,7 +325,7 @@ class unity_global: public unity_global_base {
 
 
   /**
-   * A alternate implementation of var which knows how to 
+   * A alternate implementation of var which knows how to
    * save models. Models are special because they rely on the unity_global
    * registry. Fully compatible with variant_deep_save otherwise.
    * \see variant_deep_save
@@ -333,7 +333,7 @@ class unity_global: public unity_global_base {
   void model_variant_deep_save(const variant_type& var, oarchive& oarc);
 
   /**
-   * A alternate implementation of variant_deep_load which knows how to 
+   * A alternate implementation of variant_deep_load which knows how to
    * save models. Models are special because they rely on the unity_global
    * registry. Fully compatible with variant_deep_load otherwise.
 

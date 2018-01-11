@@ -29,7 +29,7 @@ class EXPORT word_counter: public transformer_base {
   transform_utils::string_filter_list string_filters;
 
   void set_string_filters();
-  
+
   public:
   /**
    * Methods that must be implemented in a new transformer model.
@@ -81,7 +81,7 @@ class EXPORT word_counter: public transformer_base {
    * Transform the given data.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "transform" in python.
@@ -89,12 +89,12 @@ class EXPORT word_counter: public transformer_base {
    */
   gl_sframe transform(gl_sframe data);
 
-  /** 
-   * Fit and transform the given data. Intended as an optimization because 
-   * fit and transform are usually always called together. The default 
+  /**
+   * Fit and transform the given data. Intended as an optimization because
+   * fit and transform are usually always called together. The default
    * implementaiton calls fit and then transform.
-   * 
-   * \param[in] data  (SFrame of data) 
+   *
+   * \param[in] data  (SFrame of data)
    */
   gl_sframe fit_transform(gl_sframe data) {
     data.materialize();
@@ -122,7 +122,7 @@ class EXPORT word_counter: public transformer_base {
 };
 
 } // feature_engineering
-} // sdk_model 
+} // sdk_model
 } // turicreate
 
-#endif 
+#endif

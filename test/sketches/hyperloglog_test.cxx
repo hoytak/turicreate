@@ -6,7 +6,7 @@
 #include <sketches/hyperloglog.hpp>
 #include <random/random.hpp>
 struct hyperloglog_test {
-  void random_integer_length_test(size_t len, 
+  void random_integer_length_test(size_t len,
                                   size_t random_range,
                                   size_t hllbits) {
     turi::sketches::hyperloglog hll(hllbits);
@@ -21,14 +21,14 @@ struct hyperloglog_test {
 
     auto lower = hll.estimate() - 2 * hll.error_bound();
     auto upper = hll.estimate() + 2 * hll.error_bound();
-    std::cout << num_unique << 
-              " vs (" << lower << ", " 
+    std::cout << num_unique <<
+              " vs (" << lower << ", "
                      << upper << ")\n";
     TS_ASSERT_LESS_THAN(lower, num_unique);
     TS_ASSERT_LESS_THAN(num_unique, upper);
   }
 
-  void parallel_combine_test(size_t len, 
+  void parallel_combine_test(size_t len,
                              size_t random_range,
                              size_t hllbits) {
     // make a bunch of "parallel" hyperloglogs which can be combined
@@ -43,7 +43,7 @@ struct hyperloglog_test {
       hllarr[i% 16].add(v[i]);
       sequential_hll.add(v[i]);
     }
-    // make the final hyperloglog which comprises of all the 
+    // make the final hyperloglog which comprises of all the
     // hyperloglogs combined
     hyperloglog hll(hllbits);
     for (size_t i = 0;i < hllarr.size(); ++i) hll.combine(hllarr[i]);
@@ -54,8 +54,8 @@ struct hyperloglog_test {
 
     auto lower = hll.estimate() - 2 * hll.error_bound();
     auto upper = hll.estimate() + 2 * hll.error_bound();
-    std::cout << num_unique << 
-              " vs (" << lower << ", " 
+    std::cout << num_unique <<
+              " vs (" << lower << ", "
                      << upper << ")\n";
     TS_ASSERT_LESS_THAN(lower, num_unique);
     TS_ASSERT_LESS_THAN(num_unique, upper);
@@ -70,7 +70,7 @@ struct hyperloglog_test {
     for (auto len: lens) {
       for (auto range: ranges) {
         for (auto bit: bits) {
-          std::cout << "Array length: " << len << "\t" 
+          std::cout << "Array length: " << len << "\t"
                     << "Numeric Range: " << range << "\t"
                     << "Num Buckets: 2^" << bit << "\n";
           random_integer_length_test(len, range, bit);
@@ -83,7 +83,7 @@ struct hyperloglog_test {
     for (auto len: lens) {
       for (auto range: ranges) {
         for (auto bit: bits) {
-          std::cout << "Array length: " << len << "\t" 
+          std::cout << "Array length: " << len << "\t"
                     << "Numeric Range: " << range << "\t"
                     << "Num Buckets: 2^" << bit << "\n";
           parallel_combine_test(len, range, bit);

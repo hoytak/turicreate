@@ -25,12 +25,12 @@ void testJSONValidator__isValidRoot::testNotRoots(void){
 void testJSONValidator__isValidRoot::testSuddenEnd(void){
 	#ifdef JSON_VALIDATE
 		assertFalse(JSONValidator::isValidRoot(JSON_TEXT("")));
-	
+
 		//--- void testJSONValidator__isValidRoot::testRoots(void){
 		assertFalse(JSONValidator::isValidRoot(JSON_TEXT("{")));
 		assertFalse(JSONValidator::isValidRoot(JSON_TEXT("[")));
 		assertFalse(JSONValidator::isValidRoot(JSON_TEXT("[\"stuff")));
-	
+
 		//---void testJSONValidator__isValidRoot::testNotRoots(void){
 		assertFalse(JSONValidator::isValidRoot(JSON_TEXT("{}aoe")));
 		assertFalse(JSONValidator::isValidRoot(JSON_TEXT("[]aoe")));

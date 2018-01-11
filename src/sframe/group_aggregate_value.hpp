@@ -128,7 +128,7 @@ class group_aggregate_value {
    * Override this function for allowing the operator to be easily printed.
    *
    * \code
-   *   std::cout << aggregator <<s std::endl; 
+   *   std::cout << aggregator <<s std::endl;
    * \endcode
    */
   virtual void print(std::ostream& os) const {
@@ -139,7 +139,7 @@ class group_aggregate_value {
     return type;
   }
 };
-  
+
 inline std::ostream& operator<<(std::ostream& os, const group_aggregate_value& dt) {
   dt.print(os);
   return os;

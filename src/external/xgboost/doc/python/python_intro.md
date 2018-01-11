@@ -24,8 +24,8 @@ Data Interface
 --------------
 The XGBoost python module is able to load data from:
 - libsvm txt format file
-- Numpy 2D array, and 
-- xgboost binary buffer file. 
+- Numpy 2D array, and
+- xgboost binary buffer file.
 
 The data will be store in a ```DMatrix``` object.
 

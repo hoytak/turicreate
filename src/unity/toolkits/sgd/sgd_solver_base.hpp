@@ -70,7 +70,7 @@ class sgd_solver_base {
   std::map<std::string, variant_type> run();
 
  private:
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Particular methods of running things
 
@@ -139,7 +139,7 @@ class sgd_solver_base {
    */
   virtual std::pair<double, double> calculate_objective(
       sgd_interface_base* iface, const v2::ml_data& data, size_t iteration) const;
-  
+
  private:
 
   ////////////////////////////////////////////////////////////////////////////////

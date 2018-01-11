@@ -140,7 +140,7 @@ inline void copy_raw_into_array(
             return;
           }
         }
- 
+
         DASSERT_GE(idx,  0);
         x(idx) = value;
 
@@ -149,7 +149,7 @@ inline void copy_raw_into_array(
       /** The function to advance the offset, called after each column
        *  is finished.
        */
-      [&](ml_column_mode mode, size_t column_index, 
+      [&](ml_column_mode mode, size_t column_index,
                       size_t index_size) GL_GCC_ONLY(GL_HOT_INLINE_FLATTEN) {
         offset += (index_size
             - ((use_reference && mode_is_categorical(mode)) ? 1 : 0));

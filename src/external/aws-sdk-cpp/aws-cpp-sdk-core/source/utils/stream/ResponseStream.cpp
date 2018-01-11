@@ -79,7 +79,7 @@ DefaultUnderlyingStream::~DefaultUnderlyingStream()
 
 static const char* RESPONSE_STREAM_FACTORY_TAG = "ResponseStreamFactory";
 
-Aws::IOStream* Aws::Utils::Stream::DefaultResponseStreamFactoryMethod() 
+Aws::IOStream* Aws::Utils::Stream::DefaultResponseStreamFactoryMethod()
 {
     return Aws::New<Aws::Utils::Stream::DefaultUnderlyingStream>(RESPONSE_STREAM_FACTORY_TAG);
 }

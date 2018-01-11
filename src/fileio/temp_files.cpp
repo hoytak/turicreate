@@ -57,17 +57,17 @@ struct tempfile_information {
 
   /// Used to generate unique file IDs
   boost::uuids::random_generator uuid_generator;
-}; 
+};
 
 
 /**
  * Returns the process-wide singleton managing all the temp file information.
- * The object inside is created as a pointer; all the data above is meant to 
+ * The object inside is created as a pointer; all the data above is meant to
  * leak! Basically we must carefully control the ordering at which this
  * object is destroyed. (See \ref turi::global_teardown).
  */
 EXPORT tempfile_information& get_temp_info() {
-  // this is a pointer 
+  // this is a pointer
   static tempfile_information* temp_info = new tempfile_information();
   return *temp_info;
 }
@@ -155,7 +155,7 @@ size_t num_temp_directories() {
 
 /**
  * Gets the 'idx''th Turi temp directory.
- * 
+ *
  * The temp directories are turicreate-[username] appended to the temp directory.
  *
  * idx can be any value in which case the indices will loop around.
@@ -219,7 +219,7 @@ static void delete_proc_directory(fs::path path) {
   // we could use remove_all but that causes problems, I suspect
   // when multiple processes are trying to reap simultaneously.
   std::vector<fs::path> files_to_delete;
-  auto diriter = fs::recursive_directory_iterator(path, 
+  auto diriter = fs::recursive_directory_iterator(path,
                                                   fs::symlink_option::no_recurse);
   auto enditer = fs::recursive_directory_iterator();
   while(diriter != enditer) {
@@ -305,7 +305,7 @@ EXPORT std::string get_temp_name(const std::string& prefix, bool _prefer_hdfs) {
   }
   // create the directories if they do not exist
   create_current_process_temp_directory(path.string());
-  
+
   if (prefix.empty()) {
     std::stringstream strm;
     strm << boost::lexical_cast<std::string>(get_temp_info().uuid_generator());

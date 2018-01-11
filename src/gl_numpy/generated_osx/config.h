@@ -6,7 +6,7 @@
 #define SIZEOF_PY_INTPTR_T 8
 #define SIZEOF_OFF_T 8
 #define SIZEOF_PY_LONG_LONG 8
-#define MATHLIB 
+#define MATHLIB
 #define HAVE_SIN 1
 #define HAVE_COS 1
 #define HAVE_TAN 1

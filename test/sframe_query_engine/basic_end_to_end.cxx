@@ -25,9 +25,9 @@ struct basic_end_to_end {
     auto root = op_sarray_source::make_planner_node(sa);
 
     // add_one = root + 1
-    auto add_one = 
+    auto add_one =
         op_transform::make_planner_node(
-            root, 
+            root,
             [](const sframe_rows::row& a)->flexible_type {
               return a[0] + 1;
             },
@@ -35,11 +35,11 @@ struct basic_end_to_end {
 
     // sum_both = add_one + root
     //
-    auto sum_both = 
+    auto sum_both =
         op_binary_transform::make_planner_node(
-            root, 
+            root,
             add_one,
-            [](const sframe_rows::row& a, 
+            [](const sframe_rows::row& a,
                const sframe_rows::row& b)->flexible_type {
               return a[0] + b[0];
             },
@@ -68,9 +68,9 @@ struct basic_end_to_end {
     auto root = op_sarray_source::make_planner_node(sa);
 
     // even_selector = root % 2 == 0
-    auto even_selector = 
+    auto even_selector =
         op_transform::make_planner_node(
-            root, 
+            root,
             [](const sframe_rows::row& a)->flexible_type {
               return (flex_int)(a[0]) % 2 == 0;
             },
@@ -102,18 +102,18 @@ struct basic_end_to_end {
     auto root = op_sarray_source::make_planner_node(sa);
 
     // even_selector = root % 2 == 0
-    auto even_selector = 
+    auto even_selector =
         op_transform::make_planner_node(
-            root, 
+            root,
             [](const sframe_rows::row& a)->flexible_type {
               return (flex_int)(a[0]) % 2 == 0;
             },
             flex_type_enum::INTEGER);
 
     // add_one = root + 1
-    auto add_one = 
+    auto add_one =
         op_transform::make_planner_node(
-            root, 
+            root,
             [](const sframe_rows::row& a)->flexible_type {
               return a[0] + 1;
             },
@@ -140,8 +140,8 @@ struct basic_end_to_end {
     turi::copy(data.begin(), data.end(), *sa);
     sa->close();
     auto root = op_sarray_source::make_planner_node(sa);
-    flex_int m = query_eval::reduce<flex_int>(root, 
-                                 [](const flexible_type& f, 
+    flex_int m = query_eval::reduce<flex_int>(root,
+                                 [](const flexible_type& f,
                                     flex_int& val) {
                                       if (f > val) val = f;
                                     },

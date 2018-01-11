@@ -41,7 +41,7 @@ void transform_to_flat_dictionary::init_options(const std::map<std::string,flexi
       "The string prepended to the output column names.",
       "",
       false);
-  
+
   // Set options!
   options.set_options(_options);
   add_or_update_state(flexmap_to_varmap(options.current_option_values()));
@@ -104,7 +104,7 @@ void transform_to_flat_dictionary::init_transformer(const std::map<std::string,f
 
   unprocessed_features = _options.at("features");
   exclude = _options.at("exclude");
-  
+
   if ((int) exclude == 1) {
     state["features"] = to_variant(FLEX_UNDEFINED);
     state["excluded_features"] = to_variant(unprocessed_features);
@@ -121,16 +121,16 @@ void transform_to_flat_dictionary::init_transformer(const std::map<std::string,f
  * Fit the data.
  */
 void transform_to_flat_dictionary::fit(gl_sframe data){
-  
+
   DASSERT_TRUE(options.get_option_info().size() > 0);
 
   // Get the feature name (Note it is only 1 string)
   feature_columns = transform_utils::get_column_names(
                             data, exclude, unprocessed_features);
-  
+
   // Validate the features.
   transform_utils::validate_feature_columns(data.column_names(), feature_columns);
-  
+
   state["features"] = to_variant(feature_columns);
 
   // Store feature types.
@@ -138,8 +138,8 @@ void transform_to_flat_dictionary::fit(gl_sframe data){
   for (const auto& f : feature_columns) {
     feature_types[f] = data.select_column(f).dtype();
   }
-  
-  fitted = true; 
+
+  fitted = true;
 }
 
 /**
@@ -150,35 +150,35 @@ gl_sframe transform_to_flat_dictionary::transform(gl_sframe data) {
   if(!fitted) {
     log_and_throw("`transform` called before `fit` or `fit_transform`.");
   }
-  
+
   DASSERT_TRUE(options.get_option_info().size() > 0);
 
   flex_string separator = options.value("separator").get<flex_string>();
   flex_string undefined_tag = options.value("none_tag").get<flex_string>();
   flex_string output_column_prefix =  options.value("output_column_prefix").get<flex_string>();
-  
+
   // Select and validate features.
   std::vector<std::string> transform_features;
-  
+
   transform_features =
         variant_get_value<std::vector<std::string> >(state.at("features"));
-  
+
   transform_features = transform_utils::select_feature_subset(data, transform_features);
-  
+
   transform_utils::validate_feature_types(transform_features, feature_types, data);
-  
+
   gl_sframe ret_sf = data;
 
   // Do the actual transformations.
   for(const auto& s : transform_features) {
-    std::string out_c = (output_column_prefix.empty() ? s : (output_column_prefix + "." + s)); 
-    
+    std::string out_c = (output_column_prefix.empty() ? s : (output_column_prefix + "." + s));
+
     ret_sf[out_c] = to_sarray_of_flat_dictionaries(
         data[s], separator, undefined_tag, "error", "error");
   }
 
   // Do the actual transformations.
-  return ret_sf; 
+  return ret_sf;
 }
 
 } // namespace feature_engineering

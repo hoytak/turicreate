@@ -23,7 +23,7 @@ void check_operation_feasibility(flex_type_enum left,
 /**
  * Given a binary operation type, and the input type, returns the output type.
  * The operation must be one of the following: "+", "-", "*", "/", "<", ">",
- * "<=", ">=", "==", "!=". The type of the new array is dependent on the 
+ * "<=", ">=", "==", "!=". The type of the new array is dependent on the
  * semantics of the operation. check_operation_feasibility is assumed to be true.
  *  - comparison operators always return integers
  *  - +,-,* of integer against integers always return integers
@@ -32,15 +32,15 @@ void check_operation_feasibility(flex_type_enum left,
  *  - +,-,*,/ of integer against floats or floats against integers
  *            always return floats.
  */
-flex_type_enum get_output_type(flex_type_enum left, 
+flex_type_enum get_output_type(flex_type_enum left,
                                flex_type_enum right,
                                std::string op);
 
 /**
- * Given a binary operation type, returns a lambda function which computes the 
+ * Given a binary operation type, returns a lambda function which computes the
  * function on a pair of flexible_types.
  * The operation must be one of the following: "+", "-", "*", "/", "<", ">",
- * "<=", ">=", "==", "!=". The type of the new array is dependent on the 
+ * "<=", ">=", "==", "!=". The type of the new array is dependent on the
  * semantics of the operation. check_operation_feasibility is assumed to be true.
  *  - comparison operators always return integers
  *  - +,-,* of integer against integers always return integers
@@ -49,9 +49,8 @@ flex_type_enum get_output_type(flex_type_enum left,
  *  - +,-,*,/ of integer against floats or floats against integers
  *            always return floats.
  */
-std::function<flexible_type(const flexible_type&, const flexible_type&)> 
+std::function<flexible_type(const flexible_type&, const flexible_type&)>
 get_binary_operator(flex_type_enum left, flex_type_enum right, std::string op);
 } // namespace unity_sarray_binary_operations
 } // namespace turi
 #endif
-

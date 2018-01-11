@@ -35,8 +35,8 @@ class encoded_block_range;
  * sarray<flexible_type> encoded column block. It maintains the
  * block in a compressed state, and stream decodes it.
  *
- * The encoded block object is copyable, move constructable, 
- * copy assignable, move assignable. Copies are cheap and free 
+ * The encoded block object is copyable, move constructable,
+ * copy assignable, move assignable. Copies are cheap and free
  * as it only needs to copy a single shared pointer.
  */
 class encoded_block {
@@ -50,7 +50,7 @@ class encoded_block {
   encoded_block(encoded_block&&) = default;
   /// Default Copy assignment
   encoded_block& operator=(const encoded_block&) = default;
-  /// Default Move assignment 
+  /// Default Move assignment
   encoded_block& operator=(encoded_block&&) = default;
 
   /// block constructor from data contents; simply calls init().
@@ -64,7 +64,7 @@ class encoded_block {
     init(info, data);
   }
 
-  /** 
+  /**
    * Initializes this block to point to new data.
    *
    * Existing ranges are NOT invalidated.
@@ -75,7 +75,7 @@ class encoded_block {
   void init(block_info info, std::vector<char>&& data);
 
 
-  /** 
+  /**
    * Initializes this block to point to new data.
    *
    * Existing ranges are NOT invalidated.
@@ -207,7 +207,7 @@ class encoded_block_range {
   typedef boost::coroutines::coroutine<void>::pull_type coroutine_type;
   coroutine_type source;
 
-  void coroutine_launch(); 
+  void coroutine_launch();
   void call_source();
   std::shared_ptr<coro_shared_data> m_shared;
 

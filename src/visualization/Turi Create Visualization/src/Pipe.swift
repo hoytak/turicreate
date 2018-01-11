@@ -6,32 +6,32 @@ import Foundation
 
 /*!
      @class         Pipe
- 
+
      @brief         The Pipe Class handles the Stdin
- 
+
      @discussion    The Pipe object reads the stdin pipe, and accordingly updates the shared_data element
- 
+
      @helps         Graph
- 
+
 !*/
 
 class Pipe {
-    
+
     // private variables here
     private var graph_data: VegaContainer
-    
+
     init(graph_data:VegaContainer){
         self.graph_data = graph_data
-        
+
         DispatchQueue.global(qos: .userInitiated).async {
             self.readPipe();
         }
-        
+
     }
-    
+
     public func readPipe(){
         #if DEBUG
-            
+
             /*
              * For debugging purposes, throw some data through the pipe over an interval,
              * so at least by launching through the Xcode run scheme, we get some validation
@@ -45,7 +45,7 @@ class Pipe {
             }
 
         #endif
-        
+
         while (true) {
             guard let data = readLine() else {
                 // nil readLine result means EOF
@@ -57,33 +57,33 @@ class Pipe {
                 // ignore newlines
                 continue
             }
-            
+
             process_data(data: data);
         }
     }
-    
+
     public func writePipe(method: String, start: Int, end: Int){
         print("{'method':'get_rows','start':" + String(start) + ", 'end': " + String(end) + "}");
         fflush(__stdoutp)
     }
-    
+
     private func process_data(data: String) {
         do {
             // expect "data" to contain JSON of the form [String: Any]
             let json = try JSON.parse(str: data) as! [String: Any]
-            
+
             if let table_spec = json["table_spec"] as? [String: Any] {
                 self.graph_data.set_table(table_spec: table_spec)
             }
-            
+
             if let vega_spec = json["vega_spec"] as? [String: Any] {
                 self.graph_data.set_vega(vega_spec: vega_spec)
             }
-            
+
             if let data_spec = json["data_spec"] as? [String: Any] {
                 self.graph_data.add_data(data_spec: data_spec)
             }
-            
+
             if let image_spec = json["image_spec"] as? [String: Any] {
                 self.graph_data.add_images(image_spec: image_spec)
             }

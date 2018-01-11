@@ -279,4 +279,3 @@ clean:
 
 distclean vclean: clean
 	@$(call DEL, $(check_PROGRAMS))
-

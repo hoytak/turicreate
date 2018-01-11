@@ -17,7 +17,7 @@
 namespace turi {
 namespace zookeeper_util {
 class key_value;
-} 
+}
 }
 
 namespace libfault {
@@ -64,7 +64,7 @@ class EXPORT async_request_socket {
    * The request will be sent to the current owners of the key
    *
    * \param zmq_ctx A zeroMQ Context
-   * \param keyval A zookeeper key_value object to bind to. 
+   * \param keyval A zookeeper key_value object to bind to.
    * \param masterkey The master object key where requests (via request_master)
    *                  are sent.
    * \param slavekeys The slave object keys where requests (via request_any)

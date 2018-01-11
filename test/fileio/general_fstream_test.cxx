@@ -20,7 +20,7 @@ struct general_fstream_test {
 
   public:
 
-    general_fstream_test() : 
+    general_fstream_test() :
 #ifndef _WIN32
       tmpname (tmpnam(NULL)) {
 #else

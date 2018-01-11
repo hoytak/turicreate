@@ -103,7 +103,7 @@ void RunTestSuite2::RunTests(void){
         RUNTEST(testNotEqual);
         RUNTEST(testCloseEnough);
     }
-	
+
     {
         testNumberToString__atof ttt("testNumberToString__atof");
         RUNTEST(testPositive);
@@ -152,4 +152,3 @@ void RunTestSuite2::RunTests(void){
         RUNTEST(testNotNumbers);
     }
 }
-

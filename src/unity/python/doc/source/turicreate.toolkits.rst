@@ -44,4 +44,3 @@ Utilities
     turicreate.load_model
     turicreate.toolkits.distances
     turicreate.toolkits.evaluation
-

@@ -67,11 +67,11 @@ namespace turi {
    * and the entire buffer allocated length is oarc.len.
    *
    * If the oarchive is constructed with a std::vector<char>&, it will behave
-   * as like the above case, but it will keep a reference to the 
-   * std::vector<char> and use that for resizing. At completion, 
+   * as like the above case, but it will keep a reference to the
+   * std::vector<char> and use that for resizing. At completion,
    * the std::vector<char> will contain the data and oarc.off contains the
    * serialized length.
-   * 
+   *
    * and the entire buffer allocated length is oarc.len.
    *
    * To use this class, include
@@ -354,12 +354,3 @@ namespace turi {
 #endif
 
 #endif
-
-
-
-
-
-
-
-
-

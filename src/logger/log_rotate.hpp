@@ -27,30 +27,29 @@ namespace turi {
  *
  * A symlink [log_file_name].current is also created which always points to the
  * most recent log file.
- * 
+ *
  * If log rotation has already been set up, this will stop
  * the the log rotation and begin a new one.
  *
  * Not safe for concurrent use.
  *
- * \param log_file_name The prefix to output to. Logs will emit to 
+ * \param log_file_name The prefix to output to. Logs will emit to
  *                      [log_file_name].0, [log_file_name].1, etc.
  * \param log_interval  The number of seconds between rotations
  * \param truncate_limit The maximum number of files to maintain. Must be >= 1
  */
-void begin_log_rotation(std::string log_file_name, 
-                        size_t log_interval, 
+void begin_log_rotation(std::string log_file_name,
+                        size_t log_interval,
                         size_t truncate_limit);
 
 /**
- * Stops log rotation. 
+ * Stops log rotation.
  *
  * No-op if log rotation was not started.
- * 
+ *
  * Not safe for concurrent use.
  */
 void stop_log_rotation();
 
 } // turicreate
 #endif // TURI_LOGGER_LOG_ROTATE_HPP
-

@@ -36,15 +36,15 @@ class general_fstream_source {
   bool is_gzip_compressed = false;
  public:
   typedef char        char_type;
-  struct category: public boost::iostreams::device_tag, 
-    boost::iostreams::closable_tag, 
+  struct category: public boost::iostreams::device_tag,
+    boost::iostreams::closable_tag,
     boost::iostreams::multichar_tag,
     boost::iostreams::input_seekable,
     boost::iostreams::optimally_buffered_tag {};
 
   /**
    * Constructs a fstream source which opens a file. This file can be
-   * of any protocol supported by the union_fstream, and may also be 
+   * of any protocol supported by the union_fstream, and may also be
    * gzip compressed. Gzip compression detection is automatic based on the file
    * extension. (Whether it ends in .gz)
    */
@@ -52,8 +52,8 @@ class general_fstream_source {
 
   /**
    * Constructs a fstream source which opens a file. This file can be
-   * of any protocol supported by the union_fstream, and may also be 
-   * gzip compressed. Gzip compression detection is not performed, and the 
+   * of any protocol supported by the union_fstream, and may also be
+   * gzip compressed. Gzip compression detection is not performed, and the
    * gzip_compressed flag is used to enable/disable gzip decompression.
    */
   general_fstream_source(std::string file, bool gzip_compressed);
@@ -72,7 +72,7 @@ class general_fstream_source {
 
 
   /**
-   * destructor. If all copies of this object is closed, 
+   * destructor. If all copies of this object is closed,
    * closes the file.
    */
   ~general_fstream_source();
@@ -99,7 +99,7 @@ class general_fstream_source {
 
 
   /**
-   * Returns the length of the open file. 
+   * Returns the length of the open file.
    * Returns (size_t)(-1) if there is no file opened.
    */
   size_t file_size() const;

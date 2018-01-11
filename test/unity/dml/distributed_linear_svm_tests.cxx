@@ -23,19 +23,19 @@ struct distributed_linear_svm_test  {
  public:
   void test_linear_svm_basic_2d() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 100}, 
-      {"features", 1}}; 
+      {"examples", 100},
+      {"features", 1}};
 
-    size_t n = runner.get_default_num_workers_from_env(); 
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(opts, n);
   }
-  
+
   void test_linear_svm_small() {
     std::map<std::string, flexible_type> opts = {
-      {"examples", 1000}, 
-      {"features", 10}}; 
+      {"examples", 1000},
+      {"features", 10}};
 
-    size_t n = runner.get_default_num_workers_from_env(); 
+    size_t n = runner.get_default_num_workers_from_env();
     test_impl(opts, n);
   }
 
@@ -60,7 +60,7 @@ struct distributed_linear_svm_test  {
       size_t examples = opts.at("examples");
       size_t features = opts.at("features");
 
-      // Coefficients 
+      // Coefficients
       DenseVector coefs(features+1);
       coefs.randn();
 
@@ -85,8 +85,8 @@ struct distributed_linear_svm_test  {
       sframe X = data;
       X = X.remove_column(X.column_index("target"));
 
-      // Setup the arguments. 
-      std::map<std::string, flexible_type> options = { 
+      // Setup the arguments.
+      std::map<std::string, flexible_type> options = {
         {"convergence_threshold", 1e-2},
         {"lbfgs_memory_level", 3},
         {"max_iterations", 10},
@@ -107,7 +107,7 @@ struct distributed_linear_svm_test  {
 
       // Act
       // ----------------------------------------------------------------------
-      // Train the model. 
+      // Train the model.
       variant_type ret = runner.run("distributed_supervised_train", params, working_dir, num_workers);
       std::shared_ptr<linear_svm> model =
             variant_get_value<std::shared_ptr<linear_svm>>(ret);

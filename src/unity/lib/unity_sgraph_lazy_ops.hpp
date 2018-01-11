@@ -23,7 +23,7 @@ namespace turi {
     add_vertices_op(std::shared_ptr<DataType> data,
                     const std::string& id_field_name,
                     size_t group=0):
-        data(data), id_field_name(id_field_name), group(group) { } 
+        data(data), id_field_name(id_field_name), group(group) { }
 
     virtual size_t num_arguments() { return 1; }
 
@@ -124,7 +124,7 @@ namespace turi {
 
   struct select_vertex_fields_op: operator_type {
     select_vertex_fields_op(const std::vector<std::string>& _fields, size_t group) :
-      group(group) { 
+      group(group) {
           std::set<std::string> unique_fields;
           for (const auto& f: _fields) {
             if (!unique_fields.count(f)) {
@@ -147,7 +147,7 @@ namespace turi {
 
   struct select_edge_fields_op: operator_type {
     select_edge_fields_op(const std::vector<std::string>& _fields, size_t groupa, size_t groupb) :
-        groupa(groupa), groupb(groupb) { 
+        groupa(groupa), groupb(groupb) {
           std::set<std::string> unique_fields;
           for (const auto& f: _fields) {
             if (!unique_fields.count(f)) {

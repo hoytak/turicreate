@@ -5,28 +5,28 @@
 		$start  = $length * -1; //negative
 		return (substr($haystack, $start) === $needle);
 	}
-	
-	function getFilesFromDir($dir, array & $files) { 
-		if ($handle = opendir($dir)) { 
-			while (false !== ($file = readdir($handle))) { 
-				if ($file != "." && $file != "..") { 
-					if(is_dir($dir.'/'.$file)) { 
-						$dir2 = $dir.'/'.$file; 
-						getFilesFromDir($dir2, $files); 
-					} 
-					else { 
+
+	function getFilesFromDir($dir, array & $files) {
+		if ($handle = opendir($dir)) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != "..") {
+					if(is_dir($dir.'/'.$file)) {
+						$dir2 = $dir.'/'.$file;
+						getFilesFromDir($dir2, $files);
+					}
+					else {
 						if (endsWith(strtoupper($file), '.H')){
 							$files[] = $dir.'/'.$file;
 						}
-					} 
-				} 
-			} 
-			closedir($handle); 
-		} 
-		
-		return $files; 
+					}
+				}
+			}
+			closedir($handle);
+		}
+
+		return $files;
 	}
-	
+
 	function getMethodsFromFile(&$runner, $file){
 		if (($contents = file_get_contents($file)) !== false){
 			//get the class name
@@ -35,7 +35,7 @@
 					$class = trim(substr($contents, $pos + 6, $pos2 - $pos - 6));
 					if (strpos($class, ' ') === false){
 						$runner .= '    {' . PHP_EOL . '        ' . $class . ' ttt("' . $class . '");' . PHP_EOL;
-						
+
 						//get the methods
 						while(($pos = strpos($contents, 'void test', $pos)) !== false){
 							$pos2 = strpos($contents, '(', $pos);
@@ -64,7 +64,7 @@
 	foreach($array as $file){
 		getMethodsFromFile($runner, $file);
 	}
-	
+
 
 	$runner .= '}' . PHP_EOL . PHP_EOL;
 	if (file_put_contents(dirname(__FILE__) . '/RunTestSuite2.cpp', $runner) === false){

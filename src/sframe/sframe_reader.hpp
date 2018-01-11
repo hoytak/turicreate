@@ -17,7 +17,7 @@
 
 
 namespace turi {
-// forward declaration of th csv_line_tokenizer to avoid a 
+// forward declaration of th csv_line_tokenizer to avoid a
 // circular dependency
 struct csv_line_tokenizer;
 class sframe;
@@ -33,7 +33,7 @@ class sframe;
  * A input iterator over an SFrame.
  *
  * The sframe_iterator provides a simple input iterator (like forward iterator,
- * but one pass. i.e. increment of one, invalidates all other copies.) over a 
+ * but one pass. i.e. increment of one, invalidates all other copies.) over a
  * segment of an sframe. It essentially exposes a column of vectors, where each
  * vector is a row in a table.
  *
@@ -103,7 +103,7 @@ class sframe_iterator {
       cur_segment_pos = segment_limit;
     }
 
-    return *this; 
+    return *this;
   }
 
 
@@ -154,7 +154,7 @@ class sframe_iterator {
     return cur_element;
   }
 
-  /** 
+  /**
    * Returns a pointer to the current element. Value will be invalid if
    * iterator == end.
    */
@@ -181,7 +181,7 @@ class sframe_iterator {
 };
 
 /**
- * The sframe_reader provides a reading interface to an \ref sframe : 
+ * The sframe_reader provides a reading interface to an \ref sframe :
  * an immutable on-disk set of columns, each with
  * their own type.  These types are represented as a flexible_type.
  *
@@ -197,7 +197,7 @@ class sframe_iterator {
  * auto reader = frame.get_reader();
  * \endcode
  * reader will be of type sframe_reader
- * 
+ *
  * reader can then provide input iterators from segments via the begin()
  * and end() functions.
  */
@@ -222,22 +222,22 @@ class sframe_reader : public siterable<sframe_iterator> {
 
 
   /**
-   * Attempts to construct an sframe_iterator which reads 
+   * Attempts to construct an sframe_iterator which reads
    * If the index file cannot be opened, an exception is thrown.
    *
    * \param array The array to read
-   * \param num_segments If num_segments == (size_t)(-1), the 
+   * \param num_segments If num_segments == (size_t)(-1), the
    *                     segmentation of the first column is used. Otherwise,
-   *                     the array is cut into num_segments number of 
+   *                     the array is cut into num_segments number of
    *                     logical segments which distribute the rows uniformly.
    */
   void init(const sframe& array, size_t num_segments = (size_t)(-1));
 
   /**
-   * Attempts to construct an sframe_iterator which reads from 
+   * Attempts to construct an sframe_iterator which reads from
    * an existing sframe and uses a segmentation defined by an argument.
    * If the index file cannot be opened, an exception is thrown.
-   * If the sum of the lengths of all the segments do not add up to the 
+   * If the sum of the lengths of all the segments do not add up to the
    * length of the sframe , an exception is thrown
    *
    * \param array The frame to read
@@ -255,11 +255,11 @@ class sframe_reader : public siterable<sframe_iterator> {
   /**
    * Reads a collection of rows, storing the result in out_obj.
    * This function is independent of the begin/end iterator
-   * functions, and can be called anytime. This function is also fully 
+   * functions, and can be called anytime. This function is also fully
    * concurrent.
    * \param row_start First row to read
    * \param row_end one past the last row to read (i.e. EXCLUSIVE). row_end can
-   *                be beyond the end of the array, in which case, 
+   *                be beyond the end of the array, in which case,
    *                fewer rows will be read.
    * \param out_obj The output array
    * \returns Actual number of rows read. Return (size_t)(-1) on failure.
@@ -267,19 +267,19 @@ class sframe_reader : public siterable<sframe_iterator> {
    * \note This function is not always efficient. Different file formats
    * implementations will have different characteristics.
    */
-  size_t read_rows(size_t row_start, 
-                   size_t row_end, 
+  size_t read_rows(size_t row_start,
+                   size_t row_end,
                    std::vector<std::vector<flexible_type> >& out_obj);
 
 
   /**
    * Reads a collection of rows, storing the result in out_obj.
    * This function is independent of the begin/end iterator
-   * functions, and can be called anytime. This function is also fully 
+   * functions, and can be called anytime. This function is also fully
    * concurrent.
    * \param row_start First row to read
    * \param row_end one past the last row to read (i.e. EXCLUSIVE). row_end can
-   *                be beyond the end of the array, in which case, 
+   *                be beyond the end of the array, in which case,
    *                fewer rows will be read.
    * \param out_obj The output array
    * \returns Actual number of rows read. Return (size_t)(-1) on failure.
@@ -287,8 +287,8 @@ class sframe_reader : public siterable<sframe_iterator> {
    * \note This function is not always efficient. Different file formats
    * implementations will have different characteristics.
    */
-  size_t read_rows(size_t row_start, 
-                   size_t row_end, 
+  size_t read_rows(size_t row_start,
+                   size_t row_end,
                    sframe_rows& out_obj);
 
 

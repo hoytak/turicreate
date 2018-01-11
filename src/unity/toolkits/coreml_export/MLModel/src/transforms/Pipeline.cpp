@@ -71,7 +71,7 @@ namespace CoreML {
                 assert(false);
                 break;
         }
-        
+
         auto* contained = container->Add();
         *contained = spec.getProto();
         return Result();

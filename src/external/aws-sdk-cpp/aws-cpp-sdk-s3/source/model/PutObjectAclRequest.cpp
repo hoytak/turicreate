@@ -25,7 +25,7 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws::Http;
 
-PutObjectAclRequest::PutObjectAclRequest() : 
+PutObjectAclRequest::PutObjectAclRequest() :
     m_aCLHasBeenSet(false),
     m_accessControlPolicyHasBeenSet(false),
     m_bucketHasBeenSet(false),

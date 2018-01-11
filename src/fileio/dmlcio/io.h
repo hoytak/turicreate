@@ -86,7 +86,7 @@ class SeekStream: public Stream {
    * \brief generic factory function
    *  create an SeekStream for read only,
    *  the stream will close the underlying files upon deletion
-   *  error will be reported and the system will exit when create failed 
+   *  error will be reported and the system will exit when create failed
    * \param uri the uri of the input currently we support
    *            hdfs://, s3://, and file:// by default file:// will be used
    * \param allow_null whether NULL can be returned, or directly report error

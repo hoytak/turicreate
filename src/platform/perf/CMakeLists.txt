@@ -4,6 +4,6 @@ make_library(perf
   SOURCES
   tracepoint.cpp
   REQUIRES
-  logger 
+  logger
     EXTERNAL_VISIBILITY
 )

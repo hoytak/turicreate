@@ -40,40 +40,40 @@ namespace Model
     CopyObjectResult(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
     CopyObjectResult& operator=(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
 
-    
+
     inline const Aws::String& GetETag() const{ return m_eTag; }
 
-    
+
     inline void SetETag(const Aws::String& value) { m_eTag = value; }
 
-    
+
     inline void SetETag(Aws::String&& value) { m_eTag = value; }
 
-    
+
     inline void SetETag(const char* value) { m_eTag.assign(value); }
 
-    
+
     inline CopyObjectResult& WithETag(const Aws::String& value) { SetETag(value); return *this;}
 
-    
+
     inline CopyObjectResult& WithETag(Aws::String&& value) { SetETag(value); return *this;}
 
-    
+
     inline CopyObjectResult& WithETag(const char* value) { SetETag(value); return *this;}
 
-    
+
     inline const Aws::Utils::DateTime& GetLastModified() const{ return m_lastModified; }
 
-    
+
     inline void SetLastModified(const Aws::Utils::DateTime& value) { m_lastModified = value; }
 
-    
+
     inline void SetLastModified(Aws::Utils::DateTime&& value) { m_lastModified = value; }
 
-    
+
     inline CopyObjectResult& WithLastModified(const Aws::Utils::DateTime& value) { SetLastModified(value); return *this;}
 
-    
+
     inline CopyObjectResult& WithLastModified(Aws::Utils::DateTime&& value) { SetLastModified(value); return *this;}
 
   private:

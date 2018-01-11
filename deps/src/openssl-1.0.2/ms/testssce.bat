@@ -11,7 +11,7 @@ set CAserial=\OpenSSL\certCA.srl
 set CAreq=\OpenSSL\reqCA.ss
 cecopy ..\test\CAss.cnf CE:\OpenSSL
 set CAconf=\OpenSSL\CAss.cnf
-set CAreq2=\OpenSSL\req2CA.ss	
+set CAreq2=\OpenSSL\req2CA.ss
 
 cecopy ..\test\Uss.cnf CE:\OpenSSL
 set Uconf=\OpenSSL\Uss.cnf

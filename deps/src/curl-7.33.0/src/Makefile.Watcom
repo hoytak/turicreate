@@ -209,4 +209,3 @@ $(LINK_ARG): $(__MAKEFILES__)
 !else
 	@%append $^@ library ws2_32.lib
 !endif
-

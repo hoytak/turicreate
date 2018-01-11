@@ -15,7 +15,7 @@ namespace turi { namespace v2 { namespace ml_data_internal {
 
 size_t ML_DATA_TARGET_ROW_BYTE_MINIMUM = 64*1024;
 
-REGISTER_GLOBAL(int64_t, ML_DATA_TARGET_ROW_BYTE_MINIMUM, true); 
+REGISTER_GLOBAL(int64_t, ML_DATA_TARGET_ROW_BYTE_MINIMUM, true);
 
 /** Translates the raw flexible_type data in column_buffer into a
  *  block of rows, indexing it through the metadata classes.  The

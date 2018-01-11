@@ -51,8 +51,8 @@ void ml_metadata::setup_cached_values() {
 
   ////////////////////////////////////////
   // The number of untranslated columns.
-  _num_untranslated_columns = 0; 
-  
+  _num_untranslated_columns = 0;
+
   for(size_t i = 0; i < columns.size(); ++i)
     if(is_untranslated_column(i))
       ++_num_untranslated_columns;
@@ -67,9 +67,9 @@ void ml_metadata::setup_cached_values() {
 
   ////////////////////////////////////////
   // The map of column names to indices
-  
+
   _column_name_to_index_map.clear();
-  
+
   for(size_t c_idx = 0; c_idx < num_columns(); ++c_idx) {
     _column_name_to_index_map[column_name(c_idx)] = c_idx;
   }
@@ -148,7 +148,7 @@ void ml_metadata::load(turi::iarchive& iarc) {
 
   // Finalize by setting up all the cached values now that everything
   // is present.
-  setup_cached_values(); 
+  setup_cached_values();
 }
 
 /** Create a new metadata object that shares the same indexing as
@@ -229,8 +229,8 @@ std::shared_ptr<ml_metadata> ml_metadata::select_columns(
 
   m->options = options;
 
-  // Set the cached values 
-  m->setup_cached_values(); 
+  // Set the cached values
+  m->setup_cached_values();
 
   return m;
 }

@@ -1479,4 +1479,3 @@ server_cleanup:
   logmsg("========> rtspd quits");
   return 0;
 }
-

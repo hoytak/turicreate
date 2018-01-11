@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-CopyPartResult::CopyPartResult() : 
+CopyPartResult::CopyPartResult() :
     m_eTagHasBeenSet(false),
     m_lastModifiedHasBeenSet(false)
 {
 }
 
-CopyPartResult::CopyPartResult(const XmlNode& xmlNode) : 
+CopyPartResult::CopyPartResult(const XmlNode& xmlNode) :
     m_eTagHasBeenSet(false),
     m_lastModifiedHasBeenSet(false)
 {

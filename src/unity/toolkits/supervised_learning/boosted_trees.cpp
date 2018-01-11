@@ -20,22 +20,22 @@ namespace xgboost {
 void init_boosted_trees_common_options(option_manager &options){
   options.create_integer_option(
       "max_iterations",
-      "Number of iterations, equals to the number of trees", 
+      "Number of iterations, equals to the number of trees",
       10,
       1,
       std::numeric_limits<int>::max(),
       false);
 
   options.create_integer_option(
-      "max_depth", 
-      "The maximum depth of individual trees", 
+      "max_depth",
+      "The maximum depth of individual trees",
       6,
       1,
       std::numeric_limits<int>::max(),
-      false); 
+      false);
 
   options.create_real_option(
-      "step_size", 
+      "step_size",
       "Step_size used for combining the weight of individual trees",
       0.3,
       0.0,
@@ -43,12 +43,12 @@ void init_boosted_trees_common_options(option_manager &options){
       false);
 
   options.create_real_option(
-      "min_child_weight", 
+      "min_child_weight",
       "Minimum weight required on the leaf nodes",
       0.1,
       0.0,
       std::numeric_limits<float>::max(),
-      false); 
+      false);
 
   options.create_real_option(
       "min_loss_reduction",
@@ -56,7 +56,7 @@ void init_boosted_trees_common_options(option_manager &options){
       0.0,
       0.0,
       std::numeric_limits<float>::max(),
-      false); 
+      false);
 
   options.create_real_option(
       "row_subsample",
@@ -75,8 +75,8 @@ void init_boosted_trees_common_options(option_manager &options){
       false);
 
   options.create_integer_option(
-      "random_seed", 
-      "Seed for row and column subselection", 
+      "random_seed",
+      "Seed for row and column subselection",
       flex_undefined(),
       std::numeric_limits<int>::min() + 1, // yay! Windows!
       std::numeric_limits<int>::max(),
@@ -144,7 +144,7 @@ void set_xgboost_boosted_tree_common_options(
         booster_.SetParam("seed", value.c_str());
       }
     } else {
-      booster_.SetParam(name.c_str(), value.c_str());    
+      booster_.SetParam(name.c_str(), value.c_str());
     }
   }
 }
@@ -186,15 +186,15 @@ void boosted_trees_regression::init_options(
   add_or_update_state(flexmap_to_varmap(options.current_option_values()));
 }
 
-void boosted_trees_regression::export_to_coreml(const std::string& filename) { 
-  
-  std::map<std::string, flexible_type> context = { 
-    {"model_type", "boosted_trees"}, 
-    {"version", std::to_string(get_version())}, 
-    {"class", name()}, 
+void boosted_trees_regression::export_to_coreml(const std::string& filename) {
+
+  std::map<std::string, flexible_type> context = {
+    {"model_type", "boosted_trees"},
+    {"version", std::to_string(get_version())},
+    {"class", name()},
     {"short_description", "Boosted Tree Regression model."}};
 
-  this->_export_xgboost_model(filename, false, false, context); 
+  this->_export_xgboost_model(filename, false, false, context);
 }
 
 /**
@@ -205,12 +205,12 @@ void boosted_trees_regression::export_to_coreml(const std::string& filename) {
 /**
  * Init function common to all regression inits.
  */
-void boosted_trees_classifier::model_specific_init(const ml_data& data, 
+void boosted_trees_classifier::model_specific_init(const ml_data& data,
                                                    const ml_data& valid_data){
   xgboost_model::model_specific_init(data, valid_data);
   // Update the model
   state["num_classes"] = this->ml_mdata->target_index_size();
-  state["num_examples_per_class"] = 
+  state["num_examples_per_class"] =
              to_variant(supervised::get_num_examples_per_class(this->ml_mdata));
 
 }
@@ -255,23 +255,23 @@ void boosted_trees_classifier::init_options(
     "class_weights",
     "Weights (during training) assigned to each class.",
     flex_undefined(),
-    true); 
+    true);
 
   init_boosted_trees_common_options(options);
   options.set_options(_opts);
 
   add_or_update_state(flexmap_to_varmap(options.current_option_values()));
 }
-  
-void boosted_trees_classifier::export_to_coreml(const std::string& filename) { 
-  
-  std::map<std::string, flexible_type> context = { 
-    {"model_type", "boosted_trees"}, 
-    {"version", std::to_string(get_version())}, 
-    {"class", name()}, 
+
+void boosted_trees_classifier::export_to_coreml(const std::string& filename) {
+
+  std::map<std::string, flexible_type> context = {
+    {"model_type", "boosted_trees"},
+    {"version", std::to_string(get_version())},
+    {"class", name()},
     {"short_description", "Boosted Tree classification model."}};
 
-  this->_export_xgboost_model(filename, true, false, context); 
+  this->_export_xgboost_model(filename, true, false, context);
 }
 
 

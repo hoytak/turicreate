@@ -11,7 +11,7 @@
 namespace turi {
   /**
   * \ingroup util
-  * Returns the first non-localhost ipv4 address 
+  * Returns the first non-localhost ipv4 address
   */
   uint32_t get_local_ip(bool print = true);
 
@@ -20,7 +20,7 @@ namespace turi {
   * Returns the first non-localhost ipv4 address as a standard dot delimited string
   */
   std::string get_local_ip_as_str(bool print = true);
-  /** \ingroup util 
+  /** \ingroup util
    * Find a free tcp port and binds it. Caller must release the port.
    * Returns a pair of [port, socket handle]
    */

@@ -317,5 +317,3 @@ Returns 0 on success, -1 (with exception raised) on validation failure.
                                *user_dtype, PyUFuncGenericFunction
                                function, PyArray_Descr
                                **arg_dtypes, void *data)
-
-

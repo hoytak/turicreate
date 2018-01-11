@@ -7,4 +7,3 @@ make_library(unity_image_export
     unity_core
     EXTERNAL_VISIBILITY
   )
-

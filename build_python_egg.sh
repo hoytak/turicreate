@@ -78,7 +78,7 @@ while [ $# -gt 0 ]
 
     -D)                     configure_options="${configure_options} -D $2"; shift ;;
 
-    *)                      configure_options="${configure_options} $1";; 
+    *)                      configure_options="${configure_options} $1";;
   esac
   shift
 done
@@ -120,5 +120,3 @@ else
 fi
 
 find . -type f -name '*.dylib' -o -name '*.so' | xargs tar cvzf ${install_dir}/shared_objects.tar.gz
-
-

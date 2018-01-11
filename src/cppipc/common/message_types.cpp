@@ -10,7 +10,7 @@ namespace cppipc {
 void call_message::clear() {
   if (!zmqbodyused) {
     if (body) free((void*)body);
-  } 
+  }
   body = NULL;
   objectid = 0;
   zmqbodyused = false;
@@ -65,7 +65,7 @@ void call_message::emit(nanosockets::zmq_msg_vector& msg) {
   if (body != NULL) {
     z_body->assign(body, bodylen);
   }
-  
+
   clear();
 }
 
@@ -74,7 +74,7 @@ void call_message::emit(nanosockets::zmq_msg_vector& msg) {
 void reply_message::clear() {
   if (!zmqbodyused) {
     if (body) free((void*)body);
-  } 
+  }
   body = NULL;
   bodylen = 0;
   zmqbodyused = false;
@@ -123,7 +123,7 @@ void reply_message::emit(nanosockets::zmq_msg_vector& msg) {
   if (body != NULL) {
     z_body->assign(body, bodylen);
   }
-  
+
   clear();
 }
 

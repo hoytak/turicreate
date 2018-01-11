@@ -388,4 +388,3 @@ AUTHOR
        gzip.  Many people sent patches, helped  with  portability
        problems,  lent  machines,  gave advice and were generally
        helpful.
-

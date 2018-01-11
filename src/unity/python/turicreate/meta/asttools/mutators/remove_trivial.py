@@ -78,18 +78,18 @@ class GatherAssignments(Visitor):
 def remove_trivial(root):
     '''
     Remove redundant statements.
-    
+
     The statement `a = 1` will be removed::
-        
+
         a = 1
         a = 2
 
     The statement `a = 1` will not be removed because `b` depends on it::
-        
+
         a = 1
         b = a + 2
         a = 2
-        
+
     :param root: ast node
     '''
 
@@ -122,18 +122,18 @@ def remove_trivial(root):
 def remove_unused_assign(root, symbol):
     '''
     Remove redundant statements.
-    
+
     The statement `a = 1` will be removed::
-        
+
         a = 1
         a = 2
 
     The statement `a = 1` will not be removed because `b` depends on it::
-        
+
         a = 1
         b = a + 2
         a = 2
-        
+
     :param root: ast node
     '''
 
@@ -149,7 +149,7 @@ def remove_unused_assign(root, symbol):
     assignments = gen.assign_id_map[symbol]
 
     if len(assignments) < 2:
-        return 
+        return
 
     for j in range(len(assignments) - 1):
         i1 = root.body.index(assignments[j].root)
@@ -167,4 +167,3 @@ def remove_unused_assign(root, symbol):
 
     for old in to_remove:
         replace_nodes(root, old, Pass(old))
-

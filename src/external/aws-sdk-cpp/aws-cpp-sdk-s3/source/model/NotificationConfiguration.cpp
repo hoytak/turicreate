@@ -29,14 +29,14 @@ namespace S3
 namespace Model
 {
 
-NotificationConfiguration::NotificationConfiguration() : 
+NotificationConfiguration::NotificationConfiguration() :
     m_topicConfigurationsHasBeenSet(false),
     m_queueConfigurationsHasBeenSet(false),
     m_lambdaFunctionConfigurationsHasBeenSet(false)
 {
 }
 
-NotificationConfiguration::NotificationConfiguration(const XmlNode& xmlNode) : 
+NotificationConfiguration::NotificationConfiguration(const XmlNode& xmlNode) :
     m_topicConfigurationsHasBeenSet(false),
     m_queueConfigurationsHasBeenSet(false),
     m_lambdaFunctionConfigurationsHasBeenSet(false)

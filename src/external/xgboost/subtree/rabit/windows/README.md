@@ -8,5 +8,5 @@ Build
 Build Your code with rabit
 ====
 * Add include to the dependency path of your project
-* Add ```rabit.lib``` to the linker dependency  
+* Add ```rabit.lib``` to the linker dependency
 * The project basic is an example to show you how to build rabit with basic.cc

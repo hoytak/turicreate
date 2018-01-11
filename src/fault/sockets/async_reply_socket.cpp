@@ -255,7 +255,7 @@ void async_reply_socket::process_job(thread_data* data, zmq_msg_vector* msg) {
   zmq_msg_vector send;
 
   // strip message envelope from incoming message
-  // and put it to send 
+  // and put it to send
   while(msg->size() > 0) {
     zmq_msg_init(send.insert_back());
     zmq_msg_copy(send.back(), msg->front()); msg->pop_front_and_free();
@@ -331,4 +331,3 @@ std::string async_reply_socket::get_bound_address() {
 }
 
 } // namespace libfault
-

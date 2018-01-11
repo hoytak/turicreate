@@ -6,6 +6,6 @@
 
 '''
 Turi Create offers a broad set of essential machine learning models as well as
-task specific toolkits that let you to get started quickly while still giving you the 
+task specific toolkits that let you to get started quickly while still giving you the
 ability to go back and customize models later.
 '''

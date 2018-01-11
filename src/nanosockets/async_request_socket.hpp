@@ -22,9 +22,9 @@ namespace nanosockets {
  *
  * Constructs a nanomsg asynchronous request socket.
  *
- * The async_request_socket is the requesting endpoint of 
+ * The async_request_socket is the requesting endpoint of
  * \ref async_reply_socket. The \ref async_reply_socket listens and waits for
- * requests, and the \ref async_request_socket sends requests. 
+ * requests, and the \ref async_request_socket sends requests.
  * Communication is atomic; either the listener receives all of a message, or
  * none at all. Communication will be automatically retried as needed.
  *
@@ -34,7 +34,7 @@ namespace nanosockets {
  * int ret = sock.request_master(msg, ret, 10); // 10 second timeout
  * \endcode
  *
- * This object is multi-threaded. Calls can be made from multiple threads 
+ * This object is multi-threaded. Calls can be made from multiple threads
  * simultaneously and will be queued accordingly.
  *
  * All messaging is done via \ref zmq_msg_vector which is internally, an array
@@ -73,8 +73,8 @@ class EXPORT async_request_socket {
                      zmq_msg_vector& ret,
                      size_t timeout = 0);
 
-  /** 
-   * When waiting for a response, this function will be polled once per second. 
+  /**
+   * When waiting for a response, this function will be polled once per second.
    * If this function returns false, the receive polling will quit.
    * This can be used for instance, to quit a receive if we know for certain
    * the remote is no longer alive.
@@ -109,6 +109,6 @@ class EXPORT async_request_socket {
 };
 
 
-} 
+}
 }
 #endif

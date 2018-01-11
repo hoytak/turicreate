@@ -204,7 +204,7 @@ archive_entry_clone(struct archive_entry *entry)
 
 	/* Copy encryption status */
 	entry2->encryption = entry->encryption;
-	
+
 	/* Copy ACL data over. */
 	archive_acl_copy(&entry2->acl, &entry->acl);
 

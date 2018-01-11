@@ -35,4 +35,3 @@
 #define __unlikely__(x)     __builtin_expect((x),0)
 
 #endif //TURI_UTIL_BRANCH_HINTS_HPP
-

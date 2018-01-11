@@ -43,11 +43,11 @@ namespace Aws
             * Initializes object with UUID
             */
             AsyncCallerContext(const char* uuid) : m_uuid(uuid) {}
-          
+
             virtual ~AsyncCallerContext() {}
 
             /**
-             * Gets underlying UUID 
+             * Gets underlying UUID
              */
             inline const Aws::String& GetUUID() const { return m_uuid; }
 
@@ -66,4 +66,3 @@ namespace Aws
         };
     }
 }
-

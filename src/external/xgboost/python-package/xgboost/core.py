@@ -970,4 +970,3 @@ class Booster(object):
                 msg = 'feature_names mismatch: {0} {1}'
                 raise ValueError(msg.format(self.feature_names,
                                             data.feature_names))
-

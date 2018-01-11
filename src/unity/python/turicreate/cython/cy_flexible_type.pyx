@@ -436,12 +436,12 @@ cdef dict _type_lookup_by_type_enum_name = {
     "list"       : list,
     "image"      : _image_type,
     "undefined"  : none_type}
-    
+
 # Also add in the names of each of the types in order to recognize
 # them as well.
 for _t in list(_type_lookup_by_type_enum_name.values()):
     _type_lookup_by_type_enum_name[_t.__name__.lower()] = _t
-    
+
 cpdef type pytype_from_type_name(str s):
     global _type_lookup_by_type_enum_name
     try:
@@ -1419,7 +1419,7 @@ cdef flexible_type _ft_translate(object v, int tr_code) except *:
     elif tr_code == FT_BUFFER_TYPE or tr_code == FT_ARRAY_TYPE:
         tr_buffer_to_ft(ret, v)
         return ret
-    
+
     # Now, versions of the above with a cast and/or check.
     elif tr_code == (FT_INT_TYPE + FT_SAFE):
         try:
@@ -1511,7 +1511,7 @@ cdef flexible_type flexible_type_from_pyobject(object v) except *:
 
     cdef int tr_code = get_translation_code(t, v)
     #print( "type of %s = %s, tr_code = %d." % (repr(v), str(t), tr_code))
-    
+
     ret = _ft_translate(v, tr_code)
     check_list_to_vector_translation(ret)
     return ret
@@ -1619,7 +1619,7 @@ cdef pyobject_from_flexible_type(const flexible_type& v):
     """
 
     cdef flex_type_enum f_type = v.get_type()
-    
+
     if f_type == INTEGER:
         return v.get_int()
     elif f_type == FLOAT:

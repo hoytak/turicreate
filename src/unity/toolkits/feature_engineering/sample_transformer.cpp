@@ -18,12 +18,12 @@ namespace feature_engineering {
  */
 void sample_transformer::init_options(const std::map<std::string, flexible_type>&_options){
     options.create_real_option(
-        "constant", 
-        "Constant that you want us to transform all your data to.", 
+        "constant",
+        "Constant that you want us to transform all your data to.",
         0.5,
         0,
         1,
-        false); 
+        false);
 
     // Set options!
     options.set_options(_options);
@@ -53,9 +53,9 @@ void sample_transformer::save_impl(turi::oarchive& oarc) const {
  * Load the object using Turi's iarc.
  */
 void sample_transformer::load_version(turi::iarchive& iarc, size_t version){
-  // State  
+  // State
   variant_deep_load(state, iarc);
-  
+
   // Everything else
   iarc >> constant
        >> options;
@@ -65,7 +65,7 @@ void sample_transformer::load_version(turi::iarchive& iarc, size_t version){
 /**
  * Initialize the transformer.
  */
-void sample_transformer::init_transformer(const std::map<std::string, 
+void sample_transformer::init_transformer(const std::map<std::string,
                       flexible_type>& _options){
   std::map<std::string, flexible_type> opts;
   for(const auto& k: _options){
@@ -77,11 +77,11 @@ void sample_transformer::init_transformer(const std::map<std::string,
   // Capture some things as private variables.
   constant = _options.at("constant");
   init_options(opts);
-  
+
   // Set the features
   flexible_type features = _options.at("features");
   state["features"] = to_variant(features);
-  if (features == FLEX_UNDEFINED) { 
+  if (features == FLEX_UNDEFINED) {
     state["num_features"] = 1;
   } else {
     state["num_features"] = to_variant(features.size());
@@ -92,7 +92,7 @@ void sample_transformer::init_transformer(const std::map<std::string,
  * Fit the data.
  */
 void sample_transformer::fit(gl_sframe data){
-  if (variant_get_value<flexible_type>(state["features"]) == FLEX_UNDEFINED){ 
+  if (variant_get_value<flexible_type>(state["features"]) == FLEX_UNDEFINED){
     state["features"] = to_variant(data.column_names());
     state["num_features"] = to_variant(data.num_columns());
   }
@@ -107,8 +107,8 @@ gl_sframe sample_transformer::transform(gl_sframe data){
   for (const std::string& col_name: ret_sf.column_names()){
     auto constant = this->constant;
     ret_sf[col_name] = data[col_name].apply([constant]
-                      (const flexible_type& x) { 
-                          return constant; 
+                      (const flexible_type& x) {
+                          return constant;
                        }, flex_type_enum::FLOAT);
   }
   return ret_sf;

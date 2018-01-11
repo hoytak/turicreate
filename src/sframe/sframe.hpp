@@ -19,7 +19,7 @@
 
 
 namespace turi {
-// forward declaration of th csv_line_tokenizer to avoid a 
+// forward declaration of th csv_line_tokenizer to avoid a
 // circular dependency
 struct csv_line_tokenizer;
 class sframe_reader;
@@ -27,7 +27,7 @@ class csv_writer;
 
 typedef turi::sframe_function_output_iterator<
     std::vector<flexible_type>,
-    std::function<void(const std::vector<flexible_type>&)>, 
+    std::function<void(const std::vector<flexible_type>&)>,
     std::function<void(std::vector<flexible_type>&&)>,
     std::function<void(const sframe_rows&)> >
     sframe_output_iterator;
@@ -45,18 +45,18 @@ typedef turi::sframe_function_output_iterator<
  * sequence of an object T split into segments. The sframe writes an sarray
  * for each column of data it is given to disk, each with a prefix that extends
  * the prefix given to open. The SFrame is referenced on disk by a single
- * ".frame_idx" file which then has a list of file names, one file for each 
+ * ".frame_idx" file which then has a list of file names, one file for each
  * column.
  *
  * The SFrame is \b write-once, \b read-many. The SFrame can be opened for
- * writing \b once, after which it is read-only. 
+ * writing \b once, after which it is read-only.
  *
  * Since each column of the SFrame is an independent sarray, as an independent
  * shared_ptr<sarray<flexible_type> > object, columns can be added / removed
- * to form new sframes without problems. As such, certain operations 
- * (such as the object returned by add_column) recan be "ephemeral" in that 
+ * to form new sframes without problems. As such, certain operations
+ * (such as the object returned by add_column) recan be "ephemeral" in that
  * there is no .frame_idx file on disk backing it. An "ephemeral" frame can be
- * identified by checking the result of get_index_file(). If this is empty, 
+ * identified by checking the result of get_index_file(). If this is empty,
  * it is an ephemeral frame.
  *
  * The interface for the SFrame pretty much matches that of the \ref sarray
@@ -67,7 +67,7 @@ typedef turi::sframe_function_output_iterator<
 class sframe : public swriter_base<sframe_output_iterator> {
  public:
 
-  /// The reader type 
+  /// The reader type
   typedef sframe_reader reader_type;
 
   /// The iterator type which \ref get_output_iterator returns
@@ -82,12 +82,12 @@ class sframe : public swriter_base<sframe_output_iterator> {
   /*                                                                        */
   /**************************************************************************/
   /**
-   * default constructor; does nothing; use \ref open_for_read or 
+   * default constructor; does nothing; use \ref open_for_read or
    * \ref open_for_write after construction to read/create an sarray.
    */
   inline sframe() { }
 
-  /** 
+  /**
    * Copy constructor.
    * If the source frame is opened for writing, this will throw
    * an exception. Otherwise, this will create a frame opened for reading,
@@ -96,7 +96,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
   sframe(const sframe& other);
 
 
-  /** 
+  /**
    * Move constructor.
    */
   sframe(sframe&& other) : sframe() {
@@ -104,7 +104,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
   }
 
 
-  /** 
+  /**
    * Assignment operator.
    * If the source frame is opened for writing, this will throw
    * an exception. Otherwise, this will create a frame opened for reading,
@@ -113,15 +113,15 @@ class sframe : public swriter_base<sframe_output_iterator> {
   sframe& operator=(const sframe& other);
 
 
-  /** 
+  /**
    * Move Assignment operator.
-   * Moves other into this. Other will be cleared as if it is a newly 
+   * Moves other into this. Other will be cleared as if it is a newly
    * constructed sframe object.
    */
   sframe& operator=(sframe&& other);
 
   /**
-   * Attempts to construct an sframe which reads from the given frame 
+   * Attempts to construct an sframe which reads from the given frame
    * index file. This should be a .frame_idx file.
    * If the index cannot be opened, an exception is thrown.
    */
@@ -144,7 +144,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
    * \param column_names List of the name for each column, with the indices
    * corresponding with the list of columns. If the length of the column_names
    * vector does not match columns, the column gets a default name.
-   * For example, if four columns are given and column_names = {id, num}, 
+   * For example, if four columns are given and column_names = {id, num},
    * the columns will be named {"id, "num", "X3", "X4"}.  Entries that are
    * zero-length strings will also be given a default name.
    * \param fail_on_column_names If true, will throw an exception if any column
@@ -162,7 +162,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
       bool fail_on_column_names=true) {
     open_for_read(new_columns, column_names, fail_on_column_names);
   }
-  
+
   /**
    * Constructs an SFrame from a csv file.
    *
@@ -252,10 +252,10 @@ class sframe : public swriter_base<sframe_output_iterator> {
    * vector.
    * \param nsegments The number of parallel output segments on each
    * sarray.  Throws an exception if this is 0.
-   * \param frame_sidx_file If not specified, an argitrary temporary 
+   * \param frame_sidx_file If not specified, an argitrary temporary
    *                        file will be created. Otherwise, all frame
    *                        files will be written to the same location
-   *                        as the frame_sidx_file. Must end in 
+   *                        as the frame_sidx_file. Must end in
    *                        ".frame_idx"
    * \param fail_on_column_names If true, will throw an exception if any column
    *                             names are unique.  If false, will
@@ -274,7 +274,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
       log_and_throw(std::string("Names and Types array length mismatch"));
     }
     inited = true;
-    create_arrays_for_writing(column_names, column_types, 
+    create_arrays_for_writing(column_names, column_types,
                               nsegments, frame_sidx_file, fail_on_column_names);
   }
 
@@ -303,7 +303,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
 
 
   /**
-   * Return the index file of the sframe 
+   * Return the index file of the sframe
    */
   inline const std::string& get_index_file() const {
     ASSERT_TRUE(inited);
@@ -390,22 +390,22 @@ class sframe : public swriter_base<sframe_output_iterator> {
   }
 
 
-  /** Returns the column names as a single vector.  
+  /** Returns the column names as a single vector.
    */
   inline const std::vector<std::string>& column_names() const {
     return index_info.column_names;
   }
 
-  /** Returns the column types as a single vector.  
+  /** Returns the column types as a single vector.
    */
   inline std::vector<flex_type_enum> column_types() const {
     std::vector<flex_type_enum> tv(num_columns());
     for(size_t i = 0; i < num_columns(); ++i)
       tv[i] = column_type(i);
-   
+
     return tv;
   }
-  
+
   /**
    * Returns true if the sframe contains the given column.
    */
@@ -431,8 +431,8 @@ class sframe : public swriter_base<sframe_output_iterator> {
     }
   }
 
-  /** 
-   * Return the number of segments in the collection. 
+  /**
+   * Return the number of segments in the collection.
    * Will throw an exception if the writer is invalid (there is an error
    * opening/writing files)
    */
@@ -468,12 +468,12 @@ class sframe : public swriter_base<sframe_output_iterator> {
   }
 
   /**
-   * Merges another SFrame with the same schema with the current SFrame 
+   * Merges another SFrame with the same schema with the current SFrame
    * returning a new SFrame.
    * Both SFrames can be empty, but cannot be opened for writing.
    */
   sframe append(const sframe& other) const;
-  
+
 
   /**
    * Gets an sframe reader object with the segment layout of the first column.
@@ -543,7 +543,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
 
 
 
-  /** 
+  /**
    * Set the ith column name to name. This can be done when the
    * frame is open in either reading or writing mode. Changes are ephemeral,
    * and do not affect what is stored on disk.
@@ -555,8 +555,8 @@ class sframe : public swriter_base<sframe_output_iterator> {
    * The new sframe is "ephemeral" in that it is not backed by an index
    * on disk.
    *
-   * \param column_id The index of the column to remove. 
-   * 
+   * \param column_id The index of the column to remove.
+   *
    */
   sframe remove_column(size_t column_id) const;
 
@@ -568,7 +568,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
    *
    * \param column_1 The index of the first column.
    * \param column_2 The index of the second column.
-   * 
+   *
    */
   sframe swap_columns(size_t column_1, size_t column_2) const;
 
@@ -597,7 +597,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
   /**
    * Gets an output iterator for the given segment.  This can be used to
    * write data to the segment, and is currently the only supported way
-   * to do so.  
+   * to do so.
    *
    * The iterator is invalid once the segment is closed (See \ref close).
    * Accessing the iterator after the writer is destroyed is undefined
@@ -622,7 +622,7 @@ class sframe : public swriter_base<sframe_output_iterator> {
 
   /**
    * Closes the sframe. close() also implicitly closes all segments.  After
-   * the writer is closed, no segments can be written.  
+   * the writer is closed, no segments can be written.
    * After the sframe is closed, it becomes read only and can be read
    * with the get_reader() function.
    */
@@ -636,11 +636,11 @@ class sframe : public swriter_base<sframe_output_iterator> {
   /**
    * Saves a copy of the current sframe as a CSV file.
    * Does not modify the current sframe.
-   * 
+   *
    * \param csv_file target CSV file to save into
    * \param writer The CSV writer configuration
    */
-  void save_as_csv(std::string csv_file, 
+  void save_as_csv(std::string csv_file,
                    csv_writer& writer);
 
   /**
@@ -661,8 +661,8 @@ class sframe : public swriter_base<sframe_output_iterator> {
    */
   void save(oarchive& oarc) const;
 
-   
-  /** 
+
+  /**
    * SFrame deserializer. iarc must be associated with a directory.
    * Loads from the next prefix inside the directory.
    */
@@ -710,8 +710,8 @@ class sframe : public swriter_base<sframe_output_iterator> {
 
   /**
    * Internal function. Given the index_information, this function
-   * initializes each of the sarrays for reading; filling up 
-   * the columns array 
+   * initializes each of the sarrays for reading; filling up
+   * the columns array
    */
  void create_arrays_for_reading(sframe_index_file_information frame_index_info);
 

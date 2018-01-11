@@ -95,7 +95,7 @@ void sframe_rows::type_check_inplace(const std::vector<flex_type_enum>& typelist
       if (!current_array_is_unique) {
         for (;i < length; ++i) {
           const auto& val = (*arr)[i];
-          if (val.get_type() != typelist[c] && 
+          if (val.get_type() != typelist[c] &&
               val.get_type() != flex_type_enum::UNDEFINED) {
             // damn. modifications are required
             arr = std::make_shared<decoded_column_type>(*arr);
@@ -107,7 +107,7 @@ void sframe_rows::type_check_inplace(const std::vector<flex_type_enum>& typelist
       if (current_array_is_unique) {
         for (;i < length; ++i) {
           auto& val = (*arr)[i];
-          if (val.get_type() != typelist[c] && 
+          if (val.get_type() != typelist[c] &&
               val.get_type() != flex_type_enum::UNDEFINED) {
             flexible_type res(typelist[c]);
             res.soft_assign(val);

@@ -8,7 +8,7 @@ testsize <- 550000
 dtrain <- read.csv("data/training.csv", header=TRUE, nrows=350001)
 dtrain$Label = as.numeric(dtrain$Label=='s')
 # gbm.time = system.time({
-#   gbm.model <- gbm(Label ~ ., data = dtrain[, -c(1,32)], n.trees = 120, 
+#   gbm.model <- gbm(Label ~ ., data = dtrain[, -c(1,32)], n.trees = 120,
 #                    interaction.depth = 6, shrinkage = 0.1, bag.fraction = 1,
 #                    verbose = TRUE)
 # })
@@ -50,22 +50,21 @@ for (i in 1:length(threads)){
 
 xgboost.time
 # [[1]]
-# user  system elapsed 
-# 99.015   0.051  98.982 
-# 
+# user  system elapsed
+# 99.015   0.051  98.982
+#
 # [[2]]
-# user  system elapsed 
-# 100.268   0.317  55.473 
-# 
+# user  system elapsed
+# 100.268   0.317  55.473
+#
 # [[3]]
-# user  system elapsed 
-# 111.682   0.777  35.963 
-# 
+# user  system elapsed
+# 111.682   0.777  35.963
+#
 # [[4]]
-# user  system elapsed 
-# 149.396   1.851  32.661 
-# 
+# user  system elapsed
+# 149.396   1.851  32.661
+#
 # [[5]]
-# user  system elapsed 
-# 157.390   5.988  40.949 
-
+# user  system elapsed
+# 157.390   5.988  40.949

@@ -21,7 +21,7 @@ namespace turi {
     struct vector_serialize_impl {
       static void exec(OutArcType& oarc, const ValueType& vec) {
         // really this is an assert false. But the static assert
-        // must depend on a template parameter 
+        // must depend on a template parameter
         BOOST_STATIC_ASSERT(sizeof(OutArcType) == 0);
         assert(false);
       };
@@ -34,12 +34,12 @@ namespace turi {
     struct vector_deserialize_impl {
       static void exec(InArcType& iarc, ValueType& vec) {
         // really this is an assert false. But the static assert
-        // must depend on a template parameter 
+        // must depend on a template parameter
         BOOST_STATIC_ASSERT(sizeof(InArcType) == 0);
         assert(false);
       };
     };
-    
+
     /// If contained type is not a POD use the standard serializer
     template <typename OutArcType, typename ValueType>
     struct vector_serialize_impl<OutArcType, ValueType, false > {
@@ -84,14 +84,14 @@ namespace turi {
       }
     };
 
-    
-    
+
+
     /**
        Serializes a vector */
     template <typename OutArcType, typename ValueType>
     struct serialize_impl<OutArcType, std::vector<ValueType>, false > {
       static void exec(OutArcType& oarc, const std::vector<ValueType>& vec) {
-        vector_serialize_impl<OutArcType, ValueType, 
+        vector_serialize_impl<OutArcType, ValueType,
           gl_is_pod_or_scaler<ValueType>::value >::exec(oarc, vec);
       }
     };
@@ -100,12 +100,11 @@ namespace turi {
     template <typename InArcType, typename ValueType>
     struct deserialize_impl<InArcType, std::vector<ValueType>, false > {
       static void exec(InArcType& iarc, std::vector<ValueType>& vec){
-        vector_deserialize_impl<InArcType, ValueType, 
+        vector_deserialize_impl<InArcType, ValueType,
           gl_is_pod_or_scaler<ValueType>::value >::exec(iarc, vec);
       }
     };
   } // archive_detail
 } // namespace turi
 
-#endif 
-
+#endif

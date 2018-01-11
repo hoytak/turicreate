@@ -16,7 +16,7 @@
 namespace turi {
 namespace query_eval {
 
-typedef std::function<flexible_type(const sframe_rows::row&, 
+typedef std::function<flexible_type(const sframe_rows::row&,
                                     const sframe_rows::row&)> binary_transform_type;
 
 /**
@@ -32,18 +32,18 @@ typedef std::function<flexible_type(const sframe_rows::row&,
 template<>
 class operator_impl<planner_node_type::BINARY_TRANSFORM_NODE> : public query_operator {
  public:
-  
-  planner_node_type type() const { return planner_node_type::BINARY_TRANSFORM_NODE; } 
+
+  planner_node_type type() const { return planner_node_type::BINARY_TRANSFORM_NODE; }
 
   static std::string name() { return "binary_transform"; }
-        
+
   static query_operator_attributes attributes() {
     query_operator_attributes ret;
     ret.attribute_bitfield = query_operator_attributes::LINEAR;
     ret.num_inputs = 2;
     return ret;
   }
-  
+
   inline operator_impl(const binary_transform_type& f,
                        flex_type_enum output_type)
       : m_transform_fn(f)
@@ -53,7 +53,7 @@ class operator_impl<planner_node_type::BINARY_TRANSFORM_NODE> : public query_ope
   inline std::shared_ptr<query_operator> clone() const {
     return std::make_shared<operator_impl>(*this);
   }
-  
+
   inline void execute(query_context& context) {
     while(1) {
       auto rows_left = context.get_next(0);
@@ -84,8 +84,8 @@ class operator_impl<planner_node_type::BINARY_TRANSFORM_NODE> : public query_ope
       std::shared_ptr<planner_node> right,
         binary_transform_type fn,
       flex_type_enum output_type) {
-    
-    return planner_node::make_shared(planner_node_type::BINARY_TRANSFORM_NODE, 
+
+    return planner_node::make_shared(planner_node_type::BINARY_TRANSFORM_NODE,
                                      {{"output_type", (int)(output_type)}},
                                      {{"function", any(fn)}},
                                      {left, right});
@@ -93,13 +93,13 @@ class operator_impl<planner_node_type::BINARY_TRANSFORM_NODE> : public query_ope
 
   static std::shared_ptr<query_operator> from_planner_node(
       std::shared_ptr<planner_node> pnode) {
-    
+
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::BINARY_TRANSFORM_NODE);
     ASSERT_EQ(pnode->inputs.size(), 2);
     ASSERT_TRUE(pnode->operator_parameters.count("output_type"));
     ASSERT_TRUE(pnode->any_operator_parameters.count("function"));
     binary_transform_type fn;
-    flex_type_enum output_type = 
+    flex_type_enum output_type =
         (flex_type_enum)(flex_int)(pnode->operator_parameters["output_type"]);
 
     fn = pnode->any_operator_parameters["function"].as<binary_transform_type>();
@@ -116,7 +116,7 @@ class operator_impl<planner_node_type::BINARY_TRANSFORM_NODE> : public query_ope
     ASSERT_EQ((int)pnode->operator_type, (int)planner_node_type::BINARY_TRANSFORM_NODE);
     return infer_planner_node_length(pnode->inputs[0]);
   }
-  
+
  private:
    binary_transform_type m_transform_fn;
    flex_type_enum m_output_type;

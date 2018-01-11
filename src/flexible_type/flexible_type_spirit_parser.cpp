@@ -32,7 +32,7 @@ qi::real_parser< double, strict_real_policies<double> > real;
 
 template <typename Iterator, typename SpaceType>
 struct flexible_type_parser_impl: qi::grammar<Iterator, flexible_type(), SpaceType> {
-  flexible_type_parser_impl(std::string delimiter = ",", char escape_char = '\\') : 
+  flexible_type_parser_impl(std::string delimiter = ",", char escape_char = '\\') :
       flexible_type_parser_impl::base_type(root_parser), delimiter(delimiter) {
     using qi::long_long;
     using qi::double_;
@@ -72,61 +72,61 @@ struct flexible_type_parser_impl: qi::grammar<Iterator, flexible_type(), SpaceTy
     root_flex_string.escape_char = escape_char;
     root_flex_string.double_quote = true;
 
-    string = 
+    string =
         (parser_impl::restricted_string(root_flex_string)[_val = _1]);
 
-    root_parser = (real[_val = _1]) | 
-                  (long_long[_val = _1]) | 
-                  (vec [_val = _1]) | 
+    root_parser = (real[_val = _1]) |
+                  (long_long[_val = _1]) |
+                  (vec [_val = _1]) |
                   (recursive [_val = _1]) |
                   (dict [_val = _1]) |
                   (parser_impl::restricted_string(root_flex_string)[_val = _1]) |
                   eps[_val = FLEX_UNDEFINED];
 
-    non_string_parser = (real[_val = _1]) | 
-                        (long_long[_val = _1]) | 
-                        (vec [_val = _1]) | 
+    non_string_parser = (real[_val = _1]) |
+                        (long_long[_val = _1]) |
+                        (vec [_val = _1]) |
                         (recursive [_val = _1]) |
                         (dict [_val = _1]);
 
     // same as the root parser, but modified so that the string
     // parser will stop the following characters: ",{}[]"
-    recursive_element_parser = real[_val = _1] | 
-        long_long[_val = _1] | 
+    recursive_element_parser = real[_val = _1] |
+        long_long[_val = _1] |
         recursive [_val = _1] |
         dict [_val = _1] |
         (parser_impl::restricted_string(recursive_element_string_parser)) [_val = _1] |
         eps[_val = FLEX_UNDEFINED];
 
-                 
+
     // same as the root parser, but modified so that the string
     // parser will stop the following characters: ",\t{}[]:;"
-    dictionary_element_parser = real[_val = _1] | 
-        long_long[_val = _1] | 
+    dictionary_element_parser = real[_val = _1] |
+        long_long[_val = _1] |
         recursive [_val = _1] |
         dict [_val = _1] |
         (parser_impl::restricted_string(dictionary_element_string_parser)) [_val = _1] |
         eps[_val = FLEX_UNDEFINED];
 
-    // used by the recursive types to help parsing of things like 
+    // used by the recursive types to help parsing of things like
     // [1abc, ...] where the 1 gets captured by the greedy parser as an integer.
     // but if we capture "abc" we need to turn the result to an integer
     // These work by essentially going
     // --> read a flex type
     // --> if we hit a delimiter, quit
-    // --> otherwise fail and reread everything as a string, stopping at the 
+    // --> otherwise fail and reread everything as a string, stopping at the
     //     appropriate delimiters.
-    
-    robust_recursive_val_parser = 
+
+    robust_recursive_val_parser =
         (recursive_element_parser[_val = _1] >> &(char_(',') | char_(']')))
         | (parser_impl::restricted_string(recursive_element_string_parser)) [_val = _1];
 
-    robust_dict_key_parser = 
+    robust_dict_key_parser =
         (dictionary_element_parser[_val = _1] >> &(char_(':')))
         | (parser_impl::restricted_string(dictionary_element_string_parser)) [_val = _1];
 
 
-    robust_dict_val_parser = 
+    robust_dict_val_parser =
         (dictionary_element_parser[_val = _1] >> &no_skip[char_(',') | char_('}') | space])
         | (parser_impl::restricted_string(dictionary_element_string_parser)) [_val = _1];
 
@@ -138,7 +138,7 @@ struct flexible_type_parser_impl: qi::grammar<Iterator, flexible_type(), SpaceTy
         (robust_recursive_val_parser[push_back(_val, _1)] % char_(','))
          >> ']');
     vec = (char_('[') >> ']') | ('['  >>
-        (double_[push_back(_val, _1)] % 
+        (double_[push_back(_val, _1)] %
          no_skip[(*space >> char_(',')) | (*space >> char_(';')) | space])
           >> ']');
 
@@ -156,9 +156,9 @@ struct flexible_type_parser_impl: qi::grammar<Iterator, flexible_type(), SpaceTy
       */
   }
   // the root parser
-  qi::rule<Iterator, flexible_type(), SpaceType> root_parser; 
-  qi::rule<Iterator, flexible_type(), SpaceType> non_string_parser; 
-  // matches flexible type values in recursive values. This has stricter 
+  qi::rule<Iterator, flexible_type(), SpaceType> root_parser;
+  qi::rule<Iterator, flexible_type(), SpaceType> non_string_parser;
+  // matches flexible type values in recursive values. This has stricter
   // string separation rules. (since we want to accept "{a:b, c:d}", an
   // unquoted string cannot include the "," or " " characters (as well as many others).
   qi::rule<Iterator, flexible_type(), SpaceType> recursive_element_parser;
@@ -183,10 +183,10 @@ struct flexible_type_parser_impl: qi::grammar<Iterator, flexible_type(), SpaceTy
 
 
 flexible_type_parser::flexible_type_parser(std::string separator, char escape_char):
-    parser(new flexible_type_parser_impl<const char*, 
-           decltype(space)>(separator, escape_char)), 
-    non_space_parser(new flexible_type_parser_impl<const char*, 
-                     decltype(qi::eoi)>(separator, escape_char)), 
+    parser(new flexible_type_parser_impl<const char*,
+           decltype(space)>(separator, escape_char)),
+    non_space_parser(new flexible_type_parser_impl<const char*,
+                     decltype(qi::eoi)>(separator, escape_char)),
     m_delimiter_has_space(delimiter_has_space(parser->delimiter))
     { }
 
@@ -203,12 +203,12 @@ flexible_type_parser::general_flexible_type_parse(const char** str, size_t len) 
   const char* prevstr = (*str);
   const char* strend = prevstr + len;
   if (m_delimiter_has_space == false) {
-    ret.second = qi::phrase_parse((*str), (*str) + len, 
+    ret.second = qi::phrase_parse((*str), (*str) + len,
                                   *parser,
                                   space,
                                   ret.first);
   } else {
-    ret.second = qi::phrase_parse((*str), (*str) + len, 
+    ret.second = qi::phrase_parse((*str), (*str) + len,
                                   *non_space_parser,
                                   qi::eoi,
                                   ret.first);
@@ -216,10 +216,10 @@ flexible_type_parser::general_flexible_type_parse(const char** str, size_t len) 
   if (ret.second) {
     // we claimed success. Therefore
     // ok. either we consumed the entire len, OR we are at a delimiter.
-    
+
     // consumed entire length
     if ((*str) - prevstr >= (int)len) return ret;
-    bool at_delimiter = 
+    bool at_delimiter =
         parser_impl::string_parser::test_is_delimiter(*str, strend, parser->delimiter.c_str(),
                                          parser->delimiter.c_str() + parser->delimiter.size());
     if (at_delimiter) return ret;
@@ -235,7 +235,7 @@ flexible_type_parser::general_flexible_type_parse(const char** str, size_t len) 
 std::pair<flexible_type, bool>
 flexible_type_parser::non_string_flexible_type_parse(const char** str, size_t len) {
   std::pair<flexible_type, bool> ret;
-  ret.second = qi::phrase_parse((*str), (*str) + len, 
+  ret.second = qi::phrase_parse((*str), (*str) + len,
                                 parser->non_string_parser,
                                 space,
                                 ret.first);
@@ -247,7 +247,7 @@ flexible_type_parser::non_string_flexible_type_parse(const char** str, size_t le
 std::pair<flexible_type, bool>
 flexible_type_parser::dict_parse(const char** str, size_t len) {
   std::pair<flexible_type, bool> ret;
-  ret.second = qi::phrase_parse((*str), (*str) + len, 
+  ret.second = qi::phrase_parse((*str), (*str) + len,
                                 parser->dict,
                                 space,
                                 ret.first);
@@ -259,7 +259,7 @@ flexible_type_parser::dict_parse(const char** str, size_t len) {
 std::pair<flexible_type, bool>
 flexible_type_parser::recursive_parse(const char** str, size_t len) {
   std::pair<flexible_type, bool> ret;
-  ret.second = qi::phrase_parse((*str), (*str) + len, 
+  ret.second = qi::phrase_parse((*str), (*str) + len,
                                 parser->recursive,
                                 space,
                                 ret.first);
@@ -271,7 +271,7 @@ flexible_type_parser::recursive_parse(const char** str, size_t len) {
 std::pair<flexible_type, bool>
 flexible_type_parser::vector_parse(const char** str, size_t len) {
   std::pair<flexible_type, bool> ret;
-  ret.second = qi::phrase_parse((*str), (*str) + len, 
+  ret.second = qi::phrase_parse((*str), (*str) + len,
                                 parser->vec,
                                 space,
                                 ret.first);
@@ -283,7 +283,7 @@ std::pair<flexible_type, bool>
 flexible_type_parser::double_parse(const char** str, size_t len) {
   std::pair<flexible_type, bool> ret;
   double dblval;
-  ret.second = qi::phrase_parse((*str), (*str) + len, 
+  ret.second = qi::phrase_parse((*str), (*str) + len,
                                 boost::spirit::qi::double_,
                                 space,
                                 dblval);
@@ -295,7 +295,7 @@ std::pair<flexible_type, bool>
 flexible_type_parser::int_parse(const char** str, size_t len) {
   std::pair<flexible_type, bool> ret;
   flex_int intval;
-  ret.second = qi::phrase_parse((*str), (*str) + len, 
+  ret.second = qi::phrase_parse((*str), (*str) + len,
                                 boost::spirit::qi::long_long,
                                 space,
                                 intval);
@@ -307,7 +307,7 @@ flexible_type_parser::int_parse(const char** str, size_t len) {
 std::pair<flexible_type, bool>
 flexible_type_parser::string_parse(const char** str, size_t len) {
   std::pair<flexible_type, bool> ret;
-  ret.second = qi::phrase_parse((*str), (*str) + len, 
+  ret.second = qi::phrase_parse((*str), (*str) + len,
                                 parser->string,
                                 space,
                                 ret.first);

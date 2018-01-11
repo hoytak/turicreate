@@ -397,7 +397,7 @@ _s390x_AES_encrypt:
 	or	$s1,$t1
 	or	$t2,$i2
 	or	$t3,$i3
-	
+
 	srlg	$i1,$s2,`8-3`	# i0
 	srlg	$i2,$s2,`16-3`	# i1
 	nr	$i1,$mask
@@ -450,7 +450,7 @@ _s390x_AES_encrypt:
 	x	$s2,24($key)
 	x	$s3,28($key)
 
-	br	$ra	
+	br	$ra
 .size	_s390x_AES_encrypt,.-_s390x_AES_encrypt
 ___
 
@@ -772,7 +772,7 @@ _s390x_AES_decrypt:
 	x	$s2,24($key)
 	x	$s3,28($key)
 
-	br	$ra	
+	br	$ra
 .size	_s390x_AES_decrypt,.-_s390x_AES_decrypt
 ___
 
@@ -1294,7 +1294,7 @@ $code.=<<___;
 .Lcbc_enc_done:
 	l${g}	$ivp,6*$SIZE_T($sp)
 	st	$s0,0($ivp)
-	st	$s1,4($ivp)	
+	st	$s1,4($ivp)
 	st	$s2,8($ivp)
 	st	$s3,12($ivp)
 
@@ -1637,7 +1637,7 @@ $code.=<<___ if(1);
 	llgc	$len,2*$SIZE_T-1($sp)
 	nill	$len,0x0f		# $len%=16
 	br	$ra
-	
+
 .align	16
 .Lxts_km_vanilla:
 ___
@@ -1864,7 +1864,7 @@ $code.=<<___;
 	xgr	$s1,%r1
 	lrvgr	$s1,$s1			# flip byte order
 	lrvgr	$s3,$s3
-	srlg	$s0,$s1,32		# smash the tweak to 4x32-bits 
+	srlg	$s0,$s1,32		# smash the tweak to 4x32-bits
 	stg	$s1,$tweak+0($sp)	# save the tweak
 	llgfr	$s1,$s1
 	srlg	$s2,$s3,32
@@ -1915,7 +1915,7 @@ $code.=<<___;
 	xgr	$s1,%r1
 	lrvgr	$s1,$s1			# flip byte order
 	lrvgr	$s3,$s3
-	srlg	$s0,$s1,32		# smash the tweak to 4x32-bits 
+	srlg	$s0,$s1,32		# smash the tweak to 4x32-bits
 	stg	$s1,$tweak+0($sp)	# save the tweak
 	llgfr	$s1,$s1
 	srlg	$s2,$s3,32
@@ -2107,7 +2107,7 @@ $code.=<<___;
 	xgr	$s1,%r1
 	lrvgr	$s1,$s1			# flip byte order
 	lrvgr	$s3,$s3
-	srlg	$s0,$s1,32		# smash the tweak to 4x32-bits 
+	srlg	$s0,$s1,32		# smash the tweak to 4x32-bits
 	stg	$s1,$tweak+0($sp)	# save the tweak
 	llgfr	$s1,$s1
 	srlg	$s2,$s3,32

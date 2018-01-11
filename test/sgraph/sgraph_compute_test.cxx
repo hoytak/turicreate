@@ -165,9 +165,9 @@ struct sgraph_compute_test  {
     typedef sgraph_compute::sgraph_engine<flexible_type>::graph_data_type graph_data_type;
     typedef sgraph::edge_direction edge_direction;
     std::vector<std::shared_ptr<sarray<flexible_type>>> gather_results = ga.gather(g,
-                                                        [](const graph_data_type& center, 
-                                                           const graph_data_type& edge, 
-                                                           const graph_data_type& other, 
+                                                        [](const graph_data_type& center,
+                                                           const graph_data_type& edge,
+                                                           const graph_data_type& other,
                                                            edge_direction edgedir,
                                                            flexible_type& combiner) {
                                                           combiner = combiner + 1;
@@ -341,9 +341,9 @@ struct sgraph_compute_test  {
     typedef sgraph::edge_direction edge_direction;
     // count the outgoing degree
     std::vector<std::shared_ptr<sarray<flexible_type>>> ret = ga.gather(g,
-                                                        [](const graph_data_type& center, 
-                                                           const graph_data_type& edge, 
-                                                           const graph_data_type& other, 
+                                                        [](const graph_data_type& center,
+                                                           const graph_data_type& edge,
+                                                           const graph_data_type& other,
                                                            edge_direction edgedir,
                                                            flexible_type& combiner) {
                                                         combiner = combiner + 1;
@@ -396,7 +396,7 @@ struct sgraph_compute_test  {
       }
     }
     {
-      // for star graph, the center's pagerank = 0.15 + 0.85 * (n-1)) 
+      // for star graph, the center's pagerank = 0.15 + 0.85 * (n-1))
       sgraph star_graph = create_star_graph(n_vertex, n_partition);
       star_graph.get_edges().debug_print();
       compute_pagerank(star_graph, 3);
@@ -451,7 +451,7 @@ struct sgraph_compute_test  {
                                        flex_type_enum::FLOAT,
                                        [=](const std::vector<flexible_type>& val, flexible_type prev_ret){
                                          TS_ASSERT_LESS_THAN(data_index, val.size());
-                                         return val[data_index] + prev_ret / 2; 
+                                         return val[data_index] + prev_ret / 2;
                                        });
     check_vertex_apply_result(ret);
 
@@ -463,7 +463,7 @@ struct sgraph_compute_test  {
                                        ret,
                                        flex_type_enum::FLOAT,
                                        [=](const flexible_type& val, flexible_type prev_ret){
-                                         return val + prev_ret / 2; 
+                                         return val + prev_ret / 2;
                                        });
     check_vertex_apply_result(ret);
 
@@ -481,9 +481,9 @@ struct sgraph_compute_test  {
                                         [=](const std::vector<flexible_type>& val, double& sum) {
                                           TS_ASSERT_LESS_THAN(data_index, val.size());
                                           sum += (double)val[data_index];
-                                        }, 
+                                        },
                                         [=](const double& val, double& sum) {
-                                          sum += val; 
+                                          sum += val;
                                         });
     TS_ASSERT_EQUALS(vsum, n_vertex);
 

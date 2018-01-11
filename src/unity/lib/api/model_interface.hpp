@@ -18,12 +18,12 @@ class model_proxy;
 
 /**
  * \ingroup unity
- * The base class for all model objects. The model object is an object which 
+ * The base class for all model objects. The model object is an object which
  * conceptually contains a machine learning model, is implemented on the server,
  * and exposed to the client via the cppipc system.
  *
  * The model object is designed to be highly generic, and exposes a simple
- * interface which is abstractly that of a map from a string to a variant 
+ * interface which is abstractly that of a map from a string to a variant
  * object (\ref variant_type). Implementations of the model must inherit from
  * model_base and implement all functions.
  *
@@ -46,7 +46,7 @@ class EXPORT model_base : public cppipc::ipc_object_base {
    * Returns the value of a particular key. To permit arbitrary queryability,
    * an argument can be passed along with the query request. (For instance,
    * the "key" may reference a vector of numbers, and the argument is used to
-   * identify the vector offset.). The returned object must be a copy/clone 
+   * identify the vector offset.). The returned object must be a copy/clone
    * and should not contain pointers/references back into this model object.
    * In other words, if the model object is destroyed, the returned object
    * should not be invalidated.
@@ -67,7 +67,7 @@ class EXPORT model_base : public cppipc::ipc_object_base {
   /**
    * Returns the name of the model.
    */
-  virtual std::string name() = 0; 
+  virtual std::string name() = 0;
 
   /**
    * Returns the current model version
@@ -102,7 +102,7 @@ class model_proxy : public model_base {
  public:
   cppipc::object_proxy<model_base> proxy;
 
-  inline model_proxy(cppipc::comm_client& comm, 
+  inline model_proxy(cppipc::comm_client& comm,
                     bool auto_create = true,
                     size_t object_id = (size_t)(-1)):
       proxy(comm, auto_create, object_id){ }
@@ -140,7 +140,7 @@ class model_proxy : public model_base {
     throw("Calling Unreachable Function");
   }
 
-  BOOST_PP_SEQ_FOR_EACH(__GENERATE_PROXY_CALLS__, model_base, 
+  BOOST_PP_SEQ_FOR_EACH(__GENERATE_PROXY_CALLS__, model_base,
                         __ADD_PARENS__(
                             (std::vector<std::string>, list_keys, )
                             (variant_type, get_value, (std::string)(variant_map_type&))

@@ -17,12 +17,12 @@
  * \defgroup perfmonitoring Intrusive Performance Monitoring
  * \brief A tracepoint utility that provides intrusive (requires code change) performance monitoring.
  *
- * The tracepoint utility provides a extremely low overhead way of profiling a 
+ * The tracepoint utility provides a extremely low overhead way of profiling a
  * section of code, counting the number of times the section is entered, the
  * average, maximum and mimimum runtimes of the section.
  *
  * The tracepoint utility can be enabled file by file, or in an entire project by
- * setting the USE_TRACEPOINT macro before including tracepoint.hpp, or 
+ * setting the USE_TRACEPOINT macro before including tracepoint.hpp, or
  * predefining USE_TRACEPOINT globally.
  * \code
  * #define USE_TRACEPOINT
@@ -92,10 +92,10 @@ struct trace_count{
       if (__likely__(val < m || turi::atomic_compare_and_swap(maximum, m, val))) break;
     }
   }
-  
+
   /**
    * Adds the counts in a second tracer to the current tracer.
-   */  
+   */
   inline void incorporate(const trace_count &val)  __attribute__((always_inline)) {
     count.inc(val.count.value);
     total.inc(val.total.value);
@@ -139,11 +139,11 @@ struct trace_count{
  * called "name" which is of type trace_count. and is equivalent to:
  *
  * turi::trace_count name;
- * 
+ *
  * The primary reason to use this macro instead of just writing
  * the code above directly, is that the macro is ignored and compiles
  * to nothing when tracepoints are disabled.
- * 
+ *
  * Example Usage:
  * \code
  *    DECLARE_TRACER(event)
@@ -169,7 +169,7 @@ struct trace_count{
  * inaccurate on systems where rdtsc is not necessarily monotonic.
  */
 
-/** 
+/**
  * \ingroup perfmonitoring
  * \def INITIALIZE_TRACER(name, desc)
  * Initializes the tracer created by \ref DECLARE_TRACER with a description.
@@ -180,7 +180,7 @@ struct trace_count{
  *
  */
 
-/** 
+/**
  * \ingroup perfmonitoring
  * \def INITIALIZE_TRACER_NO_PRINT(name, desc)
  * Initializes the tracer created by \ref DECLARE_TRACER with a description.
@@ -189,13 +189,13 @@ struct trace_count{
  * configures the tracer to NOT print when the tracer "name" is destroyed.
  */
 
-/** 
+/**
  * \ingroup perfmonitoring
  * \def BEGIN_TRACEPOINT(name)
  * Begins a tracepoint.
  * The object with name "name" created by DECLARE_TRACER must be in scope.
  * Times a block of code. Every END_TRACEPOINT must be matched with a
- * BEGIN_TRACEPOINT within the same scope. Tracepoints are safe to use in 
+ * BEGIN_TRACEPOINT within the same scope. Tracepoints are safe to use in
  * concurrent use.
  */
 
@@ -234,11 +234,11 @@ struct trace_count{
 #else
 #define DECLARE_TRACER(name)
 #define INITIALIZE_TRACER(name, description)
-#define INITIALIZE_TRACER_NO_PRINT(name, description) 
+#define INITIALIZE_TRACER_NO_PRINT(name, description)
 
-#define BEGIN_TRACEPOINT(name) 
-#define END_TRACEPOINT(name) 
-#define END_AND_BEGIN_TRACEPOINT(endname, beginname) 
-#endif           
+#define BEGIN_TRACEPOINT(name)
+#define END_TRACEPOINT(name)
+#define END_AND_BEGIN_TRACEPOINT(endname, beginname)
+#endif
 
 #endif

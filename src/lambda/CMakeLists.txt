@@ -28,4 +28,3 @@ make_library(pylambda_worker
     flexible_type cppipc sframe shmipc process python_callbacks
     EXTERNAL_VISIBILITY
 )
-

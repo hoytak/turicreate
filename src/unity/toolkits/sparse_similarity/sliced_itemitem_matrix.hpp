@@ -41,15 +41,15 @@ class dense_triangular_itemitem_container {
   static constexpr size_t _data_size(size_t n_rows, size_t n_cols) {
     return ((n_cols - 1) * n_rows) - (n_rows * (n_rows - 1)) / 2;
   }
-  
+
  public:
 
   dense_triangular_itemitem_container(){}
-  
+
   dense_triangular_itemitem_container(size_t _num_rows, size_t _num_cols) {
-    resize(_num_rows, _num_cols); 
+    resize(_num_rows, _num_cols);
   }
-  
+
   typedef T value_type;
 
   /**  Clears all the data and the values, and resets the number of
@@ -62,12 +62,12 @@ class dense_triangular_itemitem_container {
     data.clear();
   }
 
-  /** Reserve a fixed number of elements. 
+  /** Reserve a fixed number of elements.
    */
   void reserve(size_t n_elements) {
     data.reserve(n_elements);
   }
-  
+
   size_t rows() const { return num_rows; }
   size_t cols() const { return num_cols; }
 
@@ -77,25 +77,25 @@ class dense_triangular_itemitem_container {
     DASSERT_LE(_num_rows, _num_cols);
     num_cols = _num_cols;
     num_rows = _num_rows;
-    size_t s = _data_size(num_rows, num_cols); 
+    size_t s = _data_size(num_rows, num_cols);
     data.assign(s, value_type());
     setup_row_index_map();
   }
 
   /** Indexible access.
-   */ 
+   */
   value_type& operator()(size_t row_idx, size_t col_idx) {
     size_t index = data_index(row_idx, col_idx);
     return data[index];
   }
 
   /** Indexible access.  Const overload
-   */ 
+   */
   const value_type& operator()(size_t i, size_t j) const {
     size_t index = data_index(i, j);
     return data[index];
   }
-  
+
   /**  Apply a function to a particular element.  The apply_f has
    */
   template <typename ApplyFunction>
@@ -122,7 +122,7 @@ class dense_triangular_itemitem_container {
           if(idx_2 >= num_cols) continue;
 
           value_type * __restrict__ d_ptr = data.data() + data_index(idx_1, idx_2);
-          
+
           for(; idx_2 != num_cols; ++idx_2, ++d_ptr) {
             process_interaction(idx_1, idx_2, *d_ptr);
           }
@@ -144,10 +144,10 @@ class dense_triangular_itemitem_container {
     for(size_t r = 0; r < num_rows; ++r) {
       row_index_map[r] = _data_size(r, num_cols) - r;
     }
-    
+
     row_index_map[num_rows] = data.size();
   }
-  
+
   /** Calculates the data index of a particular row and column.
    */
   size_t data_index(size_t row_idx, size_t col_idx) const GL_HOT_INLINE_FLATTEN {
@@ -157,7 +157,7 @@ class dense_triangular_itemitem_container {
 
     size_t index = row_index_map[row_idx] + (col_idx - 1);
     DASSERT_LT(index, data.size());
-    
+
     return index;
   }
 

@@ -41,40 +41,40 @@ namespace Model
     ListBucketsResult(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
     ListBucketsResult& operator=(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
 
-    
+
     inline const Aws::Vector<Bucket>& GetBuckets() const{ return m_buckets; }
 
-    
+
     inline void SetBuckets(const Aws::Vector<Bucket>& value) { m_buckets = value; }
 
-    
+
     inline void SetBuckets(Aws::Vector<Bucket>&& value) { m_buckets = value; }
 
-    
+
     inline ListBucketsResult& WithBuckets(const Aws::Vector<Bucket>& value) { SetBuckets(value); return *this;}
 
-    
+
     inline ListBucketsResult& WithBuckets(Aws::Vector<Bucket>&& value) { SetBuckets(value); return *this;}
 
-    
+
     inline ListBucketsResult& AddBuckets(const Bucket& value) { m_buckets.push_back(value); return *this; }
 
-    
+
     inline ListBucketsResult& AddBuckets(Bucket&& value) { m_buckets.push_back(value); return *this; }
 
-    
+
     inline const Owner& GetOwner() const{ return m_owner; }
 
-    
+
     inline void SetOwner(const Owner& value) { m_owner = value; }
 
-    
+
     inline void SetOwner(Owner&& value) { m_owner = value; }
 
-    
+
     inline ListBucketsResult& WithOwner(const Owner& value) { SetOwner(value); return *this;}
 
-    
+
     inline ListBucketsResult& WithOwner(Owner&& value) { SetOwner(value); return *this;}
 
   private:

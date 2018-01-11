@@ -245,4 +245,3 @@ class Image(object):
             img.show()
         except ImportError:
             print("Install pillow to use the .show() method.")
-

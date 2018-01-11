@@ -53,4 +53,3 @@ double curlx_tvdiff_secs(struct timeval t1, struct timeval t2);
 #define Curl_tvdiff_secs(x,y) curlx_tvdiff_secs(x,y)
 
 #endif /* HEADER_CURL_TIMEVAL_H */
-

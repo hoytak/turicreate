@@ -19,7 +19,7 @@ namespace cppipc {
  * \ingroup cppipc
  * An implementation of the object factory interface.
  * This is a special object created by the comm_server and is used to provide
- * the comm_server with an external interface; for instance to manage the 
+ * the comm_server with an external interface; for instance to manage the
  * construction and destruction of objects
  *
  */
@@ -61,7 +61,7 @@ class object_factory_impl: public object_factory_base {
    * \internal
    * Stores a constructor for an object type
    */
-  void add_constructor(std::string object_type_name, 
+  void add_constructor(std::string object_type_name,
                        std::function<std::shared_ptr<void>()> constructor) {
     constructors[object_type_name] = constructor;
   }

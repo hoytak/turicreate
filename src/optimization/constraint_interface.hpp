@@ -14,11 +14,11 @@
 
 // TODO: List of todo's for this file
 //------------------------------------------------------------------------------
-// 
+//
 
 namespace turi {
 
-namespace optimization { 
+namespace optimization {
 
 
 /**
@@ -36,7 +36,7 @@ namespace optimization {
  *
  * Some implementations are based on Section 16.7 of (1).
  *
- * 
+ *
  * Background: Gradient Projection Methods
  * --------------------------------------------------------------------------
  *
@@ -48,7 +48,7 @@ namespace optimization {
  *
  *              x_{k+1} = x_{k} - \alpha_k \grad f(x_k)             (G)
  *
- *   where \alpha_k is a step size. 
+ *   where \alpha_k is a step size.
  *
  *  The gradient-projection framework performs solves the problem:
  *  \min_{x \in C} f(x) using a slight modification to the gradient step in (G)
@@ -77,25 +77,25 @@ namespace optimization {
  * The gradient-projection method is guaranteed to identify the active set at
  * a solution in a finite number of iterations.  After it has identified the
  * correct active set, the gradient-projection algorithm reduces to the
- * steepest-descent algorithm on the subspace of free variables. 
+ * steepest-descent algorithm on the subspace of free variables.
  *
  * References:
  *
- * (1) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2. 
+ * (1) Wright S.J  and J. Nocedal. Numerical optimization. Vol. 2.
  *                         New York: Springer, 1999. (Chapter 12)
- *  
+ *
  *
 */
 class constraint_interface {
- 
+
   public:
-  
+
   /**
-   * Default desctuctor. 
+   * Default desctuctor.
    */
   virtual ~constraint_interface() {};
 
-  
+
   /**
    * Project a dense point into the constraint space.
    * \param[in,out]  point   Point which we are using to project the point.
@@ -106,7 +106,7 @@ class constraint_interface {
    *
    */
   virtual void project(DenseVector &point) const = 0;
-  
+
   /**
    * Project a dense a block of co-ordinates point into the constraint space.
    *
@@ -121,7 +121,7 @@ class constraint_interface {
    */
   virtual void project_block(DenseVector &point, const size_t block_start,
       const size_t block_size) const = 0;
-  
+
   /**
    * Boolean function to determine if a dense point is present in a constraint
    * space.
@@ -129,13 +129,13 @@ class constraint_interface {
    *
    */
   virtual bool is_satisfied(const DenseVector &point) const = 0;
-  
+
   /**
    * A measure of the first order optimality conditions.
-   * 
+   *
    * \param[in]  point    Point which we are querying.
    * \param[in]  gradient Gradient at that point for a given function
-   * 
+   *
    *  If you don't know what to do, then use
    *                ||P_C(x - grad) - x||
    * where x is the point, grad is the gradient and P_C is the projection to
@@ -152,4 +152,4 @@ class constraint_interface {
 } // Optimization
 } // Turi
 
-#endif 
+#endif

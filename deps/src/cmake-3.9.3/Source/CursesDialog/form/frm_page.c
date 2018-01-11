@@ -35,9 +35,9 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_form_page(FORM * form,int  page)
-|   
+|
 |   Description   :  Set the page number of the form.
 |
 |   Return Values :  E_OK              - success
@@ -60,13 +60,13 @@ int set_form_page(FORM * form, int page)
   }
   else
     {
-      if (form->status & _IN_DRIVER) 
+      if (form->status & _IN_DRIVER)
 	err = E_BAD_STATE;
       else
 	{
 	  if (form->curpage != page)
 	    {
-	      if (!_nc_Internal_Validation(form)) 
+	      if (!_nc_Internal_Validation(form))
 		err = E_INVALID_FIELD;
 	      else
 		{
@@ -84,9 +84,9 @@ int set_form_page(FORM * form, int page)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int form_page(const FORM * form)
-|   
+|
 |   Description   :  Return the current page of the form.
 |
 |   Return Values :  >= 0  : current page number

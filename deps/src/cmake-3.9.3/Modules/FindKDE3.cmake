@@ -358,4 +358,3 @@ endif ()
 
 #add the found Qt and KDE include directories to the current include path
 set(KDE3_INCLUDE_DIRS ${QT_INCLUDE_DIR} ${KDE3_INCLUDE_DIR})
-

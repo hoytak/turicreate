@@ -19,16 +19,16 @@ namespace nanosockets {
  * \ingroup nanosockets
  *
  * Constructs a Nanomsg publish socket.
- * 
+ *
  * The publish socket is bound to a zeromq style endpoint address
  * Endpoints are standard Zeromq style endpoint addresses , for instance,
  * tcp://[ip]:[port], or ipc://[filename] (interprocess socket) or
- * inproc://[handlename] (inprocess socket). 
- * 
+ * inproc://[handlename] (inprocess socket).
+ *
  * Subscribe sockets (\ref subscribe_socket) can then attach to the endpoint
  * and listen for published messages. Note that publish-subscribe is not
  * necessarily reliable; i.e.  subscribers may not receive all published data.
- * 
+ *
  * \code
  * publish_socket pubsock("ipc:///tmp/publish");
  * pubsock.send("hello world")

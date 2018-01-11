@@ -515,9 +515,9 @@ class ranking_sgd_solver_base : public sgd::sgd_solver_base {
 
         // The list has not been built yet; need to construct it.
         DASSERT_LT(n_rated_items, n_items);
-        
+
         proc_buf.available_item_list.resize(n_items - n_rated_items);
-        
+
         size_t current_position = 0;
 
         // Do one round of first_zero_bit to get the location of the
@@ -603,7 +603,7 @@ class ranking_sgd_solver_base : public sgd::sgd_solver_base {
 
     double highest_fx = std::numeric_limits<double>::lowest();
     size_t chosen_idx = 0;
-    
+
     // Build the item segments.
     for(size_t i = 0; i < n_points_picked; ++i) {
       candidate_x[1].index = chosen_negative_items[i];
@@ -638,7 +638,7 @@ class ranking_sgd_solver_base : public sgd::sgd_solver_base {
       std::swap(proc_buf.available_item_list[remove_idx], proc_buf.available_item_list.back());
       proc_buf.available_item_list.pop_back();
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     // Step 5: Return the value.  Means we are done!
 

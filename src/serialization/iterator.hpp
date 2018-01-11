@@ -20,14 +20,14 @@ namespace turi {
     a distance between the begin and end iterator.
     This function as implemented will work for other input iterators
     but is extremely inefficient.
-    
+
     \tparam OutArcType The output archive type. This should not need to be
                        specified. The compiler will typically infer this
                        correctly.
     \tparam RandomAccessIterator The iterator type. This should not need to be
                        specified. The compiler will typically infer this
                        correctly.
-    
+
     \param oarc A reference to the output archive to write to.
     \param begin The start of the iterator range to write.
     \param end The end of the iterator range to write.
@@ -49,7 +49,7 @@ namespace turi {
     This functions takes all iterator types, but takes a "count" for
     efficiency. This count is checked and will return failure if the number
     of elements serialized does not match the count
- 
+
     \tparam OutArcType The output archive type. This should not need to be
                        specified. The compiler will typically infer this
                        correctly.
@@ -78,15 +78,15 @@ namespace turi {
     \ingroup group_serialization
     \brief The accompanying function to serialize_iterator()
     Reads elements from the stream and writes it to the output iterator.
-    
+
     Note that this requires an additional template parameter T which is the
     "type of object to deserialize"
-    This is necessary for instance for the map type. The 
+    This is necessary for instance for the map type. The
     <code>map<T,U>::value_type</code>
     is <code>pair<const T,U></code>which is not useful since I cannot assign to
     it.  In this case, <code>T=pair<T,U></code>
 
-    \tparam OutArcType The output archive type. 
+    \tparam OutArcType The output archive type.
     \tparam T The type of values to deserialize
     \tparam OutputIterator The type of the output iterator to be written to.
                            This should not need to be specified. The compiler
@@ -101,7 +101,7 @@ namespace turi {
     // get the number of elements to deserialize
     size_t length = 0;
     iarc >> length;
-    
+
     // iterate through and send to the output iterator
     for (size_t x = 0; x < length ; ++x){
       /**
@@ -116,8 +116,7 @@ namespace turi {
       result++;
     }
   }
-  
- 
-} 
-#endif 
 
+
+}
+#endif

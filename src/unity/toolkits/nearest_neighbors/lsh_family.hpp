@@ -19,24 +19,24 @@ class EXPORT lsh_family {
 
   lsh_family() = default;
   virtual ~lsh_family() {}
-  
+
   // create a lsh_family pointer using dist_name ("euclidean", "cosine", ect.)
   inline static std::shared_ptr<lsh_family> create_lsh_family(const std::string& dist_name);
-  
+
   // indicator function: whether it is an asymmetric LSH or not
-  virtual bool is_asymmetric() const = 0; 
+  virtual bool is_asymmetric() const = 0;
 
   // distance type name
   virtual std::string distance_type_name() const = 0;
-  
+
   // initialize options
   virtual void init_options(const std::map<std::string, flexible_type>& _opts);
-  
+
   // One pass over the data to get some information about the data
   // For example, for lsh_dot_product, we need to know the max norm of all the
   // reference data.
-  virtual void pre_lsh(const v2::ml_data& mld_ref, bool is_sparse) {} 
-  
+  virtual void pre_lsh(const v2::ml_data& mld_ref, bool is_sparse) {}
+
   // initialize the model. num_input_dimensions is needed
   virtual void init_model(size_t num_dimensions) = 0;
 
@@ -44,8 +44,8 @@ class EXPORT lsh_family {
   // Only DenseVector and SparseVector are supported
   template <typename T>
   void add_reference_data(size_t ref_id, const T& t);
-  
-  // Return a set of candidates for the query vector 
+
+  // Return a set of candidates for the query vector
   // Only DenseVector and SparseVector are supported
   template <typename T>
   std::vector<size_t> query(const T& t) const;
@@ -56,9 +56,9 @@ class EXPORT lsh_family {
 
  protected:
   // model initialized when add_reference_data is called in the first time
-  virtual std::vector<int> hash_vector_to_codes(const DenseVector& vec, 
+  virtual std::vector<int> hash_vector_to_codes(const DenseVector& vec,
                                                 bool is_reference_data) const;
-  virtual std::vector<int> hash_vector_to_codes(const SparseVector& vec, 
+  virtual std::vector<int> hash_vector_to_codes(const SparseVector& vec,
                                                 bool is_reference_data) const;
 
  protected:
@@ -76,12 +76,12 @@ class EXPORT lsh_family {
 class EXPORT lsh_euclidean : public lsh_family {
  public:
 
-  virtual bool is_asymmetric() const { return false; } 
+  virtual bool is_asymmetric() const { return false; }
 
   virtual std::string distance_type_name() const {
     return "euclidean";
   }
-  
+
   // Sample a subset of data points, get the average euclidean distance to
   // initilize w
   virtual void pre_lsh(const v2::ml_data& mld_ref, bool is_sparse);
@@ -92,7 +92,7 @@ class EXPORT lsh_euclidean : public lsh_family {
   virtual void load(turi::iarchive& iarc);
 
  protected:
-  virtual std::vector<int> hash_vector_to_codes(const DenseVector& vec, 
+  virtual std::vector<int> hash_vector_to_codes(const DenseVector& vec,
                                         bool is_reference_data) const;
   virtual std::vector<int> hash_vector_to_codes(const SparseVector& vec,
                                         bool is_reference_data) const;
@@ -106,7 +106,7 @@ class EXPORT lsh_euclidean : public lsh_family {
 /**
  * LSH for squared_euclidean distance
  * The only difference from euclidean happens when calculating the real
- * distances 
+ * distances
  */
 class EXPORT lsh_squared_euclidean final : public lsh_euclidean {
  public:
@@ -125,7 +125,7 @@ class EXPORT lsh_manhattan final : public lsh_euclidean {
   std::string distance_type_name() const {
     return "manhattan";
   }
-  
+
   // Sample a subset of data points, get the average manhattan distance to
   // initilize w
   void pre_lsh(const v2::ml_data& mld_ref, bool is_sparse);
@@ -144,7 +144,7 @@ class EXPORT lsh_cosine final : public lsh_family {
   std::string distance_type_name() const {
     return "cosine";
   }
-  
+
   void init_model(size_t num_dimensions);
 
   void save(turi::oarchive& oarc) const;
@@ -171,7 +171,7 @@ class EXPORT lsh_jaccard final : public lsh_family {
   std::string distance_type_name() const {
     return "jaccard";
   }
-  
+
   void init_model(size_t num_dimensions);
 
   void save(turi::oarchive& oarc) const;
@@ -182,7 +182,7 @@ class EXPORT lsh_jaccard final : public lsh_family {
                                         bool is_reference_data) const;
   std::vector<int> hash_vector_to_codes(const SparseVector& vec,
                                         bool is_reference_data) const;
-  
+
   // helper function
   void fill_empty_bins(std::vector<int>& vec) const;
 
@@ -193,7 +193,7 @@ class EXPORT lsh_jaccard final : public lsh_family {
 };
 
 /**
- * LSH for dot product 
+ * LSH for dot product
  */
 class EXPORT lsh_dot_product : public lsh_family {
  public:
@@ -203,9 +203,9 @@ class EXPORT lsh_dot_product : public lsh_family {
   virtual std::string distance_type_name() const {
     return "dot_product";
   }
-  
+
   void init_model(size_t num_dimensions);
-  
+
   void pre_lsh(const v2::ml_data& mld_ref, bool is_sparse);
 
   void save(turi::oarchive& oarc) const;
@@ -216,7 +216,7 @@ class EXPORT lsh_dot_product : public lsh_family {
                                         bool is_reference_data) const;
   std::vector<int> hash_vector_to_codes(const SparseVector& vec,
                                         bool is_reference_data) const;
-  
+
  private:
   double max_vec_norm;
   DenseMatrix rand_mat;
@@ -246,26 +246,26 @@ std::shared_ptr<lsh_family> lsh_family::create_lsh_family(const std::string& dis
     return std::shared_ptr<lsh_family>(new lsh_transformed_dot_product);
   } else {
     log_and_throw(dist_name + std::string(" is not supported by LSH! Try another distance or method!"));
-    return nullptr; 
+    return nullptr;
   }
 }
 
 template <typename T>
 void lsh_family::add_reference_data(size_t ref_id, const T& vec) {
 
-  ASSERT_MSG(vec.size() == num_input_dimensions, 
+  ASSERT_MSG(vec.size() == num_input_dimensions,
              "The input dimension does not match the previous ones!");
 
   auto hash_vec = hash_vector_to_codes(vec, true);
   DASSERT_TRUE(hash_vec.size() == num_projections);
-  
+
   parallel_for (0, num_tables, [&](size_t table_idx) {
     auto hash_bucket_id = boost::hash_range(
         hash_vec.begin() + table_idx * num_projections_per_table,
         hash_vec.begin() + std::min((table_idx + 1) * num_projections_per_table, num_projections));
 
     lookup_table[table_idx].update(hash_bucket_id, [ref_id](std::vector<size_t>& v){
-                                    v.push_back(ref_id); 
+                                    v.push_back(ref_id);
                                   });
   });
 }

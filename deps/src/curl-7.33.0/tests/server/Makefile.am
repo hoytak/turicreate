@@ -61,4 +61,3 @@ endif
 include Makefile.inc
 
 EXTRA_DIST = base64.pl Makefile.inc
-

@@ -36,7 +36,7 @@ namespace sgraph_compute {
  * as we process each edge partition, the associated vertex partition
  * are sparsely visited and updated.
  *
- * \ref sgraph_synchronize_interface is used for both ends of the communication 
+ * \ref sgraph_synchronize_interface is used for both ends of the communication
  * to deal with initialization, sending and receiving the vertex and edge exchange data.
  *
  * Example:
@@ -48,7 +48,7 @@ namespace sgraph_compute {
  * // initialize vertex data in partition 0, using all_vertices sent from server.
  * worker_graph_sync.load_vertex_partition(0, all_vertices_from_server);
  *
- * // recevie a vertex_exchange from server, let's update the local vertices 
+ * // recevie a vertex_exchange from server, let's update the local vertices
  * worker_graph_sync->update_vertex_partition(vexchange_from_server);
  *
  * // do some work to update vertex data in partition 0, and obtain a set of changed vertex data..
@@ -103,7 +103,7 @@ class sgraph_synchronize : public sgraph_synchronize_interface {
     DASSERT_TRUE(m_is_partition_loaded[vpartition_exchange.partition_id]);
 
     auto& vertex_partition = *(m_vertex_partitions[vpartition_exchange.partition_id]);
-    auto& update_field_index = vpartition_exchange.field_ids; 
+    auto& update_field_index = vpartition_exchange.field_ids;
 
     for (auto& vid_data_pair : vpartition_exchange.vertices) {
       size_t id = vid_data_pair.first;
@@ -136,7 +136,7 @@ class sgraph_synchronize : public sgraph_synchronize_interface {
   size_t m_num_partitions;
 };
 
-} // end sgraph_compute 
+} // end sgraph_compute
 } // end turicreate
 
 #endif

@@ -56,12 +56,12 @@ else:
 
 
 def disassembler(co, lasti= -1):
-    """Disassemble a code object. 
-    
+    """Disassemble a code object.
+
     :param co: code object
     :param lasti: internal
     :yields: Instructions.
-    
+
     """
 
     code = co.co_code
@@ -109,4 +109,3 @@ def disassembler(co, lasti= -1):
                 instr.arg = free[oparg]
 
         yield instr
-

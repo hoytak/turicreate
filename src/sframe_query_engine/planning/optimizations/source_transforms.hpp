@@ -32,7 +32,7 @@ namespace query_eval {
  *   the two sframes are merged together, with a project transform
  *   following them for each of the outputs.
  *
- *   3. Other identical source nodes (e.g. range nodes) are merged. 
+ *   3. Other identical source nodes (e.g. range nodes) are merged.
  *
  */
 class opt_merge_all_same_sarrays : public opt_transform {

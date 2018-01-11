@@ -13,4 +13,3 @@ size_t get_next_port_number();
 
 } // namespace libfault
 #endif
-

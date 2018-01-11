@@ -34,25 +34,25 @@ struct planner_node;
  *
  * The hierarchy is:
  *  - \ref planner::materialize Handles the most general materializations
- *  - \ref planner::partial_materialize Handles the most general materializations 
- *                                      but performs all materializations except 
+ *  - \ref planner::partial_materialize Handles the most general materializations
+ *                                      but performs all materializations except
  *                                      for the last stage. A private function.
- *  - \ref planner::execute_node Replicates a plan for parallelization. 
+ *  - \ref planner::execute_node Replicates a plan for parallelization.
  *                               A private function.
  *  - \ref subplan_executor Executes a restricted plan.
  *
- * As described in \ref execution_node, to successfully execute a query plan 
+ * As described in \ref execution_node, to successfully execute a query plan
  * requires certain rate control constraints to be true: i.e. all nodes
  * must read/write data at exactly the same rate.
  *
- * This executor assumes that the query plan to execute is exactly restricted 
+ * This executor assumes that the query plan to execute is exactly restricted
  * to that. It simply sets up the pipeline of \ref execution_node objects
  * and materializes the results.
  */
 class subplan_executor {
  public:
 
- /** 
+ /**
   * Runs a single job sequentially returning the resultant SFrame.
   *
   * Note that materialize_options may be used to adapt the materialization
@@ -61,8 +61,8 @@ class subplan_executor {
   sframe run(const std::shared_ptr<planner_node>& run_this,
              const materialize_options& exec_params = materialize_options());
 
-  /** Runs a batch of planner nodes in parallel, returning an SFrame for 
-   * each of them. 
+  /** Runs a batch of planner nodes in parallel, returning an SFrame for
+   * each of them.
    *
    * Note that materialize_options may be used to adapt the materialization
    * process.
@@ -70,8 +70,8 @@ class subplan_executor {
   std::vector<sframe> run(
       const std::vector<std::shared_ptr<planner_node> >& stuff_to_run_in_parallel,
       const materialize_options& exec_params = materialize_options());
-  
-  
+
+
   /** Runs a batch of planner nodes in parallel, returning an SFrame comprising
    *  of the concatenation of the output of each of the planner nodes.
    *
@@ -86,12 +86,12 @@ class subplan_executor {
 
  private:
 
- /** 
+ /**
   * \internal
-  * Runs a single job sequentially to a single sframe segment. 
+  * Runs a single job sequentially to a single sframe segment.
   */
   void generate_to_sframe_segment(const std::shared_ptr<planner_node>& run_this,
-                                  sframe& out, 
+                                  sframe& out,
                                   size_t output_segment_id);
 
   /**
@@ -109,4 +109,3 @@ class subplan_executor {
 }}
 
 #endif /* _SUBPLAN_EXECUTOR_H_ */
-

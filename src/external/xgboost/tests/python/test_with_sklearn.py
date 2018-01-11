@@ -61,4 +61,3 @@ def test_parameter_tuning():
 	clf.fit(X,y)
 	assert clf.best_score_ < 0.7
 	assert clf.best_params_ == {'n_estimators': 100, 'max_depth': 4}
-

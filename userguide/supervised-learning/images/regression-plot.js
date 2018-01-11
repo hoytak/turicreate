@@ -5,7 +5,7 @@ $(function() {
   });
   xData.sort(function (a,b){ return b-a;});
 
-  // Define the three functions 
+  // Define the three functions
   function decision_boundary(x){
      return -25 * x * x + 215 * (Math.sin(.08 * x + 1));
   }

@@ -26,4 +26,3 @@
 void tool_help(void);
 
 #endif /* HEADER_CURL_TOOL_HELP_H */
-

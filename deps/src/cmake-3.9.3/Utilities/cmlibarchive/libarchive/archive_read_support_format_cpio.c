@@ -373,7 +373,7 @@ archive_read_format_cpio_read_header(struct archive_read *a,
 		}
 		sconv = cpio->sconv_default;
 	}
-	
+
 	r = (cpio->read_header(a, cpio, entry, &namelength, &name_pad));
 
 	if (r < ARCHIVE_WARN)
@@ -615,10 +615,10 @@ header_newc(struct archive_read *a, struct cpio *cpio,
 
 	archive_entry_set_devmajor(entry,
 		(dev_t)atol16(header + newc_devmajor_offset, newc_devmajor_size));
-	archive_entry_set_devminor(entry, 
+	archive_entry_set_devminor(entry,
 		(dev_t)atol16(header + newc_devminor_offset, newc_devminor_size));
 	archive_entry_set_ino(entry, atol16(header + newc_ino_offset, newc_ino_size));
-	archive_entry_set_mode(entry, 
+	archive_entry_set_mode(entry,
 		(mode_t)atol16(header + newc_mode_offset, newc_mode_size));
 	archive_entry_set_uid(entry, atol16(header + newc_uid_offset, newc_uid_size));
 	archive_entry_set_gid(entry, atol16(header + newc_gid_offset, newc_gid_size));
@@ -783,14 +783,14 @@ header_odc(struct archive_read *a, struct cpio *cpio,
 	/* Parse out octal fields. */
 	header = (const char *)h;
 
-	archive_entry_set_dev(entry, 
+	archive_entry_set_dev(entry,
 		(dev_t)atol8(header + odc_dev_offset, odc_dev_size));
 	archive_entry_set_ino(entry, atol8(header + odc_ino_offset, odc_ino_size));
-	archive_entry_set_mode(entry, 
+	archive_entry_set_mode(entry,
 		(mode_t)atol8(header + odc_mode_offset, odc_mode_size));
 	archive_entry_set_uid(entry, atol8(header + odc_uid_offset, odc_uid_size));
 	archive_entry_set_gid(entry, atol8(header + odc_gid_offset, odc_gid_size));
-	archive_entry_set_nlink(entry, 
+	archive_entry_set_nlink(entry,
 		(unsigned int)atol8(header + odc_nlink_offset, odc_nlink_size));
 	archive_entry_set_rdev(entry,
 		(dev_t)atol8(header + odc_rdev_offset, odc_rdev_size));
@@ -836,7 +836,7 @@ header_afiol(struct archive_read *a, struct cpio *cpio,
 	/* Parse out octal fields. */
 	header = (const char *)h;
 
-	archive_entry_set_dev(entry, 
+	archive_entry_set_dev(entry,
 		(dev_t)atol16(header + afiol_dev_offset, afiol_dev_size));
 	archive_entry_set_ino(entry, atol16(header + afiol_ino_offset, afiol_ino_size));
 	archive_entry_set_mode(entry,

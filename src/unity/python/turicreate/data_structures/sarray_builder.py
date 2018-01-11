@@ -31,7 +31,7 @@ class SArrayBuilder(object):
     dtype : type, optional
         The type the resulting SArray will be. If None, the resulting SArray
         will take on the type of the first non-None value it receives.
-        
+
     Returns
     -------
     out : SArrayBuilder
@@ -64,7 +64,7 @@ class SArrayBuilder(object):
         Append a single element to an SArray.
 
         Throws a RuntimeError if the type of `data` is incompatible with
-        the type of the SArray. 
+        the type of the SArray.
 
         Parameters
         ----------
@@ -78,13 +78,13 @@ class SArrayBuilder(object):
             preserved as they are added.
         """
         self._builder.append(data, segment)
-        
+
     def append_multiple(self, data, segment=0):
         """
         Append multiple elements to an SArray.
 
         Throws a RuntimeError if the type of `data` is incompatible with
-        the type of the SArray. 
+        the type of the SArray.
 
         Parameters
         ----------

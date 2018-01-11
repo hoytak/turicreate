@@ -66,16 +66,16 @@ const toolkit_function_specification* toolkit_function_registry::get_toolkit_fun
 }
 
 
-std::function<variant_type(const std::vector<variant_type>&)> 
+std::function<variant_type(const std::vector<variant_type>&)>
 toolkit_function_registry::get_native_function(std::string toolkit_fn_name) {
   const auto* toolkit_fn_spec = get_toolkit_function_info(toolkit_fn_name);
-  // basic error checking. 
+  // basic error checking.
   if (toolkit_fn_spec == nullptr) {
     throw std::string("toolkit function " + toolkit_fn_name + " not found");
     return nullptr;
   }
   if (toolkit_fn_spec->native_execute_function == nullptr) {
-    throw std::string("toolkit function " + toolkit_fn_name + 
+    throw std::string("toolkit function " + toolkit_fn_name +
                       " cannot be run as a native lambda since it was not"
                       " compiled and registered using the SDK registration scheme.");
     return nullptr;
@@ -84,16 +84,16 @@ toolkit_function_registry::get_native_function(std::string toolkit_fn_name) {
 }
 
 
-std::function<variant_type(const std::vector<variant_type>&)> 
+std::function<variant_type(const std::vector<variant_type>&)>
 toolkit_function_registry::get_native_function(const function_closure_info& closure) {
   const auto* toolkit_fn_spec = get_toolkit_function_info(closure.native_fn_name);
-  // basic error checking. 
+  // basic error checking.
   if (toolkit_fn_spec == nullptr) {
     throw std::string("toolkit function " + closure.native_fn_name + " not found");
     return nullptr;
   }
   if (toolkit_fn_spec->native_execute_function == nullptr) {
-    throw std::string("toolkit function " + closure.native_fn_name + 
+    throw std::string("toolkit function " + closure.native_fn_name +
                       " cannot be run as a native lambda since it was not"
                       " compiled and registered using the SDK registration scheme.");
     return nullptr;
@@ -101,7 +101,7 @@ toolkit_function_registry::get_native_function(const function_closure_info& clos
   // now. we need to wrap the closure
   // some basic checking to make sure the closure is complete
   if (closure.arguments.size() != toolkit_fn_spec->description.at("arguments").size()) {
-    throw std::string("Incomplete closure specified for toolkit function " + 
+    throw std::string("Incomplete closure specified for toolkit function " +
                       closure.native_fn_name);
   }
 
@@ -119,7 +119,7 @@ toolkit_function_registry::get_native_function(const function_closure_info& clos
   // identity call. no transformation needed
   if (is_fast_path) {
     return toolkit_fn_spec->native_execute_function;
-  } 
+  }
   // how many arguments are there really after the closure application
   int real_num_args = -1;
   for (size_t i = 0;i < closure.arguments.size(); ++i) {
@@ -131,8 +131,8 @@ toolkit_function_registry::get_native_function(const function_closure_info& clos
   ++real_num_args;
   // more complicated path. we need to build up a lambda
   auto native_execute_function = toolkit_fn_spec->native_execute_function;
-   
-  auto retlambda = 
+
+  auto retlambda =
       [real_num_args,native_execute_function,closure](const std::vector<variant_type>& inargs)->variant_type {
         if (inargs.size() < (size_t)real_num_args) {
           throw std::string("Wrong number of arguments");

@@ -49,7 +49,7 @@
 #include <timer/timer.hpp>
 #include <logger/fail_method.hpp>
 #include <logger/backtrace.hpp>
-#include <util/code_optimization.hpp> 
+#include <util/code_optimization.hpp>
 #include <process/process_util.hpp>
 
 /**
@@ -84,11 +84,11 @@
  */
 /**
  * \def LOG_EVERYTHING
- *   Log everything 
+ *   Log everything
  * \}
  */
-// sgr - needed additional debug levels. I can undo this change if 
-// necessary. although it seems to me that log levels should count 
+// sgr - needed additional debug levels. I can undo this change if
+// necessary. although it seems to me that log levels should count
 // up and saturate so the messages label array can always be used.
 #define LOG_NONE 8
 #define LOG_FATAL 7
@@ -98,7 +98,7 @@
 #define LOG_EMPH 3
 #define LOG_INFO 2
 #define LOG_DEBUG 1
-#define LOG_EVERYTHING 0 
+#define LOG_EVERYTHING 0
 
 /**
  * \ingroup turilogger
@@ -121,7 +121,7 @@
  * \{
  * \def logger(lvl, fmt,...)
  *    Emits a log line output in printf format at a particular log level. lvl
- *    must be one of the log levels from LOG_DEBUG to LOG_FATAL. Emitting a 
+ *    must be one of the log levels from LOG_DEBUG to LOG_FATAL. Emitting a
  *    LOG_FATAL will kill the process.
  *
  *    Example:
@@ -192,7 +192,7 @@
  *
  *    Example:
  *    \code
- *    logstream_ontick(5, LOG_INFO) << "Class " << str << " constructed" 
+ *    logstream_ontick(5, LOG_INFO) << "Class " << str << " constructed"
  *                                  << std::endl;
  *    \endcode
  */
@@ -200,7 +200,7 @@
 /**
  * \def logprogress(fmt,...)
  *    Emits a progress message using printf format.
- *    
+ *
  *    Example:
  *    \code
  *    logprogress("hello world: %d", 10);
@@ -221,7 +221,7 @@
 /**
  * \def logprogress_ontick(sec, fmt,...)
  *    Emits a progress message using printf format, but will only print
- *    approximately once every "sec" seconds.  
+ *    approximately once every "sec" seconds.
  *    Example:
  *    \code
  *    // only print once every 5 seconds
@@ -238,7 +238,7 @@
  *
  *    Example:
  *    \code
- *    logprogress_stream_ontick(5) << "Class " << str << " constructed" 
+ *    logprogress_stream_ontick(5) << "Class " << str << " constructed"
  *                                 << std::endl;
  *    \endcode
  * \}
@@ -329,7 +329,7 @@
       throw(std::string(message));                                  \
     };                                                              \
     throw_error();                                                  \
-  } while(0)                                                 
+  } while(0)
 
 #ifdef COMPILER_HAS_IOS_BASE_FAILURE_WITH_ERROR_CODE
 #define log_and_throw_io_failure(message)                             \
@@ -429,7 +429,7 @@ class file_logger{
   size_t get_pid() const {
     return reference_pid;
   }
-  
+
   /// Returns the current logger file.
   std::string get_log_file(void) {
     return log_file;
@@ -445,7 +445,7 @@ class file_logger{
     return log_level;
   }
 
-  /** 
+  /**
    * Set a callback to be called whenever a log message at a particular
    * log level is issued. Only one observer can be set per log level.
    */
@@ -458,7 +458,7 @@ class file_logger{
     pthread_mutex_unlock(&mut);
   }
 
-  /** 
+  /**
    * Gets the callback called when a log message at a particular
    * log level is issued. Note that only one observer can be set per log level.
    */
@@ -562,7 +562,7 @@ class file_logger{
 
   inline void stream_flush() {
     // get the stream buffer
-    logger_impl::streambuff_tls_entry* streambufentry = 
+    logger_impl::streambuff_tls_entry* streambufentry =
         reinterpret_cast<logger_impl::streambuff_tls_entry*>(
                                           pthread_getspecific(streambuffkey));
     if (streambufentry != NULL) {
@@ -577,8 +577,8 @@ class file_logger{
       if (has_callback[lineloglevel]) {
         pthread_mutex_lock(&mut);
         if (callback[lineloglevel]) {
-          callback[lineloglevel](lineloglevel, 
-                                 msg.c_str() + streambufentry->header_len, 
+          callback[lineloglevel](lineloglevel,
+                                 msg.c_str() + streambufentry->header_len,
                                  msg.length() - streambufentry->header_len);
         }
         streambufentry->header_len = 0;
@@ -670,4 +670,3 @@ void textcolor(FILE* handle, int attr, int fg);
 void reset_color(FILE* handle);
 
 #endif
-

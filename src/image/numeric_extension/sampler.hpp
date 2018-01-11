@@ -18,7 +18,7 @@
 #include "pixel_numeric_operations.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////
-/// \file               
+/// \file
 /// \brief Nearest-neighbor and bilinear image samplers.
 ///        NOTE: The code is for example use only. It is not optimized for performance
 /// \author Lubomir Bourdev and Hailin Jin \n
@@ -98,7 +98,7 @@ struct add_dst_mul_src {
 };
 } // namespace detail
 
-/// \brief A sampler that sets the destination pixel as the bilinear interpolation of the four closest pixels from the source. 
+/// \brief A sampler that sets the destination pixel as the bilinear interpolation of the four closest pixels from the source.
 /// If outside the bounds, it doesn't change the destination
 /// \ingroup ImageAlgorithms
 struct bilinear_sampler {};

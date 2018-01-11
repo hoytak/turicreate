@@ -25,4 +25,3 @@ AmazonWebServiceRequest::AmazonWebServiceRequest() :
     m_onDataSent(nullptr)
 {
 }
-

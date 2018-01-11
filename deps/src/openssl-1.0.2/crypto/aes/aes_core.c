@@ -1208,7 +1208,7 @@ int private_AES_set_encrypt_key(const unsigned char *userKey, const int bits,
                                 AES_KEY *key)
 {
     u32 *rk;
-   	int i = 0;
+	int i = 0;
     u32 temp;
 
     if (!userKey || !key)
@@ -1351,7 +1351,7 @@ int private_AES_set_decrypt_key(const unsigned char *userKey, const int bits,
             rk[j] = tpe ^ ROTATE(tpd,16) ^
                 ROTATE(tp9,24) ^ ROTATE(tpb,8);
 #else
-            rk[j] = tpe ^ (tpd >> 16) ^ (tpd << 16) ^ 
+            rk[j] = tpe ^ (tpd >> 16) ^ (tpd << 16) ^
                 (tp9 >> 8) ^ (tp9 << 24) ^
                 (tpb >> 24) ^ (tpb << 8);
 #endif

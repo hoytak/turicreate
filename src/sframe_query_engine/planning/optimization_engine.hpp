@@ -51,8 +51,8 @@ struct optimization_transform_registry {
  * \{
  */
 
-/** 
- * The main engine to power the optimizations.  
+/**
+ * The main engine to power the optimizations.
  *
  */
 class optimization_engine {
@@ -119,7 +119,7 @@ class optimization_engine {
 
   std::map<pnode_ptr, node_info_ptr> node_lookups;
   std::vector<node_info_ptr> all_nodes;
-  
+
   void release_node(const node_info_ptr& ptr);
 
 };

@@ -147,18 +147,18 @@ grouped_sframe::iterator_get_next(size_t len) {
 
   return ret;
 }
-  
+
 gl_sframe grouped_sframe::group_info() const {
   if (m_group_names.size() == 0) {
     log_and_throw("No groups present. Cannot obtain group info.");
   }
- 
-  // Return column names. 
+
+  // Return column names.
   std::vector<std::string> ret_column_names = m_key_col_names;
   ret_column_names.push_back("group_size");
   DASSERT_EQ(ret_column_names.size(), m_key_col_names.size() + 1);
 
-  // Return column types from the first group info. 
+  // Return column types from the first group info.
   DASSERT_TRUE(m_group_names.size() > 1);
   std::vector<flex_type_enum> ret_column_types;
   flexible_type first_key = m_group_names[0];
@@ -172,7 +172,7 @@ gl_sframe grouped_sframe::group_info() const {
   }
   ret_column_types.push_back(flex_type_enum::INTEGER);
   DASSERT_EQ(ret_column_types.size(), ret_column_names.size());
-  
+
   // Prepare for writing.
   size_t num_segments = thread::cpu_count();
   gl_sframe_writer writer(ret_column_names, ret_column_types, num_segments);
@@ -184,7 +184,7 @@ gl_sframe grouped_sframe::group_info() const {
     size_t start_idx = range_dir_size * thread_idx / num_threads;
     size_t end_idx = range_dir_size * (thread_idx + 1) / num_threads;
 
-    for (size_t i = start_idx; i < end_idx; i++) { 
+    for (size_t i = start_idx; i < end_idx; i++) {
       size_t range_start = m_range_directory[i];
       size_t range_end = 0;
       if((i + 1) == m_range_directory.size()) {
@@ -199,7 +199,7 @@ gl_sframe grouped_sframe::group_info() const {
       writer.write(vals, thread_idx);
     }
   });
-  return writer.close(); 
+  return writer.close();
 }
 
 /// Private methods

@@ -29,7 +29,7 @@ namespace archive_detail {
     vec.clear();
     // get the number of elements to deserialize
     size_t length = 0;
-    iarc >> length;    
+    iarc >> length;
     // iterate through and send to the output iterator
     for (size_t x = 0; x < length ; ++x){
       T v;
@@ -39,7 +39,7 @@ namespace archive_detail {
   }
   };
 
-} // archive_detail  
+} // archive_detail
 } // turicreate
 
 
@@ -67,7 +67,7 @@ namespace archive_detail {
     vec.clear();
     // get the number of elements to deserialize
     size_t length = 0;
-    iarc >> length;    
+    iarc >> length;
     // iterate through and send to the output iterator
     for (size_t x = 0; x < length ; ++x){
       T v;
@@ -77,7 +77,7 @@ namespace archive_detail {
   }
   };
 
-} // archive_detail  
+} // archive_detail
 } // turicreate
 
 
@@ -86,5 +86,4 @@ namespace archive_detail {
 
 
 
-#endif 
-
+#endif

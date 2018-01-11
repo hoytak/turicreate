@@ -39,57 +39,57 @@ struct gl_timeseries_test  {
 
       gl_timeseries ts;
       float period =  1 * DAY;
-      ts.init(sf, "index"); 
-      gl_timeseries ts_out = ts.resample(period,    
-                     {{"a", aggregate::SUM("a")}, 
-                      {"b", aggregate::SUM("b")}, 
-                      {"c", aggregate::SUM("c")}}); 
+      ts.init(sf, "index");
+      gl_timeseries ts_out = ts.resample(period,
+                     {{"a", aggregate::SUM("a")},
+                      {"b", aggregate::SUM("b")},
+                      {"c", aggregate::SUM("c")}});
       std::cout << ts_out.get_sframe() << std::endl;
-      
-      ts_out = ts.resample(period,   
-                        {{"a", aggregate::AVG("a")}, 
-                         {"b", aggregate::AVG("b")}, 
-                         {"c", aggregate::AVG("c")}}); 
+
+      ts_out = ts.resample(period,
+                        {{"a", aggregate::AVG("a")},
+                         {"b", aggregate::AVG("b")},
+                         {"c", aggregate::AVG("c")}});
       std::cout << ts_out.get_sframe() << std::endl;
-      
-      ts_out = ts.resample(period,   
-                        {{"a", aggregate::STD("a")}, 
-                         {"b", aggregate::STD("b")}, 
-                         {"c", aggregate::STD("c")}}); 
+
+      ts_out = ts.resample(period,
+                        {{"a", aggregate::STD("a")},
+                         {"b", aggregate::STD("b")},
+                         {"c", aggregate::STD("c")}});
       std::cout << ts_out.get_sframe() << std::endl;
-      
-      ts_out = ts.resample(period,   
-                        {{"a", aggregate::MIN("a")}, 
-                         {"b", aggregate::MIN("b")}, 
-                         {"c", aggregate::MIN("c")}}); 
+
+      ts_out = ts.resample(period,
+                        {{"a", aggregate::MIN("a")},
+                         {"b", aggregate::MIN("b")},
+                         {"c", aggregate::MIN("c")}});
       std::cout << ts_out.get_sframe() << std::endl;
-      
-      ts_out = ts.resample(period,   
-                        {{"a", aggregate::MAX("a")}, 
-                         {"b", aggregate::MAX("b")}, 
-                         {"c", aggregate::MAX("c")}}); 
+
+      ts_out = ts.resample(period,
+                        {{"a", aggregate::MAX("a")},
+                         {"b", aggregate::MAX("b")},
+                         {"c", aggregate::MAX("c")}});
       std::cout << ts_out.get_sframe() << std::endl;
-      
-      ts_out = ts.resample(period,   
-                        {{"a", aggregate::SELECT_ONE("a")}, 
-                         {"b", aggregate::SELECT_ONE("b")}, 
+
+      ts_out = ts.resample(period,
+                        {{"a", aggregate::SELECT_ONE("a")},
+                         {"b", aggregate::SELECT_ONE("b")},
                          {"c", aggregate::SELECT_ONE("c")}});
       std::cout << ts_out.get_sframe() << std::endl;
-      
-      ts_out = ts.resample(period,   
-                        {{"a", aggregate::CONCAT("a")}, 
-                         {"b", aggregate::CONCAT("b")}, 
-                         {"c", aggregate::CONCAT("c")}}); 
+
+      ts_out = ts.resample(period,
+                        {{"a", aggregate::CONCAT("a")},
+                         {"b", aggregate::CONCAT("b")},
+                         {"c", aggregate::CONCAT("c")}});
       std::cout << ts_out.get_sframe() << std::endl;
-      
-      ts_out = ts.resample(period,   
-                        {{"a", aggregate::COUNT_DISTINCT("a")}, 
-                         {"b", aggregate::COUNT_DISTINCT("b")}, 
-                         {"c", aggregate::COUNT_DISTINCT("c")}}); 
+
+      ts_out = ts.resample(period,
+                        {{"a", aggregate::COUNT_DISTINCT("a")},
+                         {"b", aggregate::COUNT_DISTINCT("b")},
+                         {"c", aggregate::COUNT_DISTINCT("c")}});
       std::cout << ts_out.get_sframe() << std::endl;
 
     }
-    
+
     void test_resample_corner_cases() {
 
       gl_sframe sf;
@@ -114,9 +114,9 @@ struct gl_timeseries_test  {
       float period =  1 * DAY;
 
       // Only use the index.
-      ts.init(sf[{"index"}], "index"); 
-      gl_timeseries ts_out = ts.resample(period,    
-              {{"", aggregate::COUNT()}});                     
+      ts.init(sf[{"index"}], "index");
+      gl_timeseries ts_out = ts.resample(period,
+              {{"", aggregate::COUNT()}});
       std::cout << ts_out.get_sframe() << std::endl;
     }
 
@@ -142,47 +142,47 @@ struct gl_timeseries_test  {
 
       gl_timeseries ts;
       float period =  1 * DAY;
-      ts.init(sf, "index"); 
-      gl_timeseries ts_out = ts.resample(period,    
-                     {{"a", aggregate::SUM("a")}, 
-                      {"b", aggregate::SUM("b")}, 
+      ts.init(sf, "index");
+      gl_timeseries ts_out = ts.resample(period,
+                     {{"a", aggregate::SUM("a")},
+                      {"b", aggregate::SUM("b")},
                       {"c", aggregate::SUM("c")}},
-                     get_builtin_interpolator("__builtin__none__")); 
+                     get_builtin_interpolator("__builtin__none__"));
       std::cout << ts_out.get_sframe() << std::endl;
-      
-     ts_out = ts.resample(period,    
-                     {{"a", aggregate::SUM("a")}, 
-                      {"b", aggregate::SUM("b")}, 
+
+     ts_out = ts.resample(period,
+                     {{"a", aggregate::SUM("a")},
+                      {"b", aggregate::SUM("b")},
                       {"c", aggregate::SUM("c")}},
-                     get_builtin_interpolator("__builtin__zero__")); 
+                     get_builtin_interpolator("__builtin__zero__"));
       std::cout << ts_out.get_sframe() << std::endl;
-     
-      ts_out = ts.resample(period,    
-                     {{"a", aggregate::SUM("a")}, 
-                      {"b", aggregate::SUM("b")}, 
+
+      ts_out = ts.resample(period,
+                     {{"a", aggregate::SUM("a")},
+                      {"b", aggregate::SUM("b")},
                       {"c", aggregate::SUM("c")}},
-                     get_builtin_interpolator("__builtin__ffill__")); 
+                     get_builtin_interpolator("__builtin__ffill__"));
       std::cout << ts_out.get_sframe() << std::endl;
-                
-      ts_out = ts.resample(period,    
-                     {{"a", aggregate::SUM("a")}, 
-                      {"b", aggregate::SUM("b")}, 
+
+      ts_out = ts.resample(period,
+                     {{"a", aggregate::SUM("a")},
+                      {"b", aggregate::SUM("b")},
                       {"c", aggregate::SUM("c")}},
-                     get_builtin_interpolator("__builtin__bfill__")); 
+                     get_builtin_interpolator("__builtin__bfill__"));
       std::cout << ts_out.get_sframe() << std::endl;
-     
-      ts_out = ts.resample(period,    
-                     {{"a", aggregate::SUM("a")}, 
-                      {"b", aggregate::SUM("b")}, 
+
+      ts_out = ts.resample(period,
+                     {{"a", aggregate::SUM("a")},
+                      {"b", aggregate::SUM("b")},
                       {"c", aggregate::SUM("c")}},
-                     get_builtin_interpolator("__builtin__nearest__")); 
+                     get_builtin_interpolator("__builtin__nearest__"));
       std::cout << ts_out.get_sframe() << std::endl;
-      
-      ts_out = ts.resample(period,    
-                     {{"a", aggregate::SUM("a")}, 
-                      {"b", aggregate::SUM("b")}, 
+
+      ts_out = ts.resample(period,
+                     {{"a", aggregate::SUM("a")},
+                      {"b", aggregate::SUM("b")},
                       {"c", aggregate::SUM("c")}},
-                     get_builtin_interpolator("__builtin__linear__")); 
+                     get_builtin_interpolator("__builtin__linear__"));
       std::cout << ts_out.get_sframe() << std::endl;
     }
 
@@ -199,8 +199,8 @@ struct gl_timeseries_test  {
         TS_ASSERT_EQUALS(sa[i], vec[i]);
       }
     }
-    
-    void _assert_flexvec_equals(const std::vector<flexible_type>& sa, 
+
+    void _assert_flexvec_equals(const std::vector<flexible_type>& sa,
                                 const std::vector<flexible_type>& sb) {
       TS_ASSERT_EQUALS(sa.size(), sb.size());
       for (size_t i = 0;i < sa.size() ;++i) {
@@ -223,7 +223,7 @@ struct gl_timeseries_test  {
         _assert_flexvec_equals(sa[i], sb[i]);
       }
     }
-    
+
 };
 
 

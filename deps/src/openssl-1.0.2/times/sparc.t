@@ -23,4 +23,3 @@ rsa 4096 bits  11.100s   0.202
 dsa  512 bits   0.038s   0.074
 dsa 1024 bits   0.128s   0.248
 dsa 2048 bits   0.473s   0.959
-

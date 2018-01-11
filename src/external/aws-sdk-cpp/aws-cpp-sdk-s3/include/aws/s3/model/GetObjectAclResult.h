@@ -42,19 +42,19 @@ namespace Model
     GetObjectAclResult(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
     GetObjectAclResult& operator=(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
 
-    
+
     inline const Owner& GetOwner() const{ return m_owner; }
 
-    
+
     inline void SetOwner(const Owner& value) { m_owner = value; }
 
-    
+
     inline void SetOwner(Owner&& value) { m_owner = value; }
 
-    
+
     inline GetObjectAclResult& WithOwner(const Owner& value) { SetOwner(value); return *this;}
 
-    
+
     inline GetObjectAclResult& WithOwner(Owner&& value) { SetOwner(value); return *this;}
 
     /**
@@ -92,19 +92,19 @@ namespace Model
      */
     inline GetObjectAclResult& AddGrants(Grant&& value) { m_grants.push_back(value); return *this; }
 
-    
+
     inline const RequestCharged& GetRequestCharged() const{ return m_requestCharged; }
 
-    
+
     inline void SetRequestCharged(const RequestCharged& value) { m_requestCharged = value; }
 
-    
+
     inline void SetRequestCharged(RequestCharged&& value) { m_requestCharged = value; }
 
-    
+
     inline GetObjectAclResult& WithRequestCharged(const RequestCharged& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline GetObjectAclResult& WithRequestCharged(RequestCharged&& value) { SetRequestCharged(value); return *this;}
 
   private:

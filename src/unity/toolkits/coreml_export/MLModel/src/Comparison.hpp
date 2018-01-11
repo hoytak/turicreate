@@ -11,7 +11,7 @@
 namespace CoreML {
     namespace Specification {
         // comparison operators for Specification types
-        
+
         // model container and metadata/interface
         bool operator==(const Model& a,
                         const Model& b);
@@ -25,7 +25,7 @@ namespace CoreML {
                           const FeatureDescription& b);
         bool operator==(const FeatureType& a,
                         const FeatureType& b);
-        
+
         // pipelines
         bool operator==(const Pipeline& a,
                         const Pipeline& b);
@@ -33,13 +33,13 @@ namespace CoreML {
                         const PipelineClassifier& b);
         bool operator==(const PipelineRegressor& a,
                         const PipelineRegressor& b);
-        
+
         // regressors
         bool operator==(const GLMRegressor& a,
                         const GLMRegressor& b);
         bool operator==(const GLMRegressor_DoubleArray& a,
                         const GLMRegressor_DoubleArray& b);
-        
+
         bool operator==(const SupportVectorRegressor& a,
                         const SupportVectorRegressor& b);
         bool operator==(const Kernel& a,
@@ -58,7 +58,7 @@ namespace CoreML {
                         const SparseNode& b);
         bool operator==(const DenseVector& a,
                         const DenseVector& b);
-        
+
         bool operator==(const TreeEnsembleRegressor& a,
                         const TreeEnsembleRegressor& b);
         bool operator==(const TreeEnsembleParameters& a,
@@ -67,7 +67,7 @@ namespace CoreML {
                         const TreeEnsembleParameters_TreeNode& b);
         bool operator==(const TreeEnsembleParameters_TreeNode_EvaluationInfo& a,
                         const TreeEnsembleParameters_TreeNode_EvaluationInfo& b);
-        
+
         bool operator==(const NeuralNetworkRegressor& a,
                         const NeuralNetworkRegressor& b);
         bool operator==(const NeuralNetworkLayer& a,
@@ -78,24 +78,24 @@ namespace CoreML {
                         const NeuralNetworkImageScaler& b);
         bool operator==(const NeuralNetworkMeanImage& a,
                         const NeuralNetworkMeanImage& b);
-        
+
         // classifiers
         bool operator==(const GLMClassifier& a,
                         const GLMClassifier& b);
         bool operator==(const GLMClassifier_DoubleArray& a,
                         const GLMClassifier_DoubleArray& b);
-        
+
         bool operator==(const SupportVectorClassifier& a,
                         const SupportVectorClassifier& b);
         bool operator==(const TreeEnsembleClassifier& a,
                         const TreeEnsembleClassifier& b);
         bool operator==(const NeuralNetworkClassifier& a,
                         const NeuralNetworkClassifier& b);
-        
+
         // generic models
         bool operator==(const NeuralNetwork& a,
                         const NeuralNetwork& b);
-        
+
         // feature engineering
         bool operator==(const OneHotEncoder& a,
                         const OneHotEncoder& b);
@@ -115,9 +115,9 @@ namespace CoreML {
                         const Normalizer& b);
         bool operator==(const ArrayFeatureExtractor& a,
                         const ArrayFeatureExtractor& b);
-        
+
         // data structures
-        
+
         bool operator==(const Int64Vector& a,
                         const Int64Vector& b);
         bool operator==(const StringVector& a,
@@ -132,10 +132,10 @@ namespace CoreML {
                         const StringToDoubleMap& b);
         bool operator==(const Int64ToDoubleMap& a,
                         const Int64ToDoubleMap& b);
-        
-        
+
+
         // comparison of repeated/contained types
-        
+
         template<typename T>
         bool operator==(const ::google::protobuf::RepeatedPtrField<T>& a,
                         const ::google::protobuf::RepeatedPtrField<T>& b) {
@@ -149,7 +149,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         template<typename T>
         bool operator==(const ::google::protobuf::RepeatedField<T>& a,
                         const ::google::protobuf::RepeatedField<T>& b) {
@@ -163,7 +163,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         // comparison of Map contained types
         template<typename T, typename U>
         bool operator==(const ::google::protobuf::Map<T,U>& a,
@@ -181,7 +181,7 @@ namespace CoreML {
             }
             return true;
         }
-        
+
         // generically express != in terms of ==
         template<typename T>
         bool operator!=(const T& a,

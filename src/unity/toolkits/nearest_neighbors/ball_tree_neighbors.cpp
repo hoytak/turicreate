@@ -28,7 +28,7 @@
 #include <table_printer/table_printer.hpp>
 
 namespace turi {
-namespace nearest_neighbors {   
+namespace nearest_neighbors {
 
 #define NONE_FLAG ((size_t) -1)
 
@@ -53,16 +53,16 @@ nearest_neighbors_model* ball_tree_neighbors::nearest_neighbors_clone() {
 
 /**
 * Set options
-*/ 
+*/
 void ball_tree_neighbors::init_options(
-  const std::map<std::string, flexible_type>& _options) { 
+  const std::map<std::string, flexible_type>& _options) {
 
   options.create_integer_option("leaf_size",
                             "Max number of points in a leaf node of the ball tree",
                             0,
                             0,
                             std::numeric_limits<int>::max(),
-                            true); 
+                            true);
 
   options.create_string_option("label",
                              "Name of the reference dataset column with row labels.",
@@ -70,8 +70,8 @@ void ball_tree_neighbors::init_options(
                              false);
 
   // Set options and update model state with final option values
-  options.set_options(_options); 
-  add_or_update_state(flexmap_to_varmap(options.current_option_values())); 
+  options.set_options(_options);
+  add_or_update_state(flexmap_to_varmap(options.current_option_values()));
 }
 
 
@@ -97,9 +97,9 @@ void ball_tree_neighbors::train(const sframe& X,
 
   // Initialize the distance components. NOTE: this needs data to be initialized
   // first because the row slicers need the column indices to be sorted.
-  initialize_distances(); 
-  
-  ASSERT_FALSE(composite_distances.empty()); 
+  initialize_distances();
+
+  ASSERT_FALSE(composite_distances.empty());
   dist_component c = composite_distances[0];
 
 
@@ -208,7 +208,7 @@ void ball_tree_neighbors::train(const sframe& X,
 
     // First pass over the data
     for (auto it = mld_ref.get_iterator(); !it.done(); ++it) {
-      
+
       // Get the required data
       a = it.row_index();
       idx_node = membership[a];
@@ -217,7 +217,7 @@ void ball_tree_neighbors::train(const sframe& X,
         p = pivots[idx_node];
         it.fill_row_expr(x);
         pivot_dist[a] = c.distance->distance(x, p);
-      
+
         // find the largest distance to the pivot and index of the point
         if (pivot_dist[a] >= node_radii[idx_node]) {
           node_radii[idx_node] = pivot_dist[a];
@@ -241,11 +241,11 @@ void ball_tree_neighbors::train(const sframe& X,
     // Create vector of vectors to store the first child distances contiguously
     // for each node.
     std::vector<std::vector<double>> node_dists(num_level_nodes);
-    
+
 
     // Second pass over the data
     for (auto it = mld_ref.get_iterator(); !it.done(); ++it) {
-      
+
       // Get the required data
       a = it.row_index();
       idx_node = membership[a];
@@ -339,7 +339,7 @@ void ball_tree_neighbors::train(const sframe& X,
 
   // Find the radii for each of the leaf nodes
   for (auto it = mld_ref.get_iterator(); !it.done(); ++it) {
-    
+
     // Get the required data
     a = it.row_index();
     idx_node = membership[a];
@@ -365,7 +365,7 @@ void ball_tree_neighbors::train(const sframe& X,
   table.print_row(tree_depth - 1, progress_time());
 
 
-  
+
   // Group the reference data by leaf node ID
 
   // convert the reference labels to an SArray.
@@ -396,7 +396,7 @@ void ball_tree_neighbors::train(const sframe& X,
 
   size_t idx_member_column = sf_refs.column_index("__nearest_neighbors_membership");
   sf_refs = sf_refs.remove_column(idx_member_column);
-  
+
   // extract the map of grouped row indices from the dataset.
   auto label_reader = sf_refs.select_column("__nearest_neighbors_ref_label")->get_reader();
   std::vector<flexible_type> temp2(num_examples);
@@ -408,7 +408,7 @@ void ball_tree_neighbors::train(const sframe& X,
   size_t idx_label_column = sf_refs.column_index("__nearest_neighbors_ref_label");
   sf_refs = sf_refs.remove_column(idx_label_column);
 
-  
+
   // Re-make the ML data with the row-permuted data for storage in the model
   mld_ref = v2::ml_data(metadata);
   mld_ref.fill(sf_refs);
@@ -423,7 +423,7 @@ void ball_tree_neighbors::train(const sframe& X,
 
 
 /**
- * Make predictions using an existing ball tree nearest neighbors model. 
+ * Make predictions using an existing ball tree nearest neighbors model.
  * /note For each query point compute the distance to every reference point.
  */
 sframe ball_tree_neighbors::query(const v2::ml_data& mld_queries,
@@ -438,7 +438,7 @@ sframe ball_tree_neighbors::query(const v2::ml_data& mld_queries,
 
 
   // Construct the distance object pointer
-  ASSERT_FALSE(composite_distances.empty()); 
+  ASSERT_FALSE(composite_distances.empty());
   dist_component c = composite_distances[0];
 
   // Compute the actual number of nearest neighbors and construct the data
@@ -450,7 +450,7 @@ sframe ball_tree_neighbors::query(const v2::ml_data& mld_queries,
   } else {
     kstar = std::min(k, mld_ref.size());
   }
-  
+
   std::vector<neighbor_candidates> topk (num_queries,
                     neighbor_candidates(-1, kstar, radius, include_self_edges));
 
@@ -602,7 +602,7 @@ sframe ball_tree_neighbors::query(const v2::ml_data& mld_queries,
                                         progress_time());
 
       }  // end the loop over query points
-    });  
+    });
 
   table.print_row("Done", " ", progress_time());
   table.print_footer();
@@ -677,7 +677,7 @@ void ball_tree_neighbors::load_version(turi::iarchive& iarc, size_t version) {
     auto fn = function_closure_info();
     fn.native_fn_name = "_distances.";
     fn.native_fn_name += std::string(options.value("distance"));
-    std::vector<std::string> features = variant_get_value<std::vector<std::string>>(state["features"]); 
+    std::vector<std::string> features = variant_get_value<std::vector<std::string>>(state["features"]);
     dist_component_type p = std::make_tuple(features, fn, 1.0);
     composite_params = {p};
 
@@ -687,7 +687,7 @@ void ball_tree_neighbors::load_version(turi::iarchive& iarc, size_t version) {
 
   else {
     iarc >> composite_params;
-    iarc >> untranslated_cols;    
+    iarc >> untranslated_cols;
   }
 
 
@@ -701,7 +701,7 @@ void ball_tree_neighbors::load_version(turi::iarchive& iarc, size_t version) {
         reference_labels[it.row_index()] = metadata->target_indexer()->map_index_to_value(it.target_index());
       }
     });
-    
+
     add_or_update_state({ {"num_distance_components", 1} });
   }
 
@@ -709,7 +709,7 @@ void ball_tree_neighbors::load_version(turi::iarchive& iarc, size_t version) {
     iarc >> reference_labels;
   }
 
-  initialize_distances(); 
+  initialize_distances();
 }
 
 
@@ -737,13 +737,13 @@ bool ball_tree_neighbors::activate_query_node(size_t k, double radius,
       // neighbors will be checked against radius, so the following conditional
       // won't be needed.
     if (radius < 0) {         // k is defined, radius is undefined
-      
+
       // if the candidates set is empty, max_current_dist is -1.0, but
       // num_current_neighbors should be 0, so this should trigger (unless k is
       // 0). The same thing occurs when both k and radius are defined (below).
       if ((num_current_neighbors < k) || (min_poss_dist < max_current_dist))
         activate = true;
-    
+
     } else {                  // both k and radius are defined
       if (min_poss_dist < radius)
        if ((min_poss_dist < max_current_dist) || (num_current_neighbors < k))

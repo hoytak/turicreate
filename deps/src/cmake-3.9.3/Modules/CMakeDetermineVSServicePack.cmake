@@ -169,4 +169,3 @@ function(DetermineVSServicePack _pack)
         endif()
     endif()
 endfunction()
-

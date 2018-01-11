@@ -12,7 +12,7 @@ namespace turi {
 
 parallel_task_queue::parallel_task_queue(thread_pool& pool):pool(pool) { }
 
-void parallel_task_queue::launch(const boost::function<void (void)> &spawn_function, 
+void parallel_task_queue::launch(const boost::function<void (void)> &spawn_function,
                                  int thread_id) {
   std::lock_guard<mutex> ulock(mut);
   tasks_inserted++;
@@ -27,7 +27,7 @@ void parallel_task_queue::launch(const boost::function<void (void)> &spawn_funct
         }
         std::lock_guard<mutex> finishlock(mut);
         tasks_completed++;
-        if (waiting_on_join && 
+        if (waiting_on_join &&
             tasks_completed == tasks_inserted) event_condition.signal();
       }, thread_id);
 }
@@ -87,8 +87,8 @@ void thread_pool::resize(size_t nthreads) {
         threads.join(); break;
       } catch (const char* error_str) {
         // this should not be possible!
-        logstream(LOG_FATAL) 
-            << "Unexpected exception caught in thread pool destructor: " 
+        logstream(LOG_FATAL)
+            << "Unexpected exception caught in thread pool destructor: "
             << error_str << std::endl;
       }
     }
@@ -132,8 +132,8 @@ void thread_pool::destroy_all_threads() {
     }
     catch (const char* c) {
       // this should not be possible!
-      logstream(LOG_FATAL) 
-          << "Unexpected exception caught in thread pool destructor: " 
+      logstream(LOG_FATAL)
+          << "Unexpected exception caught in thread pool destructor: "
           << c << std::endl;
       ASSERT_TRUE(false);
     }
@@ -152,8 +152,8 @@ void thread_pool::set_cpu_affinity(bool affinity) {
         threads.join(); break;
       } catch (const char* c) {
         // this should not be possible!
-        logstream(LOG_FATAL) 
-            << "Unexpected exception caught in thread pool destructor: " 
+        logstream(LOG_FATAL)
+            << "Unexpected exception caught in thread pool destructor: "
             << c << std::endl;
         // ASSERT_TRUE(false); // unnecessary
       }
@@ -164,7 +164,7 @@ void thread_pool::set_cpu_affinity(bool affinity) {
 } // end of set_cpu_affinity
 
 
-void thread_pool::launch(const boost::function<void (void)> &spawn_function, 
+void thread_pool::launch(const boost::function<void (void)> &spawn_function,
                          int virtual_threadid) {
   std::lock_guard<mutex> lock(mut);
   ++tasks_inserted;
@@ -188,7 +188,7 @@ void thread_pool::wait_for_task() {
       thread::set_thread_id(cur_thread_id);
       std::lock_guard<mutex> lock(mut);
       ++tasks_completed;
-      if (waiting_on_join && 
+      if (waiting_on_join &&
           tasks_completed == tasks_inserted) event_condition.signal();
 
     }

@@ -18,7 +18,7 @@ namespace turi{
 namespace image_util{
 
   /**
-  * Return flex_vec flexible type that is sum of all images with data in vector form. 
+  * Return flex_vec flexible type that is sum of all images with data in vector form.
   */
 
   flexible_type sum(std::shared_ptr<unity_sarray> unity_data){
@@ -27,7 +27,7 @@ namespace image_util{
     if (unity_data->size() > 0){
       bool failure = false;
       size_t reference_size;
-      size_t failure_size; 
+      size_t failure_size;
       auto reductionfn =
         [&failure, &reference_size, &failure_size]
         (const flexible_type& in, std::pair<bool, flexible_type>& sum)->bool {
@@ -56,7 +56,7 @@ namespace image_util{
 
       auto combinefn =
         [&failure, &reference_size, &failure_size]
-        (const std::pair<bool, flexible_type>& f, 
+        (const std::pair<bool, flexible_type>& f,
          std::pair<bool, flexible_type>& sum)->bool {
           if (sum.first == false) {
             // initial state
@@ -78,18 +78,18 @@ namespace image_util{
         };
       std::pair<bool, flexible_type> start_val{false, flex_vec()};
       std::pair<bool, flexible_type> sum_val =
-        query_eval::reduce<std::pair<bool, flexible_type>>(unity_data->get_planner_node(), 
-                                                           reductionfn, 
-                                                           combinefn, 
+        query_eval::reduce<std::pair<bool, flexible_type>>(unity_data->get_planner_node(),
+                                                           reductionfn,
+                                                           combinefn,
                                                            start_val);
 
       if(failure){
-        std::string error = 
+        std::string error =
             std::string("Cannot perform sum or average over images of different sizes. ")
             + std::string("Found images of total size (ie. width * height * channels) ")
-            + std::string(" of both ") + std::to_string(reference_size) 
-            + std::string( "and ") + std::to_string(failure_size) 
-            + std::string(". Please use graplab.image_analysis.resize() to make images a uniform") 
+            + std::string(" of both ") + std::to_string(reference_size)
+            + std::string( "and ") + std::to_string(failure_size)
+            + std::string(". Please use graplab.image_analysis.resize() to make images a uniform")
             + std::string(" size.");
         log_and_throw(error);
       }
@@ -108,7 +108,7 @@ namespace image_util{
 flexible_type generate_mean(std::shared_ptr<unity_sarray> unity_data) {
   log_func_entry();
 
-  
+
   std::vector<flexible_type> sample_img = unity_data->_head(1);
   flex_image meta_img;
   meta_img = sample_img[0];
@@ -116,11 +116,11 @@ flexible_type generate_mean(std::shared_ptr<unity_sarray> unity_data) {
   size_t height = meta_img.m_height;
   size_t width = meta_img.m_width;
   size_t image_size = width * height * channels;
-  size_t num_images = unity_data->size(); 
+  size_t num_images = unity_data->size();
 
   //Perform sum
   flexible_type mean = sum(unity_data);
-  
+
   //Divide for mean images.
   mean /= num_images;
 
@@ -129,7 +129,7 @@ flexible_type generate_mean(std::shared_ptr<unity_sarray> unity_data) {
   char* data_bytes = new char[image_size];
   for(size_t i = 0; i < image_size; ++i){
     data_bytes[i] = static_cast<unsigned char>(mean[i]);
-  } 
+  }
   img.m_image_data_size = image_size;
   img.m_channels = channels;
   img.m_height = height;
@@ -191,7 +191,7 @@ size_t load_images_impl(std::vector<std::string>& all_files,
         throw;
     }
     ++iter;
-    // output progress 
+    // output progress
     if (thread_id == 0) {
       double current_time = mytimer.current_time();
       size_t current_cnt = cnt;
@@ -233,7 +233,7 @@ std::vector<std::string> get_directory_files(std::string url, bool recursive) {
 }
 
 /**
- * Construct an sframe of flex_images, with url pointing to directory where images reside. 
+ * Construct an sframe of flex_images, with url pointing to directory where images reside.
  */
 std::shared_ptr<unity_sframe> load_images(std::string url, std::string format, bool with_path, bool recursive,
                                           bool ignore_failure, bool random_order) {
@@ -294,7 +294,7 @@ std::shared_ptr<unity_sframe> load_images(std::string url, std::string format, b
 
 
 void decode_image_inplace(image_type& image) {
-  image_util_detail::decode_image_impl(image); 
+  image_util_detail::decode_image_impl(image);
 }
 
 /**
@@ -381,9 +381,9 @@ flexible_type resize_image(const flexible_type& image, size_t resized_width, siz
  * Resize an sarray of flex_image with the new size.
  */
 std::shared_ptr<unity_sarray> resize_image_sarray(
-    std::shared_ptr<unity_sarray> image_sarray, 
-    size_t resized_width, 
-    size_t resized_height, 
+    std::shared_ptr<unity_sarray> image_sarray,
+    size_t resized_width,
+    size_t resized_height,
     size_t resized_channels,
     bool decode) {
   log_func_entry();
@@ -398,7 +398,7 @@ std::shared_ptr<unity_sarray> resize_image_sarray(
  * Convert sarray of image data to sarray of vector
  */
 std::shared_ptr<unity_sarray> image_sarray_to_vector_sarray(
-    std::shared_ptr<unity_sarray> image_sarray, 
+    std::shared_ptr<unity_sarray> image_sarray,
     bool undefined_on_failure) {
   // decoded_image_sarray
   log_func_entry();
@@ -407,7 +407,7 @@ std::shared_ptr<unity_sarray> image_sarray_to_vector_sarray(
   auto fn = [=](const flexible_type& f)->flexible_type {
               flexible_type ret(flex_type_enum::VECTOR);
               flex_image tmp_img = f;
-              image_util_detail::decode_image_impl(tmp_img); 
+              image_util_detail::decode_image_impl(tmp_img);
               try {
                 ret = tmp_img;
               } catch (...) {
@@ -424,7 +424,7 @@ std::shared_ptr<unity_sarray> image_sarray_to_vector_sarray(
 };
 
 /**
- * Convert sarray of vector to sarray of image 
+ * Convert sarray of vector to sarray of image
  */
 std::shared_ptr<unity_sarray> vector_sarray_to_image_sarray(
     std::shared_ptr<unity_sarray> image_sarray,
@@ -432,11 +432,11 @@ std::shared_ptr<unity_sarray> vector_sarray_to_image_sarray(
     bool undefined_on_failure) {
   log_func_entry();
   size_t expected_array_size = height * width * channels;
-  auto transformfn = 
+  auto transformfn =
       [height,width,channels,
       expected_array_size,undefined_on_failure](const flex_vec& vec)->flexible_type {
         try {
-          if (expected_array_size != vec.size()) { 
+          if (expected_array_size != vec.size()) {
             logprogress_stream << "Dimensions do not match vec size" << std::endl;
             log_and_throw("Dimensions do not match vec size");
           }
@@ -450,7 +450,7 @@ std::shared_ptr<unity_sarray> vector_sarray_to_image_sarray(
           img.m_image_data_size = data_size;
           img.m_image_data.reset(data);
           img.m_height = height;
-          img.m_width = width; 
+          img.m_width = width;
           img.m_channels = channels;
           img.m_format = Format::RAW_ARRAY;
           img.m_version = 0;
@@ -465,12 +465,12 @@ std::shared_ptr<unity_sarray> vector_sarray_to_image_sarray(
         }
       };
 
-  auto ret = image_sarray->transform_lambda(transformfn, 
+  auto ret = image_sarray->transform_lambda(transformfn,
                                             flex_type_enum::IMAGE, true, 0);
   return std::static_pointer_cast<unity_sarray>(ret);
 };
 
 
 
-} //namespace image_util 
+} //namespace image_util
 } //namespace turi

@@ -20,7 +20,7 @@ struct temp_file_test  {
     std::string filec = get_temp_name();
 
     // create file a. it will just be the file itself
-    { 
+    {
       std::ofstream fout(filea.c_str()); fout.close();
       TS_ASSERT(delete_temp_file(filea));
       // check that filea is gone
@@ -41,9 +41,9 @@ struct temp_file_test  {
       TS_ASSERT(fin.fail());
       // repeated deletion fails
       TS_ASSERT(delete_temp_file(fileb) == false);
-    } 
+    }
 
-    // file c is a lot of prefixes. and tests that we can delete a bunch of 
+    // file c is a lot of prefixes. and tests that we can delete a bunch of
     // stuff
     {
       std::vector<std::string> filecnames{filec + "pika",
@@ -51,13 +51,13 @@ struct temp_file_test  {
         filec + ".gyro",
         filec + ".salamander"};
       for(std::string f : filecnames) {
-        std::ofstream fout(f.c_str()); 
+        std::ofstream fout(f.c_str());
         fout.close();
       }
       delete_temp_files(filecnames);
       // check that they are all gone
       for(std::string f : filecnames) {
-        std::ifstream fin(f.c_str()); 
+        std::ifstream fin(f.c_str());
         TS_ASSERT(fin.fail());
         // repeated deletion fails
         TS_ASSERT(delete_temp_file(f) == false);

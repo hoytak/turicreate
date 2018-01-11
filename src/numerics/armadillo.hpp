@@ -40,24 +40,24 @@ static inline void inplace_elementwise_min(C& container, const T& v) {
 template <typename C, typename T>
 static inline void inplace_elementwise_clip(C& container, const T& min, const T& max) {
   for(auto& e : container) {
-    typedef typename std::remove_reference<decltype(e)>::type elem_t; 
+    typedef typename std::remove_reference<decltype(e)>::type elem_t;
     e = std::min<elem_t>(std::max<elem_t>(e, max), min);
   }
 }
 
 template <typename Src, typename Dest, typename T>
 static inline void elementwise_max_copy(Src& src, const Dest& dest, const T& v) {
-  typedef typename std::remove_reference<decltype(dest(0))>::type elem_t; 
-  for(size_t i = 0; i < dest.size(); ++i) { 
-    dest(i) = std::max<elem_t>(src(i), v); 
+  typedef typename std::remove_reference<decltype(dest(0))>::type elem_t;
+  for(size_t i = 0; i < dest.size(); ++i) {
+    dest(i) = std::max<elem_t>(src(i), v);
   }
 }
 
 template <typename Src, typename Dest, typename T>
 static inline void elementwise_min_copy(Src& src, const Dest& dest, const T& v) {
-  typedef typename std::remove_reference<decltype(dest(0))>::type elem_t; 
-  for(size_t i = 0; i < dest.size(); ++i) { 
-    dest(i) = std::min<elem_t>(src(i), v); 
+  typedef typename std::remove_reference<decltype(dest(0))>::type elem_t;
+  for(size_t i = 0; i < dest.size(); ++i) {
+    dest(i) = std::min<elem_t>(src(i), v);
   }
 }
 
@@ -72,21 +72,21 @@ static inline void elementwise_min_copy(Src& src, const Dest& dest, const T& v) 
       && !std::is_convertible<decltype(arma::sum(v)), double>::value>::type* = 0
 
 ///////////////////////////////////
-// 
-template <typename C> 
+//
+template <typename C>
 static inline auto _arma_tsum(C&& v, ENABLE_IF_ARMA_VEC(v))
- -> decltype(arma::sum(v)) { 
+ -> decltype(arma::sum(v)) {
   return arma::sum(v);
 }
 
-template <typename C> 
-static inline auto _arma_tsum(C&& v, ENABLE_IF_ARMA_MAT(v)) 
- -> decltype(arma::sum(arma::sum(v))) { 
+template <typename C>
+static inline auto _arma_tsum(C&& v, ENABLE_IF_ARMA_MAT(v))
+ -> decltype(arma::sum(arma::sum(v))) {
   return arma::sum(arma::sum(v));
 }
 
 ///////////////////////////////////
-// Total sum 
+// Total sum
 
 template <typename C>
 static inline auto total_sum(C&& v) -> decltype(_arma_tsum(v)) {
@@ -104,7 +104,7 @@ total_sum(const sparse_vector<T, I>& container) {
 }
 
 ///////////////////////////////////
-// Squared Norm 
+// Squared Norm
 
 template <typename C>
 static inline auto squared_norm(C&& v) -> decltype(_arma_tsum(arma::square(v))) {
@@ -195,7 +195,7 @@ arma::Col<T>& operator+=(arma::Col<T>& x, const sparse_vector<U, Index>& y) {
 template <typename T>
 arma::Col<T>  solve_ldlt(const arma::Mat<T>& _A, const arma::Col<T>& b) {
 
-#ifdef ARMA_USE_LAPACK 
+#ifdef ARMA_USE_LAPACK
   arma::Mat<T> A = _A;
 
 	if(!A.is_square()) {

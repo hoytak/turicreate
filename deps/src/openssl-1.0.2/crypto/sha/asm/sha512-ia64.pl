@@ -608,7 +608,7 @@ foreach(split($/,$code)) {
 	s/mux2(\s+)([^=]+)=([^,]+),\S+/mov$1 $2=$3/gm;
 	s/mux1(\s+)\S+/nop.i$1 0x0/gm	if ($big_endian);
 	s/(shrp\s+X\[[^=]+)=([^,]+),([^,]+),([1-9]+)/$1=$3,$2,64-$4/gm
-    						if (!$big_endian);
+						if (!$big_endian);
 	s/ld1(\s+)X\[\S+/nop.m$1 0x0/gm;
     }
 

@@ -39,10 +39,10 @@ class EXPORT feature_hasher : public transformer_base {
   REGISTER_CLASS_MEMBER_FUNCTION(feature_hasher::fit_transform, "data")
   REGISTER_CLASS_MEMBER_FUNCTION(feature_hasher::get_current_options);
   REGISTER_CLASS_MEMBER_FUNCTION(feature_hasher::list_fields);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options",
                              feature_hasher::get_default_options);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get", 
-                             feature_hasher::get_value_from_state, 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get",
+                             feature_hasher::get_value_from_state,
                              "key");
 
   END_CLASS_MEMBER_REGISTRATION

@@ -8,7 +8,7 @@ using namespace turi::fileio;
 struct hdfs_parse_url_test {
  public:
 
-  void test_default() { 
+  void test_default() {
     auto input = "hdfs:///foo/bar/a.txt";
     auto expected = std::make_tuple(default_host, default_port, "/foo/bar/a.txt");
     auto actual = parse_hdfs_url(input);
@@ -26,7 +26,7 @@ struct hdfs_parse_url_test {
     TS_ASSERT_EQUALS(std::get<2>(actual), std::get<2>(expected));
   }
 
-  void test_hostname_and_port() { 
+  void test_hostname_and_port() {
     auto input = "hdfs://hostname:9000/foo/bar/a.txt";
     auto expected = std::make_tuple("hostname", "9000", "/foo/bar/a.txt");
     auto actual = parse_hdfs_url(input);

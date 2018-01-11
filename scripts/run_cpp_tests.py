@@ -75,7 +75,7 @@ if __name__ == '__main__':
   env = os.environ.copy()
   env['WORKAROUND_LD_LIBRARY_PATH'] = os.getenv('LD_LIBRARY_PATH')
 
-  try: 
+  try:
       ctest_output = subprocess.check_output(cmd, shell=True, env=env)
   except subprocess.CalledProcessError as e:
       ctest_output = e.output

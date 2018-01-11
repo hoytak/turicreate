@@ -40,25 +40,25 @@ namespace Model
     GetBucketTaggingResult(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
     GetBucketTaggingResult& operator=(const AmazonWebServiceResult<Aws::Utils::Xml::XmlDocument>& result);
 
-    
+
     inline const Aws::Vector<Tag>& GetTagSet() const{ return m_tagSet; }
 
-    
+
     inline void SetTagSet(const Aws::Vector<Tag>& value) { m_tagSet = value; }
 
-    
+
     inline void SetTagSet(Aws::Vector<Tag>&& value) { m_tagSet = value; }
 
-    
+
     inline GetBucketTaggingResult& WithTagSet(const Aws::Vector<Tag>& value) { SetTagSet(value); return *this;}
 
-    
+
     inline GetBucketTaggingResult& WithTagSet(Aws::Vector<Tag>&& value) { SetTagSet(value); return *this;}
 
-    
+
     inline GetBucketTaggingResult& AddTagSet(const Tag& value) { m_tagSet.push_back(value); return *this; }
 
-    
+
     inline GetBucketTaggingResult& AddTagSet(Tag&& value) { m_tagSet.push_back(value); return *this; }
 
   private:

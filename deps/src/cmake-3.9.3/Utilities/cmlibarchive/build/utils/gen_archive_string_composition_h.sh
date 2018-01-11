@@ -243,7 +243,7 @@ function hextoi(hex)
 #        next
 #}
 #
-# Exclusion code points specified by  
+# Exclusion code points specified by
 # http://unicode.org/Public/6.0.0/ucd/CompositionExclusions.txt
 ##
 # 1. Script Specifices

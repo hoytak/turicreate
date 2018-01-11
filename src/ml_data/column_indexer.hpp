@@ -15,7 +15,7 @@
 #include <generics/hopscotch_map.hpp>
 #include <parallel/pthread_tools.hpp>
 
-namespace turi { 
+namespace turi {
 
 namespace ml_data_internal {
 

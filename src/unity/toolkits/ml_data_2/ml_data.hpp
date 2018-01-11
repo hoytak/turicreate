@@ -25,7 +25,7 @@ class ml_data_iterator;
 class ml_data_block_iterator;
 class ml_data_iterator_base;
 
-namespace ml_data_internal { 
+namespace ml_data_internal {
 class ml_data_block_manager;
 }
 
@@ -501,8 +501,8 @@ class ml_data {
                    bool immutable_metadata = false);
 
   /// STUPID CLANG PARSING BUG
-  typedef std::map<std::string, flexible_type> flex_map; 
-  
+  typedef std::map<std::string, flexible_type> flex_map;
+
   /**
    *   Construct an ml_data object based current options.
    */
@@ -515,8 +515,8 @@ class ml_data {
       : ml_data(std::map<std::string, flexible_type>(l))
   {}
 
-  typedef std::map<std::string, ml_column_mode> column_mode_map; 
-  
+  typedef std::map<std::string, ml_column_mode> column_mode_map;
+
   /**  Sets the data source.
    *
    *   If target_column is null, then there is no target column.
@@ -693,7 +693,7 @@ class ml_data {
    *  types.
    */
   std::vector<flexible_type> translate_row_to_original(const std::vector<ml_data_entry_global_index>& v) const;
-  
+
   /** Translates the original dense row format to the original flexible
    *  types.
    */
@@ -734,7 +734,7 @@ class ml_data {
   //  Utility routines to convert ml_data to other formats.
   //
   ////////////////////////////////////////////////////////////////////////////////
-  
+
   /**
    * Create a subsampled copy of the current ml_data structure.  This
    * allows us quickly create a subset of the data to be used for things
@@ -751,7 +751,7 @@ class ml_data {
    *
    *  \param selection_indices A vector of row indices that must be in
    *  sorted order.  Duplicates are allowed.  The returned ml_data
-   *  contains all the rows given by selection_indices. 
+   *  contains all the rows given by selection_indices.
    *
    *  \return A new ml_data object with containing only the rows given
    *  by selection_indices.
@@ -843,10 +843,10 @@ class ml_data {
   /** Convenience function to create the block manager given the
    *  current data in the model.
    */
-  void _create_block_manager(); 
-  
-  
-  
+  void _create_block_manager();
+
+
+
   ////////////////////////////////////////////////////////////////////////////////
   //
   //  Temporary variables to hold the filling parameters.

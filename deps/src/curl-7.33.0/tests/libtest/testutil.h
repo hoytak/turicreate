@@ -44,4 +44,3 @@ long tutil_tvlong(struct timeval t1);
 
 
 #endif  /* HEADER_CURL_LIBTEST_TESTUTIL_H */
-

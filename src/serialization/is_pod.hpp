@@ -27,7 +27,7 @@ namespace turi {
   template <typename T>
   struct gl_is_pod{
     // it is a pod and is not an integer since we have special handlings for integers
-    static constexpr bool value =  std::is_scalar<T>::value || 
+    static constexpr bool value =  std::is_scalar<T>::value ||
         std::is_base_of<IS_POD_TYPE, T>::value;
     /*
      * BOOST_STATIC_CONSTANT(bool, value = (boost::type_traits::ice_or<
@@ -53,7 +53,7 @@ namespace turi {
                           ));*/
 
   };
-  
+
   /// \internal
 
   template <typename T>
@@ -63,6 +63,3 @@ namespace turi {
 }
 
 #endif
-
-
-

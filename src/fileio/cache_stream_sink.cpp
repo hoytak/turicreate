@@ -12,7 +12,7 @@ cache_stream_sink::cache_stream_sink(cache_id_type cache_id) :
   cache_manager(fileio::fixed_size_cache_manager::get_instance()),
   out_block(cache_manager.new_cache(cache_id)) {
   if (out_block->is_file()) {
-    logstream(LOG_DEBUG) << "Writing " << cache_id << " from " 
+    logstream(LOG_DEBUG) << "Writing " << cache_id << " from "
                         << out_block->get_filename() << std::endl;
     out_file = std::make_shared<general_fstream_sink>(out_block->get_filename());
   }

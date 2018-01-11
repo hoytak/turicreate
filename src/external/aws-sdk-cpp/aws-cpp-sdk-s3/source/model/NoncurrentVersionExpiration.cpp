@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-NoncurrentVersionExpiration::NoncurrentVersionExpiration() : 
+NoncurrentVersionExpiration::NoncurrentVersionExpiration() :
     m_noncurrentDays(0),
     m_noncurrentDaysHasBeenSet(false)
 {
 }
 
-NoncurrentVersionExpiration::NoncurrentVersionExpiration(const XmlNode& xmlNode) : 
+NoncurrentVersionExpiration::NoncurrentVersionExpiration(const XmlNode& xmlNode) :
     m_noncurrentDays(0),
     m_noncurrentDaysHasBeenSet(false)
 {

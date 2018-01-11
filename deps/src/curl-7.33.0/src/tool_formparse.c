@@ -358,4 +358,3 @@ int formparse(struct Configurable *config,
   Curl_safefree(contents);
   return 0;
 }
-

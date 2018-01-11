@@ -15,8 +15,8 @@ namespace supervised {
 namespace xgboost {
 
 class DMatrixMLData : public ::xgboost::learner::DMatrix {
- public: 
-   DMatrixMLData(const ml_data &data, 
+ public:
+   DMatrixMLData(const ml_data &data,
                  flexible_type class_weights = flex_undefined(),
                  storage_mode_enum storage_mode = storage_mode_enum::AUTO,
                  size_t max_row_per_batch = 0);

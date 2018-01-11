@@ -122,8 +122,8 @@ public:
 
   /** One way to set the statistics.  Used by the serialization converters.
    */
-  virtual void set_data(const std::map<std::string, variant_type>& params) {} 
-  
+  virtual void set_data(const std::map<std::string, variant_type>& params) {}
+
  private:
 
   /** A snapshot of the options needed for creating the class.

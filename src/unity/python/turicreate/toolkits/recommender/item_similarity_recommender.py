@@ -369,4 +369,3 @@ class ItemSimilarityRecommender(_Recommender):
     @classmethod
     def _native_name(cls):
         return "item_similarity"
-

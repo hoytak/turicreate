@@ -6,7 +6,7 @@ are called *two-stage* detectors and still yield competitive results. However,
 recent work has combined these two steps into a single deep learning model,
 making them *one-stage* detectors:
 
-* [*"You Only Look Once: Unified, Real-Time Object Detection"*](https://arxiv.org/abs/1506.02640) by Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi (CVPR 2016) 
+* [*"You Only Look Once: Unified, Real-Time Object Detection"*](https://arxiv.org/abs/1506.02640) by Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi (CVPR 2016)
 * [*"SSD: Single Shot MultiBox Detector"*](https://arxiv.org/abs/1512.02325) by Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg (ECCV 2016)
 * [*"YOLO9000: Better, Faster, Stronger"*](https://arxiv.org/abs/1612.08242) by Joseph Redmon, Ali Farhadi (CVPR 2017)
 

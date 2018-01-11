@@ -18,7 +18,7 @@ namespace turi {
  * \ingroup group_gl_flexible_type
  * Possible image formats stored in the image type
  */
-enum class Format: size_t { 
+enum class Format: size_t {
   JPG = 0,  ///< JPEG Compressed
   PNG = 1,  ///< PNG Compressed
   RAW_ARRAY = 2,  ///< Not Compressed
@@ -29,17 +29,17 @@ enum class Format: size_t {
  * \ingroup group_gl_flexible_type
  * Image type, which is typedef'd to flex_image, part of the flexible_type union.
  * Holds image data and meta-data pertaining to image size and file type, but
- * does not hold meta-data like path or category. 
+ * does not hold meta-data like path or category.
  */
 class image_type {
 
-public: 
+public:
   /// The image data, stored in the format indicated by m_format in a char array
   boost::shared_ptr<char[]> m_image_data;
-  /// The height of the image 
+  /// The height of the image
   size_t m_height = 0;
   /// The width of the image*
-  size_t m_width = 0; 
+  size_t m_width = 0;
   /// The number of channels in the image: Grayscale = 1, RGB = 3, RGBA = 4.
   size_t m_channels = 0;
   /// Length of m_image_data char array
@@ -47,7 +47,7 @@ public:
   /// Version of image_type object
   char m_version = IMAGE_TYPE_CURRENT_VERSION;
   /// Format of data, intitialized as UNDEFINED
-  Format m_format = Format::UNDEFINED; 
+  Format m_format = Format::UNDEFINED;
   /// Constructor
   image_type() = default;
   /// Construct from existing data

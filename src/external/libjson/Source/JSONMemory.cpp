@@ -34,7 +34,7 @@
 #ifdef JSON_MEMORY_POOL
 	#include "JSONMemoryPool.h"
     static bucket_pool_8<MEMPOOL_1, MEMPOOL_2, MEMPOOL_3, MEMPOOL_4, MEMPOOL_5, MEMPOOL_6, MEMPOOL_7, MEMPOOL_8> json_generic_mempool;
-    
+
 	//This class is only meant to initiate the mempool to start out using std::malloc/realloc/free
 	class mempool_callback_setter {
     public:

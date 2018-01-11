@@ -35,9 +35,9 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int set_field_just(FIELD *field, int just)
-|   
+|
 |   Description   :  Set the fields type of justification.
 |
 |   Return Values :  E_OK            - success
@@ -66,9 +66,9 @@ int set_field_just(FIELD * field, int just)
 }
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int field_just( const FIELD *field )
-|   
+|
 |   Description   :  Retrieve the fields type of justification
 |
 |   Return Values :  The justification type.

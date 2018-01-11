@@ -23,7 +23,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-DeleteObjectsRequest::DeleteObjectsRequest() : 
+DeleteObjectsRequest::DeleteObjectsRequest() :
     m_bucketHasBeenSet(false),
     m_deleteHasBeenSet(false),
     m_mFAHasBeenSet(false),

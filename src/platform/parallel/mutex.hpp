@@ -18,8 +18,8 @@ namespace turi {
    * Simple wrapper around pthread's mutex.
    * Before you use, see \ref parallel_object_intricacies.
    *
-   * Windows recursive mutex are annoyingly recursive. 
-   * We need to prevent recursive locks. We do this by associating an 
+   * Windows recursive mutex are annoyingly recursive.
+   * We need to prevent recursive locks. We do this by associating an
    * addition boolean "locked" to the mutex.
    * Hence in the event of a double lock, on Windows the behavior is slightly
    * different. On Linux/Mac this will trigger a deadlock. On Windows,

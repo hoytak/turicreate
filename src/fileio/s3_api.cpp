@@ -78,7 +78,7 @@ bool bucket_name_valid(const std::string& bucket_name) {
   // rule 4, 5
   auto label_valid = [](const std::string& label) {
     if (label.empty()) return false;
-    using namespace std::regex_constants; 
+    using namespace std::regex_constants;
 
     auto alnum = [=](char x) { return (x <= 'Z' && x >= 'A') || (x <= 'z' && x >= 'a') || (x <= '9' && x >= '0'); };
     auto alnum_underscore_or_hypen = [=](char x) { return x == '-' || x == '_' || alnum(x); };
@@ -108,7 +108,7 @@ bool bucket_name_valid(const std::string& bucket_name) {
 
 
 std::string string_from_s3url(const s3url& parsed_url) {
-  std::string ret = "s3://" + parsed_url.access_key_id + ":" 
+  std::string ret = "s3://" + parsed_url.access_key_id + ":"
       + parsed_url.secret_key + ":";
   if (!parsed_url.endpoint.empty()) {
     ret += parsed_url.endpoint + "/";
@@ -157,7 +157,7 @@ bool parse_s3url(std::string url, s3url& ret) {
   }
 
   // The rest is parsed using boost::tokenizer
-  typedef boost::tokenizer<boost::char_separator<char> > 
+  typedef boost::tokenizer<boost::char_separator<char> >
     tokenizer;
   boost::char_separator<char> sep("/");
   tokenizer tokens(url, sep);
@@ -215,9 +215,9 @@ std::string validate_input_file(const std::string& local_file) {
   std::shared_ptr<turi::general_ifstream> fin(
       new turi::general_ifstream(local_file.c_str(),
                                      false)); // gzip_compressed.
-                                             // We avoid decompressing the file 
-                                             // on transfer. i.e. if the file is 
-                                             // compressed/uncompressed to begin 
+                                             // We avoid decompressing the file
+                                             // on transfer. i.e. if the file is
+                                             // compressed/uncompressed to begin
                                              // with, lets  keep it that way.
 
   // file cannot be opened
@@ -238,9 +238,9 @@ std::string validate_output_file(const std::string& local_file) {
   std::shared_ptr<turi::general_ofstream> fout(
       new turi::general_ofstream(local_file.c_str(),
                                      false));// gzip_compressed.
-                                             // We avoid recompressing the file 
-                                             // on transfer. i.e. if the file is 
-                                             // compressed/uncompressed to begin 
+                                             // We avoid recompressing the file
+                                             // on transfer. i.e. if the file is
+                                             // compressed/uncompressed to begin
                                              // with, lets  keep it that way.
   // file cannot be opened
   if (!fout->good()) {
@@ -264,7 +264,7 @@ std::string quote_and_escape_path(const std::string& path) {
   for (const auto& c : path) {
     if (c == '\'') {
       buf[current_pos++] = '\\'; // escape quote
-      if (current_pos >= BUF_SIZE) { 
+      if (current_pos >= BUF_SIZE) {
         delete[] buf;
         throw("Invalid path: exceed length limit");
       }
@@ -284,16 +284,16 @@ std::string quote_and_escape_path(const std::string& path) {
 
 list_objects_response list_objects_impl(s3url parsed_url,
                                         std::string proxy,
-                                        std::string endpoint) 
+                                        std::string endpoint)
 {
     // initialization
     Aws::SDKOptions options;
-    options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Info;   
+    options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Info;
     Aws::InitAPI(options);
-   
+
     // credentials
     Aws::Auth::AWSCredentials credentials(parsed_url.access_key_id.c_str(), parsed_url.secret_key.c_str());
-  
+
 
     // s3 client config
     Aws::Client::ClientConfiguration clientConfiguration;
@@ -351,7 +351,7 @@ list_objects_response list_objects_impl(s3url parsed_url,
                 if (boost::ends_with(key, "/")) key = key.substr(0, key.length() - 1);
                 ret.directories.push_back(key);
             }
-            
+
             // more results to retrieve
             moreResults = result.GetIsTruncated();
             if (moreResults)
@@ -364,8 +364,8 @@ list_objects_response list_objects_impl(s3url parsed_url,
         else
         {
             std::stringstream stream;
-            stream << "Error while listing Objects, exception: " << 
-                    outcome.GetError().GetExceptionName() << 
+            stream << "Error while listing Objects, exception: " <<
+                    outcome.GetError().GetExceptionName() <<
                     ", msg: " << outcome.GetError().GetMessage() << std::endl;
             ret.error = stream.str();
         }
@@ -394,12 +394,12 @@ std::string delete_object_impl(s3url parsed_url,
 
     // initialization
     Aws::SDKOptions options;
-    options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Info;   
+    options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Info;
     Aws::InitAPI(options);
-   
+
     // credentials
     Aws::Auth::AWSCredentials credentials(parsed_url.access_key_id.c_str(), parsed_url.secret_key.c_str());
-  
+
 
     // s3 client config
     Aws::Client::ClientConfiguration clientConfiguration;
@@ -428,12 +428,12 @@ std::string delete_object_impl(s3url parsed_url,
     if(!outcome.IsSuccess())
     {
         std::stringstream stream;
-        stream << "Error while deleting object, exception: " << 
-                outcome.GetError().GetExceptionName() << 
+        stream << "Error while deleting object, exception: " <<
+                outcome.GetError().GetExceptionName() <<
                 ", msg: " << outcome.GetError().GetMessage() << std::endl;
         ret = stream.str();
     }
-    
+
     Aws::ShutdownAPI(options);
     return ret;
 }
@@ -449,12 +449,12 @@ std::string delete_prefix_impl(s3url parsed_url,
 
     // initialization
     Aws::SDKOptions options;
-    options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Info;   
+    options.loggingOptions.logLevel = Aws::Utils::Logging::LogLevel::Info;
     Aws::InitAPI(options);
-   
+
     // credentials
     Aws::Auth::AWSCredentials credentials(parsed_url.access_key_id.c_str(), parsed_url.secret_key.c_str());
-  
+
 
     // s3 client config
     Aws::Client::ClientConfiguration clientConfiguration;
@@ -497,7 +497,7 @@ std::string delete_prefix_impl(s3url parsed_url,
                 Aws::S3::Model::ObjectIdentifier key;
                 deleteObjects.AddObjects(key.WithKey(o.GetKey()));
             }
-            
+
             // more results to retrieve
             moreResults = result.GetIsTruncated();
             if (moreResults)
@@ -510,8 +510,8 @@ std::string delete_prefix_impl(s3url parsed_url,
         else
         {
             std::stringstream stream;
-            stream << "Error while listing Objects, exception: " << 
-                    outcome.GetError().GetExceptionName() << 
+            stream << "Error while listing Objects, exception: " <<
+                    outcome.GetError().GetExceptionName() <<
                     ", msg: " << outcome.GetError().GetMessage() << std::endl;
             ret = stream.str();
         }
@@ -528,13 +528,13 @@ std::string delete_prefix_impl(s3url parsed_url,
         if (!outcome.IsSuccess())
         {
             std::stringstream stream;
-            stream << "Error while deleting Objects, exception: " << 
-                    outcome.GetError().GetExceptionName() << 
+            stream << "Error while deleting Objects, exception: " <<
+                    outcome.GetError().GetExceptionName() <<
                     ", msg: " << outcome.GetError().GetMessage() << std::endl;
             ret = stream.str();
         }
     }
-    
+
     Aws::ShutdownAPI(options);
     return ret;
 }
@@ -555,7 +555,7 @@ list_objects_response list_objects(std::string url,
   do {
     ret = list_objects_impl(parsed_url, proxy, endpoints[current_endpoint]);
     ++current_endpoint;
-  } while (boost::algorithm::icontains(ret.error, "PermanentRedirect") && 
+  } while (boost::algorithm::icontains(ret.error, "PermanentRedirect") &&
          current_endpoint < endpoints.size());
   return ret;
 }
@@ -586,7 +586,7 @@ std::pair<bool, bool> is_directory(std::string url,
       return {true, true};
     }
   }
-  // is an object 
+  // is an object
   for (auto object: response.objects) {
     if (object == url) {
       return {true, false};
@@ -625,7 +625,7 @@ list_objects_response list_directory(std::string url,
     do {
       ret = list_objects_impl(parsed_url, proxy, endpoints[current_endpoint]);
       ++current_endpoint;
-    } while (boost::algorithm::icontains(ret.error, "PermanentRedirect") && 
+    } while (boost::algorithm::icontains(ret.error, "PermanentRedirect") &&
            current_endpoint < endpoints.size());
   } else {
     ret.objects.push_back(url);
@@ -649,7 +649,7 @@ std::string delete_object(std::string url,
   do {
     ret = delete_object_impl(parsed_url, proxy, endpoints[current_endpoint]);
     ++current_endpoint;
-  } while (boost::algorithm::icontains(ret , "PermanentRedirect") && 
+  } while (boost::algorithm::icontains(ret , "PermanentRedirect") &&
          current_endpoint < endpoints.size());
   return ret;
 }
@@ -669,7 +669,7 @@ std::string delete_prefix(std::string url,
   do {
     ret = delete_prefix_impl(parsed_url, proxy, endpoints[current_endpoint]);
     ++current_endpoint;
-  } while (boost::algorithm::icontains(ret , "PermanentRedirect") && 
+  } while (boost::algorithm::icontains(ret , "PermanentRedirect") &&
          current_endpoint < endpoints.size());
   return ret;
 }
@@ -689,7 +689,7 @@ std::string sanitize_s3_url_aggressive(std::string url) {
   splitpos = url.find(':');
   if (splitpos != std::string::npos) url = url.substr(splitpos + 1);
 
-  // now, a user error is possible where ":" shows up inside the 
+  // now, a user error is possible where ":" shows up inside the
   // secret key / access key thus leaking part of a key in the logs.
   // so we also perform a more aggressive truncation.
   // find the first "/" and delete everything up to the last ":"
@@ -719,7 +719,7 @@ std::string get_s3_error_code(const std::string& msg) {
     "InvalidBucketName", "KeyTooLong", "NoSuchKey", "RequestTimeout"
   };
 
-  // User friendly error codes, return immediately. 
+  // User friendly error codes, return immediately.
   for (const auto& ec : errorcodes) {
     if (boost::algorithm::icontains(msg, ec)) {
       return ec;
@@ -728,7 +728,7 @@ std::string get_s3_error_code(const std::string& msg) {
 
   // Error code that may need some explanation.
   // Add messages for error code below:
-  // ... 
+  // ...
   // best guess for 403 error
   if (boost::algorithm::icontains(msg, "forbidden")) {
     return "403 Forbidden. Please check your AWS credentials and permission to the file.";

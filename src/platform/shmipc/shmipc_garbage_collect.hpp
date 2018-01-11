@@ -26,8 +26,8 @@ struct raii_deleter;
  * The reason for having a directory for each userid is to avoid permission
  * issues. Each tag file contains inside of it, the PID of the server process.
  */
-std::shared_ptr<raii_deleter> 
-register_shared_memory_name(std::string m_name); 
+std::shared_ptr<raii_deleter>
+register_shared_memory_name(std::string m_name);
 
 /**
  * \ingroup shmipc

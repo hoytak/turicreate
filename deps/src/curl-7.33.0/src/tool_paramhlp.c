@@ -462,4 +462,3 @@ long delegation(struct Configurable *config, char *str)
   warnf(config, "unrecognized delegation method '%s', using none\n", str);
   return CURLGSSAPI_DELEGATION_NONE;
 }
-

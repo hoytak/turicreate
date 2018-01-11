@@ -40,5 +40,3 @@ std::string get_last_err_str(unsigned err_code) {
 #endif //_WIN32
   return ret_str;
 }
-
-

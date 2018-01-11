@@ -40,10 +40,10 @@ class EXPORT quadratic_features : public transformer_base {
   REGISTER_CLASS_MEMBER_FUNCTION(quadratic_features::fit_transform, "training_data")
   REGISTER_CLASS_MEMBER_FUNCTION(quadratic_features::get_current_options);
   REGISTER_CLASS_MEMBER_FUNCTION(quadratic_features::list_fields);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options",
                              quadratic_features::get_default_options);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get", 
-                             quadratic_features::get_value_from_state, 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get",
+                             quadratic_features::get_value_from_state,
                              "key");
 
   END_CLASS_MEMBER_REGISTRATION

@@ -9,12 +9,12 @@
 #include <fileio/curl_downloader.hpp>
 
 std::ofstream fout;
-  
+
 size_t write_callback(void *buffer, size_t size, size_t nmemb, void *stream) {
   fout.write((char*)buffer, size * nmemb);
   return size * nmemb;
 }
- 
+
 
 int main(int argc, char** argv) {
   if (argc < 2) {
@@ -31,4 +31,3 @@ int main(int argc, char** argv) {
     std::cout << "Is local file at " << filename << "\n";
   }
 }
-

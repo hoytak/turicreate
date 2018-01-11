@@ -44,4 +44,3 @@ char Curl_raw_toupper(char in);
 void Curl_strntoupper(char *dest, const char *src, size_t n);
 
 #endif /* HEADER_CURL_RAWSTR_H */
-

@@ -421,4 +421,3 @@ int getpart(char **outbuf, size_t *outlen,
 
   return error;
 }
-

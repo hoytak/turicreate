@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-NotificationConfigurationFilter::NotificationConfigurationFilter() : 
+NotificationConfigurationFilter::NotificationConfigurationFilter() :
     m_keyHasBeenSet(false)
 {
 }
 
-NotificationConfigurationFilter::NotificationConfigurationFilter(const XmlNode& xmlNode) : 
+NotificationConfigurationFilter::NotificationConfigurationFilter(const XmlNode& xmlNode) :
     m_keyHasBeenSet(false)
 {
   *this = xmlNode;

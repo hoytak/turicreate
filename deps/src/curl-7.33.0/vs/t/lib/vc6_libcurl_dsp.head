@@ -8,21 +8,21 @@
 CFG=libcurl - Win32 LIB Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vc6libcurl.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "vc6libcurl.mak" CFG="libcurl - Win32 LIB Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "libcurl - Win32 DLL Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "libcurl - Win32 DLL Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "libcurl - Win32 LIB Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "libcurl - Win32 LIB Release" (based on "Win32 (x86) Static Library")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -137,7 +137,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"lib-release/libcurl.lib" /machine:I386
 # ADD LIB32 /nologo /out:"lib-release/libcurl.lib" /machine:I386
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 

@@ -32,7 +32,7 @@ namespace Aws
          */
         class AWS_CORE_API AWSErrorMarshaller
         {
-        public:            
+        public:
             virtual ~AWSErrorMarshaller() {}
 
             /**
@@ -43,7 +43,7 @@ namespace Aws
             /**
              * Attempts to finds an error code by the exception name. Otherwise returns CoreErrors::UNKNOWN as the error type.
              */
-            virtual AWSError<CoreErrors> FindErrorByName(const char* exceptionName) const;       
+            virtual AWSError<CoreErrors> FindErrorByName(const char* exceptionName) const;
         };
 
     } // namespace Client

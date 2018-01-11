@@ -333,7 +333,7 @@ void group_aggregate_container::flush_segment(size_t segmentid) {
   // sort the buckets by hash key
   std::vector<std::pair<size_t, std::vector<groupby_element>*> > local_ordered_by_hash;
   local_ordered_by_hash.reserve(local.size());
-  std::move(local.begin(), local.end(), 
+  std::move(local.begin(), local.end(),
             std::inserter(local_ordered_by_hash, local_ordered_by_hash.end()));
   std::sort(local_ordered_by_hash.begin(), local_ordered_by_hash.end());
 
@@ -463,8 +463,8 @@ void group_aggregate_container::group_and_write_segment(sframe& out,
         std::push_heap(pq.begin(), pq.end(), std::greater<pq_value_type>());
       }
     }
-    
-    // emit 
+
+    // emit
     emission_vector.resize(cur.key.size() + cur.values.size());
     for (size_t i = 0;i < cur.key.size(); ++i) emission_vector[i] = cur.key[i];
     for (size_t i = 0;i < cur.values.size(); ++i) {

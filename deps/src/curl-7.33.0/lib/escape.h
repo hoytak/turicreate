@@ -30,4 +30,3 @@ CURLcode Curl_urldecode(struct SessionHandle *data,
                         bool reject_crlf);
 
 #endif /* HEADER_CURL_ESCAPE_H */
-

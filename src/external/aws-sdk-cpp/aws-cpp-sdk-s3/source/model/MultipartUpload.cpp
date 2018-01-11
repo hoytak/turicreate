@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-MultipartUpload::MultipartUpload() : 
+MultipartUpload::MultipartUpload() :
     m_uploadIdHasBeenSet(false),
     m_keyHasBeenSet(false),
     m_initiatedHasBeenSet(false),
@@ -39,7 +39,7 @@ MultipartUpload::MultipartUpload() :
 {
 }
 
-MultipartUpload::MultipartUpload(const XmlNode& xmlNode) : 
+MultipartUpload::MultipartUpload(const XmlNode& xmlNode) :
     m_uploadIdHasBeenSet(false),
     m_keyHasBeenSet(false),
     m_initiatedHasBeenSet(false),

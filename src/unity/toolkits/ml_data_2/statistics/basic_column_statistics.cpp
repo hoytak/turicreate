@@ -69,7 +69,7 @@ void basic_column_statistics::update_categorical_statistics(
       check_global_array_size(idx, global_element_counts);
 
       std::lock_guard<simple_spinlock> el_lg(global_element_locks[get_lock_index(idx)]);
-      
+
       ++(global_element_counts[idx]);
     }
   }
@@ -106,9 +106,9 @@ void basic_column_statistics::update_numeric_statistics(
       stats[i].mean    = value_vect[i];
       stats[i].var_sum = 0;
     }
-      
+
   } else {
-    DASSERT_EQ(stats.size(), value_vect.size()); 
+    DASSERT_EQ(stats.size(), value_vect.size());
 
     // Efficient and Stable Mean+Stdev computation
     // --------------------------------------------------------------------
@@ -214,7 +214,7 @@ void basic_column_statistics::update_dict_statistics(
       check_global_array_size(idx, global_mean_var_acc);
 
       std::lock_guard<simple_spinlock> el_lg(global_element_locks[get_lock_index(idx)]);
-      
+
       update_f(global_element_counts[idx],
                global_mean_var_acc[idx].mean,
                global_mean_var_acc[idx].var_sum, v);
@@ -296,14 +296,14 @@ void basic_column_statistics::_finalize_threadlocal(
         for(size_t src_idx = 0; src_idx < by_thread_mean_var_acc.size(); ++src_idx) {
 
           const auto& mean_std_v = by_thread_mean_var_acc[src_idx];
-          const auto& local_counts = by_thread_element_counts[src_idx]; 
+          const auto& local_counts = by_thread_element_counts[src_idx];
 
           for(size_t i = start_idx; i < std::min(mean_std_v.size(), end_idx); ++i) {
 
             size_t count = (using_counts
                             ? by_thread_element_counts[src_idx][i]
                             : by_thread_row_counts[src_idx]);
-            
+
             // The difference in mean between this one and previous.
             double m_diff = (mean_std_v[i].mean - statistics[i].mean);
 
@@ -396,17 +396,17 @@ void basic_column_statistics::_finalize_global(
 
         size_t start_idx = (thread_idx * global_mean_var_acc.size()) / n_threads;
         size_t end_idx = ((thread_idx + 1) * global_mean_var_acc.size()) / n_threads;
-        
+
         for(size_t i = start_idx; i < end_idx; ++i) {
           size_t full_idx = parallel_threshhold + i;
 
           element_statistics& s = statistics[full_idx];
           element_statistics_accumulator& sa = global_mean_var_acc[i];
-          
+
           if(using_counts) {
 
             // Need to adjust for the unseen elements here, which are zero.
-            
+
             double count = counts[full_idx];
             double scale = count / total_row_count;
 
@@ -415,7 +415,7 @@ void basic_column_statistics::_finalize_global(
             // Adjust for many of the elements being zero
             sa.var_sum += std::pow(sa.mean, 2) * scale * (total_row_count - count);
           }
-          
+
           s.stdev = std::sqrt(sa.var_sum / (total_row_count - 1));
         }
 
@@ -456,7 +456,7 @@ void basic_column_statistics::finalize() {
   // Ensure the statistics column is the right size before we move
   // everything from the accumulator to it.
   size_t final_size = 0;
-  size_t in_threads_size = 0; 
+  size_t in_threads_size = 0;
   total_row_count = 0;
 
   for(size_t row_count : by_thread_row_counts)
@@ -466,9 +466,9 @@ void basic_column_statistics::finalize() {
 
     if(!global_element_counts.empty()) {
       DASSERT_LE(global_size, global_element_counts.size());
-      global_element_counts.resize(global_size); 
+      global_element_counts.resize(global_size);
       final_size      = parallel_threshhold + global_element_counts.size();
-      in_threads_size = parallel_threshhold; 
+      in_threads_size = parallel_threshhold;
     } else {
       for(const auto& v : by_thread_element_counts) {
         final_size      = std::max(final_size, v.size());
@@ -483,7 +483,7 @@ void basic_column_statistics::finalize() {
       DASSERT_LE(global_size, global_mean_var_acc.size());
       global_mean_var_acc.resize(global_size);
       final_size      = std::max(final_size, parallel_threshhold + global_mean_var_acc.size());
-      in_threads_size = parallel_threshhold; 
+      in_threads_size = parallel_threshhold;
     } else {
       for(const auto& v : by_thread_mean_var_acc) {
         final_size      = std::max(final_size, v.size());
@@ -494,7 +494,7 @@ void basic_column_statistics::finalize() {
 
   ////////////////////////////////////////////////////////////////////////////////
   // Now resize the counts and the statistics.
-  
+
   if(using_counts) {
     counts.assign(final_size, 0);
   }
@@ -511,7 +511,7 @@ void basic_column_statistics::finalize() {
   if(!global_mean_var_acc.empty() || !global_element_counts.empty()) {
     _finalize_global(in_threads_size, using_counts, using_mean_std);
   }
-  
+
   // Clear out the thread-local accumulators.
   {
     decltype(by_thread_mean_var_acc) v;
@@ -554,10 +554,10 @@ bool basic_column_statistics::is_equal(const column_statistics* other_ptr) const
 
   if(statistics.empty() != other.statistics.empty())
     return false;
-  
+
   for(size_t i = 0; i < statistics.size(); ++i) {
     if(!counts.empty() && counts[i] != other.counts[i])
-      return false; 
+      return false;
 
     if(!statistics.empty()) {
       const element_statistics& s1 = statistics[i];
@@ -642,14 +642,14 @@ void basic_column_statistics::load_version(turi::iarchive& iarc, size_t version)
  *  "total_row_count" -- size_t.  Total row count.
  */
 void basic_column_statistics::set_data(const std::map<std::string, variant_type>& params) {
-  
+
   if(params.count("mean")) {
 
     ASSERT_TRUE(params.count("stdev"));
-    
+
     std::vector<double> mv;
     mv = variant_get_value<decltype(mv)>(params.at("mean"));
-  
+
     std::vector<double> sv;
     sv = variant_get_value<decltype(sv)>(params.at("stdev"));
 
@@ -657,13 +657,13 @@ void basic_column_statistics::set_data(const std::map<std::string, variant_type>
 
     statistics.resize(mv.size());
     for(size_t i = 0; i < mv.size(); ++i) {
-      statistics[i].mean = mv[i]; 
-      statistics[i].stdev = sv[i]; 
+      statistics[i].mean = mv[i];
+      statistics[i].stdev = sv[i];
     }
   }
-  
+
   if(params.count("counts")) {
-    
+
     counts = variant_get_value<decltype(counts)>(params.at("counts"));
 
     if(!statistics.empty()) {

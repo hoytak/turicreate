@@ -33,11 +33,11 @@ gl_gframe::operator std::shared_ptr<unity_sframe_base>() const {
   return get_proxy();
 }
 
-size_t gl_gframe::size() const { 
+size_t gl_gframe::size() const {
   if (m_gframe_type == gframe_type_enum::EDGE_GFRAME) {
     return m_sgraph->num_edges();
   } else {
-    return m_sgraph->num_vertices(); 
+    return m_sgraph->num_vertices();
   }
 }
 
@@ -88,7 +88,7 @@ void gl_gframe::remove_column(const std::string& name) {
   } else {
     if (name == sgraph::VID_COLUMN_NAME) {
       throw(std::string("Cannot remove \"__id\" column"));
-    } 
+    }
     m_sgraph->remove_vertex_field(name);
   }
 }

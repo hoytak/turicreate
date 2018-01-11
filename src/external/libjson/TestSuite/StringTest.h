@@ -116,7 +116,7 @@ public:
     json_string(const mychar * meh) : len(0), str(0){
 	   setToCStr(meh, mystrlen(meh));
     }
-	
+
 	json_string(const mychar * meh, size_t l) : len(l), str(0){
 	   setToCStr(meh, l);
 	   str[len] = '\0';

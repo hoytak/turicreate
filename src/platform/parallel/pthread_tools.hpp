@@ -55,22 +55,22 @@ namespace turi {
       int error = pthread_spin_init(&m_spin, PTHREAD_PROCESS_PRIVATE);
       ASSERT_TRUE(!error);
     }
-    
+
     /** Copy constructor which does not copy. Do not use!
         Required for compatibility with some STL implementations (LLVM).
-        which use the copy constructor for vector resize, 
+        which use the copy constructor for vector resize,
         rather than the standard constructor.    */
     spinlock(const spinlock&) {
       int error = pthread_spin_init(&m_spin, PTHREAD_PROCESS_PRIVATE);
       ASSERT_TRUE(!error);
     }
-    
+
     // not copyable
     void operator=(const spinlock& m) { }
 
 
     /// Acquires a lock on the spinlock
-    inline void lock() const { 
+    inline void lock() const {
       int error = pthread_spin_lock( &m_spin  );
       ASSERT_TRUE(!error);
     }
@@ -96,10 +96,10 @@ namespace turi {
 #define SPINLOCK_SUPPORTED 0
 #endif
 
-  
+
   /**
    * \ingroup threading
-   *If pthread spinlock is not implemented, 
+   *If pthread spinlock is not implemented,
    * this provides a simple alternate spin lock implementation.
    *
    * Before you use, see \ref parallel_object_intricacies.
@@ -113,21 +113,21 @@ namespace turi {
     simple_spinlock () {
       spinner = 0;
     }
-    
+
     /** Copy constructor which does not copy. Do not use!
     Required for compatibility with some STL implementations (LLVM).
-    which use the copy constructor for vector resize, 
+    which use the copy constructor for vector resize,
     rather than the standard constructor.    */
     simple_spinlock(const simple_spinlock&) {
       spinner = 0;
     }
-    
+
     // not copyable
     void operator=(const simple_spinlock& m) { }
 
-    
+
     /// Acquires a lock on the spinlock
-    inline void lock() const { 
+    inline void lock() const {
       while(spinner == 1 || __sync_lock_test_and_set(&spinner, 1));
     }
     /// Releases a lock on the spinlock
@@ -143,11 +143,11 @@ namespace turi {
       ASSERT_TRUE(spinner == 0);
     }
   };
-  
+
 
   /**
    * \ingroup threading
-   *If pthread spinlock is not implemented, 
+   *If pthread spinlock is not implemented,
    * this provides a simple alternate spin lock implementation.
    *
    * Before you use, see \ref parallel_object_intricacies.
@@ -162,21 +162,21 @@ namespace turi {
     padded_simple_spinlock () {
       spinner = 0;
     }
-    
+
     /** Copy constructor which does not copy. Do not use!
     Required for compatibility with some STL implementations (LLVM).
-    which use the copy constructor for vector resize, 
+    which use the copy constructor for vector resize,
     rather than the standard constructor.    */
     padded_simple_spinlock(const padded_simple_spinlock&) {
       spinner = 0;
     }
-    
+
     // not copyable
     void operator=(const padded_simple_spinlock& m) { }
 
-    
+
     /// Acquires a lock on the spinlock
-    inline void lock() const { 
+    inline void lock() const {
       while(spinner == 1 || __sync_lock_test_and_set(&spinner, 1));
     }
     /// Releases a lock on the spinlock
@@ -192,7 +192,7 @@ namespace turi {
       ASSERT_TRUE(spinner == 0);
     }
   };
-  
+
 
 
 
@@ -211,20 +211,20 @@ namespace turi {
       int error = pthread_cond_init(&m_cond, NULL);
       ASSERT_TRUE(!error);
     }
-    
+
     /** Copy constructor which does not copy. Do not use!
         Required for compatibility with some STL implementations (LLVM).
-        which use the copy constructor for vector resize, 
+        which use the copy constructor for vector resize,
         rather than the standard constructor.    */
     conditional(const conditional &) {
       int error = pthread_cond_init(&m_cond, NULL);
       ASSERT_TRUE(!error);
     }
-    
+
     // not copyable
     void operator=(const conditional& m) { }
 
-    
+
     /// Waits on condition. The mutex must already be acquired. Caller
     /// must be careful about spurious wakes.
     inline void wait(const mutex& mut) const {
@@ -249,13 +249,13 @@ namespace turi {
       std::unique_lock<mutex> retlock(*lock_ptr, std::adopt_lock);
       mut.swap(retlock);
     }
-    /// Waits on condition. The mutex must already be acquired. 
+    /// Waits on condition. The mutex must already be acquired.
     /// Returns only when predicate evaulates to true
     template <typename Predicate>
     inline void wait(const mutex& mut, Predicate pred) const {
       while (!pred()) wait(mut);
     }
-    /// Waits on condition. The mutex must already be acquired. 
+    /// Waits on condition. The mutex must already be acquired.
     /// Returns only when predicate evaulates to true
     template <typename Predicate>
     inline void wait(std::unique_lock<mutex>& mut, Predicate pred) const {
@@ -297,7 +297,7 @@ namespace turi {
       // convert timeval to timespec
       timeout.tv_nsec = tv.tv_usec * 1000;
       timeout.tv_sec = tv.tv_sec;
-      
+
       // add the time
       timeout.tv_nsec += (suseconds_t)ns;
       timeout.tv_sec += (time_t)s;
@@ -321,7 +321,7 @@ namespace turi {
       // convert timeval to timespec
       timeout.tv_nsec = tv.tv_usec * 1000;
       timeout.tv_sec = tv.tv_sec;
-      
+
       // add the time
       timeout.tv_nsec += (suseconds_t)ns;
       timeout.tv_sec += (time_t)s;
@@ -418,13 +418,13 @@ namespace turi {
     }
     /** Copy constructor which does not copy. Do not use!
         Required for compatibility with some STL implementations (LLVM).
-        which use the copy constructor for vector resize, 
+        which use the copy constructor for vector resize,
         rather than the standard constructor.    */
     semaphore(const semaphore&) {
       semvalue = 0;
       waitercount = 0;
     }
-    
+
     // not copyable
     void operator=(const semaphore& m) { }
 
@@ -466,16 +466,16 @@ namespace turi {
       int error = sem_init(&m_sem, 0,0);
       ASSERT_TRUE(!error);
     }
-    
+
     /** Copy constructor with does not copy. Do not use!
         Required for compatibility with some STL implementations (LLVM).
-        which use the copy constructor for vector resize, 
+        which use the copy constructor for vector resize,
         rather than the standard constructor.    */
     semaphore(const semaphore&) {
       int error = sem_init(&m_sem, 0,0);
       ASSERT_TRUE(!error);
     }
-    
+
     // not copyable
     void operator=(const semaphore& m) { }
 
@@ -493,7 +493,7 @@ namespace turi {
     }
   }; // End semaphore
 #endif
-  
+
 
 #define atomic_xadd(P, V) __sync_fetch_and_add((P), (V))
 #define cmpxchg(P, O, N) __sync_val_compare_and_swap((P), (O), (N))
@@ -529,7 +529,7 @@ namespace turi {
     inline void writelock() const {
       unsigned me = atomic_xadd(&l.u, (1<<16));
       unsigned char val = (unsigned char)(me >> 16);
-    
+
       while (val != l.s.write) asm volatile("pause\n": : :"memory");
       writing = true;
     }
@@ -539,7 +539,7 @@ namespace turi {
 
       t.s.write++;
       t.s.read++;
-    
+
       *(volatile unsigned short *) (&l) = t.us;
       writing = false;
       __asm("mfence");
@@ -548,7 +548,7 @@ namespace turi {
     inline void readlock() const {
       unsigned me = atomic_xadd(&l.u, (1<<16));
       unsigned char val = (unsigned char)(me >> 16);
-    
+
       while (val != l.s.read) asm volatile("pause\n": : :"memory");
       l.s.read++;
     }
@@ -556,7 +556,7 @@ namespace turi {
     inline void rdunlock() const {
       atomic_inc(&l.s.write);
     }
-  
+
     inline void unlock() const {
       if (!writing) rdunlock();
       else wrunlock();
@@ -626,11 +626,11 @@ namespace turi {
 #undef atomic_inc
 #undef atomic_set_bit
 #undef atomic_add
-#undef RW_WAIT_BIT 
-#undef RW_WRITE_BIT 
+#undef RW_WAIT_BIT
+#undef RW_WRITE_BIT
 #undef RW_READ_BIT
 #undef RW_WAIT
-#undef RW_WRITE 
+#undef RW_WRITE
 #undef RW_READ
 
 
@@ -652,12 +652,12 @@ namespace turi {
       int error = pthread_rwlock_destroy(&m_rwlock);
       ASSERT_TRUE(!error);
     }
- 
+
     // not copyable
     void operator=(const rwlock& m) { }
-   
-    /** 
-     * \todo: Remove!  
+
+    /**
+     * \todo: Remove!
      *
      * Copy constructor which does not copy. Do not use!  Required for
      * compatibility with some STL implementations (LLVM).  which use
@@ -712,8 +712,8 @@ namespace turi {
     turi::mutex mutex;
     turi::conditional conditional;
     mutable int needed;
-    mutable int called;   
-    
+    mutable int called;
+
     mutable bool barrier_sense;
     mutable bool barrier_release;
     bool alive;
@@ -738,7 +738,7 @@ namespace turi {
     void resize_unsafe(size_t numthreads) {
       needed = numthreads;
     }
-    
+
     /**
      * \warning: This barrier is safely NOT reusable with this cancel
      * definition
@@ -769,7 +769,7 @@ namespace turi {
       mutex.unlock();
     }
   }; // end of conditional
-  
+
 
 
   /**
@@ -790,8 +790,8 @@ namespace turi {
     barrier(const barrier&) { }
   public:
     /// Construct a barrier which will only fall when numthreads enter
-    barrier(size_t numthreads) { 
-      pthread_barrier_init(&m_barrier, NULL, (unsigned)numthreads); }    
+    barrier(size_t numthreads) {
+      pthread_barrier_init(&m_barrier, NULL, (unsigned)numthreads); }
     // not copyable
     void operator=(const barrier& m) { }
     void resize_unsafe(size_t numthreads) {
@@ -803,7 +803,7 @@ namespace turi {
     inline void wait() const { pthread_barrier_wait(&m_barrier); }
   };
 
-#else   
+#else
    /* In some systems, pthread_barrier is not available.
    */
   typedef cancellable_barrier barrier;
@@ -815,7 +815,7 @@ namespace turi {
     char *cp;
     char *end = (char*)(addr) + len;
 
-    for (cp = (char*)(addr); cp < end; cp += 64) __builtin_prefetch(cp, 0); 
+    for (cp = (char*)(addr); cp < end; cp += 64) __builtin_prefetch(cp, 0);
   }
   inline void prefetch_range_write(void *addr, size_t len) {
     char *cp;
@@ -848,8 +848,8 @@ namespace turi {
     /**
      * This class contains the data unique to each thread. All threads
      * are gauranteed to have an associated turicreate thread_specific
-     * data. The thread object is copyable. 
-     */  
+     * data. The thread object is copyable.
+     */
     class tls_data {
     public:
       inline tls_data(size_t thread_id);
@@ -927,36 +927,36 @@ namespace turi {
 
 
   private:
-    
+
     struct invoke_args{
       size_t m_thread_id;
-      boost::function<void(void)> spawn_routine;   
+      boost::function<void(void)> spawn_routine;
       invoke_args(size_t m_thread_id, const boost::function<void(void)> &spawn_routine)
           : m_thread_id(m_thread_id), spawn_routine(spawn_routine) { };
     };
-    
+
     //! Little helper function used to launch threads
-    static void* invoke(void *_args);   
-  
+    static void* invoke(void *_args);
+
   public:
-    
+
     /**
      * Creates a thread with a user-defined associated thread ID
      */
-    inline thread(size_t thread_id = 0) : 
-      m_stack_size(0), 
+    inline thread(size_t thread_id = 0) :
+      m_stack_size(0),
       m_p_thread(0),
       m_thread_id(thread_id),
       thread_started(false){
       // Calculate the stack size in in bytes;
-      const int BYTES_PER_MB = 1048576; 
+      const int BYTES_PER_MB = 1048576;
       const int DEFAULT_SIZE_IN_MB = 8;
       m_stack_size = DEFAULT_SIZE_IN_MB * BYTES_PER_MB;
     }
 
     /**
      * execute this function to spawn a new thread running spawn_function
-     * routine 
+     * routine
      */
     void launch(const boost::function<void (void)> &spawn_routine);
 
@@ -986,7 +986,7 @@ namespace turi {
     inline bool active() const {
       return thread_started;
     }
-    
+
     inline ~thread() {  }
 
     /// Returns the pthread thread id
@@ -994,21 +994,21 @@ namespace turi {
       return m_p_thread;
     }
   private:
-    
-    
+
+
     //! The size of the internal stack for this thread
     size_t m_stack_size;
-    
+
     //! The internal pthread object
     pthread_t m_p_thread;
-    
+
     //! the threads id
     size_t m_thread_id;
-    
+
     bool thread_started;
   }; // End of class thread
 
-  
+
 
 
 
@@ -1037,12 +1037,12 @@ namespace turi {
     thread_group(const thread_group&);
     static void invoke(boost::function<void (void)> spawn_function, thread_group *group);
    public:
-    /** 
-     * Initializes a thread group. 
+    /**
+     * Initializes a thread group.
      */
     thread_group() : m_thread_counter(0), threads_running(0) { }
 
-    /** 
+    /**
      * Launch a single thread which calls spawn_function No CPU affinity is
      * set so which core it runs on is up to the OS Scheduler
      */
@@ -1058,7 +1058,7 @@ namespace turi {
     thrown by threads are forwarded to the join() function.
     */
     void join();
-    
+
     /// Returns the number of running threads.
     inline size_t running_threads() {
       return threads_running;
@@ -1070,7 +1070,7 @@ namespace turi {
 
 
   /// Runs f in a new thread. convenience function for creating a new thread quickly.
-  inline thread launch_in_new_thread(const boost::function<void (void)> &f, 
+  inline thread launch_in_new_thread(const boost::function<void (void)> &f,
                                size_t cpuid = size_t(-1)) {
     thread thr;
     if (cpuid != size_t(-1)) thr.launch(f, cpuid);
@@ -1093,4 +1093,3 @@ namespace turi {
 }; // End Namespace
 
 #endif
-

@@ -29,7 +29,7 @@ for f in classpath.split(':'):
 
 lpath = []
 lpath.append('%s/lib/native' % hdfs_home)
-lpath.append('%s/jre/lib/amd64/server' % java_home) 
+lpath.append('%s/jre/lib/amd64/server' % java_home)
 
 env = os.environ.copy()
 env['CLASSPATH'] = '${CLASSPATH}:' + (':'.join(cpath))
@@ -40,6 +40,6 @@ if 'rabit_hdfs_opts' in env:
 elif 'LIBHDFS_OPTS' not in env:
     env['LIBHDFS_OPTS'] = '--Xmx128m'
 
-env['LD_LIBRARY_PATH'] = '${LD_LIBRARY_PATH}:' + (':'.join(lpath)) 
+env['LD_LIBRARY_PATH'] = '${LD_LIBRARY_PATH}:' + (':'.join(lpath))
 ret = subprocess.call(args = sys.argv[1:], env = env)
 sys.exit(ret)

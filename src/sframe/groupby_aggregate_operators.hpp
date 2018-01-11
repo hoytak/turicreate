@@ -37,8 +37,8 @@ class vector_sum : public group_aggregate_value {
     // add everything except undefined
     if (!failure && flex.get_type() != flex_type_enum::UNDEFINED) {
       DASSERT_EQ((int)flex.get_type(), (int)value.get_type());
-      // If this is first element being added, just copy since intialized vector 
-      // is size 0 and you cannot add vectors of different size. 
+      // If this is first element being added, just copy since intialized vector
+      // is size 0 and you cannot add vectors of different size.
       if (!init){
         value = flex;
         init = true;
@@ -55,10 +55,10 @@ class vector_sum : public group_aggregate_value {
   /// combines two partial sums
   void combine(const group_aggregate_value& other) {
     const vector_sum& other_casted = dynamic_cast<const vector_sum&>(other);
-    // If you add vectors of different lengths, make result be undefined. 
+    // If you add vectors of different lengths, make result be undefined.
     if (!other_casted.failure && !failure){
       if (!init) {
-        // I am not initialized. 
+        // I am not initialized.
         (*this) = other_casted;
       } else if (other_casted.init) {
         if (value.size() != other_casted.value.size()) {
@@ -255,10 +255,10 @@ class min: public group_aggregate_value {
   bool init = false;
 };
 
-/** 
+/**
  *
  * Implemenets a argmin aggregator which is used with arg_func
- * 
+ *
  */
 
 class argmin: public group_aggregate_value {
@@ -268,8 +268,8 @@ class argmin: public group_aggregate_value {
     argmin* ret = new argmin;
     return ret;
   }
-  
-  
+
+
   void add_element(const std::vector<flexible_type>& values) {
     // add everything except undefined
     DASSERT_TRUE(values.size() > 0);
@@ -321,11 +321,11 @@ class argmin: public group_aggregate_value {
      return types[1];
   }
 
-    
+
   flex_type_enum set_input_type(flex_type_enum type) {
     throw ("set_input_type is not supported for argmin");
   }
- 
+
   /// Name of the class
   std::string name() const {
     return "argmin";
@@ -347,10 +347,10 @@ class argmin: public group_aggregate_value {
   bool init = false;
 };
 
-/** 
+/**
  *
  * Implemenets a argmax aggregator which is used with arg_func
- * 
+ *
  */
 
 class argmax: public group_aggregate_value {
@@ -360,8 +360,8 @@ class argmax: public group_aggregate_value {
     argmax* ret = new argmax;
     return ret;
   }
-  
-  
+
+
   void add_element(const std::vector<flexible_type>& values) {
     // add everything except undefined
     DASSERT_TRUE(values.size() > 0);
@@ -374,7 +374,7 @@ class argmax: public group_aggregate_value {
       }
     }
   }
-  
+
   /// Adds a new element
   void add_element_simple(const flexible_type& flex) {
     throw "argmax does not support add_element_simple with one value";
@@ -412,11 +412,11 @@ class argmax: public group_aggregate_value {
     // return type of the supporting column.
     return types[1];
   }
-  
+
   flex_type_enum set_input_type(flex_type_enum type) {
     throw ("set_input_type is not supported for argmax");
   }
-  
+
   /// Name of the class
   std::string name() const {
     return "argmax";
@@ -650,7 +650,7 @@ class vector_average: public group_aggregate_value {
   /// Adds a new element to be counted
   void add_element_simple(const flexible_type& flex) {
    if (!failure && flex.get_type() != flex_type_enum::UNDEFINED) {
-      // Copy if not initialized. 
+      // Copy if not initialized.
       if (!init){
         ++count;
         value = flex;
@@ -671,7 +671,7 @@ class vector_average: public group_aggregate_value {
   void combine(const group_aggregate_value& other) {
     const vector_average& other_casted = dynamic_cast<const vector_average&>(other);
     // Set to UNDEFINED if there are different vec sizes.
-    if (!other_casted.failure && !failure){ 
+    if (!other_casted.failure && !failure){
       if (!init){
         (*this) = other_casted;
       } else if (other_casted.init){
@@ -679,7 +679,7 @@ class vector_average: public group_aggregate_value {
           failure = true;
         } else {
           //weighted mean
-          value = ((value * count) + (other_casted.value 
+          value = ((value * count) + (other_casted.value
                 * other_casted.count)) / (count + other_casted.count);
           count += other_casted.count;
         }
@@ -703,7 +703,7 @@ class vector_average: public group_aggregate_value {
   /// The input type
   flex_type_enum set_input_type(flex_type_enum type) {
     return type;
-    
+
   }
 
   /// Name of the class
@@ -726,7 +726,7 @@ class vector_average: public group_aggregate_value {
   bool init = false;
   bool failure = false;
   size_t count = 0;
-  
+
 };
 
 /**
@@ -754,7 +754,7 @@ class average: public group_aggregate_value {
     const average& other_casted = dynamic_cast<const average&>(other);
         //weighted mean
     if (count + other_casted.count > 0){
-      value = ((value * count) + (other_casted.value 
+      value = ((value * count) + (other_casted.value
                 * other_casted.count)) / (count + other_casted.count);
       count += other_casted.count;
     }
@@ -869,10 +869,10 @@ class variance : public group_aggregate_value {
   }
 
   virtual void print(std::ostream& os) const {
-    os << this->name() << "(" 
-       << "value = " << this->emit() << ", " 
-       << "count = " << this->count << ", " 
-       << "mean = "  << this->mean << ", " 
+    os << this->name() << "("
+       << "value = " << this->emit() << ", "
+       << "count = " << this->count << ", "
+       << "mean = "  << this->mean << ", "
        << "M2 = "    << this->M2
        << ")";
   }
@@ -882,7 +882,7 @@ class variance : public group_aggregate_value {
   double mean = 0;
   double M2 = 0;
 };
-  
+
 
 class stdv : public variance {
  public:
@@ -988,7 +988,7 @@ class quantile : public group_aggregate_value {
 
 
 /**
- * Implements an aggregator that convert two values from two column 
+ * Implements an aggregator that convert two values from two column
  * into a key/value
  * value inside a dictionary
  */
@@ -1274,7 +1274,7 @@ class count_distinct: public group_aggregate_value {
  */
 class distinct: public count_distinct {
  public:
-  
+
   group_aggregate_value* new_instance() const override {
     distinct* ret = new distinct;
     return ret;
@@ -1290,7 +1290,7 @@ class distinct: public count_distinct {
     }
     return ret;
   }
-  
+
   flex_type_enum set_input_type(flex_type_enum type) override {
     return flex_type_enum::LIST;
   }
@@ -1303,7 +1303,7 @@ class distinct: public count_distinct {
 };
 
 /**
- * Implements an aggregator that computes frequncies for each unique value. 
+ * Implements an aggregator that computes frequncies for each unique value.
  */
 class frequency_count: public group_aggregate_value {
  public:
@@ -1340,7 +1340,7 @@ class frequency_count: public group_aggregate_value {
       ret[i] = {kvp.first, flex_int(kvp.second)};
       i++;
     }
-    return ret; 
+    return ret;
   }
 
   bool support_type(flex_type_enum type) const {

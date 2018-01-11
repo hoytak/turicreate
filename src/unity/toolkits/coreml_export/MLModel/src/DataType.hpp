@@ -59,7 +59,7 @@ namespace CoreML {
         // see https://developers.google.com/protocol-buffers/docs/reference/cpp-generated
         Specification::FeatureType* allocateCopy();
   };
-    
+
 }
 
 #endif

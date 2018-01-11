@@ -19,7 +19,7 @@ static double calc_similarity(
     const sparse_sim::jaccard&,
     const std::vector<std::pair<size_t, double> >& x1,
     const std::vector<std::pair<size_t, double> >& x2) {
-  
+
   double v12 = 0;
   double v1 = 0, v2 = 0;
 

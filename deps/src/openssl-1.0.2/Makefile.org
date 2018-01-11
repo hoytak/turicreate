@@ -59,10 +59,10 @@ OPENSSLDIR=/usr/local/ssl
 
 CC= cc
 CFLAG= -O
-DEPFLAG= 
-PEX_LIBS= 
-EX_LIBS= 
-EXE_EXT= 
+DEPFLAG=
+PEX_LIBS=
+EX_LIBS=
+EXE_EXT=
 ARFLAGS=
 AR=ar $(ARFLAGS) r
 RANLIB= ranlib
@@ -86,7 +86,7 @@ ASFLAG=$(CFLAG)
 PROCESSOR=
 
 # CPUID module collects small commonly used assembler snippets
-CPUID_OBJ= 
+CPUID_OBJ=
 BN_ASM= bn_asm.o
 EC_ASM=
 DES_ENC= des_enc.o fcrypt_b.o
@@ -95,9 +95,9 @@ BF_ENC= bf_enc.o
 CAST_ENC= c_enc.o
 RC4_ENC= rc4_enc.o
 RC5_ENC= rc5_enc.o
-MD5_ASM_OBJ= 
-SHA1_ASM_OBJ= 
-RMD160_ASM_OBJ= 
+MD5_ASM_OBJ=
+SHA1_ASM_OBJ=
+RMD160_ASM_OBJ=
 WP_ASM_OBJ=
 CMLL_ENC=
 MODES_ASM_OBJ=
@@ -527,7 +527,7 @@ tar-snap:
 	      --prefix=openssl-$(VERSION) - > ../$(TARFILE);\
 	ls -l ../$(TARFILE)
 
-dist:   
+dist:
 	$(PERL) Configure dist
 	@$(MAKE) dist_pem_h
 	@$(MAKE) SDIRS='$(SDIRS)' clean
@@ -588,9 +588,9 @@ install_sw:
 						*ssl*)    i=ssleay32.dll;; \
 					esac; \
 					echo installing $$i; \
-	 				cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new; \
-	 				chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new; \
-	 				mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i ); \
+					cp $$i $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new; \
+					chmod 755 $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new; \
+					mv -f $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i.new $(INSTALL_PREFIX)$(INSTALLTOP)/bin/$$i ); \
 				fi; \
 			fi; \
 		done; \

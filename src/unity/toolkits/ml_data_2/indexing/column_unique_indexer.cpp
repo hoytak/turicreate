@@ -218,12 +218,12 @@ void column_unique_indexer::insert_values_into_index(
           for(const auto& kv : feature.get<flex_dict>())
             map_value_to_index(0, kv.first);
         } else {
-          map_value_to_index(0, feature); 
+          map_value_to_index(0, feature);
         }
       }
       return;
     }
-      
+
     case ml_column_mode::UNTRANSLATED:
       return;
   }

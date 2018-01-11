@@ -23,7 +23,7 @@ struct URI {
   /*! \brief protocol */
   std::string protocol;
   /*!
-   * \brief host name, namenode for HDFS, bucket name for s3   
+   * \brief host name, namenode for HDFS, bucket name for s3
    */
   std::string host;
   /*! \brief name of the path */
@@ -31,7 +31,7 @@ struct URI {
   /*! \brief enable default constructor */
   URI(void) {}
   /*!
-   * \brief construct from URI string      
+   * \brief construct from URI string
    */
   explicit URI(const char *uri) {
     const char *p = std::strstr(uri, "://");

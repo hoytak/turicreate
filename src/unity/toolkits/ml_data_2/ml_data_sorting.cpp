@@ -123,7 +123,7 @@ ml_data::_merge_sorted_ml_data_sources(
   out.data_blocks->close();
 
   // Clean up ourselves; get the ml_data structure in a usable state.
-  out._create_block_manager();   
+  out._create_block_manager();
   out._row_start = 0;
   out._row_end = total_rows;
 

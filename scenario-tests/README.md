@@ -49,7 +49,7 @@ setup.p.y
     python driver.py
 
 ## Important Notes on Test Writing
-If your tests depend on directory layout and creation of new 
+If your tests depend on directory layout and creation of new
 directories, some things are good to keep in mind.
 
  - setup.py is run with current working directory in tests/ . NOT in your test directory as you might expect.

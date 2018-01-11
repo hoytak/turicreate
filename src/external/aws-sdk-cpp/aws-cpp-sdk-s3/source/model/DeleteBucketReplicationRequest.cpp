@@ -22,7 +22,7 @@ using namespace Aws::S3::Model;
 using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 
-DeleteBucketReplicationRequest::DeleteBucketReplicationRequest() : 
+DeleteBucketReplicationRequest::DeleteBucketReplicationRequest() :
     m_bucketHasBeenSet(false)
 {
 }
@@ -31,5 +31,3 @@ Aws::String DeleteBucketReplicationRequest::SerializePayload() const
 {
   return "";
 }
-
-

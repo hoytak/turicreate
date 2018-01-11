@@ -15,7 +15,7 @@ from .bytecode_consumer import ByteCodeConsumer
 from argparse import ArgumentParser
 
 class ByteCodePrinter(ByteCodeConsumer):
-    
+
     def generic_consume(self, instr):
         print(instr)
 

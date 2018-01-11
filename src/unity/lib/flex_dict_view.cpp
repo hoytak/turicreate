@@ -81,5 +81,3 @@ namespace turi {
     return m_flex_dict_ptr->end();
   }
 }
-
-

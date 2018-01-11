@@ -21,21 +21,21 @@ namespace query_eval {
  * \{
  */
 
-/**  
+/**
  * Materialization options.
  *
- * This options can be used to control each stage of the materialization 
+ * This options can be used to control each stage of the materialization
  * pipeline. Used in the \ref materialize methods.
  */
 struct materialize_options {
 
- /** 
+ /**
   *  The number of segments to break parallel processing into. Also
   *  may affect the number of segments of the output SFrame.
   */
   size_t num_segments = 0;
 
-  /**     
+  /**
    * If set, the final sframe output will be streamed into the callback
    * function and an empty SFrame will be returned.
    *
@@ -74,22 +74,22 @@ struct materialize_options {
    * the query plan until all remaining paths are linearly consumable.
    *
    * For successful query execution, this should always be true. When this is
-   * false, query execution may fail for particular types of plans due to 
+   * false, query execution may fail for particular types of plans due to
    * rate control issues.
    */
   bool partial_materialize = true;
 
-  /**     
+  /**
    * if set, these parameter defines the sframe output index file location
-   * of the final sframe. Also see \ref output_column_names  
+   * of the final sframe. Also see \ref output_column_names
    * This argument has no effect if \ref write_callback is set.
    */
   std::string output_index_file = "";
 
-  /**     
+  /**
    * if set, this parameter defines the column names of the output sframe.
    * Otherwise X1,X2,X3... is used.
-   * of the final sframe. Also see \ref output_index_file. 
+   * of the final sframe. Also see \ref output_index_file.
    * This argument has no effect if \ref write_callback is set.
    */
   std::vector<std::string> output_column_names;

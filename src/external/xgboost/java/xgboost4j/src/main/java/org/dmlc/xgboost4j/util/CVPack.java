@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -31,7 +31,7 @@ public class CVPack {
     DMatrix[] dmats;
     String[] names;
     Booster booster;
-    
+
     /**
      * create an cross validation package
      * @param dtrain train data
@@ -46,7 +46,7 @@ public class CVPack {
         this.dtrain = dtrain;
         this.dtest = dtest;
     }
-    
+
     /**
      * update one iteration
      * @param iter iteration num
@@ -55,7 +55,7 @@ public class CVPack {
     public void update(int iter) throws XGBoostError {
         booster.update(dtrain, iter);
     }
-    
+
     /**
      * update one iteration
      * @param iter iteration num
@@ -65,23 +65,23 @@ public class CVPack {
     public void update(int iter, IObjective obj) throws XGBoostError {
         booster.update(dtrain, iter, obj);
     }
-    
+
     /**
-     * evaluation 
+     * evaluation
      * @param iter iteration num
-     * @return 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @return
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public String eval(int iter) throws XGBoostError {
         return booster.evalSet(dmats, names, iter);
     }
-    
+
     /**
-     * evaluation 
+     * evaluation
      * @param iter iteration num
      * @param eval customized eval
-     * @return 
-     * @throws org.dmlc.xgboost4j.util.XGBoostError 
+     * @return
+     * @throws org.dmlc.xgboost4j.util.XGBoostError
      */
     public String eval(int iter, IEvaluation eval) throws XGBoostError {
         return booster.evalSet(dmats, names, iter, eval);

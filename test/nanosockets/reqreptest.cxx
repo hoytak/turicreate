@@ -13,7 +13,7 @@
 #include <nanosockets/publish_socket.hpp>
 #include <nanosockets/subscribe_socket.hpp>
 using namespace turi;
-using namespace nanosockets; 
+using namespace nanosockets;
 
 /**************************************************************************/
 /*                                                                        */
@@ -46,7 +46,7 @@ bool server_handler(zmq_msg_vector& recv,
 
 volatile bool done = false;
 
-void start_server(std::string address){  
+void start_server(std::string address){
   async_reply_socket reply(server_handler, 4, address);
   reply.start_polling();
   while (done == false) sleep(1);
@@ -75,7 +75,7 @@ struct reqrep_test {
     thread_group grp2;
     async_request_socket req(address);
     test_client(req);
-    done = true;    
+    done = true;
     grp.join();
   }
   void test_multi_thread() {
@@ -90,7 +90,7 @@ struct reqrep_test {
     grp2.launch([&]() { test_client(req,2); });
     grp2.launch([&]() { test_client(req,3); });
     grp2.join();
-    done = true;    
+    done = true;
     grp.join();
   }
 };

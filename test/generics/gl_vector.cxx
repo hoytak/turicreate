@@ -1590,7 +1590,7 @@ void stress_test(size_t n_tests, GenFunction&& gen_element) {
       v.insert(v.end(), std::move(e));
       v_ref.insert(v_ref.end(), std::move(e2));
     });
-  
+
   // Insert, 3 elements.
   operations.push_back([&]() {
       std::vector<T> ev = {gen_element(), gen_element(), gen_element()};
@@ -1610,7 +1610,7 @@ void stress_test(size_t n_tests, GenFunction&& gen_element) {
       v.insert(v.end(), ev.begin(), ev.end());
       v_ref.insert(v_ref.end(), ev.begin(), ev.end());
     });
-  
+
   // Erase, single element.
   operations.push_back([&]() {
       if(v.empty()) return;
@@ -1801,7 +1801,7 @@ struct gl_vector_stress_test   {
     random::seed(0);
     stress_test<int>(100000, []() { return random_int(); });
   }
-  
+
   void test_string() {
     random::seed(1);
     stress_test<gl_string>(100000, []() { return gl_string(std::to_string(random_int())); });
@@ -1834,7 +1834,7 @@ struct gl_vector_stress_test   {
         return v;
       });
   }
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_gl_vector_datatype_test, gl_vector_datatype_test)

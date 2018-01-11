@@ -39,9 +39,9 @@ sframe_index_file_information read_sframe_index_file(std::string index_file) {
     ret.ncolumns = std::atol(data.get<std::string>("sframe.num_columns").c_str());
     ret.nrows = std::atol(data.get<std::string>("sframe.nrows").c_str());
 
-    ret.column_names = 
+    ret.column_names =
         ini::read_sequence_section<std::string>(data, "column_names", ret.ncolumns);
-    ret.column_files = 
+    ret.column_files =
         ini::read_sequence_section<std::string>(data, "column_files", ret.ncolumns);
 
   } catch(std::string e) {
@@ -68,14 +68,14 @@ sframe_index_file_information read_sframe_index_file(std::string index_file) {
     if (p.is_relative()) {
       fname = fileio::make_absolute_path(root_dir, fname);
     }
-  } 
+  }
 
   ret.file_name = index_file;
   return ret;
 }
 
 
-void write_sframe_index_file(std::string index_file, 
+void write_sframe_index_file(std::string index_file,
                              const sframe_index_file_information& info) {
   using boost::filesystem::path;
   using boost::algorithm::starts_with;
@@ -84,7 +84,7 @@ void write_sframe_index_file(std::string index_file,
   std::string root_dir = target_index_path.parent_path().string();
 
 
-  if (info.column_names.size() != info.ncolumns || 
+  if (info.column_names.size() != info.ncolumns ||
       info.column_files.size() != info.ncolumns) {
     log_and_throw(std::string("Malformed index_file_information. ncolumns mismatch"));
   }
@@ -99,7 +99,7 @@ void write_sframe_index_file(std::string index_file,
 
   std::vector<std::string> relativized_file_names;
   for (auto filename: info.column_files) {
-    if (root_dir.length() > 0 && 
+    if (root_dir.length() > 0 &&
         boost::algorithm::starts_with(filename, root_dir)) {
       filename = filename.substr(root_dir.length() + 1);
     }

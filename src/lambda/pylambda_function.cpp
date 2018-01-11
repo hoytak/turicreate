@@ -18,7 +18,7 @@ pylambda_function::pylambda_function(const std::string& lambda_str,
 
   if (fileio::get_file_status(lambda_str) == fileio::file_status::DIRECTORY &&
       delete_pickle_files_on_destruction) {
-     m_pickle_file_handle = 
+     m_pickle_file_handle =
          std::make_shared<fileio::file_ownership_handle>(lambda_str,
                                                          true, // delete on destruction
                                                          true); // recursive delete
@@ -30,7 +30,7 @@ pylambda_function::~pylambda_function() {
 }
 
 //// Options
-void pylambda_function::set_skip_undefined(bool value) { 
+void pylambda_function::set_skip_undefined(bool value) {
   skip_undefined = value;
 }
 
@@ -38,7 +38,7 @@ void pylambda_function::set_random_seed(int value) {
   random_seed = value;
 }
 
-//// Evaluating Interface 
+//// Evaluating Interface
 
 /* One to one */
 void pylambda_function::eval(const sframe_rows& rows,
@@ -47,7 +47,7 @@ void pylambda_function::eval(const sframe_rows& rows,
 };
 
 /* Many to one */
-void pylambda_function::eval(const std::vector<std::string>& keys, 
+void pylambda_function::eval(const std::vector<std::string>& keys,
                              const sframe_rows& rows,
                              std::vector<flexible_type>& out) {
   lambda::lambda_master::get_instance().bulk_eval(lambda_hash, keys, rows, out, skip_undefined, random_seed);

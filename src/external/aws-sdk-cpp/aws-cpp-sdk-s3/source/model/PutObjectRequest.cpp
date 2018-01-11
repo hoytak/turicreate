@@ -24,7 +24,7 @@ using namespace Aws::Utils::Stream;
 using namespace Aws::Utils;
 using namespace Aws;
 
-PutObjectRequest::PutObjectRequest() : 
+PutObjectRequest::PutObjectRequest() :
     m_aCLHasBeenSet(false),
     m_bucketHasBeenSet(false),
     m_cacheControlHasBeenSet(false),

@@ -17,7 +17,7 @@ using namespace turi;
 
 
 void copy_to_memory(const sframe_rows::row& data,
-                    float* outptr, 
+                    float* outptr,
                     const std::vector<size_t>& outstrides,
                     const std::vector<size_t>& field_length_p) {
   ASSERT_GE(data.size(), 1);
@@ -64,7 +64,7 @@ void copy_to_memory(const sframe_rows::row& data,
     }
     return;
   } else if (data.size() == 1 && (type == flex_type_enum::FLOAT || type == flex_type_enum::INTEGER)) {
-    // Case 2: Single value type (should really get rid of this special case) 
+    // Case 2: Single value type (should really get rid of this special case)
     ASSERT_EQ(outstrides.size(), 0);
     (*outptr) = (float)(data[0]);
     return;

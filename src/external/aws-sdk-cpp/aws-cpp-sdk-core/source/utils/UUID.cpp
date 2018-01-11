@@ -64,8 +64,8 @@ namespace Aws
             ss << "-";
 
             WriteRangeOutToStream(ss, m_uuid, 10, 16);
-            
+
             return ss.str();
-        }        
+        }
     }
 }

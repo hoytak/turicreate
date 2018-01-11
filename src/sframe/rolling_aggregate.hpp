@@ -28,7 +28,7 @@ typedef std::function<flexible_type(circ_buffer_iterator_t,circ_buffer_iterator_
 
 /**
  * Apply an aggregate function over a moving window.
- * 
+ *
  * \param input The input SArray (expects to be materialized)
  * \param agg_op The aggregator. These classes are the same as used by groupby.
  * \param window_start The start of the moving window relative to the current
@@ -46,7 +46,7 @@ typedef std::function<flexible_type(circ_buffer_iterator_t,circ_buffer_iterator_
  *
  * Returns an SArray of the same length as the input, with a type that matches
  * the type output by the aggregation function.
- * 
+ *
  * Throws an exception if:
  *  - window_end < window_start
  *  - The window size is excessively large (currently hardcoded to UINT_MAX).

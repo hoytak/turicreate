@@ -25,21 +25,21 @@ GL_HOT_INLINE
 std::pair<size_t, size_t>
 find_slice_boundary_indices(const std::vector<std::pair<size_t, T> >& v,
                             size_t item_index_lb, size_t item_index_ub) {
-  
+
   // The comparison function for finding the correct start and
   // end items for the loop.
   auto idx_cmp_f = [](const std::pair<size_t, T>& p1, const std::pair<size_t, T>& p2) {
     return p1.first < p2.first;
   };
 
-  // We only work on sorted arrays, so make sure these indeed work. 
+  // We only work on sorted arrays, so make sure these indeed work.
   DASSERT_TRUE(std::is_sorted(v.begin(), v.end(), idx_cmp_f));
 
-  // Handle the edge cases. 
+  // Handle the edge cases.
   if(v.empty()) {
     return {0, 0};
   }
-  
+
   if(item_index_lb <= v.front().first && v.back().first < item_index_ub) {
     return {0, v.size()};
   }
@@ -48,7 +48,7 @@ find_slice_boundary_indices(const std::vector<std::pair<size_t, T> >& v,
   // searches.
   size_t list_idx_start = 0;
   size_t list_idx_end = v.size();
-  
+
   // If we don't start at the beginning, move up the list start to
   // find the correct bounds.
   if(!( item_index_lb <= v.front().first) ) {
@@ -66,14 +66,14 @@ find_slice_boundary_indices(const std::vector<std::pair<size_t, T> >& v,
     list_idx_end = std::distance(v.begin(), ub_it);
   }
 
-  if(list_idx_start != list_idx_end) { 
+  if(list_idx_start != list_idx_end) {
     // Make sure we have indeed found the correct boundaries.
     DASSERT_LT(v[list_idx_end-1].first, item_index_ub);
     DASSERT_GE(v[list_idx_end-1].first, item_index_lb);
     DASSERT_LT(v[list_idx_start].first, item_index_ub);
     DASSERT_GE(v[list_idx_start].first, item_index_lb);
   }
-  
+
   return {list_idx_start, list_idx_end};
 }
 
@@ -108,7 +108,7 @@ find_slice_boundary_indices(const std::vector<std::pair<size_t, T> >& v,
  *   preprocess_row -- the function called on every row.  It has
  *         the signature:
  *
- *              preprocess_row(size_t thread_idx, size_t row_idx, 
+ *              preprocess_row(size_t thread_idx, size_t row_idx,
  *                             size_t slice_item_idx_start, size_t slice_item_idx_end,
  *                             std::vector<std::pair<size_t, T> >& row)
  *
@@ -150,7 +150,7 @@ void iterate_through_sparse_item_array_by_slice(
     RowProcessFunction&& preprocess_row,
     ElementProcessFunction&& process_element,
     SliceFinalizeFunction&& finalize_slice) {
-  
+
   const size_t max_num_threads = thread::cpu_count();
   const size_t n = data->size();
 
@@ -159,7 +159,7 @@ void iterate_through_sparse_item_array_by_slice(
 
   volatile bool user_cancelation = false;
 
-  auto execute_user_cancelation = [&]() GL_GCC_ONLY(GL_COLD_NOINLINE) { 
+  auto execute_user_cancelation = [&]() GL_GCC_ONLY(GL_COLD_NOINLINE) {
     user_cancelation = true;
     log_and_throw("Cancelled by user.");
   };
@@ -169,14 +169,14 @@ void iterate_through_sparse_item_array_by_slice(
       execute_user_cancelation();
     }
   };
-  
+
   for(size_t slice_idx = 0; slice_idx < slice_delimiters.size() - 1; ++slice_idx) {
     check_user_cancelatation();
-    
+
     // Get the proper slice_delimiters.
     size_t item_idx_start = slice_delimiters[slice_idx];
     size_t item_idx_end = slice_delimiters[slice_idx + 1];
-    
+
     // Initialize the current slice.
     init_slice(slice_idx, item_idx_start, item_idx_end);
 
@@ -199,31 +199,31 @@ void iterate_through_sparse_item_array_by_slice(
           if(data_it.read_next(&block_row_index_start, &item_buffer_v) ) {
             break;
           }
-          
+
           size_t n_rows_read = item_buffer_v.size();
           block_row_index_end = block_row_index_start + n_rows_read;
-          
+
           for(size_t inner_idx = 0; inner_idx < n_rows_read && !user_cancelation; ++inner_idx) {
 
             // Check at the start here, before anything happens.
             check_user_cancelatation();
-            
+
             size_t row_idx = block_row_index_start + inner_idx;
             auto& item_list_nonconst = item_buffer_v[inner_idx];
-            
-            // Preprocess the row. 
+
+            // Preprocess the row.
             preprocess_row(thread_idx, row_idx, item_idx_start, item_idx_end, item_list_nonconst);
-            
-            // If it's empty, then ignore it. 
+
+            // If it's empty, then ignore it.
             if(item_list_nonconst.empty()) {
               continue;
-            } 
+            }
 
             // Check at the end of processing a row.
             check_user_cancelatation();
-            
+
             const auto& item_list = item_list_nonconst;
-            
+
             size_t list_idx_start = 0;
             size_t list_idx_end = item_list.size();
 
@@ -231,7 +231,7 @@ void iterate_through_sparse_item_array_by_slice(
             std::tie(list_idx_start, list_idx_end)
                 = find_slice_boundary_indices(
                     item_list, item_idx_start, item_idx_end);
-            
+
             // If this one is empty, ignore.
             if(UNLIKELY(list_idx_start == list_idx_end))
               continue;
@@ -252,7 +252,7 @@ void iterate_through_sparse_item_array_by_slice(
     // Check at the end of processing a slice, before the finalize
     // slice function is called.
     check_user_cancelatation();
-    
+
     finalize_slice(slice_idx, item_idx_start, item_idx_end);
   }
 }
@@ -269,7 +269,7 @@ void iterate_through_sparse_item_array_by_slice(
  *   preprocess_row -- the function called on every row.  It has
  *         the signature:
  *
- *              preprocess_row(size_t thread_idx, size_t row_idx, 
+ *              preprocess_row(size_t thread_idx, size_t row_idx,
  *                             std::vector<std::pair<size_t, T> >& row)
  *
  *         In this case, row_idx is the row currently being processed
@@ -291,7 +291,7 @@ void iterate_through_sparse_item_array(
       GL_GCC_ONLY(GL_HOT_INLINE)
       {};
 
-  // This is the only 
+  // This is the only
   auto _process_row = [&](size_t thread_idx, size_t row_idx,
                             size_t slice_item_idx_start, size_t slice_item_idx_end,
                             std::vector<std::pair<size_t, T> >& row)
@@ -306,7 +306,7 @@ void iterate_through_sparse_item_array(
 
   auto empty_process_element = [&](size_t thread_idx, size_t row_idx,
                                    size_t item_idx_start, size_t item_idx_end,
-                                   size_t item_idx, const T& value) 
+                                   size_t item_idx, const T& value)
       GL_GCC_ONLY(GL_HOT_INLINE)
       {};
 
@@ -391,10 +391,10 @@ std::shared_ptr<sarray<std::vector<std::pair<size_t, T> > > > transpose_sparse_s
 
   table_printer table( { {"Elapsed Time (Data Transposition))", 0}, {"% Complete", 0} } );
   table.print_header();
-  
+
   atomic<size_t> row_count = 0;
   size_t total_rows_to_process = n * num_slices;
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Run through each index and add a cutoff to the
 
@@ -416,7 +416,7 @@ std::shared_ptr<sarray<std::vector<std::pair<size_t, T> > > > transpose_sparse_s
     row_locations[num_items_in_slice] = item_cumsum;
   };
 
-  // nothing to be done for preprocessing a row. 
+  // nothing to be done for preprocessing a row.
   auto empty_preprocess_row = [&](size_t thread_idx, size_t row_idx,
                                   size_t slice_item_idx_start, size_t slice_item_idx_end,
                                   std::vector<std::pair<size_t, T> >& row)
@@ -425,12 +425,12 @@ std::shared_ptr<sarray<std::vector<std::pair<size_t, T> > > > transpose_sparse_s
 
         if(UNLIKELY(cur_row_count % 100 == 0)) {
           double percent_complete = double((400 * cur_row_count) / total_rows_to_process) / 4;
-          
+
           table.print_timed_progress_row(progress_time(), percent_complete);
         }
       };
-  
-  
+
+
   ////////////////////////////////////////////////////////////////////////////////
   // Stuff for processing each element within a slice.  This means
   // putting it in it's rightful spot in the transpose line.
@@ -459,19 +459,19 @@ std::shared_ptr<sarray<std::vector<std::pair<size_t, T> > > > transpose_sparse_s
     DASSERT_EQ(row_locations.size(), num_items_in_slice + 1);
 
     atomic<size_t> process_idx = 0;
-    
-    // To do the writing, we allow one of the threads to write finished rows 
+
+    // To do the writing, we allow one of the threads to write finished rows
     size_t write_idx = 0;
     dense_bitset idx_is_finished(num_items_in_slice);
 
-    std::vector<std::pair<size_t, T> > row_out; 
+    std::vector<std::pair<size_t, T> > row_out;
     auto flush_next_row = [&]() GL_GCC_ONLY(GL_HOT_INLINE) {
-      DASSERT_LT(write_idx, num_items_in_slice); 
+      DASSERT_LT(write_idx, num_items_in_slice);
       DASSERT_TRUE(idx_is_finished.get(write_idx));
-      
+
       row_out.assign(slice_t_data.begin() + row_locations[write_idx],
                      slice_t_data.begin() + row_locations[write_idx + 1]);
-      
+
       *it_out = row_out;
       ++it_out, ++write_idx;
     };
@@ -490,13 +490,13 @@ std::shared_ptr<sarray<std::vector<std::pair<size_t, T> > > > transpose_sparse_s
               flush_next_row();
             }
           }
-          
+
           size_t idx = (++process_idx) - 1;
-          
+
           if(idx >= num_items_in_slice) {
             break;
           }
-                  
+
           std::sort(slice_t_data.begin() + row_locations[idx],
                     slice_t_data.begin() + row_locations[idx + 1],
                     [](const std::pair<size_t, T>& p1,
@@ -510,10 +510,10 @@ std::shared_ptr<sarray<std::vector<std::pair<size_t, T> > > > transpose_sparse_s
 
     // Now, flush the remaining rows that may have been missed at the
     // end of the parallel portion.
-    while(write_idx < num_items_in_slice) { 
+    while(write_idx < num_items_in_slice) {
       flush_next_row();
     }
-    
+
   }; // End finalize the slice.
 
   // Now actually run all of the above.
@@ -529,7 +529,7 @@ std::shared_ptr<sarray<std::vector<std::pair<size_t, T> > > > transpose_sparse_s
 
   table.print_row(progress_time(), 100);
   table.print_footer();
-  
+
   return out_data;
 }
 

@@ -24,7 +24,7 @@ class sarray;
  * "sarray_builder" class, but provides the implementation. This is because it
  * is a slightly embellished wrapper around the SArray's output iterator, so
  * there is no further functionality that needs to be available for the C++
- * side. 
+ * side.
  *
  * The unity_sarray_builder is designed to append values until \ref close is
  * called, which returns the SArray. No "reopening" is allowed, and no
@@ -42,7 +42,7 @@ class unity_sarray_builder: public unity_sarray_builder_base {
    * Initialize the unity_sarray_buidler.
    *
    * This essentially opens the output iterator for writing.
-   * 
+   *
    */
   void init(size_t num_segments, size_t history_size, flex_type_enum dtype);
 
@@ -52,7 +52,7 @@ class unity_sarray_builder: public unity_sarray_builder_base {
    * The segment number allows the user to use the parallel interface provided
    * by the underlying output_iterator.
    *
-   * Throws if: 
+   * Throws if:
    *  - init hasn't been called or close has been called
    *  - segment number is invalid
    *  - the type of \p val differs from the type given in \ref init
@@ -63,7 +63,7 @@ class unity_sarray_builder: public unity_sarray_builder_base {
   /**
    * A wrapper around \ref append which adds multiple flexible_types to SArray.
    *
-   * Throws if: 
+   * Throws if:
    *  - init hasn't been called or close has been called
    *  - segment number is invalid
    *  - the type of any values in \p vals differs from

@@ -15,7 +15,7 @@
 #define GIL_PIXEL_NUMERIC_OPERATIONS_HPP
 
 /*!
-/// \file               
+/// \file
 /// \brief Structures for pixel-wise numeric operations
 /// \author Lubomir Bourdev and Hailin Jin \n
 ///         Adobe Systems Incorporated

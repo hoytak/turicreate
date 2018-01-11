@@ -14,7 +14,7 @@
 
 namespace turi {
 
-namespace optimization { 
+namespace optimization {
 
 
 
@@ -31,7 +31,7 @@ namespace optimization {
  *
  * This function takes in a dictionary of solver options as input. Keys in opts
  * that are required by the solver and NOT in opts are set to a default value.
- * 
+ *
  * \param[in] model       Any model with a first order optimization interface.
  * \param[in] init_point  Starting point for the solver.
  * \param[in,out] opts    Solver options.
@@ -45,28 +45,28 @@ void set_default_solver_options(const first_order_opt_interface& model, const
 /**
  *
  * Compute residual gradient.
- * 
+ *
  * \param[in] gradient Dense Gradient
  * \returns Residual to check for termination.
  *
  *
 */
-double compute_residual(const DenseVector& gradient); 
+double compute_residual(const DenseVector& gradient);
 
 /**
  *
  * Compute residual gradient.
- * 
+ *
  * \param[in] gradient Dense Gradient
  * \returns Residual to check for termination.
  *
  *
 */
-double compute_residual(const SparseVector& gradient); 
+double compute_residual(const SparseVector& gradient);
 
 /**
  *
- * Check hessian of second_order_optimization_iterface models at a point. 
+ * Check hessian of second_order_optimization_iterface models at a point.
  *
  * The function lets you check that model.compute_hessian is accurately
  * implemented.
@@ -74,7 +74,7 @@ double compute_residual(const SparseVector& gradient);
  * Check uses central difference to hessian. The must be with 1e-3
  * relative tolerance. The notion of relative tolerance is tricky especially
  * when gradients are really large or really small.
- * 
+ *
  * \param[in] model   Any model with a first order optimization interface.
  * \param[in] point   Point at which to check the gradient.
  * \param[in] hessian Dense hessian matrix.
@@ -91,18 +91,18 @@ bool check_hessian(second_order_opt_interface& model, const DenseVector& point,
 
 /**
  *
- * Check dense gradient of first_order_optimization_iterface models at a point. 
+ * Check dense gradient of first_order_optimization_iterface models at a point.
  *
  * The function lets you check that model.compute_gradient is accurately
- * implemented. 
+ * implemented.
  *
  * Check uses central difference to compute gradient. The must be with 1e-3
  * relative tolerance. The notion of relative tolerance is tricky especially
  * when gradients are really large or really small.
- * 
+ *
  * \param[in] model   Any model with a first order optimization interface.
  * \param[in] point   Point at which to check the gradient.
- * \param[in] grad    Sparse Gradient computed analytically at "point" 
+ * \param[in] grad    Sparse Gradient computed analytically at "point"
  * \param[in] mbStart Minibatch start index
  * \param[in] mbSize  Minibatch size
  * \returns bool      True if gradient is correct to 1e-3 tolerance.
@@ -118,18 +118,18 @@ bool check_gradient(first_order_opt_interface& model, const DenseVector& point,
 /**
  *
  * Check sparse gradient of first_order_optimization_iterface models at
- * a point. 
+ * a point.
  *
  * The function lets you check that model.compute_gradient is accurately
- * implemented. 
+ * implemented.
  *
  * Check uses central difference to compute gradient. The must be with 1e-3
  * relative tolerance. The notion of relative tolerance is tricky especially
  * when gradients are really large or really small.
- * 
+ *
  * \param[in] model   Any model with a first order optimization interface.
  * \param[in] point   Point at which to check the gradient.
- * \param[in] grad    Dense gradient computed analytically at "point" 
+ * \param[in] grad    Dense gradient computed analytically at "point"
  * \param[in] mbStart Minibatch start index
  * \param[in] mbSize  Minibatch size
  * \returns bool      True if hessian is correct to 1e-3 tolerance.
@@ -141,19 +141,19 @@ bool check_gradient(first_order_opt_interface& model, const DenseVector& point,
     = (size_t)(-1));
 
 
-/** 
+/**
  * Translate solver status to a string that a user can understand.
- * 
- * \param[in] status Status of the solver 
- * \returns   String with a meaningful interpretation of the solver status. 
+ *
+ * \param[in] status Status of the solver
+ * \returns   String with a meaningful interpretation of the solver status.
 */
 std::string translate_solver_status(const OPTIMIZATION_STATUS& status);
 
-/** 
- * Log solver summary stats (useful for benchmarking 
+/**
+ * Log solver summary stats (useful for benchmarking
  *
- * \param[in] status Status of the solver 
- * \returns Clean output of the optimization summary. 
+ * \param[in] status Status of the solver
+ * \returns Clean output of the optimization summary.
 */
 void log_solver_summary_stats(const solver_return& stats);
 
@@ -161,5 +161,4 @@ void log_solver_summary_stats(const solver_return& stats);
 
 } // turicreate
 
-#endif 
-
+#endif

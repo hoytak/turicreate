@@ -24,7 +24,7 @@ uint64_t total_mem();
 
 /**
  * \ingroup minipsutil
- * Returns 1 if the pid is running, 0 otherwise. 
+ * Returns 1 if the pid is running, 0 otherwise.
  */
 int32_t pid_is_running(int32_t pid);
 
@@ -45,7 +45,7 @@ int32_t kill_process(int32_t pid);
 #include <Psapi.h>
 
 typedef BOOL (WINAPI *LPFN_GLPI)(
-    PSYSTEM_LOGICAL_PROCESSOR_INFORMATION, 
+    PSYSTEM_LOGICAL_PROCESSOR_INFORMATION,
     PDWORD);
 
 int32_t num_cpus() {

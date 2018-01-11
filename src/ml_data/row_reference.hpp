@@ -93,12 +93,12 @@ class ml_data_row_reference {
    *  correspond to the columns in metadata.  Missing columns are
    *  treated as missing values.
    *
-   *  Returns a single row reference. 
+   *  Returns a single row reference.
    */
   static GL_HOT ml_data_row_reference from_row(
       const std::shared_ptr<ml_metadata>& metadata, const flex_dict& row,
       ml_missing_value_action none_action = ml_missing_value_action::USE_NAN);
-  
+
   /**
    * Fill an observation vector, represented as an ml_data_entry
    * struct.  (column_index, index, value) pairs, from this row
@@ -276,7 +276,7 @@ class ml_data_row_reference {
   /** Return a pointer to the current location in the data.
    */
   inline ml_data_internal::entry_value_iterator current_data_iter() const GL_HOT_INLINE_FLATTEN {
-    
+
 #ifndef NDEBUG
     if(data_block->translated_rows.entry_data.empty()) {
       ASSERT_EQ(current_in_block_index, 0);
@@ -284,7 +284,7 @@ class ml_data_row_reference {
       ASSERT_LT(current_in_block_index, data_block->translated_rows.entry_data.size());
     }
 #endif
-    
+
     // Note, this may be nullptr in the case of only untranslated columns and no targets.
     return data_block->translated_rows.entry_data.data() + current_in_block_index;
   }

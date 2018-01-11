@@ -12,7 +12,7 @@ Project Logical Layout
 * learner is learning module that computes gradient for specific object, and pass it to GBM
 
 File Naming Convention
-======= 
+=======
 * .h files are data structures and interface, which are needed to use functions in that layer.
 * -inl.hpp files are implementations of interface, like cpp file in most project.
   - You only need to understand the interface file to understand the usage of that layer
@@ -20,7 +20,7 @@ File Naming Convention
 
 How to Hack the Code
 ======
-* Add objective function: add to learner/objective-inl.hpp and register it in learner/objective.h ```CreateObjFunction``` 
+* Add objective function: add to learner/objective-inl.hpp and register it in learner/objective.h ```CreateObjFunction```
   - You can also directly do it in python
-* Add new evaluation metric: add to learner/evaluation-inl.hpp and register it in learner/evaluation.h ```CreateEvaluator``` 
+* Add new evaluation metric: add to learner/evaluation-inl.hpp and register it in learner/evaluation.h ```CreateEvaluator```
 * Add wrapper for a new language, most likely you can do it by taking the functions in python/xgboost_wrapper.h, which is purely C based, and call these C functions to use xgboost

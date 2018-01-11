@@ -18,7 +18,7 @@
 #else
 	#include <iostream>
 	#define LIBBASE64_ASSERT(cond, msg) if (!(cond)){ std::cerr << msg << std::endl; throw false; }
-	
+
 	template<typename T>
 	class libbase64_boundChecker {
 	public:
@@ -34,7 +34,7 @@
 	};
 	#define CREATEBOUNDCHECKER(type, name, ubound, lbound) libbase64_boundChecker<type> name(ubound, lbound)
 	#define GETITEM_BOUNDCHECK(loc, name) name.getLocation(loc)
-	
+
 	#ifdef LIBBASE64CODECOVERAGE
 		#define LIBBASE64CODECOVERAGEBRANCH { static bool f_codeCoverage_ = false; if (f_codeCoverage_ == false){ libbase64::getCoverageHits<STRINGTYPE, CHARTYPE, UCHARTYPE, SAFETY>(true); f_codeCoverage_ = true; } }
 	#endif
@@ -66,7 +66,7 @@ namespace libbase64 {
 			return hits;
 		}
 	#endif
-	
+
 	//characters used in convertions
 	namespace libbase64_characters {
 		template<typename T>
@@ -80,20 +80,20 @@ namespace libbase64 {
 			};
 			return char64s;
 		}
-		
+
 		template<typename T>
 		inline static T getChar(unsigned char bin){
 			CREATEBOUNDCHECKER(T, char64bounds, getChar64<T>(), getChar64<T>() + 64);
 			return GETITEM_BOUNDCHECK(getChar64<T>() + bin, char64bounds);
 		}
-		
+
 		template<typename T>
 		inline static T toBinary(T c) {
 			static T binaryConvert[80] = {62,48,49,50,63,52,53,54,55,56,57,58,59,60,61,249,250,251,252,253,254,255,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51};
 			CREATEBOUNDCHECKER(T, binaryConvertsbounds, binaryConvert, binaryConvert + 80);
 			return GETITEM_BOUNDCHECK(binaryConvert + c - 43, binaryConvertsbounds);
 		}
-		
+
 		template<typename T>
 		static inline T & emptyString(void){
 			static T t;
@@ -116,8 +116,8 @@ namespace libbase64 {
 	 */
 	template<class STRINGTYPE, typename CHARTYPE, typename UCHARTYPE, bool SAFETY>
 	static STRINGTYPE encode(const unsigned char * binary, size_t bytes){
-		CREATEBOUNDCHECKER(unsigned char, binarybounds, binary, binary + bytes);	
-	
+		CREATEBOUNDCHECKER(unsigned char, binarybounds, binary, binary + bytes);
+
 		//make sure that there is actually something to encode
 		if (SAFETY){
 			if (libbase64_unlikely(bytes == 0)){
@@ -125,12 +125,12 @@ namespace libbase64 {
 				return libbase64_characters::emptyString<STRINGTYPE>();
 			}
 		}
-		
+
 		//calculate length and how misaligned it is
 		size_t misaligned = bytes % 3;
 		STRINGTYPE result;
 		result.reserve(libbase64_Calculator::getEncodingSize(bytes));
-		
+
 		//do all of the ones that are 3 byte aligned
 		for (size_t i = 0, aligned((bytes - misaligned) / 3); i < aligned; ++i){
 			LIBBASE64CODECOVERAGEBRANCH;
@@ -140,7 +140,7 @@ namespace libbase64 {
 			result += libbase64_characters::getChar<CHARTYPE>(GETITEM_BOUNDCHECK(binary + 2, binarybounds) & 0x3F);
 			binary += 3;
 		}
-		
+
 		//handle any additional characters at the end of it
 		if (libbase64_likely(misaligned != 0)){
 			LIBBASE64CODECOVERAGEBRANCH;
@@ -150,7 +150,7 @@ namespace libbase64 {
 				LIBBASE64CODECOVERAGEBRANCH;
 				temp[i] = GETITEM_BOUNDCHECK(binary++, binarybounds);
 			}
-			
+
 			//now do the final three bytes
 			result += libbase64_characters::getChar<CHARTYPE>((temp[0] & 0xFC) >> 2);
 			result += libbase64_characters::getChar<CHARTYPE>(((temp[0] & 0x03) << 4) + ((temp[1] & 0xF0) >> 4));
@@ -165,16 +165,16 @@ namespace libbase64 {
 		} else {
 			LIBBASE64CODECOVERAGEBRANCH;
 		}
-		
+
 		LIBBASE64_ASSERT(libbase64_Calculator::getEncodingSize(bytes) == result.length(), "Reserve wasn't the correct guess");
 		return result;
-	}	
-		
+	}
+
 	template<class STRINGTYPE, typename CHARTYPE, typename UCHARTYPE, bool SAFETY>
     static std::string decode(const STRINGTYPE & encoded){
 		//check length to be sure its acceptable for base64
 		const size_t length = encoded.length();
-		
+
 		if (SAFETY){
 			if (libbase64_unlikely((length % 4) != 0)){
 				LIBBASE64CODECOVERAGEBRANCH;
@@ -184,7 +184,7 @@ namespace libbase64 {
 				LIBBASE64CODECOVERAGEBRANCH;
 				return libbase64_characters::emptyString<std::string>();
 			}
-			
+
 			//check to be sure there aren't odd characters or characters in the wrong places
 			size_t pos = encoded.find_first_not_of(libbase64_characters::getChar64<CHARTYPE>());
 			if (libbase64_unlikely(pos != STRINGTYPE::npos)){
@@ -223,7 +223,7 @@ namespace libbase64 {
 				LIBBASE64CODECOVERAGEBRANCH;
 			}
 		}
-		
+
 		const CHARTYPE * runner = encoded.data();
 		const CHARTYPE * end = runner + encoded.length();
 		CREATEBOUNDCHECKER(CHARTYPE, encodedbounds, runner, end);
@@ -231,7 +231,7 @@ namespace libbase64 {
 		std::string result;
 		--aligned;
 		result.reserve(libbase64_Calculator::getDecodingSize(length));
-		
+
 		//first do the ones that can not have any padding
 		for (unsigned int i = 0; i < aligned; ++i){
 			const CHARTYPE second = libbase64_characters::toBinary<UCHARTYPE>(GETITEM_BOUNDCHECK(runner + 1, encodedbounds));
@@ -241,7 +241,7 @@ namespace libbase64 {
 			result += ((third & 0x3) << 6) + libbase64_characters::toBinary<UCHARTYPE>(GETITEM_BOUNDCHECK(runner + 3, encodedbounds));
 			runner += 4;
 		}
-		
+
 		//now do the ones that might have padding, the first two characters can not be padding, so do them quickly
 		const CHARTYPE second = libbase64_characters::toBinary<UCHARTYPE>(GETITEM_BOUNDCHECK(runner + 1, encodedbounds));
 		result += (libbase64_characters::toBinary<UCHARTYPE>(GETITEM_BOUNDCHECK(runner + 0, encodedbounds)) << 2) + ((second & 0x30) >> 4);
@@ -260,7 +260,7 @@ namespace libbase64 {
 		} else {
 			LIBBASE64CODECOVERAGEBRANCH;
 		}
-		
+
 		LIBBASE64_ASSERT(libbase64_Calculator::getDecodingSize(length) >= result.length(), "Reserve wasn't the correct guess, too small");
 		LIBBASE64_ASSERT((result.length() <= 3) || (libbase64_Calculator::getDecodingSize(length) > result.length() - 3), "Reserve wasn't the correct guess, too big");
 		return result;

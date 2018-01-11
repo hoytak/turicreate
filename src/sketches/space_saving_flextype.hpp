@@ -8,16 +8,16 @@
 
 #include <vector>
 #include <sketches/space_saving.hpp>
-#include <flexible_type/flexible_type.hpp> 
+#include <flexible_type/flexible_type.hpp>
 
 namespace turi {
 namespace sketches {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/** 
+/**
  * \ingroup sketching
- * Provides an efficient wrapper around the space_saving sketch customized for 
+ * Provides an efficient wrapper around the space_saving sketch customized for
  * use with flexible type. See \ref space_saving
  */
 class space_saving_flextype {
@@ -27,7 +27,7 @@ class space_saving_flextype {
 
   bool is_combined = false;
   double m_epsilon = 0;
-    
+
  public:
 
   inline space_saving_flextype(const space_saving_flextype& ss)
@@ -37,7 +37,7 @@ class space_saving_flextype {
       , m_epsilon(ss.m_epsilon)
   {}
 
-  space_saving_flextype(space_saving_flextype&& ss) = default; 
+  space_saving_flextype(space_saving_flextype&& ss) = default;
 
   const space_saving_flextype& operator=(const space_saving_flextype& ss) {
     ss_integer.reset(new space_saving<flex_int>(*(ss.ss_integer)));
@@ -45,7 +45,7 @@ class space_saving_flextype {
     is_combined = ss.is_combined;
     m_epsilon = ss.m_epsilon;
   }
-  
+
   /**
    * Constructs a save saving sketch using 1 / epsilon buckets.
    * The resultant hyperloglog datastructure will 1 / epsilon memory, and
@@ -57,12 +57,12 @@ class space_saving_flextype {
     ss_integer.reset(new space_saving<flex_int>(epsilon));
     ss_general.reset(new space_saving<flexible_type>(epsilon));
   }
-  
+
   /**
    * Adds an item with a specified count to the sketch.
    */
   inline void add(const flexible_type& t, size_t count = 1) {
-    switch(t.get_type()) { 
+    switch(t.get_type()) {
       case flex_type_enum::INTEGER:
         ss_integer->add(t.get<flex_int>(), count);
         is_combined = false;
@@ -78,31 +78,31 @@ class space_saving_flextype {
         break;
     }
   }
-  
+
   /**
    * Returns the number of elements inserted into the sketch.
    */
   size_t size() const {
     return ss_general->size() + ss_integer->size();
   }
-  
+
   /**
-   * Returns all the elements tracked by the sketch as well as an 
+   * Returns all the elements tracked by the sketch as well as an
    * estimated count. The estimated can be a large overestimate.
    */
   inline std::vector<std::pair<flexible_type, size_t> > frequent_items() {
-    if(!is_combined) 
+    if(!is_combined)
       _combine_integer_and_general();
 
     return ss_general->frequent_items();
   }
-      
+
   /**
-   * Returns all the elements tracked by the sketch as well as an 
+   * Returns all the elements tracked by the sketch as well as an
    * estimated count. The estimated can be a large overestimate.
    */
   inline std::vector<std::pair<flexible_type, size_t> > guaranteed_frequent_items() {
-    if(!is_combined) 
+    if(!is_combined)
       _combine_integer_and_general();
 
     return ss_general->guaranteed_frequent_items();
@@ -112,11 +112,11 @@ class space_saving_flextype {
    * Merges a second space saving sketch into the current sketch
    */
   void combine(space_saving_flextype& other) {
-    if(!is_combined) 
+    if(!is_combined)
       _combine_integer_and_general();
     if(!other.is_combined)
       other._combine_integer_and_general();
-    
+
     ss_general->combine(*other.ss_general);
   }
 
@@ -124,7 +124,7 @@ class space_saving_flextype {
     ss_general->clear();
     ss_integer->clear();
   }
-  
+
   ~space_saving_flextype() { }
 
  private:
@@ -136,13 +136,9 @@ class space_saving_flextype {
     ss_integer->clear();
     is_combined = true;
   }
-  
-}; 
+
+};
 
 } // sketch
 } // namespace turi
 #endif
-
-
-
-

@@ -41,7 +41,7 @@ The B<genrsa> command generates an RSA private key.
 =item B<-out filename>
 
 the output filename. If this argument is not specified then standard output is
-used.  
+used.
 
 =item B<-passout arg>
 
@@ -105,4 +105,3 @@ be much larger (typically 1024 bits).
 L<gendsa(1)|gendsa(1)>
 
 =cut
-

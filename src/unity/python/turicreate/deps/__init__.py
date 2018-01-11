@@ -65,5 +65,3 @@ try:
 except:
     HAS_SKLEARN = False
     from . import sklearn_mock as sklearn
-
-

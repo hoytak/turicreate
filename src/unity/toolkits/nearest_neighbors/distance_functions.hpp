@@ -28,7 +28,7 @@ typedef sparse_vector<double, size_t> SparseVector;
  * matrices.
  */
 void inline all_pairs_squared_euclidean(const DenseMatrix& A,
-                                        const DenseMatrix& B, 
+                                        const DenseMatrix& B,
                                         DenseMatrix& dists) {
 
   DASSERT_EQ(A.n_cols, B.n_cols);
@@ -42,12 +42,12 @@ void inline all_pairs_squared_euclidean(const DenseMatrix& A,
   }
 
   for (size_t j = 0; j < (size_t)B.n_rows; ++j) {
-    dists.col(j) += squared_norm(B.row(j)); 
+    dists.col(j) += squared_norm(B.row(j));
   }
 }
 
 
-void inline all_pairs_cosine(const DenseMatrix& A, const DenseMatrix& B, 
+void inline all_pairs_cosine(const DenseMatrix& A, const DenseMatrix& B,
                              DenseMatrix& dists) {
 
   DASSERT_EQ(A.n_cols, B.n_cols);
@@ -70,7 +70,7 @@ void inline all_pairs_cosine(const DenseMatrix& A, const DenseMatrix& B,
 }
 
 
-void inline all_pairs_dot_product(const DenseMatrix& A, const DenseMatrix& B, 
+void inline all_pairs_dot_product(const DenseMatrix& A, const DenseMatrix& B,
                                   DenseMatrix& dists) {
 
   DASSERT_EQ(A.n_cols, B.n_cols);
@@ -83,7 +83,7 @@ void inline all_pairs_dot_product(const DenseMatrix& A, const DenseMatrix& B,
 
 
 void inline all_pairs_transformed_dot_product(const DenseMatrix& A,
-                                              const DenseMatrix& B, 
+                                              const DenseMatrix& B,
                                               DenseMatrix& dists) {
 
   DASSERT_EQ(A.n_cols, B.n_cols);
@@ -101,7 +101,7 @@ struct distance_metric {
   static inline std::shared_ptr<distance_metric> make_dist_instance(const std::string& dist_name);
 
   static inline std::shared_ptr<distance_metric> make_distance_metric(
-    function_closure_info fn); 
+    function_closure_info fn);
 
   virtual double distance(const DenseVector& a, const DenseVector& b) const {
     ASSERT_MSG(false, "Dense vector type not supported by this distance metric.");
@@ -188,7 +188,7 @@ struct cosine final : public distance_metric {
   double distance(const DenseVector& a, const DenseVector& b) const {
     DASSERT_TRUE(a.size() == b.size());
     DASSERT_TRUE(a.size() > 0);
-    
+
     double similarity = dot(a, b) / std::max(1e-16, std::sqrt(squared_norm(a) * squared_norm(b)));
 
     double ret = 1.0 - similarity;
@@ -238,20 +238,20 @@ struct transformed_dot_product final : public distance_metric {
   }
 };
 
-/* jaccard distance 
+/* jaccard distance
  */
 struct jaccard final : public distance_metric {
-  
+
   double distance(const DenseVector& a, const DenseVector& b) const {
     DASSERT_EQ(a.size(), b.size());
     double intersection_size = 0.;
-    double union_size = 0.;    
+    double union_size = 0.;
     for(size_t idx = 0; idx < std::min(a.size(), b.size()); ++idx) {
       if (a(idx) > 0. || b(idx) > 0.) {
         union_size += 1.;
         if (a(idx) > 0. && b(idx) > 0.) {
           intersection_size += 1.;
-        }  
+        }
       }
     }
     if (union_size == 0.) return 1.;
@@ -260,7 +260,7 @@ struct jaccard final : public distance_metric {
 
   double distance(const SparseVector& a, const SparseVector& b) const GL_HOT_FLATTEN {
 
-    size_t intersection_size = 0;  
+    size_t intersection_size = 0;
 
     auto it_a = a.begin();
     auto it_b = b.begin();
@@ -277,7 +277,7 @@ struct jaccard final : public distance_metric {
     }
 
     size_t d = a.num_nonzeros() + b.num_nonzeros() - intersection_size;
-    
+
     return 1.0 - double(intersection_size) / d;
   }
 
@@ -300,43 +300,43 @@ struct jaccard final : public distance_metric {
 
 };
 
-/* weighted jaccard distance 
+/* weighted jaccard distance
  */
 struct weighted_jaccard final : public distance_metric {
 
   double distance(const SparseVector& a, const SparseVector& b) const {
 
-    auto it_a = a.begin(); 
-    auto it_b = b.begin(); 
+    auto it_a = a.begin();
+    auto it_b = b.begin();
 
-    double cwise_min_sum = 0; 
-    double cwise_max_sum = 0; 
+    double cwise_min_sum = 0;
+    double cwise_max_sum = 0;
 
     while(it_a != a.end() && it_b !=b.end()) {
       if(it_a->first < it_b->first) {
-        cwise_max_sum += it_a->second; 
+        cwise_max_sum += it_a->second;
         ++it_a;
       } else if(it_a->first > it_b->first) {
-        cwise_max_sum += it_b->second; 
+        cwise_max_sum += it_b->second;
         ++it_b;
       } else {
-        cwise_min_sum += std::min(it_a->second, it_b->second); 
-        cwise_max_sum += std::max(it_a->second, it_b->second); 
+        cwise_min_sum += std::min(it_a->second, it_b->second);
+        cwise_max_sum += std::max(it_a->second, it_b->second);
         ++it_a, ++it_b;
       }
     }
 
     while(it_a != a.end()) {
-      cwise_max_sum += it_a->second; 
-      ++it_a; 
+      cwise_max_sum += it_a->second;
+      ++it_a;
     }
 
     while(it_b != b.end()) {
-      cwise_max_sum += it_b->second; 
-      ++it_b; 
+      cwise_max_sum += it_b->second;
+      ++it_b;
     }
-    
-    double similarity = cwise_min_sum / cwise_max_sum; 
+
+    double similarity = cwise_min_sum / cwise_max_sum;
     return 1 - similarity;
   }
 
@@ -398,7 +398,7 @@ struct levenshtein final : public distance_metric {
     // For each letter in the shorter string...
     for (size_t i = 0; i < len_s; i++) {
       v1[0] = i + 1;
-      
+
       // Fill in the second row
       for (size_t j = 0; j < len_t; j++) {
         cost = (s[i] == t[j]) ? 0 : 1;
@@ -466,11 +466,11 @@ std::shared_ptr<distance_metric> inline distance_metric::make_distance_metric(
 
 std::shared_ptr<distance_metric> inline distance_metric::make_dist_instance(
   const std::string& dist_name) {
-  
+
   std::shared_ptr<distance_metric> dist_ptr;
 
-  if (dist_name == "euclidean") 
-    dist_ptr.reset(new euclidean); 
+  if (dist_name == "euclidean")
+    dist_ptr.reset(new euclidean);
   else if(dist_name == "squared_euclidean")
     dist_ptr.reset(new squared_euclidean);
   else if(dist_name == "gaussian_kernel")

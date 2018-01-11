@@ -9,9 +9,9 @@ from __future__ import absolute_import as _
 import sys
 if sys.version_info.major >= 3:
     import subprocess as commands
-else: 
+else:
     import commands
-    
+
 import json
 import logging
 import os
@@ -33,7 +33,7 @@ elif sys.platform == 'darwin':
     restricted_place = '/System'
 
 if sys.version_info.major >= 3:
-    unichr = chr    
+    unichr = chr
 
 def _test_save_load_object_helper(testcase, obj, path):
     """
@@ -54,7 +54,7 @@ def _test_save_load_object_helper(testcase, obj, path):
             testcase.assertCountEqual(x, y)
         else:
             testcase.assertItemsEqual(x, y)
-                
+
     if isinstance(obj, SGraph):
         obj.save(path + ".graph")
         newobj = load_graph(path + ".graph")

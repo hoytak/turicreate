@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-CompletedMultipartUpload::CompletedMultipartUpload() : 
+CompletedMultipartUpload::CompletedMultipartUpload() :
     m_partsHasBeenSet(false)
 {
 }
 
-CompletedMultipartUpload::CompletedMultipartUpload(const XmlNode& xmlNode) : 
+CompletedMultipartUpload::CompletedMultipartUpload(const XmlNode& xmlNode) :
     m_partsHasBeenSet(false)
 {
   *this = xmlNode;

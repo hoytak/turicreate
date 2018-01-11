@@ -12,20 +12,20 @@ namespace CoreML {
 
 enum class ResultType {
     NO_ERROR,
-    
+
     // Feature type of transform doesn't match target type of a prior
     // transform, i.e. one-hot encoding the output of a linear regressor.
     TYPE_MISMATCH,
-    
+
     // Feature type of a transform violates invariant type conditions,
     // i.e. passing a dictionary to a linear regressor.
     FEATURE_TYPE_INVARIANT_VIOLATION,
-    
+
     // File I/O errors
     UNABLE_TO_OPEN_FILE,
     FAILED_TO_SERIALIZE,
     FAILED_TO_DESERIALIZE,
-    
+
     // Invalid protobuf file (internally inconsistent)
     UNSUPPORTED_COMPATIBILITY_VERSION,
     UNSUPPORTED_FEATURE_TYPE_FOR_MODEL_TYPE,
@@ -45,9 +45,9 @@ class EXPORT Result {
     std::string m_message;
 
   public:
-    Result(); 
+    Result();
     bool good() const;
-    Result(ResultType type, const std::string& message); 
+    Result(ResultType type, const std::string& message);
     const std::string& message() const;
     const ResultType& type() const;
 
@@ -60,7 +60,7 @@ class EXPORT Result {
         const std::vector<FeatureType>& allowed,
         FeatureType actual);
 
-    
+
     bool operator==(const Result& other) const;
     bool operator!=(const Result& other) const;
 };
@@ -68,10 +68,10 @@ class EXPORT Result {
 
 // TODO -- Should we make this throw a C++ exception instead of result type?
 
-/* 
+/*
  * A convenience macro to pass results onto the caller. Useful when a function
  * both returns a Result and calls other functions that return a Result, and
- * the desired behavior is an early exit in the case of a failure. 
+ * the desired behavior is an early exit in the case of a failure.
 */
 #define HANDLE_RESULT_AND_RETURN_ON_ERROR(EXPR)                                \
   {                                                                            \

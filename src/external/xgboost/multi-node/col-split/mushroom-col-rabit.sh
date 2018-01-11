@@ -19,7 +19,7 @@ python splitsvm.py ../../demo/data/agaricus.txt.train train $k
 ../../subtree/rabit/tracker/rabit_demo.py -n $k ../../xgboost mushroom-col.conf dsplit=col
 
 # the model can be directly loaded by single machine xgboost solver, as usuall
-../../xgboost mushroom-col.conf task=dump model_in=0002.model fmap=../../demo/data/featmap.txt name_dump=dump.nice.$k.txt 
+../../xgboost mushroom-col.conf task=dump model_in=0002.model fmap=../../demo/data/featmap.txt name_dump=dump.nice.$k.txt
 
 # run for one round, and continue training
 ../../subtree/rabit/tracker/rabit_demo.py -n $k  ../../xgboost mushroom-col.conf dsplit=col num_round=1

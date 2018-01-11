@@ -70,13 +70,13 @@ void ml_data::fill(const sframe& raw_data,
                    bool immutable_metadata,
                    ml_missing_value_action mva) {
 
-  fill(raw_data, {0, raw_data.num_rows()}, target_column_name, 
+  fill(raw_data, {0, raw_data.num_rows()}, target_column_name,
        mode_overrides, immutable_metadata, mva);
 }
 
 
 void ml_data::fill(const sframe& raw_data,
-                   const std::pair<size_t, size_t>& row_bounds, 
+                   const std::pair<size_t, size_t>& row_bounds,
                    const std::string& target_column_name,
                    const column_mode_map mode_overrides,
                    bool immutable_metadata,
@@ -99,15 +99,15 @@ void ml_data::fill(const sframe& raw_data,
     ASSERT_MSG(false, "missing_value_action impute not allowed on initial fill.");
   }
 
-  ASSERT_LE(row_bounds.first, row_bounds.second); 
+  ASSERT_LE(row_bounds.first, row_bounds.second);
   ASSERT_LE(row_bounds.second, raw_data.num_rows());
 
-  
-  bool empty_incoming_data = (row_bounds.second == row_bounds.first); 
+
+  bool empty_incoming_data = (row_bounds.second == row_bounds.first);
 
   ////////////////////////////////////////////////////////////////////////////////
   // Step 3: Set up the row start and end.  These are in reference to
-  // the seen ml_data, not the raw_sframe. 
+  // the seen ml_data, not the raw_sframe.
 
   _row_start            = 0;
   _row_end              = row_bounds.second - row_bounds.first;
@@ -367,7 +367,7 @@ void ml_data::_fill_data_blocks(const sframe& raw_data,
   const size_t num_rows = row_bounds.second - row_bounds.first;
   const size_t row_lb = row_bounds.first;
   const size_t row_ub = row_bounds.second;
-  
+
 
   ////////////////////////////////////////////////////////////////////////////////
   // Step 3.1: Check for an empty sframe.  In this case, just clear
@@ -659,25 +659,25 @@ void ml_data::_setup_untranslated_columns(const sframe& original_data, size_t ro
     }
   }
 
-  // Now, we need to prune those columns to the correct row 
-  
+  // Now, we need to prune those columns to the correct row
+
   if(row_lb != 0 || row_ub != original_data.num_rows()) {
 
-    size_t num_segments = thread::cpu_count(); 
-    
+    size_t num_segments = thread::cpu_count();
+
     std::vector<std::shared_ptr<sarray<flexible_type>::reader_type> > column_readers
         (untranslated_columns.size());
-    
+
     for(size_t i = 0; i < untranslated_columns.size(); ++i) {
       column_readers[i] = untranslated_columns[i]->get_reader();
       untranslated_columns[i].reset(new sarray<flexible_type>);
       untranslated_columns[i]->open_for_write(num_segments);
     }
 
-    // Now, copy them all out there. 
+    // Now, copy them all out there.
     parallel_for(0, num_segments * untranslated_columns.size(), [&](size_t idx) {
 
-        size_t col_idx = idx / num_segments; 
+        size_t col_idx = idx / num_segments;
         size_t segment_idx = idx % num_segments;
 
         size_t row_start = row_lb + ((row_ub - row_lb) * segment_idx) / num_segments;
@@ -687,7 +687,7 @@ void ml_data::_setup_untranslated_columns(const sframe& original_data, size_t ro
 
         std::vector<flexible_type> buffer;
         buffer.reserve(100);
-        
+
         for(size_t i = row_start; i < row_end; i += 100) {
 
           size_t n_read = column_readers[col_idx]->read_rows(i, i + 100, buffer);

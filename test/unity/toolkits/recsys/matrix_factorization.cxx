@@ -254,7 +254,7 @@ struct regressions  {
 
   void test_sgd_regularization_oddity() {
 
-    // The side column exactly predicts the target column; 
+    // The side column exactly predicts the target column;
     sframe obs_data = make_testing_sframe( {"user", "item", "side", "target"},
                                            { {10, 20, 1,  1},
                                              {10, 21, 3,  3},
@@ -268,8 +268,8 @@ struct regressions  {
                                              {13, 20, 2,  2},
                                              {13, 21, 10, 10},
                                                  // This one is 23, so each user has one unrated item
-                                             {13, 23, 10, 10}, 
-                                                         
+                                             {13, 23, 10, 10},
+
                                              {10, 20, -1,  -1},
                                              {10, 21, -3,  -3},
                                              {10, 22, -8,  -8},
@@ -295,11 +295,11 @@ struct regressions  {
     opts["target"] = "target";
     opts["num_factors"] = 0;
     opts["max_iterations"] = 1000;
-    opts["sgd_convergence_threshold"] = 0; 
+    opts["sgd_convergence_threshold"] = 0;
     opts["linear_regularization"] = 0;
     opts["regularization"] = 0;
     opts["sgd_step_size"] = 0;
-    
+
     model->init_options(opts);
 
     ////////////////////////////////////////////////////////////
@@ -308,16 +308,16 @@ struct regressions  {
     // A trick to make sure that things are run single threaded and
     // are then deterministic.
     parallel_for(size_t(0), size_t(16), [&](size_t i) {
-        if(i == 0) 
+        if(i == 0)
           model->setup_and_train(obs_data);
       });
-      
-    // Now with side data. 
+
+    // Now with side data.
     // The side column exactly predicts the target column;
     {
       sframe res_back = model->predict(model->create_ml_data(obs_data));
 
-      std::cerr << res_back.column_names() << std::endl; 
+      std::cerr << res_back.column_names() << std::endl;
 
       std::vector<double> true_scores = testing_extract_column<double>(obs_data.select_column("target"));
       std::vector<double> pred_scores = testing_extract_column<double>(res_back.select_column(0));
@@ -329,7 +329,7 @@ struct regressions  {
         TS_ASSERT_DELTA(true_scores[i], pred_scores[i], 0.05);
     }
   }
-  
+
 };
 
 BOOST_FIXTURE_TEST_SUITE(_matrix_factorization_tests, matrix_factorization_tests)

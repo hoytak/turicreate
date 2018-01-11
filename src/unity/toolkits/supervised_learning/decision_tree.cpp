@@ -13,26 +13,26 @@ namespace xgboost {
 
 
 /**
- * Init the GLC options manager. 
+ * Init the GLC options manager.
  *
  * \param[in,out] options  GLC options manager
  */
 void init_decision_tree_common_options(option_manager &options){
   options.create_integer_option(
-      "max_depth", 
-      "The maximum depth of individual trees", 
+      "max_depth",
+      "The maximum depth of individual trees",
       6,
       1,
       std::numeric_limits<int>::max(),
-      false); 
+      false);
 
   options.create_real_option(
-      "min_child_weight", 
+      "min_child_weight",
       "Minimum weight required on the leaf nodes",
       0.1,
       0.0,
       std::numeric_limits<float>::max(),
-      false); 
+      false);
 
   options.create_real_option(
       "min_loss_reduction",
@@ -40,15 +40,15 @@ void init_decision_tree_common_options(option_manager &options){
       0.0,
       0.0,
       std::numeric_limits<float>::max(),
-      false); 
+      false);
 
   options.create_integer_option(
-      "random_seed", 
-      "Seed for row and column subselection", 
+      "random_seed",
+      "Seed for row and column subselection",
       flex_undefined(),
       std::numeric_limits<int>::min() + 1, // yay! Windows!
       std::numeric_limits<int>::max(),
-      false); 
+      false);
 
   options.create_flexible_type_option(
       "metric",
@@ -58,7 +58,7 @@ void init_decision_tree_common_options(option_manager &options){
 }
 
 /**
- * Init the XGboost options manager. 
+ * Init the XGboost options manager.
  *
  * \param[in] options  GLC options manager
  * \param[in,out] booster  XGBoost booster type
@@ -79,7 +79,7 @@ void set_xgboost_decision_tree_common_options(
         booster_.SetParam("seed", value.c_str());
       }
     } else {
-      booster_.SetParam(name.c_str(), value.c_str());    
+      booster_.SetParam(name.c_str(), value.c_str());
     }
   }
 }
@@ -120,15 +120,15 @@ void decision_tree_regression::init_options(
   add_or_update_state(flexmap_to_varmap(options.current_option_values()));
 }
 
-void decision_tree_regression::export_to_coreml(const std::string& filename) { 
-  
-  std::map<std::string, flexible_type> context = { 
-    {"model_type", "decision_tree"}, 
-    {"version", get_version()}, 
-    {"class", name()}, 
+void decision_tree_regression::export_to_coreml(const std::string& filename) {
+
+  std::map<std::string, flexible_type> context = {
+    {"model_type", "decision_tree"},
+    {"version", get_version()},
+    {"class", name()},
     {"short_description", "Decision Tree Regression model."}};
 
-  this->_export_xgboost_model(filename, false, true, context); 
+  this->_export_xgboost_model(filename, false, true, context);
 }
 
 /**
@@ -139,12 +139,12 @@ void decision_tree_regression::export_to_coreml(const std::string& filename) {
 /**
  * Init function common to all regression inits.
  */
-void decision_tree_classifier::model_specific_init(const ml_data& data, 
+void decision_tree_classifier::model_specific_init(const ml_data& data,
                                                    const ml_data& valid_data){
   xgboost_model::model_specific_init(data, valid_data);
   // Update the model
   state["num_classes"] = this->ml_mdata->target_index_size();
-  state["num_examples_per_class"] = 
+  state["num_examples_per_class"] =
              to_variant(supervised::get_num_examples_per_class(this->ml_mdata));
 
 }
@@ -190,7 +190,7 @@ void decision_tree_classifier::init_options(
     "class_weights",
     "Weights (during training) assigned to each class.",
     flex_undefined(),
-    true); 
+    true);
 
   init_decision_tree_common_options(options);
   options.set_options(_opts);
@@ -198,15 +198,15 @@ void decision_tree_classifier::init_options(
 
 }
 
-void decision_tree_classifier::export_to_coreml(const std::string& filename) { 
-  
-  std::map<std::string, flexible_type> context = { 
-    {"model_type", "decision_tree"}, 
-    {"version", std::to_string(get_version())}, 
-    {"class", name()}, 
+void decision_tree_classifier::export_to_coreml(const std::string& filename) {
+
+  std::map<std::string, flexible_type> context = {
+    {"model_type", "decision_tree"},
+    {"version", std::to_string(get_version())},
+    {"class", name()},
     {"short_description", "Decision Tree classification model."}};
 
-  this->_export_xgboost_model(filename, true, true, context); 
+  this->_export_xgboost_model(filename, true, true, context);
 }
 
 

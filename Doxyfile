@@ -847,7 +847,7 @@ EXCLUDE_PATTERNS       = */cuckoohash_util.hh \
 
 EXCLUDE_SYMBOLS        = turi::archive_detail::* \
                          turi::dc_impl::* \
-                         turi::_* 
+                         turi::_*
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or directories
 # that contain example code fragments that are included (see the \include

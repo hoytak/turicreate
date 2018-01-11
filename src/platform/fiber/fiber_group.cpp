@@ -8,7 +8,7 @@
 #include <logger/assertions.hpp>
 namespace turi {
 
-void fiber_group::invoke(const boost::function<void (void)>& spawn_function, 
+void fiber_group::invoke(const boost::function<void (void)>& spawn_function,
                          fiber_group* group) {
   try {
     spawn_function();
@@ -45,9 +45,9 @@ void fiber_group::launch(const boost::function<void (void)> &spawn_function) {
 void fiber_group::launch(const boost::function<void (void)> &spawn_function,
                          affinity_type worker_affinity) {
   increment_running_counter();
-  fiber_control::get_instance().launch(boost::bind(invoke, spawn_function, this), 
+  fiber_control::get_instance().launch(boost::bind(invoke, spawn_function, this),
                                        stacksize,
-                                       worker_affinity);  
+                                       worker_affinity);
 }
 
 void fiber_group::launch(const boost::function<void (void)> &spawn_function,
@@ -55,9 +55,9 @@ void fiber_group::launch(const boost::function<void (void)> &spawn_function,
   increment_running_counter();
   fiber_group::affinity_type affinity;
   affinity.set_bit(worker_affinity);
-  fiber_control::get_instance().launch(boost::bind(invoke, spawn_function, this), 
+  fiber_control::get_instance().launch(boost::bind(invoke, spawn_function, this),
                                        stacksize,
-                                       affinity);  
+                                       affinity);
 }
 
 
@@ -80,4 +80,3 @@ void fiber_group::join() {
 }
 
 } // namespace turi
-

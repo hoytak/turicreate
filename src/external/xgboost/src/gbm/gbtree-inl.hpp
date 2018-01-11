@@ -16,7 +16,7 @@
 #include <xgboost/src/tree/updater.h>
 #include <xgboost/src/tree/model.h>
 
-// GLC parallel lambda premitive 
+// GLC parallel lambda premitive
 #include <parallel/lambda_omp.hpp>
 #include <parallel/pthread_tools.hpp>
 

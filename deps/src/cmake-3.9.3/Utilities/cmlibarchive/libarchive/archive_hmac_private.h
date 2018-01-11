@@ -87,7 +87,7 @@ typedef int archive_hmac_sha1_ctx;
 #define archive_hmac_sha1_update(ctx, data, data_len)\
 	__archive_hmac.__hmac_sha1_update(ctx, data, data_len)
 #define archive_hmac_sha1_final(ctx, out, out_len)\
-  	__archive_hmac.__hmac_sha1_final(ctx, out, out_len)
+	__archive_hmac.__hmac_sha1_final(ctx, out, out_len)
 #define archive_hmac_sha1_cleanup(ctx)\
 	__archive_hmac.__hmac_sha1_cleanup(ctx)
 

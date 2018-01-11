@@ -17,10 +17,10 @@ namespace cppipc {
  * across a communication link.
  *
  * The object_proxy object internally maintains an object ID which identifies
- * an object on the other side of a communication link established by the 
+ * an object on the other side of a communication link established by the
  * comm_client. The object_proxy is templatized over a type T which must have
- * an identical object interface as the remote object. T must also provide the 
- * registration callbacks which match the registration callbacks on the remote 
+ * an identical object interface as the remote object. T must also provide the
+ * registration callbacks which match the registration callbacks on the remote
  * end. For that reason, it is easiest if T defines an interface and implements
  * the register callbacks. And the remote object then inherits from T.
  *
@@ -35,7 +35,7 @@ namespace cppipc {
  * };
  * \endcode
  *
- * We implement a proxy object which has the object_proxy as a member, and 
+ * We implement a proxy object which has the object_proxy as a member, and
  * inherits from the object_base. Each function call is then forwarded to
  * the remote machine.
  *
@@ -45,7 +45,7 @@ namespace cppipc {
  *   cppipc::object_proxy<object_base> proxy;
  *
  *   // proxy must be provided with the comm_client object on construction
- *   test_object_proxy(cppipc::comm_client& comm):proxy(comm){ } 
+ *   test_object_proxy(cppipc::comm_client& comm):proxy(comm){ }
  *
  *   int add(int a, int b) {
  *     // forward the call to the remote machine
@@ -64,15 +64,15 @@ class object_proxy {
     * specified, and set_object_id() must be called to set the remote object ID.
     *
     * \param comm The comm client object to use for communication
-    * \param auto_create If true, will create the remote object on 
+    * \param auto_create If true, will create the remote object on
     *                    construction of the object proxy.
     * \param object_id   The object ID to use in the proxy. Only valid when
     *                    auto_create is false.
     */
-  object_proxy(comm_client& comm, 
-               bool auto_create = true, 
+  object_proxy(comm_client& comm,
+               bool auto_create = true,
                size_t object_id = (size_t)(-1)):
-      comm(comm), 
+      comm(comm),
       remote_object_id(object_id) {
     T::__register__(comm);
     if (auto_create) remote_object_id = comm.make_object(T::__get_type_name__());
@@ -145,7 +145,7 @@ class object_proxy {
    * An exception is raised of type reply_status if there is an error.
    */
   template <typename MemFn, typename... Args>
-  typename detail::member_function_return_type<MemFn>::type 
+  typename detail::member_function_return_type<MemFn>::type
   call(MemFn f, const Args&... args) {
     return comm.call(remote_object_id, f, args...);
   }

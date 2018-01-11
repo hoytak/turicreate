@@ -104,16 +104,16 @@ static inline bool ml_testing_equals(const flexible_type& v1, const flexible_typ
         for(size_t i = 0; i < v2.size(); ++i) {
           if(v2[i] != 0) return false;
         }
-        return true; 
+        return true;
       } else if(v2.size() == 0) {
         for(size_t i = 0; i < v1.size(); ++i) {
           if(v1[i] != 0) return false;
         }
-        return true; 
+        return true;
       }
       return false;
     }
-      
+
     default:
       return v2 == v1;
 

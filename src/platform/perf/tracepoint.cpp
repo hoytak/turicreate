@@ -50,4 +50,3 @@ trace_count::~trace_count() {
 }
 
 } // namespace turi
-

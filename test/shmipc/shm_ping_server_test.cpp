@@ -31,13 +31,13 @@ int main(int argc, char** argv) {
   }
   std::cout << "Connected" << std::endl;
   char *c = nullptr;
-  size_t len = 0;  
+  size_t len = 0;
   while(1) {
     size_t receivelen = 0;
     bool ok = server.receive_direct(&c, &len, receivelen, 10);
     if (receivelen >= 3) {
       if (strncmp(c, "end", 3) == 0) break;
-    } 
+    }
     server.send(c, receivelen);
   }
 }

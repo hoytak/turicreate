@@ -43,7 +43,7 @@ criteria for deciding when training data are in the "neighborhood" of a
 prediction point.  This is done by setting two constraints:
 
 1. `radius` - the maximum distance a training example can be from the prediction
-   point and still be considered a neighbor, and 
+   point and still be considered a neighbor, and
 
 2. `max_neighbors` - the maximum number of neighbors for the prediction point.
    If there are more points within `radius` of the prediction point, the closest
@@ -82,9 +82,9 @@ distance functions. To avoid this we standardize the features before
 creating the model.
 
 ```python
-numeric_features = ['user_avg_stars', 
-                    'business_avg_stars', 
-                    'user_review_count', 
+numeric_features = ['user_avg_stars',
+                    'business_avg_stars',
+                    'user_review_count',
                     'business_review_count']
 
 for ftr in numeric_features:

@@ -29,12 +29,12 @@ namespace S3
 namespace Model
 {
 
-CORSConfiguration::CORSConfiguration() : 
+CORSConfiguration::CORSConfiguration() :
     m_cORSRulesHasBeenSet(false)
 {
 }
 
-CORSConfiguration::CORSConfiguration(const XmlNode& xmlNode) : 
+CORSConfiguration::CORSConfiguration(const XmlNode& xmlNode) :
     m_cORSRulesHasBeenSet(false)
 {
   *this = xmlNode;

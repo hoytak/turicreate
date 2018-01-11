@@ -1,10 +1,10 @@
 /*
- Copyright (c) 2014 by Contributors 
+ Copyright (c) 2014 by Contributors
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-    
+
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
@@ -35,7 +35,7 @@ import org.dmlc.xgboost4j.IObjective;
  */
 public class Trainer {
     private static final Log logger = LogFactory.getLog(Trainer.class);
-    
+
     /**
      * Train a booster with given parameters.
      * @param params Booster params.
@@ -46,23 +46,23 @@ public class Trainer {
      * @param eval customized evaluation (set to null if not used)
      * @return trained booster
      */
-    public static Booster train(Iterable<Entry<String, Object>> params, DMatrix dtrain, int round, 
+    public static Booster train(Iterable<Entry<String, Object>> params, DMatrix dtrain, int round,
             Iterable<Entry<String, DMatrix>> watchs, IObjective obj, IEvaluation eval) throws XGBoostError {
-        
+
         //collect eval matrixs
         String[] evalNames;
         DMatrix[] evalMats;
         List<String> names = new ArrayList<>();
         List<DMatrix> mats = new ArrayList<>();
-        
+
         for(Entry<String, DMatrix> evalEntry : watchs) {
             names.add(evalEntry.getKey());
             mats.add(evalEntry.getValue());
         }
-        
+
         evalNames = names.toArray(new String[names.size()]);
         evalMats = mats.toArray(new DMatrix[mats.size()]);
-        
+
         //collect all data matrixs
         DMatrix[] allMats;
         if(evalMats!=null && evalMats.length>0) {
@@ -74,10 +74,10 @@ public class Trainer {
             allMats = new DMatrix[1];
             allMats[0] = dtrain;
         }
-        
+
         //initialize booster
         Booster booster = new Booster(params, allMats);
-        
+
         //begin to train
         for(int iter=0; iter<round; iter++) {
             if(obj != null) {
@@ -85,7 +85,7 @@ public class Trainer {
             } else {
                 booster.update(dtrain, iter);
             }
-            
+
             //evaluation
             if(evalMats!=null && evalMats.length>0) {
                 String evalInfo;
@@ -100,7 +100,7 @@ public class Trainer {
         }
         return booster;
     }
-    
+
     /**
      * Cross-validation with given paramaters.
      * @param params Booster params.
@@ -120,12 +120,12 @@ public class Trainer {
             for(CVPack cvPack : cvPacks) {
                 if(obj != null) {
                     cvPack.update(i, obj);
-                } 
+                }
                 else {
                     cvPack.update(i);
                 }
             }
-            
+
             for(int j=0; j<cvPacks.length; j++) {
                 if(eval != null) {
                     results[j] = cvPacks[j].eval(i, eval);
@@ -134,13 +134,13 @@ public class Trainer {
                     results[j] = cvPacks[j].eval(i);
                 }
             }
-            
+
             evalHist[i] = aggCVResults(results);
             logger.info(evalHist[i]);
         }
         return evalHist;
     }
-    
+
     /**
      * make an n-fold array of CVPack from random indices
      * @param data original data
@@ -175,7 +175,7 @@ public class Trainer {
                     }
                 }
             }
-            
+
             DMatrix dtrain = data.slice(trainSlice);
             DMatrix dtest = data.slice(testSlice);
             CVPack cvPack = new CVPack(dtrain, dtest, params);
@@ -187,10 +187,10 @@ public class Trainer {
             }
             cvPacks[i] = cvPack;
         }
-        
+
         return cvPacks;
     }
-    
+
     private static List<Integer> genRandPermutationNums(int start, int end) {
         List<Integer> samples = new ArrayList<>();
         for(int i=start; i<end; i++) {
@@ -199,7 +199,7 @@ public class Trainer {
         Collections.shuffle(samples);
         return samples;
     }
-    
+
     /**
      * Aggregate cross-validation results.
      * @param results eval info from each data sample
@@ -220,7 +220,7 @@ public class Trainer {
                 cvMap.get(key).add(value);
             }
         }
-        
+
         for(String key : cvMap.keySet()) {
             float value = 0f;
             for(Float tvalue : cvMap.get(key)) {
@@ -229,7 +229,7 @@ public class Trainer {
             value /= cvMap.get(key).size();
             aggResult += String.format("\tcv-%s:%f", key, value);
         }
-        
+
         return aggResult;
     }
 }

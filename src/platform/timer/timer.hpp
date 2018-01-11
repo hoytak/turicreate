@@ -16,7 +16,7 @@
 
 namespace turi {
   /**
-   * \ingroup util 
+   * \ingroup util
    *
    * \brief A simple class that can be used for benchmarking/timing up
    * to microsecond resolution.
@@ -25,11 +25,11 @@ namespace turi {
    * =================
    *
    * The timer is used by calling \ref turi::timer::start and then
-   * by getting the current time since start by calling 
+   * by getting the current time since start by calling
    * \ref turi::timer::current_time.
-   * 
+   *
    * For example:
-   * 
+   *
    * \code
    * #include <timer/timer.hpp>
    *
@@ -37,7 +37,7 @@ namespace turi {
    * turi::timer timer;
    * timer.start();
    * // do something
-   * std::cout << "Elapsed time: " << timer.current_time() << std::endl; 
+   * std::cout << "Elapsed time: " << timer.current_time() << std::endl;
    * \endcode
    *
    * Sleeping
@@ -61,21 +61,21 @@ namespace turi {
     /**
      * \brief The internal start time for this timer object
      */
-    timeval start_time_;   
+    timeval start_time_;
   public:
     /**
      * \brief The timer starts on construction but can be restarted by
      * calling \ref turi::timer::start.
      */
     inline timer() { start(); }
-    
+
     /**
      * \brief Reset the timer.
      */
     inline void start() { gettimeofday(&start_time_, NULL); }
-    
-    /** 
-     * \brief Returns the elapsed time in seconds since 
+
+    /**
+     * \brief Returns the elapsed time in seconds since
      * \ref turi::timer::start was last called.
      *
      * @return time in seconds since \ref turi::timer::start was called.
@@ -83,16 +83,16 @@ namespace turi {
     inline double current_time() const {
       timeval current_time;
       gettimeofday(&current_time, NULL);
-      double answer = 
+      double answer =
        // (current_time.tv_sec + ((double)current_time.tv_usec)/1.0E6) -
        // (start_time_.tv_sec + ((double)start_time_.tv_usec)/1.0E6);
-        (double)(current_time.tv_sec - start_time_.tv_sec) + 
+        (double)(current_time.tv_sec - start_time_.tv_sec) +
         ((double)(current_time.tv_usec - start_time_.tv_usec))/1.0E6;
        return answer;
     } // end of current_time
 
-    /** 
-     * \brief Returns the elapsed time in milliseconds since 
+    /**
+     * \brief Returns the elapsed time in milliseconds since
      * \ref turi::timer::start was last called.
      *
      * @return time in milliseconds since \ref turi::timer::start was called.
@@ -106,34 +106,34 @@ namespace turi {
     static double sec_of_day() {
       timeval current_time;
       gettimeofday(&current_time, NULL);
-      double answer = 
+      double answer =
         (double)current_time.tv_sec + ((double)current_time.tv_usec)/1.0E6;
       return answer;
     } // end of sec_of_day
 
     /**
-     * \brief Returns only the micro-second component of the 
+     * \brief Returns only the micro-second component of the
      * time since the Unix Epoch.
      */
     static size_t usec_of_day() {
       timeval current_time;
       gettimeofday(&current_time, NULL);
-      size_t answer = 
+      size_t answer =
         (size_t)current_time.tv_sec * 1000000 + (size_t)current_time.tv_usec;
       return answer;
     } // end of usec_of_day
 
     /**
      * \brief Returns the time since program start.
-     * 
+     *
      * This value is only updated once every 100ms and is therefore
      * approximate (but fast).
      */
     static float approx_time_seconds();
-    
+
     /**
      * \brief Returns the time since program start.
-     * 
+     *
      * This value is only updated once every 100ms and is therefore
      * approximate (but fast).
      */
@@ -162,8 +162,8 @@ namespace turi {
      */
     static void sleep_ms(size_t sleeplen);
   }; // end of Timer
- 
-  typedef unsigned long long rdtsc_type; 
+
+  typedef unsigned long long rdtsc_type;
 
   /**
    * \ingroup util
@@ -233,12 +233,12 @@ namespace turi {
       return dtime;
     }
   };
-   
+
 
 
 } // end of turi namespace
 
-/** 
+/**
  * Convenience function. Allows you to call "cout << ti" where ti is
  * a timer object and it will print the number of seconds elapsed
  * since ti.start() was called.
@@ -247,4 +247,3 @@ std::ostream&  operator<<(std::ostream& out, const turi::timer& t);
 
 
 #endif
-

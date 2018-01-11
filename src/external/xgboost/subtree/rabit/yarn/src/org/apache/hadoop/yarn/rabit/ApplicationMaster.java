@@ -42,7 +42,7 @@ import org.apache.hadoop.security.UserGroupInformation;
 
 /**
  * application master for allocating resources of rabit client
- * 
+ *
  * @author Tianqi Chen
  */
 public class ApplicationMaster {
@@ -113,7 +113,7 @@ public class ApplicationMaster {
     }
     /**
      * get integer argument from environment variable
-     * 
+     *
      * @param name
      *            name of key
      * @param required
@@ -138,7 +138,7 @@ public class ApplicationMaster {
 
     /**
      * initialize from arguments and command lines
-     * 
+     *
      * @param args
      */
     private void initArgs(String args[]) throws IOException {
@@ -193,7 +193,7 @@ public class ApplicationMaster {
         RegisterApplicationMasterResponse response = this.rmClient
                 .registerApplicationMaster(this.appHostName,
                         this.appTrackerPort, this.appTrackerUrl);
-      
+
         boolean success = false;
         String diagnostics = "";
         try {
@@ -233,7 +233,7 @@ public class ApplicationMaster {
             LOG.info(diagnostics);
         } catch (Exception e) {
             diagnostics = e.toString();
-        } 
+        }
         rmClient.unregisterApplicationMaster(
                 success ? FinalApplicationStatus.SUCCEEDED
                         : FinalApplicationStatus.FAILED, diagnostics,
@@ -244,7 +244,7 @@ public class ApplicationMaster {
 
     /**
      * check if the job finishes
-     * 
+     *
      * @return whether we finished all the jobs
      */
     private synchronized boolean doneAllJobs() {
@@ -253,7 +253,7 @@ public class ApplicationMaster {
 
     /**
      * submit tasks to request containers for the tasks
-     * 
+     *
      * @param tasks
      *            a collection of tasks we want to ask container for
      */
@@ -273,7 +273,7 @@ public class ApplicationMaster {
 
     /**
      * launch the task on container
-     * 
+     *
      * @param container
      *            container to run the task
      * @param task
@@ -361,7 +361,7 @@ public class ApplicationMaster {
 
     /**
      * free the containers that have not yet been launched
-     * 
+     *
      * @param containers
      */
     private synchronized void freeUnusedContainers(
@@ -370,7 +370,7 @@ public class ApplicationMaster {
 
     /**
      * handle method for AMRMClientAsync.CallbackHandler container allocation
-     * 
+     *
      * @param containers
      */
     private synchronized void onContainersAllocated(List<Container> containers) {
@@ -393,7 +393,7 @@ public class ApplicationMaster {
 
     /**
      * start aborting the job
-     * 
+     *
      * @param msg
      *            the fatal message
      */
@@ -418,7 +418,7 @@ public class ApplicationMaster {
 
     /**
      * handle non fatal failures
-     * 
+     *
      * @param cid
      */
     private synchronized void handleFailure(Collection<ContainerId> failed) {
@@ -453,7 +453,7 @@ public class ApplicationMaster {
 
     /**
      * handle method for AMRMClientAsync.CallbackHandler container allocation
-     * 
+     *
      * @param status
      *            list of status
      */

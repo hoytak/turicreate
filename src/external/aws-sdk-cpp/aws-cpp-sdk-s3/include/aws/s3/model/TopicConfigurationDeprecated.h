@@ -41,46 +41,46 @@ namespace Model
 
     void AddToNode(Aws::Utils::Xml::XmlNode& parentNode) const;
 
-    
+
     inline const Aws::String& GetId() const{ return m_id; }
 
-    
+
     inline void SetId(const Aws::String& value) { m_idHasBeenSet = true; m_id = value; }
 
-    
+
     inline void SetId(Aws::String&& value) { m_idHasBeenSet = true; m_id = value; }
 
-    
+
     inline void SetId(const char* value) { m_idHasBeenSet = true; m_id.assign(value); }
 
-    
+
     inline TopicConfigurationDeprecated& WithId(const Aws::String& value) { SetId(value); return *this;}
 
-    
+
     inline TopicConfigurationDeprecated& WithId(Aws::String&& value) { SetId(value); return *this;}
 
-    
+
     inline TopicConfigurationDeprecated& WithId(const char* value) { SetId(value); return *this;}
 
-    
+
     inline const Aws::Vector<Event>& GetEvents() const{ return m_events; }
 
-    
+
     inline void SetEvents(const Aws::Vector<Event>& value) { m_eventsHasBeenSet = true; m_events = value; }
 
-    
+
     inline void SetEvents(Aws::Vector<Event>&& value) { m_eventsHasBeenSet = true; m_events = value; }
 
-    
+
     inline TopicConfigurationDeprecated& WithEvents(const Aws::Vector<Event>& value) { SetEvents(value); return *this;}
 
-    
+
     inline TopicConfigurationDeprecated& WithEvents(Aws::Vector<Event>&& value) { SetEvents(value); return *this;}
 
-    
+
     inline TopicConfigurationDeprecated& AddEvents(const Event& value) { m_eventsHasBeenSet = true; m_events.push_back(value); return *this; }
 
-    
+
     inline TopicConfigurationDeprecated& AddEvents(Event&& value) { m_eventsHasBeenSet = true; m_events.push_back(value); return *this; }
 
     /**

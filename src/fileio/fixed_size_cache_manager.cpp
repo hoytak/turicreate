@@ -20,10 +20,10 @@ namespace fileio {
 /*************************************************************************/
 
   // Construct an in-memory cache block
-  cache_block::cache_block(cache_id_type cache_id, size_t max_capacity, 
+  cache_block::cache_block(cache_id_type cache_id, size_t max_capacity,
                            fixed_size_cache_manager* owning_cache_manager) :
     cache_id(cache_id),
-    owning_cache_manager(owning_cache_manager) { 
+    owning_cache_manager(owning_cache_manager) {
       initialize_memory(max_capacity);
     }
 
@@ -37,13 +37,13 @@ namespace fileio {
       new_capacity = std::min(new_capacity, maximum_capacity);
       size_t current_cache_utilization = owning_cache_manager->get_cache_utilization();
       // will we exceed capacity?
-      if (current_cache_utilization + (new_capacity - capacity) > 
+      if (current_cache_utilization + (new_capacity - capacity) >
           FILEIO_MAXIMUM_CACHE_CAPACITY) {
 
         // resizing will cause us to go over the maximum cache limit
         // try again with the minimal queried size.
         new_capacity = queried_capacity;
-        if (current_cache_utilization + (new_capacity - capacity) > 
+        if (current_cache_utilization + (new_capacity - capacity) >
             FILEIO_MAXIMUM_CACHE_CAPACITY) {
           // yup. we will still exceed capacity. FAIL.
           return false;
@@ -111,7 +111,7 @@ namespace fileio {
         logstream(LOG_DEBUG) << "Deleting cached file " << filename << std::endl;
         delete_temp_file(filename);
       } catch (...) {
-        logstream(LOG_WARNING) << "Failed to delete temporary file: " 
+        logstream(LOG_WARNING) << "Failed to delete temporary file: "
                                << filename << std::endl;
       }
       filename.clear();
@@ -164,24 +164,24 @@ namespace fileio {
       // if we have less than new_max_block_capacity available,
       // give less capacity.
       new_entry_max_capacity = std::min<size_t>(FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE,
-                                                FILEIO_MAXIMUM_CACHE_CAPACITY - 
+                                                FILEIO_MAXIMUM_CACHE_CAPACITY -
                                                 current_utilization);
-    } 
+    }
 
     if (cache_blocks.find(cache_id) == cache_blocks.end()) {
-      logstream(LOG_DEBUG) << "New cache block " << cache_id 
+      logstream(LOG_DEBUG) << "New cache block " << cache_id
                            << " Capacity = " << new_entry_max_capacity << std::endl;
 
       std::shared_ptr<cache_block> block(new cache_block(cache_id, new_entry_max_capacity, this));
       cache_blocks[cache_id] = block;
       return block;
     } else {
-      logstream(LOG_DEBUG) << "Overwrite cache block " << cache_id 
+      logstream(LOG_DEBUG) << "Overwrite cache block " << cache_id
                            << " Capacity = " << new_entry_max_capacity << std::endl;
       // we need to clear the content of the block.
       auto iter = cache_blocks.find(cache_id);
       std::shared_ptr<cache_block> block = iter->second;
-      // if its a pointer. we just reuse it. 
+      // if its a pointer. we just reuse it.
       if (block->is_pointer()) {
         block->initialize_memory(block->maximum_capacity);
       } else {
@@ -235,7 +235,7 @@ namespace fileio {
       }
     }
     if (largest_block) {
-      logstream_ontick(5, LOG_INFO) << "Evicting " << largest_entry_name 
+      logstream_ontick(5, LOG_INFO) << "Evicting " << largest_entry_name
                           << " with size " << current_largest_block_size << std::endl;
       largest_block->write_to_file();
       logstream_ontick(5, LOG_INFO) << "Cache Utilization:" << get_cache_utilization()

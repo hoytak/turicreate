@@ -30,18 +30,18 @@ namespace turi {
   }
   // This forces get_tsd_id to be called prior to main.
   static pthread_key_t __unused_init_keys__(get_tsd_id());
-  
+
   // the combination of the two mechanisms above will force the
   // thread local store to be initialized
   // 1: before main
   // 2: before any other global variables which spawn threads
-  
+
   // END MAGIC =============================================================>
 
 // -----------------------------------------------------------------
-//                 Thread Object Static Members 
+//                 Thread Object Static Members
 // -----------------------------------------------------------------
-  
+
 
   /**
    * Create thread specific data
@@ -75,7 +75,7 @@ namespace turi {
     return *tsd;
   } // end of get thread specific data
 
-  
+
   /**
    * Create thread specific data
    */
@@ -87,10 +87,10 @@ namespace turi {
     }
   } // end destroy the thread specific data
 
-  thread::tls_data::tls_data(size_t thread_id) : thread_id_(thread_id) { 
+  thread::tls_data::tls_data(size_t thread_id) : thread_id_(thread_id) {
     local_data.reset(new boost::unordered_map<size_t, any>);
   }
- 
+
   turi::any& thread::tls_data::operator[](const size_t& id) { return (*local_data)[id]; }
 
   bool thread::tls_data::contains(const size_t& id) const {
@@ -106,7 +106,7 @@ namespace turi {
     void* retval = NULL;
     thread::invoke_args* args = static_cast<thread::invoke_args*>(_args);
     // Create the turicreate thread specific data
-    create_tls_data(args->m_thread_id);    
+    create_tls_data(args->m_thread_id);
     //! Run the users thread code
     try {
       args->spawn_routine();
@@ -120,7 +120,7 @@ namespace turi {
     catch (...) {
       retval = (void*)(new std::string("unknown error"));
     }
-    //! Delete the arguments 
+    //! Delete the arguments
     delete args;
 
     //! Properly kill the thread
@@ -128,9 +128,9 @@ namespace turi {
     return retval;
   } // end of invoke
 
-  
 
-  
+
+
 
   /**
    * This static method joins the invoking thread with the other
@@ -187,7 +187,7 @@ namespace turi {
     assert(0);
 #endif
   } // end of cpu count
-    
+
    /**
      * Allow defining a callback when thread is destroyed.
      * This is needed at least from Java JNI, where we have to detach
@@ -198,17 +198,17 @@ namespace turi {
    void thread::thread_destroy_callback() {
      if (__thr_callback != NULL) __thr_callback();
    }
-   
+
    void thread::set_thread_destroy_callback(void (*callback)()) {
      __thr_callback = callback;
    }
 
 
 // -----------------------------------------------------------------
-//                 Thread Object Public Members 
+//                 Thread Object Public Members
 // -----------------------------------------------------------------
 
-  
+
   void thread::launch(const boost::function<void (void)> &spawn_routine) {
     get_tsd_id();
     ASSERT_FALSE(thread_started);
@@ -220,16 +220,16 @@ namespace turi {
     error = pthread_attr_setstacksize(&attr, m_stack_size);
     ASSERT_TRUE(!error);
     error = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-    ASSERT_TRUE(!error);       
+    ASSERT_TRUE(!error);
     error =
-      pthread_create(&m_p_thread, 
-                     &attr, 
-                     invoke,  
-                     static_cast<void*>(new invoke_args(m_thread_id, 
+      pthread_create(&m_p_thread,
+                     &attr,
+                     invoke,
+                     static_cast<void*>(new invoke_args(m_thread_id,
                                                         spawn_routine)) );
     thread_started = true;
     if(error) {
-      std::cerr << "Major error in thread_group.launch (pthread_create). Error: " 
+      std::cerr << "Major error in thread_group.launch (pthread_create). Error: "
                 << error << std::endl;
       exit(EXIT_FAILURE);
     }
@@ -237,8 +237,8 @@ namespace turi {
     error = pthread_attr_destroy(&attr);
     ASSERT_TRUE(!error);
   }
-  
-  void thread::launch(const boost::function<void (void)> &spawn_routine, 
+
+  void thread::launch(const boost::function<void (void)> &spawn_routine,
                       size_t cpu_id){
       get_tsd_id();
       // if this is not a linux based system simply invoke start and
@@ -260,7 +260,7 @@ namespace turi {
         launch(spawn_routine);
         return;
       }
-      
+
       // fill in the thread attributes
       pthread_attr_t attr;
       int error = 0;
@@ -279,12 +279,12 @@ namespace turi {
 
       pthread_attr_setaffinity_np(&attr, sizeof(cpu_set), &cpu_set);
 #endif
-          
+
       // Launch the thread
-      error = pthread_create(&m_p_thread, 
-                             &attr, 
+      error = pthread_create(&m_p_thread,
+                             &attr,
                              invoke,
-                             static_cast<void*>(new invoke_args(m_thread_id, 
+                             static_cast<void*>(new invoke_args(m_thread_id,
                                                                 spawn_routine)));
       thread_started = true;
       if(error) {
@@ -292,17 +292,17 @@ namespace turi {
         std::cerr << "pthread_create() returned error " << error << std::endl;
         exit(EXIT_FAILURE);
       }
-      
-      
-      
+
+
+
       // destroy the attribute object
       error = pthread_attr_destroy(&attr);
       ASSERT_TRUE(!error);
 #endif
     }
-      
+
   // -----------------------------------------------------------------
-  //                 Thread Group Object Public Members 
+  //                 Thread Group Object Public Members
   // -----------------------------------------------------------------
   // thread group exception forwarding is a little more complicated
   // because it has to be able to catch it on a bunch of threads
@@ -323,20 +323,20 @@ namespace turi {
       group->mut.unlock();
 
   }
-                        
+
 
   void thread_group::launch(const boost::function<void (void)> &spawn_function) {
-    // Create a thread object and launch it. 
+    // Create a thread object and launch it.
     // We do not need to keep a copy of the thread around
     thread local_thread(m_thread_counter++);
     mut.lock();
     threads_running++;
     mut.unlock();
     local_thread.launch(boost::bind(thread_group::invoke, spawn_function, this));
-  } 
+  }
 
 
-  void thread_group::launch(const boost::function<void (void)> &spawn_function, 
+  void thread_group::launch(const boost::function<void (void)> &spawn_function,
                             size_t cpu_id) {
     if (cpu_id == size_t(-1)) {
       launch(spawn_function);
@@ -347,7 +347,7 @@ namespace turi {
     mut.lock();
     threads_running++;
     mut.unlock();
-    local_thread.launch(boost::bind(thread_group::invoke, spawn_function, this), 
+    local_thread.launch(boost::bind(thread_group::invoke, spawn_function, this),
                         cpu_id);
   } // end of launch
 
@@ -355,7 +355,7 @@ namespace turi {
     mut.lock();
     while(threads_running > 0) {
       // if no threads are joining. wait
-      while (joinqueue.empty()) cond.wait(mut);      
+      while (joinqueue.empty()) cond.wait(mut);
       // a thread is joining
       std::pair<pthread_t, const char*> joining_thread = joinqueue.front();
       joinqueue.pop();
@@ -373,9 +373,8 @@ namespace turi {
       }
       mut.lock();
     }
-    mut.unlock();    
+    mut.unlock();
   } // end of join
 
 
 } // end of namespace turi
-

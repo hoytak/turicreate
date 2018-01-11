@@ -17,11 +17,11 @@ namespace turi {
 /**
  * The base class for which all new toolkit classes inherit from.
  *
- * This class implements the class member registration and dispatcher for 
+ * This class implements the class member registration and dispatcher for
  * class member functions and properties.
  *
  * Basically, the class exposes to Python 6 keys:
- * "list_functions" --> returns a dictionary of 
+ * "list_functions" --> returns a dictionary of
  *                      function_name --> array of arg names containing
  *                      all the functions and input keyword arguments of each
  *                      member function.
@@ -47,7 +47,7 @@ namespace turi {
  * "get_docstring" --> The argument must contain the key "__symbol__",
  *                     and this returns a docstring
  *
- * "__uid__" --> Returns a class specific string. This is used to bypass 
+ * "__uid__" --> Returns a class specific string. This is used to bypass
  *               type erasure to model_base.
  */
 class EXPORT toolkit_class_base: public model_base {
@@ -73,7 +73,7 @@ class EXPORT toolkit_class_base: public model_base {
    * Returns a unique identifier for the toolkit class. It can be *any* unique
    * ID. The UID is only used at runtime and is never stored.
    */
-  virtual std::string uid() = 0; 
+  virtual std::string uid() = 0;
 
   /**
    * Serializes the toolkit class. Must save the class to the file format version
@@ -112,7 +112,7 @@ class EXPORT toolkit_class_base: public model_base {
   /**
    * Calls a user defined function
    */
-  virtual variant_type call_function(std::string function, 
+  virtual variant_type call_function(std::string function,
                                      variant_map_type argument);
 
   /**
@@ -120,23 +120,23 @@ class EXPORT toolkit_class_base: public model_base {
    */
   virtual variant_type get_property(std::string property,
                                     variant_map_type argument);
- 
+
   /**
    * Sets a property.
-   */ 
-  virtual variant_type set_property(std::string property, 
+   */
+  virtual variant_type set_property(std::string property,
                                     variant_map_type argument);
 
   virtual std::string get_docstring(std::string symbol);
- 
+
   /**
    * Function implemented by BEGIN_CLASS_MEMBER_REGISTRATION
-   */ 
+   */
   virtual void perform_registration() = 0;
  protected:
   // whether perform registration has been called
   bool registered = false;
-  // a description of all the function arguments. This is returned by 
+  // a description of all the function arguments. This is returned by
   // list_functions()
   std::map<std::string, std::vector<std::string>> m_function_args;
 
@@ -144,16 +144,16 @@ class EXPORT toolkit_class_base: public model_base {
   std::map<std::string, variant_map_type> m_function_default_args;
 
   // The implementation of each function
-  std::map<std::string, 
-      std::function<variant_type(toolkit_class_base*, 
+  std::map<std::string,
+      std::function<variant_type(toolkit_class_base*,
                                  variant_map_type)> > m_function_list;
   // The implementation of each setter function
-  std::map<std::string, 
-      std::function<variant_type(toolkit_class_base*, 
+  std::map<std::string,
+      std::function<variant_type(toolkit_class_base*,
                                  variant_map_type)> > m_set_property_list;
   // The implementation of each getter function
-  std::map<std::string, 
-      std::function<variant_type(toolkit_class_base*, 
+  std::map<std::string,
+      std::function<variant_type(toolkit_class_base*,
                                  variant_map_type)> > m_get_property_list;
   // The docstring for each symbol
   std::map<std::string, std::string> m_docstring;
@@ -161,26 +161,26 @@ class EXPORT toolkit_class_base: public model_base {
   /**
    * Adds a function with the specified name, and argument list.
    */
-  void register_function(std::string fnname, 
+  void register_function(std::string fnname,
                          std::vector<std::string> arguments,
                          std::function<variant_type(toolkit_class_base*, variant_map_type)> fn);
 
   /**
    * Registers default argument values
    */
-  void register_defaults(std::string fnname, 
+  void register_defaults(std::string fnname,
                          const variant_map_type& arguments);
 
   /**
    * Adds a property setter with the specified name.
    */
-  void register_setter(std::string propname, 
+  void register_setter(std::string propname,
                        std::function<variant_type(toolkit_class_base*, variant_map_type)> setfn);
 
   /**
    * Adds a property getter with the specified name.
    */
-  void register_getter(std::string propname, 
+  void register_getter(std::string propname,
                        std::function<variant_type(toolkit_class_base*, variant_map_type)> getfn);
 
   void register_docstring(std::pair<std::string, std::string> fnname_docstring);
@@ -188,4 +188,3 @@ class EXPORT toolkit_class_base: public model_base {
 
 } // namespace turi
 #endif // TURI_UNITY_TOOLKIT_CLASS_BASE_HPP
-

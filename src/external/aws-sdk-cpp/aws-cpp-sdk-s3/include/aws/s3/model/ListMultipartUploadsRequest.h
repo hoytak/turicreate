@@ -39,25 +39,25 @@ namespace Model
 
     void AddQueryStringParameters(Aws::Http::URI& uri) const override;
 
-    
+
     inline const Aws::String& GetBucket() const{ return m_bucket; }
 
-    
+
     inline void SetBucket(const Aws::String& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(Aws::String&& value) { m_bucketHasBeenSet = true; m_bucket = value; }
 
-    
+
     inline void SetBucket(const char* value) { m_bucketHasBeenSet = true; m_bucket.assign(value); }
 
-    
+
     inline ListMultipartUploadsRequest& WithBucket(const Aws::String& value) { SetBucket(value); return *this;}
 
-    
+
     inline ListMultipartUploadsRequest& WithBucket(Aws::String&& value) { SetBucket(value); return *this;}
 
-    
+
     inline ListMultipartUploadsRequest& WithBucket(const char* value) { SetBucket(value); return *this;}
 
     /**
@@ -95,19 +95,19 @@ namespace Model
      */
     inline ListMultipartUploadsRequest& WithDelimiter(const char* value) { SetDelimiter(value); return *this;}
 
-    
+
     inline const EncodingType& GetEncodingType() const{ return m_encodingType; }
 
-    
+
     inline void SetEncodingType(const EncodingType& value) { m_encodingTypeHasBeenSet = true; m_encodingType = value; }
 
-    
+
     inline void SetEncodingType(EncodingType&& value) { m_encodingTypeHasBeenSet = true; m_encodingType = value; }
 
-    
+
     inline ListMultipartUploadsRequest& WithEncodingType(const EncodingType& value) { SetEncodingType(value); return *this;}
 
-    
+
     inline ListMultipartUploadsRequest& WithEncodingType(EncodingType&& value) { SetEncodingType(value); return *this;}
 
     /**

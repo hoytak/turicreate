@@ -208,7 +208,7 @@ struct test_basic_storage  {
                 case 5: {
                   // Translate through the single row use case.
                   const auto& raw_row = ref_data.at(it_idx);
-                  DASSERT_EQ(raw_row.size(), raw_data.num_columns()); 
+                  DASSERT_EQ(raw_row.size(), raw_data.num_columns());
 
                   flex_dict v(raw_row.size());
                   for(size_t i = 0; i < raw_row.size(); ++i) {
@@ -221,7 +221,7 @@ struct test_basic_storage  {
                   row_x = translate_row_to_original(data.metadata(), x);
                   break;
                 }
-                  
+
               }
 
               ASSERT_EQ(row_x.size(), run_string.size());

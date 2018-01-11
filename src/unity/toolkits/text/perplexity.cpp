@@ -29,25 +29,25 @@ namespace text {
  * current implementation of the topic_model class.
  */
 double perplexity(std::shared_ptr<sarray<flexible_type>> dataset,
-                  const std::shared_ptr<sarray<flexible_type>> doc_topic_prob, 
+                  const std::shared_ptr<sarray<flexible_type>> doc_topic_prob,
                   const std::shared_ptr<sarray<flexible_type>> word_topic_prob,
                   const std::shared_ptr<sarray<flexible_type>> vocabulary) {
-  
+
   DASSERT_EQ(dataset->size(), doc_topic_prob->size());
-  
-  // Convert the SArray of vocabulary into std::vector 
+
+  // Convert the SArray of vocabulary into std::vector
   std::vector<flexible_type> vocab = std::vector<flexible_type>();
   vocab.reserve(vocabulary->size());
   auto vocab_reader = vocabulary->get_reader();
   for (size_t seg = 0; seg < vocabulary->num_segments(); ++seg) {
     auto iter = vocab_reader->begin(seg);
-    auto enditer = vocab_reader->end(seg);   
+    auto enditer = vocab_reader->end(seg);
     while (iter != enditer) {
-      DASSERT_EQ(flex_type_enum_to_name((*iter).get_type()), 
+      DASSERT_EQ(flex_type_enum_to_name((*iter).get_type()),
                  flex_type_enum_to_name(flex_type_enum::STRING));
-      
+
       // Create a flex_dict element
-      std::pair<flexible_type, flexible_type> item = 
+      std::pair<flexible_type, flexible_type> item =
           std::make_pair(*iter, 1.0);
 
       vocab.push_back(flex_dict{item});
@@ -65,23 +65,23 @@ double perplexity(std::shared_ptr<sarray<flexible_type>> dataset,
   ml_data d;
   d.fill(dataset_sf);
 
-  // Load the topics SArray into a vector of vectors 
+  // Load the topics SArray into a vector of vectors
   std::vector<std::vector<double>> phi(word_topic_prob->size());
   auto phi_reader = word_topic_prob->get_reader();
   size_t word_id = 0;
   size_t num_topics = 0;
   for (size_t seg = 0; seg < word_topic_prob->num_segments(); ++seg) {
     auto iter = phi_reader->begin(seg);
-    auto enditer = phi_reader->end(seg);   
+    auto enditer = phi_reader->end(seg);
     while (iter != enditer) {
 
-      DASSERT_EQ(flex_type_enum_to_name((*iter).get_type()), 
+      DASSERT_EQ(flex_type_enum_to_name((*iter).get_type()),
                  flex_type_enum_to_name(flex_type_enum::VECTOR));
 
       phi[word_id] = (*iter).get<flex_vec>();
-      
+
       // Assume the number of topics is the length of the first vector.
-      if (word_id == 0) 
+      if (word_id == 0)
         num_topics = phi[word_id].size();
 
       // Throw an error of the length of some vector doesn't match num_topics.
@@ -91,9 +91,9 @@ double perplexity(std::shared_ptr<sarray<flexible_type>> dataset,
       ++word_id;
       ++iter;
     }
-  } 
+  }
 
-  // Prepare to iterate through documents 
+  // Prepare to iterate through documents
   size_t num_segments = thread::cpu_count();
   std::vector<double> llk_per_thread(num_segments);
   std::vector<size_t> num_words_per_thread(num_segments);
@@ -101,27 +101,27 @@ double perplexity(std::shared_ptr<sarray<flexible_type>> dataset,
 
   // Start iterating through documents
   in_parallel([&](size_t thread_idx, size_t num_threads) {
-      
+
     // Prepare to iterate through document topics
     auto theta_iter = theta_reader->begin(thread_idx);
-    auto theta_enditer = theta_reader->end(thread_idx);   
+    auto theta_enditer = theta_reader->end(thread_idx);
 
     // Start iterating through documents
     std::vector<ml_data_entry> x;
     for(auto it = d.get_iterator(thread_idx, num_threads); !it.done(); ++it) {
-    
+
       // Get topic proportions
       const flex_vec& theta_doc = *theta_iter;
       DASSERT_EQ(theta_doc.size(), num_topics);
 
       // Get document data
-      it->fill(x); 
+      it->fill(x);
       for (size_t j = 0; j < x.size(); ++j) {
-     
+
         // Get word index and frequency
         size_t word_id = x[j].index;
         size_t freq = x[j].value;
-  
+
         if (word_id < vocab.size()) {
           // Compute Pr(word | theta, phi)
           double prob = 0;
@@ -142,13 +142,13 @@ double perplexity(std::shared_ptr<sarray<flexible_type>> dataset,
     }
   });
 
-  double llk = std::accumulate(llk_per_thread.begin(), 
+  double llk = std::accumulate(llk_per_thread.begin(),
                                llk_per_thread.end(), 0.0);
-  size_t num_words = std::accumulate(num_words_per_thread.begin(), 
+  size_t num_words = std::accumulate(num_words_per_thread.begin(),
                                      num_words_per_thread.end(), 0.0);
 
   return std::exp(- llk / num_words);
 }
 
-} // text 
+} // text
 } // turicreate

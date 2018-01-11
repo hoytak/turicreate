@@ -27,4 +27,3 @@ int parseconfig(const char *filename,
                 struct Configurable *config);
 
 #endif /* HEADER_CURL_TOOL_PARSECFG_H */
-

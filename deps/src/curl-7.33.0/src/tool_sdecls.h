@@ -150,4 +150,3 @@ typedef enum {
 #include "tool_cfgable.h"
 
 #endif /* HEADER_CURL_TOOL_SDECLS_H */
-

@@ -36,9 +36,9 @@ MODULE_ID("$Id$")
 
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  FIELDTYPE *field_type(const FIELD *field)
-|   
+|
 |   Description   :  Retrieve the associated fieldtype for this field.
 |
 |   Return Values :  Pointer to fieldtype of NULL if none is defined.

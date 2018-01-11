@@ -29,8 +29,8 @@ const Aws::String& EnumParseOverflowContainer::RetrieveOverflow(int hashCode) co
         {
             AWS_LOGSTREAM_DEBUG(LOG_TAG, "Found value " << foundIter->second << " for hash " << hashCode << " from enum overflow container.");
             return foundIter->second;
-        } 
-    }  
+        }
+    }
 
     AWS_LOGSTREAM_ERROR(LOG_TAG, "Could not find a previously stored overflow value for hash " << hashCode << ". This will likely break some requests.");
     return m_emptyString;

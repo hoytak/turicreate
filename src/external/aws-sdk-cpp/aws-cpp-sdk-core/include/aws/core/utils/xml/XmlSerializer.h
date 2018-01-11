@@ -160,7 +160,7 @@ namespace Aws
 
             /**
              * Container for Xml Document as a whole. All nodes have a reference to their parent document. Any changes
-             * you make to the nodes will be reflected here. 
+             * you make to the nodes will be reflected here.
              */
             class AWS_CORE_API XmlDocument
             {
@@ -168,7 +168,7 @@ namespace Aws
                 /**
                  * move document memory
                  */
-                XmlDocument(XmlDocument&& doc); 
+                XmlDocument(XmlDocument&& doc);
                 XmlDocument(const XmlDocument& other) = delete;
 
                 ~XmlDocument();
@@ -187,7 +187,7 @@ namespace Aws
                  */
                 bool WasParseSuccessful() const;
                 /**
-                 * Returns the error message if the call to CreateFromXml* failed. 
+                 * Returns the error message if the call to CreateFromXml* failed.
                  */
                 Aws::String GetErrorMessage() const;
                 /**
@@ -219,4 +219,3 @@ namespace Aws
         } // namespace Xml
     } // namespace Utils
 } // namespace Aws
-

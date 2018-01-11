@@ -20,13 +20,13 @@ namespace turi {
 /**
  * \ingroup fileio
  * \internal
- * s3 file source is used to construct boost iostreams 
+ * s3 file source is used to construct boost iostreams
  */
 class s3_device {
  public: // boost iostream concepts
   typedef char                                          char_type;
-  struct category : 
-      public boost::iostreams::device_tag, 
+  struct category :
+      public boost::iostreams::device_tag,
       public boost::iostreams::multichar_tag,
       public boost::iostreams::closable_tag,
       public boost::iostreams::bidirectional_seekable { };
@@ -45,7 +45,7 @@ class s3_device {
 
   s3_device(const std::string& filename, const bool write = false);
 
-  // Because the device has bidirectional tag, close will be called 
+  // Because the device has bidirectional tag, close will be called
   // twice, one with the std::ios_base::in, followed by out.
   // Only close the file when the close tag matches the actual file type.
   void close(std::ios_base::openmode mode = std::ios_base::openmode());
@@ -60,10 +60,10 @@ class s3_device {
   bool good() const;
 
   /**
-   * Seeks to a different location. 
+   * Seeks to a different location.
    */
-  std::streampos seek(std::streamoff off, 
-                      std::ios_base::seekdir way, 
+  std::streampos seek(std::streamoff off,
+                      std::ios_base::seekdir way,
                       std::ios_base::openmode);
 
   /**

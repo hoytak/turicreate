@@ -1,12 +1,12 @@
 /*
   * Copyright 2010-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-  * 
+  *
   * Licensed under the Apache License, Version 2.0 (the "License").
   * You may not use this file except in compliance with the License.
   * A copy of the License is located at
-  * 
+  *
   *  http://aws.amazon.com/apache2.0
-  * 
+  *
   * or in the "license" file accompanying this file. This file is distributed
   * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
   * express or implied. See the License for the specific language governing
@@ -42,7 +42,7 @@ static const uint32_t HTTP_REQUEST_WRITE_BUFFER_LENGTH = 8192;
 WinHttpSyncHttpClient::WinHttpSyncHttpClient(const ClientConfiguration& config) :
     Base()
 {
-    AWS_LOGSTREAM_INFO(GetLogTag(), "Creating http client with user agent " << config.userAgent << " with max connections " << config.maxConnections 
+    AWS_LOGSTREAM_INFO(GetLogTag(), "Creating http client with user agent " << config.userAgent << " with max connections " << config.maxConnections
         << " request timeout " << config.requestTimeoutMs << ",and connect timeout " << config.connectTimeoutMs);
 
     DWORD winhttpFlags = WINHTTP_ACCESS_TYPE_NO_PROXY;
@@ -182,7 +182,7 @@ bool WinHttpSyncHttpClient::DoQueryHeaders(void* hHttpRequest, std::shared_ptr<S
     wchar_t contentTypeStr[1024];
     dwSize = sizeof(contentTypeStr);
     wmemset(contentTypeStr, 0, static_cast<size_t>(dwSize / sizeof(wchar_t)));
-    
+
     WinHttpQueryHeaders(hHttpRequest, WINHTTP_QUERY_CONTENT_TYPE, nullptr, &contentTypeStr, &dwSize, 0);
     if (contentTypeStr[0] != NULL)
     {
@@ -190,11 +190,11 @@ bool WinHttpSyncHttpClient::DoQueryHeaders(void* hHttpRequest, std::shared_ptr<S
         response->SetContentType(contentStr);
         AWS_LOGSTREAM_DEBUG(GetLogTag(), "Received content type " << contentStr);
     }
-       
+
     BOOL queryResult = false;
     AWS_LOG_DEBUG(GetLogTag(), "Received headers:");
     WinHttpQueryHeaders(hHttpRequest, WINHTTP_QUERY_RAW_HEADERS_CRLF, WINHTTP_HEADER_NAME_BY_INDEX, nullptr, &dwSize, WINHTTP_NO_HEADER_INDEX);
-    
+
     //I know it's ugly, but this is how MSFT says to do it so....
     if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     {
@@ -208,7 +208,7 @@ bool WinHttpSyncHttpClient::DoQueryHeaders(void* hHttpRequest, std::shared_ptr<S
             ss << std::move(headers);
             read = dwSize;
         }
-    } 
+    }
 
     return queryResult == TRUE;
 }

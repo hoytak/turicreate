@@ -12,7 +12,7 @@
 #include "./utils.h"
 #include "./omp.h"
 
-// GLC parallel lambda premitive 
+// GLC parallel lambda premitive
 #include <parallel/lambda_omp.hpp>
 #include <parallel/pthread_tools.hpp>
 

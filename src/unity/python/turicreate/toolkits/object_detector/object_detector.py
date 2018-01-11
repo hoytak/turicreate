@@ -216,7 +216,7 @@ def create(dataset, annotations=None, feature=None, model='darknet-yolo',
     if '_advanced_parameters' in kwargs:
         # Make sure no additional parameters are provided
         new_keys = set(kwargs['_advanced_parameters'].keys())
-        set_keys = set(params.keys()) 
+        set_keys = set(params.keys())
         unsupported = new_keys - set_keys
         if unsupported:
             raise _ToolkitError('Unknown advanced parameters: {}'.format(unsupported))

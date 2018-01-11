@@ -181,4 +181,3 @@ void reply_socket::remove_from_pollset() {
 }
 
 } // namespace libfault
-

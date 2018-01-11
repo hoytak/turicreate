@@ -171,15 +171,15 @@ void random_forest_regression::init_options(
   add_or_update_state(flexmap_to_varmap(options.current_option_values()));
 }
 
-void random_forest_regression::export_to_coreml(const std::string& filename) { 
-  
-  std::map<std::string, flexible_type> context = { 
-    {"model_type", "random_forest"}, 
-    {"version", std::to_string(get_version())}, 
-    {"class", name()}, 
+void random_forest_regression::export_to_coreml(const std::string& filename) {
+
+  std::map<std::string, flexible_type> context = {
+    {"model_type", "random_forest"},
+    {"version", std::to_string(get_version())},
+    {"class", name()},
     {"short_description", "Random Forest Regression model."}};
 
-  this->_export_xgboost_model(filename, false, true, context); 
+  this->_export_xgboost_model(filename, false, true, context);
 }
 
 /**
@@ -248,15 +248,15 @@ void random_forest_classifier::init_options(
 
 }
 
-void random_forest_classifier::export_to_coreml(const std::string& filename) { 
-  
-  std::map<std::string, flexible_type> context = { 
-    {"model_type", "random_forest"}, 
-    {"version", get_version()}, 
-    {"class", name()}, 
+void random_forest_classifier::export_to_coreml(const std::string& filename) {
+
+  std::map<std::string, flexible_type> context = {
+    {"model_type", "random_forest"},
+    {"version", get_version()},
+    {"class", name()},
     {"short_description", "Random Forest Classifier model."}};
 
-  this->_export_xgboost_model(filename, true, true, context); 
+  this->_export_xgboost_model(filename, true, true, context);
 }
 
 

@@ -44,4 +44,3 @@ int
 _archive_set_either_option(struct archive *a,
     const char *m, const char *o, const char *v,
     option_handler use_format_option, option_handler use_filter_option);
-

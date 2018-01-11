@@ -6,7 +6,7 @@
 #include <parallel/lambda_omp.hpp>
 #include <sframe_query_engine/execution/subplan_executor.hpp>
 #include <sframe_query_engine/execution/execution_node.hpp>
-#include <sframe_query_engine/operators/operator_properties.hpp> 
+#include <sframe_query_engine/operators/operator_properties.hpp>
 
 namespace turi { namespace query_eval {
 
@@ -14,7 +14,7 @@ namespace turi { namespace query_eval {
 
 static std::shared_ptr<execution_node> get_executor(
     const std::shared_ptr<planner_node>& p,
-    std::map<std::shared_ptr<planner_node>, 
+    std::map<std::shared_ptr<planner_node>,
              std::shared_ptr<execution_node> >& memo) {
   // See if things are cached; if so, just return that.
   if(memo.count(p)) return memo[p];
@@ -28,14 +28,14 @@ static std::shared_ptr<execution_node> get_executor(
   // Make the operator.
   std::shared_ptr<query_operator> op = planner_node_to_operator(p);
   memo[p] = std::make_shared<execution_node>(op, inputs);
-  return memo[p]; 
+  return memo[p];
 }
 
-// Returns an output sframe which can hold the generated output of the 
-// planner node. The output sframe has been opened for write and must be 
+// Returns an output sframe which can hold the generated output of the
+// planner node. The output sframe has been opened for write and must be
 // written to and closed before it can be read.
 static sframe get_output_sframe_schema(
-    const std::shared_ptr<planner_node>& pnode, 
+    const std::shared_ptr<planner_node>& pnode,
     size_t nsegments = 1,
     std::string target_index_file_location = "",
     std::vector<std::string> column_names = std::vector<std::string>()) {
@@ -59,7 +59,7 @@ static sframe get_output_sframe_schema(
  *  This find the earliest, left-most exception. if simultanous exception
  *  occurs in multiple locations, it will only find the left-most exception)
  */
-static std::exception_ptr 
+static std::exception_ptr
 find_earliest_exception(std::shared_ptr<execution_node> tip,
                         std::set<std::shared_ptr<execution_node>>& visited) {
   if (visited.count(tip)) return std::exception_ptr();
@@ -68,7 +68,7 @@ find_earliest_exception(std::shared_ptr<execution_node> tip,
     auto input = tip->get_input_node(i);
     auto input_exception = find_earliest_exception(input, visited);
     if (input_exception != nullptr) {
-      ret = input_exception; 
+      ret = input_exception;
       break;
     }
   }
@@ -99,7 +99,7 @@ void subplan_executor::generate_to_callback_function(
     if(done)
       break;
   }
-  
+
   // look through the list of all nodes for exceptions
   bool has_exception = false;
   for(auto& nodes: memo) {
@@ -139,9 +139,9 @@ sframe subplan_executor::run(const std::shared_ptr<planner_node>& pnode,
     sframe ret;
     return ret;
   } else {
-    sframe out = get_output_sframe_schema(pnode, 
+    sframe out = get_output_sframe_schema(pnode,
                                           1, // just 1 segment will do
-                                          exec_params.output_index_file); 
+                                          exec_params.output_index_file);
     generate_to_sframe_segment(pnode, out, 0);
     out.close();
     return out;
@@ -152,13 +152,13 @@ std::vector<sframe> subplan_executor::run(
     const std::vector<std::shared_ptr<planner_node>>& stuff_to_run_in_parallel,
     const materialize_options& exec_params) {
 
-  std::vector<sframe> ret(stuff_to_run_in_parallel.size()); 
+  std::vector<sframe> ret(stuff_to_run_in_parallel.size());
 
   parallel_for(0, stuff_to_run_in_parallel.size(), [&](const size_t i) {
       ret[i] = run(stuff_to_run_in_parallel[i], exec_params);
   });
 
-  return ret; 
+  return ret;
 }
 
 sframe subplan_executor::run_concat(

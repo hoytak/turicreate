@@ -5,7 +5,7 @@ make_library(table_printer
     table_printer.cpp
     table_element_printers.cpp
   REQUIRES
-    sframe logger 
+    sframe logger
     EXTERNAL_VISIBILITY
   )
 

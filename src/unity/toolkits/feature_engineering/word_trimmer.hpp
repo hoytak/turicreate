@@ -63,7 +63,7 @@ class EXPORT word_trimmer : public transformer_base {
   /**
    * Initialize the transformer.
    */
-  void init_transformer(const std::map<std::string, 
+  void init_transformer(const std::map<std::string,
                         flexible_type>& _options);
 
   /**
@@ -77,7 +77,7 @@ class EXPORT word_trimmer : public transformer_base {
    * Transform the given data.
    *
    * \param[in] data  (SFrame of data)
-   * 
+   *
    * Python side interface
    * ------------------------
    * This function directly interfaces with "transform" in python.
@@ -88,7 +88,7 @@ class EXPORT word_trimmer : public transformer_base {
 
   /**
    * Fit and transform the given data. Intended as an optimization because
-   * fit and transform are usually always called together. The default 
+   * fit and transform are usually always called together. The default
    * implementaiton calls fit and then transform.
    *
    * \param[in] data  (SFrame of data)
@@ -96,10 +96,10 @@ class EXPORT word_trimmer : public transformer_base {
   gl_sframe fit_transform(gl_sframe data) {
      data.materialize();
      fit(data);
-     return transform(data); 
+     return transform(data);
   }
 
-  
+
   // Functions that all transformers need to register. Can be copied verbatim
   // for other classes.
   // --------------------------------------------------------------------------
@@ -110,10 +110,10 @@ class EXPORT word_trimmer : public transformer_base {
   REGISTER_CLASS_MEMBER_FUNCTION(word_trimmer::transform, "data");
   REGISTER_CLASS_MEMBER_FUNCTION(word_trimmer::get_current_options);
   REGISTER_CLASS_MEMBER_FUNCTION(word_trimmer::list_fields);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options", 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("_get_default_options",
                                      word_trimmer::get_default_options);
-  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get", 
-                                     word_trimmer::get_value_from_state, 
+  REGISTER_NAMED_CLASS_MEMBER_FUNCTION("get",
+                                     word_trimmer::get_value_from_state,
                                      "key");
   END_CLASS_MEMBER_REGISTRATION
 

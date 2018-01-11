@@ -24,13 +24,13 @@ using namespace Aws::Utils::Xml;
 using namespace Aws::Utils;
 using namespace Aws;
 
-ListMultipartUploadsResult::ListMultipartUploadsResult() : 
+ListMultipartUploadsResult::ListMultipartUploadsResult() :
     m_maxUploads(0),
     m_isTruncated(false)
 {
 }
 
-ListMultipartUploadsResult::ListMultipartUploadsResult(const AmazonWebServiceResult<XmlDocument>& result) : 
+ListMultipartUploadsResult::ListMultipartUploadsResult(const AmazonWebServiceResult<XmlDocument>& result) :
     m_maxUploads(0),
     m_isTruncated(false)
 {

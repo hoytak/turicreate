@@ -289,25 +289,25 @@ namespace Model
      */
     inline ListPartsResult& WithIsTruncated(bool value) { SetIsTruncated(value); return *this;}
 
-    
+
     inline const Aws::Vector<Part>& GetParts() const{ return m_parts; }
 
-    
+
     inline void SetParts(const Aws::Vector<Part>& value) { m_parts = value; }
 
-    
+
     inline void SetParts(Aws::Vector<Part>&& value) { m_parts = value; }
 
-    
+
     inline ListPartsResult& WithParts(const Aws::Vector<Part>& value) { SetParts(value); return *this;}
 
-    
+
     inline ListPartsResult& WithParts(Aws::Vector<Part>&& value) { SetParts(value); return *this;}
 
-    
+
     inline ListPartsResult& AddParts(const Part& value) { m_parts.push_back(value); return *this; }
 
-    
+
     inline ListPartsResult& AddParts(Part&& value) { m_parts.push_back(value); return *this; }
 
     /**
@@ -335,19 +335,19 @@ namespace Model
      */
     inline ListPartsResult& WithInitiator(Initiator&& value) { SetInitiator(value); return *this;}
 
-    
+
     inline const Owner& GetOwner() const{ return m_owner; }
 
-    
+
     inline void SetOwner(const Owner& value) { m_owner = value; }
 
-    
+
     inline void SetOwner(Owner&& value) { m_owner = value; }
 
-    
+
     inline ListPartsResult& WithOwner(const Owner& value) { SetOwner(value); return *this;}
 
-    
+
     inline ListPartsResult& WithOwner(Owner&& value) { SetOwner(value); return *this;}
 
     /**
@@ -375,19 +375,19 @@ namespace Model
      */
     inline ListPartsResult& WithStorageClass(StorageClass&& value) { SetStorageClass(value); return *this;}
 
-    
+
     inline const RequestCharged& GetRequestCharged() const{ return m_requestCharged; }
 
-    
+
     inline void SetRequestCharged(const RequestCharged& value) { m_requestCharged = value; }
 
-    
+
     inline void SetRequestCharged(RequestCharged&& value) { m_requestCharged = value; }
 
-    
+
     inline ListPartsResult& WithRequestCharged(const RequestCharged& value) { SetRequestCharged(value); return *this;}
 
-    
+
     inline ListPartsResult& WithRequestCharged(RequestCharged&& value) { SetRequestCharged(value); return *this;}
 
   private:

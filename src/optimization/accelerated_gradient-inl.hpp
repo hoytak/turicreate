@@ -28,7 +28,7 @@
 // 2. Perf improvement for sparse gradients.
 
 namespace turi {
-  
+
 namespace optimization {
 
 /**
@@ -39,12 +39,12 @@ namespace optimization {
 
 /**
  *
- * Solve a first_order_optimization_iterface model with a dense accelerated 
+ * Solve a first_order_optimization_iterface model with a dense accelerated
  * gradient method.
  *
  * The algorithm is based on FISTA with backtracking (Beck and Teboulle 2009).
- * Details are in Page 194 of [1]. 
- * 
+ * Details are in Page 194 of [1].
+ *
  * \param[in,out] model  Model with first order optimization interface.
  * \param[in] init_point Starting point for the solver.
  * \param[in,out] opts   Solver options.
@@ -65,11 +65,11 @@ namespace optimization {
 */
 template <typename Vector = DenseVector>
 inline solver_return accelerated_gradient(first_order_opt_interface& model,
-    const DenseVector& init_point, 
+    const DenseVector& init_point,
     std::map<std::string, flexible_type>& opts,
-    const std::shared_ptr<regularizer_interface> reg=NULL){ 
+    const std::shared_ptr<regularizer_interface> reg=NULL){
 
-    // Benchmarking utils. 
+    // Benchmarking utils.
     timer tmr;
     double start_time = tmr.current_time();
     logprogress_stream << "Starting Accelerated Gradient (FISTA)" << std::endl;
@@ -77,11 +77,11 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
     std::stringstream ss;
     ss.str("");
 
-    // Print progress 
+    // Print progress
     table_printer printer(
         model.get_status_header({"Iteration", "Passes", "Step size", "Elapsed Time"}));
     printer.print_header();
-   
+
     // Step 1: Algorithm option init
     // ------------------------------------------------------------------------
 
@@ -96,62 +96,62 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
     DenseVector delta_point = point;                  // Step taken
     DenseVector y = point;                            // Momentum
     DenseVector xp = point;                           // Point in the previos iter
-    DenseVector x = point;                            // Point in the current 
+    DenseVector x = point;                            // Point in the current
     delta_point.zeros();
 
     // First compute the residual. Sometimes, you already have the solution
     // during the starting point. In these settings, you don't want to waste
-    // time performing a step of the algorithm. 
+    // time performing a step of the algorithm.
     Vector gradient(point.size());
     double fy;
     model.compute_first_order_statistics(y, gradient, fy);
     double residual = compute_residual(gradient);
     stats.num_passes++;
-    
+
     // First iteration will take longer. Warn the user.
     logprogress_stream <<"Tuning step size. First iteration could take longer"
                        <<" than subsequent iterations." << std::endl;
-    
+
 
     // Value of parameters t in itersation k-1 and k
-    double t = 1;                           // t_k   
+    double t = 1;                           // t_k
     double tp = 1;                          // t_{k-1}
     double fply, Qply;
-    
+
     // Nan Checking!
     if (std::isnan(residual) || std::isinf(residual)){
       stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_OVERFLOW;
     }
-    
+
     // Step 2: Algorithm starts here
     // ------------------------------------------------------------------------
     // While not converged
     while((residual >= convergence_threshold) && (iters < iter_limit)){
 
-    
+
       // Auto tuning the step_size
       while (step_size > LS_ZERO){
 
         // FISTA with backtracking
         // Equation 4: Page 194 of (1)
-        
-        // Test point 
+
+        // Test point
         //      point = prox(y - \grad_f(y) * s) (where s is the step size)
         point = y - gradient * step_size;
         if(reg != NULL)
           reg->apply_proximal_operator(point, step_size);
 
-        // Compute 
+        // Compute
         // f(point)
         fply = model.compute_function_value(point);
         stats.func_evals++;
-        
-        // Compute 
+
+        // Compute
         // f(y) + 0.5 * s * |delta_point|^2 + delta_point^T \grad_f(y)
         delta_point = (point - y);
         Qply = fy  + dot(delta_point, gradient) + 0.5
           * squared_norm(delta_point) / step_size;
-        
+
         if (fply < Qply){
           break;
         }
@@ -166,7 +166,7 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
       x = point;
       t = (1 + sqrt(1 + 4*tp*tp))/2;
       y = x + (tp - 1)/t * (x - xp);
-     
+
       delta_point =  x - xp;
       xp = x;
       tp = t;
@@ -181,7 +181,7 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
         stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_OVERFLOW;
         break;
       }
-      
+
       // Compute residual norm (to check for convergence)
       model.compute_first_order_statistics(y, gradient, fy);
       stats.num_passes++;
@@ -189,7 +189,7 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
       // made.
       residual = compute_residual(delta_point);
       iters++;
-      
+
       // Check for nan's in the function value.
       if(!std::isfinite(fy)) {
         stats.status = OPTIMIZATION_STATUS::OPT_NUMERIC_ERROR;
@@ -197,18 +197,18 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
       }
 
       // Print progress
-      auto stat_info = {std::to_string(iters), 
+      auto stat_info = {std::to_string(iters),
                         std::to_string(stats.num_passes),
-                        std::to_string(step_size), 
+                        std::to_string(step_size),
                         std::to_string(tmr.current_time())};
       auto row = model.get_status(point, stat_info);
       printer.print_progress_row_strs(iters, row);
-      
-      // Log info for debugging. 
-      logstream(LOG_INFO) << "Iters  (" << iters << ") " 
-                          << "Passes (" << stats.num_passes << ") " 
-                          << "Residual (" << residual << ") " 
-                          << "Loss (" << fy << ") " 
+
+      // Log info for debugging.
+      logstream(LOG_INFO) << "Iters  (" << iters << ") "
+                          << "Passes (" << stats.num_passes << ") "
+                          << "Residual (" << residual << ") "
+                          << "Loss (" << fy << ") "
                           << std::endl;
 
 #ifdef HAS_DISTRIBUTED
@@ -217,7 +217,7 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
 #endif
     }
     printer.print_footer();
-    
+
     // Step 3: Return optimization model status.
     // ------------------------------------------------------------------------
     if (stats.status == OPTIMIZATION_STATUS::OPT_UNSET) {
@@ -234,10 +234,10 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
     stats.solve_time = tmr.current_time() - start_time;
     stats.solution = point;
     stats.progress_table = printer.get_tracked_table();
-    
+
     // Display solver stats
     log_solver_summary_stats(stats);
-    
+
     return stats;
 }
 
@@ -247,5 +247,4 @@ inline solver_return accelerated_gradient(first_order_opt_interface& model,
 
 } // turicreate
 
-#endif 
-
+#endif

@@ -33,7 +33,7 @@ else()
     message(STATUS "Custom memory management disabled")
 endif()
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/include/aws/core/SDKConfig.h.in" 
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/include/aws/core/SDKConfig.h.in"
                "${CMAKE_CURRENT_SOURCE_DIR}/include/aws/core/SDKConfig.h")
 
 # Pretty sure we can use a regex here...
@@ -102,7 +102,7 @@ elseif(ENABLE_OPENSSL_ENCRYPTION)
 elseif(ENABLE_COMMONCRYPTO_ENCRYPTION)
     file(GLOB UTILS_CRYPTO_COMMONCRYPTO_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/aws/core/utils/crypto/commoncrypto/*.h")
     file(GLOB UTILS_CRYPTO_COMMONCRYPTO_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/utils/crypto/commoncrypto/*.cpp")
-endif()   
+endif()
 
 
 file(GLOB AWS_NATIVE_SDK_COMMON_SRC
@@ -160,7 +160,7 @@ file(GLOB AWS_NATIVE_SDK_COMMON_HEADERS
   ${UTILS_CRYPTO_BCRYPT_HEADERS}
   ${UTILS_CRYPTO_OPENSSL_HEADERS}
   ${UTILS_CRYPTO_COMMONCRYPTO_HEADERS}
-) 
+)
 
 # misc platform-specific, not related to features (encryption/http clients)
 if(PLATFORM_WINDOWS)
@@ -168,7 +168,7 @@ if(PLATFORM_WINDOWS)
   #add your windows specific impl stuff here.
   file(GLOB PLATFORM_WINDOWS_SOURCE = "${CMAKE_CURRENT_SOURCE_DIR}/source/platform/windows/*.cpp")
 
-  file(GLOB AWS_NATIVE_SDK_WINDOWS_SRC 
+  file(GLOB AWS_NATIVE_SDK_WINDOWS_SRC
     ${PLATFORM_WINDOWS_SOURCE}
   )
 elseif(PLATFORM_LINUX OR PLATFORM_APPLE)
@@ -177,14 +177,14 @@ elseif(PLATFORM_LINUX OR PLATFORM_APPLE)
 
   file(GLOB PLATFORM_LINUX_SHARED_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/platform/linux-shared/*.cpp")
 
-  file(GLOB AWS_NATIVE_SDK_LINUX_SHARED_SRC 
+  file(GLOB AWS_NATIVE_SDK_LINUX_SHARED_SRC
      ${PLATFORM_LINUX_SHARED_SOURCE}
    )
 elseif(PLATFORM_ANDROID)
   file(GLOB UTILS_LOGGING_ANDROID_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/aws/core/utils/logging/android/*.h")
   file(GLOB PLATFORM_ANDROID_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/source/platform/android/*.cpp")
 
-  file(GLOB AWS_NATIVE_SDK_ANDROID_SRC 
+  file(GLOB AWS_NATIVE_SDK_ANDROID_SRC
      ${PLATFORM_ANDROID_SOURCE}
   )
   file(GLOB AWS_NATIVE_SDK_ANDROID_HEADERS

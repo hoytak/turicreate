@@ -283,5 +283,3 @@ End Function
 Function MyASC(OneChar)
   If OneChar = "" Then MyASC = 0 Else MyASC = Asc(OneChar)
 End Function
-
-

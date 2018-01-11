@@ -96,7 +96,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
    *
    */
   struct _progress_tracker {
-    
+
     _progress_tracker(size_t _num_items)
         : num_items(_num_items)
         , table({{"Elapsed Time (Constructing Lookups)", 0},
@@ -104,26 +104,26 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
             {"Items Processed", 0}})
     {
     }
-    
+
     void print_header() { table.print_header(); }
     void print_break()  { table.print_line_break(); }
     void print_footer() {
       item_pair_count = num_items * num_items;
       size_t _item_pair_count = num_items * num_items;
       double percent_complete = 100.0;
-      
+
       table.print_row(
-          progress_time(), 
+          progress_time(),
           percent_complete,
           num_items);
 
       table.print_footer();
     }
-        
+
     GL_HOT_INLINE
-    void increment_item_counter(size_t counter = 1) { 
+    void increment_item_counter(size_t counter = 1) {
       item_pair_count += counter;
-      
+
       if(UNLIKELY(table.time_for_next_row() && !in_print_next_row)) {
         // Because this function can be called a lot, we just set a
         // flag to tell other threads to hold off.  It will still be
@@ -135,10 +135,10 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
         // atomic in_print_next_row flag to deter this situation.
         in_print_next_row = true;
         _print_next_row();
-        in_print_next_row = false; 
+        in_print_next_row = false;
       }
     }
-    
+
    private:
 
     GL_HOT_NOINLINE
@@ -151,9 +151,9 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
       bool acquired_lock = lg.try_lock();
 
       if(!acquired_lock) {
-        return; 
+        return;
       }
-      
+
       size_t _item_pair_count = item_pair_count;
       size_t items_processed = _item_pair_count / num_items;
 
@@ -162,20 +162,20 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
       // Approximate to the nearest 0.25%
       double percent_complete = std::floor(4 * 100.0 * prop_complete) / 4;
-      
+
       table.print_timed_progress_row(
-          progress_time(), 
+          progress_time(),
           percent_complete,
           items_processed);
     }
-    
-    size_t num_items = 0; 
+
+    size_t num_items = 0;
     atomic<size_t> item_pair_count;
     atomic<int> in_print_next_row;
     simple_spinlock _print_next_row_counter_lock;
     table_printer table;
   };
-  
+
   ////////////////////////////////////////////////////////////////////////////////
   // Management functions for building the lookup tables.
 
@@ -188,7 +188,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
    */
   void init_item_lookups(size_t num_items, const std::vector<final_item_data_type>& _final_item_data) {
 
-    // Assign these. 
+    // Assign these.
     total_num_items = num_items;
     item_neighbor_counts.assign(total_num_items, 0);
     item_interaction_locks.resize(total_num_items);
@@ -196,7 +196,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
  ALLOCATION_RETRY:
     try {
       item_interaction_data.reserve(total_num_items * max_item_neighborhood_size);
-        
+
     } catch(const std::bad_alloc& e) {
       // Attempt to handle the allocations in this realm properly.
       // If it drops to ridiculously low item similarity numbers,
@@ -205,21 +205,21 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
       // a number, like the total number of items.
       if(max_item_neighborhood_size >= 16) {
 
-        size_t new_max_item_neighborhood_size = std::min<size_t>(64, max_item_neighborhood_size / 2); 
-          
+        size_t new_max_item_neighborhood_size = std::min<size_t>(64, max_item_neighborhood_size / 2);
+
         logstream(LOG_ERROR)
             << "Error allocating proper lookup tables with max_item_neighborhood_size = "
             << max_item_neighborhood_size << "; reattempting with max_item_neighborhood_size = "
             << new_max_item_neighborhood_size << "." << std::endl;
-              
+
         max_item_neighborhood_size = new_max_item_neighborhood_size;
         options.at("max_item_neighborhood_size") = max_item_neighborhood_size;
         goto ALLOCATION_RETRY;
-        
+
       } else {
         std::ostringstream ss;
         ss << "Out-of-Memory error allocating proper lookup tables with max_item_neighborhood_size = "
-           << max_item_neighborhood_size << ".  This currently requires a lookup table of " 
+           << max_item_neighborhood_size << ".  This currently requires a lookup table of "
            << (max_item_neighborhood_size * total_num_items * 16)
            << " bytes.  Please attempt with fewer items or use a machine with more memory."
            << std::endl;
@@ -229,7 +229,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
     item_interaction_data.assign(total_num_items * max_item_neighborhood_size,
                                  {0, final_interaction_data_type()});
-    
+
     // Copy over the item vertex data.
     if(use_final_item_data()) {
       ASSERT_EQ(_final_item_data.size(), num_items);
@@ -275,8 +275,8 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
       // Put this in a separate function so the above is much more
       // easy to inline.  Below involes a lot of math.
-      auto insert_on_heap = [&]() GL_GCC_ONLY(GL_HOT_NOINLINE) { 
-        
+      auto insert_on_heap = [&]() GL_GCC_ONLY(GL_HOT_NOINLINE) {
+
         // Now, lock the item.
         std::lock_guard<simple_spinlock> lg(item_interaction_locks[item_a]);
 
@@ -315,10 +315,10 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
         }
       };
 
-      insert_on_heap(); 
+      insert_on_heap();
     }
   }
-  
+
   /** Finalize the lookup tables.  After calling this, things are
    *  ready to be used.
    */
@@ -426,7 +426,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
           size_t item_a = it.value(0);
           size_t item_b = it.value(1);
           if(item_a == item_b) continue;
-          
+
           const flexible_type& sim_value = it.value(2);
 
           if(item_a >= num_items || item_b >= num_items) {
@@ -440,10 +440,10 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
             raise_error();
           }
-          
+
           similarity.import_final_interaction_value(final_interaction_data, sim_value);
           insert_into_lookup(item_a, item_b, final_interaction_data);
-          
+
           if(add_reverse) {
             insert_into_lookup(item_b, item_a, final_interaction_data);
           }
@@ -714,7 +714,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
         [&](size_t i, size_t j) { return item_info[i].num_users < item_info[j].num_users; });
 
     size_t item_count_threshold = item_info[items[degree_approximation_threshold]].num_users;
-    
+
     // Two checks to make sure our math is indeed correct.
     // We want to make sure that approximately
     // degree_approximation_threshold items with the
@@ -737,7 +737,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
           [&](std::pair<size_t, double> p) {
             return item_info[p.first].num_users <= item_count_threshold;
           });
-    
+
       DASSERT_TRUE(n1 > degree_approximation_threshold);
 
       size_t n2 = std::count_if(
@@ -745,11 +745,11 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
           [&](std::pair<size_t, double> p) {
             return item_info[p.first].num_users < item_count_threshold;
           });
-    
+
       DASSERT_TRUE(n2 <= degree_approximation_threshold);
     }
 #endif
-    
+
     return item_count_threshold;
   }
 
@@ -950,7 +950,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
     };
 
     progress_tracker->print_header();
-    
+
     /** Now send it off to the brute force similarity lookup tables.
      */
     brute_force_all_pairs_similarity_with_vector_reference(
@@ -995,8 +995,8 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
       const std::shared_ptr<sarray<std::vector<std::pair<size_t, double> > > >& data) {
 
     ////////////////////////////////////////////////////////////////////////////////
-    // Step 1.  Define constants needed later on, along with common lookup tables. 
-    
+    // Step 1.  Define constants needed later on, along with common lookup tables.
+
     // Locks, in case they are needed.  Just hash to a particular
     // point in this array to avoid contention.
     static constexpr bool use_interaction_locks = (
@@ -1009,24 +1009,24 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
     static constexpr size_t n_interaction_locks = (use_interaction_locks ? 1024 : 1);
     std::array<simple_spinlock, n_interaction_locks> interaction_locks;
-    
+
     // Now that that is set up, get the rest.
     const size_t num_items = item_info.size();
     const size_t n = data->size();
     DASSERT_EQ(items_per_row.size(), n);
-    
+
     const size_t random_seed = (options.count("random_seed")
                                 ? size_t(options.at("random_seed"))
                                 : size_t(0));
-    
+
     size_t degree_approximation_threshold = options.at("degree_approximation_threshold");
 
     simple_spinlock pruned_user_item_count_thresholds_lock;
     std::map<size_t, size_t> pruned_user_item_count_thresholds;
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     // Variables for the progress tracking.
-    
+
     progress_tracker->print_header();
 
     // Calculate the total number of operations registered through a
@@ -1048,23 +1048,23 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
     // item-item interactions, so each row needs to be scaled by this
     // amount.
 
-    double progress_register_scale = (double(num_items) * num_items) / (total_interactions_to_register); 
+    double progress_register_scale = (double(num_items) * num_items) / (total_interactions_to_register);
 
     ////////////////////////////////////////////////////////////////////////////////
     // At the beginning of each slice, this function is called.  We
     // use that to set up the information and lookups for process_row.
-    
+
     auto init_slice = [&](size_t slice_idx, size_t item_idx_start, size_t item_idx_end) {
 
       // The matrix starts from (item_idx_start, item_idx_start).
       size_t slice_height = item_idx_end - item_idx_start;
       size_t slice_width = num_items - item_idx_start;
       DASSERT_GE(slice_height, 1);
-      
+
       // Now reset the edge data container.
       interaction_data.clear();
       interaction_data.resize(slice_height, slice_width);
-    };   
+    };
 
     ////////////////////////////////////////////////////////////////////////////////
     // The workhorse function; called for every row in the data and
@@ -1072,8 +1072,8 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
     // then clears the row so
     // iterate_through_sparse_item_array_by_slice continues to the
     // next row after this.
-    
-    auto process_row = [&](size_t thread_idx, size_t row_idx, 
+
+    auto process_row = [&](size_t thread_idx, size_t row_idx,
                            size_t item_idx_start, size_t item_idx_end,
                            std::vector<std::pair<size_t, double> >& item_list)
         GL_GCC_ONLY(GL_HOT_INLINE) {
@@ -1091,9 +1091,9 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
           progress_tracker->increment_item_counter(n_interactions_to_register);
         }
-          
+
         index_mapper.remap_sparse_vector(item_list);
-      
+
         // It may be that the above cleared out all the items.
         if(item_list.empty()) {
           break;
@@ -1113,7 +1113,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
         // items with hash above this are excluded.
         size_t rng_64bit_threshhold = std::numeric_limits<size_t>::max();
-      
+
         // Exclusion function.
         auto exclude_item_by_sampling = [&](size_t idx) {
           rng_gen_value = hash64(rng_gen_value, idx);
@@ -1234,8 +1234,8 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
           }
         }
 
-      } while(false); 
-      
+      } while(false);
+
       // Clear the item list so the iteration function doesn't iterate
       // through the resulting elements. (see docs for
       // iterate_through_sparse_item_array_by_slice).
@@ -1245,21 +1245,21 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
     ////////////////////////////////////////////////////////////////////////////////
     // The function to process a given element.  We're not using that
     // one here, so just declare it to be empty.
-    
+
     auto empty_process_element = [](size_t thread_idx, size_t row_idx,
                                     size_t item_idx_start, size_t item_idx_end,
                                     size_t item_idx, double value)
         GL_GCC_ONLY(GL_HOT_INLINE)
         {};
 
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     // At the end of every slice, go through and process all the
     // lookup tables that process_row filled.  Between init_slice and
     // finalize_slice was one complete run through the data.
-    
+
     auto finalize_slice = [&](size_t slice_idx, size_t item_idx_start, size_t item_idx_end) {
-      
+
       ////////////////////////////////////////////////////////////////////////////////
       // Process all of these edges, then go back and do another pass
       // on the next slice if necessary.  Note that there is
@@ -1316,7 +1316,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
     turi::timer total_timer;
     total_timer.start();
-    auto progress_tracker = std::make_shared<_progress_tracker>(num_items); 
+    auto progress_tracker = std::make_shared<_progress_tracker>(num_items);
 
     std::map<std::string, flexible_type> ret;
 
@@ -1336,7 +1336,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
 
     calculate_item_processing_colwise(
         item_info, similarity, data, num_items, &items_per_user);
-    
+
     size_t num_items_remaining = item_info.size();
 
     logprogress_stream << "Setting up lookup tables." << std::endl;
@@ -1377,7 +1377,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
               << "Processing data in " << num_dense_passes << " passes using dense lookup tables."
               << std::endl;
         }
-        
+
         typedef dense_triangular_itemitem_container<interaction_data_type> matrix_type;
 
         {
@@ -1388,13 +1388,13 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
             size_t target_memory_usage = options.at("target_memory_usage");
             dense_container.reserve(target_memory_usage / sizeof(interaction_data_type));
           }
-        
+
           // Set up the slices for the edge processing.
           _train_with_sparse_matrix_sarray(
               dense_container, dense_slice_structure, item_info,
               items_per_user, index_mapper, progress_tracker, data);
         }
-        
+
         return true;
       } else {
         return false;
@@ -1443,17 +1443,17 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
       if(n_in_nearest_neighbors == num_items) {
         // The nearest neighbors has taken care of everything.  We're
         // done.
-        
+
         // Record the actual training method into the dense.
         options["training_method"] = "nn";
-        
+
         goto ITEM_SIM_DONE;
       } else if(n_in_nearest_neighbors == 0) {
         // nearest neighbors did nothing.  So we don't need to remap
         // the indices.
         nearest_neighbors_run = false;
       } else {
-        
+
         // Apply this mapping to the vertex data
         item_in_nearest_neighbors.invert();
         num_items_remaining = index_mapper.set_index_mapping_from_mask(item_in_nearest_neighbors);
@@ -1461,7 +1461,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
         DASSERT_EQ(num_items_remaining, item_info.size());
         nearest_neighbors_run = true;
 
-        // Register we're going on to other methods. 
+        // Register we're going on to other methods.
         progress_tracker->print_break();
       }
     }
@@ -1518,19 +1518,19 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
                                   ? sparse_slice_structure.size() - 1
                                   : std::numeric_limits<size_t>::max());
 
-      if(sparse_possible) { 
+      if(sparse_possible) {
         logstream(LOG_INFO) << "Estimated " << num_sparse_passes
                             << " passes needed for sparse matrix." << std::endl;
       } else {
         logstream(LOG_INFO) << "Number of data passes too high for sparse matrix. " << std::endl;
       }
-      
+
       // Are we disabling the dense mode by forcing the sparse mode?
       // If so, then we keep trying until it works in the sparse mode.
       bool disable_dense = (force_mode == "sparse" || force_mode == "nn:sparse");
 
       // If we are not disabling the dense mode, then attempt to do it
-      // by allocating enough of the 
+      // by allocating enough of the
       if(!disable_dense) {
 
         size_t dense_mode_allowed_passes = max_data_passes;
@@ -1542,7 +1542,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
         // we are able to do the dense mode in less than 4 times the
         // passes it would take to do the sparse mode, just run with
         // that.
-       
+
         if(sparse_possible) {
           dense_mode_allowed_passes = std::min(8*num_sparse_passes, max_data_passes);
         }
@@ -1579,7 +1579,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
             matrix_type(), sparse_slice_structure, item_info,
             items_per_user, index_mapper, progress_tracker, data);
 
-        // Record what we actually did for future reference. 
+        // Record what we actually did for future reference.
         if(nearest_neighbors_run) {
           options["training_method"] = "nn:sparse";
         } else {
@@ -1629,7 +1629,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
     progress_tracker->print_footer();
 
     logprogress_stream << "Finalizing lookup tables." << std::endl;
-    
+
     finalize_lookups();
 
     ret.insert(options.begin(), options.end());
@@ -1661,7 +1661,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
     item_prediction_buffer.assign(total_num_items, prediction_accumulation_type());
 
     atomic<size_t> num_updates = 0;
-    
+
     // The function that actually does the similarity calculations.
     auto _run_scoring = [&](
         size_t user_item_data_start, size_t user_item_data_end,
@@ -1679,7 +1679,7 @@ class sparse_similarity_lookup_impl : public sparse_similarity_lookup {
           const auto& item_neighbor = item_interaction_data[i];
 
           ++num_updates;
-          
+
           if(use_unsafe_update_method) {
             similarity.update_prediction_unsafe(
                 item_prediction_buffer[item_neighbor.first],

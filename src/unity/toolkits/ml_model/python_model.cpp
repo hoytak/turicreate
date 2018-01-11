@@ -113,5 +113,3 @@ END_CLASS_REGISTRATION
 
 } // python_model
 } // demo turicreate
-
-

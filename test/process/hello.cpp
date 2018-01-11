@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     ss << argv[i];
     ss << " ";
   }
-  
+
   std::cout << ss.str();
 
   //std::cerr << "ERRORS AND STUFF!!!";

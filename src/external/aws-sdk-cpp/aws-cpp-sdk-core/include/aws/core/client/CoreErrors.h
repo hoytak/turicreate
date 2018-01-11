@@ -45,7 +45,7 @@ namespace Aws
             UNRECOGNIZED_CLIENT = 17, // Most likely caused by an invalid access key or secret key
             MALFORMED_QUERY_STRING = 18, // Where does this come from? (cognito identity uses it)
 
-            NETWORK_CONNECTION = 99, // General failure to send message to service 
+            NETWORK_CONNECTION = 99, // General failure to send message to service
 
             // These are needed for logical reasons
             UNKNOWN = 100, // Unknown to the SDK
@@ -61,5 +61,3 @@ namespace Aws
         } // namespace CoreErrorsMapper
     } // namespace Client
 } // namespace Aws
-
-

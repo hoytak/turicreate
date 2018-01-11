@@ -43,7 +43,7 @@ template <typename T>
 class sarray_format_reader_v2: public sarray_format_reader<T> {
  public:
   /// Default Constructor
-  inline sarray_format_reader_v2(): 
+  inline sarray_format_reader_v2():
       m_manager(v2_block_impl::block_manager::get_instance()) {
   }
 
@@ -99,7 +99,7 @@ class sarray_format_reader_v2: public sarray_format_reader<T> {
     m_cache.resize(m_block_list.size());
     m_used_cache_entries.resize(m_block_list.size());
     m_used_cache_entries.clear();
-    // it is convenient for m_start_row to have one more entry which is 
+    // it is convenient for m_start_row to have one more entry which is
     // the total # elements in the file
     m_start_row.push_back(m_num_rows);
     ASSERT_EQ(m_num_rows, row_count);
@@ -152,28 +152,28 @@ class sarray_format_reader_v2: public sarray_format_reader<T> {
     return m_index_info.index_file;
   }
 
-  size_t read_rows(size_t row_start, 
-                   size_t row_end, 
+  size_t read_rows(size_t row_start,
+                   size_t row_end,
                    sframe_rows& out_obj);
 
   /**
    * Reads a collection of rows, storing the result in out_obj.
    * This function is independent of the open_segment/read_segment/close_segment
-   * functions, and can be called anytime. This function is also fully 
+   * functions, and can be called anytime. This function is also fully
    * concurrent.
    * \param row_start First row to read
    * \param row_end one past the last row to read (i.e. EXCLUSIVE). row_end can
-   *                be beyond the end of the array, in which case, 
+   *                be beyond the end of the array, in which case,
    *                fewer rows will be read.
    * \param out_obj The output array
    * \returns Actual number of rows read. Return (size_t)(-1) on failure.
    *
-   * \note This function is currently only optimized for "mostly" sequential 
+   * \note This function is currently only optimized for "mostly" sequential
    * reads. i.e. we are expecting read_rows(a, b), to be soon followed by
    * read_rows(b,c), etc.
    */
-  size_t read_rows(size_t row_start, 
-                   size_t row_end, 
+  size_t read_rows(size_t row_start,
+                   size_t row_end,
                    std::vector<T>& out_obj) {
     if (row_end > m_num_rows) row_end = m_num_rows;
     if (row_start >= row_end) {
@@ -211,12 +211,12 @@ class sarray_format_reader_v2: public sarray_format_reader<T> {
    * Each cache_entry is a decoded block. m_start_row provides the information
    * as to which row this block contains. buffer_start_row is the first
    * row in the buffer which is usable.
-   * 
+   *
    * The caching algorithm works as such:
    *  - fetch the cache entry from file for a given block if it doesn't exist.
    *    If we exceed the maximum cache limit, we evict something random
-   *  - If buffer_start_row matches the first requested row, this is a 
-   *    sequential access and we use "moves" to move the read data into the 
+   *  - If buffer_start_row matches the first requested row, this is a
+   *    sequential access and we use "moves" to move the read data into the
    *    user's buffer. We will then have to update the buffer_start_row since
    *    some data is now missing from the buffer. If the cache becomes empty
    *    we evict the entry.)
@@ -259,7 +259,7 @@ class sarray_format_reader_v2: public sarray_format_reader<T> {
     bool has_data = false;
     // if it is held decoded
     std::shared_ptr<std::vector<T> > buffer;
-    // if it is held encoded 
+    // if it is held encoded
     v2_block_impl::encoded_block encoded_buffer;
     v2_block_impl::encoded_block_range encoded_buffer_reader;
   };
@@ -280,10 +280,10 @@ class sarray_format_reader_v2: public sarray_format_reader<T> {
   /**
    * Extracts as many from fetch_start to fetch_end from the cache
    * inserting into out_obj. out_obj must be resized to fetch_end - fetch_start.
-   * 
+   *
    * See \ref cache_entry for details on the caching process.
-   */ 
-  void fetch_rows_from_cache(size_t fetch_start, 
+   */
+  void fetch_rows_from_cache(size_t fetch_start,
                              size_t fetch_end,
                              std::vector<T>& out_obj);
 
@@ -291,7 +291,7 @@ class sarray_format_reader_v2: public sarray_format_reader<T> {
 
   /**
    * Releases a cache entry.
-   * Releases the buffer back to the pool and update the bitfield and 
+   * Releases the buffer back to the pool and update the bitfield and
    * cache_size counters.
    */
   void release_cache(size_t block_number) {
@@ -324,7 +324,7 @@ class sarray_format_reader_v2: public sarray_format_reader<T> {
       // loop around to 0
       b = 0;
       if (!m_used_cache_entries.get(b)) m_used_cache_entries.next_bit(b);
-    } 
+    }
     std::unique_lock<turi::simple_spinlock> cache_lock_guard(m_cache[b].lock, std::defer_lock);
     if (cache_lock_guard.try_lock()) {
       release_cache(b);
@@ -357,18 +357,18 @@ buffer_pool<std::vector<T> > sarray_format_reader_v2<T>::m_buffer_pool;
 // specialization for fetch_cache_from_file when T is a flexible_type
 // since this permits an encoded representation
 template <>
-inline void 
+inline void
 sarray_format_reader_v2<flexible_type>::
 fetch_cache_from_file(size_t block_number, cache_entry& ret) {
 //   std::cerr << "Fetching from file: " << block_number << std::endl;
-  // don't use the buffer. hold as encoded always when reading from a 
+  // don't use the buffer. hold as encoded always when reading from a
   // flexible_type file
   if (ret.buffer) {
     m_buffer_pool.release_buffer(std::move(ret.buffer));
     ret.buffer.reset();
   }
   block_address block_addr = m_block_list[block_number];
-  v2_block_impl::block_info* info; 
+  v2_block_impl::block_info* info;
   auto buffer = m_manager.read_block(block_addr, &info);
   if (buffer == nullptr) {
     log_and_throw("Unexpected block read failure. Bad file?");
@@ -382,9 +382,9 @@ fetch_cache_from_file(size_t block_number, cache_entry& ret) {
   m_used_cache_entries.set_bit(block_number);
   // evict something random
   // we will only loop at most this number of times
-  int num_to_evict = (int)(m_cache_size.value) - 
+  int num_to_evict = (int)(m_cache_size.value) -
       SFRAME_MAX_BLOCKS_IN_CACHE;
-  while(num_to_evict > 0 && 
+  while(num_to_evict > 0 &&
         m_cache_size.value > SFRAME_MAX_BLOCKS_IN_CACHE) {
     try_evict_something_from_cache();
     --num_to_evict;
@@ -392,7 +392,7 @@ fetch_cache_from_file(size_t block_number, cache_entry& ret) {
 }
 
 template <typename T>
-inline void 
+inline void
 sarray_format_reader_v2<T>::
 fetch_cache_from_file(size_t block_number, cache_entry& ret) {
 //   std::cerr << "Fetching from file: " << block_number << std::endl;
@@ -408,9 +408,9 @@ fetch_cache_from_file(size_t block_number, cache_entry& ret) {
   m_used_cache_entries.set_bit(block_number);
   // evict something random
   // we will only loop at most this number of times
-  int num_to_evict = (int)(m_cache_size.value) - 
+  int num_to_evict = (int)(m_cache_size.value) -
       SFRAME_MAX_BLOCKS_IN_CACHE;
-  while(num_to_evict > 0 && 
+  while(num_to_evict > 0 &&
         m_cache_size.value > SFRAME_MAX_BLOCKS_IN_CACHE) {
     try_evict_something_from_cache();
     --num_to_evict;
@@ -445,11 +445,11 @@ ensure_cache_decoded(cache_entry& cache, size_t block_number) {
 }
 
 
-// specialization for fetch_rows_from_cache when T is a flexible_type 
+// specialization for fetch_rows_from_cache when T is a flexible_type
 // to permit pulling from the encoded representation
 template <>
 inline void sarray_format_reader_v2<flexible_type>::
-fetch_rows_from_cache(size_t fetch_start, 
+fetch_rows_from_cache(size_t fetch_start,
                            size_t fetch_end,
                            std::vector<flexible_type>& out_obj) {
   // find block address containing fetch_start and block containing fetch_end
@@ -463,7 +463,7 @@ fetch_rows_from_cache(size_t fetch_start,
     std::unique_lock<turi::simple_spinlock> cache_lock_guard(cache.lock);
     if (!cache.has_data) {
       fetch_cache_from_file(i, cache);
-    } 
+    }
     if (cache.buffer_start_row < first_row_to_fetch_in_this_block && cache.is_encoded) {
       // fast forward
       size_t diff = first_row_to_fetch_in_this_block - cache.buffer_start_row;
@@ -481,23 +481,23 @@ fetch_rows_from_cache(size_t fetch_start,
         cache.buffer_start_row = last_row_to_fetch_in_this_block;
       } else {
         size_t input_offset = m_start_row[i];
-        for (size_t j = first_row_to_fetch_in_this_block; 
-             j < last_row_to_fetch_in_this_block; 
+        for (size_t j = first_row_to_fetch_in_this_block;
+             j < last_row_to_fetch_in_this_block;
              ++j) {
           out_obj[output_idx++] = (*cache.buffer)[j - input_offset];
         }
       }
       if (last_row_to_fetch_in_this_block == m_start_row[i + 1]) {
         // we have exhausted this cache
-        release_cache(i); 
+        release_cache(i);
       }
     } else {
       // non sequential read
       // we copy without updating the start_row
       ensure_cache_decoded(cache, i);
       size_t input_offset = m_start_row[i];
-      for (size_t j = first_row_to_fetch_in_this_block; 
-           j < last_row_to_fetch_in_this_block; 
+      for (size_t j = first_row_to_fetch_in_this_block;
+           j < last_row_to_fetch_in_this_block;
            ++j) {
         out_obj[output_idx++] = (*cache.buffer)[j - input_offset];
       }
@@ -507,7 +507,7 @@ fetch_rows_from_cache(size_t fetch_start,
 
 template <typename T>
 inline void sarray_format_reader_v2<T>::
-fetch_rows_from_cache(size_t fetch_start, 
+fetch_rows_from_cache(size_t fetch_start,
                            size_t fetch_end,
                            std::vector<T>& out_obj) {
   // find block address containing fetch_start and block containing fetch_end
@@ -524,27 +524,27 @@ fetch_rows_from_cache(size_t fetch_start,
         cache.buffer_start_row > first_row_to_fetch_in_this_block) {
       // we need to reload the cache
       fetch_cache_from_file(i, cache);
-    } 
+    }
     if (cache.buffer_start_row == first_row_to_fetch_in_this_block) {
       // this is a sequential read
       // encoded reads are impossible
       size_t input_offset = m_start_row[i];
-      for (size_t j = first_row_to_fetch_in_this_block; 
-           j < last_row_to_fetch_in_this_block; 
+      for (size_t j = first_row_to_fetch_in_this_block;
+           j < last_row_to_fetch_in_this_block;
            ++j) {
         out_obj[output_idx++] = std::move((*cache.buffer)[j - input_offset]);
       }
       cache.buffer_start_row = last_row_to_fetch_in_this_block;
       if (last_row_to_fetch_in_this_block == m_start_row[i + 1]) {
         // we have exhausted this cache
-        release_cache(i); 
+        release_cache(i);
       }
     } else {
       // non sequential read
       // we copy without updating the start_row
       size_t input_offset = m_start_row[i];
-      for (size_t j = first_row_to_fetch_in_this_block; 
-           j < last_row_to_fetch_in_this_block; 
+      for (size_t j = first_row_to_fetch_in_this_block;
+           j < last_row_to_fetch_in_this_block;
            ++j) {
         out_obj[output_idx++] = (*cache.buffer)[j - input_offset];
       }
@@ -554,8 +554,8 @@ fetch_rows_from_cache(size_t fetch_start,
 
 template <>
 inline size_t sarray_format_reader_v2<flexible_type>::
-read_rows(size_t row_start, 
-          size_t row_end, 
+read_rows(size_t row_start,
+          size_t row_end,
           sframe_rows& out_obj) {
   return sarray_format_reader<flexible_type>::read_rows(row_start, row_end, out_obj);
 }
@@ -563,8 +563,8 @@ read_rows(size_t row_start,
 
 template <typename T>
 inline size_t sarray_format_reader_v2<T>::
-read_rows(size_t row_start, 
-          size_t row_end, 
+read_rows(size_t row_start,
+          size_t row_end,
           sframe_rows& out_obj) {
   ASSERT_MSG(false, "Attempting to type decode a non-flexible_type column");
   return 0;
@@ -581,7 +581,7 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
    * Open has to be called before any of the other functions are called.
    * No files are actually opened at this point.
    */
-  void open(std::string index_file, 
+  void open(std::string index_file,
             size_t segments_to_create,
             size_t columns_to_create) {
     if (columns_to_create == 0) {
@@ -600,8 +600,8 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
   }
 
   /**
-   * Gets a modifiable reference to the index file information which will 
-   * be written to the index file. 
+   * Gets a modifiable reference to the index file information which will
+   * be written to the index file.
    */
   group_index_file_information& get_index_info() {
     return m_writer.get_index_info();
@@ -610,7 +610,7 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
   /**
    * Writes a row to the array group
    */
-  void write_segment(size_t segmentid, 
+  void write_segment(size_t segmentid,
                      const std::vector<T>& v) {
     DASSERT_LT(segmentid, m_nsegments);
     DASSERT_LE(v.size(), m_column_buffers.size());
@@ -623,7 +623,7 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
   /**
    * Writes a row to the array group
    */
-  void write_segment(size_t segmentid, 
+  void write_segment(size_t segmentid,
                      std::vector<T>&& v) {
     DASSERT_LT(segmentid, m_nsegments);
     DASSERT_LE(v.size(), m_column_buffers.size());
@@ -636,14 +636,14 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
   /**
    * Writes a row to the array group
    */
-  void write_segment(size_t columnid, 
-                     size_t segmentid, 
+  void write_segment(size_t columnid,
+                     size_t segmentid,
                      const T& t) {
     DASSERT_LT(segmentid, m_nsegments);
     DASSERT_LT(columnid, m_column_buffers.size());
     DASSERT_EQ(m_array_open, true);
     m_column_buffers[columnid].segment_data[segmentid].push_back(t);
-    if (m_column_buffers[columnid].segment_data[segmentid].size() >= 
+    if (m_column_buffers[columnid].segment_data[segmentid].size() >=
         m_column_buffers[columnid].elements_before_flush) {
       flush_block(columnid, segmentid);
     }
@@ -693,14 +693,14 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
   /**
    * Writes a row to the array group
    */
-  void write_segment(size_t columnid, 
-                     size_t segmentid, 
+  void write_segment(size_t columnid,
+                     size_t segmentid,
                      T&& t) {
     DASSERT_LT(segmentid, m_nsegments);
     DASSERT_LT(columnid, m_column_buffers.size());
     DASSERT_EQ(m_array_open, true);
     m_column_buffers[columnid].segment_data[segmentid].push_back(std::forward<T>(t));
-    if (m_column_buffers[columnid].segment_data[segmentid].size() >= 
+    if (m_column_buffers[columnid].segment_data[segmentid].size() >=
         m_column_buffers[columnid].elements_before_flush) {
       flush_block(columnid, segmentid);
     }
@@ -722,7 +722,7 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
     }
     /*
      * for (size_t i = 0;i < m_column_buffers.size(); ++i) {
-     *   logstream(LOG_INFO) << "Writing column " << i 
+     *   logstream(LOG_INFO) << "Writing column " << i
      *                       << " with total utilization of "
      *                       << m_column_buffers[i].total_bytes_written << std::endl;
      * }
@@ -779,7 +779,7 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
     size_t total_bytes_written = 0;
     size_t total_elements_written = 0;
   };
-  
+
   std::vector<column_buffer> m_column_buffers;
   /**
    * Makes a particular segment writable with \ref write_segment
@@ -806,14 +806,14 @@ class sarray_group_format_writer_v2: public sarray_group_format_writer<T> {
   }
 
   /**
-   * Flushes the current contents of a segment of a column 
+   * Flushes the current contents of a segment of a column
    */
-  void flush_block(size_t columnid, size_t segmentid); 
+  void flush_block(size_t columnid, size_t segmentid);
 };
 
 /// \}
 template <>
-inline void sarray_group_format_writer_v2<flexible_type>::flush_block(size_t columnid, 
+inline void sarray_group_format_writer_v2<flexible_type>::flush_block(size_t columnid,
                                                                size_t segmentid) {
   // flexible_type specialization. writes typed blocks.
   // if there is no data to write, skip
@@ -825,25 +825,25 @@ inline void sarray_group_format_writer_v2<flexible_type>::flush_block(size_t col
                                           colbuf.segment_data[segmentid],
                                           v2_block_impl::block_info());
   colbuf.segment_data[segmentid].clear();
-  // update the column buffer counters and estimates the number of elements 
+  // update the column buffer counters and estimates the number of elements
   // before the next flush.
   std::lock_guard<simple_spinlock> guard(colbuf.lock);
   colbuf.total_bytes_written += ret;
   colbuf.total_elements_written += write_size;
   colbuf.elements_before_flush = (float)(SFRAME_DEFAULT_BLOCK_SIZE) / (
       (float)(colbuf.total_bytes_written+1) / (float)(colbuf.total_elements_written+1));
-  colbuf.elements_before_flush = std::max(colbuf.elements_before_flush, 
+  colbuf.elements_before_flush = std::max(colbuf.elements_before_flush,
                                           SARRAY_WRITER_MIN_ELEMENTS_PER_BLOCK);
-  colbuf.elements_before_flush = std::min(colbuf.elements_before_flush, 
+  colbuf.elements_before_flush = std::min(colbuf.elements_before_flush,
                                           SFRAME_WRITER_MAX_BUFFERED_CELLS / (m_nsegments * m_column_buffers.size()));
-  colbuf.elements_before_flush = std::min(colbuf.elements_before_flush, 
+  colbuf.elements_before_flush = std::min(colbuf.elements_before_flush,
                                           SFRAME_WRITER_MAX_BUFFERED_CELLS_PER_BLOCK);
 }
 
 template <typename T>
-inline void sarray_group_format_writer_v2<T>::flush_block(size_t columnid, 
+inline void sarray_group_format_writer_v2<T>::flush_block(size_t columnid,
                                                           size_t segmentid){
-  // regular type specialization. writes bytes 
+  // regular type specialization. writes bytes
   // if there is no data to write, skip
   auto& colbuf = m_column_buffers[columnid];
   if (colbuf.segment_data[segmentid].empty()) return;
@@ -854,24 +854,24 @@ inline void sarray_group_format_writer_v2<T>::flush_block(size_t columnid,
                                     v2_block_impl::block_info());
   colbuf.segment_data[segmentid].clear();
 
-  // update the column buffer counters and estimates the number of elements 
+  // update the column buffer counters and estimates the number of elements
   // before the next flush.
   std::lock_guard<simple_spinlock> guard(colbuf.lock);
   colbuf.total_bytes_written += ret;
   colbuf.total_elements_written += write_size;
   colbuf.elements_before_flush = (float)(SFRAME_DEFAULT_BLOCK_SIZE) / (
       (float)(colbuf.total_bytes_written+1) / (float)(colbuf.total_elements_written+1));
-  colbuf.elements_before_flush = std::max(colbuf.elements_before_flush, 
+  colbuf.elements_before_flush = std::max(colbuf.elements_before_flush,
                                           SARRAY_WRITER_MIN_ELEMENTS_PER_BLOCK);
-  colbuf.elements_before_flush = std::min(colbuf.elements_before_flush, 
+  colbuf.elements_before_flush = std::min(colbuf.elements_before_flush,
                                           SFRAME_WRITER_MAX_BUFFERED_CELLS / (m_nsegments * m_column_buffers.size()));
-  colbuf.elements_before_flush = std::min(colbuf.elements_before_flush, 
+  colbuf.elements_before_flush = std::min(colbuf.elements_before_flush,
                                           SFRAME_WRITER_MAX_BUFFERED_CELLS_PER_BLOCK);
 
 }
 
 template <>
-inline void sarray_group_format_writer_v2<flexible_type>::write_segment(size_t segmentid, 
+inline void sarray_group_format_writer_v2<flexible_type>::write_segment(size_t segmentid,
                                                                         const sframe_rows& rows) {
   DASSERT_LT(segmentid, m_nsegments);
   DASSERT_EQ(m_array_open, true);
@@ -882,7 +882,7 @@ inline void sarray_group_format_writer_v2<flexible_type>::write_segment(size_t s
   for (size_t i = 0;i < m_column_buffers.size(); ++i) {
     auto& buffer = m_column_buffers[i].segment_data[segmentid];
     std::copy(cols[i]->begin(), cols[i]->end(), std::back_inserter(buffer));
-    if (m_column_buffers[i].segment_data[segmentid].size() >= 
+    if (m_column_buffers[i].segment_data[segmentid].size() >=
         m_column_buffers[i].elements_before_flush) {
       flush_block(i, segmentid);
     }
@@ -890,7 +890,7 @@ inline void sarray_group_format_writer_v2<flexible_type>::write_segment(size_t s
 }
 
 template <typename T>
-inline void sarray_group_format_writer_v2<T>::write_segment(size_t segmentid, 
+inline void sarray_group_format_writer_v2<T>::write_segment(size_t segmentid,
                                                      const sframe_rows& rows) {
   ASSERT_MSG(false, "Cannot write to general SArray with sframe_rows");
 }

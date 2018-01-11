@@ -17,5 +17,5 @@ public:
 	void testNotNumbers(void);
 	void testSuddenEnd(void);
 };
-	
+
 #endif

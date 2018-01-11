@@ -73,4 +73,3 @@ doc doxygen:
 
 clean:
 	$(RM) $(OBJ) $(MPIOBJ) $(ALIB) $(MPIALIB) $(SLIB) *~ src/*~ include/*~ include/*/*~ wrapper/*~
-

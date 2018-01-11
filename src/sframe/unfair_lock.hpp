@@ -22,7 +22,7 @@ namespace turi {
 /**
  * This class implements a completely unfair lock.
  *
- * The basic mechanic of operation is that every thread is assigned a 
+ * The basic mechanic of operation is that every thread is assigned a
  * priority ID (this is via a thread local variable) (rant if apple compiler
  * has proper C++11 support this would just be using the thread_local keyword.
  * But we don't. So it is this annoying boilerplate around pthread_getspecific.).
@@ -35,7 +35,7 @@ namespace turi {
  * if it (or a lower ID thread) returns to acquire the lock, it will be able to
  * get it immediately. This "stickness" essentially parameterizes the
  * CPU-utilization Disk-utilization balance. The more IO bound a task is, the
- * better it is for it to be executed on just one CPU. This threshold attempts 
+ * better it is for it to be executed on just one CPU. This threshold attempts
  * to self-tune by trying to maximize the total throughput of the lock.
  * (i.e.. maximising lock acquisitions per second). This is done by gradually
  * adapting the sleep interval: i.e. if increasing it increases throughput,

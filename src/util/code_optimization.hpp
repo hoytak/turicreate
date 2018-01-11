@@ -10,7 +10,7 @@
 #define GL_OPT_ATTR(...) __attribute__((__VA_ARGS__))
 #else
 // put it as hot; this is more-or-less ignored in the ; the "cold" ones have their own attribute def.
-#define GL_OPT_ATTR(...) __attribute__((hot)) 
+#define GL_OPT_ATTR(...) __attribute__((hot))
 #endif
 
 #ifdef __clang__
@@ -81,11 +81,11 @@
   __attribute__((cold, noinline))
 
 
-/** 
+/**
  * \ingroup util
  * This is used with various assertion routines.  It never returns.
  * The noreturn suppresses the "warning: control reaches end of
- * non-void function" messages you get by using it this way. 
+ * non-void function" messages you get by using it this way.
  */
 #define GL_COLD_NOINLINE_ERROR                 \
   __attribute__((cold, noinline, noreturn))
@@ -95,7 +95,7 @@
 #endif
 
 // Set the floating point register to flush denormal numbers to zero.
-// This gives improved performance on most sgd things. 
+// This gives improved performance on most sgd things.
 static inline void set_denormal_are_zero() {
 #ifdef __SSE2__
   _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
@@ -104,7 +104,7 @@ static inline void set_denormal_are_zero() {
 }
 
 // Set the floating point register to flush denormal numbers to zero.
-// This gives improved performance on most sgd things. 
+// This gives improved performance on most sgd things.
 static inline void unset_denormal_are_zero() {
 #ifdef __SSE2__
   _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_OFF);

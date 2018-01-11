@@ -17,11 +17,11 @@ namespace sframe_impl {
  * \ingroup sframe_physical
  * is_siterable<T>::value is true if T inherits from siterable
  */
-template <typename T, 
+template <typename T,
           typename DecayedT = typename std::decay<T>::type,
-          typename Iterator = typename DecayedT::iterator> 
+          typename Iterator = typename DecayedT::iterator>
 struct is_siterable {
-  static constexpr bool value = 
+  static constexpr bool value =
       std::is_base_of<turi::siterable<Iterator>, DecayedT>::value;
 };
 

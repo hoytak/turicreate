@@ -22,16 +22,16 @@ namespace query_eval {
  */
 
 /**
- * A append operator append two input streams; typedefed \ref op_append. 
+ * A append operator append two input streams; typedefed \ref op_append.
  */
 template<>
 class operator_impl<planner_node_type::APPEND_NODE> : public query_operator {
  public:
 
-  planner_node_type type() const { return planner_node_type::APPEND_NODE; } 
-  
+  planner_node_type type() const { return planner_node_type::APPEND_NODE; }
+
   static std::string name() { return "append"; }
-  
+
   inline operator_impl() { };
 
   static query_operator_attributes attributes() {
@@ -81,13 +81,13 @@ class operator_impl<planner_node_type::APPEND_NODE> : public query_operator {
   }
 
   ////////////////////////////////////////////////////////////////////////////////
-  
+
   /**
    * Creates a logical append node that appends the left and right nodes.
    */
   static std::shared_ptr<planner_node> make_planner_node(std::shared_ptr<planner_node> left,
                                                          std::shared_ptr<planner_node> right) {
-    return planner_node::make_shared(planner_node_type::APPEND_NODE, 
+    return planner_node::make_shared(planner_node_type::APPEND_NODE,
                                      std::map<std::string, flexible_type>(),
                                      std::map<std::string, any>(),
                                      {left, right});
@@ -128,7 +128,7 @@ class operator_impl<planner_node_type::APPEND_NODE> : public query_operator {
     }
     return ret_length;
   }
-  
+
   static std::string repr(std::shared_ptr<planner_node> pnode, pnode_tagger& get_tag) {
     ASSERT_EQ(pnode->inputs.size(), 2);
     return std::string("Append(") + get_tag(pnode->inputs[0]) + "," + get_tag(pnode->inputs[1]) + ")";
@@ -136,7 +136,7 @@ class operator_impl<planner_node_type::APPEND_NODE> : public query_operator {
 
 };
 
-typedef operator_impl<planner_node_type::APPEND_NODE> op_append; 
+typedef operator_impl<planner_node_type::APPEND_NODE> op_append;
 
 /// \}
 

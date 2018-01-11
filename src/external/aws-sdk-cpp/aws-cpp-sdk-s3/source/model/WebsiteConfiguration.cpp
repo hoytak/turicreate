@@ -29,7 +29,7 @@ namespace S3
 namespace Model
 {
 
-WebsiteConfiguration::WebsiteConfiguration() : 
+WebsiteConfiguration::WebsiteConfiguration() :
     m_errorDocumentHasBeenSet(false),
     m_indexDocumentHasBeenSet(false),
     m_redirectAllRequestsToHasBeenSet(false),
@@ -37,7 +37,7 @@ WebsiteConfiguration::WebsiteConfiguration() :
 {
 }
 
-WebsiteConfiguration::WebsiteConfiguration(const XmlNode& xmlNode) : 
+WebsiteConfiguration::WebsiteConfiguration(const XmlNode& xmlNode) :
     m_errorDocumentHasBeenSet(false),
     m_indexDocumentHasBeenSet(false),
     m_redirectAllRequestsToHasBeenSet(false),

@@ -24,4 +24,3 @@ raw <- xgb.save.raw(bst)
 bst <- xgb.load(raw)
 pred <- predict(bst, test$data)
 }
-

@@ -20,7 +20,7 @@ constexpr size_t DELTA = 5;
 struct unfair_lock_priority {
   // the priority for this thread. Lower number is higher priority
   size_t priority;
-  // The condition variable this thread will wait on. Required for the 
+  // The condition variable this thread will wait on. Required for the
   // unfair lock implementation
   conditional cond;
 };
@@ -40,7 +40,7 @@ void destroy_tls_data(void* ptr) {
 // force creation of the thread local datastructures before main starts.
 struct thread_keys {
   pthread_key_t UNFAIR_LOCK_PRIORITY;
-  thread_keys() { 
+  thread_keys() {
     pthread_key_create(&UNFAIR_LOCK_PRIORITY, destroy_tls_data);
   }
 };
@@ -55,10 +55,10 @@ static pthread_key_t __unused_init_keys__(get_priority_tls_key_id());
 
 
 /**
- * Gets the thread local unfair_lock_priority structure 
+ * Gets the thread local unfair_lock_priority structure
  */
 static unfair_lock_priority* get_unfair_lock_priority() {
-  unfair_lock_priority* priority = 
+  unfair_lock_priority* priority =
       (unfair_lock_priority*)pthread_getspecific(get_priority_tls_key_id());
   if (priority == NULL) {
     // not set. create it
@@ -75,14 +75,14 @@ static unfair_lock_priority* get_unfair_lock_priority() {
 void unfair_lock::lock() {
   unfair_lock_priority* priority = get_unfair_lock_priority();
   m_internal_lock.lock();
-  if (m_lock_acquired || 
+  if (m_lock_acquired ||
       (m_cond.size() > 0 && m_cond.begin()->first < priority->priority)) {
-    // slow path: 
+    // slow path:
     //   lock was acquired --> I need to wait.
     //   or lock was not acquired, but I am not the lowest priority.
     //   i.e. some other thread should be waking up --> I need to wait
     m_cond[priority->priority] = &(priority->cond);
-    while(m_lock_acquired || 
+    while(m_lock_acquired ||
           (m_cond.size() > 0 && m_cond.begin()->first < priority->priority)) {
       priority->cond.wait(m_internal_lock);
       if (priority->priority > m_previous_owner_priority) {
@@ -93,7 +93,7 @@ void unfair_lock::lock() {
       }
     }
     m_cond.erase(priority->priority);
-  } // else ... fast path .. lock was not acquired, and I am 
+  } // else ... fast path .. lock was not acquired, and I am
   // the lowest priority, go for it and acquire the lcok
   m_lock.lock();
   m_lock_acquired = true;
@@ -104,7 +104,7 @@ void unfair_lock::unlock() {
   m_internal_lock.lock();
   // some funky magic.
   // Essentially how this works is that we record the amount of time required to
-  // acquire LOCKS_PER_EPOCH locks. Then we adapt the sleep interval 
+  // acquire LOCKS_PER_EPOCH locks. Then we adapt the sleep interval
   // (the stickiness of the lock)
   ++m_epoch_counter;
   if (m_epoch_counter == LOCKS_PER_EPOCH) {
@@ -127,7 +127,7 @@ void unfair_lock::unlock() {
       else if (m_previous_time_for_epoch < m_time_for_epoch) {
         // current sleep interval is worse. move back
         m_new_sleep_interval -= (m_current_sleep_interval - m_previous_sleep_interval);
-      } 
+      }
       // can't go negative.
       if (m_new_sleep_interval < 0) m_new_sleep_interval = 0;
       if (m_new_sleep_interval > 100) m_new_sleep_interval = 100;
@@ -137,7 +137,7 @@ void unfair_lock::unlock() {
         m_new_sleep_interval += DELTA;
       }
     /*
-     * logstream(LOG_INFO) << m_previous_time_for_epoch << ": " << m_previous_sleep_interval << "\t" 
+     * logstream(LOG_INFO) << m_previous_time_for_epoch << ": " << m_previous_sleep_interval << "\t"
      *                     << m_time_for_epoch << ": " << m_current_sleep_interval << std::endl;
      * logstream(LOG_INFO) << "New adaptive sleep interval: " << m_new_sleep_interval << std::endl;
      */

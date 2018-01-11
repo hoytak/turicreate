@@ -201,7 +201,7 @@ public:
 		if (reverse){
 			iteratorKeeper<true> ik(this, position);
 			inc();
-		} else 
+		} else
 		#endif
 		{
 			iteratorKeeper<false> ik(this, position);

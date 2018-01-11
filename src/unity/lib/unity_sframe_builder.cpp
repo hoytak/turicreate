@@ -60,7 +60,7 @@ void unity_sframe_builder::append_multiple(const std::vector<std::vector<flexibl
     this->append(i, segment);
   }
 }
-  
+
 std::vector<std::string> unity_sframe_builder::column_names() {
   return m_sframe.column_names();
 }

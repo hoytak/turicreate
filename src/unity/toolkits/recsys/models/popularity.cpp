@@ -5,7 +5,7 @@
  */
 #include <unity/lib/unity_sframe.hpp>
 #include <unity/toolkits/recsys/models/popularity.hpp>
-#include <unity/toolkits/options/option_manager.hpp> 
+#include <unity/toolkits/options/option_manager.hpp>
 #include <unity/toolkits/ml_data_2/metadata.hpp>
 #include <unity/toolkits/ml_data_2/ml_data.hpp>
 #include <unity/toolkits/ml_data_2/ml_data_iterators.hpp>
@@ -35,19 +35,19 @@ void recsys_popularity::init_options(const std::map<std::string,
   opt.description    = "The name of the column for user ids.";
   opt.default_value  = "user_id";
   opt.parameter_type = option_handling::option_info::STRING;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name           = "item_id";
   opt.description    = "The name of the column for item ids.";
   opt.default_value  = "item_id";
   opt.parameter_type = option_handling::option_info::STRING;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name           = "target";
   opt.description    = "The name of the column of target ratings to be predicted.";
   opt.default_value  = "";
   opt.parameter_type = option_handling::option_info::STRING;
-  options.create_option(opt); 
+  options.create_option(opt);
 
   opt.name           = "random_seed";
   opt.description    = "Random seed to use for the model.";
@@ -55,7 +55,7 @@ void recsys_popularity::init_options(const std::map<std::string,
   opt.parameter_type = option_handling::option_info::INTEGER;
   opt.lower_bound    = 0;
   opt.upper_bound    = std::numeric_limits<flex_int>::max();
-  options.create_option(opt); 
+  options.create_option(opt);
 
   // Set user specified options
   options.set_options(_options);
@@ -113,7 +113,7 @@ std::map<std::string, flexible_type> recsys_popularity::train(const v2::ml_data&
     unseen_item_prediction = double(num_items) / (std::max<size_t>(1, data.num_rows()));
   }
 
-  // Store the results in an SFrame. 
+  // Store the results in an SFrame.
   sframe items_with_predictions = sframe_from_ranged_generator(
       {metadata->column_name(ITEM_COLUMN_INDEX), "prediction"},
       {metadata->column_type(ITEM_COLUMN_INDEX), flex_type_enum::FLOAT},
@@ -122,13 +122,13 @@ std::map<std::string, flexible_type> recsys_popularity::train(const v2::ml_data&
         out = {metadata->indexer(ITEM_COLUMN_INDEX)->map_index_to_value(idx),
                item_predictions[idx]};
       });
-  
+
   std::shared_ptr<unity_sframe> ip_usf(new unity_sframe);
   ip_usf->construct_from_sframe(items_with_predictions);
 
   add_or_update_state({ {"item_predictions", to_variant(ip_usf)} });
 
-  // And we're done. 
+  // And we're done.
   std::map<std::string, flexible_type> ret;
   return ret;
 }
@@ -213,8 +213,8 @@ sframe recsys_popularity::predict(const v2::ml_data& test_data) const {
 
   size_t n_threads = thread::cpu_count();
 
-  size_t num_segments = n_threads; 
-  
+  size_t num_segments = n_threads;
+
   ret->open_for_write(num_segments);
   ret->set_type(flex_type_enum::FLOAT);
 
@@ -254,11 +254,11 @@ sframe recsys_popularity::get_similar_items(
                     : unseen_item_prediction);
 
         double max_diff = 0;
-        
+
         for(size_t i = 0; i < item_predictions.size(); ++i) {
           double diff = std::pow(v - item_predictions[i], 2);
-          idx_dist_dest[i] = {i, diff}; 
-          max_diff = std::max(max_diff, diff); 
+          idx_dist_dest[i] = {i, diff};
+          max_diff = std::max(max_diff, diff);
         }
 
         for(size_t i = 0; i < item_predictions.size(); ++i) {
@@ -266,7 +266,7 @@ sframe recsys_popularity::get_similar_items(
           // and everything else is given something in [0, 1).
           idx_dist_dest[i].second = (1.0 - idx_dist_dest[i].second / max_diff);
         }
-          
+
       });
 }
 
@@ -283,14 +283,14 @@ sframe recsys_popularity::get_similar_users(
         double v = metadata->statistics(USER_COLUMN_INDEX)->count(query_idx);
 
         double max_diff = 0;
-        
+
         for(size_t i = 0; i < n;  ++i) {
           double v2 = metadata->statistics(USER_COLUMN_INDEX)->count(i);
           double diff = std::pow(v - v2, 2);
           idx_dist_dest[i] = {i, diff};
-          max_diff = std::max(max_diff, diff); 
+          max_diff = std::max(max_diff, diff);
         }
-        
+
         for(size_t i = 0; i < n; ++i) {
           // Scale things so that most similar is given a score of 1,
           // and everything else is given something in [0, 1).
@@ -309,7 +309,7 @@ void recsys_popularity::score_all_items(
       const std::shared_ptr<v2::ml_data_side_features>& known_side_features) const {
 
   for(auto& p : scores) {
-    p.second = (p.first < item_predictions.size()) ? 
+    p.second = (p.first < item_predictions.size()) ?
         item_predictions[p.first] : unseen_item_prediction;
   }
 }
@@ -317,7 +317,7 @@ void recsys_popularity::score_all_items(
 ////////////////////////////////////////////////////////////////////////////////
 
 void recsys_popularity::internal_save(turi::oarchive& oarc) const {
-  oarc << item_predictions 
+  oarc << item_predictions
        << unseen_item_prediction;
   bool has_nearest_items_model = false;
   oarc << has_nearest_items_model;
@@ -325,7 +325,7 @@ void recsys_popularity::internal_save(turi::oarchive& oarc) const {
 
 void recsys_popularity::internal_load(turi::iarchive& iarc, size_t version) {
   ASSERT_EQ(version, POPULARITY_RECOMMENDER_VERSION);
-  iarc >> item_predictions 
+  iarc >> item_predictions
        >> unseen_item_prediction;
 
   bool has_nearest_items_model;
@@ -338,5 +338,3 @@ void recsys_popularity::internal_load(turi::iarchive& iarc, size_t version) {
   }
 }
 }}
-
-

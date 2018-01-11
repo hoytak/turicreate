@@ -29,13 +29,13 @@ namespace S3
 namespace Model
 {
 
-Bucket::Bucket() : 
+Bucket::Bucket() :
     m_nameHasBeenSet(false),
     m_creationDateHasBeenSet(false)
 {
 }
 
-Bucket::Bucket(const XmlNode& xmlNode) : 
+Bucket::Bucket(const XmlNode& xmlNode) :
     m_nameHasBeenSet(false),
     m_creationDateHasBeenSet(false)
 {

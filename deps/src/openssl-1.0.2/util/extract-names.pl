@@ -23,4 +23,3 @@ while(<STDIN>) {
 }
 
 print join("\n", @words),"\n";
-

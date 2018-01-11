@@ -37,7 +37,7 @@
 		  return (json_char *)std::memcpy(json_malloc<json_char>(len), str.c_str(), len);
 	   #endif
     }
-	
+
 	inline json_char * alreadyCString(json_char * str) json_nothrow {
 		#ifdef JSON_MEMORY_MANAGE
 		   return (json_char *)json_global(STRING_HANDLER).insert(str);

@@ -850,7 +850,7 @@ inline ::google::protobuf::uint64 ImageFeatureType::width() const {
   return width_;
 }
 inline void ImageFeatureType::set_width(::google::protobuf::uint64 value) {
-  
+
   width_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.ImageFeatureType.width)
 }
@@ -864,7 +864,7 @@ inline ::google::protobuf::uint64 ImageFeatureType::height() const {
   return height_;
 }
 inline void ImageFeatureType::set_height(::google::protobuf::uint64 value) {
-  
+
   height_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.ImageFeatureType.height)
 }
@@ -878,7 +878,7 @@ inline ::CoreML::Specification::ImageFeatureType_ColorSpace ImageFeatureType::co
   return static_cast< ::CoreML::Specification::ImageFeatureType_ColorSpace >(colorspace_);
 }
 inline void ImageFeatureType::set_colorspace(::CoreML::Specification::ImageFeatureType_ColorSpace value) {
-  
+
   colorspace_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.ImageFeatureType.colorSpace)
 }
@@ -929,7 +929,7 @@ inline ::CoreML::Specification::ArrayFeatureType_ArrayDataType ArrayFeatureType:
   return static_cast< ::CoreML::Specification::ArrayFeatureType_ArrayDataType >(datatype_);
 }
 inline void ArrayFeatureType::set_datatype(::CoreML::Specification::ArrayFeatureType_ArrayDataType value) {
-  
+
   datatype_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.ArrayFeatureType.dataType)
 }
@@ -1350,7 +1350,7 @@ inline bool FeatureType::isoptional() const {
   return isoptional_;
 }
 inline void FeatureType::set_isoptional(bool value) {
-  
+
   isoptional_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.FeatureType.isOptional)
 }

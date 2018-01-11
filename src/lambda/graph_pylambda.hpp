@@ -18,10 +18,10 @@ namespace lambda {
 /**
  * Implements sgraph synchronizing interface for graph pylambda worker.
  *
- * In the pylambda environment, vertex data are stored locally as python dictionary object. 
+ * In the pylambda environment, vertex data are stored locally as python dictionary object.
  * This class provides the following synchronization functionality:
- * 1) Load a python object vertex partition given the flexible_type vertex partition. 
- * 2) Update the python object vertex partition given a vertex_partition_exchange. 
+ * 1) Load a python object vertex partition given the flexible_type vertex partition.
+ * 2) Update the python object vertex partition given a vertex_partition_exchange.
  * 3) Create a vertex_partition_exchange object from the stored python object vertex partition.
  */
 class pysgraph_synchronize : public sgraph_compute::sgraph_synchronize_interface {
@@ -29,12 +29,12 @@ class pysgraph_synchronize : public sgraph_compute::sgraph_synchronize_interface
   void init(size_t num_partitions, const std::vector<std::string>& vertex_keys);
 
   /**
-   * Load a python object vertex partition given the flexible_type vertex partition. 
+   * Load a python object vertex partition given the flexible_type vertex partition.
    */
   void load_vertex_partition(size_t partition_id, std::vector<sgraph_vertex_data>& vertices);
-  
+
   /**
-   * Update the python object vertex partition given a vertex_partition_exchange. 
+   * Update the python object vertex partition given a vertex_partition_exchange.
    */
   void update_vertex_partition(vertex_partition_exchange& vpartition_exchange);
 
@@ -96,7 +96,7 @@ class graph_pylambda_evaluator : public graph_lambda_evaluator_interface {
   /*                                                                        */
   /**************************************************************************/
   /**
-   * Load a python object vertex partition given the flexible_type vertex partition. 
+   * Load a python object vertex partition given the flexible_type vertex partition.
    */
   inline void load_vertex_partition(size_t partition_id, std::vector<sgraph_vertex_data>& vertices) {
     logstream(LOG_INFO) << "graph_lambda_worker load partition " << partition_id << std::endl;
@@ -142,14 +142,14 @@ class graph_pylambda_evaluator : public graph_lambda_evaluator_interface {
 
  private:
   mutex m_mutex;
-  
+
   size_t m_lambda_id = size_t(-1);
-  
+
   std::vector<std::string> m_vertex_keys;
   std::vector<std::string> m_edge_keys;
   size_t m_srcid_column;
   size_t m_dstid_column;
-  
+
   pysgraph_synchronize m_graph_sync;
 };
 

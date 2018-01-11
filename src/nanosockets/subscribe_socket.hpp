@@ -21,7 +21,7 @@ namespace nanosockets {
  * Constructs a subscribe socket.
  *
  * The subscribe socket binds to at least one endpoint bound by a publish socket
- * (\ref publish_socket). Everything the publish socket publishes will be 
+ * (\ref publish_socket). Everything the publish socket publishes will be
  * received by the callback. You can register interest in prefix matches
  * of the message.
  *
@@ -43,7 +43,7 @@ class EXPORT subscribe_socket {
    * Constructs a subscribe socket.
    * \param callback The function used to process replies.
    *
-   * keyval can be NULL in which case all "connect/disconnect" calls 
+   * keyval can be NULL in which case all "connect/disconnect" calls
    * must refer to a ZeroMQ endpoints.
    */
   subscribe_socket(callback_type callback);
@@ -59,7 +59,7 @@ class EXPORT subscribe_socket {
   void connect(std::string endpoint);
 
   /**
-   * Disconnects from a given endpoint. 
+   * Disconnects from a given endpoint.
    */
   void disconnect(std::string endpoint);
 

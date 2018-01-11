@@ -166,7 +166,7 @@ std::shared_ptr<unity_sframe_base> unity_sgraph::get_edges_lazy(size_t groupa, s
         std::shared_ptr<sarray<flexible_type>> source_id_column = vdata_groupa[i].select_column(sgraph::VID_COLUMN_NAME);
         std::vector<flexible_type> id_vec;
         source_id_column->get_reader()->read_rows(0, source_id_column->size(), id_vec);
-        std::shared_ptr<const std::vector<flexible_type>> id_vec_ptr = 
+        std::shared_ptr<const std::vector<flexible_type>> id_vec_ptr =
           std::make_shared<const std::vector<flexible_type>>(id_vec);
         id_column_translators[{groupa, i}] = lazy_id_translation_functor(id_vec_ptr);
       }
@@ -174,7 +174,7 @@ std::shared_ptr<unity_sframe_base> unity_sgraph::get_edges_lazy(size_t groupa, s
         std::shared_ptr<sarray<flexible_type>> target_id_column = vdata_groupb[j].select_column(sgraph::VID_COLUMN_NAME);
         std::vector<flexible_type> id_vec;
         target_id_column->get_reader()->read_rows(0, target_id_column->size(), id_vec);
-        std::shared_ptr<const std::vector<flexible_type>> id_vec_ptr = 
+        std::shared_ptr<const std::vector<flexible_type>> id_vec_ptr =
           std::make_shared<const std::vector<flexible_type>>(id_vec);
         id_column_translators[{groupb, j}] = lazy_id_translation_functor(id_vec_ptr);
       }
@@ -302,7 +302,7 @@ std::shared_ptr<unity_sgraph_base> unity_sgraph::copy_vertex_field(
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::delete_vertex_field(const std::string field, size_t group) {
   log_func_entry();
   std::lock_guard<mutex> lock(dag_access_mutex);
@@ -325,7 +325,7 @@ std::shared_ptr<unity_sgraph_base> unity_sgraph::add_vertex_field(
     log_and_throw("Cannot add id field " + field);
   }
   sgraph* new_graph = new sgraph((*m_graph)());
-  std::shared_ptr<unity_sarray> column_data = 
+  std::shared_ptr<unity_sarray> column_data =
       std::static_pointer_cast<unity_sarray>(in_column_data);
   new_graph->add_vertex_field(column_data->get_underlying_sarray(), field);
   std::shared_ptr<unity_sgraph> g(new unity_sgraph(*this));
@@ -333,7 +333,7 @@ std::shared_ptr<unity_sgraph_base> unity_sgraph::add_vertex_field(
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::swap_vertex_fields(const std::string& field1, const std::string& field2) {
   log_func_entry();
   std::lock_guard<mutex> lock(dag_access_mutex);
@@ -347,7 +347,7 @@ unity_sgraph::swap_vertex_fields(const std::string& field1, const std::string& f
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::rename_vertex_fields(const std::vector<std::string>& oldnames,
                                    const std::vector<std::string>& newnames) {
   log_func_entry();
@@ -372,7 +372,7 @@ std::shared_ptr<unity_sgraph_base> unity_sgraph::select_vertex_fields(
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::copy_edge_field(const std::string field,
                               const std::string newfield,
                               size_t groupa, size_t groupb) {
@@ -392,7 +392,7 @@ unity_sgraph::copy_edge_field(const std::string field,
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::delete_edge_field(const std::string field,
                                 size_t groupa, size_t groupb) {
   log_func_entry();
@@ -408,7 +408,7 @@ unity_sgraph::delete_edge_field(const std::string field,
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::add_edge_field(std::shared_ptr<unity_sarray_base> in_column_data,
                              std::string field) {
   log_func_entry();
@@ -418,7 +418,7 @@ unity_sgraph::add_edge_field(std::shared_ptr<unity_sarray_base> in_column_data,
     log_and_throw("Cannot add id field " + field);
   }
   sgraph* new_graph = new sgraph((*m_graph)());
-  std::shared_ptr<unity_sarray> column_data = 
+  std::shared_ptr<unity_sarray> column_data =
       std::static_pointer_cast<unity_sarray>(in_column_data);
   new_graph->add_edge_field(column_data->get_underlying_sarray(), field);
   std::shared_ptr<unity_sgraph> g(new unity_sgraph(*this));
@@ -426,7 +426,7 @@ unity_sgraph::add_edge_field(std::shared_ptr<unity_sarray_base> in_column_data,
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::swap_edge_fields(const std::string& field1,
                                const std::string& field2) {
   log_func_entry();
@@ -442,7 +442,7 @@ unity_sgraph::swap_edge_fields(const std::string& field1,
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::rename_edge_fields(const std::vector<std::string>& oldnames,
                                  const std::vector<std::string>& newnames) {
   log_func_entry();
@@ -454,7 +454,7 @@ unity_sgraph::rename_edge_fields(const std::vector<std::string>& oldnames,
   return g;
 }
 
-std::shared_ptr<unity_sgraph_base> 
+std::shared_ptr<unity_sgraph_base>
 unity_sgraph::select_edge_fields(const std::vector<std::string>& fields,
                                  size_t groupa, size_t groupb) {
   log_func_entry();
@@ -525,7 +525,7 @@ unity_sgraph::lambda_triple_apply_native(const lambda_triple_apply_fn& lambda,
     }
     if (all_vertex_field_set.count(f)) {
       mutated_vertex_fields.push_back(f);
-      mutated_vertex_field_ids.push_back(std::find(all_vertex_fields.begin(), 
+      mutated_vertex_field_ids.push_back(std::find(all_vertex_fields.begin(),
                                                    all_vertex_fields.end(), f) -
                                           all_vertex_fields.begin());
     }
@@ -542,7 +542,7 @@ unity_sgraph::lambda_triple_apply_native(const lambda_triple_apply_fn& lambda,
                                                 all_vertex_fields.end());
   std::vector<flexible_type> flex_edge_fields(all_edge_fields.begin(),
                                               all_edge_fields.end());
-  auto new_lambda = 
+  auto new_lambda =
       [=](sgraph_compute::edge_scope& e)->void {
         e.lock_vertices();
         edge_triple triple;
@@ -575,7 +575,7 @@ unity_sgraph::lambda_triple_apply_native(const lambda_triple_apply_fn& lambda,
 flexible_type _map_to_flex_dict(std::map<std::string, flexible_type>&& map) {
   flex_dict ret;
   ret.reserve(map.size());
-  for (auto&& pair: map) 
+  for (auto&& pair: map)
     ret.push_back(std::make_pair(flexible_type(pair.first), pair.second));
   return ret;
 }
@@ -590,7 +590,7 @@ std::map<std::string, flexible_type> _map_from_flex_dict(flex_dict&& dict) {
 std::shared_ptr<unity_sgraph_base>
 unity_sgraph::lambda_triple_apply_native(const function_closure_info& toolkit_fn_name,
                                   const std::vector<std::string>& mutated_fields) {
-  auto native_execute_function = 
+  auto native_execute_function =
                   get_unity_global_singleton()
                   ->get_toolkit_function_registry()
                   ->get_native_function(toolkit_fn_name);
@@ -736,7 +736,7 @@ void unity_sgraph::fast_validate_add_vertices(const sframe& vertices,
   if (id_type != flex_type_enum::INTEGER && id_type != flex_type_enum::STRING) {
     log_and_throw(
         std::string("Invalid id column type : ")
-        + flex_type_enum_to_name(id_type) 
+        + flex_type_enum_to_name(id_type)
         + ". Supported types are: integer and string."
     );
   }

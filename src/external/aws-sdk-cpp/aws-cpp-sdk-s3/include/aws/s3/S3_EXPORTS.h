@@ -23,7 +23,7 @@
     #ifdef _MSC_VER
         #pragma warning(disable : 4251)
     #endif // _MSC_VER
-    
+
     #ifdef USE_IMPORT_EXPORT
         #ifdef AWS_S3_EXPORTS
             #define AWS_S3_API __declspec(dllexport)

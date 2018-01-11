@@ -21,15 +21,15 @@ There are no constraints on the constructor or destructor of the class, or what
 members the class should have. The class should contain enough information to
 perform the execute() method.
 
-The functions which must be implemented are 
+The functions which must be implemented are
  - attributes(): describes the attributes of the operator.
  - name(): a printable name of the operator
  - execute(): which reads elements from its inputs, and generates output
 Optionally:
- - print(): Makes a human readable description of the operator. 
+ - print(): Makes a human readable description of the operator.
             Defaults to just name()
 
-A couple of routines to convert back of forth between planner_node and the 
+A couple of routines to convert back of forth between planner_node and the
 operator implementation:
 
     operator_impl<enum>::make_planner_node(...)
@@ -45,7 +45,7 @@ A length inference routine:
 
 Example
 -------
-To give an example, to implement a transform operator 
+To give an example, to implement a transform operator
 (see the source in transform.hpp). The example here defines a simplified version
 that only transforms a single column of \ref flexible_type.
 
@@ -60,11 +60,11 @@ To define a transform, we define constructor to accept a generic function. We
 need to know the actual output type of the function ahead of time.
 
 \code
-  inline operator_impl(const std::function<flexible_type(flexible_type)>& f, 
+  inline operator_impl(const std::function<flexible_type(flexible_type)>& f,
                        flex_type_enum output_type) {
       : m_transform_fn(f), m_output_type(output_type)
   { }
-  
+
   inline std::shared_ptr<query_operator> clone() const {
     return std::make_shared<operator_impl>(*this);
   }
@@ -121,7 +121,7 @@ inline void execute(query_context& context) {
   }
 \endcode
 
-We need converters between \ref planner_node and this operator. The 
+We need converters between \ref planner_node and this operator. The
 \ref planner_node really just stores a bunch of information in a generic map->any
 and we have to figure out our own schema in it. A bunch of assertions checks
 are removed for readability.
@@ -131,7 +131,7 @@ are removed for readability.
       std::shared_ptr<planner_node> source,
       std::function<flexible_type(flexible_type)>fn,
       flex_type_enum output_type) {
-    return planner_node::make_shared(planner_node_type::TRANSFORM_NODE, 
+    return planner_node::make_shared(planner_node_type::TRANSFORM_NODE,
                                      {{"output_type", (int)(output_type)},
                                      {{"function", any(fn)}},
                                      {source});
@@ -141,7 +141,7 @@ are removed for readability.
       std::shared_ptr<planner_node> pnode) {
     typedef std::function<flexible_type(flexible_type)> transform_type;
     transform_type fn;
-    flex_type_enum output_type = 
+    flex_type_enum output_type =
         (flex_type_enum)(flex_int)(pnode->operator_parameters["output_type"]);
     fn = pnode->any_operator_parameters["function"].as<transform_type>();
     // call my own constructor
@@ -149,7 +149,7 @@ are removed for readability.
   }
 \endcode
 
-To guide the graph verification and planning process of the logical graph, 
+To guide the graph verification and planning process of the logical graph,
 a couple of methods around type or length inference has to be provided.
 \code
   static std::vector<flex_type_enum> infer_type(std::shared_ptr<planner_node> pnode) {
@@ -162,14 +162,14 @@ a couple of methods around type or length inference has to be provided.
     // So we recursively call the infer_planner_node_length on the input node.
     return infer_planner_node_length(pnode->inputs[0]);
   }
-  
+
 \endcode
 
 Finally, for convenience, we might typedef the whole class to something
 easier to read
 
 \code
-typedef operator_impl<planner_node_type::TRANSFORM_NODE> op_transform; 
+typedef operator_impl<planner_node_type::TRANSFORM_NODE> op_transform;
 \endcode
 
  */

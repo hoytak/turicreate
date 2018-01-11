@@ -64,7 +64,7 @@ bool block_cache::write(const std::string& key, const std::string& value) {
       logstream(LOG_INFO) << "Evicting " << to_evict << std::endl;
       evict_key(to_evict);
     }
-    return true; 
+    return true;
   } catch (...) {
     // all exceptions result in failure.
     return false;
@@ -88,11 +88,11 @@ int64_t block_cache::value_length(const std::string& key) {
   }
 }
 
-int64_t block_cache::read(const std::string& key, 
+int64_t block_cache::read(const std::string& key,
                           std::string& output,
                           size_t start,
                           size_t end) {
-  // we need to get the end size if we do not know it so that 
+  // we need to get the end size if we do not know it so that
   // we have resize the output string.
   if (end == (size_t)(-1)) end = value_length(key);
   if (end == (size_t)(-1)) return -1;
@@ -102,13 +102,13 @@ int64_t block_cache::read(const std::string& key,
 }
 
 
-int64_t block_cache::read(const std::string& key, 
+int64_t block_cache::read(const std::string& key,
                           char* output,
                           size_t start,
                           size_t end) {
   static atomic<size_t> ctr;
   if (ctr.inc() % 4096 == 0) {
-    logstream(LOG_INFO) << "Block Cache Hits: " << file_handle_cache_hits() 
+    logstream(LOG_INFO) << "Block Cache Hits: " << file_handle_cache_hits()
                         << " Misses: " << file_handle_cache_misses() << std::endl;
   }
   ASSERT_TRUE(m_initialized);
@@ -133,7 +133,7 @@ int64_t block_cache::read(const std::string& key,
       from_cache = true;
     }
   }
-  // not in cache. open it 
+  // not in cache. open it
   if (read_stream == nullptr) {
     try {
       if (fileio::get_file_status(filename) == fileio::file_status::REGULAR_FILE) {
@@ -155,7 +155,7 @@ int64_t block_cache::read(const std::string& key,
   if (read_stream->good() && length > 0) {
     read_stream->read(&(output[0]), length);
     retval = read_stream->gcount();
-  } 
+  }
 
   if (!read_stream->good()) {
     retval = -1;
@@ -174,7 +174,7 @@ int64_t block_cache::read(const std::string& key,
     std::unique_lock<mutex> global_lock(m_lock);
     m_cache.insert(filename, read_stream);
   }
-  return retval; 
+  return retval;
 }
 
 bool block_cache::evict_key(const std::string& key) {
@@ -221,7 +221,7 @@ static std::once_flag block_cache_is_initialized;
 static std::shared_ptr<block_cache> bc;
 
 block_cache& block_cache::get_instance() {
-  std::call_once(block_cache_is_initialized, 
+  std::call_once(block_cache_is_initialized,
                  []() {
                    bc = std::make_shared<block_cache>();
                    auto temp_name = get_temp_name_prefer_hdfs("block_caches-");

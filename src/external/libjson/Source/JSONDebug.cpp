@@ -39,4 +39,3 @@ void JSONDebug::_JSON_ASSERT(bool condition, const json_string & msg) json_nothr
     }
 }
 #endif
-

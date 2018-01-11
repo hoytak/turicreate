@@ -85,4 +85,3 @@ for complete algorithms and toolkits.
 With Core ML, you can integrate machine learning models into your macOS,
 iOS, watchOS, and tvOS app. Many models created  in Turi Create can be
 exported for use in Core ML.
-

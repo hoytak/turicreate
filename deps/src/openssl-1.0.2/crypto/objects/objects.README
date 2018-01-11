@@ -41,4 +41,3 @@ Then there are some extra commands:
 
 Lines starting with # are treated as comments, as well as any line starting
 with ! and not matching the commands above.
-

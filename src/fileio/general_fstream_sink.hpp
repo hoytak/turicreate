@@ -41,14 +41,14 @@ class general_fstream_sink {
 
  public:
   typedef char        char_type;
-  struct category: public boost::iostreams::sink_tag, 
-    boost::iostreams::closable_tag, 
+  struct category: public boost::iostreams::sink_tag,
+    boost::iostreams::closable_tag,
     boost::iostreams::multichar_tag,
     boost::iostreams::optimally_buffered_tag {};
 
   /**
    * Constructs a fstream sink which write to a file. This file can be
-   * of any protocol supported by the union_fstream, and may also be 
+   * of any protocol supported by the union_fstream, and may also be
    * gzip compressed. Gzip compression detection is automatic based on the file
    * extension. (Whether it ends in .gz)
    */
@@ -56,8 +56,8 @@ class general_fstream_sink {
 
   /**
    * Constructs a fstream sink which writes to a file. This file can be
-   * of any protocol supported by the union_fstream, and may also be 
-   * gzip compressed. Gzip compression detection is not performed, and the 
+   * of any protocol supported by the union_fstream, and may also be
+   * gzip compressed. Gzip compression detection is not performed, and the
    * gzip_compressed flag is used to enable/disable gzip decompression.
    */
   general_fstream_sink(std::string file, bool gzip_compressed);
@@ -82,7 +82,7 @@ class general_fstream_sink {
   inline std::streamsize optimal_buffer_size() const {
     return turi::fileio::FILEIO_WRITER_BUFFER_SIZE;
   }
-  
+
   /**
    * Returns true if the file is opened
    */

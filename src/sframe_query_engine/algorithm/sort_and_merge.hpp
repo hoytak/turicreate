@@ -20,12 +20,12 @@ namespace query_eval {
  * \internal
  * The merge stage of \ref sort.
  *
- * The input is a partially sorted(partitioned) sframe, represented by 
+ * The input is a partially sorted(partitioned) sframe, represented by
  * an sarray<string> with N segments. Each segment
- * is a partitioned key range, and segments are ordered by 
+ * is a partitioned key range, and segments are ordered by
  * the key orders.
  *
- * Given the partially sorted sframe, this function will in parallel 
+ * Given the partially sorted sframe, this function will in parallel
  * sort each partition, and concat the result into final sframe.
  *
  * \param partition_array the serialized input sframe, partially sorted

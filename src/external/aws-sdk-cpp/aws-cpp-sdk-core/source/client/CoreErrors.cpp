@@ -15,12 +15,12 @@
 
 #include "aws/core/client/AWSError.h"
 #include "aws/core/client/CoreErrors.h"
-#include "aws/core/utils/HashingUtils.h"  
+#include "aws/core/utils/HashingUtils.h"
 
 using namespace Aws::Client;
 using namespace Aws::Utils;
 
-//we can't use a static map here due to memory allocation ordering. 
+//we can't use a static map here due to memory allocation ordering.
 //instead we compute the hash of these strings to avoid so many string compares.
 static const int INCOMPLETE_SIGNATURE_EXCEPTION_HASH = HashingUtils::HashString("IncompleteSignatureException");
 static const int INCOMPLETE_SIGNATURE_HASH = HashingUtils::HashString("IncompleteSignature");

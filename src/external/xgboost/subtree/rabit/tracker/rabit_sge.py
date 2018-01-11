@@ -35,7 +35,7 @@ if os.path.exists(args.logdir):
         raise RuntimeError('specified logdir %s is a file instead of directory' % args.logdir)
 else:
     os.mkdir(args.logdir)
-    
+
 runscript = '%s/runrabit.sh' % args.logdir
 fo = open(runscript, 'w')
 fo.write('source ~/.bashrc\n')

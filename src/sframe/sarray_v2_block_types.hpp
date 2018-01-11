@@ -53,28 +53,28 @@ enum FLAGS {
 };
 }
 /**
- * A column address is a tuple of segment_id, 
+ * A column address is a tuple of segment_id,
  * column number within the segment
  */
 typedef std::tuple<size_t, size_t> column_address;
 
 /**
- * A block address is a tuple of segment_id, 
+ * A block address is a tuple of segment_id,
  * column number, block number within the segment
  */
 typedef std::tuple<size_t, size_t, size_t> block_address;
 
-/** 
+/**
  * Metadata about each block
  */
 struct block_info: public turi::IS_POD_TYPE {
   uint64_t offset = (uint64_t)(-1); /// The file offsets of the block
   uint64_t length = 0; /// The length of the block in bytes on disk
-  /** 
-   * The decompressed length of the block in bytes 
-   * on disk. Only different from length if the block is LZ4_compressed. 
+  /**
+   * The decompressed length of the block in bytes
+   * on disk. Only different from length if the block is LZ4_compressed.
    */
-  uint64_t block_size = 0; 
+  uint64_t block_size = 0;
   uint64_t num_elem = 0; /// The number of elements in the block
   uint64_t flags = 0;  /// block flags
   /**

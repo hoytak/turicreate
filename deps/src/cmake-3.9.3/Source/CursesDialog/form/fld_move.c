@@ -35,9 +35,9 @@
 MODULE_ID("$Id$")
 
 /*---------------------------------------------------------------------------
-|   Facility      :  libnform  
+|   Facility      :  libnform
 |   Function      :  int move_field(FIELD *field,int frow, int fcol)
-|   
+|
 |   Description   :  Moves the disconnected field to the new location in
 |                    the forms subwindow.
 |
@@ -47,10 +47,10 @@ MODULE_ID("$Id$")
 +--------------------------------------------------------------------------*/
 int move_field(FIELD *field, int frow, int fcol)
 {
-  if ( !field || (frow<0) || (fcol<0) ) 
+  if ( !field || (frow<0) || (fcol<0) )
     RETURN(E_BAD_ARGUMENT);
 
-  if (field->form) 
+  if (field->form)
     RETURN(E_CONNECTED);
 
   field->frow = frow;
@@ -59,4 +59,3 @@ int move_field(FIELD *field, int frow, int fcol)
 }
 
 /* fld_move.c ends here */
-

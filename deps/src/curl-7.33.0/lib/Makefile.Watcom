@@ -248,4 +248,3 @@ $(LINK_ARG): $(__MAKEFILES__)
 $(LIB_ARG): $(__MAKEFILES__)
 	%create $^@
 	@for %f in ($(OBJS_STAT)) do @%append $^@ +- %f
-

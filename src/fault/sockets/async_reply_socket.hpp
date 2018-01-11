@@ -19,7 +19,7 @@
 namespace turi {
 namespace zookeeper_util {
 class key_value;
-} 
+}
 }
 
 namespace libfault {

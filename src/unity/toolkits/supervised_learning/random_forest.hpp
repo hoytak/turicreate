@@ -20,9 +20,9 @@ namespace xgboost {
  *
  */
 class EXPORT random_forest_regression: public xgboost_model {
-  
+
   public:
-  
+
   /**
    * Set one of the options in the algorithm.
    *
@@ -31,17 +31,17 @@ class EXPORT random_forest_regression: public xgboost_model {
    *
    * \param[in] opts Options to set
    */
-  void init_options(const std::map<std::string,flexible_type>& _opts) override; 
+  void init_options(const std::map<std::string,flexible_type>& _opts) override;
 
-  /** 
-   * Configure booster from options 
+  /**
+   * Configure booster from options
    */
   void configure(void) override;
-  
+
   void export_to_coreml(const std::string& filename);
 
   SUPERVISED_LEARNING_METHODS_REGISTRATION(
-      "random_forest_regression", 
+      "random_forest_regression",
       random_forest_regression)
 
 };
@@ -51,17 +51,17 @@ class EXPORT random_forest_regression: public xgboost_model {
  * Boosted trees classifier.
  *
  */
-class EXPORT random_forest_classifier: public xgboost_model {  
-  
+class EXPORT random_forest_classifier: public xgboost_model {
+
   public:
-  
+
   /**
    * Initialize things that are specific to your model.
    *
    * \param[in] data ML-Data object created by the init function.
    *
    */
-  void model_specific_init(const ml_data& data, 
+  void model_specific_init(const ml_data& data,
                            const ml_data& valid_data) override;
 
   /**
@@ -72,10 +72,10 @@ class EXPORT random_forest_classifier: public xgboost_model {
    *
    * \param[in] opts Options to set
    */
-  void init_options(const std::map<std::string, flexible_type>& _opts) override; 
+  void init_options(const std::map<std::string, flexible_type>& _opts) override;
 
-  /** 
-   * Configure booster from options 
+  /**
+   * Configure booster from options
    */
   void configure(void) override;
 
@@ -84,30 +84,30 @@ class EXPORT random_forest_classifier: public xgboost_model {
    */
   void set_default_evaluation_metric(){
     set_evaluation_metric({
-        "accuracy", 
-        "auc", 
+        "accuracy",
+        "auc",
         "confusion_matrix",
-        "f1_score", 
+        "f1_score",
         "log_loss",
-        "precision", 
-        "recall",  
+        "precision",
+        "recall",
         "roc_curve",
-        }); 
+        });
   }
-  
+
   /**
    * Set the default evaluation metric for progress tracking.
    */
   void set_default_tracking_metric(){
     set_tracking_metric({
         "accuracy", "log_loss"
-       }); 
+       });
   }
 
   void export_to_coreml(const std::string& filename);
- 
+
   SUPERVISED_LEARNING_METHODS_REGISTRATION(
-      "random_forest_classifier", 
+      "random_forest_classifier",
       random_forest_classifier)
 
 };

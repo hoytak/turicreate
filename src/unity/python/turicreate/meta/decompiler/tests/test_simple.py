@@ -135,12 +135,12 @@ class Simple(Base):
     def test_exec1(self):
         stmnt = 'exec a'
         self.statement(stmnt)
-    
+
     @py2only
     def test_exec2(self):
         stmnt = 'exec a in b'
         self.statement(stmnt)
-    
+
     @py2only
     def test_exec3(self):
         stmnt = 'exec a in b,c'
@@ -203,42 +203,42 @@ class Simple(Base):
     def test_call_var_kwargs(self):
         stmnt = 'a(a, b=0, *d, **a)'
         self.statement(stmnt)
-    
+
     @py2only
     def test_print(self):
         stmnt = 'print foo,'
         self.statement(stmnt)
-    
+
     @py2only
     def test_printnl(self):
         stmnt = 'print foo'
         self.statement(stmnt)
-    
+
     @py2only
     def test_printitems(self):
         stmnt = 'print foo, bar, bas,'
         self.statement(stmnt)
-    
+
     @py2only
     def test_printitemsnl(self):
         stmnt = 'print foo, bar, bas'
         self.statement(stmnt)
-    
+
     @py2only
     def test_print_to(self):
         stmnt = 'print >> stream, foo,'
         self.statement(stmnt)
-    
+
     @py2only
     def test_print_to_nl(self):
         stmnt = 'print >> stream, foo'
         self.statement(stmnt)
-    
+
     @py2only
     def test_printitems_to(self):
         stmnt = 'print >> stream, foo, bar, bas,'
         self.statement(stmnt)
-    
+
     @py2only
     def test_printitems_to_nl(self):
         stmnt = 'print >> stream, foo, bar, bas'
@@ -351,7 +351,7 @@ class Simple(Base):
     def test_subscr_delX3(self):
         stmnt = 'del x[x,:a]'
         self.statement(stmnt)
-        
+
     def test_bug_001(self):
         stmnt = 'a = 1; b = 2; (a, b) = (b, a)'
         self.statement(stmnt)
@@ -376,4 +376,3 @@ class Simple(Base):
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.test_assign']
     unittest.main()
-

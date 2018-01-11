@@ -291,4 +291,3 @@ std::shared_ptr<sarray<flexible_type> > validation_test);
 } // turicreate
 
 #endif
-

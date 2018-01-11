@@ -26,7 +26,7 @@ using namespace Aws::Utils;
 using namespace Aws::Http;
 using namespace Aws;
 
-UploadPartRequest::UploadPartRequest() : 
+UploadPartRequest::UploadPartRequest() :
     m_bucketHasBeenSet(false),
     m_contentLength(0),
     m_contentLengthHasBeenSet(false),

@@ -351,7 +351,7 @@ static void sort_and_uniquify_map_of_vecs(std::map<K, std::vector<T> >& data) {
         while(local_counter < next_index) {
           ++it;
           ++local_counter;
-        
+
           if(it == it_end)
             return;
         }
@@ -1061,7 +1061,7 @@ sframe recsys_model_base::recommend(
           if(new_data_it != new_data_it_end && new_data_it->first == item)
             return false;
 
-          return true; 
+          return true;
         };
 
         if(!item_restriction_list.empty()) {
@@ -1304,7 +1304,7 @@ void recsys_model_base::load_version(turi::iarchive& iarc, size_t version) {
   // Now, if there have been any additional options added since this
   // model was saved, go through and add those to the option manager.
 
-  
+
   if (version == 1) {
     // Version 1 had the base type stored as a flex_dict so
     // item_similarity could use it in a graph, but for speed version
@@ -1390,7 +1390,7 @@ std::shared_ptr<recsys_popularity> recsys_model_base::get_popularity_baseline() 
 flex_dict recsys_model_base::get_data_schema() const {
 
   size_t n = metadata->num_columns();
-  
+
   flex_dict schema(n);
 
   for(size_t i = 0; i < n; ++i) {
@@ -1398,7 +1398,7 @@ flex_dict recsys_model_base::get_data_schema() const {
                  flex_type_enum_to_name(metadata->column_type(i))};
   }
 
-  return schema; 
+  return schema;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1441,7 +1441,7 @@ sframe recsys_model_base::get_item_intersection_info(const sframe& unindexed_ite
     log_and_throw("Provided list of item pairs must be 2-column "
                   "sframe with each column containing an item.");
   }
-  
+
   struct item_data {
     size_t row_index;
     size_t item_1, item_2;
@@ -1471,11 +1471,11 @@ sframe recsys_model_base::get_item_intersection_info(const sframe& unindexed_ite
     idata.n_users_item_1 = item_statistics->count(idata.item_1);
     idata.n_users_item_2 = item_statistics->count(idata.item_2);
 
-    if(idata.item_1 != size_t(-1)) { 
+    if(idata.item_1 != size_t(-1)) {
       all_items_considered.insert(idata.item_1);
     }
-    
-    if(idata.item_2 != size_t(-1)) { 
+
+    if(idata.item_2 != size_t(-1)) {
       all_items_considered.insert(idata.item_2);
     }
   }
@@ -1522,7 +1522,7 @@ sframe recsys_model_base::get_item_intersection_info(const sframe& unindexed_ite
             size_t item_2 = p2.first;
             double score_2 = p2.second;
 
-            // Find the next item in the list of item_outputs that match this item pair. 
+            // Find the next item in the list of item_outputs that match this item pair.
             auto it = std::lower_bound(
                 iout_it, item_outputs.end(), std::make_pair(item_1, item_2),
                 [](const item_data& idata, const std::pair<size_t, size_t>& p) {
@@ -1545,14 +1545,14 @@ sframe recsys_model_base::get_item_intersection_info(const sframe& unindexed_ite
     });
 
   // Now, go through and put all the answers into an sframe in the
-  // orginal order. 
+  // orginal order.
   std::sort(item_outputs.begin(), item_outputs.end(),
             [](const item_data& id1, const item_data& id2) {
               return id1.row_index < id2.row_index;
             });
 
   sframe out_data_1 = unindexed_item_pairs;
-  
+
   sframe out_data_2 = sframe_from_ranged_generator(
       {"num_users_1", "num_users_2", "intersection"},
       {flex_type_enum::INTEGER, flex_type_enum::INTEGER, flex_type_enum::DICT},
@@ -1562,11 +1562,11 @@ sframe recsys_model_base::get_item_intersection_info(const sframe& unindexed_ite
         flex_dict fd(idata.users_in_intersection.size());
 
         for(size_t i = 0; i < idata.users_in_intersection.size(); ++i) {
-          const auto& p = idata.users_in_intersection[i]; 
+          const auto& p = idata.users_in_intersection[i];
           fd[i] = {user_indexer->map_index_to_value(p.first),
                    flex_list{flexible_type(p.second.first), flexible_type(p.second.second)}};
         }
-        
+
         out = {idata.n_users_item_1,
                idata.n_users_item_2,
                std::move(fd)};
@@ -1662,5 +1662,3 @@ sframe recsys_model_base::get_num_users_per_item() const {
 
 
 }}
-
-

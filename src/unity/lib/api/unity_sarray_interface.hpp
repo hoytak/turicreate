@@ -92,4 +92,3 @@ GENERATE_INTERFACE_AND_PROXY(unity_sarray_base, unity_sarray_proxy,
 } // namespace turi
 #endif // TURI_UNITY_SARRAY_INTERFACE_HPP
 #include <unity/lib/api/unity_sframe_interface.hpp>
-

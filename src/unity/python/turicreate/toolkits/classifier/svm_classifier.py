@@ -561,7 +561,7 @@ class SVMClassifier(_Classifier):
         """
         return super(SVMClassifier, self).classify(dataset, missing_value_action=missing_value_action)
 
-    
+
     def evaluate(self, dataset, metric='auto', missing_value_action='auto'):
         """
         Evaluate the model by making predictions of target values and comparing

@@ -27,7 +27,7 @@ class EXPORT hash_map_container {
   }
 
   explicit hash_map_container(size_t num_seg) {
-    num_segments = std::min(num_seg, thread::cpu_count() 
+    num_segments = std::min(num_seg, thread::cpu_count()
                             * std::max<size_t>(1, log2(thread::cpu_count())));
     maps.resize(num_segments, hash_map_type());
   }
@@ -40,7 +40,7 @@ class EXPORT hash_map_container {
     size_t seg_id = get_segment_id(k);
     maps[seg_id].update(k, func);
   }
-  
+
   const V& get(const K& k) const {
     size_t seg_id = get_segment_id(k);
     return maps[seg_id].get(k);
@@ -49,7 +49,7 @@ class EXPORT hash_map_container {
   inline size_t get_segment_id(const K& k) const {
     return hash64(k) % num_segments;
   }
-  
+
   void clear() {
     for (auto& m: maps) {
       m.clear();
@@ -87,7 +87,7 @@ class EXPORT hash_map {
     auto fit = umap.find(k);
     if (fit == umap.end()) {
       fit = umap.insert(std::make_pair(k, default_value)).first;
-    }      
+    }
     func(fit->second);
     lock.unlock();
   }
@@ -96,10 +96,10 @@ class EXPORT hash_map {
     auto fit = umap.find(k);
     if (fit == umap.end()) {
       return default_value;
-    } 
-    return fit->second; 
+    }
+    return fit->second;
   }
-  
+
   void clear() {
     lock.lock();
     umap.clear();

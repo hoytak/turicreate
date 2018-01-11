@@ -665,7 +665,7 @@ class TopicModel(_Model):
 
         return preds
 
-    
+
     def evaluate(self, train_data, test_data=None, metric='perplexity'):
         """
         Estimate the model's ability to predict new data. Imagine you have a

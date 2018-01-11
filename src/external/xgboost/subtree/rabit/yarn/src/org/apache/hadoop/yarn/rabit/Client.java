@@ -67,7 +67,7 @@ public class Client {
         userName = UserGroupInformation.getCurrentUser().getShortUserName();
         credentials = UserGroupInformation.getCurrentUser().getCredentials();
     }
-    
+
     /**
      * setup security token given current user
      * @return the ByeBuffer containing the security tokens
@@ -78,10 +78,10 @@ public class Client {
         this.credentials.writeTokenStorageToStream(buffer);
         return ByteBuffer.wrap(buffer.getData());
     }
-    
+
     /**
      * setup all the cached files
-     * 
+     *
      * @param fmaps
      *            the file maps
      * @return the resource map
@@ -100,7 +100,7 @@ public class Client {
         }
         // create temporary directory
         FileSystem.mkdirs(dfs, tmpPath, permTemp);
-        
+
         StringBuilder cstr = new StringBuilder();
         Map<String, LocalResource> rmap = new java.util.HashMap<String, LocalResource>();
         for (Map.Entry<String, String> e : cacheFiles.entrySet()) {
@@ -127,7 +127,7 @@ public class Client {
             cstr.append(e.getKey());
             cstr.append("\"");
         }
-        
+
         dfs.deleteOnExit(tmpPath);
         this.cacheFileArg = cstr.toString();
         return rmap;
@@ -135,7 +135,7 @@ public class Client {
 
     /**
      * get the environment variables for container
-     * 
+     *
      * @return the env variable for child class
      */
     private Map<String, String> getEnvironment() {
@@ -163,7 +163,7 @@ public class Client {
 
     /**
      * initialize the settings
-     * 
+     *
      * @param args
      */
     private void initArgs(String[] args) {
@@ -232,13 +232,13 @@ public class Client {
         capability.setMemory(1024);
         capability.setVirtualCores(1);
         LOG.info("jobname=" + this.jobName + ",username=" + this.userName);
-        
+
         appContext.setApplicationName(jobName + ":RABIT-YARN");
         appContext.setAMContainerSpec(amContainer);
         appContext.setResource(capability);
         appContext.setQueue(queue);
         //appContext.setUser(userName);
-        LOG.info("Submitting application " + appId);      
+        LOG.info("Submitting application " + appId);
         yarnClient.submitApplication(appContext);
 
         ApplicationReport appReport = yarnClient.getApplicationReport(appId);
@@ -250,7 +250,7 @@ public class Client {
             appReport = yarnClient.getApplicationReport(appId);
             appState = appReport.getYarnApplicationState();
         }
-        
+
         System.out.println("Application " + appId + " finished with"
                 + " state " + appState + " at " + appReport.getFinishTime());
         if (!appReport.getFinalApplicationStatus().equals(

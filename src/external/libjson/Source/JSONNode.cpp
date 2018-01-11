@@ -315,12 +315,12 @@ JSONNode JSON_PTR_LIB JSONNode::pop_back(const json_string & name_t) json_throws
 	   #endif
     }
 #endif
-		
+
 #ifdef JSON_MEMORY_POOL
 	#include "JSONMemoryPool.h"
 	memory_pool<NODEPOOL> json_node_mempool;
 #endif
-		
+
 void JSONNode::deleteJSONNode(JSONNode * ptr) json_nothrow {
 	#ifdef JSON_MEMORY_POOL
 		ptr -> ~JSONNode();
@@ -332,7 +332,7 @@ void JSONNode::deleteJSONNode(JSONNode * ptr) json_nothrow {
 		delete ptr;
 	#endif
 }
-		
+
 inline JSONNode * _newJSONNode(const JSONNode & orig) {
 	#ifdef JSON_MEMORY_POOL
 		return new((JSONNode*)json_node_mempool.allocate()) JSONNode(orig);
@@ -342,7 +342,7 @@ inline JSONNode * _newJSONNode(const JSONNode & orig) {
 		return new JSONNode(orig);
 	#endif
 }
-		
+
 JSONNode * JSONNode::newJSONNode(const JSONNode & orig    JSON_MUTEX_COPY_DECL) {
 	#ifdef JSON_MUTEX_CALLBACKS
 		if (parentMutex != 0){
@@ -353,7 +353,7 @@ JSONNode * JSONNode::newJSONNode(const JSONNode & orig    JSON_MUTEX_COPY_DECL) 
 	#endif
 	return _newJSONNode(orig);
 }
-		
+
 JSONNode * JSONNode::newJSONNode(internalJSONNode * internal_t) {
 	#ifdef JSON_MEMORY_POOL
 		return new((JSONNode*)json_node_mempool.allocate()) JSONNode(internal_t);
@@ -363,7 +363,7 @@ JSONNode * JSONNode::newJSONNode(internalJSONNode * internal_t) {
 		return new JSONNode(internal_t);
 	#endif
 }
-		
+
 JSONNode * JSONNode::newJSONNode_Shallow(const JSONNode & orig) {
 	#ifdef JSON_MEMORY_POOL
 		return new((JSONNode*)json_node_mempool.allocate()) JSONNode(true, const_cast<JSONNode &>(orig));
@@ -373,5 +373,3 @@ JSONNode * JSONNode::newJSONNode_Shallow(const JSONNode & orig) {
 		return new JSONNode(true, const_cast<JSONNode &>(orig));
 	#endif
 }
-		
-

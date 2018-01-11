@@ -286,4 +286,3 @@ rpm_filter_close(struct archive_read_filter *self)
 
 	return (ARCHIVE_OK);
 }
-
