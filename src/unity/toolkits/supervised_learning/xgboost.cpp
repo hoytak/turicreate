@@ -477,6 +477,7 @@ std::shared_ptr< sarray<flexible_type> > transform_prediction(const std::vector<
   } else if (num_classes == 2) {
     //  Binary classification
     switch(output_type) {
+      case prediction_type_enum::NA:  // This one is the default if nothing is given.
       case prediction_type_enum::PROBABILITY:
       case prediction_type_enum::MARGIN:
         {

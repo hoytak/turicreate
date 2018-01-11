@@ -6,6 +6,23 @@
 #include <unity/lib/unity_global.hpp>
 
 
+// Allows the exact registration to be overridden in the build process.
+#ifdef TC_CAPI_SERVER_INITIALIZER_CREATION_FUNCTION
+
+  extern const turi::unity_server_initializer& TC_CAPI_SERVER_INITIALIZER_CREATION_FUNCTION();
+
+#else
+
+static const turi::unity_server_initializer& default_server_init() {
+  static turi::unity_server_initializer default_init;
+   return default_init;
+}
+
+#define TC_CAPI_SERVER_INITIALIZER_CREATION_FUNCTION default_server_init
+#endif
+
+
+
 /******************************************************************************/
 /*                                                                            */
 /*   Models                                                                   */
@@ -28,7 +45,10 @@ EXPORT void tc_initialize(const char* log_file, tc_error** error) {
   s_opts.log_rotation_interval = 0;
   s_opts.log_rotation_truncate = 0;
 
-  turi::start_server(s_opts);
+  turi::unity_server_initializer server_initializer
+    = TC_CAPI_SERVER_INITIALIZER_CREATION_FUNCTION();
+
+  turi::start_server(s_opts, server_initializer);
 
   ERROR_HANDLE_END(error);
 }

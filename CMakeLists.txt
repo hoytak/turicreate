@@ -789,6 +789,15 @@ include_directories(SYSTEM src/external)
 include_directories(SYSTEM src/old)
 include_directories(SYSTEM src/platform)
 
+if(EXISTS ${CMAKE_SOURCE_DIR}/extensions)
+  include_directories(SYSTEM extensions)
+  add_subdirectory(extensions)
+endif()
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/external_source)
+  include_directories(SYSTEM external_source)
+  add_subdirectory(external_source)
+endif()
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/subtree)
   include_directories(SYSTEM subtree)
