@@ -28,7 +28,7 @@ void add_metadata(std::shared_ptr<CoreML::Specification::Model> model_spec,
       (*user_defined)[kv.first] = kv.second.get<flex_string>();
     }
   }
-  (*user_defined)["version"] = context.at("version").get<flex_string>();
+  (*user_defined)["version"] = context.at("version").to<flex_string>();
   (*user_defined)["class"] = context.at("class").get<flex_string>();
 }
 

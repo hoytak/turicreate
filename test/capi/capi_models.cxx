@@ -9,6 +9,8 @@
 BOOST_AUTO_TEST_CASE(test_boosted_trees_double) {
 
 
+  for(const char* model_name : {"boosted_trees_regression", "decision_tree_regression", "regression_linear_regression"} ) {
+
   tc_error* error = NULL;
 
   tc_initialize("/tmp/", &error);
@@ -62,7 +64,7 @@ BOOST_AUTO_TEST_CASE(test_boosted_trees_double) {
   }
 
   // We now have enough to create the model.
-  tc_model* model = tc_model_new("boosted_trees_regression", &error);
+  tc_model* model = tc_model_new(model_name, &error);
   TS_ASSERT(error == NULL);
 
   tc_model_call_method(model, "train", args, &error);
@@ -74,7 +76,7 @@ BOOST_AUTO_TEST_CASE(test_boosted_trees_double) {
 
   std::string ret_name = tc_model_name(model, &error);
 
-  TS_ASSERT(ret_name == "boosted_trees_regression");
+  TS_ASSERT(ret_name == model_name);
 
   // Test predictions on the same data.  Should be almost completely accurate...
   {
@@ -134,5 +136,6 @@ BOOST_AUTO_TEST_CASE(test_boosted_trees_double) {
       TS_ASSERT(error == NULL);
       tc_parameters_destroy(export_args);
     }
+  }
   }
 }
