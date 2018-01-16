@@ -338,12 +338,14 @@ tc_sarray* tc_sarray_create_from_list(
 
 tc_sarray* tc_sarray_create_copy(const tc_sarray* src, tc_error** error);
 
+// Save in native format
+void tc_sarray_save(const tc_sarray* src, const char* directory, const char* format, tc_error**);
 
 // Gets a particular element.
 tc_flexible_type* tc_sarray_extract_element(const tc_sarray*, uint64_t index, tc_error**);
 
 // Gets the sarry size. 
-uint64_t tc_sarray_size(const tc_sarray*); 
+uint64_t tc_sarray_size(const tc_sarray*, tc_error**); 
 
 // Gets the type of the sarray. 
 tc_ft_type_enum tc_sarray_type(const tc_sarray*); 
@@ -361,11 +363,119 @@ tc_sarray* tc_op_sarray_mult_ft(const tc_sarray*, const tc_flexible_type*, tc_er
 // Returns 1 if all elements are equal and 0 otherwise.
 int tc_sarray_equals(const tc_sarray*, const tc_sarray*, tc_error**);
 
-// Call sum on the tc_sarray
-tc_flexible_type* tc_sarray_sum(const tc_sarray*, tc_error**);
-
 // Wrap the printing.  Returns a string flexible type.
 tc_flexible_type* tc_sarray_text_summary(const tc_sarray* sf, tc_error**);
+
+// To implement.
+tc_sarray* tc_op_sarray_lt_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+tc_sarray* tc_op_sarray_gt_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+tc_sarray* tc_op_sarray_le_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+tc_sarray* tc_op_sarray_ge_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+tc_sarray* tc_op_sarray_eq_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+
+tc_sarray* tc_op_sarray_lt_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_gt_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_ge_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_le_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_eq_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+
+tc_sarray* tc_op_sarray_lt_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_gt_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_ge_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_le_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_eq_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+
+tc_sarray* tc_op_sarray_logical_and_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+tc_sarray* tc_op_sarray_logical_and_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_bitwise_and_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+tc_sarray* tc_op_sarray_bitwise_and_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+
+tc_sarray* tc_op_sarray_logical_or_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+tc_sarray* tc_op_sarray_logical_or_ft(const tc_sarray*, const tc_flexible_type*, tc_error**); 
+tc_sarray* tc_op_sarray_bitwise_or_sarray(const tc_sarray*, const tc_sarray*, tc_error**); 
+tc_sarray* tc_op_sarray_bitwise_or_ft(const tc_sarray*, const tc_flexible_type*, tc_error**);
+
+// gl_sarray operator[](const gl_sarray& slice);
+tc_sarray* tc_sarray_apply_mask(const tc_sarray* src, const tc_sarray* mask, tc_error**); 
+  
+int tc_sarray_all_nonzero(const tc_sarray*, tc_error**);
+
+int tc_sarray_any_nonzero(const tc_sarray*, tc_error**);
+
+// Force materialization
+void tc_sarray_materialize(const tc_sarray* src, tc_error**);
+
+tc_sarray* tc_sarray_head(const tc_sarray* src, uint64_t n, tc_error**);
+tc_sarray* tc_sarray_tail(const tc_sarray* src, uint64_t n, tc_error**);
+
+//gl_sarray count_words(bool to_lower=true, turi::flex_list delimiters={"\r", "\v", "\n", "\f", "\t", " "});
+tc_sarray* tc_sarray_count_words(const tc_sarray*, int to_lower, tc_error**); 
+tc_sarray* tc_sarray_count_words_with_delimiters(const tc_sarray*, int to_lower, tc_flex_list* delimiters, tc_error**); 
+
+// wraps  gl_sarray count_ngrams(size_t n=2, std::string method="word", 
+//                         bool to_lower=true, bool ignore_space=true);
+tc_sarray* tc_sarray count_word_ngrams(const tc_sarray* src, uint64_t n, bool to_lower, tc_error**);
+
+tc_sarray* tc_sarray count_character_ngrams(const tc_sarray* src, size_t n, bool to_lower, bool ignore_space, tc_error**);
+
+tc_sarray* tc_sarray_dict_trim_by_keys(const tc_sarray* src, const tc_flex_list* keys, int exclude_keys, tc_error**); 
+
+tc_sarray* tc_sarray_dict_trim_by_value_range(const tc_sarray* src, const tc_flexible_type* lower, const tc_flexible_type* upper, tc_error**);
+
+tc_flexible_type* tc_sarray_max(const tc_sarray*, tc_error**);
+
+tc_flexible_type* tc_sarray_min(const tc_sarray*, tc_error**);
+
+tc_flexible_type* tc_sarray_sum(const tc_sarray*, tc_error**);
+
+tc_flexible_type* tc_sarray_mean(const tc_sarray*, tc_error**);
+
+tc_flexible_type* tc_sarray_std(const tc_sarray*, tc_error**);
+
+uint64_t tc_sarray_nnz(const tc_sarray*, tc_error**);
+
+size_t tc_sarray_num_missing(const tc_sarray*, tc_error**);
+
+tc_sarray* tc_sarray_dict_keys(const tc_sarray* src, tc_error**);
+
+tc_sarray* tc_sarray_dict_has_any_keys(const tc_sarray* src, const tc_flex_list* keys, tc_error**);
+
+tc_sarray* tc_sarray_dict_has_all_keys(const tc_sarray* src, const tc_flex_list* keys, tc_error**);
+
+tc_sarray* tc_sarray_sample(const tc_sarray* src, double fraction, uint64_t seed, tc_error**);
+
+tc_sarray* tc_sarray_datetime_to_str_with_format(const tc_sarray* src, const char* format, tc_error**);
+
+tc_sarray* tc_sarray_datetime_to_str(const tc_sarray* src, tc_error**);
+
+tc_sarray* tc_sarray_str_to_datetime(const tc_sarray* src, const char* format, tc_error**);
+
+tc_sarray* tc_sarray_astype(const tc_sarray* src, flex_type_enum dtype, int undefined_on_failure, tc_error**);
+
+tc_sarray* tc_sarray_clip(const tc_sarray* src, tc_flexible_type* lower, tc_flexible_type* upper, tc_error**);
+
+tc_sarray* tc_sarray_drop_nan(const tc_sarray* src, tc_error**);
+
+tc_sarray* tc_sarray_replace_nan(const tc_sarray* src, tc_flexible_type* value, tc_error**);
+
+tc_sarray* tc_sarray_topk_index(const tc_sarray* src, size_t topk, int reverse, tc_error**);
+  
+tc_sarray* tc_sarray_append(const tc_sarray* other, tc_error**);
+
+tc_sarray* tc_sarray_unique(const tc_sarray* src, tc_error**);
+
+
+void materialize_to_callback(
+      std::function<bool(size_t, const std::shared_ptr<sframe_rows>&)> callback,
+      size_t nthreads = (size_t)(-1));
+
+  
+int tc_sarray_is_materialized(const tc_sarray* src, tc_error**);
+
+void tc_sarray_materialize(const tc_sarray* other, tc_error**);
+
+////////////////////////////////////////////////
+// General purpose application functions.
 
 // SArray Apply. The flexible_type* returned is not automatically freed
 tc_sarray* tc_sarray_apply(const tc_sarray*,
@@ -435,7 +545,12 @@ tc_sframe* tc_sframe_head(const tc_sframe* sf, size_t n, tc_error **error);
 tc_sframe* tc_sframe_tail(const tc_sframe* sf, size_t n, tc_error **error);
 
 // Random split.
-void tc_sframe_random_split(const tc_sframe* sf, double proportion, size_t seed, tc_sframe** left, tc_sframe** right, tc_error **error);
+void tc_sframe_random_split(const tc_sframe* sf, double proportion, 
+                            size_t seed, tc_sframe** left, tc_sframe** right, tc_error **error);
+  
+
+void save(const char* path, const char* format="");
+
 
 // Whizbangery
 //
@@ -448,12 +563,124 @@ tc_sframe* tc_sframe_join_on_single_column(
     const char* column, 
     const char* how, tc_error**);
 
+// Join two sframes.  
+//
+// column is the column name to join on. 
+// how is "inner", "outer", "left", or "right" 
+tc_sframe* tc_sframe_join_on_multiple_columns(
+    tc_sframe* left, tc_sframe* right, 
+    const tc_flex_list* column, 
+    const char* how, tc_error**);
+
 // Append one sframe onto another.
-tc_sframe* tc_sframe_append(tc_sframe* top, tc_sframe* bottom, tc_error **error);
+tc_sframe* tc_sframe_append(const tc_sframe* top, tc_sframe* bottom, tc_error **error);
+
+// wrap versions oftc_sframe* operator[](const std::initializer_list<int64_t>& slice);
+tc_sframe* tc_sframe_slice(const tc_sframe* src, uint64_t row_index_start, uint64_t row_index_end, tc_error**); 
+   
+tc_sframe* tc_sframe_slice_with_stride(const tc_sframe* src, uint64_t row_index_start, uint64_t row_index_end, uint64_t stride, tc_error**); 
+ 
+int tc_sframe_is_materialized(const tc_sframe* src, tc_error**);
+
+void tc_sframe_materialize(tc_sframe* src, tc_error**);
+
+int tc_sframe_size_is_known(const tc_sframe* src, tc_error**);
+
+void tc_sframe_save_reference(const tc_sframe*, const char* path, tc_error**);
+
+bool tc_sframe_contains_column(const tc_sframe*, const char* col_name, tc_error**);
+
+tc_sframe* tc_sframe_sample(const tc_sframe*, double fraction, uint64_t seed, tc_error**);
+
+tc_sframe* tc_sframe_topk(const tc_sframe* src, const char* column_name, uint64_t k, bool reverse, tc_error**);
+
+void tc_sframe_replace_add_column(const tc_sframe* sf, const char* name, const tc_sarray* new_column, tc_error**);
+
+void tc_sframe_add_constant_column(tc_sframe* sf, const char* column_name, const tc_flexible_type* value, tc_error**);
+
+void tc_sframe_add_columns(tc_sframe* sf, const tc_sframe* other, tc_error**);
+
+void tc_sframe_swap_columns(tc_sframe* sf, const char* column_1, const char* column_2, tc_error**);
+
+void tc_sframe_rename_column(tc_sframe* sf, const char* old_name, const char* new_name, tc_error**);
+
+void tc_sframe_rename_columns(tc_sframe* sf, const tc_flex_dict* name_mapping, tc_error**);
+
+tc_sframe* filter_by(const tc_sframe* src, const tc_sframe* values, const char* column_name, bool exclude, tc_error**);
+
+// Apologies -- these arguments are not completely translated...
+tc_sframe* tc_sframe_pack_columns(const tc_sframe* data, const tc_flex_list* columns,
+                        const char* new_column_name,
+                        flex_type_enum dtype,
+                        const tc_flexible_type* fill_na, tc_error**);
+
+tc_sframe* tc_sframe_split_datetime(const tc_sframe* data, const char* expand_column,
+                                    const char* column_name_prefix, 
+                                    const tc_flex_list* components_to_expose,
+                                    bool use_timezone, tc_error**);
+
+tc_sframe* tc_sframe_unpack(const tc_sframe* data,const char* unpack_column,
+                            const char* column_name_prefix = "X", 
+                            const tc_flexible_type* na_value, tc_error**);
+                   
+tc_sframe* tc_sframe_unpack_detailed(const tc_sframe* data,const char* unpack_column,
+                            const char* column_name_prefix = "X", 
+                            const tc_flexible_type* na_value, 
+                            const tc_flex_enum* column_types, size_t n_column_types_given, 
+                            const tc_flex_list* include_set, 
+                            tc_error**);
+                   
+tc_sframe* tc_sframe_stack(const tc_sframe* data,
+                           const char* column_name,
+                           const char* new_column_names,
+                           bool drop_na);
+
+tc_sframe* tc_sframe_stack_and_rename(const tc_sframe* data,
+                  const char* column_name,
+                  const tc_flex_list* new_column_names,
+                  bool drop_na);
+ 
+tc_sframe* tc_sframe_unstack(const tc_sframe* data,const char* columns,
+                    const char* new_column_name = "");
+
+tc_sframe* tc_sframe_unstack(const tc_sframe* data,const std::vector<std::string>& columns,
+                    const char* new_column_name = "");
+ 
+tc_sframe* tc_sframe_unique(const tc_sframe* data);
+
+tc_sframe* sort(const tc_sframe* data,const char* column, bool ascending = true);
+
+tc_sframe* sort(const tc_sframe* data,const std::vector<std::string>& columns, bool ascending = true);
+
+tc_sframe* sort(const tc_sframe* data,const std::vector<std::pair<std::string, bool>>& column_and_ascending);
+
+tc_sframe* dropna(const tc_sframe* data,const std::vector<std::string>& columns = std::vector<std::string>(),
+                   std::string how = "any");
+
+   std::pair<gl_sframe, gl_sframe> dropna_split(
+      const tc_sframe* data,const std::vector<std::string>& columns=std::vector<std::string>(),
+      std::string how = "any");
+
+tc_sframe* fillna(const tc_sframe* data,const char* column, flexible_type value);
+
+  
+  void materialize_to_callback(
+      std::function<bool(size_t, const std::shared_ptr<sframe_rows>&)> callback,
+      size_t nthreads = (size_t)(-1));
+
+  gl_sarray apply(std::function<flexible_type(const sframe_rows::row&)> fn,
+                  flex_type_enum dtype);
+ 
+tc_sframe* groupby(const std::vector<std::string>& groupkeys, 
+                    const std::map<std::string, aggregate::groupby_descriptor_type>& operators 
+                    = std::map<std::string, aggregate::groupby_descriptor_type>());
 
 
 // Destructor
 void tc_sframe_destroy(tc_sframe* sa);
+
+
+
 
 /******************************************************************************/
 /*                                                                            */
