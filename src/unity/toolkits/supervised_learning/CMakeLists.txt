@@ -25,6 +25,7 @@ make_library(supervised_learning
     optimization
     xgboost
     numerics
+    unity_coreml_model_export
   )
 
 set_property(TARGET supervised_learning APPEND_STRING PROPERTY COMPILE_FLAGS " -DXGBOOST_CUSTOMIZE_MSG_")

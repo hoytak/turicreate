@@ -66,14 +66,6 @@ class predict_constant : public supervised_learning_model_base {
 
 
   /**
-   * Returns the name of the model.
-   */
-  std::string name(){
-    return "predict_constant";
-  }
-
-
-  /**
    * Train a supervised_learning model.
    */
   void train(){
@@ -144,6 +136,7 @@ class predict_constant : public supervised_learning_model_base {
          << metrics
          << constant
          << options;
+
   }
 
 
@@ -172,6 +165,8 @@ class predict_constant : public supervised_learning_model_base {
     return constant;
   }
 
+    BEGIN_CLASS_MEMBER_REGISTRATION("predict_const"); 
+    END_CLASS_MEMBER_REGISTRATION; 
 
 };
 
