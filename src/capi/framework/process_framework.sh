@@ -6,7 +6,7 @@ echo "PostProcessing framework"
 name=""
 src_header_dir=""
 fmwrk_dir=""
-install_location="@rpath"
+install_location=""
 
 function print_options {
   echo "Required options: --name --src-headers --dest"
@@ -31,10 +31,16 @@ while [ $# -gt 0 ]
   shift
 done
 
-if [[ ! ${name} -eq "" ]] ; then
+if [[ ${name} -eq "" ]] ; then
  echo "Name empty."
  exit 1
 fi
+
+if [[ ${install_location} -eq "" ]] ; then
+ echo "--install-location not given."
+ exit 1
+fi
+
 
 src_library_file=${fmwrk_dir}/${name}
 

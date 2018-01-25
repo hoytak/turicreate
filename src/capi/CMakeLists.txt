@@ -67,8 +67,9 @@ make_library(TuriCore
     MACOSX_FRAMEWORK_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/framework/Info.plist"
     PUBLIC_HEADER TuriCore.h)
 
-  if(${TC_CAPI_AS_SYSTEM_FRAMEWORK})
-    set(_install_location "/System/Library/PrivateFrameworks")
+  if(TC_CAPI_FRAMEWORK_PATH)
+    message("Building framework with path ${TC_CAPI_FRAMEWORK_PATH}.")
+    set(_install_location "${TC_CAPI_FRAMEWORK_PATH}") 
   else()
     set(_install_location "@rpath")
   endif()
@@ -80,7 +81,11 @@ make_library(TuriCore
     --name TuriCore
     --src-headers "${CMAKE_CURRENT_SOURCE_DIR}"
     --framework "${CMAKE_CURRENT_BINARY_DIR}/TuriCore.framework"
-    --install-location "${_install_location}")
+    --install-location "${_install_location}"
+    BYPRODUCTS 
+    "${CMAKE_CURRENT_BINARY_DIR}/TuriCore.framework/Versions/Current/Header/TuriCore.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/TuriCore.framework/Versions/Current/TuriCore.tbd"
+    )
 
   add_dependencies(TuriCore "${CMAKE_CURRENT_SOURCE_DIR}/framework/process_framework.sh")
 
