@@ -31,12 +31,12 @@ while [ $# -gt 0 ]
   shift
 done
 
-if [[ ${name} -eq "" ]] ; then
+if [[ -z ${name} ]] ; then
  echo "Name empty."
  exit 1
 fi
 
-if [[ ${install_location} -eq "" ]] ; then
+if [[ -z ${install_location} ]] ; then
  echo "--install-location not given."
  exit 1
 fi
