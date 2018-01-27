@@ -52,6 +52,38 @@ static tc_flex_list* make_flex_list_double(const std::vector<double>& v) {
   return fl;
 }
 
+static tc_flex_list* make_flex_list_string(const std::vector<std::string>& v) {
+
+  tc_error* error = NULL;
+
+  tc_flex_list* fl = tc_flex_list_create(&error);
+
+  TS_ASSERT(error == NULL);
+
+  size_t pos = 0;
+
+  for(std::string t : v) {
+    tc_flexible_type* ft = tc_ft_create_from_cstring(t.c_str(), &error);
+
+    TS_ASSERT(error == NULL);
+
+    size_t idx = tc_flex_list_add_element(fl, ft, &error);
+
+    TS_ASSERT(error == NULL);
+
+    TS_ASSERT_EQUALS(idx, pos);
+    ++pos;
+
+    size_t actual_size = tc_flex_list_size(fl);
+
+    TS_ASSERT_EQUALS(pos, actual_size);
+
+    tc_ft_destroy(ft);
+  }
+
+  return fl;
+}
+
 static tc_sarray* make_sarray_double(const std::vector<double>& v) {
 
   tc_error* error = NULL;
@@ -81,7 +113,6 @@ static tc_sarray* make_sarray_double(const std::vector<double>& v) {
 
   return sa;
 }
-
 
 static tc_sframe* make_sframe_double(const std::vector<std::pair<std::string, std::vector<double> > >& data ) {
 

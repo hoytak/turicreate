@@ -18,7 +18,7 @@ subdirs(extensions
           perf
           minipsutil_static
           numerics
-  )
+  ) 
 
   # Pull in all the libraries in the extensions directory.
   get_property(EXTENSIONS_LIST DIRECTORY "extensions" PROPERTY EXTENSIONS_LIST)

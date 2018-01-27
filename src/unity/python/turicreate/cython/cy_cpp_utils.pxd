@@ -16,7 +16,7 @@ cdef inline string str_to_cpp(py_s) except *:
     string class.
     """
     cdef type t = type(py_s)
-
+    
     if PY_MAJOR_VERSION >= 3:
         if t is str:
             return (<str>py_s).encode()
@@ -30,7 +30,7 @@ cdef inline string str_to_cpp(py_s) except *:
         elif t is unicode:
             return (<unicode>py_s).encode('UTF-8')
         else:
-            return _attempt_cast_str_to_cpp(py_s)
+            return _attempt_cast_str_to_cpp(py_s)            
 
 cdef inline string unsafe_str_to_cpp(py_s) except *:
     """
@@ -63,7 +63,7 @@ cdef _cpp_to_str_py3_decode(const string& cpp_s)
 
 cdef inline cpp_to_str(const string& cpp_s):
     cdef const char* c_s = cpp_s.data()
-
+    
     if PY_MAJOR_VERSION >= 3:
         return _cpp_to_str_py3_decode(cpp_s)
     else:
@@ -72,7 +72,7 @@ cdef inline cpp_to_str(const string& cpp_s):
 
 cdef inline vector[string] to_vector_of_strings(object v) except *:
     """
-    Translate a vector of strings with proper encoding..
+    Translate a vector of strings with proper encoding.. 
     """
     cdef list fl
     cdef tuple ft
@@ -93,10 +93,10 @@ cdef inline vector[string] to_vector_of_strings(object v) except *:
         raise TypeError("Cannot interpret type '%s' as list of strings." % str(type(v)))
 
     return ret
-
+    
 cdef inline list from_vector_of_strings(const vector[string]& sv):
     """
-    Translate a vector of strings with proper decoding.
+    Translate a vector of strings with proper decoding. 
     """
     cdef list ret = [None]*sv.size()
     cdef long i
@@ -106,9 +106,21 @@ cdef inline list from_vector_of_strings(const vector[string]& sv):
 
     return ret
 
+# This function accepts its argument by value because cython does not yet know
+# how to obtain a const_iterator from a const container.
+cdef inline dict from_map_of_strings_and_vectors_of_strings(map[string, vector[string]] m):
+    """
+    Translate a map whose keys are strings and whose values are vectors of
+    strings
+    """
+    ret = {}
+    for value in m:
+        ret[cpp_to_str(value.first)] = from_vector_of_strings(value.second)
+    return ret
+    
 cdef inline vector[vector[string]] to_nested_vectors_of_strings(object v) except *:
     """
-    Translate a nested vector of strings with proper encoding.
+    Translate a nested vector of strings with proper encoding. 
     """
     cdef list fl
     cdef tuple ft
@@ -131,11 +143,11 @@ cdef inline vector[vector[string]] to_nested_vectors_of_strings(object v) except
             vs = vs[:50] + "..."
         raise TypeError("Cannot interpret '%s' as nested lists of strings." % vs)
 
-    return ret
-
+    return ret    
+        
 cdef inline map[string, string] dict_to_string_string_map(dict d) except *:
     """
-    Translate a map of strings to strings with proper encoding.
+    Translate a map of strings to strings with proper encoding. 
     """
     cdef map[string,string] ret
 
@@ -143,3 +155,4 @@ cdef inline map[string, string] dict_to_string_string_map(dict d) except *:
         ret[str_to_cpp(k)] = str_to_cpp(v)
 
     return ret
+

@@ -26,13 +26,13 @@ EXPORT uint64_t tc_flex_dict_add_element(tc_flex_dict* ft,
                                          tc_error** error) {
   ERROR_HANDLE_START();
 
-  CHECK_NOT_NULL(error, ft, "flex dict", uint64_t(-1));
-  CHECK_NOT_NULL(error, first, "key flexible_type", uint64_t(-1));
-  CHECK_NOT_NULL(error, second, "value flexible_type", uint64_t(-1));
+  CHECK_NOT_NULL(error, ft, "flex dict", uint64_t(-1)); 
+  CHECK_NOT_NULL(error, first, "key flexible_type", uint64_t(-1)); 
+  CHECK_NOT_NULL(error, second, "value flexible_type", uint64_t(-1)); 
 
-  uint64_t ret = ft->value.size();
-  ft->value.push_back({first->value, second->value});
-  return ret;
+  uint64_t ret = ft->value.size(); 
+  ft->value.push_back({first->value, second->value}); 
+  return ret; 
 
   ERROR_HANDLE_END(error, uint64_t(-1));
 }
@@ -45,19 +45,19 @@ EXPORT void tc_flex_dict_extract_entry(const tc_flex_dict* ft,
                                        tc_error** error) {
   ERROR_HANDLE_START();
 
-  CHECK_NOT_NULL(error, ft, "flex dict");
-  CHECK_NOT_NULL(error, key_dest, "key dest flexible_type");
-  CHECK_NOT_NULL(error, value_dest, "value dest flexible_type");
-
+  CHECK_NOT_NULL(error, ft, "flex dict"); 
+  CHECK_NOT_NULL(error, key_dest, "key dest flexible_type"); 
+  CHECK_NOT_NULL(error, value_dest, "value dest flexible_type"); 
+  
   if(entry_index >= ft->value.size()) {
     set_error(error, "Index out of range.");
-    return;
-  }
+    return; 
+  } 
 
-  const std::pair<turi::flexible_type, turi::flexible_type>& p = ft->value[entry_index];
+  const std::pair<turi::flexible_type, turi::flexible_type>& p = ft->value[entry_index]; 
 
-  key_dest->value = p.first;
-  value_dest->value = p.second;
+  key_dest->value = p.first; 
+  value_dest->value = p.second; 
 
   ERROR_HANDLE_END(error);
 }

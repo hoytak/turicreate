@@ -794,11 +794,6 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/extensions)
   add_subdirectory(extensions)
 endif()
 
-if(EXISTS ${CMAKE_SOURCE_DIR}/external_source)
-  include_directories(SYSTEM external_source)
-  add_subdirectory(external_source)
-endif()
-
 if(EXISTS ${CMAKE_SOURCE_DIR}/subtree)
   include_directories(SYSTEM subtree)
   add_subdirectory(subtree)

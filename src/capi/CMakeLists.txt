@@ -1,7 +1,7 @@
 
 project(turi_capi)
 
-set(capi_sources
+set(capi_sources 
     impl/capi_error_handling.cpp
     impl/capi_flexible_type.cpp
     impl/capi_flex_dict.cpp
@@ -12,13 +12,10 @@ set(capi_sources
     impl/capi_parameters.cpp
     impl/capi_sframe.cpp
     impl/capi_models.cpp
+    impl/capi_variant.cpp
     )
 
 set(capi_dependencies unity numerics)
-
-if(TC_CAPI_EXTERNAL_DEPENDENCIES)
-  set(capi_dependencies ${capi_dependencies} ${TC_CAPI_EXTERNAL_DEPENDENCIES})
-endif()
 
   # Internal version
 make_library(turi_capi
@@ -28,16 +25,6 @@ make_library(turi_capi
   ${capi_dependencies}
 )
 
-
-if(TC_CAPI_SERVER_INITIALIZER_CREATION_FUNCTION)
-  message("Building C-API with ${TC_CAPI_SERVER_INITIALIZER_CREATION_FUNCTION} for server initializer class.")
-
-  set_source_files_properties(impl/capi_models.cpp PROPERTIES COMPILE_FLAGS "-DTC_CAPI_SERVER_INITIALIZER_CREATION_FUNCTION=${TC_CAPI_SERVER_INITIALIZER_CREATION_FUNCTION}")
-else()
-  message("Building C-API with default unity server initializer.")
-endif()
-
-
 set(_build_framework 0)
 if(APPLE)
   if(TC_BUILD_CAPI_FRAMEWORK)
@@ -46,10 +33,10 @@ if(APPLE)
 endif()
 
 
-if(${_build_framework})
+if(${_build_framework}) 
 
 make_library(TuriCore
-  SOURCES
+  SOURCES 
   ${capi_sources}
    REQUIRES
    ${capi_dependencies}
@@ -67,9 +54,8 @@ make_library(TuriCore
     MACOSX_FRAMEWORK_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/framework/Info.plist"
     PUBLIC_HEADER TuriCore.h)
 
-  if(TC_CAPI_FRAMEWORK_PATH)
-    message("Building framework with path ${TC_CAPI_FRAMEWORK_PATH}.")
-    set(_install_location "${TC_CAPI_FRAMEWORK_PATH}") 
+  if(${TC_CAPI_AS_SYSTEM_FRAMEWORK})
+    set(_install_location "/System/Library/PrivateFrameworks")
   else()
     set(_install_location "@rpath")
   endif()
@@ -78,14 +64,10 @@ make_library(TuriCore
   add_custom_command(TARGET TuriCore
     POST_BUILD
     COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/framework/process_framework.sh"
-    --name TuriCore
+    --name TuriCore 
     --src-headers "${CMAKE_CURRENT_SOURCE_DIR}"
     --framework "${CMAKE_CURRENT_BINARY_DIR}/TuriCore.framework"
-    --install-location "${_install_location}"
-    BYPRODUCTS 
-    "${CMAKE_CURRENT_BINARY_DIR}/TuriCore.framework/Versions/Current/Header/TuriCore.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/TuriCore.framework/Versions/Current/TuriCore.tbd"
-    )
+    --install-location "${_install_location}")
 
   add_dependencies(TuriCore "${CMAKE_CURRENT_SOURCE_DIR}/framework/process_framework.sh")
 
@@ -93,7 +75,7 @@ make_library(TuriCore
 else()
   #build out as a regular library
   make_library(turi
-  SOURCES
+  SOURCES 
   ${capi_sources}
    REQUIRES
    ${capi_dependencies}

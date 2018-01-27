@@ -4,9 +4,9 @@
 #include <capi/impl/capi_sarray.hpp>
 #include <unity/lib/unity_sketch.hpp>
 
-extern "C" {
+extern "C" { 
 
-struct tc_sketch_struct {
+struct tc_sketch_struct { 
   std::shared_ptr<turi::unity_sketch_base> value;
 };
 
@@ -18,7 +18,7 @@ static inline tc_sketch* new_tc_sketch(const std::shared_ptr<turi::unity_sketch_
   return ret;
 }
 
-static inline tc_sketch* new_tc_sketch() {
+static inline tc_sketch* new_tc_sketch() { 
   return new_tc_sketch(std::make_shared<turi::unity_sketch>());
 }
 
