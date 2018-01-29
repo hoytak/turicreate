@@ -30,17 +30,17 @@ namespace nearest_neighbors {
 
 /**
 * Get the list of options that are relevant to each model.
-*/ 
+*/
 std::vector<std::string> get_model_option_keys(std::string model_name) {
- 
+
   // Brute-force
-  if (model_name == "nearest_neighbors_brute_force") { 
+  if (model_name == "nearest_neighbors_brute_force") {
     return {"label"};
   } else if (model_name == "nearest_neighbors_ball_tree") {
     return {"leaf_size", "label"};
   } else if (model_name == "nearest_neighbors_lsh") {
-    return {"num_tables", "num_projections_per_table", "label"}; 
-  } else { // Not a nearest neighbors model. This should never happen. 
+    return {"num_tables", "num_projections_per_table", "label"};
+  } else { // Not a nearest neighbors model. This should never happen.
     log_and_throw(model_name + " is not a nearest neighbors model.");
     return {};
   }
@@ -55,7 +55,7 @@ variant_map_type get_current_options(variant_map_type& params) {
   variant_map_type ret;
 
   // get the name of the model to query
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
 
   // retrieve the correct model
@@ -84,7 +84,7 @@ variant_map_type training_stats(variant_map_type& params) {
   variant_map_type ret;
 
   // get the name of the model to query
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
 
   // retrieve the correct model
@@ -113,7 +113,7 @@ variant_map_type get_value(variant_map_type& params) {
   variant_map_type ret;
 
   // get the name of the model to query
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
 
   // retrieve the correct model
@@ -142,7 +142,7 @@ variant_map_type list_fields(variant_map_type& params) {
   variant_map_type ret;
 
   // get the name of the model to query
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
 
   // retrieve the correct model
@@ -174,7 +174,7 @@ variant_map_type train(variant_map_type& params) {
   /*** Unpack the inputs ***/
 
   // Model name and model
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
 
   // Construct a model
@@ -198,15 +198,15 @@ variant_map_type train(variant_map_type& params) {
     = *(safe_varmap_get<std::shared_ptr<unity_sframe>>(
     params, "sf_features")->get_underlying_sframe());
 
-  std::shared_ptr<sarray<flexible_type>> sa_ref_labels = 
+  std::shared_ptr<sarray<flexible_type>> sa_ref_labels =
     safe_varmap_get<std::shared_ptr<unity_sarray>>
     (params, "ref_labels")->get_underlying_sarray();
 
   std::vector<flexible_type> ref_labels(X.num_rows(), flexible_type(0));
   sa_ref_labels->get_reader()->read_rows(0, X.num_rows(), ref_labels);
-  
+
   // Composite distances
-  std::vector<dist_component_type> composite_distance_params = 
+  std::vector<dist_component_type> composite_distance_params =
     safe_varmap_get<std::vector<dist_component_type> >(params,
                                                        "composite_params");
 
@@ -220,7 +220,7 @@ variant_map_type train(variant_map_type& params) {
       opts[key] = safe_varmap_get<flexible_type>(params, key);
     }
   }
-  
+
   /*** Initialize and train the model ***/
   model->train(X, ref_labels, composite_distance_params, opts);
 
@@ -230,8 +230,8 @@ variant_map_type train(variant_map_type& params) {
 }
 
 
-/** 
- * Query function for the nearest neighbors toolkit. 
+/**
+ * Query function for the nearest neighbors toolkit.
  */
 variant_map_type query(variant_map_type& params) {
 
@@ -242,9 +242,9 @@ variant_map_type query(variant_map_type& params) {
 
   // Make sure the model exists
   // ---------------------------------------------------------------------------
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
- 
+
 
   // retrieve the correct model
   std::shared_ptr<nearest_neighbors_model> model
@@ -253,7 +253,7 @@ variant_map_type query(variant_map_type& params) {
   if (model == NULL) {
     log_and_throw(model_name + " is not a nearest neighbors model.");
   }
- 
+
 
   // Get features and label, validate, and remove unneeded columns
   // ---------------------------------------------------------------------------
@@ -261,7 +261,7 @@ variant_map_type query(variant_map_type& params) {
     = *((safe_varmap_get<std::shared_ptr<unity_sframe>>(
         params, "features"))->get_underlying_sframe());
 
-  std::shared_ptr<sarray<flexible_type>> sa_query_labels = 
+  std::shared_ptr<sarray<flexible_type>> sa_query_labels =
     safe_varmap_get<std::shared_ptr<unity_sarray>>(
     params, "query_labels")->get_underlying_sarray();
 
@@ -276,7 +276,7 @@ variant_map_type query(variant_map_type& params) {
   sframe result = model->query(Q, query_labels, k, radius);
   std::shared_ptr<unity_sframe> neighbors(new unity_sframe());
   neighbors->construct_from_sframe(result);
-  
+
   /*
   if (model_name == "nearest_neighbors_lsh") {
     neighbors = std::dynamic_pointer_cast<unity_sframe>(
@@ -292,8 +292,8 @@ variant_map_type query(variant_map_type& params) {
 
 
 
-/** 
- * Similarity graph function for the nearest neighbors toolkit. 
+/**
+ * Similarity graph function for the nearest neighbors toolkit.
  */
 variant_map_type similarity_graph(variant_map_type& params) {
 
@@ -304,23 +304,23 @@ variant_map_type similarity_graph(variant_map_type& params) {
 
   // Make sure the model exists and retrieve it
   // ------------------------------------------
-  std::string model_name 
+  std::string model_name
     = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
- 
+
   std::shared_ptr<nearest_neighbors_model> model
       = safe_varmap_get<std::shared_ptr<nearest_neighbors_model>>(params, "model");
 
   if (model == NULL) {
     log_and_throw(model_name + " is not a nearest neighbors model.");
   }
- 
+
 
   // Get method inputs.
   // ------------------
   size_t k = (size_t)safe_varmap_get<flexible_type>(params, "k");
   double radius = (double)safe_varmap_get<flexible_type>(params, "radius");
   bool include_self_edges = (bool)safe_varmap_get<flexible_type>(params, "include_self_edges");
-  
+
 
   // Run the query and return results
   // --------------------------------

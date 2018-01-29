@@ -372,7 +372,7 @@ variant_map_type train_test_split(variant_map_type& params) {
   } catch (...) {
     throw std::string("Error interpreting random_seed as integer.");
   }
-  
+
   size_t max_users = size_t(-1);
   if (max_num_users.get_type() != flex_type_enum::UNDEFINED) {
     max_users = (size_t) max_num_users;
@@ -532,7 +532,7 @@ EXPORT variant_map_type get_data_schema(variant_map_type& params) {
 
   variant_map_type ret;
   ret["schema"] = model->get_data_schema();
-  
+
   return ret;
 }
 

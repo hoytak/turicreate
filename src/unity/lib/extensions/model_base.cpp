@@ -36,7 +36,7 @@ std::vector<std::string> model_base::list_set_properties() {
   return ret;
 }
 
-variant_type model_base::call_function(std::string function, 
+variant_type model_base::call_function(std::string function,
 				       variant_map_type argument) {
   perform_registration();
   if (m_function_list.count(function)) {
@@ -63,8 +63,8 @@ variant_type model_base::get_property(std::string property) {
 
 /**
  * Sets a property.
- */ 
-variant_type model_base::set_property(std::string property, 
+ */
+variant_type model_base::set_property(std::string property,
 				      variant_map_type argument) {
   perform_registration();
   if (m_set_property_list.count(property)) {
@@ -83,7 +83,7 @@ std::string model_base::get_docstring(std::string symbol) {
 }
 
 
-void model_base::register_function(std::string fnname, 
+void model_base::register_function(std::string fnname,
 				   std::vector<std::string> arguments,
 				   impl_fn fn) {
 
@@ -94,7 +94,7 @@ void model_base::register_function(std::string fnname,
   m_function_list[fnname] = std::move(fn);
 }
 
-void model_base::register_defaults(std::string fnname, 
+void model_base::register_defaults(std::string fnname,
 				   const variant_map_type& arguments) {
   m_function_default_args[fnname] = arguments;
 }

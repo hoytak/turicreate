@@ -3,7 +3,7 @@
 #
 # Use of this source code is governed by a BSD-3-clause license that can
 # be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
-from .cy_variant cimport to_value 
+from .cy_variant cimport to_value
 from .cy_variant cimport from_dict as variant_map_from_dict
 from .cy_cpp_utils cimport str_to_cpp,\
                            cpp_to_str,\
@@ -19,7 +19,7 @@ cdef create_model_from_proxy(const model_base_ptr& proxy):
     return ret
 
 
-cdef class UnityModel: 
+cdef class UnityModel:
     cpdef get_uid(self):
         return cpp_to_str(self.thisptr.uid())
 

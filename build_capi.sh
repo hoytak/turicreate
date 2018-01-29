@@ -76,7 +76,7 @@ while [ $# -gt 0 ]
     --jobs=*)               jobs=${1##--jobs=} ;;
     --jobs|-j)              jobs=$2; shift ;;
 
-    --framework-path)       framework_path="$2"; shift ;; 
+    --framework-path)       framework_path="$2"; shift ;;
 
     --help)                 print_help; exit 0;;
 

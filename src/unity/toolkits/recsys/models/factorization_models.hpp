@@ -28,13 +28,13 @@ class EXPORT recsys_factorization_model_base : public recsys_model_base {
  public:
   bool include_columns_beyond_user_item() const { return true; }
 
-  void init_options(const std::map<std::string, flexible_type>& _options); 
+  void init_options(const std::map<std::string, flexible_type>& _options);
 
   std::map<std::string, flexible_type> train(const v2::ml_data& training_data);
 
   sframe predict(const v2::ml_data& test_data) const;
 
-  sframe get_similar_items(std::shared_ptr<sarray<flexible_type>> indexed_items, 
+  sframe get_similar_items(std::shared_ptr<sarray<flexible_type>> indexed_items,
                            size_t k=0) const;
 
   void get_item_similarity_scores(
@@ -55,7 +55,7 @@ class EXPORT recsys_factorization_model_base : public recsys_model_base {
 
   std::vector<std::string> list_fields() const;
   std::map<std::string, variant_type> get(const std::string& v) const;
-  
+
   void score_all_items(
       std::vector<std::pair<size_t, double> >& scores,
       const std::vector<v2::ml_data_entry>& query_row,
@@ -63,8 +63,8 @@ class EXPORT recsys_factorization_model_base : public recsys_model_base {
       const std::vector<std::pair<size_t, double> >& user_item_list,
       const std::vector<std::pair<size_t, double> >& new_user_item_data,
       const std::vector<v2::ml_data_row_reference>& new_observation_data,
-      const std::shared_ptr<v2::ml_data_side_features>& known_side_features) const; 
-  
+      const std::shared_ptr<v2::ml_data_side_features>& known_side_features) const;
+
   static constexpr size_t RECSYS_FACTORIZATION_MODEL_VERSION = 1;
 
   inline size_t internal_get_version() const {
@@ -82,7 +82,7 @@ class EXPORT recsys_factorization_model_base : public recsys_model_base {
   virtual bool include_ranking_options() const = 0;
 
   std::map<std::string, flexible_type> train(
-                  const v2::ml_data& training_data_by_user, 
+                  const v2::ml_data& training_data_by_user,
                   const v2::ml_data& training_data_by_item);
  private:
   std::shared_ptr<factorization::factorization_model> model;
@@ -102,7 +102,7 @@ class recsys_factorization_model : public recsys_factorization_model_base {
  private:
   bool include_ranking_options() const { return false; }
 
- public: 
+ public:
    // TODO: convert interface above to use the extensions methods here
   BEGIN_CLASS_MEMBER_REGISTRATION("factorization_recommender")
   REGISTER_CLASS_MEMBER_FUNCTION(recsys_factorization_model::list_fields)
@@ -119,7 +119,7 @@ class recsys_ranking_factorization_model : public recsys_factorization_model_bas
  private:
   bool include_ranking_options() const { return true; }
 
- public: 
+ public:
    // TODO: convert interface above to use the extensions methods here
   BEGIN_CLASS_MEMBER_REGISTRATION("ranking_factorization_recommender")
   REGISTER_CLASS_MEMBER_FUNCTION(recsys_ranking_factorization_model::list_fields)

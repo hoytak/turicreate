@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(test_boosted_trees_double) {
 #ifdef TC_VARIANT_FUNCTIONS_DEFINED
     int is_sarray = tc_variant_is_sarray(ret);
     TS_ASSERT(is_sarray);
-    
+
     tc_sarray* sa = tc_variant_sarray(ret, &error);
     TS_ASSERT(error == NULL);
 

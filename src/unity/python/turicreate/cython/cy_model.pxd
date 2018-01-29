@@ -5,7 +5,7 @@
 # be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
 from libcpp.map cimport map
 from libcpp.vector cimport vector
-from libcpp.string cimport string 
+from libcpp.string cimport string
 from libcpp.pair cimport pair
 from .cy_variant cimport variant_type, variant_map_type
 from .cy_unity_base_types cimport model_base_ptr

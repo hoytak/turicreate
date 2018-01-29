@@ -2,7 +2,7 @@
 #include <capi/impl/capi_error_handling.hpp>
 #include <capi/impl/capi_flex_image.hpp>
 #include <capi/impl/capi_flexible_type.hpp>
-#include <flexible_type/flexible_type.hpp> 
+#include <flexible_type/flexible_type.hpp>
 #include <unity/lib/image_util.hpp>
 #include <export.hpp>
 
@@ -35,18 +35,18 @@ EXPORT tc_flex_image* tc_flex_image_create_from_data(
     uint64_t total_data_size, const char* format, tc_error** error) {
   ERROR_HANDLE_START();
 
-  turi::Format format_enum; 
+  turi::Format format_enum;
 
   std::string fmt_s(format);
-  if(fmt_s == "jpg" || fmt_s == "JPG") { 
+  if(fmt_s == "jpg" || fmt_s == "JPG") {
     format_enum = turi::Format::JPG;
-  } else if(fmt_s == "png" || fmt_s == "PNG") { 
-    format_enum = turi::Format::PNG;  
-  } else if (fmt_s == "RAW" || fmt_s == "raw") { 
-    format_enum = turi::Format::RAW_ARRAY;  
-  } else { 
+  } else if(fmt_s == "png" || fmt_s == "PNG") {
+    format_enum = turi::Format::PNG;
+  } else if (fmt_s == "RAW" || fmt_s == "raw") {
+    format_enum = turi::Format::RAW_ARRAY;
+  } else {
     throw std::invalid_argument(
-        "format string must be one of \"jpg\", \"png\", or \"raw\"."); 
+        "format string must be one of \"jpg\", \"png\", or \"raw\".");
   }
 
   return new_tc_flex_image(data, height, width, channels, total_data_size,
@@ -55,10 +55,10 @@ EXPORT tc_flex_image* tc_flex_image_create_from_data(
   ERROR_HANDLE_END(error, NULL);
 }
 
-EXPORT uint64_t tc_flex_image_width(const tc_flex_image* image, tc_error** error) { 
+EXPORT uint64_t tc_flex_image_width(const tc_flex_image* image, tc_error** error) {
   ERROR_HANDLE_START();
 
-  CHECK_NOT_NULL(error, image, "image", 0); 
+  CHECK_NOT_NULL(error, image, "image", 0);
 
   return image->value.m_width;
 
@@ -66,52 +66,52 @@ EXPORT uint64_t tc_flex_image_width(const tc_flex_image* image, tc_error** error
 }
 
 
-EXPORT uint64_t tc_flex_image_height(const tc_flex_image* image, tc_error** error) { 
+EXPORT uint64_t tc_flex_image_height(const tc_flex_image* image, tc_error** error) {
   ERROR_HANDLE_START();
 
-  CHECK_NOT_NULL(error, image, "image", 0); 
+  CHECK_NOT_NULL(error, image, "image", 0);
 
   return image->value.m_height;
 
   ERROR_HANDLE_END(error, 0);
 }
- 
-EXPORT uint64_t tc_flex_image_num_channels(const tc_flex_image* image, tc_error** error) { 
+
+EXPORT uint64_t tc_flex_image_num_channels(const tc_flex_image* image, tc_error** error) {
   ERROR_HANDLE_START();
 
-  CHECK_NOT_NULL(error, image, "image", 0); 
+  CHECK_NOT_NULL(error, image, "image", 0);
 
   return image->value.m_channels;
 
   ERROR_HANDLE_END(error, 0);
 }
- 
-EXPORT uint64_t tc_flex_image_data_size(const tc_flex_image* image, tc_error** error) { 
+
+EXPORT uint64_t tc_flex_image_data_size(const tc_flex_image* image, tc_error** error) {
   ERROR_HANDLE_START();
 
-  CHECK_NOT_NULL(error, image, "image", 0); 
+  CHECK_NOT_NULL(error, image, "image", 0);
 
   return image->value.m_image_data_size;
 
   ERROR_HANDLE_END(error, 0);
 }
- 
-EXPORT const char* tc_flex_image_data(const tc_flex_image* image, tc_error** error) { 
+
+EXPORT const char* tc_flex_image_data(const tc_flex_image* image, tc_error** error) {
   ERROR_HANDLE_START();
 
-  CHECK_NOT_NULL(error, image, "image", NULL); 
+  CHECK_NOT_NULL(error, image, "image", NULL);
 
   return image->value.m_image_data.get();
 
   ERROR_HANDLE_END(error, NULL);
 }
- 
-EXPORT const char* tc_flex_image_format(const tc_flex_image* image, tc_error** error) { 
+
+EXPORT const char* tc_flex_image_format(const tc_flex_image* image, tc_error** error) {
   ERROR_HANDLE_START();
 
-  CHECK_NOT_NULL(error, image, "image", NULL); 
+  CHECK_NOT_NULL(error, image, "image", NULL);
 
-  switch(image->value.m_format) { 
+  switch(image->value.m_format) {
     case turi::Format::JPG: return "jpg";
     case turi::Format::PNG: return "png";
     case turi::Format::RAW_ARRAY: return "raw";
@@ -122,7 +122,7 @@ EXPORT const char* tc_flex_image_format(const tc_flex_image* image, tc_error** e
 }
 
 EXPORT void tc_flex_image_destroy(tc_flex_image* image) {
-  delete image; 
+  delete image;
 }
 
 }

@@ -19,7 +19,7 @@ namespace nearest_neighbors {
  *
  * \param[in] model_name Name of the model.
  * \returns List of keys of option names relevant to a model.
- */   
+ */
 std::vector<std::string> get_model_option_keys(std::string model_name);
 
 /**
@@ -87,8 +87,8 @@ variant_map_type list_fields(variant_map_type& params);
  */
 variant_map_type train(variant_map_type& params);
 
-/** 
- * Query function for the nearest neighbors toolkit. 
+/**
+ * Query function for the nearest neighbors toolkit.
  *
  * \param[in] params dictionary with function arguments
  * \returns SFrame with labels of queries, reference points in the nearest
@@ -101,8 +101,8 @@ variant_map_type train(variant_map_type& params);
  */
 variant_map_type query(variant_map_type& params);
 
-/** 
- * Similarity graph function for the nearest neighbors toolkit. 
+/**
+ * Similarity graph function for the nearest neighbors toolkit.
  *
  * \param[in] params dictionary with function arguments
  * \returns SFrame with labels of queries, reference points in the nearest
@@ -123,4 +123,4 @@ std::vector<toolkit_function_specification> get_toolkit_function_registration();
 } // namespace nearest_neighbors
 } // namespace turi
 
-#endif 
+#endif

@@ -81,7 +81,7 @@ generate_member_function_wrapper_indirect(Ret (T::* fn)(Args...) const, VarArgs.
  * that takes a variant_map_type and returns a variant type.
  *
  * Essentially, given Ret T::f(), wraps it with the following:
- * 
+ *
  * \code
  * variant_type g(T* t, variant_map_type input) {
  *   return variant_encode(t->f());
@@ -103,7 +103,7 @@ generate_getter(Ret (T::* fn)()) {
  * Given a member function of type Ret T::f() const, wraps it with a function
  * that takes a variant_map_type and returns a variant type.
  *
- * Essentially, given Ret T::f(), 
+ * Essentially, given Ret T::f(),
  * returns a function that performs the following:
  * \code
  * variant_type g(T* t, variant_map_type input) {

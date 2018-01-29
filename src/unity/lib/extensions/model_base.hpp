@@ -72,7 +72,7 @@ class EXPORT model_base: public cppipc::ipc_object_base {
    * Note: this function is typically overridden using the
    * BEGIN_CLASS_MEMBER_REGISTRATION macro.
    */
-  virtual std::string uid() = 0; 
+  virtual std::string uid() = 0;
 
   void save(oarchive& oarc) const {
     oarc << get_version();
@@ -129,11 +129,11 @@ class EXPORT model_base: public cppipc::ipc_object_base {
    * Reads a property.
    */
   variant_type get_property(std::string property);
- 
+
   /**
    * Sets a property. The new value of the property should appear in the
    * argument map under the key "value".
-   */ 
+   */
   variant_type set_property(std::string property, variant_map_type argument);
 
   /**
@@ -156,7 +156,7 @@ class EXPORT model_base: public cppipc::ipc_object_base {
   /**
    * Function implemented by BEGIN_CLASS_MEMBER_REGISTRATION and invoked the
    * first time a public member function executes.
-   */ 
+   */
   virtual void perform_registration() = 0;
 
   // Used to ensure that perform_registration is called once for each instance.
@@ -172,7 +172,7 @@ class EXPORT model_base: public cppipc::ipc_object_base {
   /**
    * Registers default argument values
    */
-  void register_defaults(std::string fnname, 
+  void register_defaults(std::string fnname,
                          const variant_map_type& arguments);
 
   /**
@@ -193,7 +193,7 @@ class EXPORT model_base: public cppipc::ipc_object_base {
  private:
   // whether perform registration has been called
   bool m_registered = false;
-  // a description of all the function arguments. This is returned by 
+  // a description of all the function arguments. This is returned by
   // list_functions()
   std::map<std::string, std::vector<std::string>> m_function_args;
   // default arguments if any
@@ -219,7 +219,7 @@ class model_proxy : public model_base {
  public:
   cppipc::object_proxy<model_base> proxy;
 
-  inline model_proxy(cppipc::comm_client& comm, 
+  inline model_proxy(cppipc::comm_client& comm,
                     bool auto_create = true,
                     size_t object_id = (size_t)(-1)):
       proxy(comm, auto_create, object_id){ }
@@ -264,7 +264,7 @@ class model_proxy : public model_base {
     throw("Calling Unreachable Function");
   }
 
-  BOOST_PP_SEQ_FOR_EACH(__GENERATE_PROXY_CALLS__, model_base, 
+  BOOST_PP_SEQ_FOR_EACH(__GENERATE_PROXY_CALLS__, model_base,
                         __ADD_PARENS__(
                             (std::string, name, )
                             ))

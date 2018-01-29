@@ -40,19 +40,19 @@ namespace supervised {
  * \param[in] params  Parameters dictionary
  * \param[in] key     The key in params
  */
-std::shared_ptr<supervised_learning_model_base> 
+std::shared_ptr<supervised_learning_model_base>
       get_supervised_learning_model(variant_map_type& params,
                                    std::string model_key){
   DASSERT_TRUE(params.count("model_name") > 0);
   std::shared_ptr<supervised_learning_model_base> model;
-  model = safe_varmap_get<std::shared_ptr<supervised_learning_model_base>>( 
+  model = safe_varmap_get<std::shared_ptr<supervised_learning_model_base>>(
                                 params, model_key);
 
   // This should not happen.
   if (model == NULL) {
-    std::string model_name 
+    std::string model_name
       = (std::string)safe_varmap_get<flexible_type>(params, "model_name");
-    log_and_throw("Internal error: " + model_name + 
+    log_and_throw("Internal error: " + model_name +
                                       " is not a supervised learning model.");
   }
   return model;
@@ -68,17 +68,17 @@ variant_map_type train(variant_map_type& params) {
   DASSERT_TRUE(params.count("target") > 0);
   DASSERT_TRUE(params.count("features") > 0);
 
-  // Get data from Python. 
+  // Get data from Python.
   sframe X
     = *(safe_varmap_get<std::shared_ptr<unity_sframe>>(
             params, "features")->get_underlying_sframe());
   sframe y
     = *(safe_varmap_get<std::shared_ptr<unity_sframe>>(
             params, "target")->get_underlying_sframe());
-  std::string model_name 
+  std::string model_name
     = safe_varmap_get<std::string>(params, "model_name");
 
- 
+
   // Remove option names that are not needed.
   variant_map_type kwargs = params;
   kwargs.erase("model_name");
@@ -106,7 +106,7 @@ variant_map_type extract_feature(variant_map_type& params){
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(params,
         "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model =
@@ -120,7 +120,7 @@ variant_map_type extract_feature(variant_map_type& params){
   sframe test_data
     = *(safe_varmap_get<std::shared_ptr<unity_sframe>>(
             params, "dataset")->get_underlying_sframe());
-  
+
   sframe X = setup_test_data_sframe(test_data, model, missing_value_action);
   std::shared_ptr<sarray<flexible_type>> py_ptr;
 
@@ -151,7 +151,7 @@ variant_map_type predict(variant_map_type& params){
   // --------------------------------------------------------------------------
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(params, "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model
@@ -191,7 +191,7 @@ variant_map_type predict_topk(variant_map_type& params){
   // --------------------------------------------------------------------------
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(params, "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model
@@ -233,7 +233,7 @@ variant_map_type classify(variant_map_type& params) {
   // --------------------------------------------------------------------------
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(params, "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model
@@ -272,7 +272,7 @@ variant_map_type evaluate(variant_map_type& params){
   // --------------------------------------------------------------------------
   std::string missing_value_action_str
     = (std::string)safe_varmap_get<flexible_type>(params, "missing_value_action");
-  ml_missing_value_action missing_value_action = 
+  ml_missing_value_action missing_value_action =
       get_missing_value_enum_from_string(missing_value_action_str);
 
   std::shared_ptr<supervised_learning_model_base> model
@@ -435,11 +435,11 @@ REGISTER_FUNCTION(add_or_update_state, "params");
 REGISTER_FUNCTION(list_fields, "params");
 REGISTER_FUNCTION(get_option_value, "params");
 REGISTER_FUNCTION(extract_feature, "params");
-REGISTER_FUNCTION(_fast_predict, "model", "rows", "output_type", 
+REGISTER_FUNCTION(_fast_predict, "model", "rows", "output_type",
                       "missing_value_action");
-REGISTER_FUNCTION(_fast_predict_topk, "model", "rows", "output_type", 
+REGISTER_FUNCTION(_fast_predict_topk, "model", "rows", "output_type",
                       "missing_value_action", "topk");
-REGISTER_FUNCTION(_fast_classify, "model", "rows", 
+REGISTER_FUNCTION(_fast_classify, "model", "rows",
                       "missing_value_action");
 REGISTER_FUNCTION(_regression_model_selector, "_X");
 REGISTER_FUNCTION(_classifier_model_selector, "_X");
