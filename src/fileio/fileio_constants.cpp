@@ -11,9 +11,11 @@
 #include <fileio/fs_utils.hpp>
 #include <fileio/temp_files.hpp>
 #include <fileio/block_cache.hpp>
-#include <fileio/hdfs.hpp>
 #include <globals/globals.hpp>
 #include <random/random.hpp>
+#ifdef TC_HAS_REMOTEFS
+#include <fileio/hdfs.hpp>
+#endif
 #include <iostream>
 #include <export.hpp>
 
@@ -76,6 +78,7 @@ static bool check_cache_file_location(std::string val) {
   return true;
 }
 
+#ifdef TC_HAS_REMOTEFS
 static bool check_cache_file_hdfs_location(std::string val) {
   if (get_protocol(val) == "hdfs") {
     if (get_file_status(val) == file_status::DIRECTORY) {
@@ -98,6 +101,7 @@ static bool check_cache_file_hdfs_location(std::string val) {
   }
   throw std::string("Invalid hdfs path: ") + val;
 }
+#endif
 
 EXPORT const size_t FILEIO_INITIAL_CAPACITY_PER_FILE = 1024;
 EXPORT size_t FILEIO_MAXIMUM_CACHE_CAPACITY_PER_FILE = 128 * 1024 * 1024;
@@ -130,11 +134,13 @@ REGISTER_GLOBAL_WITH_CHECKS(std::string,
                             true,
                             check_cache_file_location);
 
+
+#ifdef TC_HAS_REMOTEFS
 REGISTER_GLOBAL_WITH_CHECKS(std::string,
                             CACHE_FILE_HDFS_LOCATION,
                             true,
                             check_cache_file_hdfs_location);
-
+#endif
 std::string get_cache_file_locations() {
   return CACHE_FILE_LOCATIONS; 
 }

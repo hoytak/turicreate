@@ -9,8 +9,6 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
-#include <cppipc/cppipc.hpp>
-#include <cppipc/common/authentication_token_method.hpp>
 #include <minipsutil/minipsutil.h>
 #include <logger/logger.hpp>
 #include <logger/log_rotate.hpp>
@@ -19,8 +17,9 @@
 #include <unity/lib/toolkit_class_registry.hpp>
 #include <unity/lib/toolkit_function_registry.hpp>
 #include <startup_teardown/startup_teardown.hpp>
-
+#ifdef TC_HAS_PYTHON
 #include <lambda/lambda_master.hpp>
+#endif
 
 #include "unity_server.hpp"
 
@@ -60,7 +59,9 @@ void unity_server::start(const unity_server_initializer& server_initializer) {
   // initialize extension modules and lambda workers
   server_initializer.init_extensions(options.root_path, unity_global_ptr);
 
+#ifdef TC_HAS_PYTHON
   lambda::set_pylambda_worker_binary_from_environment_variables();
+#endif
 
   log_thread.launch([=]() {
                       do {

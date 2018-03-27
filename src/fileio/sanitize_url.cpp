@@ -6,17 +6,23 @@
 #include <string>
 #include <boost/algorithm/string/predicate.hpp>
 #include <fileio/sanitize_url.hpp>
-#include <fileio/s3_api.hpp>
 #include <export.hpp>
+#ifdef TC_HAS_REMOTEFS
+#include <fileio/s3_api.hpp>
+#endif
 
 namespace turi {
 
 EXPORT std::string sanitize_url(std::string url) {
+#ifdef TC_HAS_REMOTEFS
   if (boost::algorithm::starts_with(url, "s3://")) {
     return sanitize_s3_url(url);
   } else {
     return url;
   }
+#else
+    return url;
+#endif
 }
 
 }

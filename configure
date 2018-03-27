@@ -105,6 +105,8 @@ with_capi=0
 with_capi_framework=0
 with_ccache=1
 with_visualization=1
+with_remotefs=1
+release_opt_for_size=0
 
 python27=0
 python35=0
@@ -119,6 +121,8 @@ while [ $# -gt 0 ]
     --cleanup)              cleanup_option=1;;
     
     --install-python-toolchain) python_only=1;;
+
+    --release-opt-for-size) release_opt_for_size=1;;
     
     --with-system-cmake)    with_system_cmake=1;;
     --no-system-cmake)      with_system_cmake=0;;
@@ -135,6 +139,9 @@ while [ $# -gt 0 ]
 
     --with-visualization)   with_visualization=1;;
     --no-visualization)     with_visualization=0;;
+
+    --with-remotefs)        with_remotefs=1;;
+    --no-remotefs)          with_remotefs=0;;
 
     --yes)                  default_yes=1;;
 
@@ -191,7 +198,11 @@ else
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_PYTHON=0"
 fi
 
-# If we need to build python, we also need to install the python toolchain
+if [[ $release_opt_for_size == 1 ]]; then
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DRELEASE_OPT_FOR_SIZE=1"
+fi
+
+# Check what is needed with the remote_fs stuff 
 if [[ $with_capi == 1 ]]; then
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_CAPI=1"
   if [[ $with_capi_framework == 1 ]]; then
@@ -201,13 +212,20 @@ else
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_CAPI=0"
 fi
 
-# If we need to build python, we also need to install the python toolchain
+# Do we need to build the visualization toolkit?  
 if [[ $with_visualization == 1 ]]; then
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_VISUALIZATION_CLIENT=1"
 else
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_VISUALIZATION_CLIENT=0"
 fi
 
+
+# If we need to build python, we also need to install the python toolchain
+if [[ $with_remotefs == 1 ]]; then
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_REMOTEFS=1"
+else 
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_REMOTEFS=0"
+fi
 
 
 ##################################################################3
