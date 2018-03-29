@@ -17,8 +17,8 @@ using boost::coroutines::stack_traits;
  * Default stack size is 64K or minimum_size() whichever is larger
  */
 int64_t COROUTINE_STACK_SIZE = 
-    64*1024 < stack_traits::minimum_size() ?
-        stack_traits::minimum_size() : 64*1024;
+    256*1024 < stack_traits::minimum_size() ?
+        stack_traits::minimum_size() : 256*1024;
 
 REGISTER_GLOBAL_WITH_CHECKS(int64_t, COROUTINE_STACK_SIZE, false,
             +[](int64_t i){ 

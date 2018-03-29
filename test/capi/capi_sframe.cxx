@@ -1510,88 +1510,37 @@ void test_sframe_read_json() {
 
 BOOST_FIXTURE_TEST_SUITE(_capi_test_sframe, capi_test_sframe)
 BOOST_AUTO_TEST_CASE(test_sframe_allocation) {
+
+  for(size_t counter = 0; ; ++counter) {
  capi_test_sframe::test_sframe_allocation();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_save_load) {
   capi_test_sframe::test_sframe_save_load();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_double) {
   capi_test_sframe::test_sframe_double();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_append_test) {
   capi_test_sframe::test_sframe_append_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_is_materialized_test) {
   capi_test_sframe::test_sframe_is_materialized_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_materialize_test) {
   capi_test_sframe::test_sframe_materialize_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_size_is_known_test) {
   capi_test_sframe::test_sframe_size_is_known_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_contains_column_test) {
   capi_test_sframe::test_sframe_contains_column_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_sample_test) {
   capi_test_sframe::test_sframe_sample_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_topk_test) {
   capi_test_sframe::test_sframe_topk_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_replace_add_column_test) {
   capi_test_sframe::test_sframe_replace_add_column_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_add_constant_column_test) {
   capi_test_sframe::test_sframe_add_constant_column_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_add_column_test) {
   capi_test_sframe::test_sframe_add_column_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_add_columns_test) {
   capi_test_sframe::test_sframe_add_columns_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_swap_columns_test) {
   capi_test_sframe::test_sframe_swap_columns_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_rename_column_test) {
   capi_test_sframe::test_sframe_rename_column_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_fillna_test) {
   capi_test_sframe::test_sframe_fillna_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_filter_by_test) {
   capi_test_sframe::test_sframe_filter_by_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_pack_unpack_test) {
   capi_test_sframe::test_sframe_pack_unpack_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_stack_unstack_test) {
   capi_test_sframe::test_sframe_stack_unstack_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_stack_and_rename_test) {
   capi_test_sframe::test_sframe_stack_and_rename_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_unique_test) {
   capi_test_sframe::test_sframe_unique_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_single_sort_column_test) {
   capi_test_sframe::test_sframe_single_sort_column_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_sort_multiple_columns_test) {
   capi_test_sframe::test_sframe_sort_multiple_columns_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_dropna_test) {
   capi_test_sframe::test_sframe_dropna_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_slice_test) {
   capi_test_sframe::test_sframe_slice_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_slice_stride_test) {
   capi_test_sframe::test_sframe_slice_stride_test();
-}
-BOOST_AUTO_TEST_CASE(test_sframe_read_json) {
-  capi_test_sframe::test_sframe_read_json();
+  std::cout << "Iteration " << counter << std::endl; 
+  }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
