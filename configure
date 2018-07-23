@@ -21,31 +21,39 @@ function print_help {
   echo "  --cleanup                         Clean up everything."
   echo
   echo "  --install-python-toolchain        Install python in local virtualenv."
-  echo  
+  echo
   echo "  --with-system-cmake (default)     Use system cmake, if avaliable."
   echo "  --no-system-cmake "
-  echo 
+  echo
   echo "  --with-ccache (default)           Use ccache, if available."
   echo "  --no-ccache "
-  echo  
+  echo
   echo "  --with-capi (default)             Build C API."
   echo "  --with-capi-framework             Build C API as macOS framework (macOS only)"
-  echo "  --no-capi                         Skip building the C API." 
-
-  echo "  --with-python (default)           Build python components."
-  echo "  --no-python"
-  echo 
+  echo "  --no-capi                         Skip building the C API."
+  echo
   echo "  --with-visualization (default)    Build Turi Create visualization client."
   echo "  --no-visualization"
   echo
+  echo "  --arch                            Target execution for a specific achetecture (default x86-64)."
+  echo "  --tune                            Optimize for specific achetecture (default --arch; pass after --arch)."
+  echo
   echo "  --release-opt-for-size            Optimize for size."
+  echo "  --debug-opt-for-size              Debug optimize for size."
   echo "  --target-ios                      Build for iOS (macOS only)"
   echo
   echo "  --with-remotefs (default)         Include capabilities for remote file access."
   echo "  --no-remotefs                     Disable remote file access."
   echo
+  echo "  --with-python (default)           Build python components."
+  echo "  --no-python"
+  echo
   echo "  --virtualenv VIRTUALENV_EXE       Path to virtualenv executable (otherwise looks in \$PATH)."
-  echo 
+  echo
+  echo "  --python2.7                       Use Python 2.7 (default)."
+  echo "  --python3.5                       Use Python 3.5, default is Python 2.7."
+  echo "  --python3.6                       Use Python 3.6, default is Python 2.7."
+  echo
   echo "  --yes                             Defaults to yes on a prompt"
   echo
   echo "  -D var=value                      Specify CFLAGS definitions to be passed on to cmake."
@@ -88,8 +96,8 @@ function run_cleanup_prompt {
   fi
 }
 
-function install_python_toolchain { 
-  
+function install_python_toolchain {
+
   echo "Installing python toolchain."
   # TODO - validate that $VIRTUALENV is set, and/or set it if not
   echo "Using virtualenv at $VIRTUALENV."
@@ -116,6 +124,9 @@ with_ccache=1
 with_visualization=1
 with_remotefs=1
 release_opt_for_size=0
+debug_opt_for_size=0
+arch=x86_64
+tune=native
 
 ###############################################################################
 #
@@ -124,21 +135,24 @@ release_opt_for_size=0
 while [ $# -gt 0 ]
   do case $1 in
     --cleanup)              cleanup_option=1;;
-    
+
     --install-python-toolchain) python_only=1;;
-    
+
     --release-opt-for-size) release_opt_for_size=1;;
-    --target-ios)           with_ios=1; with_python=0; with_capi=1; release_opt_for_size=1;; 
+    --target-ios)           with_ios=1; with_python=0; with_capi=1; release_opt_for_size=1; arch=arm64;;
+
+    --arch)                 arch=$2; tune=$2 ; with_ios=0; shift ;;
+    --tune)                 tune=$2; shift ;;
 
     --with-system-cmake)    with_system_cmake=1;;
     --no-system-cmake)      with_system_cmake=0;;
 
     --with-ccache)          with_ccache=1;;
     --no-ccache)            with_ccache=0;;
-    
+
     --with-capi)            with_capi=1;;
     --with-capi-framework)  with_capi=1; with_capi_framework=1;;
-    --no-capi)              with_capi=0;; 
+    --no-capi)              with_capi=0;;
 
     --with-python)          with_python=1;;
     --no-python)            with_python=0;;
@@ -166,15 +180,31 @@ if [[ $cleanup_option == 1 ]]; then
   exit 0
 fi
 
+if [[ $(($python27 + $python35 + $python36)) -gt 1 ]]; then
+  echo "Two or more versions of Python specified. Pick one."
+  exit 1
+fi
+
+
+if [[ $python35 == 1 ]]; then
+  CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DPYTHON_VERSION=\"python3.5\""
+  PYTHON_VERSION="python3.5"
+elif [[ $python36 == 1 ]]; then
+  CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DPYTHON_VERSION=\"python3.6\""
+  PYTHON_VERSION="python3.6"
+else
+  CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DPYTHON_VERSION=\"python2.7\""
+  PYTHON_VERSION="python2.7"
+fi
 
 if [[ $python_only == 1 ]]; then
   install_python_toolchain
-  exit $?  
+  exit $?
 fi
 
 # If we need to build python, we also need to install the python toolchain
 if [[ $with_python == 1 ]]; then
-  if [[ $with_visualization == 0 ]]; then 
+  if [[ $with_visualization == 0 ]]; then
     echo "Visualization client libraries (--with-visualization) required for python build."
     exit 1
   fi
@@ -187,6 +217,10 @@ fi
 
 if [[ $release_opt_for_size == 1 ]]; then
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DRELEASE_OPT_FOR_SIZE=1"
+fi
+
+if [[ $debug_opt_for_size == 1 ]]; then
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DDEBUG_OPT_FOR_SIZE=1"
 fi
 
 # Check what is needed with the remote_fs stuff
@@ -217,6 +251,8 @@ else
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_ENABLE_REMOTEFS=0 -DTC_NO_CURL=1"
 fi
 
+# Set the archetecture
+CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DMARCH=${arch} -DARCH=${arch} -DMTUNE=${tune}"
 
 ##################################################################3
 # setup compilers and includes
@@ -240,7 +276,7 @@ fi
 # If not specified we assume gcc and g++ are the default c and c++
 # compilers
 if [[ -z $CC ]]; then
-  if [[ `which cc` ]]; then 
+  if [[ `which cc` ]]; then
     CC=cc
   elif [[ `which gcc` ]]; then
     CC=gcc
@@ -253,9 +289,9 @@ if [[ -z $CC ]]; then
 fi
 
 if [[ -z $CXX ]]; then
-  if [[ `which cxx` ]]; then 
+  if [[ `which cxx` ]]; then
     CXX=cxx
-  elif [[ `which c++` ]]; then 
+  elif [[ `which c++` ]]; then
     CXX=c++
   elif [[ `which g++` ]]; then
     CXX=g++
@@ -269,9 +305,9 @@ fi
 
 CCCMD=`which $CC || echo ""`
 CXXCMD=`which $CXX || echo ""`
-  
+
 echo "CC = $CCCMD"
-echo "CXX = $CXXCMD" 
+echo "CXX = $CXXCMD"
 
 echo "Attempting to use C compiler $CCCMD."
 echo "Attempting to use C++ compiler $CXXCMD."
@@ -285,7 +321,7 @@ mkdir -p $DEPS_PREFIX/bin
 rm -f $CCSCR
 rm -f $CXXSCR
 
-if [ $with_ccache -eq 1 ] && [ -f $CCACHE ]; then 
+if [ $with_ccache -eq 1 ] && [ -f $CCACHE ]; then
 
   echo "Using ccache from $CCACHE."
 
@@ -301,7 +337,7 @@ if [ $with_ccache -eq 1 ] && [ -f $CCACHE ]; then
   exit \$?
   " > $CXXSCR && chmod a+x $CXXSCR
 
-else 
+else
 
   echo "#!/bin/bash -e
   $CCCMD \$@
@@ -368,7 +404,7 @@ function install_cmake {
 
 CMAKE=`which cmake || echo ""`
 
-function check_cmake { 
+function check_cmake {
 
   if [[ -f $CMAKE ]] ; then
 
@@ -380,8 +416,8 @@ function check_cmake {
         install_cmake
         return $?
       fi
-    fi 
-    
+    fi
+
     if [[ -f ${PWD}/deps/local/bin/cmake ]]; then
       CMAKE=${PWD}/deps/local/bin/cmake
     fi
@@ -407,9 +443,9 @@ function check_cmake {
   fi
 }
 
-check_cmake || { 
-  echo "Error 1: Error reported installing CMake." 
-  exit 1 
+check_cmake || {
+  echo "Error 1: Error reported installing CMake."
+  exit 1
 }
 
 ########################################################

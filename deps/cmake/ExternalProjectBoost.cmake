@@ -5,7 +5,7 @@ SET(EXTRA_CONFIGURE_COMMANDS "")
 
 if (CLANG)
   SET(ADD_BOOST_BOOTSTRAP --with-toolset=clang)
-  SET(cxxflags "-std=c++11 -stdlib=libc++ ${ARCH_FLAG} ${CPP_REAL_COMPILER_FLAGS}")
+  SET(cxxflags "-std=c++11 -stdlib=libc++ ${ARCH_COMPILE_FLAGS} ${CPP_REAL_COMPILER_FLAGS}")
   SET(tmp2 "-stdlib=libc++")
   if(TC_BUILD_IOS)
     SET(ADD_BOOST_COMPILE_TOOLCHAIN "toolset=clang abi=aapcs address-model=64 architecture=arm binary-format=mach-o threading=multi target-os=iphone cflags=\"-arch arm64\" cxxflags=\"${cxxflags}\" linkflags=${tmp2}")
@@ -36,21 +36,24 @@ if (WIN32 AND ${MINGW_MAKEFILES})
     SET CPLUS_INCLUDE_PATH=${CMAKE_SOURCE_DIR}\\deps\\local\\include &&
     SET LIBRARY_PATH=${CMAKE_SOURCE_DIR}\\deps\\local\\lib &&
     SET PATH=$PATH;${CMAKE_SOURCE_DIR}\\deps\\local\\bin &&
-    .\\b2 ${ADD_BOOST_COMPILE_TOOLCHAIN} install link=static variant=release threading=multi runtime-link=static cxxflags=-fPIC --prefix=<INSTALL_DIR>)
+    .\\b2 ${ADD_BOOST_COMPILE_TOOLCHAIN} install link=static variant=release threading=multi runtime-link=static cxxflags="-fPIC -march=${MARCH} -mtune=${MTUNE} -fvisibility=hidden -Wl,-arch,${MARCH}" cflags="-fPIC -march=${MARCH} -mtune=${MTUNE} -fvisibility=hidden -Wl,-arch,${MARCH}" linkflags="-arch ${MARCH}" --prefix=<INSTALL_DIR>)
 else()
   SET(SCRIPT_EXTENSION ".sh")
   if(WIN32 AND MSYS_MAKEFILES)
     SET(PLATFORM_DEFINES define=MS_WIN64)
   endif()
-  if(TC_BUILD_IOS)
-    execute_process(
-      COMMAND bash -c "xcrun --sdk iphoneos --show-sdk-path" 
-      OUTPUT_VARIABLE _ios_sdk_path 
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    set(OPTIONAL_SDKROOT "SDKROOT=${_ios_sdk_path}")
+
+  set(_cflags "-fPIC -I${CMAKE_SOURCE_DIR}/deps/local/include -L${CMAKE_SOURCE_DIR}/deps/local/lib ${CMAKE_C_FLAGS_RELEASE} ${LINKER_COMMON_FLAGS} ${ARCH_COMPILE_FLAGS} ${C_REAL_COMPILER_FLAGS} -Wno-unused-command-line-argument -Wno-error")
+
+  if(${MARCH} MATCHES "x86_64.*")
+    set(_archetecture "x86")
+  else()
+    set(_archetecture ${MARCH})
   endif()
-  SET(BOOST_BUILD_SHELL_COMMAND "rm -rf <INSTALL_DIR>/include/boost && PATH=$PATH:${CMAKE_SOURCE_DIR}/deps/local/bin C_INCLUDE_PATH=${CMAKE_SOURCE_DIR}/deps/local/include CPLUS_INCLUDE_PATH=${CMAKE_SOURCE_DIR}/deps/local/include LIBRARY_PATH=${CMAKE_SOURCE_DIR}/deps/local/lib ${OPTIONAL_SDKROOT} ./b2 -d0 -q ${ADD_BOOST_COMPILE_TOOLCHAIN} install link=static variant=release threading=multi runtime-link=static ${PLATFORM_DEFINES} cxxflags='-fPIC -std=c++11'")
+
+  SET(BOOST_BUILD_SHELL_COMMAND "rm -rf <INSTALL_DIR>/include/boost && PATH=$PATH:${CMAKE_SOURCE_DIR}/deps/local/bin C_INCLUDE_PATH=${CMAKE_SOURCE_DIR}/deps/local/include CPLUS_INCLUDE_PATH=${CMAKE_SOURCE_DIR}/deps/local/include LIBRARY_PATH=${CMAKE_SOURCE_DIR}/deps/local/lib SDKROOT=${TC_SDK_ROOT} CFLAGS='${_cflags}' CPPFLAGS='${_cflags}' CXXFLAGS='${_cflags}' LDFLAGS='${LINKER_COMMON_FLAGS}' ./b2 -d0 -q -j4 ${ADD_BOOST_COMPILE_TOOLCHAIN} install link=static variant=release threading=multi runtime-link=static ${PLATFORM_DEFINES} cxxflags='${_cflags}' cflags='${_cflags}' linkflags='\"${LINKER_COMMON_FLAGS}\"' architecture=${_archetecture}")
+  # SET(BOOST_BUILD_SHELL_COMMAND "rm -rf <INSTALL_DIR>/include/boost && PATH=$PATH:${CMAKE_SOURCE_DIR}/deps/local/bin C_INCLUDE_PATH=${CMAKE_SOURCE_DIR}/deps/local/include CPLUS_INCLUDE_PATH=${CMAKE_SOURCE_DIR}/deps/local/include LIBRARY_PATH=${CMAKE_SOURCE_DIR}/deps/local/lib SDKROOT=${TC_SDK_ROOT} ./b2 -d0 -q ${ADD_BOOST_COMPILE_TOOLCHAIN} install link=static variant=release threading=multi runtime-link=static ${PLATFORM_DEFINES} cxxflags='${_boost_compile_flags}' cflags='${_boost_compile_flags}' linkflags='-arch ${MARCH}'")
+# SET(BOOST_BUILD_SHELL_COMMAND "rm -rf <INSTALL_DIR>/include/boost && PATH=$PATH:${CMAKE_SOURCE_DIR}/deps/local/bin C_INCLUDE_PATH=${CMAKE_SOURCE_DIR}/deps/local/include CPLUS_INCLUDE_PATH=${CMAKE_SOURCE_DIR}/deps/local/include LIBRARY_PATH=${CMAKE_SOURCE_DIR}/deps/local/lib ./b2 ${ADD_BOOST_COMPILE_TOOLCHAIN} install link=static variant=release threading=multi runtime-link=static ${PLATFORM_DEFINES} cxxflags=\"-fPIC -march=${MARCH} -mtune=${MTUNE} -fvisibility=hidden -Wl,-arch,${MARCH}\" cflags=\"-fPIC -march=${MARCH} -mtune=${MTUNE} -fvisibility=hidden -Wl,-arch,${MARCH}\" linkflags=\"-arch ${MARCH}\"")
   STRING(REGEX REPLACE "C:" "/C" BOOST_BUILD_SHELL_COMMAND ${BOOST_BUILD_SHELL_COMMAND})
   SET(BOOST_BUILD_COMMAND sh -c ${BOOST_BUILD_SHELL_COMMAND})
   SET(BOOST_INSTALL_COMMAND "PATH=$PATH:${CMAKE_SOURCE_DIR}/deps/local/bin ./b2 -d0 -q tools/bcp && cp dist/bin/bcp ${CMAKE_SOURCE_DIR}/deps/local/bin")
@@ -74,6 +77,9 @@ ExternalProject_Add(ex_boost
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   PATCH_COMMAND ${PATCHCMD}
   CONFIGURE_COMMAND
+  export CXXFLAGS=\"${CMAKE_CXX_FLAGS_RELEASE}\" &&
+  export CFLAGS=\"${CMAKE_C_FLAGS_RELEASE}\" &&
+  export LDFLAGS=\"${LINKER_COMMON_FLAGS}\" &&
   ./bootstrap${SCRIPT_EXTENSION}
   ${ADD_BOOST_BOOTSTRAP}
   --with-libraries=filesystem

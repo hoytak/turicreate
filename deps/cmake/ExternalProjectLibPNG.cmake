@@ -6,12 +6,13 @@ if(APPLE AND TC_BUILD_IOS)
   set(EXTRA_CONFIGURE_FLAGS --host=arm-apple-darwin)
 endif()
 
-set(CFLAGS "-fPIC -I${CMAKE_SOURCE_DIR}/deps/local/include -L${CMAKE_SOURCE_DIR}/deps/local/lib")
+set(_cflags "-fPIC -I${CMAKE_SOURCE_DIR}/deps/local/include -L${CMAKE_SOURCE_DIR}/deps/local/lib ${CMAKE_C_FLAGS_RELEASE} ${LINKER_COMMON_FLAGS} ${ARCH_COMPILE_FLAGS} ${C_REAL_COMPILER_FLAGS} -Wno-unused-command-line-argument -Wno-error")
+
 ExternalProject_Add(ex_libpng
   PREFIX ${CMAKE_SOURCE_DIR}/deps/build/libpng
   URL ${CMAKE_SOURCE_DIR}/deps/src/libpng-1.6.14/
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
-  CONFIGURE_COMMAND env "CFLAGS=${CFLAGS} ${ARCH_FLAG} ${C_REAL_COMPILER_FLAGS}" "CPPFLAGS=${CFLAGS} ${ARCH_FLAG} ${C_REAL_COMPILER_FLAGS}" <SOURCE_DIR>/configure --enable-shared=no --prefix=<INSTALL_DIR> ${EXTRA_CONFIGURE_FLAGS}
+  CONFIGURE_COMMAND bash -c "CC=${CMAKE_C_COMPILER} CFLAGS='${_cflags}' CPPFLAGS='${_cflags}' LDFLAGS='${LINKER_COMMON_FLAGS}' <SOURCE_DIR>/configure --enable-shared=no --prefix=<INSTALL_DIR> ${EXTRA_CONFIGURE_FLAGS}"
   INSTALL_COMMAND make install
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libpng.a
   BUILD_IN_SOURCE 1)

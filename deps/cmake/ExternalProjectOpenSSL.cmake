@@ -3,6 +3,9 @@ if(TC_NO_CURL)
   return()
 endif()
 
+set(_cflags "-fPIC -I${CMAKE_SOURCE_DIR}/deps/local/include -L${CMAKE_SOURCE_DIR}/deps/local/lib ${CMAKE_C_FLAGS_RELEASE} ${LINKER_COMMON_FLAGS} ${ARCH_COMPILE_FLAGS} ${C_REAL_COMPILER_FLAGS} -Wno-unused-command-line-argument -Wno-error")
+
+
 if(APPLE)
   # SSL seems to link fine even when compiled using the default compiler
   # The alternative to get openssl to use gcc on mac requires a patch to
@@ -12,9 +15,9 @@ ExternalProject_Add(ex_libssl
   URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2 
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
-  CONFIGURE_COMMAND env "CC=${CMAKE_C_COMPILER} -mmacosx-version-min=10.12" ./Configure darwin64-x86_64-cc no-idea no-mdc2 no-rc5 -fPIC --prefix=<INSTALL_DIR>
-  BUILD_COMMAND make -j1
-  INSTALL_COMMAND make -j1 install && cp ./libcrypto.a <INSTALL_DIR>/ssl && cp ./libssl.a <INSTALL_DIR>/ssl
+  CONFIGURE_COMMAND bash -c "CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CFLAGS='${_cflags}' CPPFLAGS='${_cflags}' LDFLAGS='${LINKER_COMMON_FLAGS}'  ./Configure darwin64-x86_64-cc no-idea no-mdc2 no-rc5 -fPIC --prefix=<INSTALL_DIR>"
+  BUILD_COMMAND make -j4
+  INSTALL_COMMAND make -j4 install && cp ./libcrypto.a <INSTALL_DIR>/ssl && cp ./libssl.a <INSTALL_DIR>/ssl
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a
   )
 elseif(WIN32)

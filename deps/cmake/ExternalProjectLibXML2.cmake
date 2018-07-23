@@ -6,11 +6,14 @@ if(APPLE AND TC_BUILD_IOS)
   set(EXTRA_CONFIGURE_FLAGS --host=arm-apple-darwin)
 endif()
 
+set(_cflags "-fPIC -I${CMAKE_SOURCE_DIR}/deps/local/include -L${CMAKE_SOURCE_DIR}/deps/local/lib ${CMAKE_C_FLAGS_RELEASE} ${ARCH_COMPILE_FLAGS} ${C_REAL_COMPILER_FLAGS} -Wno-unused-command-line-argument -Wno-error")
+
+
 ExternalProject_Add(ex_libxml2
   PREFIX ${CMAKE_SOURCE_DIR}/deps/build/libxml2
   URL ${CMAKE_SOURCE_DIR}/deps/src/libxml2-2.9.1/ 
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
-  CONFIGURE_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} "CFLAGS=-fPIC ${ARCH_FLAG} ${C_REAL_COMPILER_FLAGS}" <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --enable-shared=no --enable-static=yes --without-lzma --libdir=<INSTALL_DIR>/lib --with-python=./ ${EXTRA_CONFIGURE_FLAGS}
+  CONFIGURE_COMMAND bash -c "CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CFLAGS='${_cflags}' CPPFLAGS='${_cflags}' LDFLAGS='${LINKER_COMMON_FLAGS}' <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --enable-shared=no --enable-static=yes --without-lzma --libdir=<INSTALL_DIR>/lib --with-python=./ ${EXTRA_CONFIGURE_FLAGS}"
   BUILD_COMMAND cp <SOURCE_DIR>/testchar.c <SOURCE_DIR>/testapi.c && make
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libxml2.a
   )

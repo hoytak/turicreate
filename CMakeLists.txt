@@ -1,6 +1,5 @@
 project(Turi)
 
-
 # We require the most recent version of cmake and automatically
 # install the correct version when using the cmake lists
 cmake_minimum_required(VERSION 2.8.3)
@@ -71,52 +70,6 @@ endif()
 #*                       Platform Specific Stuff                          *
 #*                                                                        *
 #**************************************************************************
-if(APPLE)
-  if(TC_BUILD_IOS)
-    SET(TC_BASE_SDK iphoneos)
-    SET(COMPILER_FLAGS "${COMPILER_FLAGS} -miphoneos-version-min=12.0 -Wno-c++11-narrowing")
-  else()
-    SET(TC_BASE_SDK macosx)
-
-    # Modify COMPILER_FLAGS instead of setting CMAKE_OSX_DEPLOYMENT_TARGET so
-    # that this setting propagates to external dependencies.
-    SET(COMPILER_FLAGS "${COMPILER_FLAGS} -mmacosx-version-min=10.12")
-  endif()
-
-  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-version OUTPUT_VARIABLE TC_BASE_SDK_VERSION RETURN_VALUE _xcrun_ret)
-  if(NOT ${_xcrun_ret} EQUAL 0)
-    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
-  endif()
-
-  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-path OUTPUT_VARIABLE TC_BASE_SDK_PATH RETURN_VALUE _xcrun_ret)
-  if(NOT ${_xcrun_ret} EQUAL 0)
-    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
-  endif()
-
-  SET(CMAKE_OSX_SYSROOT "${TC_BASE_SDK_PATH}")
-  SET(COMPILER_FLAGS "${COMPILER_FLAGS} -isysroot ${TC_BASE_SDK_PATH}")
-
-  # Core ML is only present on macOS 10.13 or higher.
-  # Logic reversed to get around what seems to be a CMake bug.
-  if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.13)
-    add_definitions(-DHAS_CORE_ML)
-    set(HAS_CORE_ML TRUE)
-  endif()
-
-  # Core ML only supports batch inference on macOS 10.14 or higher
-  # Logic reversed to get around what seems to be a CMake bug.
-  if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.14)
-    add_definitions(-DHAS_CORE_ML_BATCH_INFERENCE)
-
-    # GPU-accelerated training with MPS backend requires macOS 10.14 or higher
-    set(HAS_MPS TRUE)
-
-    # CoreML MLCustomModel requires macOS 10.14 or higher
-    set(HAS_MLCUSTOMMODEL TRUE)
-  endif()
-endif()
-
-
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   set(CLANG false)
 elseif(WIN32)
@@ -173,10 +126,28 @@ if(WIN32)
   add_definitions(-D_WIN32_WINNT=0x0600)
 endif()
 
-if(TC_BUILD_IOS)
-  add_definitions(-DTC_BUILD_IOS)
-  add_definitions(-DTC_NO_CURL)
-  set(TC_ENABLE_REMOTEFS 0)
+if(APPLE)
+
+  execute_process(
+      COMMAND bash -c "xcrun --sdk macosx --show-sdk-path"
+      OUTPUT_VARIABLE MACOS_SDK_ROOT
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+  if(TC_BUILD_IOS)
+    add_definitions(-DTC_BUILD_IOS)
+    add_definitions(-DTC_NO_CURL)
+    set(TC_ENABLE_REMOTEFS 0)
+
+    execute_process(
+        COMMAND bash -c "xcrun --sdk iphoneos --show-sdk-path"
+        OUTPUT_VARIABLE IOS_SDK_ROOT
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+    set(TC_SDK_ROOT ${IOS_SDK_ROOT})
+  else()
+    set(TC_SDK_ROOT ${MACOSX_SDK_ROOT})
+  endif()
 endif()
 
 if(${TC_ENABLE_REMOTEFS})
@@ -213,7 +184,7 @@ message(WARNING "OpenMP Libraries were not found")
 #*                                                                        */
 #**************************************************************************/
 if (CLANG)
-set(CPP11_FLAGS "-std=c++11 -stdlib=libc++ -Wno-deprecated-register -Wno-enum-compare -Wno-conversion-null -Wno-constant-logical-operand -Wno-parentheses-equality -ftemplate-depth=900" CACHE STRING "C++11 enabling flags")
+  set(CPP11_FLAGS "-std=c++11 -stdlib=libc++ -Wno-deprecated-register -Wno-enum-compare -Wno-conversion-null -Wno-constant-logical-operand -Wno-parentheses-equality -ftemplate-depth=900" CACHE STRING "C++11 enabling flags")
 set(WERROR_FLAGS "-Werror")
 else()
 set(CPP11_FLAGS "-std=c++11 -Wno-enum-compare -Wno-conversion-null -ftemplate-depth=900" CACHE STRING "C++11 enabling flags")
@@ -239,6 +210,38 @@ if (APPLE)
   endif()
 endif()
 
+if (MARCH)
+  if(APPLE)
+    set(ARCH_COMPILE_FLAGS "-arch ${MARCH}")
+    set(ARCH_LINK_FLAGS "-Wl,-arch,${MARCH}")
+  else()
+    set(ARCH_COMPILE_FLAGS "-march=${MARCH}")
+    set(ARCH_LINK_FLAGS "-Wl,-arch,${MARCH}")
+  endif()
+elseif (ARCH)
+  set(ARCH_COMPILE_FLAGS "-arch ${ARCH}")
+  set(ARCH_LINK_FLAGS "-Wl,-arch,${ARCH}")
+else()
+  set(ARCH_COMPILE_FLAGS "-arch x86_64")
+  set(ARCH_LINK_FLAGS "")
+endif()
+
+# check if MTUNE is set
+if (NOT MTUNE)
+  #set to native if supported
+  check_cxx_compiler_flag(-mtune=native HAS_MTUNE_NATIVE)
+  check_cxx_compiler_flag(-mtune=${MARCH} HAS_MTUNE_MARCH)
+  check_cxx_compiler_flag(-mtune=${ARCH} HAS_MTUNE_ARCH)
+  if(HAS_MTUNE_NATIVE AND NOT ARCH_COMPILE_FLAGS)
+    set(MTUNE "native")
+  elseif(HAS_MTUNE_MARCH)
+    set(MTUNE "${MARCH}")
+  elseif(HAS_MTUNE_ARCH)
+    set(MTUNE "${ARCH}")
+  endif()
+endif()
+
+# set(TUNE_FLAG "-mtune=${MTUNE}")
 
 # Install time rpath gets highest priority, we should always use rpath relative to the installation location first.
 if (WIN32)
@@ -249,55 +252,31 @@ elseif (APPLE)
   # For whatever reason just adding -rpath=@loader_path has issues on 10.9 but not 10.10
   # Here are two possible alternatives that "may" fix the issue. If they fix it
   # I am not sure which line was the one which actually worked
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,@loader_path/.")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,.")
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,@loader_path -Wl,-rpath,@loader_path/..")
-  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-rpath,@loader_path -Wl,-rpath,@loader_path/..")
+  set(LINKER_COMMON_FLAGS ${ARCH_LINK_FLAGS})
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,@loader_path/. ${LINKER_COMMON_FLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,. ${LINKER_COMMON_FLAGS}")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,@loader_path -Wl,-rpath,@loader_path/.. ${LINKER_COMMON_FLAGS}")
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-rpath,@loader_path -Wl,-rpath,@loader_path/.. ${LINKER_COMMON_FLAGS}")
 else()
+  set(LINKER_COMMON_FLAGS "${ARCH_LINK_FLAGS}")
+
   # LINUX
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,$ORIGIN")
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,$ORIGIN -Wl,-rpath,$ORIGIN/..")
-  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-rpath,$ORIGIN -Wl,-rpath,$ORIGIN/..")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,$ORIGIN ${LINKER_COMMON_FLAGS}")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,$ORIGIN -Wl,-rpath,$ORIGIN/.. ${LINKER_COMMON_FLAGS}")
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-rpath,$ORIGIN -Wl,-rpath,$ORIGIN/.. ${LINKER_COMMON_FLAGS}")
 endif()
 
-# if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib64)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib64")
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib64")
-  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib64")
-  # endif()
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib64")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib64")
+set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib64")
 
-  # if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib")
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib")
-  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib")
-  # endif()
-
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib")
+set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-rpath,${CMAKE_SOURCE_DIR}/deps/local/lib")
 
 
 include(CheckCXXCompilerFlag)
-if (MARCH)
-  set(ARCH_FLAG "-march=${MARCH}")
-elseif (ARCH)
-  set(ARCH_FLAG "-arch ${ARCH}")
-else()
-  set(MARCH "x86-64")
-  set(ARCH_FLAG "-march=${MARCH}")
-endif()
 
-# check if MTUNE is set
-if (NOT MTUNE)
-  #set to native if supported
-  check_cxx_compiler_flag(-mtune=native HAS_MTUNE_NATIVE)
-  check_cxx_compiler_flag(-mtune=${MARCH} HAS_MTUNE_MARCH)
-  check_cxx_compiler_flag(-mtune=${ARCH} HAS_MTUNE_ARCH)
-  if(HAS_MTUNE_NATIVE)
-    set(MTUNE "-mtune=native")
-  elseif(HAS_MTUNE_MARCH)
-    set(MTUNE "-mtune=${MARCH}")
-  elseif(HAS_MTUNE_ARCH)
-    set(MTUNE "-mtune=${ARCH}")
-  endif()
-endif()
 
 set(EXTRA_OPTIMIZATION_FLAGS "")
 set(DISABLE_WARNING_FLAGS "")
@@ -333,40 +312,47 @@ if(HAS_FTRACER)
         set(EXTRA_OPTIMIZATION_FLAGS "${EXTRA_OPTIMIZATION_FLAGS} -ftracer")
 endif()
 
-set(DEBUG_OPTIMIZATION_LEVEL -O0)
+if(${DEBUG_OPT_FOR_SIZE})
+  set(DEBUG_OPTIMIZATION_FLAGS -Os)
+else()
+  set(DEBUG_OPTIMIZATION_FLAGS "-O0 -fno-inline")
+endif()
 
 if(${RELEASE_OPT_FOR_SIZE})
-  set(RELEASE_OPTIMIZATION_LEVEL -Os)
+  set(RELEASE_OPTIMIZATION_FLAGS "-Os -DNDEBUG")
 else()
-  set(RELEASE_OPTIMIZATION_LEVEL -O3)
+  set(RELEASE_OPTIMIZATION_FLAGS "-O3 -DNDEBUG")
 endif()
 
 if(WIN32)
         # on windows due to some string table limitations + template
         # insanities, on -O0 we run out of string table entries or something
         # like that.
-        set(DEBUG_OPTIMIZATION_LEVEL -O2)
+        set(DEBUG_OPTIMIZATION_FLAGS -O2)
 endif()
+
+# Set mac os minimum version
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.12")
 
 # Set the debug flags
 set(EXTERNAL_CMAKE_C_FLAGS_DEBUG
-  "${DEBUG_OPTIMIZATION_LEVEL} -Wno-attributes ${ARCH_FLAG} -Winit-self ${PROFILING_FLAGS} ${C_REAL_COMPILER_FLAGS} -fno-inline ${ALTERNATE_LINKER} -DHAVE_PTHREAD=1"
+  "${DEBUG_OPTIMIZATION_LEVEL} -Wno-attributes ${ARCH_COMPILE_FLAGS} -Winit-self ${PROFILING_FLAGS} ${C_REAL_COMPILER_FLAGS} -fno-inline ${ALTERNATE_LINKER} -DHAVE_PTHREAD=1"
   CACHE STRING "compiler options" FORCE)
 set(CMAKE_C_FLAGS_DEBUG
   "${EXTERNAL_CMAKE_C_FLAGS_DEBUG} ${WERROR_FLAGS}"
   CACHE STRING "compiler options" FORCE)
 set(EXTERNAL_CMAKE_CXX_FLAGS_DEBUG
-  "${DEBUG_OPTIMIZATION_LEVEL} ${DISABLE_WARNING_FLAGS} -Wno-attributes ${ARCH_FLAG} -Winit-self ${PROFILING_FLAGS} ${CPP_REAL_COMPILER_FLAGS} ${INT128_FLAGS} ${ALTERNATE_LINKER} -fno-inline -DHAVE_PTHREAD=1"
+  "${DEBUG_OPTIMIZATION_LEVEL} ${DISABLE_WARNING_FLAGS} -Wno-attributes ${ARCH_COMPILE_FLAGS} -Winit-self ${PROFILING_FLAGS} ${CPP_REAL_COMPILER_FLAGS} ${INT128_FLAGS} ${ALTERNATE_LINKER} -fno-inline -DHAVE_PTHREAD=1"
   CACHE STRING "compiler options" FORCE)
 set(CMAKE_CXX_FLAGS_DEBUG
   "${EXTERNAL_CMAKE_CXX_FLAGS_DEBUG} ${WERROR_FLAGS}"
   CACHE STRING "compiler options" FORCE)
 
 set(CMAKE_C_FLAGS_RELEASE
-  "${RELEASE_OPTIMIZATION_LEVEL} -Wno-attributes ${ARCH_FLAG} ${MTUNE} ${PROFILING_FLAGS} ${C_REAL_COMPILER_FLAGS} ${WERROR_FLAGS} -DNDEBUG ${ALTERNATE_LINKER} -DHAVE_PTHREAD=1 -DARMA_NO_DEBUG"
+  "${RELEASE_OPTIMIZATION_LEVEL} -Wno-attributes ${ARCH_COMPILE_FLAGS} ${TUNE_FLAG} ${PROFILING_FLAGS} ${C_REAL_COMPILER_FLAGS} ${WERROR_FLAGS} -DNDEBUG ${ALTERNATE_LINKER} -DHAVE_PTHREAD=1 -DARMA_NO_DEBUG"
   CACHE STRING "compiler options" FORCE)
 set(CMAKE_CXX_FLAGS_RELEASE
-  "${RELEASE_OPTIMIZATION_LEVEL} ${EXTRA_OPTIMIZATION_FLAGS} ${DISABLE_WARNING_FLAGS} ${PROFILING_FLAGS} -Wno-attributes ${ARCH_FLAG} ${MTUNE} ${CPP_REAL_COMPILER_FLAGS} ${WERROR_FLAGS} ${INT128_FLAGS} ${ALTERNATE_LINKER} -DNDEBUG -DHAVE_PTHREAD=1 -DARMA_NO_DEBUG"
+  "${RELEASE_OPTIMIZATION_LEVEL} ${EXTRA_OPTIMIZATION_FLAGS} ${DISABLE_WARNING_FLAGS} ${PROFILING_FLAGS} -Wno-attributes ${ARCH_COMPILE_FLAGS} ${TUNE_FLAG} ${CPP_REAL_COMPILER_FLAGS} ${WERROR_FLAGS} ${INT128_FLAGS} ${ALTERNATE_LINKER} -DNDEBUG -DHAVE_PTHREAD=1 -DARMA_NO_DEBUG"
   CACHE STRING "compiler options" FORCE)
 
 
@@ -625,6 +611,8 @@ else()
   endif()
 endif()
 
+set_target_properties("${NAME}" PROPERTIES LINK_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
+
 endmacro()
 
 # This is an external function
@@ -782,6 +770,70 @@ function (make_boost_test NAME)
 
   add_test(${NAME} ${NAME}test)
 endfunction()
+
+# Copy files from source directory in current source tree to destination
+# directory in the binary destination directory.
+# Create destination directory tree if it does not exist.
+macro(copy_directory src_dir dest_dir)
+    message(STATUS "Copying src directory ${src_dir} to ${dest_dir}")
+    set(_src_dir "${CMAKE_CURRENT_SOURCE_DIR}/${src_dir}")
+    set(_dest_dir "${CMAKE_CURRENT_BINARY_DIR}/${src_dir}")
+    file(MAKE_DIRECTORY ${_dest_dir})
+
+    file(GLOB template_files RELATIVE ${_src_dir} ${_src_dir}/*)
+    foreach(template_file ${template_files})
+        set(src_template_path ${_src_dir}/${template_file})
+        if(NOT IS_DIRECTORY ${src_template_path})
+            message(STATUS "Configuring file ${template_file}")
+            configure_file(
+                    ${src_template_path}
+                    ${_dest_dir}/${template_file}
+                    COPYONLY)
+        else()
+          copy_directory(${src_dir}/${template_file} ${dest_dir}/${template_file})
+        endif()
+    endforeach(template_file)
+endmacro(copy_directory)
+
+if(APPLE)
+  SET(TC_BASE_SDK macosx)
+  if(TC_BUILD_IOS)
+    SET(TC_BASE_SDK iphoneos)
+    SET(COMPILER_FLAGS "${COMPILER_FLAGS} -Wno-c++11-narrowing")
+  endif()
+
+  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-version OUTPUT_VARIABLE TC_BASE_SDK_VERSION RETURN_VALUE _xcrun_ret)
+  if(NOT ${_xcrun_ret} EQUAL 0)
+    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
+  endif()
+
+  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-path OUTPUT_VARIABLE TC_BASE_SDK_PATH RETURN_VALUE _xcrun_ret)
+  if(NOT ${_xcrun_ret} EQUAL 0)
+    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
+  endif()
+
+  SET(CMAKE_OSX_SYSROOT "${TC_BASE_SDK_PATH}")
+  SET(COMPILER_FLAGS "${COMPILER_FLAGS} -isysroot ${TC_BASE_SDK_PATH}")
+
+  # Core ML is only present on macOS 10.13 or higher.
+  # Logic reversed to get around what seems to be a CMake bug.
+  if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.13)
+    add_definitions(-DHAS_CORE_ML)
+    set(HAS_CORE_ML TRUE)
+  endif()
+
+  # Core ML only supports batch inference on macOS 10.14 or higher
+  # Logic reversed to get around what seems to be a CMake bug.
+  if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.14)
+    add_definitions(-DHAS_CORE_ML_BATCH_INFERENCE)
+
+    # GPU-accelerated training with MPS backend requires macOS 10.14 or higher
+    set(HAS_MPS TRUE)
+
+    # CoreML MLCustomModel requires macOS 10.14 or higher
+    set(HAS_MLCUSTOMMODEL TRUE)
+  endif()
+endif()
 
 
 # This is an external function
