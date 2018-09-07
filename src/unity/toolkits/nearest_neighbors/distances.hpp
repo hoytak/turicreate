@@ -241,9 +241,9 @@ double weighted_jaccard(const flexible_type& a, const flexible_type& b) {
 }
 
 double apply_w_custom(function_closure_info fn,
-                      const std::vector<double>& a,
-                      const std::vector<double>& b) {
-  auto actual_fn = variant_get_value< std::function<double(const std::vector<double>, const std::vector<double>)> >(fn);
+                      const flex_vec& a,
+                      const flex_vec& b) {
+  auto actual_fn = variant_get_value< std::function<double(const flex_vec&, const flex_vec&)> >(fn);
   auto d = nearest_neighbors::custom_distance();
   d.fn = actual_fn;
   return d.distance(a, b);
@@ -253,7 +253,7 @@ gl_sarray apply(gl_sarray a, gl_sarray b, function_closure_info fn) {
   if (a.dtype() != b.dtype())
     log_and_throw("Types of both SArrays must match.");
 
-  auto actual_fn = variant_get_value< std::function<double(const flexible_type, const flexible_type)> >(fn);
+  auto actual_fn = variant_get_value< std::function<double(const flexible_type&, const flexible_type&)> >(fn);
 
   gl_sarray_writer writer(flex_type_enum::FLOAT, 1);
   auto ar = a.range_iterator();

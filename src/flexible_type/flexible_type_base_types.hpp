@@ -7,7 +7,7 @@
 #ifndef TURI_UNITY_FLEXIBLE_TYPE_BASE_TYPES_HPP
 #define TURI_UNITY_FLEXIBLE_TYPE_BASE_TYPES_HPP
 #include <string>
-#include <vector>
+#include <generics/gl_vector.hpp>
 #include <cstdint>
 #include <iostream>
 #include <serialization/serialization_includes.hpp>
@@ -43,7 +43,7 @@ typedef std::string flex_string;
  * Corresponds to the type enum \ref flex_type_enum::VECTOR.
  * \deprecated
  */
-typedef std::vector<double> flex_vec;
+typedef gl_vector<double> flex_vec;
 /**
  * A recursive object vector<flexible_type> that can be stored in a flexible_type.
  * Corresponds to the type enum \ref flex_type_enum::LIST.

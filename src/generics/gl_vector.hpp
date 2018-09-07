@@ -9,6 +9,7 @@
 #include <generics/vector_internals.hpp>
 #include <generics/vector_serialization.hpp>
 #include <generics/is_memmovable.hpp>
+#include <vector>
 #include <algorithm>
 
 namespace turi {
@@ -72,7 +73,7 @@ class gl_vector {
   {}
 
 
-  explicit gl_vector (const std::vector<value_type>& v)
+  gl_vector (const std::vector<value_type>& v)
       : info(gl_vector_internal::construct<value_type>(v.begin(), v.end()))
   {}
 

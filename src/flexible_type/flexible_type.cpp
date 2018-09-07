@@ -208,24 +208,25 @@ flex_vec get_vec_visitor::operator() (const flex_image& img) const {
 static bool flexible_type_flatten_to_nd_vec(const flexible_type& f, 
                                             const std::vector<size_t>& shape,
                                             size_t shape_index,
-                                            std::vector<double>& ret);
+                                            flex_vec& ret);
 static bool flexible_type_flatten_to_nd_vec(const flex_vec& f, 
                                             const std::vector<size_t>& shape,
                                             size_t shape_index,
-                                            std::vector<double>& ret);
+                                            flex_vec& ret);
 static bool flexible_type_flatten_to_nd_vec(const flex_list& f, 
                                             const std::vector<size_t>& shape,
                                             size_t shape_index,
-                                            std::vector<double>& ret);
+                                            flex_vec& ret);
 static bool flexible_type_flatten_to_nd_vec(const flex_nd_vec& f, 
                                             const std::vector<size_t>& shape,
                                             size_t shape_index,
-                                            std::vector<double>& ret);
+                                            flex_vec& ret);
 
 static bool flexible_type_flatten_to_nd_vec(const flexible_type& f, 
                                             const std::vector<size_t>& shape,
                                             size_t shape_index,
-                                            std::vector<double>& ret) {
+                                            flex_vec& ret) {
+
   if (f.get_type() == flex_type_enum::VECTOR) {
     return flexible_type_flatten_to_nd_vec(f.get<flex_vec>(), shape, shape_index, ret);
   } else if (f.get_type() == flex_type_enum::ND_VECTOR) {
@@ -240,7 +241,7 @@ static bool flexible_type_flatten_to_nd_vec(const flexible_type& f,
 static bool flexible_type_flatten_to_nd_vec(const flex_vec& f, 
                                             const std::vector<size_t>& shape,
                                             size_t shape_index,
-                                            std::vector<double>& ret) {
+                                            flex_vec& ret) {
   // check shape.
   if (shape_index == shape.size() - 1 && f.size() == shape[shape_index]) {
     // shape is good
@@ -253,7 +254,7 @@ static bool flexible_type_flatten_to_nd_vec(const flex_vec& f,
 static bool flexible_type_flatten_to_nd_vec(const flex_list& f, 
                                             const std::vector<size_t>& shape,
                                             size_t shape_index,
-                                            std::vector<double>& ret) {
+                                            flex_vec& ret) {
   // check shape
   if (shape_index < shape.size() && f.size() == shape[shape_index]) {
     // shape is good
@@ -282,7 +283,7 @@ static bool flexible_type_flatten_to_nd_vec(const flex_list& f,
 static bool flexible_type_flatten_to_nd_vec(const flex_nd_vec& f, 
                                             const std::vector<size_t>& shape,
                                             size_t shape_index,
-                                            std::vector<double>& ret) {
+                                            flex_vec& ret) {
   // check shape
   if (shape.size() - shape_index == f.shape().size()) {
     bool shape_good = true;

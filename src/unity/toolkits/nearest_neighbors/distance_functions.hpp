@@ -120,7 +120,7 @@ struct distance_metric {
     ASSERT_UNREACHABLE();
   }
 
-  virtual double distance(const std::vector<double>& a, const std::vector<double>& b) const {
+  virtual double distance(const flex_vec& a, const flex_vec& b) const {
     ASSERT_MSG(false, "Vector of double type not supported by this distance metric.");
     ASSERT_UNREACHABLE();
   }
@@ -427,7 +427,7 @@ struct custom_distance final : public distance_metric {
   // std::function<double(const std::vector<double>, const std::vector<double>)> fn;
   std::function<double(const flexible_type, const flexible_type)> fn;
 
-  double distance(const std::vector<double>& a, const std::vector<double>& b) const {
+  double distance(const flex_vec& a, const flex_vec& b) const {
     return fn(a, b);
   }
 
@@ -463,7 +463,7 @@ std::shared_ptr<distance_metric> inline distance_metric::make_distance_metric(
   } else {
     // Create a distance metric that uses the user-provided function.
     // Only functions that take dense vectors are currently supported.
-    auto actual_fn = variant_get_value< std::function<double(const std::vector<double>, const std::vector<double>)> >(fn);
+    auto actual_fn = variant_get_value< std::function<double(const flex_vec&, const flex_vec&)> >(fn);
     auto d = nearest_neighbors::custom_distance();
     d.fn = actual_fn;
     auto sp = std::make_shared<distance_metric>(d);

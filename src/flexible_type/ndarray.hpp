@@ -9,6 +9,8 @@
 #include <iostream>
 #include <logger/assertions.hpp>
 #include <serialization/serialization_includes.hpp>
+#include <generics/gl_vector.hpp> 
+
 namespace turi {
 namespace flexible_type_impl {
 
@@ -70,7 +72,7 @@ class ndarray {
   typedef size_t index_type;
   typedef T value_type;
   typedef std::vector<index_type> index_range_type;
-  typedef std::vector<T> container_type;
+  typedef gl_vector<T> container_type;
 
  private:
   std::shared_ptr<container_type> m_elem;

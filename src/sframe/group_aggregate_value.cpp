@@ -47,7 +47,7 @@ std::shared_ptr<group_aggregate_value> get_builtin_group_aggregator(
     // parse the quantiles
     // first get everything to the right of "__builtin_quantile__"
     std::string str_quantiles = name.substr(strlen("__builtin__quantile__"));
-    std::vector<double> parsed_quantiles;
+    flex_vec parsed_quantiles;
     bool success = false;
     flexible_type_parser parser;
     const char* c = str_quantiles.c_str();
