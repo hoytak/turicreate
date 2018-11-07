@@ -17,6 +17,34 @@
 
 namespace turi {
 
+/**
+ * Set one of the options in the algorithm. Use the option manager to set
+ * these options. If the option does not satisfy the conditions that the
+ * option manager has imposed on it. Errors will be thrown.
+ *
+ * \param[in] options Options to set
+ *
+ * DEPRECATED: use setup_options + set_options instead; the default
+ * implementation of this calls these two methods.
+ */
+void ml_model_base::init_options(
+    const std::map<std::string, flexible_type>& _options) {
+
+  setup_options();
+  set_options(_options);
+}
+
+/** Setup the options initially with the option manager.  Default version of
+ * this simply calls init_options.
+ */
+void ml_model_base::setup_options() {
+  // Ensure we don't have a case of inifinite recursion.
+  if(_options_setup_called) {
+    return;
+  }
+  _options_setup_called = true;
+  init_options({});
+}
 
 /**
  * List all the keys that are present in the state.

@@ -76,9 +76,16 @@ class EXPORT ml_model_base: public model_base {
    * option manager has imposed on it. Errors will be thrown.
    *
    * \param[in] options Options to set
+   *
+   * DEPRECATED: use setup_options + set_options instead; the default
+   * implementation of this calls these two methods.
    */
   virtual void init_options(const std::map<std::string,flexible_type>& _options) {};
 
+  /** Setup the options initially with the option manager.  Default version of
+   * this simply calls init_options.
+   */
+  virtual void setup_options();
 
   /**
    * Methods with already meaningful default implementations.
@@ -205,7 +212,11 @@ class EXPORT ml_model_base: public model_base {
   option_manager options;                                 /* Option manager */
   std::map<std::string, variant_type> state;         /**< All things python */
 
-
+ private:
+  // This flag determines whether the options have been set up.  It's mainly
+  // present to prevent an infinite recursion between the base cases of
+  // set_options and the deprecated init_options.
+  bool _options_setup_called = false;
 };
 
 

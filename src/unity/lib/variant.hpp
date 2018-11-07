@@ -52,6 +52,8 @@ typedef typename boost::make_recursive_variant<
 /*
  * A map of string to variant. Also a type the variant type can store.
  */
+
+
 typedef std::map<std::string, variant_type> variant_map_type;
 
 /*
@@ -59,29 +61,40 @@ typedef std::map<std::string, variant_type> variant_map_type;
  */
 typedef std::vector<variant_type> variant_vector_type;
 
+// Type codes for the various variant types.  Do not change these or all
+// deserialization will fail.
+static const int VT_FLEXIBLE_TYPE = 0;
+static const int VT_SGRAPH = 1;
+static const int VT_DATAFRAME = 2;
+static const int VT_MODEL = 3;
+static const int VT_SFRAME = 4;
+static const int VT_SARRAY = 5;
+static const int VT_DICTIONARY = 6;
+static const int VT_LIST = 7;
+static const int VT_FUNCTION = 8;
 
 /**
  * Given variant.which() gets the name of the type inside it.
  */
-inline std::string get_variant_which_name(int i) {
-  switch(i) {
-   case 0:
+inline std::string get_variant_which_name(int variant_type_code) {
+  switch(variant_type_code) {
+   case VT_FLEXIBLE_TYPE:
      return "flexible_type";
-   case 1:
+   case VT_SGRAPH:
      return "SGraph";
-   case 2:
+   case VT_DATAFRAME:
      return "Dataframe";
-   case 3:
+   case VT_MODEL:
      return "Model";
-   case 4:
+   case VT_SFRAME:
      return "SFrame";
-   case 5:
+   case VT_SARRAY:
      return "SArray";
-   case 6:
+   case VT_DICTIONARY:
      return "Dictionary";
-   case 7:
+   case VT_LIST:
      return "List";
-   case 8:
+   case VT_FUNCTION:
      return "Function";
    default:
      return "";
@@ -108,17 +121,36 @@ struct deserialize_impl<iarchive, turi::variant_type, false> {
 
 
 namespace turi {
+
+template <typename T>
+std::string full_type_name(const T& example = T()) {
+  // Is this a flexible type?  If so, then use that for the name instead.
+  if (is_flexible_type_convertible<T>::value) {
+    flexible_type f = convert_to_flexible_type(example);
+    return flex_type_enum_to_name(f.get_type());
+  } else {
+    return get_variant_which_name(to_variant(example).which());
+  }
+}
+
+std::string full_type_name(const variant_type& example) {
+  if(example.which() == 0) {
+    return flex_type_enum_to_name(variant_get_ref<flexible_type>(example).get_type());
+  } else {
+    return get_variant_which_name(example.which());
+  }
+}
+
+
 // A list of accessors to help Cython access the variant
 template <typename T>
 GL_COLD_NOINLINE_ERROR
 void _throw_variant_error(const variant_type& v) {
-    std::string errormsg =  //
-        std::string("Variant type error: Expecting ") +
-        get_variant_which_name(variant_type(T()).which()) + " but got a " +
-        get_variant_which_name(v.which());
-    log_and_throw(errormsg);
+  std::string errormsg =  //
+      std::string("Variant type error: Expecting ") + full_type_name<T>() +
+      " but got a " + full_type_name(v);
+  std_log_and_throw(errormsg);
 }
-
 
 /**
  * Gets a reference to a content of a variant.
@@ -305,9 +337,7 @@ template <typename T>
 inline variant_type to_variant(const T& f) {
   return variant_converter<typename std::decay<T>::type>().set(f);
 }
-} // namespace turi
 
-namespace turi {
 /**
  * Reads an arbitrary type from a variant.
  * T can be \b alot of possibilities. See the \ref sec_supported_type_list
@@ -317,6 +347,71 @@ template <typename T>
 inline typename std::decay<T>::type variant_get_value(const variant_type& v) {
   return variant_converter<typename std::decay<T>::type>().get(v);
 }
+
+
+// Convenience function to better raise errors when there is a bad value in a
+// variant map type.
+template <typename T>
+static inline typename std::decay<T>::type variant_map_extract(
+    const variant_map_type& m, const std::string& name) {
+
+  // Is it in the map?
+  auto it = m.find(name);
+
+  if(it == m.end()) {
+    auto __raise_error = [&]() GL_COLD_NOINLINE_ERROR {
+      std::ostringstream ss;
+      ss << "Value for requested key \"" << name << "\" not found in parameter set.";
+      std_log_and_throw(std::out_of_range, ss.str());
+    };
+
+    __raise_error();
+  }
+
+  if(!variant_is<T>(it->second)) {
+    auto __raise_error = [&]() GL_COLD_NOINLINE_ERROR {
+      std::ostringstream ss;
+      ss << "Value for key \"" << name << "\" is of type "
+         << full_type_name(it->second) << "; Expected type "
+         << full_type_name<T>() << ".";
+      std_log_and_throw(std::out_of_range, ss.str());
+    };
+
+    __raise_error();
+  }
+
+  return variant_get_value<T>(it->second);
+}
+
+// Convenience function to better raise errors when there is a bad value in a
+// variant map type.  Overload with default value provided.
+template <typename T>
+static inline typename std::decay<T>::type variant_map_extract(
+    const variant_map_type& m, const std::string& name,
+    const T& default_value) {
+
+  auto it = m.find(name);
+
+  if(it == m.end()) {
+    return default_value;
+  }
+
+  try {
+    return variant_get_value<T>(it->second);
+  } catch(const std::exception& e) {
+    std::ostringstream ss;
+    ss << "Value for key \"" << name << "\" is of type "
+       << full_type_name(it->second) << "; Error converting to required type "
+       << full_type_name<T>() << "."
+       << " (conversion error: " << e.msg() << ").";
+
+    std_log_and_throw(std::runtime_error, ss.str());
+  }
+
+}
+
+
+
 
 } // namespace turi
 #include <unity/lib/api/function_closure_info.hpp>
