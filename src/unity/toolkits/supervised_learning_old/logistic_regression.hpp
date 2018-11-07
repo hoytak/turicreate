@@ -10,10 +10,12 @@
 #include <ml_data/ml_data.hpp>
 
 // Toolkits
-#include <toolkits/supervised_learning/supervised_learning_base.hpp>
+#include <toolkits/supervised_learning/supervised_learning.hpp>
+#include <unity/toolkits/coreml_export/mlmodel_wrapper.hpp>
 
 // Optimization Interface
 #include <optimization/optimization_interface.hpp>
+
 #include <export.hpp>
 
 namespace turi {
@@ -30,18 +32,18 @@ class logistic_regression_opt_interface;
  * Logistic regression model class definition.
  *
  */
-class EXPORT logistic_regression : public supervised_learning_model_base {
+class EXPORT logistic_regression: public supervised_learning_model_base {
 
   protected:
-   bool m_simple_mode;
 
-   std::shared_ptr<logistic_regression_opt_interface> lr_interface;
+    bool m_simple_mode;
 
-   arma::vec coefs; /**< Coefs */
-   arma::vec std_err;
+  std::shared_ptr<logistic_regression_opt_interface> lr_interface;
+  arma::vec  coefs;                 /**< Coefs */
+  arma::vec  std_err;
 
-   size_t num_classes = 0;      /**< fast access: num classes */
-   size_t num_coefficients = 0; /**< fast access: num coefs   */
+  size_t num_classes = 0;                      /**< fast access: num classes */
+  size_t num_coefficients= 0;                  /**< fast access: num coefs   */
   public:
   
   static constexpr size_t LOGISTIC_REGRESSION_MODEL_VERSION = 6;

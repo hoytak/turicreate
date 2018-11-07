@@ -241,17 +241,17 @@ class l2_rescaling: public standardization_interface {
    *
    */
   l2_rescaling(
-      const std::shared_ptr<ml_metadata> & ml_mdata,
+      const std::shared_ptr<ml_metadata> & metadata,
       bool _use_reference = true){
 
     // Make sure the size is set
     use_reference = _use_reference;
     total_size = 1;
-    for(size_t i = 0; i < ml_mdata->num_columns(); i++){
-    if (ml_mdata->is_categorical(i)) {
-        total_size += ml_mdata->index_size(i) - use_reference;
+    for(size_t i = 0; i < metadata->num_columns(); i++){
+    if (metadata->is_categorical(i)) {
+        total_size += metadata->index_size(i) - use_reference;
       } else {
-        total_size += ml_mdata->index_size(i);
+        total_size += metadata->index_size(i);
       }
     }
 
@@ -260,9 +260,9 @@ class l2_rescaling: public standardization_interface {
     scale.zeros();
     size_t idx = 0;
 
-    for(size_t i = 0; i < ml_mdata->num_columns(); i++){
+    for(size_t i = 0; i < metadata->num_columns(); i++){
 
-      const auto& stats = ml_mdata->statistics(i);
+      const auto& stats = metadata->statistics(i);
 
       // For each column in the metadata
       // \note: Computing the L2 norm (averaged over example)
@@ -273,7 +273,7 @@ class l2_rescaling: public standardization_interface {
       // The stdev is the L2 norm of the data shifted by the mean. This undoes
       // this shift. There could be an multiplication by an "N" to get the
       // L2 norm but that multiple doesn't quite help.
-      switch(ml_mdata->column_mode(i)) {
+      switch(metadata->column_mode(i)) {
 
         // Numeric
         case ml_column_mode::NUMERIC: {
@@ -285,7 +285,7 @@ class l2_rescaling: public standardization_interface {
 
         // Categorical
         case ml_column_mode::CATEGORICAL: {
-          for (size_t c = 0; c < ml_mdata->index_size(i); c++){
+          for (size_t c = 0; c < metadata->index_size(i); c++){
             if(c >= use_reference){
               scale(idx) = stats->mean(c) * stats->mean(c) +
                              stats->stdev(c) * stats->stdev(c);
@@ -297,7 +297,7 @@ class l2_rescaling: public standardization_interface {
 
         // Numeric vector
         case ml_column_mode::NUMERIC_VECTOR: {
-          for (size_t c = 0; c < ml_mdata->index_size(i); c++){
+          for (size_t c = 0; c < metadata->index_size(i); c++){
             scale(idx) = stats->mean(c) * stats->mean(c) +
                              stats->stdev(c) * stats->stdev(c);
             ++idx;
@@ -307,7 +307,7 @@ class l2_rescaling: public standardization_interface {
 
         // Categorical vector
         case ml_column_mode::CATEGORICAL_VECTOR: {
-          for (size_t c = 0; c < ml_mdata->index_size(i); c++){
+          for (size_t c = 0; c < metadata->index_size(i); c++){
             if(c >= use_reference){
               scale(idx) = stats->mean(c) * stats->mean(c) +
                              stats->stdev(c) * stats->stdev(c);
@@ -319,7 +319,7 @@ class l2_rescaling: public standardization_interface {
 
         // Dictionary
         case ml_column_mode::DICTIONARY: {
-          for(size_t k = 0; k < ml_mdata->index_size(i); ++k) {
+          for(size_t k = 0; k < metadata->index_size(i); ++k) {
             scale(idx) = stats->mean(k) * stats->mean(k) +
                              stats->stdev(k) * stats->stdev(k);
             idx++;

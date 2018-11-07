@@ -128,15 +128,15 @@ void supervised_learning_model_base::init(const sframe& X, const sframe& y,
   ml_data data;
   sframe sf_data = X.add_column(y.select_column(0), target_col);
   data.fill(sf_data, target_col, mode_overides, false, missing_value_action);
-  this->ml_mdata = data.metadata();
+  this->metadata = data.metadata();
 
   // Update the model
   std::vector<std::string> feature_names =
-                   get_feature_names_from_metadata(this->ml_mdata);
+                   get_feature_names_from_metadata(this->metadata);
   std::vector<std::string> feature_column_names =
-                   get_feature_column_names_from_metadata(this->ml_mdata);
+                   get_feature_column_names_from_metadata(this->metadata);
 
-  this->state["target"] =  to_variant((this->ml_mdata)->target_column_name());
+  this->state["target"] =  to_variant((this->metadata)->target_column_name());
   this->state["unpacked_features"] = to_variant(feature_names);
   this->state["features"] = to_variant(feature_column_names);
   this->state["num_examples"] = X.num_rows();
@@ -150,7 +150,7 @@ void supervised_learning_model_base::init(const sframe& X, const sframe& y,
   // Check the number of dimensions in this dataset is small, otherwise warn the
   // user. (see  #3001 for context)
   if (not simple_mode) {
-      size_t num_dims = get_number_of_coefficients(this->ml_mdata);
+      size_t num_dims = get_number_of_coefficients(this->metadata);
       if(num_dims >= X.num_rows()) {
         std::stringstream ss;
         ss << "WARNING: The number of feature dimensions in this problem is "
@@ -177,12 +177,12 @@ void supervised_learning_model_base::init(const sframe& X, const sframe& y,
   model_specific_init(data, valid_data);
 
   // Raise error if mean and variance are not finite
-  check_feature_means_and_variances(this->ml_mdata,
+  check_feature_means_and_variances(this->metadata,
              show_extra_warnings && (not simple_mode));
 
   // One class classification error message.
   if(this->is_classifier()) {
-    if (this->ml_mdata->target_index_size() == 1) {
+    if (this->metadata->target_index_size() == 1) {
       std::stringstream ss;
       ss << "One-class classification is not currently supported. "
          << "Please check your target column. "
@@ -191,7 +191,7 @@ void supervised_learning_model_base::init(const sframe& X, const sframe& y,
          << std::endl;
       log_and_throw(ss.str());
     }
-    this->state["classes"] = get_class_names(this->ml_mdata);
+    this->state["classes"] = get_class_names(this->metadata);
   }
 
 }
@@ -208,12 +208,12 @@ supervised_learning_model_base::impute_missing_columns_using_current_metadata(co
   if (n_rows == 0)
     return X;
 
-  if (this->ml_mdata) {
-    for(auto col : (this->ml_mdata)->column_names()){
+  if (this->metadata) {
+    for(auto col : (this->metadata)->column_names()){
       if(!X.contains_column(col)) {
         std::shared_ptr<sarray<flexible_type>> ret (new sarray<flexible_type>);
         ret->open_for_write();
-        ret->set_type((this->ml_mdata)->column_type(col));
+        ret->set_type((this->metadata)->column_type(col));
         auto writer = ret->get_output_iterator(0);
         for(size_t i=0; i < n_rows; ++i){
           *writer = flex_undefined();
@@ -238,7 +238,7 @@ supervised_learning_model_base::construct_ml_data_using_current_metadata(
     const sframe& X, const sframe& y,
     ml_missing_value_action missing_value_action) const {
 
-  ml_data data(this->ml_mdata);
+  ml_data data(this->metadata);
   std::string target_col = y.column_name(0);
   sframe sf_data = X.add_column(y.select_column(0), target_col);
   data.fill(sf_data,
@@ -258,7 +258,7 @@ supervised_learning_model_base::construct_ml_data_using_current_metadata(
     const sframe& X,
     ml_missing_value_action missing_value_action) const {
 
-  ml_data data(this->ml_mdata);
+  ml_data data(this->metadata);
   data.fill(X,
             std::string(""),
             std::map<std::string, ml_column_mode>(),
@@ -462,7 +462,7 @@ supervised_learning_model_base::predict(const ml_data& test_data,
   std::shared_ptr<sarray<flexible_type>> ret (new sarray<flexible_type>);
   ret->open_for_write(n_threads);
   if (output_type == "class"){
-    ret->set_type((this->ml_mdata)->target_column_type());
+    ret->set_type((this->metadata)->target_column_type());
   } else if (output_type == "probability_vector"){
     ret->set_type(flex_type_enum::VECTOR);
   } else {
@@ -519,7 +519,7 @@ gl_sarray supervised_learning_model_base::fast_predict(
   std::vector<flexible_type> ret(rows.size());
   flex_type_enum ret_type;
   if (output_type == "class"){
-    ret_type = (this->ml_mdata)->target_column_type();
+    ret_type = (this->metadata)->target_column_type();
   } else if (output_type == "probability_vector"){
     ret_type = flex_type_enum::VECTOR;
   } else {
@@ -539,14 +539,14 @@ gl_sarray supervised_learning_model_base::fast_predict(
     if (this->is_dense()) {
       DenseVector dense_vec(variables);
       fill_reference_encoding(ml_data_row_reference::from_row(
-               this->ml_mdata, row.get<flex_dict>(), na_enum), dense_vec);
+               this->metadata, row.get<flex_dict>(), na_enum), dense_vec);
       dense_vec(variables - 1) = 1;
       flexible_type pred = predict_single_example(dense_vec, pred_type_enum);
       writer.write(pred, 0);
     } else {
       SparseVector sparse_vec(variables);
       fill_reference_encoding(ml_data_row_reference::from_row(
-               this->ml_mdata, row.get<flex_dict>(), na_enum), sparse_vec);
+               this->metadata, row.get<flex_dict>(), na_enum), sparse_vec);
       sparse_vec.insert(variables - 1, 1);
       flexible_type pred = predict_single_example(sparse_vec, pred_type_enum);
       writer.write(pred, 0);
@@ -624,7 +624,7 @@ sframe supervised_learning_model_base::predict_topk(
   sframe sf;
   std::vector<std::string> col_names {"id", "class", output_type};
   std::vector<flex_type_enum> col_types {flex_type_enum::INTEGER,
-                                    (this->ml_mdata)->target_column_type()};
+                                    (this->metadata)->target_column_type()};
   if (output_type == "rank"){
     col_types.push_back(flex_type_enum::INTEGER);
   } else {
@@ -678,7 +678,7 @@ sframe supervised_learning_model_base::predict_topk(
       // Write the topk
       for (size_t k = 0; k < topk; ++k) {
         write_x[0] = it.row_index();
-        write_x[1] = this->ml_mdata->target_indexer()
+        write_x[1] = this->metadata->target_indexer()
                           ->map_index_to_value(out[k].first);
         if (output_type_enum == prediction_type_enum::RANK){
           write_x[2] = k;
@@ -722,7 +722,7 @@ std::map<std::string, variant_type> supervised_learning_model_base::evaluate(
     num_classes_test_and_train = test_data.metadata()->target_column_size();
     variables = variables / (num_classes - 1);
     for (size_t i = 0; i < num_classes_test_and_train; i++){
-      index_map[i] = this->ml_mdata->target_indexer()->map_index_to_value(i);
+      index_map[i] = this->metadata->target_indexer()->map_index_to_value(i);
       identity_map[i] = i;
     }
   }
@@ -912,7 +912,7 @@ void supervised_learning_model_base::display_regression_training_summary(
 std::vector<std::vector<flexible_type>>
           supervised_learning_model_base::get_metadata_mapping() {
 
-  auto metadata = this->ml_mdata;
+  auto metadata = this->metadata;
   std::vector<std::vector<flexible_type>> ret(metadata->num_dimensions());
  
   size_t pos = 0; 

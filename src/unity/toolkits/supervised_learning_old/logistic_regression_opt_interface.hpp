@@ -40,13 +40,14 @@ namespace supervised {
  * for the class j.
  *
  */
-class logistic_regression_opt_interface : public
+class logistic_regression_opt_interface: public
   optimization::second_order_opt_interface {
 
   protected:
 
   ml_data data;
   ml_data valid_data;
+  logistic_regression smodel;
 
   // number of examples, features, and total variables
   size_t examples = 0;

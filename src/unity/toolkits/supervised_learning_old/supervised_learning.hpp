@@ -111,7 +111,7 @@ std::shared_ptr<supervised_learning_model_base> create(
  *            The value is of type "variant_type" which is fully interfaced
  *            with python. You can add basic types, vectors, SFrames etc.
  *
- *  *) ml_mdata: A globally consistent object with column wise metadata. This
+ *  *) metadata: A globally consistent object with column wise metadata. This
  *               metadata changes with time (even after training). If you 
  *               want to freeze the metadata after training, you have to do 
  *               so yourself.
@@ -185,7 +185,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
 
   public:
 
-  std::shared_ptr<ml_metadata> ml_mdata;          /* ML-Data-2 metadata. */
+  std::shared_ptr<ml_metadata> metadata;          /* ML-Data-2 metadata. */
 
   // virtual destructor
   virtual ~supervised_learning_model_base() { }
@@ -579,7 +579,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * \returns Get the ml_metadata.
    */
   std::shared_ptr<ml_metadata> get_ml_metadata() const {
-    return this->ml_mdata;
+    return this->metadata;
   }
 
   /**
@@ -591,7 +591,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    * Returns true if the model is a classifier.
    */
   bool is_dense() {
-    return ((this->ml_mdata)->num_dimensions() <= 3 * num_features()) ? true : false;
+    return ((this->metadata)->num_dimensions() <= 3 * num_features()) ? true : false;
   }
 
   /**

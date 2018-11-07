@@ -58,7 +58,7 @@ linear_svm::~linear_svm(){
 void linear_svm::model_specific_init(const ml_data& data,
                                      const ml_data& valid_data) {
 
-  if (ml_mdata->target_index_size() != 2){
+  if (metadata->target_index_size() != 2){
     std::stringstream ss;
     ss << "Linear SVM currently only supports binary classification. " 
        << "Use the boosted_trees_classifier for multi-class classification."
@@ -69,12 +69,12 @@ void linear_svm::model_specific_init(const ml_data& data,
   // Count the number of variables
   // --------------------------------------------------------------------------
   // Create an interface to the solver.
-  size_t variables = get_number_of_coefficients(ml_mdata);
+  size_t variables = get_number_of_coefficients(metadata);
 
   // Examples per class
   state["num_classes"] = 2;
   state["num_examples_per_class"] = 
-                    to_variant(get_num_examples_per_class(ml_mdata));
+                    to_variant(get_num_examples_per_class(metadata));
   state["num_coefficients"] = variables;
   
   // Create an interface to the solver.
@@ -160,13 +160,13 @@ void linear_svm::train() {
   
   // Set class weights
   flexible_type class_weights = 
-                      get_class_weights_from_options(options, ml_mdata);
+                      get_class_weights_from_options(options, metadata);
   state["class_weights"] =  to_variant(class_weights);
   size_t i = 0;
   flex_dict _class_weights(variant_get_value<size_t>(state.at("num_classes")));
   for(const auto& kvp: class_weights.get<flex_dict>()){
     _class_weights[i++] = 
-        {ml_mdata->target_indexer()->immutable_map_value_to_index(kvp.first), 
+        {metadata->target_indexer()->immutable_map_value_to_index(kvp.first), 
          kvp.second.get<flex_float>()};
   }
   scaled_logistic_svm_interface->set_class_weights(_class_weights);
@@ -226,7 +226,7 @@ void linear_svm::train() {
   // ---------------------------------------------------------------------------
   coefs = stats.solution;
   scaled_logistic_svm_interface->rescale_solution(coefs);
-  sframe sf_coef = get_coefficients_as_sframe(coefs, ml_mdata);
+  sframe sf_coef = get_coefficients_as_sframe(coefs, metadata);
   std::shared_ptr<unity_sframe> unity_coef = std::make_shared<unity_sframe>();
   unity_coef->construct_from_sframe(sf_coef);
   state["coefficients"] = to_variant(unity_coef);
@@ -270,7 +270,7 @@ flexible_type linear_svm::predict_single_example(
     case prediction_type_enum::CLASS: 
     {
       size_t class_id = (margin >= 0.0);
-      return  ml_mdata->target_indexer()->map_index_to_value(class_id);
+      return  metadata->target_indexer()->map_index_to_value(class_id);
     }
 
     // Not supported types
@@ -306,7 +306,7 @@ flexible_type linear_svm::predict_single_example(
     case prediction_type_enum::CLASS: 
     {
       size_t class_id = (margin >= 0.0);
-      return  ml_mdata->target_indexer()->map_index_to_value(class_id);
+      return  metadata->target_indexer()->map_index_to_value(class_id);
     }
 
     // Not supported
@@ -354,7 +354,7 @@ void linear_svm::save_impl(turi::oarchive& oarc) const {
   variant_deep_save(state, oarc);
 
   // Everything else
-  oarc << ml_mdata
+  oarc << metadata
        << metrics
        << coefs
        << options;
@@ -384,7 +384,7 @@ void linear_svm::load_version(turi::iarchive& iarc, size_t version) {
 
   // Everything else
   // GLC 1.3-
-  iarc >> ml_mdata
+  iarc >> metadata
        >> metrics
        >> coefs
        >> options;
@@ -419,7 +419,7 @@ std::shared_ptr<coreml::MLModelWrapper> linear_svm::export_to_coreml() {
     {"class", name()}, 
     {"short_description", "Linear SVM Model."}};
 
-  return export_linear_svm_as_model_asset(ml_mdata, coefs, context);
+  return export_linear_svm_as_model_asset(metadata, coefs, context);
 }
 
 } // supervised

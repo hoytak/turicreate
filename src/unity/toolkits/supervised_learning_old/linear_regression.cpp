@@ -63,7 +63,7 @@ void linear_regression::model_specific_init(const ml_data& data,
                                             const ml_data& valid_data){
 
   // Create an interface to the solver.
-  size_t variables = get_number_of_coefficients(this->ml_mdata);
+  size_t variables = get_number_of_coefficients(this->metadata);
 
   // Update the model
   state["num_coefficients"] =  variables;
@@ -274,7 +274,7 @@ void linear_regression::train(){
   }
 
   // Save coefs to SFrame.
-  sframe sf_coef = get_coefficients_as_sframe(this->coefs, this->ml_mdata,
+  sframe sf_coef = get_coefficients_as_sframe(this->coefs, this->metadata,
       this->std_err);
   if(!has_stderr) {
     sf_coef = add_na_std_err_to_coef(sf_coef);
@@ -348,7 +348,7 @@ void linear_regression::save_impl(turi::oarchive& oarc) const {
   variant_deep_save(state, oarc);
 
   // Everything else
-  oarc << this->ml_mdata
+  oarc << this->metadata
        << this->metrics
        << this->coefs
        << this->options;
@@ -370,7 +370,7 @@ void linear_regression::load_version(turi::iarchive& iarc, size_t version) {
   variant_deep_load(state, iarc);
 
   // Everything else
-  iarc >> ml_mdata
+  iarc >> metadata
        >> metrics
        >> coefs
        >> options;
@@ -424,7 +424,7 @@ std::shared_ptr<coreml::MLModelWrapper> linear_regression::export_to_coreml() {
     {"version", std::to_string(get_version())},
     {"short_description", "Linear regression model."}};
 
-  return export_linear_regression_as_model_asset(ml_mdata, coefs,
+  return export_linear_regression_as_model_asset(metadata, coefs,
                                                  context_metadata);
 }
 

@@ -455,7 +455,7 @@ std::vector<std::string> parse_tracking_metric(const flexible_type& input_metric
 std::shared_ptr< sarray<flexible_type> > transform_prediction(const std::vector<float>& preds,
                                                               prediction_type_enum output_type,
                                                               size_t num_classes,
-                                                              std::shared_ptr<ml_metadata> ml_mdata) {
+                                                              std::shared_ptr<ml_metadata> metadata) {
   auto sa = std::make_shared<sarray<flexible_type>>();
   sa->open_for_write();
   if (num_classes == 0) {
@@ -484,8 +484,8 @@ std::shared_ptr< sarray<flexible_type> > transform_prediction(const std::vector<
       case prediction_type_enum::NA:
       case prediction_type_enum::CLASS:
         {
-          sa->set_type(ml_mdata->target_column_type());
-          auto& target_indexer = ml_mdata->target_indexer();
+          sa->set_type(metadata->target_column_type());
+          auto& target_indexer = metadata->target_indexer();
           auto transform_fn = [=](const float& x) {
             return target_indexer->map_index_to_value(x >= 0.5);
           };
@@ -551,8 +551,8 @@ std::shared_ptr< sarray<flexible_type> > transform_prediction(const std::vector<
             sa->set_type(flex_type_enum::INTEGER);
             turi::copy(class_index_array.begin(), class_index_array.end(), *sa);
           } else {
-            sa->set_type(ml_mdata->target_column_type());
-            auto target_indexer = ml_mdata->target_indexer();
+            sa->set_type(metadata->target_column_type());
+            auto target_indexer = metadata->target_indexer();
             auto transform_to_class_name = [&](const size_t& x) {
               return target_indexer->map_index_to_value(x);
             };
@@ -603,7 +603,7 @@ sframe transform_prediction_topk(const std::vector<float>& preds,
                                  const std::string& output_type,
                                  size_t topk,
                                  size_t num_classes,
-                                 std::shared_ptr<ml_metadata> ml_mdata) {
+                                 std::shared_ptr<ml_metadata> metadata) {
   // Select the output column type
   auto output_type_enum = prediction_type_enum_from_name(output_type);
   flex_type_enum output_column_type = flex_type_enum::FLOAT;
@@ -614,13 +614,13 @@ sframe transform_prediction_topk(const std::vector<float>& preds,
     default: log_and_throw("Unexpected output type");
   }
 
-  auto target_indexer = ml_mdata->target_indexer();
+  auto target_indexer = metadata->target_indexer();
   size_t stride = num_classes == 2 ? 1 : num_classes;
 
   // Make SFrame
   std::vector<std::string> col_names {"id", "class", output_type};
   std::vector<flex_type_enum> col_types {flex_type_enum::INTEGER,
-        ml_mdata->target_column_type(),
+        metadata->target_column_type(),
         output_column_type};
   sframe sf;
   sf.open_for_write(col_names, col_types, "");
@@ -767,7 +767,7 @@ std::pair<std::shared_ptr<DMatrixMLData>, std::shared_ptr<DMatrixMLData>> xgboos
   // Class weights
   flexible_type class_weights = flex_undefined();
   if (is_classifier()) {
-    class_weights = get_class_weights_from_options(options, this->ml_mdata);
+    class_weights = get_class_weights_from_options(options, this->metadata);
     state["class_weights"] =  to_variant(class_weights);
   }
   // Validation size
@@ -1096,7 +1096,7 @@ void xgboost_model::_save_training_state(size_t iteration,
   }
   // Store trees
   utils::FeatMap fmap;
-  MakeFeatMap(fmap, this->ml_mdata);
+  MakeFeatMap(fmap, this->metadata);
   std::vector<flexible_type> trees_json = convert_vec_string(booster_->DumpModel(fmap, XGBOOST_JSON_FORMAT | XGBOOST_WITH_STATS));
   info["trees_json"] = trees_json;
   info["num_trees"] = trees_json.size();
@@ -1127,7 +1127,7 @@ std::shared_ptr< sarray<flexible_type> > xgboost_model::predict_impl(
   return transform_prediction(preds,
                               prediction_type_enum_from_name(output_type),
                               this->num_classes(),
-                              this->ml_mdata);
+                              this->metadata);
 }
 
 
@@ -1143,7 +1143,7 @@ gl_sarray xgboost_model::fast_predict(
     const std::string& missing_value_action,
     const std::string& output_type) {
   auto na_enum = get_missing_value_enum_from_string(missing_value_action);
-  DMatrixSimple dmat = make_simple_dmatrix(test_data, this->ml_mdata, na_enum);
+  DMatrixSimple dmat = make_simple_dmatrix(test_data, this->metadata, na_enum);
   auto sa = predict_impl(dmat, output_type);
   auto unity_sa = std::make_shared<unity_sarray>();
   unity_sa->construct_from_sarray(sa);
@@ -1156,7 +1156,7 @@ gl_sframe xgboost_model::fast_predict_topk(
     const std::string& output_type,
     const size_t topk) {
   auto na_enum = get_missing_value_enum_from_string(missing_value_action);
-  DMatrixSimple dmat = make_simple_dmatrix(test_data, this->ml_mdata, na_enum);
+  DMatrixSimple dmat = make_simple_dmatrix(test_data, this->metadata, na_enum);
   auto sf = predict_topk_impl(dmat, output_type, topk);
   auto unity_sf = std::make_shared<unity_sframe>();
   unity_sf->construct_from_sframe(sf);
@@ -1241,7 +1241,7 @@ sframe xgboost_model::predict_topk_impl(
                                    output_type,
                                    topk,
                                    num_classes,
-                                   this->ml_mdata);
+                                   this->metadata);
 }
 
 /**
@@ -1271,7 +1271,7 @@ std::map<std::string, variant_type> xgboost_model::evaluate_impl(
   size_t num_classes = this->num_classes();
   if (is_classifier()) {
     for (size_t i = 0; i < dmat.num_classes(); i++) {
-      index_map[i] = this->ml_mdata->target_indexer()->map_index_to_value(i);
+      index_map[i] = this->metadata->target_indexer()->map_index_to_value(i);
       identity_map[i] = i;
     }
   }
@@ -1474,7 +1474,7 @@ utils::FeatMap get_index_map_with_escaping(
  * Get the tree from XGboost (in text format).
  */
 flexible_type xgboost_model::get_trees() {
-  auto metadata = this->ml_mdata;
+  auto metadata = this->metadata;
 
   // Escaping is needed to reliably do indexing.
   utils::FeatMap _index_fmap = get_index_map_with_escaping(metadata);
@@ -1524,7 +1524,7 @@ flexible_type xgboost_model::get_tree(size_t tree_id) {
  */
 gl_sframe xgboost_model::get_feature_importance() {
 
-  auto metadata = this->ml_mdata;
+  auto metadata = this->metadata;
 
   // Make a custom feature map to make sure it's correct.
   const char* format_str = "{%zd}\0";
@@ -1532,7 +1532,7 @@ gl_sframe xgboost_model::get_feature_importance() {
   utils::FeatMap _index_fmap = get_index_map_with_escaping(metadata);
 
   std::vector<std::string> trees = booster_->DumpModel(_index_fmap, 0);
-  std::vector<size_t> counts(this->ml_mdata->num_dimensions(), 0);
+  std::vector<size_t> counts(this->metadata->num_dimensions(), 0);
 
   for (const std::string& tree : trees) {
     const char* s = tree.c_str();
@@ -1614,7 +1614,7 @@ gl_sframe xgboost_model::get_feature_importance() {
 
 std::vector<std::string> xgboost_model::dump(bool with_stats) {
   utils::FeatMap fmap;
-  MakeFeatMap(fmap, this->ml_mdata);
+  MakeFeatMap(fmap, this->metadata);
   int option = 0; // text format
   option |= with_stats;
   std::vector<std::string> trees = booster_->DumpModel(fmap, option);
@@ -1623,7 +1623,7 @@ std::vector<std::string> xgboost_model::dump(bool with_stats) {
 
 std::vector<std::string> xgboost_model::dump_json(bool with_stats) {
   utils::FeatMap fmap;
-  MakeFeatMap(fmap, this->ml_mdata);
+  MakeFeatMap(fmap, this->metadata);
   int option = 2; // json format
   option |= with_stats;
   std::vector<std::string> trees = booster_->DumpModel(fmap, option);
@@ -1634,7 +1634,7 @@ void xgboost_model::_save(turi::oarchive& oarc, bool save_booster_prediction_buf
   // State
   variant_deep_save(state, oarc);
   // Everything else
-  oarc << ml_mdata
+  oarc << metadata
        << metrics
        << options;
   // XGBoost model
@@ -1659,7 +1659,7 @@ void xgboost_model::load_version(turi::iarchive& iarc, size_t version) {
   variant_deep_load(state, iarc);
 
   // Everythiing else
-  iarc >> ml_mdata
+  iarc >> metadata
        >> metrics
        >> options;
 
@@ -1726,7 +1726,7 @@ std::shared_ptr<coreml::MLModelWrapper> xgboost_model::_export_xgboost_model(boo
   flex_list tree_fl = this->get_trees().get<flex_list>();
   std::vector<std::string> trees(tree_fl.begin(), tree_fl.end());
 
-  return export_xgboost_model(ml_mdata, trees, is_classifier, is_random_forest,
+  return export_xgboost_model(metadata, trees, is_classifier, is_random_forest,
                               context);
 }
 

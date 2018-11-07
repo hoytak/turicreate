@@ -88,19 +88,27 @@ class EXPORT ml_model_base: public model_base {
   virtual void load_version(iarchive& iarc, size_t version) = 0;
 
   /**
-   * Set one of the options in the algorithm. Use the option manager to set
+   * Set up all the options in the algorithm. Use the option manager to set
    * these options. If the option does not satisfy the conditions that the
    * option manager has imposed on it. Errors will be thrown.
    *
    * \param[in] options Options to set
    */
-  virtual void init_options(const std::map<std::string,flexible_type>& _options) = 0;
+  virtual void init_options() = 0;
 
 
   /**
    * Methods with already meaningful default implementations.
    * -------------------------------------------------------------------------
    */
+
+
+  /**
+   * Set the options on model creation 
+   *
+   */
+  void set_options(const std::map<std::string,flexible_type>& options);
+
 
 
   /**

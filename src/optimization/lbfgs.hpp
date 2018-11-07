@@ -15,8 +15,32 @@
 #include <optimization/optimization_interface.hpp>
 #include <optimization/regularizer_interface.hpp>
 #include <optimization/line_search-inl.hpp>
-#include <table_printer/table_printer.hpp>
 #include <numerics/armadillo.hpp>
+
+typedef arma::vec DenseVector;
+typedef arma::mat DenseMatrix;
+
+
+/**
+ * Solver status.
+ * \note The number of passes over the data need not be the same thing 
+ * as the number of iterations. Each iteration could require multiple passes
+ * over the data (Eg. for line search).
+*/
+struct solver_status {
+  size_t iteration = -1;                        /*!< Iterations taken */
+  double solve_time = -1;                       /*!< Wall clock time (s) */
+  DenseVector solution;                         /*!< Current Solution */
+  DenseVector gradient;                         /*!< Current gradient */
+  DenseMatrix hessian;                          /*!< Current hessian */
+  double residual;                              /*!< Residual norm */
+  double func_value;                            /*!< Function value */
+  size_t func_evals = 0;                        /*!< Function evals */
+  size_t gradient_evals = 0;                    /*!< Gradient evals */
+  size_t num_passes = 0;                        /*!< Number of passes over the data */
+  OPTIMIZATION_STATUS status = OPTIMIZATION_STATUS::OPT_UNSET;  /*!< Status */
+};
+
 
 
 // TODO: List of todo's for this file
@@ -78,36 +102,40 @@ namespace optimization {
  */
 class lbfgs_solver {
  public:
-  lbfgs_solver(first_order_opt_interface& _model) : model(_model) {}
+  lbfgs_solver(std::shared_ptr<first_order_opt_interface> _model)
+      : model(_model) {}
 
-  void setup(const DenseVector& init_point,
+  /** Sets up (or resets) the solver with the initial conditions.  
+   *
+   *
+   */
+   void setup(const DenseVector& init_point,
              const std::map<std::string, flexible_type>& opts,
              const std::shared_ptr<smooth_regularizer_interface> reg = nullptr);
 
+
+  /** Call this method repeatedly, with each HERE
+   *
+   *
+   */
   bool next_iteration();
 
-  const solver_stats& status() const;
+  const solver_stats& status() const { return _stats; }
 
  private:
   
   timer compute_timer;
 
-  first_order_opt_interface& model;
+  // The model used in the optimization.
+  std::shared_ptr<first_order_opt_interface> model;
+
   std::shared_ptr<smooth_regularizer_interface> reg;
   
   size_t n = 0;
   size_t m = 0;
+
+  solver_status _stats; 
   
-  size_t iteration_count = 0;
-
-  solver_stats _stat;
- 
-  double fprevious = 0; 
-  bool tune_step_size = false;  
-
-  // Things used for the optimization interface stuff
-  DenseVector point; 
-
   // LBFGS storage
   // The search steps and gradient differences are stored in a order
   // controlled by the start point.
@@ -122,10 +150,8 @@ class lbfgs_solver {
   DenseVector alpha;     // Step sizes (prev m iters)
 
   // Buffers used internally.
-  DenseVector delta_point, gradient, reg_gradient, delta_grad, previous_gradient;
+  DenseVector delta_point, reg_gradient, delta_grad, previous_gradient;
 
-
-  double previous_function_value = 0;
   double step_size = 0;
 };
 
@@ -175,9 +201,10 @@ template <typename Vector>
    gamma = 0; 
 
 
-   point = init_point; 
-   delta_point.resize(n);
-   gradient.resize(n); 
+   _stats.solution = init_point; 
+   _stats.gradient.resize(n); 
+   _stats.gradient.zeros();
+
    reg_gradient.resize(n);
    delta_grad.resize(n); 
    previous_gradient.resize(n); 
@@ -193,24 +220,32 @@ template <typename Vector>
 
 
 
-// returns true on 
 template <typename Vector>
 bool lbfgs_solver<Vector>::next_iteration() {
 
-  double iteration_start_time = t.current_time();
-  t.start(); 
+  double iteration_start_time = compute_timer.current_time();
+  compute_timer.start(); 
+  
+  double func_value = NAN;
 
   // A function to fill out the status before return. 
   auto fill_current_stats = [&](OPTIMIZATION_STATUS status) {
-    stats.status = status;
-    stats.iteration_time = t.elapsed_time() - iteration_start_time;
+    _stats.status = status;
+    _stats.iteration_time += compute_timer.elapsed_time() - iteration_start_time;
+    _stats.func_value = func_value; 
+    HERE
   };
 
-  // Start by computing the gradient 
-  double func_value = 0;
+  // Set up references to the containers already held in the stats
+  DenseVector& point = _stats.solution;
+  DenseVector& gradient = _stats.gradient; 
+  
+  
+  // Start by computing the gradient of the current point. 
+
 
   model.compute_first_order_statistics(point, gradient, func_value);
-  stats.num_passes++;
+  _stats.num_passes++;
 
     // Check for nan's in the function value.
   if (!std::isfinite(func_value)) {
@@ -239,7 +274,6 @@ bool lbfgs_solver<Vector>::next_iteration() {
   }
 
   if(current_iteration == 0) {
-  // Set up the gradient information. 
 
     // Do a line search
     double reg_func = 0;
@@ -359,6 +393,12 @@ bool lbfgs_solver<Vector>::next_iteration() {
 
   // Now, report that all is well and return.  
   fill_current_stats(OPTIMIZATION_STATUS::OPT_IN_PROGRESS); 
+ 
+  stats.iters = iters;
+  stats.residual = residual;
+  stats.func_value = func_value;
+  stats.solve_time = t.current_time() - start_time;
+  stats.solution = point;
   
   stast
 
@@ -645,12 +685,7 @@ inline solver_return lbfgs(
       }
     }
 
-    stats.iters = iters;
-    stats.residual = residual;
-    stats.func_value = func_value;
-    stats.solve_time = t.current_time() - start_time;
-    stats.solution = point;
-    stats.progress_table = printer.get_tracked_table();
+   stats.progress_table = printer.get_tracked_table();
     
     // Display solver stats
     log_solver_summary_stats(stats, simple_mode);
