@@ -20,6 +20,7 @@
 #include <optimization/gradient_descent-inl.hpp>
 #include <optimization/accelerated_gradient-inl.hpp>
 #include <optimization/lbfgs-inl.hpp>
+#include <optimization/lbfgs.hpp>
 
 
 using namespace turi;
@@ -378,6 +379,14 @@ struct optimization_interface_test  {
       TS_ASSERT(arma::approx_equal(stats.solution, solution,"absdiff", 1e-2));
     }
 
+    void test_lbfgs_2(){
+      optimization::solver_status stats;
+      stats = turi::optimization::lbfgs(solver_interface,
+          init_point, opts);
+      TS_ASSERT(arma::approx_equal(stats.solution, solution,"absdiff", 1e-2));
+    }
+
+ 
     void test_fista(){
       optimization::solver_return stats;
       stats = turi::optimization::accelerated_gradient(*solver_interface,

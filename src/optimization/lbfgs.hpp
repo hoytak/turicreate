@@ -33,8 +33,8 @@ struct solver_status {
   DenseVector solution;                         /*!< Current Solution */
   DenseVector gradient;                         /*!< Current gradient */
   DenseMatrix hessian;                          /*!< Current hessian */
-  double residual;                              /*!< Residual norm */
-  double func_value;                            /*!< Function value */
+  double residual = NAN;                        /*!< Residual norm */
+  double func_value = NAN;                      /*!< Function value */
   size_t func_evals = 0;                        /*!< Function evals */
   size_t gradient_evals = 0;                    /*!< Gradient evals */
   size_t num_passes = 0;                        /*!< Number of passes over the data */
@@ -120,7 +120,7 @@ class lbfgs_solver {
    */
   bool next_iteration();
 
-  const solver_stats& status() const { return _stats; }
+  const solver_status& status() const { return _stats; }
 
  private:
   
@@ -154,6 +154,40 @@ class lbfgs_solver {
 
   double step_size = 0;
 };
+
+
+
+solver_status lbfgs(
+    std::shared_ptr<first_order_opt_interface> model,
+    const DenseVector& init_point,
+    const std::map<std::string, flexible_type>& opts,
+    const std::shared_ptr<smooth_regularizer_interface> reg = nullptr) {
+
+
+  // Get the max number of iterations to perform.
+  auto it_n = opts.find("max_iterations");
+  size_t num_iterations = (it_n != opts.end())
+                              ? it_n->second
+                              : default_solver_options.at("max_iterations");
+
+
+  lbfgs_solver solver(model);
+
+  solver.setup(init_point, opts, reg); 
+
+  for(size_t i = 0; i < num_iterations; ++i) { 
+     bool result = solver.next_iteration(); 
+
+     if(result) { 
+       return solver.status(); 
+     }
+  }
+
+  solver_stats status = solver.status(); 
+  status.status = OPTIMIZATION_STATUS::OPT_ITERATION_LIMIT;
+  return status; 
+}
+
 
 template <typename Vector>
  void  lbfgs_solver<Vector>::setup(const Vector& init_point,
@@ -232,17 +266,16 @@ bool lbfgs_solver<Vector>::next_iteration() {
   auto fill_current_stats = [&](OPTIMIZATION_STATUS status) {
     _stats.status = status;
     _stats.iteration_time += compute_timer.elapsed_time() - iteration_start_time;
-    _stats.func_value = func_value; 
-    HERE
+    _stats.func_value = func_value;
   };
 
   // Set up references to the containers already held in the stats
   DenseVector& point = _stats.solution;
-  DenseVector& gradient = _stats.gradient; 
-  
-  
-  // Start by computing the gradient of the current point. 
+  DenseVector& gradient = _stats.gradient;
+  size_t current_iteration = _stats.iteration;
+  size_t store_point = current_iteration % m; 
 
+  // Start by computing the gradient of the current point.
 
   model.compute_first_order_statistics(point, gradient, func_value);
   _stats.num_passes++;
@@ -315,24 +348,24 @@ bool lbfgs_solver<Vector>::next_iteration() {
      *
      *   Iteration              Storage location
      *  *****************************************************
-     *     iter-1               start_point
-     *     iter-2               (start_point + 1) % m
+     *     iter-1               store_point
+     *     iter-2               (store_point + 1) % m
      *      ...                  ...
-     *     iter-m               (start_point + m - 1) % m
+     *     iter-m               (store_point + m - 1) % m
      *
      **/
-    for (size_t j = 0; j <= std::min(iters, m - 1); j++) {
-      size_t i = (start_point + j) % m;
+    for (size_t j = 0; j <= std::min(current_iteration, m - 1); j++) {
+      size_t i = (store_point + j) % m;
       alpha(i) = rho(i) * dot(s.col(i), q);
       q -= alpha(i) * y.col(i);
     }
 
     // Scaling factor according to Pg 178 of [1]. This ensures that the
     // problem is better scaled and that a step size of 1 is mostly accepted.
-    gamma = 1 / (squared_norm(y.col(start_point)) * rho(start_point));
+    gamma = 1 / (squared_norm(y.col(store_point)) * rho(store_point));
     r = gamma * (arma::diagmat(H0) * q);
-    for (size_t j = std::min(iters, m - 1); j >= 0; j--) {
-      size_t i = (start_point + j) % m;
+    for (size_t j = std::min(current_iteration, m - 1); j >= 0; j--) {
+      size_t i = (store_point + j) % m;
       beta = rho(i) * dot(y.col(i), r);
       r = r + s.col(i) * (alpha(i) - beta);
     }
@@ -385,33 +418,18 @@ bool lbfgs_solver<Vector>::next_iteration() {
 
   // Store the gradient differences, step difference and rho for the next
   // iteration.
-  start_point = (start_point + 1) % m;
-  s.col(start_point) = delta_point;
-  y.col(start_point) = delta_grad;
-  rho(start_point) = 1.0 / (dot(delta_point, delta_grad));
-
+  s.col(store_point) = delta_point;
+  y.col(store_point) = delta_grad;
+  rho(store_point) = 1.0 / (dot(delta_point, delta_grad));
 
   // Now, report that all is well and return.  
   fill_current_stats(OPTIMIZATION_STATUS::OPT_IN_PROGRESS); 
  
-  stats.iters = iters;
-  stats.residual = residual;
-  stats.func_value = func_value;
-  stats.solve_time = t.current_time() - start_time;
-  stats.solution = point;
-  
-  stast
+  _stats.residual = residual;
+  ++_stats.iteration;
 
 
-
-
-
-
-
-
-
-  
-
+  return false; 
 }
 
 
@@ -509,7 +527,7 @@ inline solver_return lbfgs(
     DenseVector rho(m);          // Scaling factors (prev m iters) 
     DenseVector alpha(m);        // Step sizes (prev m iters)
 
-    int start_point = -1;
+    int store_point = -1;
     H0.ones();
     s.zeros();
     y.zeros();
@@ -567,24 +585,24 @@ inline solver_return lbfgs(
          * 
          *   Iteration              Storage location
          *  *****************************************************
-         *     iter-1               start_point
-         *     iter-2               (start_point + 1) % m
+         *     iter-1               store_point
+         *     iter-2               (store_point + 1) % m
          *      ...                  ...
-         *     iter-m               (start_point + m - 1) % m
+         *     iter-m               (store_point + m - 1) % m
          * 
         **/
         for (int j = 0; j <= std::min(iters, m-1); j++){
-          int i = (start_point + j) % m;
+          int i = (store_point + j) % m;
           alpha(i) = rho(i) * dot(s.col(i),q);
           q = q - alpha(i) * y.col(i);
         }
         
         // Scaling factor according to Pg 178 of [1]. This ensures that the 
         // problem is better scaled and that a step size of 1 is mostly accepted.
-        gamma = 1 / (squared_norm(y.col(start_point)) * rho(start_point));
+        gamma = 1 / (squared_norm(y.col(store_point)) * rho(store_point));
         r = gamma * (arma::diagmat(H0) * q);
         for (int j = std::min(iters, m-1); j >=0 ; j--){
-          int i = (start_point + j) % m;
+          int i = (store_point + j) % m;
           beta = rho(i) * dot(y.col(i), r);
           r = r + s.col(i) * (alpha(i) - beta);
         }
@@ -645,10 +663,9 @@ inline solver_return lbfgs(
 
       
       // Store the previous gradient difference, step difference and rho
-      start_point = (start_point + 1) % m;
-      s.col(start_point) = delta_point;
-      y.col(start_point) = delta_grad;
-      rho(start_point) = 1/ (dot(delta_point, delta_grad));
+      s.col(store_point) = delta_point;
+      y.col(store_point) = delta_grad;
+      rho(store_point) = 1/ (dot(delta_point, delta_grad));
       iters++;
       
       // Log info for debugging. 
