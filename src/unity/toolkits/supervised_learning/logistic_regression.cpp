@@ -62,15 +62,15 @@ void logistic_regression::model_specific_init(const ml_data& data,
 
 
   // Create an interface to the solver.
-  this->num_classes = metadata->target_index_size();
-  size_t variables = get_number_of_coefficients(metadata);
+  this->num_classes = ml_mdata->target_index_size();
+  size_t variables = get_number_of_coefficients(ml_mdata);
   this->num_coefficients = variables * (num_classes - 1);
   state["num_coefficients"] =  this->num_coefficients;
 
   // Examples per class
   state["num_classes"] = this->num_classes;
   state["num_examples_per_class"] =
-                    to_variant(get_num_examples_per_class(metadata));
+                    to_variant(get_num_examples_per_class(ml_mdata));
 
   // Initialize the solver and set initial solution.
   lr_interface.reset(new logistic_regression_opt_interface(data, valid_data, *this));
@@ -187,13 +187,13 @@ void logistic_regression::train() {
 
   // Set class weights
   flexible_type class_weights =
-                      get_class_weights_from_options(options, metadata);
+                      get_class_weights_from_options(options, ml_mdata);
   state["class_weights"] =  to_variant(class_weights);
   flex_dict _class_weights(this->num_classes);
   size_t i = 0;
   for(const auto& kvp: class_weights.get<flex_dict>()){
     _class_weights[i++] =
-        {metadata->target_indexer()->immutable_map_value_to_index(kvp.first),
+        {ml_mdata->target_indexer()->immutable_map_value_to_index(kvp.first),
          kvp.second.get<flex_float>()};
   }
   lr_interface->set_class_weights(_class_weights);
@@ -328,7 +328,7 @@ void logistic_regression::train() {
   }
 
   // Save coefs to SFrame.
-  sframe sf_coef = get_coefficients_as_sframe(coefs, metadata, std_err);
+  sframe sf_coef = get_coefficients_as_sframe(coefs, ml_mdata, std_err);
   if(!has_stderr) {
     sf_coef = add_na_std_err_to_coef(sf_coef);
   }
@@ -395,7 +395,7 @@ flexible_type logistic_regression::predict_single_example(
         return row_prob >= 0.5;
 
       case prediction_type_enum::CLASS:
-        return  metadata->target_indexer()->map_index_to_value(row_prob >= 0.5);
+        return  ml_mdata->target_indexer()->map_index_to_value(row_prob >= 0.5);
 
       case prediction_type_enum::MAX_PROBABILITY:
       case prediction_type_enum::NA:
@@ -460,7 +460,7 @@ flexible_type logistic_regression::predict_single_example(
         if (output_type == prediction_type_enum::CLASS_INDEX) {
           return class_idx;
         } else {
-          return metadata->target_indexer()->map_index_to_value(class_idx);
+          return ml_mdata->target_indexer()->map_index_to_value(class_idx);
         }
 
       }
@@ -513,7 +513,7 @@ flexible_type logistic_regression::predict_single_example(
 
       // Class
       case prediction_type_enum::CLASS:
-        return  metadata->target_indexer()->map_index_to_value(row_prob >= 0.5);
+        return  ml_mdata->target_indexer()->map_index_to_value(row_prob >= 0.5);
 
       case prediction_type_enum::MAX_PROBABILITY:
       case prediction_type_enum::NA:
@@ -571,7 +571,7 @@ flexible_type logistic_regression::predict_single_example(
         if (output_type == prediction_type_enum::CLASS_INDEX) {
           return class_idx;
         } else {
-          return metadata->target_indexer()->map_index_to_value(class_idx);
+          return ml_mdata->target_indexer()->map_index_to_value(class_idx);
         }
       }
       // Probability for best class
@@ -623,7 +623,7 @@ gl_sframe logistic_regression::fast_predict_topk(
   // Setup the SFrame writer for output
   std::vector<std::string> col_names {"id", "class", output_type};
   std::vector<flex_type_enum> col_types {flex_type_enum::INTEGER,
-                                    (this->metadata)->target_column_type()};
+                                    (this->ml_mdata)->target_column_type()};
   if (output_type == "rank"){
     col_types.push_back(flex_type_enum::INTEGER);
   } else {
@@ -651,7 +651,7 @@ gl_sframe logistic_regression::fast_predict_topk(
     if (this->is_dense()) {
       DenseVector dense_vec(variables);
       fill_reference_encoding(ml_data_row_reference::from_row(
-               this->metadata, row.get<flex_dict>(), na_enum), dense_vec);
+               this->ml_mdata, row.get<flex_dict>(), na_enum), dense_vec);
       dense_vec(variables - 1) = 1;
       preds = predict_single_example(dense_vec, pred_type_enum);
 
@@ -659,7 +659,7 @@ gl_sframe logistic_regression::fast_predict_topk(
     } else {
       SparseVector sparse_vec(variables);
       fill_reference_encoding(ml_data_row_reference::from_row(
-               this->metadata, row.get<flex_dict>(), na_enum), sparse_vec);
+               this->ml_mdata, row.get<flex_dict>(), na_enum), sparse_vec);
       sparse_vec(variables - 1) = 1;
       preds = predict_single_example(sparse_vec, pred_type_enum);
     }
@@ -684,7 +684,7 @@ gl_sframe logistic_regression::fast_predict_topk(
     // Write the topk
     for (size_t k = 0; k < topk; ++k) {
       write_x[0] = row_number;
-      write_x[1] = this->metadata->target_indexer()
+      write_x[1] = this->ml_mdata->target_indexer()
                         ->map_index_to_value(out[k].first);
       if (pred_type_enum == prediction_type_enum::RANK){
         write_x[2] = k;
@@ -708,7 +708,7 @@ void logistic_regression::save_impl(turi::oarchive& oarc) const {
   variant_deep_save(state, oarc);
   
   // Everything else
-  oarc << metadata
+  oarc << ml_mdata
        << metrics
        << coefs
        << options;
@@ -731,7 +731,7 @@ void logistic_regression::load_version(turi::iarchive& iarc, size_t version) {
   this->num_coefficients = variant_get_value<size_t>(state["num_coefficients"]);
 
   // GLC 1.3-
-  iarc >> metadata;
+  iarc >> ml_mdata;
   iarc >> metrics;
   iarc >> coefs;
   iarc >> options;
@@ -778,7 +778,7 @@ std::shared_ptr<coreml::MLModelWrapper> logistic_regression::export_to_coreml() 
     {"version", std::to_string(get_version())},
     {"short_description", "Logisitic regression model."}};
 
-  return export_logistic_model_as_model_asset(metadata, coefs,
+  return export_logistic_model_as_model_asset(ml_mdata, coefs,
                                               context_metadata);
 }
 

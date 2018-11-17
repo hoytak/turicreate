@@ -3,11 +3,12 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#ifndef TURI_REGR_LOGISTIC_REGRESSION_H_
-#define TURI_REGR_LOGISTIC_REGRESSION_H_
+#ifndef TURI_REGR_LINEAR_REGRESSION_H_
+#define TURI_REGR_LINEAR_REGRESSION_H_
 
 // ML-Data Utils
-#include <ml_data/ml_data.hpp>
+#include <ml_data/metadata.hpp>
+
 
 // Toolkits
 #include <toolkits/supervised_learning/supervised_learning.hpp>
@@ -21,65 +22,36 @@
 namespace turi {
 namespace supervised {
 
-class logistic_regression_opt_interface;
+class linear_regression_opt_interface;
 
 /*
- * Logistic Regression Model
+ * Linear Regression Model
  * ****************************************************************************
  */
 
+
 /**
- * Logistic regression model class definition.
+ * Linear regression model class definition.
  *
  */
-class EXPORT logistic_regression: public supervised_learning_model_base {
+class EXPORT linear_regression: public supervised_learning_model_base {
+
 
   protected:
 
-    bool m_simple_mode;
+  std::shared_ptr<linear_regression_opt_interface> lr_interface;
 
-  std::shared_ptr<logistic_regression_opt_interface> lr_interface;
-  arma::vec  coefs;                 /**< Coefs */
-  arma::vec  std_err;
-
-  size_t num_classes = 0;                      /**< fast access: num classes */
-  size_t num_coefficients= 0;                  /**< fast access: num coefs   */
   public:
   
-  static constexpr size_t LOGISTIC_REGRESSION_MODEL_VERSION = 6;
-
-  public:
+  static constexpr size_t LINEAR_REGRESSION_MODEL_VERSION = 4;
+  arma::vec  coefs;                 /**< Coefs */
+  arma::vec  std_err;
 
   /**
    * Destructor. Make sure bad things don't happen
    */
-  ~logistic_regression();
+  ~linear_regression();
 
-  
-  /**
-   * Set the default evaluation metric during model evaluation..
-   */
-  void set_default_evaluation_metric() override {
-    set_evaluation_metric({
-        "accuracy", 
-        "auc", 
-        "confusion_matrix",
-        "f1_score", 
-        "log_loss",
-        "precision", 
-        "recall",  
-        "roc_curve",
-        }); 
-  }
-  
-  /**
-   * Set the default evaluation metric for progress tracking.
-   */
-  void set_default_tracking_metric() override {
-    set_tracking_metric({
-        "accuracy", 
-       }); 
-  }
 
   /**
    * Initialize things that are specific to your model.
@@ -89,8 +61,6 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    */
   void model_specific_init(const ml_data& data, const ml_data& valid_data) override;
   
-  bool is_classifier() const override { return true; }
-
   /**
    * Initialize the options.
    *
@@ -103,17 +73,18 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    */
   size_t get_version() const override;
 
+  bool is_classifier() const override { return false; }
 
   /**
    * Train a regression model.
    */
   void train() override;
-
+  
   /**
    * Setter for model coefficieints.
    */
   void set_coefs(const DenseVector& _coefs) override;
-  
+
   /**
    * Serialize the object.
    */
@@ -123,7 +94,7 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    * Load the object
    */
   void load_version(turi::iarchive& iarc, size_t version) override;
-  
+
   /**
    * Predict for a single example. 
    *
@@ -136,19 +107,7 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
   flexible_type predict_single_example(
     const DenseVector& x,
     const prediction_type_enum& output_type=prediction_type_enum::NA) override;
-  
-  /**
-   * Fast path predictions given a row of flexible_types.
-   *
-   * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] output_type Output type. 
-   */
-  gl_sframe fast_predict_topk(
-      const std::vector<flexible_type>& rows,
-      const std::string& missing_value_action ="error",
-      const std::string& output_type="",
-      const size_t topk = 5) override;
-  
+
   /**
    * Predict for a single example. 
    *
@@ -169,14 +128,14 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
     _coefs.resize(coefs.size());
     _coefs = coefs;
   }
-  
+
   std::shared_ptr<coreml::MLModelWrapper> export_to_coreml() override;
 
-  BEGIN_CLASS_MEMBER_REGISTRATION("classifier_logistic_regression");
+  BEGIN_CLASS_MEMBER_REGISTRATION("regression_linear_regression");
   IMPORT_BASE_CLASS_REGISTRATION(supervised_learning_model_base);
   END_CLASS_MEMBER_REGISTRATION
-
 };
+
 } // supervised
 } // turicreate
 

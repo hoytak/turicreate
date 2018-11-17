@@ -3,11 +3,12 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#ifndef TURI_REGR_LOGISTIC_REGRESSION_H_
-#define TURI_REGR_LOGISTIC_REGRESSION_H_
+#ifndef TURI_CLASS_LINEAR_SVM_H_
+#define TURI_CLASS_LINEAR_SVM_H_
 
 // ML-Data Utils
 #include <ml_data/ml_data.hpp>
+#include <unity/lib/gl_sframe.hpp>
 
 // Toolkits
 #include <toolkits/supervised_learning/supervised_learning.hpp>
@@ -21,40 +22,32 @@
 namespace turi {
 namespace supervised {
 
-class logistic_regression_opt_interface;
+class linear_svm_scaled_logistic_opt_interface;
 
 /*
- * Logistic Regression Model
+ * SVM  Model
  * ****************************************************************************
  */
 
 /**
- * Logistic regression model class definition.
+ * SVM svm model class definition.
  *
  */
-class EXPORT logistic_regression: public supervised_learning_model_base {
+class EXPORT linear_svm: public supervised_learning_model_base {
 
   protected:
 
-    bool m_simple_mode;
-
-  std::shared_ptr<logistic_regression_opt_interface> lr_interface;
-  arma::vec  coefs;                 /**< Coefs */
-  arma::vec  std_err;
-
-  size_t num_classes = 0;                      /**< fast access: num classes */
-  size_t num_coefficients= 0;                  /**< fast access: num coefs   */
-  public:
+  arma::vec  coefs;    /**< Primal sol */
+  std::shared_ptr<linear_svm_scaled_logistic_opt_interface>
+                                          scaled_logistic_svm_interface;
   
-  static constexpr size_t LOGISTIC_REGRESSION_MODEL_VERSION = 6;
-
   public:
 
+  static constexpr size_t SVM_MODEL_VERSION = 5;
   /**
    * Destructor. Make sure bad things don't happen
    */
-  ~logistic_regression();
-
+  virtual ~linear_svm();
   
   /**
    * Set the default evaluation metric during model evaluation..
@@ -62,13 +55,10 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
   void set_default_evaluation_metric() override {
     set_evaluation_metric({
         "accuracy", 
-        "auc", 
         "confusion_matrix",
         "f1_score", 
-        "log_loss",
         "precision", 
         "recall",  
-        "roc_curve",
         }); 
   }
   
@@ -80,40 +70,42 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
         "accuracy", 
        }); 
   }
-
+  
   /**
-   * Initialize things that are specific to your model.
+   * Internal init after the ml_data is built.
    *
-   * \param[in] data ML-Data object created by the init function.
+   * \param[in] data        Training data
+   * \param[in] valid_data  Validation data
    *
    */
-  void model_specific_init(const ml_data& data, const ml_data& valid_data) override;
-  
+  void model_specific_init(const ml_data& data, 
+                           const ml_data& valid_data) override;
+
   bool is_classifier() const override { return true; }
 
   /**
-   * Initialize the options.
-   *
-   * \param[in] _options Options to set
+   * Train a svm model.
    */
-  void init_options(const std::map<std::string,flexible_type>& _options) override;
-  
+  void train() override;
+
+  /**
+   * Init the options.
+   *
+   * \param[in] opts Options to set
+   */
+  void init_options(const std::map<std::string,flexible_type>& _opts) override;
+
+
   /**
    * Gets the model version number
    */
   size_t get_version() const override;
 
-
-  /**
-   * Train a regression model.
-   */
-  void train() override;
-
   /**
    * Setter for model coefficieints.
    */
   void set_coefs(const DenseVector& _coefs) override;
-  
+
   /**
    * Serialize the object.
    */
@@ -123,7 +115,8 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    * Load the object
    */
   void load_version(turi::iarchive& iarc, size_t version) override;
-  
+
+
   /**
    * Predict for a single example. 
    *
@@ -136,18 +129,6 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
   flexible_type predict_single_example(
     const DenseVector& x,
     const prediction_type_enum& output_type=prediction_type_enum::NA) override;
-  
-  /**
-   * Fast path predictions given a row of flexible_types.
-   *
-   * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] output_type Output type. 
-   */
-  gl_sframe fast_predict_topk(
-      const std::vector<flexible_type>& rows,
-      const std::string& missing_value_action ="error",
-      const std::string& output_type="",
-      const size_t topk = 5) override;
   
   /**
    * Predict for a single example. 
@@ -163,6 +144,28 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
     const prediction_type_enum& output_type=prediction_type_enum::NA) override;
 
   /**
+   * Make classification using a trained supervised_learning model.
+   *
+   * \param[in] X           Test data (only independent variables)
+   * \param[in] output_type Type of classifcation (future proof).
+   * \returns ret   SFrame with "class" and probability (if applicable)
+   *
+   * \note Already assumes that data is of the right shape.
+   */
+  sframe classify(const ml_data& test_data, 
+                  const std::string& output_type="") override;
+
+  /**
+   * Fast path predictions given a row of flexible_types
+   *
+   * \param[in] rows List of rows (each row is a flex_dict)
+   * \param[in] output_type Output type. 
+   */
+  gl_sframe fast_classify(
+      const std::vector<flexible_type>& rows,
+      const std::string& missing_value_action ="error") override;
+
+  /**
   * Get coefficients for a trained model.
   */
   void get_coefficients(DenseVector& _coefs) const{
@@ -172,11 +175,12 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
   
   std::shared_ptr<coreml::MLModelWrapper> export_to_coreml() override;
 
-  BEGIN_CLASS_MEMBER_REGISTRATION("classifier_logistic_regression");
+  BEGIN_CLASS_MEMBER_REGISTRATION("classifier_svm");
   IMPORT_BASE_CLASS_REGISTRATION(supervised_learning_model_base);
   END_CLASS_MEMBER_REGISTRATION
-
+ 
 };
+
 } // supervised
 } // turicreate
 

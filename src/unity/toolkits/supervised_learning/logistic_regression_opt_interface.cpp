@@ -66,27 +66,23 @@ void flattened_sparse_vector_outer_prod(const SparseVector& a,
 * Constructor for logistic regression solver object
 */
 logistic_regression_opt_interface::logistic_regression_opt_interface(
-    const ml_data& _data, 
-    const ml_data& _valid_data, 
-    logistic_regression& _sp_model) {
-
+    const ml_data& _data) {
   data = _data;
-  if (_valid_data.num_rows() > 0) valid_data = _valid_data;
-  smodel = _sp_model;
 
   // Initialize reader and other data
   examples = data.num_rows();
   features = data.num_columns();
-  n_threads = turi::thread_pool::get_instance().size();
 
   // Initialize the number of variables to 1 (bias term)
-  auto ml_metadata = smodel.get_ml_metadata();
-  classes = ml_metadata->target_index_size();
-  variables = get_number_of_coefficients(ml_metadata);
-  is_dense = (variables <= 3 * data.max_row_size()) ? true : false;
-  variables *= (classes - 1);
+  auto metadata = _data.metadata();
 
+  n_classes = metadata->target_index_size();
+  n_variables_per_class = get_number_of_coefficients(metadata);
 
+  is_dense = (n_variables_per_class <= 3 * data.max_row_size()) ? true : false;
+  n_variables = n_variables_per_class * (n_classes - 1);
+
+  class_weights = arma::ones(n_classes); 
 }
 
 
@@ -97,23 +93,12 @@ logistic_regression_opt_interface::~logistic_regression_opt_interface() {
 }
 
 
-/**
-* Set the number of threads
-*/
-void logistic_regression_opt_interface::set_threads(size_t _n_threads) {
-  n_threads = _n_threads;
-}
-
 
 /**
 * Set the class weights (as a flex_dict which is already validated)
 */
-void logistic_regression_opt_interface::set_class_weights(
-                                        const flexible_type& _class_weights) {
-  DASSERT_TRUE(_class_weights.size() == classes);
-  for(const auto& kvp: _class_weights.get<flex_dict>()){
-    class_weights[kvp.first.get<flex_int>()]= kvp.second.get<flex_float>();
-  }
+void logistic_regression_opt_interface::set_class_weights(const DenseVector& _class_weights) { 
+  class_weights = _class_weights; 
 }
 
 
@@ -121,23 +106,22 @@ void logistic_regression_opt_interface::set_class_weights(
  * Set feature rescaling.
  */
 void logistic_regression_opt_interface::init_feature_rescaling() {
-  feature_rescaling = true;
-  scaler.reset(new l2_rescaling(smodel.get_ml_metadata(), true));
+  scaler.reset(new l2_rescaling(data.metadata(), true));
+  coefs_per_class.resize(n_variables_per_class);
 }
 
 /**
  * Transform final solution back to the original scale.
  */
 void logistic_regression_opt_interface::rescale_solution(DenseVector& coefs) {
-  if(feature_rescaling){
-    size_t variables_per_class = variables / (classes-1);
-    DenseVector coefs_per_class(variables_per_class);
-    for(size_t i = 0; i < classes - 1; i++){
-      size_t m = variables_per_class;
-      coefs_per_class = coefs.subvec(i * m, (i + 1)*m - 1 /*end inclusive*/);
-      scaler->transform(coefs_per_class);
-      coefs.subvec(i * m, (i + 1) * m - 1) = coefs_per_class;
-    }
+  DASSERT_TRUE(scaler != nullptr);
+
+  size_t m = n_variables_per_class;
+
+  for (size_t i = 0; i < classes - 1; i++) {
+    coefs_per_class = coefs.subvec(i * m, (i + 1) * m - 1 /*end inclusive*/);
+    scaler->transform(coefs_per_class);
+    coefs.subvec(i * m, (i + 1) * m - 1) = coefs_per_class;
   }
 }
 
@@ -146,14 +130,6 @@ void logistic_regression_opt_interface::rescale_solution(DenseVector& coefs) {
 */
 size_t logistic_regression_opt_interface::num_examples() const{
   return examples;
-}
-
-
-/**
-* Get the number of validation-set examples for the model
-*/
-size_t logistic_regression_opt_interface::num_validation_examples() const{
-  return valid_data.num_rows();
 }
 
 
@@ -172,16 +148,6 @@ size_t logistic_regression_opt_interface::num_classes() const{
   return classes;
 }
 
-
-/**
- * Get strings needed to print the header for the progress table.
- */
-std::vector<std::pair<std::string, size_t>>
-logistic_regression_opt_interface::get_status_header(const std::vector<std::string>& stat_headers) {
-  bool has_validation_data = (valid_data.num_rows() > 0);
-  auto header = make_progress_header(smodel, stat_headers, has_validation_data); 
-  return header;
-}
 
 double logistic_regression_opt_interface::get_validation_accuracy() {
   DASSERT_TRUE(valid_data.num_rows() > 0);
@@ -228,238 +194,171 @@ std::vector<std::string> logistic_regression_opt_interface::get_status(
 /**
  * Compute the first order statistics
 */
-void logistic_regression_opt_interface::compute_first_order_statistics(
-    const ml_data& data, const DenseVector& point, DenseVector& gradient,
-    double& function_value, const size_t mbStart, const size_t mbSize) {
-  DASSERT_TRUE(mbStart == 0);
-  DASSERT_TRUE(mbSize == (size_t)(-1));
+template <typename PointVector>
+void logistic_regression_opt_interface::_compute_first_order_statistics(
+    const ml_data& data, const DenseVector& point, DenseVector& gradient) {
 
-  // Init
-  std::vector<DenseVector> G(n_threads, arma::zeros(variables));
-  std::vector<double> f(n_threads, 0.0);
-  size_t variables_per_class = variables / (classes-1);
+
+  // Initialize computation
+  size_t num_threads = thread::cpu_count();
+  thread_compute_buffers.resize(num_threads);
+
+  auto& pointMat = thread_compute_buffers.pointMat;
+
+  // Get the point in matrix form
+  pointMat = point;
+  pointMat.reshape(n_variables_per_class, n_classes);
+
   timer t;
   double start_time = t.current_time();
 
-  logstream(LOG_INFO) << "Starting first order stats computation" << std::endl; 
+  logstream(LOG_INFO) << "Starting first order stats computation" << std::endl;
 
-  // Dense data. 
-  if (this->is_dense) {
-    in_parallel([&](size_t thread_idx, size_t num_threads) {
-      DenseVector x(variables_per_class);
-      double row_func = 0, margin_dot_class = 0;
-      DenseVector margin(classes - 1), kernel(classes - 1), row_prob(classes -1);
-      DenseMatrix pointMat(point);
-      pointMat.reshape(variables_per_class, classes-1);
-      size_t class_idx = 0;
-      double kernel_sum = 0;
-      for (auto it = data.get_iterator(thread_idx, num_threads); !it.done();
-           ++it) {
-        class_idx = it->target_index();
+  in_parallel([&](size_t thread_idx, size_t n_threads) {
 
-        if(class_idx >= classes) {
-           continue;
-        }
+    // set up all the buffers; 
+    PointVector x(n_variables_per_class);
+    auto& gradient = thread_compute_buffers[thread_idx].gradient;
+    auto& margin = thread_compute_buffers[thread_idx].margin;
+    auto& kernel = thread_compute_buffers[thread_idx].kernel;
+    auto& row_prob = thread_compute_buffers[thread_idx].row_prob;
+    auto& f_value = thread_compute_buffers.f_value; 
 
-        fill_reference_encoding(*it, x);
-        x(variables_per_class - 1) = 1;
-        if(feature_rescaling){
-          scaler->transform(x);
-        }
+    graident.resize(n_variables); 
+    gradient.setZero();
 
+    for (auto it = data.get_iterator(thread_idx, n_threads); !it.done(); ++it) {
+      size_t class_idx = it->target_index();
 
-        margin = pointMat.t() * x;
-        margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
-   
-        kernel =  arma::exp(margin);
-        kernel_sum = arma::sum(kernel);
-        row_func = log1p(kernel_sum) - margin_dot_class;
-        row_prob = kernel / (1 + kernel_sum);
-        if (class_idx > 0) row_prob(class_idx - 1) -= 1;
-
-        G[thread_idx] += arma::vectorise(class_weights[class_idx] * (x * row_prob.t()));
-        f[thread_idx] += class_weights[class_idx] * row_func;
+      if (class_idx >= n_classes) {
+        continue;
       }
-    });
 
-  // Sparse data
-  } else {
-    in_parallel([&](size_t thread_idx, size_t num_threads) {
-      SparseVector x(variables_per_class);
-      double row_func = 0, margin_dot_class = 0;
-      DenseVector margin(classes - 1), kernel(classes - 1), row_prob(classes -1);
-      DenseMatrix pointMat(point);
-      pointMat.reshape(variables_per_class, classes-1);
-      arma::mat pointMatT = pointMat.t();
-      size_t class_idx = 0;
-      double kernel_sum = 0;
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
-                                                              !it.done(); ++it) {
-        class_idx = it->target_index();
-        
-        if(class_idx >= classes) {
-           continue;
-        }
+      fill_reference_encoding(*it, x);
+      
+      x(n_variables_per_class - 1) = 1;
 
-        fill_reference_encoding(*it, x);
-        x(variables_per_class - 1) = 1;
-        if(feature_rescaling){
-          scaler->transform(x);
-        }
-
-        margin = pointMatT * x;
-        margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
-   
-        kernel =  exp(margin);
-        kernel_sum = arma::sum(kernel);
-        row_func = log1p(kernel_sum) - margin_dot_class;
-        row_prob = kernel / (1 + kernel_sum);
-
-        SparseVector G_tmp(variables);
-        if (class_idx > 0) row_prob(class_idx - 1) -= 1;
-        flattened_sparse_vector_outer_prod(x, row_prob, G_tmp);
-        G_tmp *= class_weights[class_idx];
-
-        G[thread_idx] += G_tmp;
-        f[thread_idx] += class_weights[class_idx] * row_func;
+      if (scaler != nullptr) {
+        scaler->transform(x);
       }
-    });
-  }
 
-  // Reduce
-  function_value = f[0];
-  gradient = G[0];
-  for(size_t i=1; i < n_threads; i++){
-    gradient += G[i];
-    function_value += f[i];
-  }
+      margin = pointMat.t() * x;
+      double margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
 
-  logstream(LOG_INFO) << "Computation done at " 
-                      << (t.current_time() - start_time) << "s" << std::endl; 
+      kernel = arma::exp(margin);
+      double kernel_sum = arma::sum(kernel);
+      double row_func = log1p(kernel_sum) - margin_dot_class;
+      row_prob = kernel * (1.0 / (1 + kernel_sum));
+
+      if (class_idx > 0) {
+        row_prob(class_idx - 1) -= 1;
+      }
+
+      gradient +=
+          arma::vectorise(class_weights[class_idx] * (x * row_prob.t()));
+
+      f_value += class_weights[class_idx] * row_func;
+    }
+  });
 }
 
 /**
  * Compute the second order statistics
 */
-void logistic_regression_opt_interface::compute_second_order_statistics(
-    const DenseVector& point, DenseMatrix& hessian, DenseVector& gradient,
-    double& function_value) {
-    
+template <typename PointVector>
+void logistic_regression_opt_interface::_compute_statistics(
+    const DenseVector& point, double& _function_value, DenseVector& _gradient,
+    DenseMatrix* _hessian = nullptr) {
+
+
+  const bool _compute_hessian = (_hessian != nullptr); 
+
   timer t;
   double start_time = t.current_time();
   logstream(LOG_INFO) << "Starting second order stats computation" << std::endl; 
+  
+  // Initialize computation
+  size_t num_threads = thread::cpu_count();
+  thread_compute_buffers.resize(num_threads);
 
-  // Init  
-  std::vector<DenseMatrix> H(n_threads, arma::zeros(variables, variables));
-  std::vector<DenseVector> G(n_threads, arma::zeros(variables));
-  std::vector<double> f(n_threads, 0.0);
-  size_t variables_per_class = variables / (classes-1);
+  auto& pointMat = thread_compute_buffers.pointMat;
+
+  // Get the point in matrix form
+  pointMat = point;
+  pointMat.reshape(n_variables_per_class, n_classes);
 
   // Dense data
-  if (this->is_dense) {
+  in_parallel([&](size_t thread_idx, size_t n_threads) {
 
-    in_parallel([&](size_t thread_idx, size_t num_threads) {
-      DenseVector x(variables_per_class);
-      double row_func = 0, margin_dot_class = 0, kernel_sum = 0;
-      size_t class_idx = 0;
-      DenseVector margin(classes - 1), kernel(classes - 1), row_prob(classes -1);
-      DenseMatrix pointMat(point);
-      pointMat.reshape(variables_per_class, classes-1);
+    // Set up all the buffers;
+    PointVector x(n_variables_per_class);
+    auto& gradient = thread_compute_buffers[thread_idx].gradient;
+    auto& hessian = thread_compute_buffers[thread_idx].hessian;
+    auto& A = thread_compute_buffers[thread_idx].A;
+    auto& XXt = thread_compute_buffers[thread_idx].XXt 
+    auto& margin = thread_compute_buffers[thread_idx].margin;
+    auto& kernel = thread_compute_buffers[thread_idx].kernel;
+    auto& row_prob = thread_compute_buffers[thread_idx].row_prob;
+    auto& f_value = thread_compute_buffers.f_value;
 
-      DenseMatrix A(classes-1, classes-1);
+    if(compute_hessian) {
+      hessian.resize(n_variables, n_variables);
+      hessian.setZeros();
+    }
 
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
-                                                              !it.done(); ++it) {
-        fill_reference_encoding(*it, x);
-        x(variables_per_class - 1) = 1;
-        if(feature_rescaling){
-          scaler->transform(x);
-        }
+    for (auto it = data.get_iterator(thread_idx, n_threads); !it.done(); ++it) {
 
-        class_idx = it->target_index();
-        margin = pointMat.t() * x;
-        margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
+      fill_reference_encoding(*it, x);
+      x(n_variables_per_class - 1) = 1;
 
-        kernel = exp(margin);
-        kernel_sum = arma::sum(kernel);
-        row_prob = kernel / (1 + kernel_sum);
+      if (scaler != nullptr) {
+        scaler->transform(x);
+      }
 
+      size_t class_idx = it->target_index();
+
+      margin = pointMat.t() * x;
+      double margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
+
+      kernel = arma::exp(margin);
+      double kernel_sum = arma::sum(kernel);
+      row_prob = kernel * (1.0 / (1 + kernel_sum));
+
+      double row_func = log1p(kernel_sum) - margin_dot_class;
+      
+      if (class_idx > 0) {
+        row_prob(class_idx - 1) -= 1;
+      }
+      gradient +=
+          arma::vectorise(class_weights[class_idx] * (x * row_prob.t()));
+
+      f_value += class_weights[class_idx] * row_func;
+
+      if(compute_hessian) {
+        // TODO: change this so we only care about the upper triangular part til
+        // the very end.
         A = diagmat(row_prob) - row_prob * row_prob.t();
+        XXT = x * x.t();
 
-        row_func = log1p(kernel_sum) - margin_dot_class;
-        if (class_idx > 0) row_prob(class_idx - 1) -= 1;
-        
-        f[thread_idx] += class_weights[class_idx] * row_func;
-        DenseMatrix G_tmp = class_weights[class_idx] * (x * row_prob.t());
-        G[thread_idx] += arma::vectorise(G_tmp);
-        DenseMatrix XXT = x * x.t();
+        for (size_t a = 0; a < n_classes - 1; a++) {
+          for (size_t b = 0; b < n_classes - 1; b++) {
 
-        for(size_t a = 0; a < classes - 1; a++){
-          for(size_t b = 0; b < classes - 1; b++){
-            size_t m = variables_per_class;
-            H[thread_idx].submat(a * m, b *m,
-                                 (a + 1) * m - 1, (b + 1) * m - 1)
-                      += class_weights[class_idx] * A(a,b) * XXT;
-          }
-        }
-      }  
-    });
-  
-  // Sparse data. 
-  } else {
-    in_parallel([&](size_t thread_idx, size_t num_threads) {
-      SparseVector x(variables_per_class);
-      double row_func = 0, margin_dot_class = 0, kernel_sum = 0;
-      size_t class_idx = 0;
-      DenseVector margin(classes - 1), kernel(classes - 1), row_prob(classes -1);
-      DenseMatrix pointMat(point);
-      pointMat.reshape(variables_per_class, classes-1);
-      arma::mat pointMatT = pointMat.t();
-      DenseMatrix A(classes-1, classes-1);
-      for(auto it = data.get_iterator(thread_idx, num_threads); 
-                                                              !it.done(); ++it) {
-        fill_reference_encoding(*it, x);
-        x(variables_per_class - 1) = 1;
-        if(feature_rescaling){
-          scaler->transform(x);
-        }
-
-        class_idx = it->target_index();
-        margin = pointMatT * x;
-        margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
-
-        kernel =  arma::exp(margin);
-        kernel_sum = arma::sum(kernel);
-        row_prob = kernel / (1 + kernel_sum);
-
-        A = diagmat(row_prob) - row_prob * row_prob.t();
-
-        row_func = log1p(kernel_sum) - margin_dot_class;
-        SparseVector G_tmp(variables);
-        if (class_idx > 0) row_prob(class_idx - 1) -= 1;
-        flattened_sparse_vector_outer_prod(x, row_prob, G_tmp);
-        G_tmp *= class_weights[class_idx];
-        G[thread_idx] += G_tmp;
-        f[thread_idx] += class_weights[class_idx] * row_func;
-
-        // Sadly, this is the fastest way to do this in Eigen. It can be done 
-        // in block mode if x is dense, but when x is sparse, this seems to be 
-        // faster (much faster).
-        for(size_t a = 0; a < classes - 1; a++){
-          for(size_t b = 0; b < classes - 1; b++){
-            size_t a_index_offset = a * variables_per_class;
-            size_t b_index_offset = b * variables_per_class;
-            for (auto pi : x) {
-              for (auto pj : x) {
-                H[thread_idx](a_index_offset + pi.first,
-                              b_index_offset + pj.first) +=
-                  class_weights[class_idx] * pi.second * pj.second * A(a,b);
-              }
-            }
+            size_t m = n_variables_per_class;
+            hessian.submat(a * m, b * m, (a + 1) * m - 1, (b + 1) * m - 1) +=
+                (class_weights[class_idx] * A(a, b)) * XXt;
           }
         }
       }
-    });
+    }
+  });
+
+  // Reduce
+  function_value = thread_compute_buffers[0].f_value; 
+  gradient = thread_compute_buffers[0].gradient; 
+
+  for(size_t i=1; i < n_threads; i++) {
+    gradient += thread_compute_buffers[i].gradient;
+    function_value += thread_compute_buffers[i].f_value;
   }
 
   // Reduce
