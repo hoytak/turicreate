@@ -10,7 +10,7 @@
 #include <unity/lib/gl_sframe.hpp>
 
 // Interfaces
-#include <unity/lib/extensions/ml_model.hpp>
+#include <unity/lib/extensions/iterative_ml_model.hpp>
 
 // ML-Data Utils
 #include <ml_data/ml_data.hpp>
@@ -119,85 +119,173 @@ typedef sparse_vector<double>  SparseVector;
  *
  */
 class EXPORT supervised_learning_model_base : public ml_model_base {
- protected:
-  bool show_extra_warnings = true;                /* If true, be more verbose.*/
-
-  std::shared_ptr<ml_metadata> _metadata;          /* ML Data  metadata. */
-
-   /**
-   * Get ml_metadata.
-   *
-   * \returns Get the ml_metadata.
-   */
-  std::shared_ptr<ml_metadata> get_ml_metadata() const {
-    return this->metadata;
-  }
-
- public: 
-
-
-  // Set up the init options component 
-  virtual void init_options() = 0; 
-
+ public:
   // virtual destructor
   virtual ~supervised_learning_model_base() { }
 
-  void set_options(const std::map<std::string, flexible_type>& opts);
+  //////////////////////////////////////////////////////////////////////////
+  // 
+  //  Public facing methods.  
 
-  void setup_training(gl_sframe data, const std::string& target,
-                      const variant_type& validation_data = FLEX_UNDEFINED);
 
-  flexible_type predict_row(const flex_dict& row,
-                            std::string output_type,
-                            std::string missing_value_action = "");
+  /** Initialize the specific options.
+   */
+  void init_options() = 0;
+
+
+  /////////////////////////////////////////////////////////////////////////
+  //
+  //  Implementations of the iterative training examples.  Everything goes through these. 
+
 
   /**
-   * Extract features! 
+   *  Train the model.
+   *
+   *  This implementation requires that the  
    */
-  virtual gl_sarray extract_features(const gl_sframe& X,
-                                     const std::string& missing_value_action) {
-    log_and_throw("Model does not support feature extraction");
-  }
+  virtual void setup_iterative_training(
+      const std::map<std::string, variant_map>& data,
+      const std::map<std::string, flexible_type>& _options);
+
+  /**
+   *  Execute the next iteration of training
+   *
+   *  This implementation requires the 
+   */
+  bool next_training_iteration();
+
+
+  /** Implement 
+   *
+   */
+  const std::map<std::string, variant_type>& training_status() const;  
+
+
+  /**  Finalize training of the model.  
+   *
+   */
+  void finalize_training(); 
+
+
+  /**
+   * Evaluate the model. 
+   */
+  variant_map_type evaluate(gl_sframe data, std::string metric = "auto",
+                            std::string missing_value_action = "");
 
   /**
    * Export to CoreML.
    */
   virtual std::shared_ptr<coreml::MLModelWrapper> export_to_coreml() = 0;
 
-  variant_map_type evaluate(gl_sframe data, std::string metric = "auto",
+
+  /** Predict options for this.  
+   *
+   */
+  gl_sarray predict(gl_sframe data, std::string missing_value_action,
+                    std::string output_type);
+
+
+  /** Predict a single row. 
+   *
+   */
+  flexible_type predict_row(const flex_dict& row,
+                            std::string output_type,
                             std::string missing_value_action = "");
 
-  gl_sarray predict(gl_sframe data, std::string missing_value_action, std::string output_type); 
+  
+  /** Predict a single row. 
+   *
+   */
+  flexible_type predict_row(const flex_list& row, std::string output_type,
+                            std::string missing_value_action = "");
 
+  // Convenience methods to 
+
+
+
+
+
+
+  /** Set up the training 
+   *
+   */
+  void setup_training(gl_sframe data, const std::string& target,
+                      const variant_type& validation_data = FLEX_UNDEFINED);
+
+
+
+
+
+
+  /**
+   * Get ml_metadata.
+   *
+   * \returns Get the ml_metadata.
+   */
+  const std::shared_ptr<ml_metadata>& metadata() const {
+    return this->metadata;
+  }
 
 protected:
- void internal_train(const ml_data& data, const ml_data& validation_data);
 
- /**
-  *
-  * Predict for a single example.
-  *
-  * \param[in] x  Single example.
-  * \param[in] output_type Type of prediction.
-  *
-  * \returns Prediction for a single example.
-  *
+ /** Initialize the model specific options.
   */
- virtual flexible_type predict_single_example(
+ virtual void internal_init_options() = 0;
+
+ virtual void set_options(
+     const std::map<std::string, flexible_type>& options) = 0;
+
+ virtual void internal_iterative_training_setup(
+     const ml_data& data, const ml_data& validation_data,
+     const std::map<std::string, variant_type>& alt_data) = 0;
+
+
+ virtual void internal_training_finalize() = 0; 
+
+ /**  Internal prediction function.  
+  *
+  *   This function is up to the 
+  */
+ virtual flexible_type internal_predict_row(
      const ml_data_row_reference& row,
-     const prediction_type_enum& output_type = prediction_type_enum::NA) = 0;
-
- /**
-  *  Train the model
-  */
- void train(gl_sframe data, const std::string& target,
-            const variant_type& validation_data = FLEX_UNDEFINED,
-            const std::map<std::string, flexible_type>& _options = {});
+     const std::vector<prediction_type_enum>& output_type) = 0;
 
  /**
   * Methods that must be implemented in a new supervised_learning model.
   * -------------------------------------------------------------------------
   */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  /**
   * Get metadata mapping.
   */

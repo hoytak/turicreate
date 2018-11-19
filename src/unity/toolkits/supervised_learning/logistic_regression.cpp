@@ -60,6 +60,10 @@ logistic_regression::~logistic_regression(){
 void logistic_regression::model_specific_init(const ml_data& data,
                                               const ml_data& valid_data){
 
+   /** Initialize the model specific options.
+    */
+   void internal_init_options() override;
+
 
   // Create an interface to the solver.
   this->num_classes = ml_mdata->target_index_size();
@@ -78,18 +82,13 @@ void logistic_regression::model_specific_init(const ml_data& data,
 
 }
 
-/**
- * Setter for coefficients vector.
- */
-void logistic_regression::set_coefs(const DenseVector& _coefs) {
-  coefs = _coefs;
-}
+
+
 
 /**
  * Set options
  */
-void logistic_regression::init_options(const std::map<std::string,
-                                      flexible_type>&_opts) {
+void logistic_regression::internal_init_options() {
 
   options.create_real_option(
       "convergence_threshold",
@@ -105,14 +104,6 @@ void logistic_regression::init_options(const std::map<std::string,
       1.0,
       optimization::OPTIMIZATION_ZERO,
       optimization::OPTIMIZATION_INFTY,
-      false);
-
-  options.create_integer_option(
-      "max_iterations",
-      "Maximum number of iterations to perform during training",
-      10,
-      1,
-      std::numeric_limits<int>::max(),
       false);
 
   options.create_integer_option(
@@ -149,12 +140,6 @@ void logistic_regression::init_options(const std::map<std::string,
       false);
 
   options.create_boolean_option(
-      "simple_mode",
-      "Show progress printing with very simple options.",
-      false,
-      false);
-
-  options.create_boolean_option(
       "feature_rescaling",
       "Rescale features to have unit L2-Norm",
       true,
@@ -163,31 +148,25 @@ void logistic_regression::init_options(const std::map<std::string,
   options.create_flexible_type_option(
       "class_weights",
       "Weights (during training) assigned to each class.",
-      flex_undefined(),
+      FLEX_UNDEFINED,
       true);
-
-  // Set options!
-  options.set_options(_opts);
-  add_or_update_state(flexmap_to_varmap(options.current_option_values()));
 
 }
 
+// Load all the internal options from the specific 
+void logistic_regression::_init_parameters_from_options() { 
 
-/**
- * Train a logistic regression model.
- */
-void logistic_regression::train() {
+  m_feature_rescaling_enabled = (get_option_value("feature_rescaling") != 0);
 
-  m_simple_mode = options.value("simple_mode");
+  
 
+  // Set the class weights
   size_t variables_per_class = this->num_coefficients/ (this->num_classes - 1);
-  if(get_option_value("feature_rescaling")){
-    lr_interface->init_feature_rescaling();
-  }
 
   // Set class weights
-  flexible_type class_weights =
+   class_weights =
                       get_class_weights_from_options(options, ml_mdata);
+
   state["class_weights"] =  to_variant(class_weights);
   flex_dict _class_weights(this->num_classes);
   size_t i = 0;
@@ -197,6 +176,53 @@ void logistic_regression::train() {
          kvp.second.get<flex_float>()};
   }
   lr_interface->set_class_weights(_class_weights);
+
+
+
+
+
+
+
+
+}
+
+
+
+
+void logisitic_regression::internal_iterative_training_setup(
+    const ml_data& data, 
+    const std::map<std::string, variant_type>&) override {
+
+  // LOad all the parameters from the current options. 
+  this->_init_parameters_from_options();
+
+  // Inititialize the interface.
+  lr_interface.reset(new logistic_regression_opt_interface(data));
+
+  if (m_feature_rescaling_enabled) {
+    lr_interface->enable_feature_rescaling();
+  }
+
+  // See if we need to set up the class weights
+  if (get_option_value("class_weights") != FLEX_UNDEFINED) {
+    lr_interface->set_class_weights(process_class_weights(
+        data.metadata(), get_option_value("class_weights")));
+  }
+
+  // Initialize the begininng structures of the 
+  //
+  //  
+
+
+
+}
+
+/**
+ * Train a logistic regression model.
+ */
+void logistic_regression::train() {
+
+
 
   // Set the initial point and write initial output to screen
   // ---------------------------------------------------------------------------

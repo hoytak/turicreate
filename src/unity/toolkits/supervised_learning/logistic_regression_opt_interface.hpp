@@ -43,27 +43,6 @@ namespace supervised {
 class logistic_regression_opt_interface: public
   optimization::second_order_opt_interface {
 
-  protected:
-
-  ml_data data;
-
-  // number of examples, features, and total variables
-  size_t examples = 0;
-  size_t n_classes = 2;
-  size_t n_features = 0;
-  size_t n_variables = 0;
-  size_t n_variables_per_class = 0; 
-
-  DenseVector class_weights; 
-
-  std::shared_ptr<l2_rescaling> scaler;        /** <Scale features */
-  bool is_dense = false;                       /** Is the data dense? */
-
-
-  private:
-   // Buffer variables to avoid excessive memory use
-   DenseVector coefs_per_class;
-
   public:
    /**
     * Default constructor
@@ -81,16 +60,22 @@ class logistic_regression_opt_interface: public
    ~logistic_regression_opt_interface();
 
    /**
-    * Set feature scaling
-    */
-   void init_feature_rescaling();
-
-   /**
-    * Transform the final solution back to the original scale.
+    * Set the class weights (as a flex_dict which is already validated)
     *
-    * \param[in,out] coefs Solution vector
+    * \param[in] 
     */
-   void rescale_solution(DenseVector& coefs);
+   void set_class_weights(const DenseVector& class_weights);
+
+   /** Enable scaling for the features 
+    */
+   void enable_feature_scaling(); 
+
+   /** The scaler used to stabalize the solution.  
+    *
+    *  null if no scaler is used.  
+    */
+   const std::shared_ptr<l2_rescaling>& scaler() const { return m_scaler; }
+
 
    /**
     * Set the class weights (as a flex_dict which is already validated)
@@ -102,25 +87,11 @@ class logistic_regression_opt_interface: public
    void set_class_weights(const flex_dict& class_weights);
 
    /**
-    * Get the number of examples for the model
-    *
-    * \returns Number of examples
-    */
-   size_t num_examples() const;
-
-   /**
     * Get the number of variables in the model
     *
     * \returns Number of variables
     */
-   size_t num_variables() const;
-
-   /**
-    * Get the number of classes in the model
-    *
-    * \returns Number of classes
-    */
-   size_t num_classes() const;
+   size_t num_variables() const { return n_variables; } 
 
    /**
     * Compute first order statistics at the given point. (Gradient & Function
@@ -129,15 +100,11 @@ class logistic_regression_opt_interface: public
     * \param[in]  point           Point at which we are computing the stats.
     * \param[out] gradient        Dense gradient
     * \param[out] function_value  Function value
-    * \param[in]  mbStart         Minibatch start index
-    * \param[in]  mbSize          Minibatch size (-1 implies all)
     *
     */
    void compute_first_order_statistics(const DenseVector& point,
                                        DenseVector& gradient,
-                                       double& function_value,
-                                       const size_t mbStart = 0,
-                                       const size_t mbSize = -1);
+                                       double& function_value) const; 
 
    /**
     * Compute second order statistics at the given point. (Gradient & Function
@@ -152,47 +119,53 @@ class logistic_regression_opt_interface: public
    void compute_second_order_statistics(const DenseVector& point,
                                         DenseMatrix& hessian,
                                         DenseVector& gradient,
-                                        double& function_value);
-
-   /**
-    * Compute first order statistics at the given point with respect to the
-    * a provided dataset. (Gradient & Function value)
-    *
-    * \param[in]  point           Point at which we are computing the stats.
-    * \param[out] gradient        Dense gradient
-    * \param[out] function_value  Function value
-    *
-    */
-   void compute_first_order_statistics(const ml_data& data,
-                                       const DenseVector& point,
-                                       DenseVector& gradient,
-                                       double& function_value);
+                                        double& function_value) const;
 
   private: 
+   
+   ml_data data;
 
+   // number of examples, features, and total variables
+   size_t n_classes = 0;
+   size_t n_features = 0;
+   size_t n_variables = 0;
+   size_t n_variables_per_class = 0;
+
+   DenseVector class_weights;
+
+   std::shared_ptr<l2_rescaling> m_scaler; /** <Scale features? */
+
+   bool is_dense = false;                /** Is the data dense? */
+
+   /**
+    * Compute second order statistics at the given point. (Gradient & Function
+    * value)
+    *
+    * \param[in]  point           Point at which we are computing the stats.
+    * \param[out] function_value  Function value
+    * \param[out] gradient        Dense gradient
+    * \param[out] hessian_ptr     Hessian, optional, nullptr, etc.
+    *
+    */
    template <typename PointVector>
-   void _compute_first_order_statistics(const ml_data& data,
-                                       const DenseVector& point,
-                                       DenseVector& gradient,
-                                       double& function_value);
+   void _compute_second_order_statistics(
+       const ml_data& data, const DenseVector& point, double& function_value,
+       DenseVector& gradient, DenseMatrix* hessian_ptr = nullptr) const;
 
-   template <typename PointVector>
-   void _compute_second_order_statistics(const ml_data& data,
-                                         const DenseVector& point,
-                                         DenseVector& gradient,
-                                         DenseMatrix& hessian,
-                                         double& function_value);
-
-   DenseMatrix pointMat;
+   mutable DenseMatrix pointMat;
 
    struct thread_compute_buffer_type {
-     DenseVector margin, kernel, row_prob;
-     DenseVector gradient; 
+     DenseVector r;
+     DenseVector gradient;
+
+     // Stuff used in the hessian computation
      DenseMatrix hessian;
+     DenseMatrix A, XXt;
+     
      double f_value; 
    };
 
-   std::vector<thread_compute_buffer_type> thread_compute_buffers;
+   mutable std::vector<thread_compute_buffer_type> thread_compute_buffers;
 
 
 };

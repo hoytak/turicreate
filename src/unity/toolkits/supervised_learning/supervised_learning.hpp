@@ -39,63 +39,9 @@
 namespace turi {
 namespace supervised {
 
-class supervised_learning_model_base;
 typedef arma::vec  DenseVector;
 typedef sparse_vector<double>  SparseVector;
 
-/**
- * An enumeration over the possible types of prediction that are supported.
- * \see prediction_type_enum_from_name 
- */
-enum class prediction_type_enum: char {
-  NA = 0,                /**< NA: Default/Not-applicable.*/       
-  CLASS = 1, 
-  CLASS_INDEX = 2,       /**< Index of the class (performance reasons) .*/       
-  PROBABILITY = 3, 
-  MAX_PROBABILITY = 4,   /**< Max probability for classify .*/       
-  MARGIN = 5, 
-  RANK = 6, 
-  PROBABILITY_VECTOR = 7 /** < A vector of probabilities .*/ 
-};
-
-/**
- * Given the printable name of a prediction_type_enum type, it returns the name.
- * 
- * \param[in] name Name of the prediction_type_enum type.
- * \returns prediction_type_enum 
- */
-inline prediction_type_enum prediction_type_enum_from_name(const std::string& name) {
-  static std::map<std::string, prediction_type_enum> type_map{
-    {"na", prediction_type_enum::NA},
-    {"", prediction_type_enum::NA},
-    {"class", prediction_type_enum::CLASS},
-    {"class_index", prediction_type_enum::CLASS_INDEX},
-    {"probability", prediction_type_enum::PROBABILITY},
-    {"max_probability", prediction_type_enum::MAX_PROBABILITY},
-    {"margin", prediction_type_enum::MARGIN},
-    {"rank", prediction_type_enum::RANK},
-    {"probability_vector", prediction_type_enum::PROBABILITY_VECTOR},
-  };
-  if (type_map.count(name) == 0) {
-    log_and_throw(std::string("Invalid prediction type name " + name));
-  }
-  return type_map.at(name);
-}
-
-
-/**
- * Create a supervised learning model. 
- * ---------------------------------------
- *
- * \param[in] X          : An SFrame of features. 
- * \param[in] y          : An SFrame with a single column containing the target. 
- * \param[in] model_name : Model name to be created (same as model->name())
- * \param[out] A created supervised learning model. 
- */
-
-std::shared_ptr<supervised_learning_model_base> create(
-               sframe X, sframe y, std::string model_name, 
-               const variant_map_type& kwargs);
 
 /**
  * Supervised_learning model base class.
@@ -175,7 +121,7 @@ std::shared_ptr<supervised_learning_model_base> create(
  *
  *
  */
-class EXPORT supervised_learning_model_base : public ml_model_base {
+class EXPORT supervised_learning_model_base : public iterative_ml_model_base {
 
   protected:
 
@@ -183,9 +129,8 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   std::vector<std::string> tracking_metrics;      /* Tracking metric(s). */
   bool show_extra_warnings = true;                /* If true, be more verbose.*/
 
-  public:
-
-  std::shared_ptr<ml_metadata> ml_mdata;          /* ML-Data-2 metadata. */
+ public:
+  std::shared_ptr<ml_metadata> metadata; /* ML-Data metadata. */
 
   // virtual destructor
   virtual ~supervised_learning_model_base() { }
@@ -218,7 +163,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    *
    * \param[in] _options Options to set
    */
-  virtual void init_options(const std::map<std::string,flexible_type>& _options) = 0;
+  virtual void init_options() = 0;
   
   /**
    * Get metadata mapping. 

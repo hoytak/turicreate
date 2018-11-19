@@ -16,12 +16,13 @@
 // Optimization Interface
 #include <optimization/optimization_interface.hpp>
 
+#include <unity/toolkits/supervised_learning/supervised_learning_constants.hpp>
+
 #include <export.hpp>
 
 namespace turi {
 namespace supervised {
 
-class logistic_regression_opt_interface;
 
 /*
  * Logistic Regression Model
@@ -33,22 +34,56 @@ class logistic_regression_opt_interface;
  *
  */
 class EXPORT logistic_regression: public supervised_learning_model_base {
+  private:
 
-  protected:
+   /** Initialize the model specific options.
+    */
+   void internal_init_options() override;
 
-    bool m_simple_mode;
+   void internal_iterative_training_setup(
+       const ml_data& data, const ml_data& validation_data,
+       const std::map<std::string, variant_type>& alt_data) override;
 
-  std::shared_ptr<logistic_regression_opt_interface> lr_interface;
-  arma::vec  coefs;                 /**< Coefs */
-  arma::vec  std_err;
+   void internal_training_finalize() override;
 
-  size_t num_classes = 0;                      /**< fast access: num classes */
-  size_t num_coefficients= 0;                  /**< fast access: num coefs   */
+   /**  Internal prediction function.
+    *
+    *   This function is up to the prediction
+    */
+   flexible_type internal_predict_row(
+       const ml_data_row_reference& row,
+       const std::vector<prediction_type_enum>& output_type) override;
+
+   std::shared_ptr<logistic_regression_opt_interface> lr_interface;
+
+   bool m_simple_mode;
+
+   DenseVector coefs;    // Coefficients of the logisitic regression.
+   DenseVector std_err;  // The standard error on each coefficient
+
+   size_t num_classes = 0;      /**< fast access: num classes */
+   size_t num_coefficients = 0; /**< fast access: num coefs   */
   public:
-  
-  static constexpr size_t LOGISTIC_REGRESSION_MODEL_VERSION = 6;
 
-  public:
+
+   static constexpr size_t LOGISTIC_REGRESSION_MODEL_VERSION = 6;
+   /**
+    * Gets the model version number
+    */
+   size_t get_version() const override {
+     return LOGISTIC_REGRESSION_MODEL_VERSION;
+  }
+
+  private:
+  void _init_parameters_from_options();  
+
+  bool m_feature_rescaling_enabled = false;
+  size_t n_variables_per_class = 0;
+  size_t n_classes = 0;
+
+
+
+ public:
 
   /**
    * Destructor. Make sure bad things don't happen
@@ -98,10 +133,6 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    */
   void init_options(const std::map<std::string,flexible_type>& _options) override;
   
-  /**
-   * Gets the model version number
-   */
-  size_t get_version() const override;
 
 
   /**

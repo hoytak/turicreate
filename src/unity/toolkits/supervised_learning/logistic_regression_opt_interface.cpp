@@ -41,32 +41,11 @@ namespace supervised {
 
 
 /**
-* Perform a specialized operation of a outer product between a sparse 
-* vector and a dense vector and flatten the result.
-*
-* out = a * b.t()
-* out.resize(9,1);
-*
-*/
-void flattened_sparse_vector_outer_prod(const SparseVector& a, 
-                                        const DenseVector& b,
-                                        SparseVector& out) {
-  DASSERT_TRUE(out.size() == a.size() * b.size());
-  out.clear();
-  out.reserve(a.num_nonzeros() * b.size());
-  size_t a_size = a.size();
-  for(size_t j = 0; j < b.size(); j++){
-    for(auto p : a) {
-      out.insert(p.first + a_size * j, b(j) * p.second);
-    }
-  }
-}
-
-/**
 * Constructor for logistic regression solver object
 */
 logistic_regression_opt_interface::logistic_regression_opt_interface(
-    const ml_data& _data) {
+    const ml_data& _data, bool enable_scaling) {
+
   data = _data;
 
   // Initialize reader and other data
@@ -79,10 +58,11 @@ logistic_regression_opt_interface::logistic_regression_opt_interface(
   n_classes = metadata->target_index_size();
   n_variables_per_class = get_number_of_coefficients(metadata);
 
-  is_dense = (n_variables_per_class <= 3 * data.max_row_size()) ? true : false;
+  is_dense = (n_variables_per_class <= 8 * data.max_row_size()) ? true : false;
   n_variables = n_variables_per_class * (n_classes - 1);
 
-  class_weights = arma::ones(n_classes); 
+  class_weights = arma::ones(n_classes);
+
 }
 
 
@@ -92,8 +72,6 @@ logistic_regression_opt_interface::logistic_regression_opt_interface(
 logistic_regression_opt_interface::~logistic_regression_opt_interface() {
 }
 
-
-
 /**
 * Set the class weights (as a flex_dict which is already validated)
 */
@@ -101,165 +79,67 @@ void logistic_regression_opt_interface::set_class_weights(const DenseVector& _cl
   class_weights = _class_weights; 
 }
 
-
 /**
  * Set feature rescaling.
  */
-void logistic_regression_opt_interface::init_feature_rescaling() {
+void logistic_regression_opt_interface::enable_feature_rescaling() {
   scaler.reset(new l2_rescaling(data.metadata(), true));
-  coefs_per_class.resize(n_variables_per_class);
 }
 
 /**
  * Transform final solution back to the original scale.
  */
 void logistic_regression_opt_interface::rescale_solution(DenseVector& coefs) {
-  DASSERT_TRUE(scaler != nullptr);
 
   size_t m = n_variables_per_class;
 
-  for (size_t i = 0; i < classes - 1; i++) {
-    coefs_per_class = coefs.subvec(i * m, (i + 1) * m - 1 /*end inclusive*/);
-    scaler->transform(coefs_per_class);
-    coefs.subvec(i * m, (i + 1) * m - 1) = coefs_per_class;
+   DenseVector coefs_per_class;
+   coefs_per_class.resize(n_variables_per_class);
+
+   for (size_t i = 0; i < classes - 1; i++) {
+     coefs_per_class = coefs.subvec(i * m, (i + 1) * m - 1 /*end inclusive*/);
+     scaler->transform(coefs_per_class);
+     coefs.subvec(i * m, (i + 1) * m - 1) = coefs_per_class;
   }
 }
 
 /**
-* Get the number of examples for the model
-*/
-size_t logistic_regression_opt_interface::num_examples() const{
-  return examples;
-}
-
-
-/**
-* Get the number of variables for the model
-*/
-size_t logistic_regression_opt_interface::num_variables() const{
-  return variables;
-}
-
-
-/**
-* Get the number of classes for the model
-*/
-size_t logistic_regression_opt_interface::num_classes() const{
-  return classes;
-}
-
-
-double logistic_regression_opt_interface::get_validation_accuracy() {
-  DASSERT_TRUE(valid_data.num_rows() > 0);
-
-  auto eval_results = smodel.evaluate(valid_data, "train");
-  auto results = eval_results.find("accuracy");
-  if(results == eval_results.end()) {
-    log_and_throw("No Validation Accuracy.");
-  }
-
-  variant_type variant_accuracy = results->second;
-  double accuracy = variant_get_value<flexible_type>(variant_accuracy).to<double>();
-  return accuracy;
-}
-
-double logistic_regression_opt_interface::get_training_accuracy() {
-  auto eval_results = smodel.evaluate(data, "train");
-  auto results = eval_results.find("accuracy");
-
-  if(results == eval_results.end()) {
-    log_and_throw("No Validation Accuracy.");
-  }
-  variant_type variant_accuracy = results->second;
-  double accuracy = variant_get_value<flexible_type>(variant_accuracy).to<double>();
-
-  return accuracy;
-}
-
-/**
- * Get strings needed to print a row of the progress table.
+ * Compute first order statistics at the given point. (Gradient & Function
+ * value)
+ *
+ * \param[in]  point           Point at which we are computing the stats.
+ * \param[out] gradient        Dense gradient
+ * \param[out] function_value  Function value
+ *
  */
-std::vector<std::string> logistic_regression_opt_interface::get_status(
-    const DenseVector& coefs, 
-    const std::vector<std::string>& stats) {
-
-  DenseVector coefs_tmp = coefs;
-  rescale_solution(coefs_tmp);
-  smodel.set_coefs(coefs_tmp); 
-
-  auto ret = make_progress_row_string(smodel, data, valid_data, stats);
-  return ret;
+void logistic_regression_opt_interface::compute_first_order_statistics(
+    const DenseVector& point, DenseVector& gradient, double& f_value) const {
+  if (is_dense) {
+    _compute_statistics<DenseVector>(point, f_value, gradient, nullptr);
+  } else {
+    _compute_statistics<SparseVector>(point, f_value, gradient, nullptr);
+  }
 }
 
 /**
- * Compute the first order statistics
-*/
-template <typename PointVector>
-void logistic_regression_opt_interface::_compute_first_order_statistics(
-    const ml_data& data, const DenseVector& point, DenseVector& gradient) {
+ * Compute second order statistics at the given point. (Gradient & Function
+ * value)
+ *
+ * \param[in]  point           Point at which we are computing the stats.
+ * \param[out] hessian         Hessian (Dense)
+ * \param[out] gradient        Dense gradient
+ * \param[out] function_value  Function value
+ *
+ */
+void logistic_regression_opt_interface::compute_second_order_statistics(
+    const DenseVector& point, DenseMatrix& hessian, DenseVector& gradient,
+    double& f_value) const {
 
-
-  // Initialize computation
-  size_t num_threads = thread::cpu_count();
-  thread_compute_buffers.resize(num_threads);
-
-  auto& pointMat = thread_compute_buffers.pointMat;
-
-  // Get the point in matrix form
-  pointMat = point;
-  pointMat.reshape(n_variables_per_class, n_classes);
-
-  timer t;
-  double start_time = t.current_time();
-
-  logstream(LOG_INFO) << "Starting first order stats computation" << std::endl;
-
-  in_parallel([&](size_t thread_idx, size_t n_threads) {
-
-    // set up all the buffers; 
-    PointVector x(n_variables_per_class);
-    auto& gradient = thread_compute_buffers[thread_idx].gradient;
-    auto& margin = thread_compute_buffers[thread_idx].margin;
-    auto& kernel = thread_compute_buffers[thread_idx].kernel;
-    auto& row_prob = thread_compute_buffers[thread_idx].row_prob;
-    auto& f_value = thread_compute_buffers.f_value; 
-
-    graident.resize(n_variables); 
-    gradient.setZero();
-
-    for (auto it = data.get_iterator(thread_idx, n_threads); !it.done(); ++it) {
-      size_t class_idx = it->target_index();
-
-      if (class_idx >= n_classes) {
-        continue;
-      }
-
-      fill_reference_encoding(*it, x);
-      
-      x(n_variables_per_class - 1) = 1;
-
-      if (scaler != nullptr) {
-        scaler->transform(x);
-      }
-
-      margin = pointMat.t() * x;
-      double margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
-
-      kernel = arma::exp(margin);
-      double kernel_sum = arma::sum(kernel);
-      double row_func = log1p(kernel_sum) - margin_dot_class;
-      row_prob = kernel * (1.0 / (1 + kernel_sum));
-
-      if (class_idx > 0) {
-        row_prob(class_idx - 1) -= 1;
-      }
-
-      gradient +=
-          arma::vectorise(class_weights[class_idx] * (x * row_prob.t()));
-
-      f_value += class_weights[class_idx] * row_func;
-    }
-  });
+  if (is_dense) {
+    _compute_statistics<DenseVector>(point, f_value, gradient, &hessian);
+  } else {
+    _compute_statistics<SparseVector>(point, f_value, gradient, &hessian);
+  }
 }
 
 /**
@@ -268,8 +148,7 @@ void logistic_regression_opt_interface::_compute_first_order_statistics(
 template <typename PointVector>
 void logistic_regression_opt_interface::_compute_statistics(
     const DenseVector& point, double& _function_value, DenseVector& _gradient,
-    DenseMatrix* _hessian = nullptr) {
-
+    DenseMatrix* _hessian = nullptr) const {
 
   const bool _compute_hessian = (_hessian != nullptr); 
 
@@ -296,10 +175,11 @@ void logistic_regression_opt_interface::_compute_statistics(
     auto& hessian = thread_compute_buffers[thread_idx].hessian;
     auto& A = thread_compute_buffers[thread_idx].A;
     auto& XXt = thread_compute_buffers[thread_idx].XXt 
-    auto& margin = thread_compute_buffers[thread_idx].margin;
-    auto& kernel = thread_compute_buffers[thread_idx].kernel;
-    auto& row_prob = thread_compute_buffers[thread_idx].row_prob;
+    auto& r = thread_compute_buffers[thread_idx].r;
     auto& f_value = thread_compute_buffers.f_value;
+
+    gradient.zeros();
+    f_value = 0; 
 
     if(compute_hessian) {
       hessian.resize(n_variables, n_variables);
@@ -317,33 +197,41 @@ void logistic_regression_opt_interface::_compute_statistics(
 
       size_t class_idx = it->target_index();
 
-      margin = pointMat.t() * x;
-      double margin_dot_class = (class_idx > 0) ? margin(class_idx - 1) : 0;
+      // margin = pointMat.t() * x;
+      r = pointMat.t() * x;
+      double margin_dot_class = (class_idx > 0) ? r(class_idx - 1) : 0;
 
-      kernel = arma::exp(margin);
-      double kernel_sum = arma::sum(kernel);
-      row_prob = kernel * (1.0 / (1 + kernel_sum));
+      // kernel = arma::exp(margin);
+      r = arma::exp(r); 
+
+      // kernel_sum = arma::sum(kernel);
+      double kernel_sum = arma::sum(r);
+
+      // row_prob = kernel * (1.0 / (1 + kernel_sum));
+      r *= (1.0 / (1 + kernel_sum));
 
       double row_func = log1p(kernel_sum) - margin_dot_class;
       
       if (class_idx > 0) {
-        row_prob(class_idx - 1) -= 1;
+        r(class_idx - 1) -= 1;
       }
-      gradient +=
-          arma::vectorise(class_weights[class_idx] * (x * row_prob.t()));
+
+      // r is row_prob here.
+      gradient += arma::vectorise(class_weights[class_idx] * (x * r.t()));
 
       f_value += class_weights[class_idx] * row_func;
 
       if(compute_hessian) {
         // TODO: change this so we only care about the upper triangular part til
         // the very end.
-        A = diagmat(row_prob) - row_prob * row_prob.t();
+        A = diagmat(row_prob) - r * r.t();
         XXT = x * x.t();
 
         for (size_t a = 0; a < n_classes - 1; a++) {
           for (size_t b = 0; b < n_classes - 1; b++) {
 
             size_t m = n_variables_per_class;
+
             hessian.submat(a * m, b * m, (a + 1) * m - 1, (b + 1) * m - 1) +=
                 (class_weights[class_idx] * A(a, b)) * XXt;
           }
@@ -353,40 +241,24 @@ void logistic_regression_opt_interface::_compute_statistics(
   });
 
   // Reduce
-  function_value = thread_compute_buffers[0].f_value; 
-  gradient = thread_compute_buffers[0].gradient; 
+  function_value = thread_compute_buffers[0].f_value;
+  gradient = thread_compute_buffers[0].gradient;
 
-  for(size_t i=1; i < n_threads; i++) {
-    gradient += thread_compute_buffers[i].gradient;
+  if (_hessian != nullptr) {
+    (*_hessian) = thread_compute_buffers[0].hessian;
+  }
+
+  for (size_t i = 1; i < num_threads; i++) {
     function_value += thread_compute_buffers[i].f_value;
+    gradient += thread_compute_buffers[i].gradient;
+
+    if (_hessian != nullptr) {
+      (*_hessian) += thread_compute_buffers[i].hessian;
+    }
   }
 
-  // Reduce
-  function_value = f[0];
-  hessian = H[0];
-  gradient = G[0];
-  for(size_t i=1; i < n_threads; i++){
-    hessian += H[i];
-    gradient += G[i];
-    function_value += f[i];
-  }
-
-  logstream(LOG_INFO) << "Computation done at " 
-                      << (t.current_time() - start_time) << "s" << std::endl; 
-}
-
-void logistic_regression_opt_interface::compute_first_order_statistics(const
-    DenseVector& point, DenseVector& gradient, double& function_value, const
-    size_t mbStart, const size_t mbSize) {
-  compute_first_order_statistics(
-      data, point, gradient, function_value, mbStart, mbSize);
-}
-
-void
-logistic_regression_opt_interface::compute_validation_first_order_statistics(
-    const DenseVector& point, DenseVector& gradient, double& function_value) {
-  compute_first_order_statistics(
-      valid_data, point, gradient, function_value);
+  logstream(LOG_INFO) << "Computation done at "
+                      << (t.current_time() - start_time) << "s" << std::endl;
 }
 
 
