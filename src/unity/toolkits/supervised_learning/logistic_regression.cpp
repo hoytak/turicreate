@@ -54,34 +54,6 @@ logistic_regression::~logistic_regression(){
 }
 
 
-/**
- * Init function common to all regression inits.
- */
-void logistic_regression::model_specific_init(const ml_data& data,
-                                              const ml_data& valid_data){
-
-   /** Initialize the model specific options.
-    */
-   void internal_init_options() override;
-
-
-  // Create an interface to the solver.
-  this->num_classes = ml_mdata->target_index_size();
-  size_t variables = get_number_of_coefficients(ml_mdata);
-  this->num_coefficients = variables * (num_classes - 1);
-  state["num_coefficients"] =  this->num_coefficients;
-
-  // Examples per class
-  state["num_classes"] = this->num_classes;
-  state["num_examples_per_class"] =
-                    to_variant(get_num_examples_per_class(ml_mdata));
-
-  // Initialize the solver and set initial solution.
-  lr_interface.reset(new logistic_regression_opt_interface(data, valid_data, *this));
-  coefs = arma::zeros(variables);
-
-}
-
 
 
 
@@ -100,7 +72,7 @@ void logistic_regression::internal_init_options() {
 
   options.create_real_option(
       "step_size",
-      "Guess for the initial step size for the solver",
+      "Guess for the initial step size for the solver.",
       1.0,
       optimization::OPTIMIZATION_ZERO,
       optimization::OPTIMIZATION_INFTY,
@@ -116,7 +88,7 @@ void logistic_regression::internal_init_options() {
 
   options.create_categorical_option(
       "solver",
-      "Solver used for training",
+      "Solver used for training the logistic regression model.",
       "auto",
       {flexible_type("auto"), flexible_type("newton"),
        flexible_type("lbfgs"),
@@ -125,7 +97,7 @@ void logistic_regression::internal_init_options() {
 
   options.create_real_option(
       "l1_penalty",
-      "Penalty on the L1-penalty",
+      "Penalty on the L1 Regularization Term.",
       0,
       0,
       optimization::OPTIMIZATION_INFTY,
@@ -139,62 +111,48 @@ void logistic_regression::internal_init_options() {
       optimization::OPTIMIZATION_INFTY,
       false);
 
-  options.create_boolean_option(
-      "feature_rescaling",
-      "Rescale features to have unit L2-Norm",
-      true,
-      false);
-
-  options.create_flexible_type_option(
-      "class_weights",
-      "Weights (during training) assigned to each class.",
-      FLEX_UNDEFINED,
-      true);
 
 }
 
-// Load all the internal options from the specific 
-void logistic_regression::_init_parameters_from_options() { 
 
-  m_feature_rescaling_enabled = (get_option_value("feature_rescaling") != 0);
-
-  
-
-  // Set the class weights
-  size_t variables_per_class = this->num_coefficients/ (this->num_classes - 1);
-
-  // Set class weights
-   class_weights =
-                      get_class_weights_from_options(options, ml_mdata);
-
-  state["class_weights"] =  to_variant(class_weights);
-  flex_dict _class_weights(this->num_classes);
-  size_t i = 0;
-  for(const auto& kvp: class_weights.get<flex_dict>()){
-    _class_weights[i++] =
-        {ml_mdata->target_indexer()->immutable_map_value_to_index(kvp.first),
-         kvp.second.get<flex_float>()};
-  }
-  lr_interface->set_class_weights(_class_weights);
-
-
-
-
-
-
-
-
-}
 
 
 
 
 void logisitic_regression::internal_iterative_training_setup(
-    const ml_data& data, 
     const std::map<std::string, variant_type>&) override {
 
-  // LOad all the parameters from the current options. 
-  this->_init_parameters_from_options();
+  // Load all the parameters from the current options.
+  m_num_classes = metadata->target_index_size();
+
+  if(m_num_classes < 2) { 
+    log_and_throw("Number of classes in training data must be 2 or greater.");
+  }
+
+  m_variables_per_class = m_num_coefficients / (m_num_classes - 1);
+}
+
+  // Create an interface to the solver.
+  set_state_entry("num_classes", m_num_classes);
+  set_state_entry("num_coefficients", m_num_coefficients);
+
+
+
+  m_variables_per_class = get_number_of_coefficients(metadata);
+
+  this->num_coefficients = variables * (num_classes - 1);
+  state["num_coefficients"] =  this->num_coefficients;
+
+  // Examples per class
+  state["num_examples_per_class"] =
+      to_variant(get_num_examples_per_class(ml_mdata));
+
+  // Initialize the solver and set initial solution.
+  lr_interface.reset(new logistic_regression_opt_interface(data, valid_data, *this));
+  coefs = arma::zeros(variables);
+
+}
+
 
   // Inititialize the interface.
   lr_interface.reset(new logistic_regression_opt_interface(data));
@@ -209,8 +167,7 @@ void logisitic_regression::internal_iterative_training_setup(
         data.metadata(), get_option_value("class_weights")));
   }
 
-  // Initialize the begininng structures of the 
-  //
+  // Initialize the begininng structures of the rest of the interface 
   //  
 
 
@@ -268,7 +225,7 @@ void logistic_regression::train() {
 
 
   // Sort out the appropriate solver for the regularization settings
-  std::string solver =  get_option_value("solver");
+  std::string solver = get_option_value("solver");
 
   // Auto solver
   // \note Currently, we do not incorporate dataset sparsity while selecting

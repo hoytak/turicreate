@@ -40,7 +40,7 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
     */
    void internal_init_options() override;
 
-   void internal_iterative_training_setup(
+   void internal_setup_iterative_training(
        const ml_data& data, const ml_data& validation_data,
        const std::map<std::string, variant_type>& alt_data) override;
 
@@ -61,8 +61,8 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
    DenseVector coefs;    // Coefficients of the logisitic regression.
    DenseVector std_err;  // The standard error on each coefficient
 
-   size_t num_classes = 0;      /**< fast access: num classes */
-   size_t num_coefficients = 0; /**< fast access: num coefs   */
+   size_t m_num_classes = 0;      /**< fast access: num classes */
+   size_t m_num_coefficients = 0; /**< fast access: num coefs   */
   public:
 
 
@@ -74,10 +74,9 @@ class EXPORT logistic_regression: public supervised_learning_model_base {
      return LOGISTIC_REGRESSION_MODEL_VERSION;
   }
 
-  private:
-  void _init_parameters_from_options();  
+ private:
+  void _setup_class_parameters();  
 
-  bool m_feature_rescaling_enabled = false;
   size_t n_variables_per_class = 0;
   size_t n_classes = 0;
 

@@ -88,9 +88,9 @@ class EXPORT ml_model_base: public model_base {
   virtual void load_version(iarchive& iarc, size_t version) = 0;
 
   /**
-   * Set up all the options in the algorithm. Use the option manager to set
+   * Set up all the options in the algorithm.  Use the option manager to set
    * these options. If the option does not satisfy the conditions that the
-   * option manager has imposed on it. Errors will be thrown.
+   * option manager has imposed on it, errors will be thrown.
    *
    * \param[in] options Options to set
    */
@@ -102,12 +102,11 @@ class EXPORT ml_model_base: public model_base {
    * -------------------------------------------------------------------------
    */
 
-
   /**
-   * Set the options on model creation 
+   * Set the options.  These are all added to the state variable of the model.
    *
    */
-  void set_options(const std::map<std::string,flexible_type>& options);
+  void set_options(const std::map<std::string, flexible_type>& options);
 
 
 
@@ -138,8 +137,15 @@ class EXPORT ml_model_base: public model_base {
    * [] operator in python.
    *
    */
-  const variant_type& get_value_from_state(std::string key);
+  template <typename T = variant_type>
+  const T& get_value_from_state(const std::string& key) const;
 
+  /** Set the state entry associated with a given entry.
+   *
+   *
+   */
+  template <typename T> 
+  void set_state(const std::string& key, const T&& value); 
 
   /**
    * Get current options.
@@ -231,7 +237,18 @@ class EXPORT ml_model_base: public model_base {
 
 };
 
+// Implementations of these 
+  template <typename T = variant_type>
+  const T& from_state(const std::string& key) const;
 
+  /** Set the state entry associated with a given entry.
+   *
+   *
+   */
+  template <typename T> 
+  void set_state(const std::string& key, const T&& value); 
+
+ 
 namespace ml_model_sdk {
 
 /**

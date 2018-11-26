@@ -44,19 +44,7 @@ inline arma::vec get_stderr_from_hessian(
   return arma::sqrt(arma::diagvec(arma::inv_sympd(hessian + 1E-8 * I)));
 }
 
-/**
- * Is this model a classifier?
- *
- * \param[in] model_name  Name of the model
- *
- * if the model_key is empty, then an empty model is created.
- */
-inline bool is_classifier(std::string model_name){
-  if(model_name.find("classifier") != std::string::npos) {
-    return true;
-  }
-  return false;
-}
+
 
 /**
  * Setup the ml_data for prediction.
@@ -80,71 +68,6 @@ inline ml_data setup_ml_data_for_evaluation(const sframe& X, const sframe& y,
   ml_data data;
   data = model->construct_ml_data_using_current_metadata(X, y, missing_value_action);
   return data;
-}
-
-/**
- * Check if the data is empty!
- *
- * \param[in] X  Feature names.
- */
-inline void check_empty_data(sframe X){
-  if (X.num_rows() == 0){
-    log_and_throw("Input data does not contain any rows.");
-  }
-
-  if (X.num_columns() == 0){
-    log_and_throw("Input data does not contain any features.");
-  }
-}
-
-/**
- * Check that the types of each set of feature columns match and 
- * that they have the same number of columns.
- */
-inline void check_feature_column_types_match(sframe train, sframe valid) {
-  if (train.num_columns() != valid.num_columns()) {
-    log_and_throw("The provided validation set has a different number of "
-                  "columns from the provided training set.");
-  }
-
-  std::stringstream ss;
-  for (size_t i = 0; i < train.num_columns(); i++){
-    flex_type_enum ctype1 = train.column_type(i);
-    flex_type_enum ctype2 = valid.column_type(i);
-    if (ctype1 != ctype2) {
-      ss.str("");
-      ss << "The type of " << train.column_name(i) << " in the training set "
-         << "is not the same in the training set and the provided validation "
-         << "set (" << flex_type_enum_to_name(ctype1) 
-         << " vs. " << flex_type_enum_to_name(ctype2) << ")."
-         << std::endl;
-      log_and_throw(ss.str());
-    }
-  }
-}
-
-/**
- * Check that the feature types are right!
- */
-inline void check_feature_column_types(sframe X, bool support_image_type=false){
-
-  std::stringstream ss;
-  for (size_t i = 0; i < X.num_columns(); i++){
-    flex_type_enum ctype = X.column_type(i);
-    if (ctype != flex_type_enum::INTEGER &&
-        ctype != flex_type_enum::FLOAT &&
-        ctype != flex_type_enum::VECTOR &&
-        ctype != flex_type_enum::LIST &&
-        ctype != flex_type_enum::DICT &&
-        ctype != flex_type_enum::STRING &&
-        !(support_image_type && ctype == flex_type_enum::IMAGE)) {
-      ss.str("");
-      ss << "Feature '" << X.column_name(i) << "' is not of type"
-         << " (numeric, string, array, or dictionary)."
-         << std::endl;
-      log_and_throw(ss.str());
-    }
-  }
 }
 
 
@@ -235,124 +158,6 @@ inline sframe setup_test_data_sframe(const sframe& sf,
 }
 
 
-/**
- * Fill the ml_data_row with an EigenVector using reference encoding for 
- * categorical variables. Here, the 0"th" category is used as the reference
- * category. 
- *
- * [in,out] An ml_data_row_reference object from which we are reading. 
- * [in,out] An eigen expression (could be a sparse, dense, or row of a matrix) 
- */
-template <typename ArmaExpr>
-GL_HOT_INLINE_FLATTEN
-inline void fill_reference_encoding(
-    const ml_data_row_reference& row_ref, 
-    ArmaExpr && x) {
-
-  x.zeros();
-  size_t offset = 0;
-
-  row_ref.unpack(
-      
-      // The function to write out the data to x.
-      [&](ml_column_mode mode, size_t column_index,
-          size_t feature_index, double value,
-          size_t index_size, size_t index_offset) {
-        
-        if(UNLIKELY(feature_index >= index_size))
-          return;
-
-        // Decrement if it isn't the reference category.
-        size_t idx = offset + feature_index;
-        if(mode_is_categorical(mode)) {
-          if (feature_index != 0) {
-            idx -= 1;
-          } else {
-            return;
-          }
-        }
-
-        DASSERT_GE(idx,  0);
-        x(idx) = value;
-
-      },
-
-      /** 
-       * The function to advance the offset, called after each column
-       *  is finished.
-       */
-      [&](ml_column_mode mode, size_t column_index, 
-                      size_t index_size) GL_GCC_ONLY(GL_HOT_INLINE_FLATTEN) {
-           offset += (index_size - (mode_is_categorical(mode) ? 1 : 0));
-      });
-}
-
-
-/**
- * Warn the user for features with low variance.
- *
- * [in] metadata A copy of the ml_metadata.
- */
-inline void check_feature_means_and_variances(
-                const std::shared_ptr<ml_metadata> metadata,
-                bool display_warnings = true) {
-
-  std::stringstream ss;
-  std::vector<std::string> error_columns;
-
-  // Get out the features with low variance
-  for(size_t cid = 0; cid < metadata->num_columns(); cid++){
-    const auto stats = metadata->statistics(cid);
-    size_t index_size = metadata->index_size(cid);
-    std::string col = metadata->column_name(cid);
-    for(size_t i = 0; i < index_size; i++) {
-      if (std::abs(stats->stdev(i)) < 1e-20) {
-        error_columns.push_back(col);
-        break;
-      }
-    }
-  }
-
-  if (error_columns.size() && display_warnings) {
-    ss << "WARNING: Detected extremely low variance for feature(s) ";
-    for(size_t i=0; i < error_columns.size()-1; i++){
-      ss << "'" << error_columns[i] << "', ";
-    }
-    ss << "'" << error_columns[error_columns.size()-1] << "'"
-       << " because all entries are nearly the same.\n"
-       << "Proceeding with model training using all features. "
-       << "If the model does not provide results of adequate quality, "
-       << "exclude the above mentioned feature(s) from the input dataset.";
-    logprogress_stream << ss.str() << std::endl;
-  }
-
-  // Get out the features with inf or nan
-  error_columns.clear();
-  bool column_with_nan = false;
-  for(size_t cid = 0; cid < metadata->num_columns(); cid++){
-    const auto stats = metadata->statistics(cid);
-    size_t index_size = metadata->index_size(cid);
-    std::string col = metadata->column_name(cid);
-    for(size_t i = 0; i < index_size; i++) {
-      if (!std::isfinite(stats->mean(i))) {
-        error_columns.push_back(col);
-        column_with_nan = true;
-        break;
-      }
-    }
-  }
-
-  // Throw an error if a column contains NAN/INF.
-  if (column_with_nan == true) {
-    ss << "Detected inf/nan values in feature(s) ";
-    for(size_t i=0; i < error_columns.size()-1; i++){
-      ss << "'" << error_columns[i] << "', ";
-    }
-    ss << "'" << error_columns[error_columns.size()-1] << "'. "
-       << "Cannot proceed with model training.";
-    log_and_throw(ss.str());
-  }
-}
 
 
 /**
@@ -457,107 +262,6 @@ inline std::vector<std::string> make_progress_row_string(
 }
 
 /**
- * Get the class weights based on the user options and target metadata.
- * 
- * \param[in] options
- * \param[in] metadata
- * \returns Class weights
- */
-inline flexible_type get_class_weights_from_options( 
-                const option_manager& options, 
-                const std::shared_ptr<ml_metadata>& metadata){
-
-  size_t num_classes = 2;
-  num_classes = metadata->target_index_size();
-  auto indexer = metadata->target_indexer();
-  auto stats = metadata->target_statistics();
-
-  flex_dict class_weights(num_classes);
-  flexible_type class_weights_option = options.value("class_weights");
-
-  // Case 1 (None): Uniform weights
-  if (class_weights_option.get_type() == flex_type_enum::UNDEFINED) {
-
-    for(size_t i = 0; i < num_classes; i++){
-      class_weights[i] = {indexer->map_index_to_value(i), 1.0};
-    }
-
-  // Case 2 ('auto'): Sample inversely proportional to class frequency.
-  } else if (class_weights_option == "auto") {
-
-    // Weight inversely proportional to class frequency 
-    // w_c = (1/n_c) / (sum(i in C, 1/n_i)) 
-    float total = 0;
-    for(size_t i = 0; i < num_classes; i++){
-      DASSERT_TRUE(stats->count(i) > 0);
-      total += 1.0 / stats->count(i);
-    }
-    for(size_t i = 0; i < num_classes; i++){
-      class_weights[i] = {indexer->map_index_to_value(i), 
-                   1.0 / (total * stats->count(i))};
-    }
-
-  // Case 3 (dict): User provided weights.
-  } else if (class_weights_option.get_type() == flex_type_enum::DICT) {
-
-    // Check that all weights were provided.
-    flex_dict_view class_weights_view(class_weights_option);
-    for(size_t i = 0; i < num_classes; i++){
-      if (!class_weights_view.has_key(indexer->map_index_to_value(i))){
-        std::stringstream ss;
-        ss << "The parameter class_weight does not contain a weight for the "
-           << "class " << indexer->map_index_to_value(i) << "."
-           << " Make sure that the types of the keys in the class_weight "
-           << "dictionary are the same as the type of the target column." 
-           << std::endl;
-        log_and_throw(ss.str());
-      } 
-    }
-
-    // Save those weights. (Can't save flexible_type to flex_dict)
-    size_t i = 0;
-    for(const auto& kvp: class_weights_option.get<flex_dict>()){
-
-      // Weights must be numeric 
-      bool error = false;
-      if (kvp.second.get_type() != flex_type_enum::INTEGER &&
-          kvp.second.get_type() != flex_type_enum::FLOAT) {
-        error = true;
-
-      // Weights must be positive
-      } else {
-        float weight = (float)kvp.second;
-        if (weight > 1e-20){
-          class_weights[i++] = {kvp.first, weight};
-        } else {
-          error = true;
-        }
-      }
-      // Throw an error message if not numeric and not in range.
-      if (error == true){
-        std::stringstream ss;
-        ss << "The class_weight parameter for the class " << kvp.first 
-           << " must be a positive numeric value."
-           << std::endl;
-        log_and_throw(ss.str());
-      } 
-    }
-
-  // Error: Weights are not of dictioanry, None, or 'auto' type.
-  } else {
-    std::stringstream ss;
-    ss << "The class_weights parameter cannot be of type " 
-       << flex_type_enum_to_name(class_weights_option.get_type()) << "."
-       << " Class weights must be a dictionary, None or 'auto'" << std::endl;
-    log_and_throw(ss.str());
-  }
-
-
-  return class_weights;
- 
-} 
-
-/**
  * Get number of examples per class
  * 
  * \param[in] metadata
@@ -577,23 +281,8 @@ inline std::map<flexible_type, size_t> get_num_examples_per_class(
   return examples_per_class;
 } 
 
-/**
- * Get the set of classes.
- * 
- * \param[in] ml_metadata
- * \returns Get the set of all classes in the model.
- *
- */
-inline std::vector<flexible_type> get_class_names( 
-                std::shared_ptr<ml_metadata> metadata){
 
-  std::vector<flexible_type> classes;
-  classes.resize(metadata->target_index_size());
-  for(size_t k = 0; k < classes.size(); k++){
-    classes[k] = metadata->target_indexer()->map_index_to_value(k);
-  }
-  return classes;
-} 
+
 
 /**
  * Get feature names from the metadata.

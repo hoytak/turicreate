@@ -133,42 +133,68 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   void init_options() = 0;
 
 
+
+  virtual bool is_classifier() const = 0;
+
+  virtual bool feature_scaling_allowed() const = 0;
+
+  virtual bool use_reference_encoding() const = 0;
+
+  virtual bool nan_values_allowed_in_training() const = 0; 
+
+  virtual ml_missing_value_action missing_value_policy_in_prediction() const = 0;
+
+
+
+ protected:
+
+  // Control flags
+  bool m_display_warnings = true; 
+
+
+
+  size_t m_num_dimensions = 0;
+
+  std::shared_ptr<ml_metadata> metadata;
+
+  template <typename ArmaExpr>
+  GL_HOT_INLINE_FLATTEN inline void fill_reference_encoding(
+      const ml_data_row_reference& row_ref, ArmaExpr&& x) const;
+
+ public:
   /////////////////////////////////////////////////////////////////////////
   //
-  //  Implementations of the iterative training examples.  Everything goes through these. 
-
+  //  Implementations of the iterative training examples.  Everything goes
+  //  through these.
 
   /**
    *  Train the model.
    *
-   *  This implementation requires that the  
+   *  This implementation requires that the
    */
-  virtual void setup_iterative_training(
-      const std::map<std::string, variant_map>& data,
+  void setup_iterative_training(
+      const variant_map_type& data,
       const std::map<std::string, flexible_type>& _options);
 
   /**
    *  Execute the next iteration of training
    *
-   *  This implementation requires the 
+   *  This implementation requires the
    */
   bool next_training_iteration();
 
-
-  /** Implement 
+  /** Implement
    *
    */
-  const std::map<std::string, variant_type>& training_status() const;  
+  const std::map<std::string, variant_type>& training_status() const;
 
-
-  /**  Finalize training of the model.  
+  /**  Finalize training of the model.
    *
    */
-  void finalize_training(); 
-
+  void finalize_training();
 
   /**
-   * Evaluate the model. 
+   * Evaluate the model.
    */
   variant_map_type evaluate(gl_sframe data, std::string metric = "auto",
                             std::string missing_value_action = "");
@@ -178,45 +204,31 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    */
   virtual std::shared_ptr<coreml::MLModelWrapper> export_to_coreml() = 0;
 
-
-  /** Predict options for this.  
+  /** Predict options for this.
    *
    */
   gl_sarray predict(gl_sframe data, std::string missing_value_action,
                     std::string output_type);
 
-
-  /** Predict a single row. 
+  /** Predict a single row.
    *
    */
-  flexible_type predict_row(const flex_dict& row,
-                            std::string output_type,
+  flexible_type predict_row(const flex_dict& row, std::string output_type,
                             std::string missing_value_action = "");
 
-  
-  /** Predict a single row. 
+  /** Predict a single row.
    *
    */
   flexible_type predict_row(const flex_list& row, std::string output_type,
                             std::string missing_value_action = "");
 
-  // Convenience methods to 
+  // Convenience methods to
 
-
-
-
-
-
-  /** Set up the training 
+  /** Set up the training
    *
    */
   void setup_training(gl_sframe data, const std::string& target,
                       const variant_type& validation_data = FLEX_UNDEFINED);
-
-
-
-
-
 
   /**
    * Get ml_metadata.
@@ -225,513 +237,481 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    */
   const std::shared_ptr<ml_metadata>& metadata() const {
     return this->metadata;
-  }
-
-protected:
-
- /** Initialize the model specific options.
-  */
- virtual void internal_init_options() = 0;
-
- virtual void set_options(
-     const std::map<std::string, flexible_type>& options) = 0;
-
- virtual void internal_iterative_training_setup(
-     const ml_data& data, const ml_data& validation_data,
-     const std::map<std::string, variant_type>& alt_data) = 0;
-
-
- virtual void internal_training_finalize() = 0; 
-
- /**  Internal prediction function.  
-  *
-  *   This function is up to the 
-  */
- virtual flexible_type internal_predict_row(
-     const ml_data_row_reference& row,
-     const std::vector<prediction_type_enum>& output_type) = 0;
-
- /**
-  * Methods that must be implemented in a new supervised_learning model.
-  * -------------------------------------------------------------------------
-  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /**
-  * Get metadata mapping.
-  */
- std::vector<std::vector<flexible_type> > get_metadata_mapping();
-
- /**
-  * Methods with default implementations but are in-flux during the
-  * Trees and NeuralNetworks integration
-  * -------------------------------------------------------------------------
-  */
-
- /**
-  * Predict for a single example.
-  *
-  * \param[in] x  Single example.
-  * \param[in] output_type Type of prediction.
-  *
-  * \returns Prediction for a single example.
-  *
-  */
- virtual flexible_type predict_single_example(
-     const DenseVector& x,
-     const prediction_type_enum& output_type = prediction_type_enum::NA) {
-   return 0.0;
-  }
-
-  /**
-   * Predict for a single example. 
-   *
-   * \param[in] x  Single example.
-   * \param[in] output_type Type of prediction.
-   *
-   * \returns Prediction for a single example.
-   *
-   */
-  virtual flexible_type predict_single_example(
-          const SparseVector & x,
-          const prediction_type_enum& output_type=prediction_type_enum::NA) {
-    return 0.0;
-  }
-  
-  /**
-   * Evaluate the model.
-   *
-   * \param[in] test_data          Test data.
-   * \param[in] evaluation_type Evalution type.
-   *
-   * \note Already assumes that data is of the right shape. Test data
-   * must contain target column also.
-   *
-   */
-  virtual std::map<std::string, variant_type> evaluate(const ml_data&
-                test_data, const std::string& evaluation_type="");
-
-  /**
-   * Same as evaluate(ml_data), but take SFrame as input.
-   */
-  virtual std::map<std::string, variant_type> evaluate(const sframe& X,
-                const sframe &y, const std::string& evaluation_type="") {
-    ml_data data = construct_ml_data_using_current_metadata(X, y);
-    return this->evaluate(data, evaluation_type);
-  }
-
-  /**
-   * Make predictions using a trained supervised_learning model.
-   *
-   * \param[in] test_X      Test data (only independent variables)
-   * \param[in] output_type Type of prediction.
-   * \returns ret   Shared pointer to an SArray containing predicions.
-   *
-   * \note Already assumes that data is of the right shape.
-   */
-  virtual std::shared_ptr<sarray<flexible_type>> predict(
-    const ml_data& test_data, const std::string& output_type="");
-
-  /**
-   * Same as predict(ml_data), but takes SFrame as input.
-   */
-  virtual std::shared_ptr<sarray<flexible_type>> predict(
-    const sframe& X, const std::string& output_type="") {
-    ml_data data = construct_ml_data_using_current_metadata(X);
-    return predict(data, output_type);
-  }
-
-
-  /**
-   * Make multiclass predictions using a trained supervised_learning model.
-   *
-   * \param[in] test_X      Test data (only independent variables)
-   * \param[in] output_type Type of prediction.
-   * \param[in] topk        Number of classes to return.
-   * \returns ret   SFrame containing {row_id, class, output_type}.
-   *
-   * \note Already assumes that data is of the right shape.
-   * \note Default throws error, model supporting this method should override 
-   * this function.
-   */
-  virtual sframe predict_topk(const sframe& test_data,
-                              const std::string& output_type="",
-                              size_t topk=5) {
-    log_and_throw("Predicting multiple classes is not supported by this model.");
-  }
-
-  /**
-   * Make multiclass predictions using a trained supervised_learning model.
-   *
-   * \param[in] test_X      Test data (only independent variables)
-   * \param[in] output_type Type of prediction.
-   * \param[in] topk        Number of classes to return.
-   * \returns ret   SFrame containing {row_id, class, output_type}.
-   *
-   * \note Already assumes that data is of the right shape.
-   */
-  virtual sframe predict_topk(const ml_data& test_data,
-                              const std::string& output_type="",
-                              size_t topk=5);
-
-  /**
-   * Make classification using a trained supervised_learning model.
-   *
-   * \param[in] X           Test data (only independent variables)
-   * \param[in] output_type Type of classifcation (future proof).
-   * \returns ret   SFrame with "class" and probability (if applicable)
-   *
-   * \note Already assumes that data is of the right shape.
-   */
-  virtual sframe classify(const ml_data& test_data, 
-                          const std::string& output_type="");
-
-  /**
-   * Same as classify(ml_data), but takes SFrame as input.
-   */
-  virtual sframe classify(const sframe& X,
-                          const std::string& output_type="") {
-
-    ml_data data = construct_ml_data_using_current_metadata(X);
-    return classify(data, output_type);
-  };
-  
-  /**
-   * Fast path predictions given a row of flexible_types.
-   *
-   * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] missing_value_action Missing value action string
-   * \param[in] output_type Output type. 
-   */
-  virtual gl_sarray fast_predict(
-      const std::vector<flexible_type>& rows,
-      const std::string& missing_value_action = "error",
-      const std::string& output_type = "");
-  
-  /**
-   * Fast path predictions given a row of flexible_types.
-   *
-   * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] missing_value_action Missing value action string
-   * \param[in] output_type Output type. 
-   * \param[in] topk Number of classes to return
-   */
-  virtual gl_sframe fast_predict_topk(
-      const std::vector<flexible_type>& rows,
-      const std::string& missing_value_action ="error",
-      const std::string& output_type="", 
-      const size_t topk = 5) {
-    log_and_throw("Not implemented yet");
-  }
-  
-  /**
-   * Fast path predictions given a row of flexible_types
-   *
-   * \param[in] rows List of rows (each row is a flex_dict)
-   * \param[in] output_type Output type. 
-   */
-  virtual gl_sframe fast_classify(
-      const std::vector<flexible_type>& rows,
-      const std::string& missing_value_action ="error");
-
-  /**
-   * Methods with already meaningful default implementations.
-   * -------------------------------------------------------------------------
-   */
-
-
-  /**
-   * Init the model with the data.
-   *
-   * \param[in] X              Predictors
-   * \param[in] y              target
-   *
-   * Python side interface
-   * ------------------------
-   *  NA.
-   *
-   */
-  virtual void init(
-      const sframe& X, const sframe& y, 
-      const sframe& valid_X=sframe(), 
-      const sframe& valid_y=sframe(),
-      ml_missing_value_action mva = ml_missing_value_action::ERROR);
-  
-  /**
-   * A setter for models that use Armadillo for model coefficients.
-   */
-  virtual void set_coefs(const DenseVector& coefs) {
-    DASSERT_TRUE(false);
-  }
-
-  /**
-   * Set the evaluation metric. Set to RMSE by default.
-   */
-  void set_evaluation_metric(std::vector<std::string> _metrics){
-    metrics = _metrics;
-  }
-
-
-  /**
-   * Set the evaluation metric. Set to RMSE by default.
-   */
-  void set_tracking_metric(std::vector<std::string> _metrics){
-    tracking_metrics = _metrics;
-  }
-  
-  /**
-   * Set the Extra Warnings output. These warnings include telling the user
-   * about low-variance features, etc...
-   */
-  void set_more_warnings(bool more_warnings){
-    show_extra_warnings = more_warnings;
-  }
-
-  /**
-   * Set the default evaluation metric during model evaluation.
-   */
-  virtual void set_default_evaluation_metric(){
-    set_evaluation_metric({"max_error", "rmse"});
-  }
-  
-  /**
-   * Set the default evaluation metric for progress tracking.
-   */
-  virtual void set_default_tracking_metric(){
-    set_tracking_metric({"max_error", "rmse"}); 
-  }
-
-  /**
-   * Get training stats.
-   *
-   * \returns The training stats map.
-   *
-   * Python side interface
-   * ------------------------
-   *  The dictionary returned to the user can be transfered as is to the python
-   *  side. You MUST use this to return a dictionary to the object.
-   */
-  std::map<std::string, flexible_type> get_train_stats() const;
-
-  /**
-   * Impute missing columns with 'None' values.
-   *
-   * \param[in] X  Predictors
-   *
-   * \returns An SFrame with 'None' written to all columns that are missing.
-   *
-   */
-  sframe impute_missing_columns_using_current_metadata(const sframe& X) const;
-
-  /**
-   * Construct ml-data from the predictors and target using the current
-   * value of the metadata.
-   *
-   * \param[in] X        Predictors
-   * \param[in] y        target
-   * \param[in] new_opts Additional options.
-   *
-   * \returns A constructed ml_data object
-   *
-   */
-  ml_data construct_ml_data_using_current_metadata(
-    const sframe& X, const sframe& y, 
-    ml_missing_value_action mva = ml_missing_value_action::ERROR) const;
-  
-  /**
-   * Construct ml-data from the predictors using the current
-   * value of the metadata.
-   *
-   * \param[in] X         Predictors
-   * \param[in] new_opts  Additional options.
-   *
-   * \returns A constructed ml_data object
-   *
-   */
-  ml_data construct_ml_data_using_current_metadata(
-    const sframe& X, 
-    ml_missing_value_action mva = ml_missing_value_action::ERROR) const;
-
-  /**
-   * Get the number of feature columns in the model
-   *
-   * \returns Number of features.
-   */
-  size_t num_features() const;
-
-  /**
-   * Get the number of examples in the model
-   *
-   * \returns Number of examples.
-   */
-  size_t num_examples() const;
-  
-  /**
-   * Get the number of features in the model (unpacked)
-   *
-   * \returns Number of features.
-   */
-  size_t num_unpacked_features() const;
-
-  /**
-   * Get names of predictor variables.
-   *
-   * \returns Names of features (Vector of string names).
-   */
-  std::vector<std::string> get_feature_names() const;
-
-  /**
-   * Get name of the target column.
-   *
-   * \returns Names of target.
-   */
-  std::string get_target_name() const;
-
-  /**
-   * Get ml_metadata.
-   *
-   * \returns Get the ml_metadata.
-   */
-  std::shared_ptr<ml_metadata> get_ml_metadata() const {
-    return this->metadata;
-  }
-
-  /**
-   * Returns true if the model is a classifier.
-   */
-  virtual bool is_classifier() const = 0;
-
-  /**
-   * Returns true if the model is a classifier.
-   */
-  bool is_dense() {
-    return ((this->metadata)->num_dimensions() <= 3 * num_features()) ? true : false;
-  }
-
-  /**
-   * Get metrics strings.
-   */
-  std::vector<std::string> get_metrics()  const;
-  
-  /**
-   * Get tracking metrics strings.
-   */
-  std::vector<std::string> get_tracking_metrics()  const;
-
-  /**
-   * Get metric display name.
-   */
-  std::string get_metric_display_name(const std::string& metric) const;
-
-  /**
-   * Display model training data summary for regression.
-   *
-   * \param[in] model_display_name   Name to be displayed
-   *
-   */
-  void display_regression_training_summary(std::string model_display_name) const;
-  
-  /**
-   * Display model training data summary for classifier.
-   *
-   * \param[in] model_display_name   Name to be displayed
-   *
-   */
-  void display_classifier_training_summary(std::string model_display_name, bool simple_mode = false) const;
-
-  /**
-   * Methods with no current implementation (or empty implementations)
-   * -------------------------------------------------------------------------
-   */
-  
-  /**
-   * Initialize things that are specific to your model.
-   *
-   * \param[in] data ML-Data object created by the init function.
-   *
-   */
-  virtual void model_specific_init(const ml_data& data, 
-                                   const ml_data& validation_data) { }
-
-  /**
-   * Returns true if the model can handle missing value
-   */
-  virtual bool support_missing_value() const { return false; }
-
- /**
-   *  API interface through the unity server.
-   *
-   *  Run prediction. 
-   */
-  gl_sarray api_predict(gl_sframe data, std::string missing_value_action,
-                        std::string output_type);  // TODO: This should be const
-
-  /**
-   *  API interface through the unity server.
-   *
-   *  Run multiclass prediction.
-   */
-  gl_sframe api_predict_topk(gl_sframe data, std::string missing_value_action,
-			     std::string output_type, size_t topk = 5);
-  // TODO: This function should be const.
-
-  /**
-   *  API interface through the unity server.
-   *
-   *  Run classification.
-   */
-  // TODO: This function should be const
-  gl_sframe api_classify(gl_sframe data, std::string missing_value_action,
-                         std::string output_type); // TODO: This should be const
-
-  /**
-   *  API interface through the unity server.
-   *
-   *  Evaluate the model
-   */
-  // TODO: This function should be const
-  variant_map_type api_evaluate(
-      gl_sframe data, std::string missing_value_action, std::string metric);
-
-  /**
-   *  API interface through the unity server.
-   *
-   *  Extract features!
-   */
-  // TODO: This function should be const
-  gl_sarray api_extract_features(
-      gl_sframe data, std::string missing_value_action);
-
-  std::shared_ptr<coreml::MLModelWrapper> api_export_to_coreml(const std::string& file);
+   }
+
+  protected:
+   /** Initialize the model specific options.
+    */
+   virtual void internal_init_options() = 0;
+
+   virtual void set_options(
+       const std::map<std::string, flexible_type>& options) = 0;
+
+   virtual void internal_iterative_training_setup(
+       const ml_data& data, const ml_data& validation_data,
+       const std::map<std::string, variant_type>& alt_data) = 0;
+
+   virtual void internal_training_finalize() = 0;
+
+   /**  Internal prediction function.
+    *
+    *   This function is up to the
+    */
+   virtual flexible_type internal_predict_row(
+       const ml_data_row_reference& row,
+       const std::vector<prediction_type_enum>& output_type) = 0;
+
+   /**
+    * Methods that must be implemented in a new supervised_learning model.
+    * -------------------------------------------------------------------------
+    */
+
+   /**
+    * Get metadata mapping.
+    */
+   std::vector<std::vector<flexible_type>> get_metadata_mapping();
+
+   /**
+    * Methods with default implementations but are in-flux during the
+    * Trees and NeuralNetworks integration
+    * -------------------------------------------------------------------------
+    */
+
+   /**
+    * Predict for a single example.
+    *
+    * \param[in] x  Single example.
+    * \param[in] output_type Type of prediction.
+    *
+    * \returns Prediction for a single example.
+    *
+    */
+   virtual flexible_type predict_single_example(
+       const DenseVector& x,
+       const prediction_type_enum& output_type = prediction_type_enum::NA) {
+     return 0.0;
+   }
+
+   /**
+    * Predict for a single example.
+    *
+    * \param[in] x  Single example.
+    * \param[in] output_type Type of prediction.
+    *
+    * \returns Prediction for a single example.
+    *
+    */
+   virtual flexible_type predict_single_example(
+       const SparseVector& x,
+       const prediction_type_enum& output_type = prediction_type_enum::NA) {
+     return 0.0;
+   }
+
+   /**
+    * Evaluate the model.
+    *
+    * \param[in] test_data          Test data.
+    * \param[in] evaluation_type Evalution type.
+    *
+    * \note Already assumes that data is of the right shape. Test data
+    * must contain target column also.
+    *
+    */
+   virtual std::map<std::string, variant_type> evaluate(
+       const ml_data& test_data, const std::string& evaluation_type = "");
+
+   /**
+    * Same as evaluate(ml_data), but take SFrame as input.
+    */
+   virtual std::map<std::string, variant_type> evaluate(
+       const sframe& X, const sframe& y,
+       const std::string& evaluation_type = "") {
+     ml_data data = construct_ml_data_using_current_metadata(X, y);
+     return this->evaluate(data, evaluation_type);
+   }
+
+   /**
+    * Make predictions using a trained supervised_learning model.
+    *
+    * \param[in] test_X      Test data (only independent variables)
+    * \param[in] output_type Type of prediction.
+    * \returns ret   Shared pointer to an SArray containing predicions.
+    *
+    * \note Already assumes that data is of the right shape.
+    */
+   virtual std::shared_ptr<sarray<flexible_type>> predict(
+       const ml_data& test_data, const std::string& output_type = "");
+
+   /**
+    * Same as predict(ml_data), but takes SFrame as input.
+    */
+   virtual std::shared_ptr<sarray<flexible_type>> predict(
+       const sframe& X, const std::string& output_type = "") {
+     ml_data data = construct_ml_data_using_current_metadata(X);
+     return predict(data, output_type);
+   }
+
+   /**
+    * Make multiclass predictions using a trained supervised_learning model.
+    *
+    * \param[in] test_X      Test data (only independent variables)
+    * \param[in] output_type Type of prediction.
+    * \param[in] topk        Number of classes to return.
+    * \returns ret   SFrame containing {row_id, class, output_type}.
+    *
+    * \note Already assumes that data is of the right shape.
+    * \note Default throws error, model supporting this method should override
+    * this function.
+    */
+   virtual sframe predict_topk(const sframe& test_data,
+                               const std::string& output_type = "",
+                               size_t topk = 5) {
+     log_and_throw(
+         "Predicting multiple classes is not supported by this model.");
+   }
+
+   /**
+    * Make multiclass predictions using a trained supervised_learning model.
+    *
+    * \param[in] test_X      Test data (only independent variables)
+    * \param[in] output_type Type of prediction.
+    * \param[in] topk        Number of classes to return.
+    * \returns ret   SFrame containing {row_id, class, output_type}.
+    *
+    * \note Already assumes that data is of the right shape.
+    */
+   virtual sframe predict_topk(const ml_data& test_data,
+                               const std::string& output_type = "",
+                               size_t topk = 5);
+
+   /**
+    * Make classification using a trained supervised_learning model.
+    *
+    * \param[in] X           Test data (only independent variables)
+    * \param[in] output_type Type of classifcation (future proof).
+    * \returns ret   SFrame with "class" and probability (if applicable)
+    *
+    * \note Already assumes that data is of the right shape.
+    */
+   virtual sframe classify(const ml_data& test_data,
+                           const std::string& output_type = "");
+
+   /**
+    * Same as classify(ml_data), but takes SFrame as input.
+    */
+   virtual sframe classify(const sframe& X,
+                           const std::string& output_type = "") {
+     ml_data data = construct_ml_data_using_current_metadata(X);
+     return classify(data, output_type);
+   };
+
+   /**
+    * Fast path predictions given a row of flexible_types.
+    *
+    * \param[in] rows List of rows (each row is a flex_dict)
+    * \param[in] missing_value_action Missing value action string
+    * \param[in] output_type Output type.
+    */
+   virtual gl_sarray fast_predict(
+       const std::vector<flexible_type>& rows,
+       const std::string& missing_value_action = "error",
+       const std::string& output_type = "");
+
+   /**
+    * Fast path predictions given a row of flexible_types.
+    *
+    * \param[in] rows List of rows (each row is a flex_dict)
+    * \param[in] missing_value_action Missing value action string
+    * \param[in] output_type Output type.
+    * \param[in] topk Number of classes to return
+    */
+   virtual gl_sframe fast_predict_topk(
+       const std::vector<flexible_type>& rows,
+       const std::string& missing_value_action = "error",
+       const std::string& output_type = "", const size_t topk = 5) {
+     log_and_throw("Not implemented yet");
+   }
+
+   /**
+    * Fast path predictions given a row of flexible_types
+    *
+    * \param[in] rows List of rows (each row is a flex_dict)
+    * \param[in] output_type Output type.
+    */
+   virtual gl_sframe fast_classify(
+       const std::vector<flexible_type>& rows,
+       const std::string& missing_value_action = "error");
+
+   /**
+    * Methods with already meaningful default implementations.
+    * -------------------------------------------------------------------------
+    */
+
+   /**
+    * Init the model with the data.
+    *
+    * \param[in] X              Predictors
+    * \param[in] y              target
+    *
+    * Python side interface
+    * ------------------------
+    *  NA.
+    *
+    */
+   virtual void init(
+       const sframe& X, const sframe& y, const sframe& valid_X = sframe(),
+       const sframe& valid_y = sframe(),
+       ml_missing_value_action mva = ml_missing_value_action::ERROR);
+
+   /**
+    * A setter for models that use Armadillo for model coefficients.
+    */
+   virtual void set_coefs(const DenseVector& coefs) { DASSERT_TRUE(false); }
+
+   /**
+    * Set the evaluation metric. Set to RMSE by default.
+    */
+   void set_evaluation_metric(std::vector<std::string> _metrics) {
+     metrics = _metrics;
+   }
+
+   /**
+    * Set the evaluation metric. Set to RMSE by default.
+    */
+   void set_tracking_metric(std::vector<std::string> _metrics) {
+     tracking_metrics = _metrics;
+   }
+
+   /**
+    * Set the Extra Warnings output. These warnings include telling the user
+    * about low-variance features, etc...
+    */
+   void set_more_warnings(bool more_warnings) {
+     show_extra_warnings = more_warnings;
+   }
+
+   /**
+    * Set the default evaluation metric during model evaluation.
+    */
+   virtual void set_default_evaluation_metric() {
+     set_evaluation_metric({"max_error", "rmse"});
+   }
+
+   /**
+    * Set the default evaluation metric for progress tracking.
+    */
+   virtual void set_default_tracking_metric() {
+     set_tracking_metric({"max_error", "rmse"});
+   }
+
+   /**
+    * Get training stats.
+    *
+    * \returns The training stats map.
+    *
+    * Python side interface
+    * ------------------------
+    *  The dictionary returned to the user can be transfered as is to the python
+    *  side. You MUST use this to return a dictionary to the object.
+    */
+   std::map<std::string, flexible_type> get_train_stats() const;
+
+   /**
+    * Impute missing columns with 'None' values.
+    *
+    * \param[in] X  Predictors
+    *
+    * \returns An SFrame with 'None' written to all columns that are missing.
+    *
+    */
+   sframe impute_missing_columns_using_current_metadata(const sframe& X) const;
+
+   /**
+    * Construct ml-data from the predictors and target using the current
+    * value of the metadata.
+    *
+    * \param[in] X        Predictors
+    * \param[in] y        target
+    * \param[in] new_opts Additional options.
+    *
+    * \returns A constructed ml_data object
+    *
+    */
+   ml_data construct_ml_data_using_current_metadata(
+       const sframe& X, const sframe& y,
+       ml_missing_value_action mva = ml_missing_value_action::ERROR) const;
+
+   /**
+    * Construct ml-data from the predictors using the current
+    * value of the metadata.
+    *
+    * \param[in] X         Predictors
+    * \param[in] new_opts  Additional options.
+    *
+    * \returns A constructed ml_data object
+    *
+    */
+   ml_data construct_ml_data_using_current_metadata(
+       const sframe& X,
+       ml_missing_value_action mva = ml_missing_value_action::ERROR) const;
+
+   /**
+    * Get the number of feature columns in the model
+    *
+    * \returns Number of features.
+    */
+   size_t num_features() const;
+
+   /**
+    * Get the number of examples in the model
+    *
+    * \returns Number of examples.
+    */
+   size_t num_examples() const;
+
+   /**
+    * Get the number of features in the model (unpacked)
+    *
+    * \returns Number of features.
+    */
+   size_t num_unpacked_features() const;
+
+   /**
+    * Get names of predictor variables.
+    *
+    * \returns Names of features (Vector of string names).
+    */
+   std::vector<std::string> get_feature_names() const;
+
+   /**
+    * Get name of the target column.
+    *
+    * \returns Names of target.
+    */
+   std::string get_target_name() const;
+
+   /**
+    * Get ml_metadata.
+    *
+    * \returns Get the ml_metadata.
+    */
+   std::shared_ptr<ml_metadata> get_ml_metadata() const {
+     return this->metadata;
+   }
+
+   /**
+    * Returns true if the model is a classifier.
+    */
+   virtual bool is_classifier() const = 0;
+
+   /**
+    * Returns true if the model is a classifier.
+    */
+   bool is_dense() {
+     return ((this->metadata)->num_dimensions() <= 3 * num_features()) ? true
+                                                                       : false;
+   }
+
+   /**
+    * Get metrics strings.
+    */
+   std::vector<std::string> get_metrics() const;
+
+   /**
+    * Get tracking metrics strings.
+    */
+   std::vector<std::string> get_tracking_metrics() const;
+
+   /**
+    * Get metric display name.
+    */
+   std::string get_metric_display_name(const std::string& metric) const;
+
+   /**
+    * Display model training data summary for regression.
+    *
+    * \param[in] model_display_name   Name to be displayed
+    *
+    */
+   void display_regression_training_summary(std::string model_display_name)
+       const;
+
+   /**
+    * Display model training data summary for classifier.
+    *
+    * \param[in] model_display_name   Name to be displayed
+    *
+    */
+   void display_classifier_training_summary(std::string model_display_name,
+                                            bool simple_mode = false) const;
+
+   /**
+    * Methods with no current implementation (or empty implementations)
+    * -------------------------------------------------------------------------
+    */
+
+   /**
+    * Initialize things that are specific to your model.
+    *
+    * \param[in] data ML-Data object created by the init function.
+    *
+    */
+   virtual void model_specific_init(const ml_data& data,
+                                    const ml_data& validation_data) {}
+
+   /**
+    * Returns true if the model can handle missing value
+    */
+   virtual bool support_missing_value() const { return false; }
+
+   /**
+    *  API interface through the unity server.
+    *
+    *  Run prediction.
+    */
+   gl_sarray api_predict(
+       gl_sframe data, std::string missing_value_action,
+       std::string output_type);  // TODO: This should be const
+
+   /**
+    *  API interface through the unity server.
+    *
+    *  Run multiclass prediction.
+    */
+   gl_sframe api_predict_topk(gl_sframe data, std::string missing_value_action,
+                              std::string output_type, size_t topk = 5);
+   // TODO: This function should be const.
+
+   /**
+    *  API interface through the unity server.
+    *
+    *  Run classification.
+    */
+   // TODO: This function should be const
+   gl_sframe api_classify(
+       gl_sframe data, std::string missing_value_action,
+       std::string output_type);  // TODO: This should be const
+
+   /**
+    *  API interface through the unity server.
+    *
+    *  Evaluate the model
+    */
+   // TODO: This function should be const
+   variant_map_type api_evaluate(
+       gl_sframe data, std::string missing_value_action, std::string metric);
+
+   /**
+    *  API interface through the unity server.
+    *
+    *  Extract features!
+    */
+   // TODO: This function should be const
+   gl_sarray api_extract_features(gl_sframe data,
+                                  std::string missing_value_action);
+
+   std::shared_ptr<coreml::MLModelWrapper> api_export_to_coreml(
+       const std::string& file);
 
 #define SUPERVISED_LEARNING_METHODS_REGISTRATION(name, class_name)             \
                                                                                \

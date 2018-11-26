@@ -221,28 +221,12 @@ class l2_rescaling: public standardization_interface {
    * Default constructor.
    *
    * \param[in] metadata          Metadata object for the features.
-   * \param[in] index_size        Sizes of each of the features.
-   * \param[in] use_reference     Reference encoding of categorical?
-   *
-   * \note The index_size refers to the size of each of the features. The
-   * sizes of each type of features are:
-   *
-   * Numeric            : 1
-   * String             : # categories
-   * List               : Size
-   * Categorical Vector : Total number of categories
-   * Dictionary         : # keys
-   *
-   * \note Although the metadata keeps a copy of these sizes, they may not be
-   * consistent with what was seen during training (because of new categories).
-   * Hence, you would need both the metadata for the column stats collected
-   * during training and the index_size for feature sizes captured at the
-   * end of training.
+   * \param[in] use_reference     Reference encoding for categorical types?
    *
    */
   l2_rescaling(
       const std::shared_ptr<ml_metadata> & ml_mdata,
-      bool _use_reference = true){
+      bool _use_reference = true) {
 
     // Make sure the size is set
     use_reference = _use_reference;

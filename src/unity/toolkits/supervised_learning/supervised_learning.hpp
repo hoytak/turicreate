@@ -122,12 +122,11 @@ typedef sparse_vector<double>  SparseVector;
  *
  */
 class EXPORT supervised_learning_model_base : public iterative_ml_model_base {
+ protected:
 
-  protected:
 
-  std::vector<std::string> metrics;               /* Evaluation metric(s). */
-  std::vector<std::string> tracking_metrics;      /* Tracking metric(s). */
-  bool show_extra_warnings = true;                /* If true, be more verbose.*/
+  size_t m_num_dimensions = 0;  
+
 
  public:
   std::shared_ptr<ml_metadata> metadata; /* ML-Data metadata. */
@@ -140,35 +139,40 @@ class EXPORT supervised_learning_model_base : public iterative_ml_model_base {
    * -------------------------------------------------------------------------
    */
 
-
-  /**
-   * Train a supervised_learning model.
-   */
-  virtual void train() = 0;
-  
-
-  /**
-   * Save the object using Turi's oarc.
-   */
-  virtual void save_impl(turi::oarchive& oarc) const = 0;
-
-
-  /**
-   * Load the object using Turi's iarc.
-   */
-  virtual void load_version(turi::iarchive& iarc, size_t version) = 0;
-  
   /**
    * Initialize the options.
    *
    * \param[in] _options Options to set
    */
-  virtual void init_options() = 0;
-  
+  void init_options() override;
+
+  /////////////////////////////////////////////////////////////
+  //
+  //  UNIMPLEMENTED BUT HEADER EXAMINED
+  //
+
+  // TODO: these should have default implementations.
   /**
-   * Get metadata mapping. 
+   * Save the object using Turi's oarc.
    */
-  std::vector<std::vector<flexible_type>> get_metadata_mapping();
+  void save_impl(turi::oarchive& oarc) const override;
+
+
+  /**
+   * Load the object using Turi's iarc.
+   */
+  void load_version(turi::iarchive& iarc, size_t version) override;
+
+  // If the version is < 10, then use this and go through the old path.
+  virtual earlier_version_load(turi::iarchive& iarc, size_t version) = 0;
+
+  /////////////////////////////////////////////////////////////
+  //
+  //  NOT DONE BELOW THIS
+  
+  std::vector<std::string> metrics;               /* Evaluation metric(s). */
+  std::vector<std::string> tracking_metrics;      /* Tracking metric(s). */
+  bool show_extra_warnings = true;                /* If true, be more verbose.*/
 
   /**
    * Methods with default implementations but are in-flux during the
@@ -185,11 +189,9 @@ class EXPORT supervised_learning_model_base : public iterative_ml_model_base {
    * \returns Prediction for a single example.
    *
    */
-  virtual flexible_type predict_single_example(
+  flexible_type predict_single_example(
           const ml_data_iterator& it,
-          const prediction_type_enum& output_type=prediction_type_enum::NA) {
-    return 0.0;
-  }
+          const prediction_type_enum& output_type=prediction_type_enum::NA) override;
 
   /**
    * Predict for a single example. 
@@ -231,14 +233,15 @@ class EXPORT supervised_learning_model_base : public iterative_ml_model_base {
    * must contain target column also.
    *
    */
-  virtual std::map<std::string, variant_type> evaluate(const ml_data&
+  virtual variant_map_type evaluate(const ml_data&
                 test_data, const std::string& evaluation_type="");
 
   /**
    * Same as evaluate(ml_data), but take SFrame as input.
    */
-  virtual std::map<std::string, variant_type> evaluate(const sframe& X,
-                const sframe &y, const std::string& evaluation_type="") {
+  virtual std::map<std::string, variant_type> evaluate(
+      const sframe& X, const sframe& y,
+      const std::string& evaluation_type = "") {
     ml_data data = construct_ml_data_using_current_metadata(X, y);
     return this->evaluate(data, evaluation_type);
   }
@@ -253,13 +256,13 @@ class EXPORT supervised_learning_model_base : public iterative_ml_model_base {
    * \note Already assumes that data is of the right shape.
    */
   virtual std::shared_ptr<sarray<flexible_type>> predict(
-    const ml_data& test_data, const std::string& output_type="");
+      const ml_data& test_data, const std::string& output_type = "");
 
   /**
    * Same as predict(ml_data), but takes SFrame as input.
    */
-  virtual std::shared_ptr<sarray<flexible_type>> predict(
-    const sframe& X, const std::string& output_type="") {
+  virtual std::shared_ptr<sarray<flexible_type> > predict(
+      const sframe& X, const std::string& output_type = "") {
     ml_data data = construct_ml_data_using_current_metadata(X);
     return predict(data, output_type);
   }
