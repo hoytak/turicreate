@@ -82,8 +82,9 @@ void logistic_regression_opt_interface::set_class_weights(const DenseVector& _cl
 /**
  * Set feature rescaling.
  */
-void logistic_regression_opt_interface::enable_feature_rescaling() {
-  scaler.reset(new l2_rescaling(data.metadata(), true));
+void logistic_regression_opt_interface::set_feature_scaler(
+    const std::shared_ptr<l2_rescaling>& scaler) {
+  m_scaler = scaler;
 }
 
 /**

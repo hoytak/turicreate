@@ -68,7 +68,7 @@ class logistic_regression_opt_interface: public
 
    /** Enable scaling for the features 
     */
-   void enable_feature_scaling(); 
+   void set_feature_scaler(const std::shared_ptr<l2_rescaling>& scaler);
 
    /** The scaler used to stabalize the solution.  
     *
@@ -131,7 +131,6 @@ class logistic_regression_opt_interface: public
    size_t n_variables = 0;
    size_t n_variables_per_class = 0;
 
-   DenseVector class_weights;
 
    std::shared_ptr<l2_rescaling> m_scaler; /** <Scale features? */
 

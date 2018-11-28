@@ -5,12 +5,14 @@
  * category.
  *
  * [in,out] An ml_data_row_reference object from which we are reading.
- * [in,out] An eigen expression (could be a sparse, dense, or row of a matrix)
+ * [in,out] An eigen row expression (could be a sparse, dense, or row of a matrix)
  */
-template <typename ArmaExpr>
+template <typename RowExpr>
 GL_HOT_INLINE_FLATTEN inline void
-supervised_learning_base::fill_reference_encoding(
-    const ml_data_row_reference& row_ref, ArmaExpr&& x) const {
+supervised_learning_base::fill_row_expression(
+    const ml_data_row_reference& row_ref, RowExpr&& x) const {
+
+  DASSERT_EQ(x.size(), m_row_dimension); 
   x.zeros();
   size_t offset = 0;
 
@@ -25,7 +27,7 @@ supervised_learning_base::fill_reference_encoding(
 
             // Decrement if it isn't the reference category.
             size_t idx = offset + feature_index;
-            if (mode_is_categorical(mode)) {
+            if (m_use_reference_encoding && mode == ml_column_mode::CATEGORICAL)) {
               if (feature_index != 0) {
                 idx -= 1;
               } else {
@@ -44,7 +46,7 @@ supervised_learning_base::fill_reference_encoding(
        */
       [&](ml_column_mode mode, size_t column_index, size_t index_size)
           GL_HOT_INLINE_FLATTEN {
-            offset += (index_size - (mode_is_categorical(mode) ? 1 : 0));
+            offset += (index_size - (mode == ml_column_mode::CATEGORICAL ? 1 : 0));
           });
 }
 

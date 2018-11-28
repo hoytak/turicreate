@@ -130,7 +130,7 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
 
   /** Initialize the specific options.
    */
-  void init_options() = 0;
+  void init_options();
 
 
 
@@ -142,26 +142,43 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
 
   virtual bool nan_values_allowed_in_training() const = 0; 
 
+
+  // Internal ones. 
+ protected: 
+
   virtual ml_missing_value_action missing_value_policy_in_prediction() const = 0;
+
+  virtual const std::vector<sl_prediction_type>& available_prediction_modes() const = 0; 
+
+ private:
 
 
 
  protected:
 
   // Control flags
-  bool m_display_warnings = true; 
-
-
-
-  size_t m_num_dimensions = 0;
+  bool m_display_warnings = true;
+  bool m_use_reference_encoding = true; 
+  
+  size_t m_row_dimension = 0;
 
   std::shared_ptr<ml_metadata> metadata;
 
-  template <typename ArmaExpr>
-  GL_HOT_INLINE_FLATTEN inline void fill_reference_encoding(
-      const ml_data_row_reference& row_ref, ArmaExpr&& x) const;
+  /** Fill the row of an expression from an ml_data row_reference.
+   *
+   *  This implementation takes into account
+   */
+  template <typename RowExpr>
+  GL_HOT_INLINE_FLATTEN inline void fill_row_expression(
+      const ml_data_row_reference& row_ref, RowExpr&& x) const;
+   
+  // Class weights, enabled if it's a classifier
+  bool m_class_weights_enabled = false; 
+  DenseVector class_weights;
 
  public:
+
+
   /////////////////////////////////////////////////////////////////////////
   //
   //  Implementations of the iterative training examples.  Everything goes
@@ -170,11 +187,11 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
   /**
    *  Train the model.
    *
-   *  This implementation requires that the
+   *  This implementation requires that the 
    */
   void setup_iterative_training(
-      const variant_map_type& data,
-      const std::map<std::string, flexible_type>& _options);
+      const variant_map_type& input_data,
+      const std::map<std::string, flexible_type>& options);
 
   /**
    *  Execute the next iteration of training
@@ -192,6 +209,57 @@ class EXPORT supervised_learning_model_base : public ml_model_base {
    *
    */
   void finalize_training();
+
+ private: 
+
+  // Internal 
+  ml_data _m_validation_data; 
+  std::vector<...> m_validation_metric_prediction_requirements; 
+
+ protected: 
+
+  //////////////////////////////////////////////////////////////////////////////
+  //
+  //  The model-specific functions that must be implemented in a new model
+  //  class.
+
+
+
+  /**
+   *  Add in any model options not covered by the base model. 
+   *
+   */
+  virtual void internal_init_options() = 0; 
+
+
+  /**
+   *  Train the model.
+   *
+   */
+  virtual void internal_setup_iterative_training(
+      const ml_data& data, const variant_map_type& extra_input_data) = 0;
+
+  /**
+   *  Execute the next iteration of training
+   *
+   *  This implementation requires that the 
+   */
+  virtual variant_map_type internal_next_training_iteration() = 0;
+
+  /**  Finalize training of the model.
+   */
+  virtual void finalize_training() = 0;
+
+
+
+
+
+//////////////////////////////////////////////////////////////
+//
+//  RAW MATERIAL BELOW THIS
+
+
+
 
   /**
    * Evaluate the model.

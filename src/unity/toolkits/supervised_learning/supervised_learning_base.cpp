@@ -59,17 +59,22 @@ void logistic_regression::init_options() {
 }
 
 void supervised_learning_model_base::setup_iterative_training(
-    const std::map<std::string, variant_type>& data,
+    const std::map<std::string, variant_type>& input_data,
     const std::map<std::string, flexible_type>& options) {
 
   // Set up the correct information for each of these components 
   this->set_options(options);
 
+  //////////////////////////////////////////////////////////////////////////////
   //
+  //  Set up all the local lookups and flags. 
   bool is_classifier = this->is_classifier();
+  m_use_reference_encoding = this->use_reference_encoding();
 
+  //////////////////////////////////////////////////////////////////////////////
   // Extract all the data sets.
-  gl_sframe data = variant_map_extract(data, "data");
+  //
+  gl_sframe data = variant_map_extract<gl_sframe>(input_data, "data");
 
   if (data.num_rows() == 0) {
     log_and_throw("Input data does not contain any rows.");
@@ -81,15 +86,32 @@ void supervised_learning_model_base::setup_iterative_training(
 
 
   //////////////////////////////////////////////////////////////////////////////
-  // Set up the ml_data and accompaning iterators
+  // Set up ml_data and accompaning iterators
+
+  {
+
+    
 
 
 
+  }
 
+  
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Set up the validation data if we need to. 
+
+  gl_sframe validation_data_sf =
+      variant_map_extract(input_data, "validation_data", gl_sframe());
+
+  if (validation_data_sf.num_rows() != 0) {
+    // Set up the validation metrics; etc.
+
+  }
 
 
   //////////////////////////////////////////////////////////////////////////////
-  // Look at the features with low variance; warn them
+  // Look at the features with low variance; warn the user about them. 
   {
     std::vector<std::string> error_columns;
 
@@ -121,48 +143,69 @@ void supervised_learning_model_base::setup_iterative_training(
     }
   }
 
-
-
-  // Set up the encodings and other mechanisms.
-
-  // Handle the classifier specific tasks, e.g. setting up class weights.
-
-  // Set up the class weights
-  if (is_classifier()) {
-    _setup_class_weights();
-  }
+  /////////////////////////////////////////////////////////////////////////////
+  // Set up feature scaling if that needs to happen. 
 
   if (this->feature_scaling_allowed()) {
+    
     // Do we do feature scaling?
+    m_feature_scaling_enabled = (get_option_value("feature_rescaling") != 0);
+    m_feature_scaler.reset(new l2_rescalling(metadata, true)); 
 
-    bool feature_scaling_enabled = (get_option_value("feature_rescaling") != 0);
 
     // This is where the logic for the feature classification happens.
 
-    // Put in feature rescaling if that's enabled.
-    lr_interface->set_class_weights(_class_weights);
-
-    //
+  } else {
+    m_feature_scaling_enabled = false; 
   }
 
-  // Call the model specific initializers.
+  //////////////////////////////////////////////////////////////////////////////
+  // Handle the classifier specific tasks, e.g. setting up class weights.
 
+ 
+  // Set up the class weights
+  if (is_classifier()) {
+    _setup_class_weights();  
+  }
 
+ }
+
+ // Finally, call the model specific initializers.
+ internal_setup_iterative_training(input_data);
 }
 
 
+  /**
+   *  Execute the next iteration of training
+   *
+   *  This implementation requires the
+   */
+bool supervised_learning_base::next_training_iteration() {
+
+  // TODO: Record timing information
+  
+  variant_map_type iteration_stats = internal_next_training_iteration(); 
+
+  // Handle timing information
+
+  // BORK
 
 
+  // Do we have validation data sets to update?
+  {
+    if (!m_validatation_data.empty()) {
+      variant_map_type validation_stats = internal_evaluate(
+          m_validatation_data, m_validation_metric_prediction_requirements);
 
+      // Update the new stats
+      for (auto& p : validation_stats) {
+        iteration_stats.emplace("validation_" + p.first, std::move(p.second));
+      }
+    }
+  }
 
-
-
-
-
-
-
-
-
+  // Handle timing information
+}
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -175,6 +218,8 @@ void supervised_learning_model_base::setup_iterative_training(
  */
 inline void supervised_learning_base::_setup_class_weights() {
 
+  DASSERT_TRUE(is_classifier());
+
   size_t num_classes = metadata->target_index_size();
 
   flexible_type class_weights_option = options.value("class_weights");
@@ -182,9 +227,10 @@ inline void supervised_learning_base::_setup_class_weights() {
   // Case 1 (None): Uniform weights
   if (class_weights_option.get_type() == flex_type_enum::UNDEFINED) {
 
-    // In this case, we just set it to be empty, and the various algorit
+    // In this case, we just set it to be uniform, and disable it 
     m_class_weights.resize(num_classes);
-    m_class_weights.zeros();
+    m_class_weights.ones();
+    m_class_weights_enabled = false;
 
   // Case 2 ('auto'): Sample inversely proportional to class frequency.
   } else if (class_weights_option == "auto") {
@@ -204,6 +250,8 @@ inline void supervised_learning_base::_setup_class_weights() {
       class_weights[i] = {indexer->map_index_to_value(i),
                           1.0 / (total * stats->count(i))};
     }
+    
+    m_class_weights_enabled = true;
 
     // Case 3 (dict): User provided weights.
   } else if (class_weights_option.get_type() == flex_type_enum::DICT) {
@@ -286,6 +334,8 @@ inline void supervised_learning_base::_setup_class_weights() {
         log_and_throw(ss.str());
       }
     }
+    
+    m_class_weights_enabled = true;
 
   } else {
     // Error: Weights are not of dictionary, None, or 'auto' type.
