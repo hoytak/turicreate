@@ -5,29 +5,47 @@
 # In most cases, type make will give what you want.
 
 # See additional instruction in doc/build.md
-
-#for building static OpenMP lib in MAC for easier installation in MAC
-#doesn't work with XCode clang/LLVM since Apple doesn't support, 
-#needs brew install gcc 4.9+ with OpenMP. By default the static link is OFF
-static_omp=0
-if ((${static_omp}==1)); then
-    rm libgomp.a
-    ln -s `g++ -print-file-name=libgomp.a`
-    make clean
-    make omp_mac_static=1
-    echo "Successfully build multi-thread static link xgboost"
-    exit 0
-fi
+set -e
 
 if make; then
     echo "Successfully build multi-thread xgboost"
 else
+
+    not_ready=0
+
+    if [[ ! -e ./rabit/Makefile ]]; then
+        echo ""
+        echo "Please init the rabit submodule:"
+        echo "git submodule update --init --recursive -- rabit"
+        not_ready=1
+    fi
+    
+    if [[ ! -e ./dmlc-core/Makefile ]]; then
+        echo ""
+        echo "Please init the dmlc-core submodule:"
+        echo "git submodule update --init --recursive -- dmlc-core"
+        not_ready=1
+    fi
+
+    if [[ "${not_ready}" == "1" ]]; then
+        echo ""
+        echo "Please fix the errors above and retry the build, or reclone the repository with:"
+        echo "git clone --recursive https://github.com/dmlc/xgboost.git"
+        echo ""
+        exit 1
+    fi
+
+
     echo "-----------------------------"
     echo "Building multi-thread xgboost failed"
     echo "Start to build single-thread xgboost"
-    make clean
-    make no_omp=1
-    echo "Successfully build single-thread xgboost"
-    echo "If you want multi-threaded version"
-    echo "See additional instructions in doc/build.md"
+    make clean_all
+    make config=make/minimum.mk
+    if [ $? -eq 0 ] ;then
+      echo "Successfully build single-thread xgboost"
+      echo "If you want multi-threaded version"
+      echo "See additional instructions in doc/build.md"
+    else
+      echo "Failed to build single-thread xgboost"
+    fi
 fi

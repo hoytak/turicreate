@@ -245,6 +245,8 @@ endif()
 #*                             Common Defines                             */
 #*                                                                        */
 #**************************************************************************/
+set(CMAKE_CXX_STANDARD 11)
+
 
 if(WIN32)
   add_definitions(-DWINVER=0x0600)
@@ -306,6 +308,8 @@ message(WARNING "OpenMP Libraries were not found")
 #*             Adapt Compiler and Linker Flags to the system              */
 #*                                                                        */
 #**************************************************************************/
+
+
 if (CLANG)
 
   set(_cpp11_optional_flags "")
@@ -315,12 +319,12 @@ if (CLANG)
     set(_cpp11_optional_flags "${_cpp11_optional_flags} -Wno-stdlibcxx-not-found")
   endif()
 
-  set(CPP11_FLAGS "-std=c++11 -stdlib=libc++ -Wno-deprecated-register -Wno-enum-compare -Wno-conversion-null -Wno-constant-logical-operand -Wno-parentheses-equality -ftemplate-depth=900 ${_cpp11_optional_flags}")
+  set(CPP11_FLAGS "-stdlib=libc++ -Wno-deprecated-register -Wno-enum-compare -Wno-conversion-null -Wno-constant-logical-operand -Wno-parentheses-equality -ftemplate-depth=900 ${_cpp11_optional_flags}")
 
   set(WERROR_FLAGS "-Werror")
 else()
   # non-clang
-  set(CPP11_FLAGS "-std=c++11 -Wno-enum-compare -Wno-conversion-null -ftemplate-depth=900")
+  set(CPP11_FLAGS "-Wno-enum-compare -Wno-conversion-null -ftemplate-depth=900")
   set(WERROR_FLAGS "-Werror")
 endif()
 

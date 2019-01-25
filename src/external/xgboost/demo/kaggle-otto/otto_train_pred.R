@@ -8,7 +8,7 @@ test = test[,-1]
 
 y = train[,ncol(train)]
 y = gsub('Class_','',y)
-y = as.integer(y)-1 #xgboost take features in [0,numOfClass)
+y = as.integer(y)-1  # xgboost take features in [0,numOfClass)
 
 x = rbind(train[,-ncol(train)],test)
 x = as.matrix(x)
@@ -22,14 +22,14 @@ param <- list("objective" = "multi:softprob",
               "num_class" = 9,
               "nthread" = 8)
 
-# Run Cross Valication
-cv.nround = 50
+# Run Cross Validation
+cv.nrounds = 50
 bst.cv = xgb.cv(param=param, data = x[trind,], label = y, 
-                nfold = 3, nrounds=cv.nround)
+                nfold = 3, nrounds=cv.nrounds)
 
 # Train the model
-nround = 50
-bst = xgboost(param=param, data = x[trind,], label = y, nrounds=nround)
+nrounds = 50
+bst = xgboost(param=param, data = x[trind,], label = y, nrounds=nrounds)
 
 # Make prediction
 pred = predict(bst,x[teind,])
