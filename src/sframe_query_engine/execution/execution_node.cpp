@@ -12,7 +12,7 @@
 
 namespace turi {
 namespace query_eval {
-using boost::coroutines::stack_traits;
+using boost::context::stack_traits;
 /*
  * Default stack size is 64K or minimum_size() whichever is larger
  */
@@ -69,7 +69,6 @@ void execution_node::start_coroutines() {
 
   // restart the coroutine
   m_coroutines_started = true;
-  auto coro_attributes = boost::coroutines::attributes(COROUTINE_STACK_SIZE);
 
   auto attributes = m_operator->attributes();
   bool supports_skipping = 
@@ -111,9 +110,10 @@ void execution_node::start_coroutines() {
    *  - If the operator does not support skipping AND is a non-linear operator
    *  we need to process it normally.
    */
-  m_source = boost::coroutines::coroutine<void>::pull_type(
-      [this, supports_skipping, is_linear_operator]
-      (boost::coroutines::coroutine<void>::push_type & sink) {
+  m_source.reset(new boost::coroutines2::coroutine<void>::pull_type(
+      boost::coroutines2::fixedsize_stack(COROUTINE_STACK_SIZE),
+      [this, supports_skipping, is_linear_operator](
+          boost::coroutines2::coroutine<void>::push_type& sink) {
         
         emit_state initial_operator_state = emit_state::NONE;
         if (supports_skipping && m_skip_next_block) {
@@ -158,15 +158,14 @@ LABEL_GOTO_SINK_AGAIN:
                               initial_operator_state);
         try {
           m_operator->execute(context);
-        } catch(boost::coroutines::detail::forced_unwind& unwind) {
+        } catch(boost::coroutines2::detail::forced_unwind& unwind) {
           throw;
         } catch(...) {
           m_exception_occured = true;
           m_exception = std::current_exception();
         }
 
-      },
-      coro_attributes);
+      }));
 }
 
 std::shared_ptr<sframe_rows> execution_node::get_next(size_t consumer_id, bool skip) {
@@ -181,7 +180,7 @@ std::shared_ptr<sframe_rows> execution_node::get_next(size_t consumer_id, bool s
 
   // consume from source when queue is empty and there is more in source
   while (m_output_queue->empty(consumer_id) && m_source) {
-    m_source();
+    (*m_source)();
   }
   // end of data
   if (m_output_queue->empty(consumer_id) && !m_source) return nullptr;

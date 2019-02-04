@@ -10,8 +10,7 @@
 #include <vector>
 #include <queue>
 
-#define BOOST_COROUTINES_NO_DEPRECATION_WARNING
-#include <boost/coroutine/coroutine.hpp>
+#include <boost/coroutine2/coroutine.hpp>
 
 #include <flexible_type/flexible_type.hpp>
 #include <sframe_query_engine/operators/operator.hpp>
@@ -243,7 +242,7 @@ class execution_node  : public std::enable_shared_from_this<execution_node> {
   std::shared_ptr<query_operator> m_operator;
 
   /// The coroutine running the actual function
-  typename boost::coroutines::coroutine<void>::pull_type m_source;
+  std::unique_ptr<typename boost::coroutines2::coroutine<void>::pull_type> m_source;
 
   /**
    * The inputs to this execution node:

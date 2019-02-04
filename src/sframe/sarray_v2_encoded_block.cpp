@@ -43,11 +43,11 @@ void encoded_block_range::coroutine_launch() {
   auto coro_m_shared = m_shared;
   auto coro_m_block = m_block;
   coroutine_started = true;
-  source = 
+  source.reset(new
       coroutine_type(
           // the coroutine function
           [coro_m_shared, coro_m_block]
-          (boost::coroutines::coroutine<void>::push_type& sink){
+          (boost::coroutines2::coroutine<void>::push_type& sink){
             // coroutine function basically calls the decoder with a callback
             // which sticks stuff into the buffer. 
             // and triggers the sink when the buffer full.
@@ -72,12 +72,12 @@ void encoded_block_range::coroutine_launch() {
                                            }
                                          });
             return;
-      });
+      }));
 }
 
 void encoded_block_range::call_source() {
   if (!coroutine_started) coroutine_launch();
-  else source();
+  else (*source)();
 }
 
 void encoded_block_range::skip(size_t n) {
@@ -105,9 +105,9 @@ void encoded_block_range::release() {
   if (source) {
     // try to unwind the coroutine cleanly.
     m_shared->terminate = true;
-    source();
+    (*source)();
   }
-  source = coroutine_type();
+  source.reset();
   m_shared.reset();
   m_block.m_data.reset();
 }

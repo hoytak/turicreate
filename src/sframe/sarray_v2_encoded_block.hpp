@@ -6,8 +6,7 @@
 #ifndef TURI_SFRAME_ENCODED_BLOCK_HPP
 #define TURI_SFRAME_ENCODED_BLOCK_HPP
 
-#define BOOST_COROUTINES_NO_DEPRECATION_WARNING
-#include <boost/coroutine/coroutine.hpp>
+#include <boost/coroutine2/coroutine.hpp>
 
 #include <boost/circular_buffer.hpp>
 #include <vector>
@@ -204,8 +203,8 @@ class encoded_block_range {
   /*                          The coroutine types                           */
   /*                                                                        */
   /**************************************************************************/
-  typedef boost::coroutines::coroutine<void>::pull_type coroutine_type;
-  coroutine_type source;
+  typedef boost::coroutines2::coroutine<void>::pull_type coroutine_type;
+  std::unique_ptr<coroutine_type> source;
 
   void coroutine_launch(); 
   void call_source();
