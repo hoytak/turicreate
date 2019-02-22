@@ -31,7 +31,7 @@ from coremltools.proto import FeatureTypes_pb2 as _FeatureTypes_pb2
 from coremltools.models import MLModel as _MLModel
 
 import json as _json
-import mxnet as _mxnet
+from .._mxnet import mxnet as _mxnet
 import numpy as _np
 
 _MXNET_LAYER_REGISTRY  = {

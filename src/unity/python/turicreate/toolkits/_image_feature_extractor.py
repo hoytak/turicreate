@@ -7,8 +7,6 @@ from __future__ import print_function as _
 from __future__ import division as _
 from __future__ import absolute_import as _
 
-from . import _mxnet_utils
-
 
 def _create_feature_extractor(model_name):
     import os
@@ -77,6 +75,9 @@ class MXFeatureExtractor(ImageFeatureExtractor):
         ptModel: ImageClassifierPreTrainedModel
             An instance of a pre-trained model.
         """
+       
+        from ._mxnet import _mxnet_utils
+
         self.ptModel = ptModel
         self.data_layer = ptModel.data_layer
         self.feature_layer = ptModel.feature_layer
@@ -195,7 +196,7 @@ class MXFeatureExtractor(ImageFeatureExtractor):
         model: MLModel
             Return the underlying model.
         """
-        from ._mxnet_to_coreml import _mxnet_converter
+        from ._mxnet._mxnet_to_coreml import _mxnet_converter
         import mxnet as _mx
 
         (sym, arg_params, aux_params) = self.ptModel.mxmodel
