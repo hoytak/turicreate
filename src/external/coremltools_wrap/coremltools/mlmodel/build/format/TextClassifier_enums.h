@@ -5,7 +5,6 @@ enum MLTextClassifierClassLabels: int {
     MLTextClassifierClassLabels_NOT_SET = 0,
 };
 
-__attribute__((__unused__))
 static const char * MLTextClassifierClassLabels_Name(MLTextClassifierClassLabels x) {
     switch (x) {
         case MLTextClassifierClassLabels_stringClassLabels:

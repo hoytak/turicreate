@@ -1,4 +1,4 @@
-make_library(minipsutil OBJECT
+make_library(minipsutil_static
   SOURCES
-    minipsutil.c 
-)
+  minipsutil.c
+  )

@@ -8,7 +8,6 @@ enum MLKernelkernel: int {
     MLKernelkernel_NOT_SET = 0,
 };
 
-__attribute__((__unused__))
 static const char * MLKernelkernel_Name(MLKernelkernel x) {
     switch (x) {
         case MLKernelkernel_linearKernel:
@@ -31,7 +30,6 @@ enum MLSupportVectorRegressorsupportVectors: int {
     MLSupportVectorRegressorsupportVectors_NOT_SET = 0,
 };
 
-__attribute__((__unused__))
 static const char * MLSupportVectorRegressorsupportVectors_Name(MLSupportVectorRegressorsupportVectors x) {
     switch (x) {
         case MLSupportVectorRegressorsupportVectors_sparseSupportVectors:
@@ -50,7 +48,6 @@ enum MLSupportVectorClassifiersupportVectors: int {
     MLSupportVectorClassifiersupportVectors_NOT_SET = 0,
 };
 
-__attribute__((__unused__))
 static const char * MLSupportVectorClassifiersupportVectors_Name(MLSupportVectorClassifiersupportVectors x) {
     switch (x) {
         case MLSupportVectorClassifiersupportVectors_sparseSupportVectors:
@@ -69,7 +66,6 @@ enum MLSupportVectorClassifierClassLabels: int {
     MLSupportVectorClassifierClassLabels_NOT_SET = 0,
 };
 
-__attribute__((__unused__))
 static const char * MLSupportVectorClassifierClassLabels_Name(MLSupportVectorClassifierClassLabels x) {
     switch (x) {
         case MLSupportVectorClassifierClassLabels_stringClassLabels:

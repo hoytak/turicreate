@@ -31,7 +31,6 @@ enum MLModelType: int {
     MLModelType_NOT_SET = 0,
 };
 
-__attribute__((__unused__))
 static const char * MLModelType_Name(MLModelType x) {
     switch (x) {
         case MLModelType_pipelineClassifier:

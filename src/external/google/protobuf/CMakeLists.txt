@@ -1,7 +1,6 @@
 project(TuriExternalDependencies)
 
 make_library(protobuf
-  OBJECT
   SOURCES
     # Don't need to pull in the compiler source files here.
     # Or any non-lite sources.
@@ -27,4 +26,16 @@ make_library(protobuf
     stubs/structurally_valid.cc
     stubs/strutil.cc
     wire_format_lite.cc
-)
+  COMPILE_FLAGS_EXTRA
+    -Wno-sign-compare
+    -Wno-unused-function
+  COMPILE_FLAGS_EXTRA_CLANG
+    -Wno-uninitialized
+    -Wno-unused-const-variable
+  COMPILE_FLAGS_EXTRA_GCC
+    -Wno-maybe-uninitialized
+  )
+
+# Add this in so that the protobuf namespace is globally redefined to __tc_google.
+# This avoids symbol conflicts with other version of protobuf.
+target_compile_definitions(protobuf PUBLIC google=__tc_google HAVE_PTHREAD=1)

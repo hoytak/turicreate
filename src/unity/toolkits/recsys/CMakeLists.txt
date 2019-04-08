@@ -1,6 +1,6 @@
 project(unity_toolkits)
 
-make_library(unity_recsys OBJECT
+make_library(unity_recsys
   SOURCES
     class_registrations.cpp
     recsys_model_base.cpp
@@ -22,4 +22,7 @@ make_library(unity_recsys OBJECT
     unity_factorization
     unity_core
     unity_coreml_model_export 
-)
+  COMPILE_FLAGS_EXTRA_GCC
+    -Wno-unknown-pragmas  # NOTE: used for auto-generated protobuf source files
+    -Wno-unused-function  # NOTE: used for auto-generated protobuf source files
+  )

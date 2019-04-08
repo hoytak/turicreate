@@ -1,6 +1,6 @@
 project(unity_toolkits)
 
-make_library(unity_evaluation OBJECT
+make_library(unity_evaluation
   SOURCES
     metrics.cpp 
     unity_evaluation.cpp
@@ -8,4 +8,4 @@ make_library(unity_evaluation OBJECT
     ml_data
     unity_core
     unity_recsys
-)
+  )

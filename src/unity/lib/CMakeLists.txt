@@ -5,7 +5,7 @@ subdirs(
     visualization
 )
 
-make_library(unity_core OBJECT
+make_library(unity_core
   SOURCES
     api/function_closure_info.cpp
     extensions/model_base.cpp
@@ -51,5 +51,9 @@ make_library(unity_core OBJECT
     eigen
     visualization
     annotation
-    EXTERNAL_VISIBILITY
+  EXTERNAL_VISIBILITY
 )
+
+make_shared_library_from_static(unity_core_shared
+                                REQUIRES
+                                unity_core)
