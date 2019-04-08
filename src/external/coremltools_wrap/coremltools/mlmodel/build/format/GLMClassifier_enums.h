@@ -16,7 +16,6 @@ enum MLGLMClassifierClassLabels: int {
     MLGLMClassifierClassLabels_NOT_SET = 0,
 };
 
-__attribute__((__unused__))
 static const char * MLGLMClassifierClassLabels_Name(MLGLMClassifierClassLabels x) {
     switch (x) {
         case MLGLMClassifierClassLabels_stringClassLabels:

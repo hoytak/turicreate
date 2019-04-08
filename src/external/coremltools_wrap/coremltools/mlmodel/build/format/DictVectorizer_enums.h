@@ -6,7 +6,6 @@ enum MLDictVectorizerMap: int {
     MLDictVectorizerMap_NOT_SET = 0,
 };
 
-__attribute__((__unused__))
 static const char * MLDictVectorizerMap_Name(MLDictVectorizerMap x) {
     switch (x) {
         case MLDictVectorizerMap_stringToIndex:

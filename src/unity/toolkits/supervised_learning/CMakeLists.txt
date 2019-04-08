@@ -1,6 +1,6 @@
 project(unity_toolkits)
 
-make_library(supervised_learning OBJECT
+make_library(unity_supervised_learning
   SOURCES
     supervised_learning.cpp
     linear_regression.cpp
@@ -28,5 +28,13 @@ make_library(supervised_learning OBJECT
     optimization
     xgboost
     eigen
-)
-target_compile_definitions(supervised_learning PUBLIC "-DXGBOOST_CUSTOMIZE_MSG_")
+  COMPILE_FLAGS_EXTRA_GCC
+    -Wno-unknown-pragmas  # NOTE: used for auto-generated protobuf source files
+    -Wno-unused-function  # NOTE: used for auto-generated protobuf source files
+  )
+
+set_property(TARGET unity_supervised_learning APPEND_STRING PROPERTY COMPILE_FLAGS " -DXGBOOST_CUSTOMIZE_MSG_")
+
+
+set(CXXNET_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src/cxxnet/src)
+message(info "CXXNET_SOURCE_DIR=${CXXNET_SOURCE_DIR}")

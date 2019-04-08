@@ -9,7 +9,6 @@ endif()
 # Libraries should not link both cppipc and cppipc_zookeeper together
 # They are not compatible
 make_library(cppipc
-  OBJECT
   SOURCES
     client/comm_client.cpp
     ${PLATFORM_SOURCES}
@@ -24,7 +23,6 @@ make_library(cppipc
 )
 
 make_library(cancel_serverside_ops
-  OBJECT
   SOURCES
     server/cancel_ops.cpp
 )

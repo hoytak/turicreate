@@ -1,13 +1,12 @@
 project(lambda)
 
-make_library(python_callbacks OBJECT
+make_library(python_callbacks
   SOURCES
     python_callbacks.cpp
   REQUIRES
-    logger
-)
+    logger)
 
-make_library(pylambda OBJECT
+make_library(pylambda
   SOURCES
     worker_pool.cpp
     lambda_constants.cpp
@@ -15,16 +14,17 @@ make_library(pylambda OBJECT
     pylambda_function.cpp
     graph_pylambda_master.cpp
   REQUIRES
-    flexible_type cppipc sframe shmipc process python_callbacks		
-  EXTERNAL_VISIBILITY
+    flexible_type cppipc sframe shmipc process python_callbacks
+    EXTERNAL_VISIBILITY
 )
 
-make_library(pylambda_worker OBJECT
+
+make_library(pylambda_worker
   SOURCES
-    pylambda.cpp
-    pylambda_worker.cpp
-    graph_pylambda.cpp
+  pylambda.cpp
+  pylambda_worker.cpp
+  graph_pylambda.cpp
   REQUIRES
-    flexible_type cppipc sframe shmipc process python_callbacks		
-  EXTERNAL_VISIBILITY
+    flexible_type cppipc sframe shmipc process python_callbacks
+    EXTERNAL_VISIBILITY
 )

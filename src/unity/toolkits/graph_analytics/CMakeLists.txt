@@ -1,6 +1,6 @@
 project(unity_toolkits)
 
-make_library(unity_graph_analytics OBJECT
+make_library(unity_graph_analytics
   SOURCES
     kcore_sgraph.cpp
     connected_component_sgraph.cpp
@@ -12,4 +12,4 @@ make_library(unity_graph_analytics OBJECT
     label_propagation.cpp
   REQUIRES
     unity_core
-)
+  )

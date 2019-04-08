@@ -6,7 +6,7 @@ else()
   SET(PLATFORM_SOURCES process_unix.cpp process_util_unix.cpp)
 endif()
 
-make_library(process OBJECT
+make_library(process
   SOURCES
     process.cpp
     ${PLATFORM_SOURCES}

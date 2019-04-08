@@ -10,5 +10,6 @@ subdirs(
   shmipc
   so_utils
   timer
+  user_pagefault
   config
   )

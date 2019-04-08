@@ -1,6 +1,6 @@
 project(parallel)
 
-make_library(parallel OBJECT
+make_library(parallel
   SOURCES
     pthread_tools.cpp
     thread_pool.cpp
@@ -8,5 +8,5 @@ make_library(parallel OBJECT
   REQUIRES
     platform_config
     logger
-  EXTERNAL_VISIBILITY
+    EXTERNAL_VISIBILITY
 )

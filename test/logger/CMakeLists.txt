@@ -1,3 +1,3 @@
-project(logger_test)
+project(timer_test)
 
-make_boost_test(logger_test.cxx REQUIRES unity_shared_for_testing)
+make_boost_test(logger_test.cxx REQUIRES logger)
