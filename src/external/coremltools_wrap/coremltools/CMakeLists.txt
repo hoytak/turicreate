@@ -14,7 +14,7 @@ add_subdirectory(deps)
 add_subdirectory(mlmodel)
 
 if("${PYTHON}" STREQUAL "")
-  find_program(PYTHON NAMES python3 python)
+  find_program(PYTHON NAMES python python3)
 endif()
 if("${PYTHON_MAJOR_VERSION}" STREQUAL "")
   exec_program(${PYTHON}
@@ -31,7 +31,7 @@ if("${PYTHON_VERSION}" STREQUAL "")
 endif()
 
 if("${PYTHON_CONFIG}" STREQUAL "")
-  find_program(PYTHON_CONFIG NAMES python3-config python-config)
+  find_program(PYTHON_CONFIG NAMES python-config python3-config)
 endif()
 exec_program(${PYTHON_CONFIG}
   ARGS "--includes"
@@ -195,7 +195,7 @@ endif()
 
 set(PYTHON_TAG "cp${PYTHON_MAJOR_VERSION}${PYTHON_MINOR_VERSION}")
 if(APPLE)
-  set(PLAT_NAME "macosx_10_14_intel;macosx_10_13_intel;macosx_10_12_intel")
+  set(PLAT_NAME "macosx_10_15_intel;macosx_10_14_intel;macosx_10_13_intel;macosx_10_12_intel")
 elseif("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
   set(PLAT_NAME "manylinux1_x86_64")
 else()

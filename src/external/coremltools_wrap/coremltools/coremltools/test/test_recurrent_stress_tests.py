@@ -790,7 +790,7 @@ class LSTMLayer(RecurrentLayerTest):
 
         self.assertEquals(shape_err_models, [], msg='Shape error models {}'.format(shape_err_models))
         self.assertEquals(numerical_err_models, [], msg='Numerical error models {}'.format(numerical_err_models))
-
+        
     @unittest.skipIf(not HAS_KERAS_TF, 'Missing keras 1. Skipping test.')
     @pytest.mark.keras1
     @pytest.mark.slow

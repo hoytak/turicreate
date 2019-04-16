@@ -7,6 +7,7 @@
 Neural network builder class to construct Core ML models.
 """
 from ... import SPECIFICATION_VERSION
+from ... import _MINIMUM_NDARRAY_SPEC_VERSION
 from ...proto import Model_pb2 as _Model_pb2
 from ...proto import NeuralNetwork_pb2 as _NeuralNetwork_pb2
 from ...proto import FeatureTypes_pb2 as _FeatureTypes_pb2
@@ -14,6 +15,7 @@ from .._interface_management import set_transform_interface_params
 from .. import datatypes
 import numpy as np
 from .quantization_utils import unpack_to_bytes, _convert_array_to_nbit_quantized_bytes
+from .spec_inspection_utils import *
 
 def _set_recurrent_activation(param, activation):
     if activation == 'SIGMOID':
@@ -79,6 +81,68 @@ def _fill_quantized_weights(weights_message = None,
         quant_lut = kwargs.get('quant_lut', [0.0, 1.0])
         weights_message.quantization.lookupTableQuantization.floatValue.extend(map(float, quant_lut))
 
+def _get_nn_spec(spec):
+    if spec.HasField('neuralNetworkClassifier'):
+        return spec.neuralNetworkClassifier
+    elif spec.HasField('neuralNetworkRegressor'):
+        return spec.neuralNetworkRegressor
+    elif spec.HasField('neuralNetwork'):
+        return spec.neuralNetwork
+    else:
+        return None
+
+def _get_lstm_weight_fields(lstm_wp):
+    """Get LSTM weight fields.
+    lstm_wp: _NeuralNetwork_pb2.LSTMWeightParams
+    """
+    return [
+        lstm_wp.inputGateWeightMatrix,
+        lstm_wp.forgetGateWeightMatrix,
+        lstm_wp.blockInputWeightMatrix,
+        lstm_wp.outputGateWeightMatrix,
+        lstm_wp.inputGateRecursionMatrix,
+        lstm_wp.forgetGateRecursionMatrix,
+        lstm_wp.blockInputRecursionMatrix,
+        lstm_wp.outputGateRecursionMatrix,
+        lstm_wp.inputGateBiasVector,
+        lstm_wp.forgetGateBiasVector,
+        lstm_wp.blockInputBiasVector,
+        lstm_wp.outputGateBiasVector,
+        lstm_wp.inputGatePeepholeVector,
+        lstm_wp.forgetGatePeepholeVector,
+        lstm_wp.outputGatePeepholeVector]
+
+def _fill_tensor_fields(tensor_field, ranks=None, shapes=None):
+    """Fill the tensor fields.
+    ranks - None or a list of integers with the same length of number of inputs/outputs
+    shapes - None or a list of shapes the same length of number of inputs/outputs. Each shape is a list or tuple
+    """
+    if ranks is None and shapes is None:
+        return
+    if ranks is None and shapes is not None:
+        ranks = [len(shape) for shape in shapes]
+    # Fill ranks only
+    for rank in ranks:
+        if rank is None:
+            raise ValueError('Rank of a tensor should not be None')
+        # if rank > 5:
+        #     raise ValueError('Rank greater than 5 not supported')
+        field = tensor_field.add()
+        field.rank = rank
+    if ranks is not None and shapes is not None:
+        # Check validity
+        if len(ranks) != len(shapes):
+            raise ValueError('Number of rank and shape of tensor field does not match')
+        for i, (r, s) in enumerate(zip(ranks, shapes)):
+            if s is None:
+                continue
+            if r != len(s):
+                import pdb
+                pdb.set_trace()
+                raise ValueError('Rank and shape does not match')
+            tensor_field[i].dimValue.extend(s)
+
+
 class NeuralNetworkBuilder(object):
     """
     Neural network builder class to construct Core ML models.
@@ -99,7 +163,7 @@ class NeuralNetworkBuilder(object):
         from coremltools.models.neural_network import datatypes, NeuralNetworkBuilder
         from coremltools.models.utils import save_spec
 
-        # Create a neural network binary classifier that classifies
+        # Create a neural network binary classifier that classifies 
         # 3-dimensional data points
         # Specify input and output dimensions
         >>> input_dim = (3,)
@@ -122,22 +186,36 @@ class NeuralNetworkBuilder(object):
     MLModel, datatypes, save_spec
     """
 
-    def __init__(self, input_features, output_features, mode = None):
+    def __init__(self,
+                 input_features=None,
+                 output_features=None,
+                 mode=None,
+                 spec=None,
+                 nn_spec=None,
+                 disable_rank5_shape_mapping=False):
         """
-        Construct a NeuralNetworkBuilder object and set protobuf specification interface.
+        Construct a NeuralNetworkBuilder object to build an MLModel specification with
+        model interface or a NeuralNetwork protobuf message, either from scratch or an
+        existing specification.
 
         Parameters
         ----------
-        input_features: [(str, datatypes.Array)]
+        input_features: [(str, datatypes.Array)] or None
             List of input feature of the network. Each feature is a (name,
             array) tuple, where name the name of the feature, and array
             is an datatypes.Array object describing the feature type.
-
-        output_features: [(str, datatypes.Array or None)]
+            When spec is None (building from scratch), input_features must not be None.
+            When spec is not None, input_features will be ignored; input feature of
+            existing spec will be used instead.
+        
+        output_features: [(str, datatypes.Array or None)] or None
             List of output feature of the network. Each feature is a (name,
             array) tuple, where name is the name of the feature, and array
             is an datatypes.Array object describing the feature type.
-            array can be None if not known.
+            array can be None if not known. 
+            When spec is None (building from scratch), output_features must not be None.
+            When spec is not None, output_features will be ignored; output feature of
+            existing spec will be used instead.
 
         mode: str ('classifier', 'regressor' or None)
             Mode (one of 'classifier', 'regressor', or None).
@@ -145,6 +223,27 @@ class NeuralNetworkBuilder(object):
             When mode = 'classifier', a NeuralNetworkClassifier spec will be
             constructed.  When mode = 'regressor', a NeuralNetworkRegressor
             spec will be constructed.
+
+        disable_rank5_shape_mapping: bool
+            Only applicable for neural networks.
+            If True, inputs are no longer forced to map to rank 5 tensors
+            (rank is equal to the length of the shape of the tensor).
+            Instead, for multi-array inputs "EXACT_ARRAY_MAPPING" mapping is used, whereas
+            for image inputs "RANK4_IMAGE_MAPPING" is used.
+            For details, please see description of enums "NeuralNetworkMultiArrayShapeMapping"
+            and "NeuralNetworkImageShapeMapping" in NeuralNetwork.proto.
+            When spec is not None, this argument will be ignored.
+
+        spec: None or coremltools.proto.Model_pb2
+            If None, a new MLModel spec will be created by the builder with input and output features.
+            Otherwise, the builder will continue to build on spec. This is useful when the MLModel is
+            built incrementally.
+
+        nn_spec: None or coremltools.proto.NeuralNetwork_pb2
+            If None, a new, empty NeuralNetwork proto will be created for spec.
+            If nn_spec is not None and spec is None, the builder will build a NeuralNetwork spec without
+            wrapping it within an MLModel. This is useful to create nested NeuralNetworks for models
+            with control flow operations.
 
         Examples
         --------
@@ -160,49 +259,70 @@ class NeuralNetworkBuilder(object):
         --------
         set_input, set_output, set_class_labels
         """
-        # Set the interface params.
-        spec = _Model_pb2.Model()
-        spec.specificationVersion = SPECIFICATION_VERSION
+        self.spec = spec
+        self.nn_spec = nn_spec
+        self._disable_rank5_shape_mapping = disable_rank5_shape_mapping
+        self.layers = []
+        self.layer_specs = {}
+        self.named_parameters = []
 
-        in_features = input_features
-        out_features = []
-        unk_shape_indices = []
-        for idx, feature in enumerate(output_features):
-            name, arr = feature
-            if arr is None:
-                arr = datatypes.Array(1)
-                unk_shape_indices.append(idx)
-            out_features.append((str(name), arr))
+        if self.spec is not None: # Existing spec
+            if self.nn_spec is None:
+                self.nn_spec = _get_nn_spec(self.spec)
+                for layer_spec in self.nn_spec.layers:
+                    self.layers.append(layer_spec.name)
+                    self.layer_specs[layer_spec.name] = layer_spec
+            else:
+                # Both spec and nn_spec are not None
+                raise ValueError('Attempting to assign another NeuralNetwork Spec to an existing MLModel Spec')
+            if input_features is None and output_features is None:
+                return
+
+        if self.spec is None and self.nn_spec is not None: # Building nested Neural Network
+            return
+
+        # Set the interface params.
+        if self.spec is None:
+            self.spec = _Model_pb2.Model()
+        self.spec.specificationVersion = SPECIFICATION_VERSION
+        if disable_rank5_shape_mapping:
+            self.spec.specificationVersion = _MINIMUM_NDARRAY_SPEC_VERSION
 
         # When output_features in None, use some dummy sized type
         out_features_with_shape = []
         for out_feature in output_features:
             feat_name, feat_type = out_feature
             if feat_type is None:
-                out_features_with_shape.append((feat_name, datatypes.Array(1)))
+                out_features_with_shape.append((str(feat_name), datatypes.Array(1)))
             else:
                 out_features_with_shape.append(out_feature)
-
+        
         # Set interface inputs and outputs
-        # set_transform_interface_params require output types and shapes,
-        # so we call it then remove the shape
-        spec = set_transform_interface_params(spec, input_features,
+        if len(self.spec.description.input) > 0:
+            del self.spec.description.input[:]
+        if len(self.spec.description.output) > 0:
+            del self.spec.description.output[:]
+
+        self.spec = set_transform_interface_params(self.spec, input_features,
                                               out_features_with_shape)
 
         for idx, output_feature in enumerate(output_features):
             if output_features[idx][1] is None:
-                spec.description.output[idx].type.multiArrayType.ClearField(
-                        "shape")
+                self.spec.description.output[idx].type.multiArrayType.ClearField("shape")
 
-        # Save the spec in the protobuf
-        self.spec = spec
-        if mode == 'classifier':
-            nn_spec = spec.neuralNetworkClassifier
-        elif mode == 'regressor':
-            nn_spec = spec.neuralNetworkRegressor
-        else:
-            nn_spec = spec.neuralNetwork
-        self.nn_spec = nn_spec
+        if self.nn_spec is None:
+            if mode == 'classifier':
+                nn_spec = self.spec.neuralNetworkClassifier
+            elif mode == 'regressor':
+                nn_spec = self.spec.neuralNetworkRegressor
+            else:
+                nn_spec = self.spec.neuralNetwork
+            self.nn_spec = nn_spec
+
+        if disable_rank5_shape_mapping and self.nn_spec:
+            self.nn_spec.arrayInputShapeMapping = _NeuralNetwork_pb2.NeuralNetworkMultiArrayShapeMapping.Value('EXACT_ARRAY_MAPPING')
+            self.nn_spec.imageInputShapeMapping = _NeuralNetwork_pb2.NeuralNetworkImageShapeMapping.Value('RANK4_IMAGE_MAPPING')
+
 
     def set_input(self, input_names, input_dims):
         """
@@ -230,18 +350,20 @@ class NeuralNetworkBuilder(object):
         set_output, set_class_labels
         """
         spec = self.spec
-        nn_spec = self.nn_spec
         for idx, dim in enumerate(input_dims):
-            if len(dim) == 3:
-                input_shape = (dim[0], dim[1], dim[2])
-            elif len(dim) == 2:
-                input_shape = (dim[1], )
-            elif len(dim) == 1:
-                input_shape = tuple(dim)
+            if hasattr(self, '_disable_rank5_shape_mapping') and self._disable_rank5_shape_mapping:
+                input_shape = dim
             else:
-                raise RuntimeError("Attempting to add a neural network " +
-                        "input with rank " + str(len(dim)) +
-                        ". All networks should take inputs of rank 1 or 3.")
+                if len(dim) == 3:
+                    input_shape = (dim[0], dim[1], dim[2])
+                elif len(dim) == 2:
+                    input_shape = (dim[1], )
+                elif len(dim) == 1:
+                    input_shape = tuple(dim)
+                else:
+                    raise RuntimeError("Attempting to add a neural network " +
+                            "input with rank " + str(len(dim)) +
+                            ". All networks should take inputs of rank 1 or 3.")
 
             spec.description.input[idx].type.multiArrayType.ClearField("shape")
             spec.description.input[idx].type.multiArrayType.shape.extend(input_shape)
@@ -275,12 +397,12 @@ class NeuralNetworkBuilder(object):
         set_input, set_class_labels
         """
         spec = self.spec
-        nn_spec = self.nn_spec
         for idx, dim in enumerate(output_dims):
             spec.description.output[idx].type.multiArrayType.ClearField("shape")
             spec.description.output[idx].type.multiArrayType.shape.extend(dim)
             spec.description.output[idx].type.multiArrayType.dataType = \
                     _Model_pb2.ArrayFeatureType.DOUBLE
+
 
     def set_class_labels(self, class_labels, predicted_feature_name = 'classLabel', prediction_blob = ''):
         """
@@ -295,7 +417,7 @@ class NeuralNetworkBuilder(object):
         predicted_feature_name: str
             Name of the output feature for the class labels exposed in the
             Core ML neural network classifier.  Defaults to 'class_output'.
-
+            
         prediction_blob: str
             If provided, then this is the name of the neural network blob which
             generates the probabilities for each class label (typically the output
@@ -346,7 +468,6 @@ class NeuralNetworkBuilder(object):
             # assume it's the last blob produced in the network
             nn_spec.labelProbabilityLayerName = nn_spec.layers[-1].output[0]
 
-
     def add_optionals(self, optionals_in, optionals_out):
         """
         Add optional inputs and outputs to the model spec.
@@ -377,19 +498,300 @@ class NeuralNetworkBuilder(object):
 
         input_features = list(zip(input_names, input_types))
         output_features = list(zip(output_names, output_types))
-
+       
         len_before_in = len(spec.description.input)
         len_before_out = len(spec.description.output)
-
+       
         # this appends to the existing model interface
         set_transform_interface_params(spec, input_features, output_features, True)
-
+       
         # add types for any extra hidden inputs
         for idx in range(len_before_in, len(spec.description.input)):
             spec.description.input[idx].type.multiArrayType.dataType = _Model_pb2.ArrayFeatureType.DOUBLE
         for idx in range(len_before_out, len(spec.description.output)):
             spec.description.output[idx].type.multiArrayType.dataType = _Model_pb2.ArrayFeatureType.DOUBLE
 
+    def make_updatable(self, trainables):
+        """ Make the builder's NeuralNetwork spec updatable.
+        trainables: [str] - list of layer names to be set trainable.
+        """
+        if self.spec is None:
+            return
+        self.spec.isUpdatable = True
+        self.nn_spec.updateParams.MergeFromString(b'')
+
+        for trainable in trainables:
+            if trainable not in self.layer_specs:
+                raise ValueError('Layer %s does not exist.' %(trainable))
+            spec_layer = self.layer_specs[trainable]
+            spec_layer.isUpdatable = True
+            typed_layer = getattr(spec_layer, spec_layer.WhichOneof('layer'))
+            for fd in typed_layer.DESCRIPTOR.fields:
+                field = getattr(typed_layer, fd.name)
+                if type(field) == _NeuralNetwork_pb2.LSTMWeightParams:
+                    wfs = _get_lstm_weight_fields(field)
+                    for wf in wfs:
+                        wf.isUpdatable = True
+                elif type(field) == _NeuralNetwork_pb2.WeightParams:
+                    field.isUpdatable = True
+                else:
+                    pass
+
+    def set_cross_entropy_loss(self, name, input=None, target=None):
+        if self.spec is None:
+            return
+
+        if name in self.layer_specs:
+            raise ValueError("Name %s is already used." % (name))
+
+        if input is None:
+            raise ValueError('Loss Layer input must be specified')
+
+        if target is None:
+            raise ValueError('Loss Layer target must be specified')
+
+        loss_layer = self.nn_spec.updateParams.lossLayers.add()
+        self.layers.append(name)
+        self.layer_specs[name] = loss_layer
+        loss_layer.name = name
+
+        names = [x.name for x in self.spec.description.output]
+
+        if input not in names:
+            raise ValueError('Loss Layer input (%s) must be model outputs' % input)
+
+        if target in names:
+            raise ValueError('Loss Layer target (%s) must not be a model output' % target)
+
+        loss_layer.crossEntropyLossLayer.input = input
+        loss_layer.crossEntropyLossLayer.target = target
+
+    def set_mse_loss(self, name, input=None, target=None):
+        if self.spec is None:
+            return
+
+        if name in self.layer_specs:
+            raise ValueError("Name %s is already used." % (name))
+
+        if input is None:
+            raise ValueError('Loss Layer input must be specified')
+
+        if target is None:
+            raise ValueError('Loss Layer target must be specified')
+
+        loss_layer = self.nn_spec.updateParams.lossLayers.add()
+        self.layers.append(name)
+        self.layer_specs[name] = loss_layer
+        loss_layer.name = name
+
+        names = [x.name for x in self.spec.description.output]
+
+        if input not in names:
+            raise ValueError('Loss Layer input (%s) must be model outputs' % input)
+
+        if target in names:
+            raise ValueError('Loss Layer target (%s) must not be a model output' % target)
+
+        loss_layer.mseLossLayer.input = input
+        loss_layer.mseLossLayer.target = target
+
+    def _create_parameter_dict(self, paramName, default_value, allowed_range, allowed_set):
+
+        if len(allowed_range) == 2:
+            if default_value < allowed_range[0] or default_value > allowed_range[1]:
+                raise ValueError('Default value ' + default_value + ' specified for ' + paramName + ' is out of allowed range')
+        elif len(allowed_set) > 0:
+            if default_value not in allowed_set:
+                raise ValueError('Default value ' + default_value + ' specified for ' + paramName + ' is not in allowed values set')
+        else:
+            raise ValueError('Either allowed range or allowed set has to be specified for ' + paramName)
+
+        return {
+            "default_value": default_value,
+            "allowed_range": allowed_range,
+            "allowed_set": allowed_set,
+        }
+
+    def create_learning_rate(self, default_value, allowed_range = []):
+        return self._create_parameter_dict("learning_rate", default_value, allowed_range, [])
+
+    def create_mini_batch_size(self, default_value, allowed_range = [], allowed_set = []):
+        return self._create_parameter_dict("mini_batch_size", default_value, allowed_range, allowed_set)
+
+    def create_epochs(self, default_value, allowed_range = [], allowed_set = []):
+        return self._create_parameter_dict("epochs", default_value, allowed_range, allowed_set)
+
+    def create_momentum(self, default_value, allowed_range = [], allowed_set = []):
+        return self._create_parameter_dict("momentum", default_value, allowed_range, allowed_set)
+
+    def create_beta1(self, default_value, allowed_range = [], allowed_set = []):
+        return self._create_parameter_dict("beta1", default_value, allowed_range, allowed_set)
+
+    def create_beta2(self, default_value, allowed_range = [], allowed_set = []):
+        return self._create_parameter_dict("beta2", default_value, allowed_range, allowed_set)
+
+    def create_eps(self, default_value, allowed_range = [], allowed_set = []):
+        return self._create_parameter_dict("eps", default_value, allowed_range, allowed_set)
+
+    def set_sgd_optimizer(self, learning_rate, mini_batch_size, momentum=None):
+        if self.spec is None:
+            return
+
+        if learning_rate == None:
+            raise NotImplementedError('SGD Optimizer requires learning rate parameter to be specified.')
+
+        if mini_batch_size == None:
+            raise NotImplementedError('SGD Optimizer requires mini batch size parameter to be specified.')
+
+        sgd_optimizer = self.nn_spec.updateParams.optimizer.sgdOptimizer
+
+        # set learning rate
+        sgd_optimizer.learningRate.defaultValue = learning_rate["default_value"]
+        if len(learning_rate["allowed_range"]) == 2:
+            sgd_optimizer.learningRate.range.minValue = learning_rate["allowed_range"][0]
+            sgd_optimizer.learningRate.range.maxValue = learning_rate["allowed_range"][1]
+        else:
+            raise NotImplementedError('allowed_range has to be specified for learning rate parameter.')
+
+        # set mini batch size
+        sgd_optimizer.miniBatchSize.defaultValue = mini_batch_size["default_value"]
+        if len(mini_batch_size["allowed_range"]) == 2:
+            sgd_optimizer.miniBatchSize.range.minValue = mini_batch_size["allowed_range"][0]
+            sgd_optimizer.miniBatchSize.range.maxValue = mini_batch_size["allowed_range"][1]
+        elif len(mini_batch_size["allowed_set"]) > 0:
+            sgd_optimizer.miniBatchSize.set.values.extend(mini_batch_size["allowed_set"])
+        else:
+            raise NotImplementedError('Either allowed_range or allowed_set has to be specified for mini batch size parameter.')
+
+        # set momentum
+        if momentum is not None:
+            sgd_optimizer.momentum.defaultValue = momentum["default_value"]
+            if len(momentum["allowed_range"]) == 2:
+                sgd_optimizer.momentum.range.minValue = momentum["allowed_range"][0]
+                sgd_optimizer.momentum.range.maxValue = momentum["allowed_range"][1]
+            else:
+                raise NotImplementedError('allowed_range has to be specified for momentum parameter.')
+
+    def set_adam_optimizer(self, learning_rate, mini_batch_size, beta1, beta2, eps):
+        if self.spec is None:
+            return
+
+        if learning_rate == None:
+            raise NotImplementedError('Adam Optimizer requires learning rate parameter to be specified.')
+
+        if mini_batch_size == None:
+            raise NotImplementedError('Adam Optimizer requires mini batch size parameter to be specified.')
+
+        if beta1 == None:
+            raise NotImplementedError('Adam Optimizer requires beta1 parameter to be specified.')
+
+        if beta2 == None:
+            raise NotImplementedError('Adam Optimizer requires beta2 parameter to be specified.')
+
+        if eps == None:
+            raise NotImplementedError('Adam Optimizer requires eps parameter to be specified.')
+
+        adam_optimizer = self.nn_spec.updateParams.optimizer.adamOptimizer
+
+        # set learning rate
+        adam_optimizer.learningRate.defaultValue = learning_rate["default_value"]
+        if len(learning_rate["allowed_range"]) == 2:
+            adam_optimizer.learningRate.range.minValue = learning_rate["allowed_range"][0]
+            adam_optimizer.learningRate.range.maxValue = learning_rate["allowed_range"][1]
+        else:
+            raise NotImplementedError('allowed_range has to be specified for learning rate parameter.')
+
+        # set mini batch size
+        adam_optimizer.miniBatchSize.defaultValue = mini_batch_size["default_value"]
+        if len(mini_batch_size["allowed_range"]) == 2:
+            adam_optimizer.miniBatchSize.range.minValue = mini_batch_size["allowed_range"][0]
+            adam_optimizer.miniBatchSize.range.maxValue = mini_batch_size["allowed_range"][1]
+        elif len(mini_batch_size["allowed_set"]) > 0:
+            adam_optimizer.miniBatchSize.set.values.extend(mini_batch_size["allowed_set"])
+        else:
+            raise NotImplementedError('Either allowed_range or allowed_set has to be specified for mini batch size parameter.')
+
+        # set beta1
+        adam_optimizer.beta1.defaultValue = beta1["default_value"]
+        if len(beta1["allowed_range"]) == 2:
+            adam_optimizer.beta1.range.minValue = beta1["allowed_range"][0]
+            adam_optimizer.beta1.range.maxValue = beta1["allowed_range"][1]
+        else:
+            raise NotImplementedError('allowed_range has to be specified for beta1 parameter.')
+
+        # set beta2
+        adam_optimizer.beta2.defaultValue = beta2["default_value"]
+        if len(beta2["allowed_range"]) == 2:
+            adam_optimizer.beta2.range.minValue = beta2["allowed_range"][0]
+            adam_optimizer.beta2.range.maxValue = beta2["allowed_range"][1]
+        else:
+            raise NotImplementedError('allowed_range has to be specified for beta2 parameter.')
+
+        # set eps
+        adam_optimizer.eps.defaultValue = eps["default_value"]
+        if len(eps["allowed_range"]) == 2:
+            adam_optimizer.eps.range.minValue = eps["allowed_range"][0]
+            adam_optimizer.eps.range.maxValue = eps["allowed_range"][1]
+        else:
+            raise NotImplementedError(
+                'allowed_range has to be specified for eps parameter.')
+
+    def set_epochs(self, epochs):
+        if self.spec is None:
+            return
+
+        if epochs == None:
+            raise NotImplementedError('epoch parameter has to be specified.')
+
+        self.nn_spec.updateParams.epochs.defaultValue = epochs["default_value"]
+
+        if len(epochs["allowed_range"]) == 2:
+            self.nn_spec.updateParams.epochs.range.minValue = epochs["allowed_range"][0]
+            self.nn_spec.updateParams.epochs.range.maxValue = epochs["allowed_range"][1]
+        elif len(epochs["allowed_set"]) > 0:
+            self.nn_spec.updateParams.epochs.set.values.extend(epochs["allowed_set"])
+        else:
+            raise NotImplementedError('Either allowed_range or allowed_set has to be specified for epoch parameter.')
+
+    def _add_generic_layer(self, name, input_names, output_names,
+                           input_ranks=None, input_shapes=None,
+                           output_ranks=None, output_shapes=None):
+        generic_layer = self.nn_spec.layers.add()
+        generic_layer.name = name
+        generic_layer.input.extend(input_names)
+        generic_layer.output.extend(output_names)
+        self.layers.append(name)
+        if name in self.layer_specs:
+            raise ValueError('Layer with name \"%s\" has already been added. Please use a unique name.' % name)
+        self.layer_specs[name] = generic_layer
+        _fill_tensor_fields(generic_layer.inputTensor, input_ranks, input_shapes)
+        _fill_tensor_fields(generic_layer.outputTensor, output_ranks, output_shapes)
+        return generic_layer
+
+    def inspect_layers(self, last = -1, verbose = False):
+        """ Prints the summary for last "last" number of layers.
+
+        Parameters
+        ----------
+        last: int
+             The numbers of layers to inspect, starting from the last one.
+        verbose: bool
+            Whether to display layer-specific parameters or not
+        """
+        n_layers = len(self.nn_spec.layers)
+        if last < 0:
+            last = n_layers
+        for i,alayer in enumerate(self.nn_spec.layers[::-1]):
+            if i >= last:
+                break
+            layer_type, name, in_blobs, out_blobs, params_info = summarize_network_layer_info(alayer)
+            print('[Id: {}], Name: {} (Type: {})'.format(n_layers-i-1, name, layer_type))
+            print(' '*10 + 'Input blobs: {}'.format(in_blobs))
+            print(' '*10 + 'Output blobs: {}'.format(out_blobs))
+            if verbose and len(params_info) > 0:
+                print(' '*10 + 'Parameters: ')
+                for param in params_info:
+                    print(' '*14 + '{} = {}'.format(param[0], param[1]))
 
     def add_inner_product(self, name, W, b, input_channels, output_channels, has_bias,
                           input_name, output_name, **kwargs):
@@ -402,7 +804,7 @@ class NeuralNetworkBuilder(object):
             The name of this layer
         W: numpy.array or bytes()
             Weight matrix of shape (output_channels, input_channels)
-            If W is of type bytes(), i.e. quantized, other quantization related arguments must be provided as well (see below).
+            If W is of type bytes(), i.e. quantized, other quantization related arguments must be provided as well (see below).    
         b: numpy.array
             Bias vector of shape (output_channels, ).
         input_channels: int
@@ -419,9 +821,9 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
-        Quantization arguments expected in kwargs, when W is of type bytes():
-
+            
+        Quantization arguments expected in kwargs, when W is of type bytes(): 
+            
             quantization_type : str
                 When weights are quantized (i.e. W is of type bytes()), this should be either "linear" or "lut".
 
@@ -443,14 +845,7 @@ class NeuralNetworkBuilder(object):
         add_embedding, add_convolution
         """
 
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.innerProduct
 
         # Fill in the parameters
@@ -459,7 +854,6 @@ class NeuralNetworkBuilder(object):
         spec_layer_params.hasBias = has_bias
 
         weights = spec_layer_params.weights
-
         if len(kwargs) == 0:
             weights.floatValue.extend(map(float, W.flatten()))
         else:
@@ -469,9 +863,16 @@ class NeuralNetworkBuilder(object):
         if has_bias:
             bias = spec_layer_params.bias
             bias.floatValue.extend(map(float, b.flatten()))
+        return spec_layer
 
     def add_embedding(self, name, W, b, input_dim, output_channels, has_bias,
-                      input_name, output_name):
+                      input_name, output_name,
+                      is_quantized_weight= False,
+                      quantization_type='linear',
+                      nbits = 8,
+                      quant_scale = None,
+                      quant_bias = None,
+                      quant_lut = None):
         """
         Add an embedding layer to the model.
 
@@ -479,8 +880,9 @@ class NeuralNetworkBuilder(object):
         ----------
         name: str
             The name of this layer
-        W: numpy.array
+        W: float32 numpy.array or bytes()
             Weight matrix of shape (output_channels, input_dim).
+            If W is of type bytes(), i.e. quantized to 1-8 bits, other quantization related arguments must be provided as well (see below).
         b: numpy.array
             Bias vector of shape (output_channels, ).
         input_dim: int
@@ -498,19 +900,33 @@ class NeuralNetworkBuilder(object):
         output_name: str
             The output blob name of this layer.
 
+
+        Quantization arguments expected, when W is of type bytes():
+
+        is_quantized_weight : bool
+            Set it to true when W is of type bytes(), representing quantized weights
+
+        quantization_type : str
+            When weights are quantized (i.e. W is of type bytes()), this should be either "linear" or "lut".
+
+        nbits: int
+            Should be between 1 and 8 (inclusive). Number of bits per weight value.
+
+        quant_scale: numpy.array(dtype=numpy.float32)
+            scale vector to be used with linear quantization. Must be of length either 1 or output_channels.
+
+        quant_bias: numpy.array(dtype=numpy.float32)
+            bias vector to be used with linear quantization. Must be of length either 1 or output_channels.
+
+        quant_lut: numpy.array(dtype=numpy.float32)
+            the LUT (look up table) to be used with LUT quantization. Must be of length 2^nbits.
+
         See Also
         --------
         add_inner_product
         """
 
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
 
         # Fill in the parameters
         spec_layer_params = spec_layer.embedding
@@ -520,11 +936,104 @@ class NeuralNetworkBuilder(object):
         spec_layer_params.hasBias = has_bias
 
         weights = spec_layer_params.weights
-        weights.floatValue.extend(map(float, W.flatten()))
+        if not is_quantized_weight:
+            weights.floatValue.extend(map(float, W.flatten()))
+        else:
+            _verify_quantization_arguments(weight=W, output_channels=output_channels,
+                                           quantization_type=quantization_type, nbits=nbits,
+                                           quant_scale=quant_scale, quant_bias=quant_bias, quant_lut=quant_lut)
+
+            _fill_quantized_weights(weights_message=weights, W=W,
+                                    quantization_type=quantization_type, nbits=nbits,
+                                    quant_scale=quant_scale, quant_bias=quant_bias, quant_lut=quant_lut)
+
         if has_bias:
             bias = spec_layer_params.bias
             bias.floatValue.extend(map(float, b.flatten()))
 
+        return spec_layer
+
+
+    def add_embeddingND(self, name, input_name, output_name,
+                        vocab_size, embedding_size,
+                        W, b= None,
+                        is_quantized_weight=False,
+                        quantization_type='linear',
+                        nbits=8,
+                        quant_scale=None,
+                        quant_bias=None,
+                        quant_lut=None):
+        """
+        Add an embeddingND layer to the model.
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer
+        input_name: str
+            The input blob name of this layer.
+        output_name: str
+            The output blob name of this layer.
+        vocab_size: int
+            Size of the vocabulary (1 + maximum integer index of the words).
+        embedding_size: int
+            Size of the embedded vector.
+        W: float32 numpy.array or bytes()
+            Weight matrix of shape (embedding_size, vocab_size).
+            If W is of type bytes(), i.e. quantized to 1-8 bits, other quantization related arguments must be provided as well (see below).
+        b: numpy.array | optional
+            Bias vector of shape (embedding_size, ).
+
+        Quantization arguments expected, when W is of type bytes():
+
+        is_quantized_weight : bool
+            Set it to true when W is of type bytes(), representing quantized weights
+
+        quantization_type : str
+            When weights are quantized (i.e. W is of type bytes()), this should be either "linear" or "lut".
+
+        nbits: int
+            Should be between 1 and 8 (inclusive). Number of bits per weight value.
+
+        quant_scale: numpy.array(dtype=numpy.float32)
+            scale vector to be used with linear quantization. Must be of length either 1 or embedding_size.
+
+        quant_bias: numpy.array(dtype=numpy.float32)
+            bias vector to be used with linear quantization. Must be of length either 1 or embedding_size.
+
+        quant_lut: numpy.array(dtype=numpy.float32)
+            the LUT (look up table) to be used with LUT quantization. Must be of length 2^nbits.
+
+        See Also
+        --------
+        add_inner_product, add_embedding
+        """
+
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+
+        # Fill in the parameters
+        spec_layer_params = spec_layer.embeddingND
+
+        spec_layer_params.vocabSize = vocab_size
+        spec_layer_params.embeddingSize = embedding_size
+        spec_layer_params.hasBias = b is not None
+
+        weights = spec_layer_params.weights
+        if not is_quantized_weight:
+            weights.floatValue.extend(map(float, W.flatten()))
+        else:
+            _verify_quantization_arguments(weight=W, output_channels=embedding_size,
+                                           quantization_type=quantization_type, nbits=nbits,
+                                           quant_scale=quant_scale, quant_bias=quant_bias, quant_lut=quant_lut)
+
+            _fill_quantized_weights(weights_message=weights, W=W,
+                                    quantization_type=quantization_type, nbits=nbits,
+                                    quant_scale=quant_scale, quant_bias=quant_bias, quant_lut=quant_lut)
+
+        if b is not None:
+            bias = spec_layer_params.bias
+            bias.floatValue.extend(map(float, b.flatten()))
+        return spec_layer
 
     def add_softmax(self, name, input_name, output_name):
         """
@@ -538,21 +1047,14 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+       
         See Also
         --------
         add_activation, add_inner_product, add_convolution
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.softmax.MergeFromString(b'')
+        return spec_layer
 
     def add_activation(self, name, non_linearity, input_name, output_name,
         params=None):
@@ -564,13 +1066,13 @@ class NeuralNetworkBuilder(object):
         name: str
             The name of this layer
         non_linearity: str
-            The non_linearity (activation) function of this layer.
+            The non_linearity (activation) function of this layer. 
             It can be one of the following:
 
                 - 'RELU': Rectified Linear Unit (ReLU) function.
                 - 'SIGMOID': sigmoid function.
                 - 'TANH': tanh function.
-                - 'SCALED_TANH': scaled tanh function, defined as:
+                - 'SCALED_TANH': scaled tanh function, defined as: 
 
                   `f(x) = alpha * tanh(beta * x)`
 
@@ -578,22 +1080,22 @@ class NeuralNetworkBuilder(object):
 
                 - 'SOFTPLUS': softplus function.
                 - 'SOFTSIGN': softsign function.
-                - 'SIGMOID_HARD': hard sigmoid function, defined as:
+                - 'SIGMOID_HARD': hard sigmoid function, defined as: 
 
-                  `f(x) = min(max(alpha * x + beta, -1), 1)`
+                  `f(x) = min(max(alpha * x + beta, -1), 1)` 
 
                   where alpha and beta are constant scalars.
-                - 'LEAKYRELU': leaky relu function, defined as:
+                - 'LEAKYRELU': leaky relu function, defined as: 
 
                   `f(x) = (x >= 0) * x + (x < 0) * alpha * x`
 
                   where alpha is a constant scalar.
-                - 'PRELU': Parametric ReLU function, defined as:
+                - 'PRELU': Parametric ReLU function, defined as: 
 
                   `f(x) = (x >= 0) * x + (x < 0) * alpha * x`
 
                   where alpha is a multi-dimensional array of same size as x.
-                - 'ELU': Exponential linear unit function, defined as:
+                - 'ELU': Exponential linear unit function, defined as: 
 
                   `f(x) = (x >= 0) * x + (x < 0) * (alpha * exp(x) - 1)`
 
@@ -604,21 +1106,21 @@ class NeuralNetworkBuilder(object):
                   `f(x) = alpha * log(1 + exp(beta * x))`
 
                   where alpha and beta are two multi-dimensional arrays of same size as x.
-                - 'THRESHOLDEDRELU': Thresholded ReLU function, defined as:
+                - 'THRESHOLDEDRELU': Thresholded ReLU function, defined as: 
 
                   `f(x) = (x >= alpha) * x`
 
                   where alpha is a constant scalar.
                 - 'LINEAR': linear function.
-
-                   `f(x) = alpha * x + beta`
+                
+                   `f(x) = alpha * x + beta`    
 
         input_name: str
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
         params: [float] | [numpy.array]
-            Parameters for the activation, depending on non_linearity. Kindly refer to NeuralNetwork.proto for details.
+            Parameters for the activation, depending on non_linearity. Kindly refer to NeuralNetwork.proto for details. 
 
                 - When non_linearity is one of ['RELU', 'SIGMOID', 'TANH', 'SCALED_TANH', 'SOFTPLUS', 'SOFTSIGN'], params is ignored.
                 - When non_linearity is one of ['SCALED_TANH', 'SIGMOID_HARD', 'LINEAR'], param is a list of 2 floats
@@ -638,20 +1140,13 @@ class NeuralNetworkBuilder(object):
         add_convolution, add_softmax
         """
 
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.activation
 
         # Fill in the parameters
         if non_linearity == 'RELU':
             spec_layer_params.ReLU.MergeFromString(b'')
-
+  
         elif non_linearity == 'SIGMOID':
             spec_layer_params.sigmoid.MergeFromString(b'')
 
@@ -702,14 +1197,14 @@ class NeuralNetworkBuilder(object):
             # Weight alignment: Keras [H,W,C,F], Espresso [
             spec_layer_params.parametricSoftplus.alpha.floatValue.extend(map(float, alphas.flatten()))
             spec_layer_params.parametricSoftplus.beta.floatValue.extend(map(float, betas.flatten()))
-
+  
         elif non_linearity == 'THRESHOLDEDRELU':
             if params is None:
                 theta = 1.0
             else:
                 theta = params
             spec_layer_params.thresholdedReLU.alpha = float(theta)
-
+  
         elif non_linearity == 'LINEAR':
             if params is None:
                 alpha, beta = (1.0, 0.0)
@@ -719,6 +1214,7 @@ class NeuralNetworkBuilder(object):
             spec_layer_params.linear.beta = beta
         else:
             raise TypeError("Unknown activation type %s." %(non_linearity))
+        return spec_layer
 
     def add_elementwise(self, name, input_names, output_name, mode, alpha = None):
         """
@@ -744,28 +1240,18 @@ class NeuralNetworkBuilder(object):
             - 'MAX': compute the element-wise maximum over the input blobs.
             - 'MIN': compute the element-wise minimum over the input blobs.
             - 'AVE': compute the element-wise average over the input blobs.
-
+        
         alpha: float
             if mode == 'ADD' and there is only one input_name, alpha is added to the input
             if mode == 'MULTIPLY' and there is only one input_name, alpha is multiplied to the input
-
+       
         See Also
         --------
         add_upsample, add_sequence_repeat
-
+       
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-
-        if isinstance(input_names, list):
-            for input_name in input_names:
-                spec_layer.input.append(input_name)
-        else:
-            spec_layer.input.append(input_names)
-        spec_layer.output.append(output_name)
+        input_names = input_names if isinstance(input_names, list) else [input_names]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
 
         ## Add the following layers.
         if mode == 'CONCAT':
@@ -787,11 +1273,12 @@ class NeuralNetworkBuilder(object):
         elif mode == 'MAX':
             spec_layer.max.MergeFromString(b'')
         elif mode == 'MIN':
-            spec_layer.min.MergeFromString(b'')
+            spec_layer.min.MergeFromString(b'')    
         elif mode == 'AVE':
             spec_layer.average.MergeFromString(b'')
         else:
             raise ValueError("Unsupported elementwise mode %s" % mode)
+        return spec_layer
 
     def add_upsample(self, name, scaling_factor_h, scaling_factor_w, input_name, output_name, mode = 'NN'):
         """
@@ -818,14 +1305,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_sequence_repeat, add_elementwise
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new inner-product layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.upsample
         spec_layer_params.scalingFactor.append(scaling_factor_h)
         spec_layer_params.scalingFactor.append(scaling_factor_w)
@@ -835,6 +1315,7 @@ class NeuralNetworkBuilder(object):
             spec_layer_params.mode = _NeuralNetwork_pb2.UpsampleLayerParams.InterpolationMode.Value('BILINEAR')
         else:
             raise ValueError("Unsupported upsampling mode %s" % mode)
+        return spec_layer
 
     def add_scale(self, name, W, b, has_bias, input_name, output_name, shape_scale = [1], shape_bias = [1]):
         """
@@ -854,7 +1335,7 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+        
         shape_scale: [int]
             List of ints that specifies the shape of the scale parameter. Can be [1] or [C] or [1,H,W] or [C,H,W].
         shape_bias: [int]
@@ -864,37 +1345,32 @@ class NeuralNetworkBuilder(object):
         --------
         add_bias
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.scale
-
+        
         spec_layer_params.hasBias = has_bias
-
+        
         #add scale and its shape
         scale = spec_layer_params.scale
-        spec_layer_params.shapeScale.extend(shape_scale)
+        spec_layer_params.shapeScale.extend(shape_scale)  
         if isinstance(W, int):
             scale.floatValue.append(float(W))
-        else:
-            scale.floatValue.extend(map(float, W.flatten()))
+        else:    
+            scale.floatValue.extend(map(float, W.flatten()))  
         if len(scale.floatValue) != np.prod(shape_scale):
-            raise ValueError("Dimensions of 'shape_scale' do not match the size of the provided 'scale' parameter")
-
+            raise ValueError("Dimensions of 'shape_scale' do not match the size of the provided 'scale' parameter")     
+        
         #add bias and its shape
         if has_bias:
             bias = spec_layer_params.bias
-            spec_layer_params.shapeBias.extend(shape_bias)
+            spec_layer_params.shapeBias.extend(shape_bias) 
             if isinstance(b, int):
                 bias.floatValue.append(float(b))
-            else:
-                bias.floatValue.extend(map(float, b.flatten()))
+            else:    
+                bias.floatValue.extend(map(float, b.flatten()))  
             if len(bias.floatValue) != np.prod(shape_bias):
                 raise ValueError("Dimensions of 'shape_bias' do not match the size of the provided 'b' parameter")
+        return spec_layer
 
     def add_bias(self, name, b, input_name, output_name, shape_bias = [1]):
         """
@@ -917,13 +1393,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_scale
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.bias
 
         #add bias and its shape
@@ -931,15 +1401,16 @@ class NeuralNetworkBuilder(object):
         spec_layer_params.shape.extend(shape_bias)
         if isinstance(b, int):
             bias.floatValue.append(float(b))
-        else:
+        else:    
             bias.floatValue.extend(map(float, b.flatten()))
         if len(bias.floatValue) != np.prod(shape_bias):
             raise ValueError("Dimensions of 'shape_bias' do not match the size of the provided 'b' parameter")
+        return spec_layer
 
     def add_sequence_repeat(self, name, nrep, input_name, output_name):
         """
         Add sequence repeat layer to the model.
-
+       
         Parameters
         ----------
         name: str
@@ -950,24 +1421,20 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+       
         See Also
         --------
         add_upsample, add_elementwise
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.sequenceRepeat
         spec_layer_params.nRepetitions = nrep
+        return spec_layer
 
     def add_convolution(self, name, kernel_channels, output_channels, height,
-            width, stride_height, stride_width, border_mode, groups, W, b, has_bias,
-            is_deconv = False, output_shape = None,
-            input_name = 'data', output_name = 'out',
+            width, stride_height, stride_width, border_mode, groups, W, b, has_bias, 
+            is_deconv = False, output_shape = None, 
+            input_name = 'data', output_name = 'out', 
             dilation_factors = [1,1],
             padding_top = 0, padding_bottom = 0, padding_left = 0, padding_right = 0,
             same_padding_asymmetry_mode = 'BOTTOM_RIGHT_HEAVY',
@@ -996,15 +1463,15 @@ class NeuralNetworkBuilder(object):
             Stride along the height direction.
         border_mode: str
             Option for the padding type and output blob shape. Can be either 'valid' or 'same'.
-            Kindly refer to NeuralNetwork.proto for details.
+            Kindly refer to NeuralNetwork.proto for details. 
         groups: int
-            Number of kernel groups. Input is divided into groups along the channel axis. Each kernel group share the same weights.
+            Number of kernel groups. Input is divided into groups along the channel axis. Each kernel group share the same weights. 
         W: numpy.array or bytes()
             Weight of the convolution kernels.
 
             - If is_deconv is False, W should have shape (height, width, kernel_channels, output_channels), where kernel_channel = input_channels / groups
             - If is_deconv is True, W should have shape (height, width, kernel_channels, output_channels / groups), where kernel_channel = input_channels
-
+            
             If W is of type bytes(), i.e. quantized, other quantization related arguments must be provided as well (see below).
 
         b: numpy.array
@@ -1023,37 +1490,37 @@ class NeuralNetworkBuilder(object):
 
         output_shape: tuple | None
             Either None or a 2-tuple, specifying the output shape (output_height, output_width). Used only when is_deconv == True.
-            When is_deconv == False, this parameter is ignored.
+            When is_deconv == False, this parameter is ignored. 
             If it is None, the output shape is calculated automatically using the border_mode.
-            Kindly refer to NeuralNetwork.proto for details.
-
+            Kindly refer to NeuralNetwork.proto for details.    
+            
         input_name: str
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
 
         dilation_factors: [int]
-            Dilation factors across height and width directions. Must be a list of two positive integers.
-            Defaults to [1,1]
-
+            Dilation factors across height and width directions. Must be a list of two positive integers. 
+            Defaults to [1,1]   
+            
         padding_top, padding_bottom, padding_left, padding_right: int
             values of height (top, bottom) and width (left, right) padding to be used if border_more is "valid".
-
+            
         same_padding_asymmetry_mode : str.
-            Type of asymmetric padding to be used when  border_mode is 'same'.
-            Can be either 'BOTTOM_RIGHT_HEAVY' or  'TOP_LEFT_HEAVY'.
-            Kindly refer to NeuralNetwork.proto for details.
-
-
+            Type of asymmetric padding to be used when  border_mode is 'same'. 
+            Can be either 'BOTTOM_RIGHT_HEAVY' or  'TOP_LEFT_HEAVY'. 
+            Kindly refer to NeuralNetwork.proto for details.    
+            
+            
         Depthwise convolution is a special case of convolution, where we have:
             kernel_channels = 1 (== input_channels / groups)
             output_channels = channel_multiplier * input_channels
             groups = input_channels
             W : [Kernel_height, Kernel_width, 1, channel_multiplier * input_channels]
-
-
-        Quantization arguments expected in kwargs, when W is of type bytes():
-
+            
+            
+        Quantization arguments expected in kwargs, when W is of type bytes(): 
+            
             quantization_type : str
                 When weights are quantized (i.e. W is of type bytes()), this should be either "linear" or "lut".
 
@@ -1068,31 +1535,30 @@ class NeuralNetworkBuilder(object):
                 bias vector to be used with linear quantization. Must be of length either 1 or output_channels.
 
             quant_lut: numpy.array(dtype=numpy.float32)
-                the LUT (look up table) to be used with LUT quantization. Must be of length 2^nbits.
-
+                the LUT (look up table) to be used with LUT quantization. Must be of length 2^nbits. 
+                
         See Also
         --------
         add_pooling, add_activation, add_batchnorm
-
+       
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
 
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
-        spec_layer.convolution.MergeFromString(b'') # hack to set empty message
+        if isinstance(input_name, tuple):
+            input_names = list(input_name)
+        elif isinstance(input_name, list):
+            input_names = input_name
+        else:
+            input_names = [input_name]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
 
         # Set the layer params
         spec_layer_params = spec_layer.convolution
         spec_layer_params.isDeconvolution = is_deconv
-
+        
         if is_deconv and output_shape:
             spec_layer_params.outputShape.append(output_shape[0])
             spec_layer_params.outputShape.append(output_shape[1])
-
+            
         spec_layer_params.outputChannels = output_channels
         spec_layer_params.kernelChannels = kernel_channels
         spec_layer_params.kernelSize.append(height)
@@ -1118,6 +1584,15 @@ class NeuralNetworkBuilder(object):
         spec_layer_params.nGroups = groups
         spec_layer_params.hasBias = has_bias
 
+        # add dilation factors
+        spec_layer_params.dilationFactor.append(dilation_factors[0])
+        spec_layer_params.dilationFactor.append(dilation_factors[1])
+
+        # If weight comes from another tensor just return
+        if len(input_names) > 1:
+            return
+
+        # Weight assignments
         if len(kwargs) > 0:
             _verify_quantization_arguments(weight = W, output_channels=output_channels, **kwargs)
 
@@ -1135,9 +1610,9 @@ class NeuralNetworkBuilder(object):
                 W = np.reshape(W, (height, width, kernel_channels, output_channels))
 
 
-        # Weight alignment: MLModel Spec requires following weight arrangement:
+        # Weight alignment: MLModel Spec requires following weight arrangement: 
         # is_deconv == False ==> (output_channels, kernel_channels, height, width), where kernel_channel = input_channels / groups
-        # is_deconv == True ==> (kernel_channels, output_channels / groups, height, width), where kernel_channel = input_channels
+        # is_deconv == True ==> (kernel_channels, output_channels / groups, height, width), where kernel_channel = input_channels        
         if not is_deconv:
             Wt = W.transpose((3,2,0,1))
             Wt = Wt.flatten()
@@ -1162,14 +1637,12 @@ class NeuralNetworkBuilder(object):
             for f in range(output_channels):
                 bias.floatValue.append(float(b[f]))
 
-        # add dilation factors
-        spec_layer_params.dilationFactor.append(dilation_factors[0])
-        spec_layer_params.dilationFactor.append(dilation_factors[1])
+        return spec_layer
 
     def add_pooling(self, name, height, width, stride_height, stride_width,
             layer_type, padding_type, input_name, output_name, exclude_pad_area = True, is_global = False,
             padding_top = 0, padding_bottom = 0, padding_left = 0, padding_right = 0,
-            same_padding_asymmetry_mode = 'BOTTOM_RIGHT_HEAVY'):
+            same_padding_asymmetry_mode = 'BOTTOM_RIGHT_HEAVY'):        
         """
         Add a pooling layer to the model.
 
@@ -1188,8 +1661,8 @@ class NeuralNetworkBuilder(object):
         layer_type: str
             Type of pooling performed. Can either be 'MAX', 'AVERAGE' or 'L2'.
         padding_type: str
-            Option for the type of padding and output blob shape. Can be either 'VALID' , 'SAME' or 'INCLUDE_LAST_PIXEL'.
-            Kindly refer to NeuralNetwork.proto for details.
+            Option for the type of padding and output blob shape. Can be either 'VALID' , 'SAME' or 'INCLUDE_LAST_PIXEL'. 
+            Kindly refer to NeuralNetwork.proto for details. 
         input_name: str
             The input blob name of this layer.
         output_name: str
@@ -1202,34 +1675,26 @@ class NeuralNetworkBuilder(object):
             - If False, the padded area will be included.
             This flag is only used with average pooling.
         is_global: boolean
-            Whether the pooling operation is global. Defaults to False.
+            Whether the pooling operation is global. Defaults to False. 
 
             - If True, the pooling operation is global -- the pooling region is of the same size of the input blob.
             Parameters height, width, stride_height, stride_width will be ignored.
 
             - If False, the pooling operation is not global.
-
+            
         padding_top, padding_bottom, padding_left, padding_right: int
             values of height (top, bottom) and width (left, right) padding to be used if padding type is "VALID" or "INCLUDE_LAST_PIXEL".
-
+            
         same_padding_asymmetry_mode : str.
-            Type of asymmetric padding to be used when  padding_type = 'SAME'.
-            Can be either 'BOTTOM_RIGHT_HEAVY' or  'TOP_LEFT_HEAVY'.
-            Kindly refer to NeuralNetwork.proto for details.
+            Type of asymmetric padding to be used when  padding_type = 'SAME'. 
+            Can be either 'BOTTOM_RIGHT_HEAVY' or  'TOP_LEFT_HEAVY'. 
+            Kindly refer to NeuralNetwork.proto for details.            
 
         See Also
         --------
         add_convolution, add_activation
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.pooling
 
         # Set the parameters
@@ -1253,8 +1718,8 @@ class NeuralNetworkBuilder(object):
             spec_layer_params.includeLastPixel.paddingAmounts.append(padding_top)
             spec_layer_params.includeLastPixel.paddingAmounts.append(padding_left)
         else:
-            raise ValueError("Unknown padding_type %s in pooling" %(padding_type))
-
+            raise ValueError("Unknown padding_type %s in pooling" %(padding_type))    
+            
 
         spec_layer_params.kernelSize.append(height)
         spec_layer_params.kernelSize.append(width)
@@ -1262,21 +1727,22 @@ class NeuralNetworkBuilder(object):
         spec_layer_params.stride.append(stride_width)
         spec_layer_params.avgPoolExcludePadding = exclude_pad_area
         spec_layer_params.globalPooling = is_global
+        return spec_layer
 
-    def add_padding(self, name,
-            left = 0, right = 0, top = 0, bottom = 0,
-            value = 0,
-            input_name = 'data', output_name = 'out',
+    def add_padding(self, name, 
+            left = 0, right = 0, top = 0, bottom = 0, 
+            value = 0, 
+            input_name = 'data', output_name = 'out', 
             padding_type = 'constant'):
         """
-        Add a padding layer to the model. Kindly refer to NeuralNetwork.proto for details.
+        Add a padding layer to the model. Kindly refer to NeuralNetwork.proto for details. 
 
         Parameters
         ----------
         name: str
             The name of this layer.
         left: int
-            Number of elements to be padded on the left side of the input blob.
+            Number of elements to be padded on the left side of the input blob. 
         right: int
             Number of elements to be padded on the right side of the input blob.
         top: int
@@ -1290,21 +1756,13 @@ class NeuralNetworkBuilder(object):
         output_name: str
             The output blob name of this layer.
         padding_type: str
-            Type of the padding. Can be one of 'constant', 'reflection' or 'replication'
+            Type of the padding. Can be one of 'constant', 'reflection' or 'replication'     
 
         See Also
         --------
         add_crop, add_convolution, add_pooling
         """
-        # Currently only constant padding is supported.
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.padding
 
         # Set the parameters
@@ -1315,8 +1773,7 @@ class NeuralNetworkBuilder(object):
         elif padding_type == 'replication':
             spec_layer_params.replication.MergeFromString(b'')
         else:
-            raise ValueError("Unknown padding_type %s" %(padding_type))
-
+            raise ValueError("Unknown padding_type %s" %(padding_type))      
 
         height_border = spec_layer_params.paddingAmounts.borderAmounts.add()
         height_border.startEdgeSize = top
@@ -1324,6 +1781,7 @@ class NeuralNetworkBuilder(object):
         width_border = spec_layer_params.paddingAmounts.borderAmounts.add()
         width_border.startEdgeSize = left
         width_border.endEdgeSize = right
+        return spec_layer
 
     def add_crop(self, name, left, right, top, bottom, offset, input_names,
             output_name):
@@ -1332,16 +1790,16 @@ class NeuralNetworkBuilder(object):
         The cropping layer have two functional modes:
 
             - When it has 1 input blob, it crops the input blob based
-              on the 4 parameters [left, right, top, bottom].
+              on the 4 parameters [left, right, top, bottom]. 
             - When it has 2 input blobs, it crops the first input blob based
-              on the dimension of the second blob with an offset.
+              on the dimension of the second blob with an offset. 
 
         Parameters
         ----------
         name: str
             The name of this layer.
         left: int
-            Number of elements to be cropped on the left side of the input blob.
+            Number of elements to be cropped on the left side of the input blob. 
             When the crop layer takes 2 inputs, this parameter is ignored.
         right: int
             Number of elements to be cropped on the right side of the input blob.
@@ -1365,19 +1823,11 @@ class NeuralNetworkBuilder(object):
         --------
         add_padding, add_convolution, add_pooling
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        for input_name in input_names:
-            spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
         spec_layer_params = spec_layer.crop
 
         # Set the parameters
-        offset = [0,0] if len(input_name) == 1 else offset
+        offset = [0,0] if len(input_names) == 1 else offset
         spec_layer_params.offset.extend(offset)
         height_border = spec_layer_params.cropAmounts.borderAmounts.add()
         height_border.startEdgeSize = top
@@ -1385,6 +1835,7 @@ class NeuralNetworkBuilder(object):
         width_border = spec_layer_params.cropAmounts.borderAmounts.add()
         width_border.startEdgeSize = left
         width_border.endEdgeSize = right
+        return spec_layer
 
     def add_simple_rnn(self,name, W_h, W_x, b, hidden_size, input_size, activation, input_names, output_names, output_all = False, reverse_input = False):
         """
@@ -1427,17 +1878,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_activation, add_gru, add_unilstm, add_bidirlstm
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new Layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        for name in input_names:
-            spec_layer.input.append(name)
-        for name in output_names:
-            spec_layer.output.append(name)
+        spec_layer = self._add_generic_layer(name, input_names, output_names)
         spec_layer_params = spec_layer.simpleRecurrent
         spec_layer_params.reverseInput = reverse_input
 
@@ -1457,9 +1898,10 @@ class NeuralNetworkBuilder(object):
 
         if b is not None:
             spec_layer_params.biasVector.floatValue.extend(map(float, b.flatten()))
+        return spec_layer
 
-    def add_gru(self, name, W_h, W_x, b, hidden_size, input_size,
-            input_names, output_names, activation = 'TANH', inner_activation = 'SIGMOID_HARD',
+    def add_gru(self, name, W_h, W_x, b, hidden_size, input_size, 
+            input_names, output_names, activation = 'TANH', inner_activation = 'SIGMOID_HARD', 
             output_all = False, reverse_input = False):
         """
         Add a Gated-Recurrent Unit (GRU) layer to the model.
@@ -1487,7 +1929,7 @@ class NeuralNetworkBuilder(object):
         activation: str
             Activation function used at the output gate. Can be one of the following option:
             ['RELU', 'TANH', 'SIGMOID', 'SCALED_TANH', 'SIGMOID_HARD', 'LINEAR'].
-            Defaults to 'TANH'.
+            Defaults to 'TANH'. 
             See add_activation for more detailed description.
         inner_activation: str
             Inner activation function used at update and reset gates. Can be one of the following option:
@@ -1513,17 +1955,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_activation, add_simple_rnn, add_unilstm, add_bidirlstm
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new Layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-
-        for name in input_names:
-            spec_layer.input.append(name)
-        for name in output_names:
-            spec_layer.output.append(name)
+        spec_layer = self._add_generic_layer(name, input_names, output_names)
         spec_layer_params = spec_layer.gru
 
         # set the parameters
@@ -1542,7 +1974,7 @@ class NeuralNetworkBuilder(object):
         # Write the weights
         R_z, R_r, R_o = W_h
         W_z, W_r, W_o = W_x
-
+        
         spec_layer_params.updateGateWeightMatrix.floatValue.extend(map(float, W_z.flatten()))
         spec_layer_params.resetGateWeightMatrix.floatValue.extend(map(float, W_r.flatten()))
         spec_layer_params.outputGateWeightMatrix.floatValue.extend(map(float, W_o.flatten()))
@@ -1556,6 +1988,7 @@ class NeuralNetworkBuilder(object):
             spec_layer_params.updateGateBiasVector.floatValue.extend(map(float, b_z.flatten()))
             spec_layer_params.resetGateBiasVector.floatValue.extend(map(float, b_r.flatten()))
             spec_layer_params.outputGateBiasVector.floatValue.extend(map(float, b_o.flatten()))
+        return spec_layer
 
     def add_unilstm(self, name, W_h, W_x, b, hidden_size, input_size, input_names, output_names,
                     inner_activation = 'SIGMOID',
@@ -1628,16 +2061,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_activation, add_simple_rnn, add_gru, add_bidirlstm
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new Layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        for name in input_names:
-            spec_layer.input.append(name)
-        for name in output_names:
-            spec_layer.output.append(name)
+        spec_layer = self._add_generic_layer(name, input_names, output_names)
         spec_layer_params = spec_layer.uniDirectionalLSTM
         params = spec_layer_params.params
         weight_params = spec_layer_params.weightParams
@@ -1667,7 +2091,7 @@ class NeuralNetworkBuilder(object):
         # Write the weights
         R_i, R_f, R_o, R_z = W_h
         W_i, W_f, W_o, W_z = W_x
-
+        
         weight_params.inputGateWeightMatrix.floatValue.extend(map(float, W_i.flatten()))
         weight_params.forgetGateWeightMatrix.floatValue.extend(map(float, W_f.flatten()))
         weight_params.outputGateWeightMatrix.floatValue.extend(map(float, W_o.flatten()))
@@ -1691,7 +2115,9 @@ class NeuralNetworkBuilder(object):
             weight_params.forgetGatePeepholeVector.floatValue.extend(map(float, p_f.flatten()))
             weight_params.outputGatePeepholeVector.floatValue.extend(map(float, p_o.flatten()))
 
-    def add_bidirlstm(self, name, W_h, W_x, b, W_h_back, W_x_back, b_back, hidden_size, input_size,
+        return spec_layer
+
+    def add_bidirlstm(self, name, W_h, W_x, b, W_h_back, W_x_back, b_back, hidden_size, input_size, 
             input_names, output_names,
             inner_activation = 'SIGMOID',
             cell_state_update_activation = 'TANH',
@@ -1742,7 +2168,7 @@ class NeuralNetworkBuilder(object):
         inner_activation: str
             Inner activation function used at input and forget gate. Can be one of the following option:
             ['RELU', 'TANH', 'SIGMOID', 'SCALED_TANH', 'SIGMOID_HARD', 'LINEAR'].
-            Defaults to 'SIGMOID'.
+            Defaults to 'SIGMOID'. 
         cell_state_update_activation: str
             Cell state update activation function used at the cell state update gate.
             ['RELU', 'TANH', 'SIGMOID', 'SCALED_TANH', 'SIGMOID_HARD', 'LINEAR'].
@@ -1778,17 +2204,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_activation, add_simple_rnn, add_unilstm, add_bidirlstm
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new Layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        for name in input_names:
-            spec_layer.input.append(name)
-        for name in output_names:
-            spec_layer.output.append(name)
+        spec_layer = self._add_generic_layer(name, input_names, output_names)
         spec_layer_params = spec_layer.biDirectionalLSTM
         params = spec_layer_params.params
         weight_params = spec_layer_params.weightParams.add()
@@ -1825,7 +2241,7 @@ class NeuralNetworkBuilder(object):
         # Write the forward lstm weights
         R_i, R_f, R_o, R_z = W_h
         W_i, W_f, W_o, W_z = W_x
-
+        
         weight_params.inputGateWeightMatrix.floatValue.extend(map(float, W_i.flatten()))
         weight_params.forgetGateWeightMatrix.floatValue.extend(map(float, W_f.flatten()))
         weight_params.outputGateWeightMatrix.floatValue.extend(map(float, W_o.flatten()))
@@ -1852,7 +2268,7 @@ class NeuralNetworkBuilder(object):
         # Write the backward lstm weights
         R_i, R_f, R_o, R_z = W_h_back
         W_i, W_f, W_o, W_z = W_x_back
-
+        
         weight_params_back.inputGateWeightMatrix.floatValue.extend(map(float, W_i.flatten()))
         weight_params_back.forgetGateWeightMatrix.floatValue.extend(map(float, W_f.flatten()))
         weight_params_back.outputGateWeightMatrix.floatValue.extend(map(float, W_o.flatten()))
@@ -1875,10 +2291,11 @@ class NeuralNetworkBuilder(object):
             weight_params_back.inputGatePeepholeVector.floatValue.extend(map(float, p_i.flatten()))
             weight_params_back.forgetGatePeepholeVector.floatValue.extend(map(float, p_f.flatten()))
             weight_params_back.outputGatePeepholeVector.floatValue.extend(map(float, p_o.flatten()))
+        return spec_layer
 
     def add_flatten(self, name, mode, input_name, output_name):
         """
-        Add a flatten layer. Only flattens the channel, height and width axis. Leaves the sequence axis as is.
+        Add a flatten layer. Only flattens the channel, height and width axis. Leaves the sequence axis as is. 
 
         Parameters
         ----------
@@ -1898,14 +2315,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_permute, add_reshape
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.flatten
 
         # Set the parameters
@@ -1916,46 +2326,40 @@ class NeuralNetworkBuilder(object):
             spec_layer_params.mode = \
                         _NeuralNetwork_pb2.FlattenLayerParams.FlattenOrder.Value('CHANNEL_LAST')
         else:
-            raise NotImplementedError(
-                'Unknown flatten mode %d ' % mode)
+            raise NotImplementedError('Unknown flatten mode %d ' % mode)
+
+        return spec_layer
 
     def add_slice(self, name, input_name, output_name, axis, start_index = 0, end_index = -1, stride = 1):
         """
-        Add a slice layer. Equivalent to to numpy slice [start_index:end_index:stride],
-        start_index is included, while end_index is exclusive.
+        Add a slice layer. Equivalent to to numpy slice [start_index:end_index:stride], 
+        start_index is included, while end_index is exclusive. 
 
         Parameters
         ----------
         name: str
             The name of this layer.
-
+        
         input_name: str
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+        
         axis: str
            axis along which input is sliced.
-	       allowed values: 'channel', 'height', 'width'
+   	       allowed values: 'channel', 'height', 'width'
         start_index: int
             must be non-negative.
         end_index: int
-            negative indexing is supported.
+            negative indexing is supported. 
         stride: int
-            must be positive.
+            must be positive. 
 
         See Also
         --------
         add_permute, add_reshape
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.slice
 
         # Set the parameters
@@ -1963,11 +2367,11 @@ class NeuralNetworkBuilder(object):
             raise ValueError("Invalid start_index value %d. Must be non-negative." % start_index)
         if stride < 1:
             raise ValueError("Invalid stride value %d. Must be positive." % stride)
-
+            
         spec_layer_params.startIndex = start_index
         spec_layer_params.endIndex = end_index
         spec_layer_params.stride = stride
-
+        
         if axis == 'channel':
             spec_layer_params.axis = \
                         _NeuralNetwork_pb2.SliceLayerParams.SliceAxis.Value('CHANNEL_AXIS')
@@ -1976,11 +2380,10 @@ class NeuralNetworkBuilder(object):
                         _NeuralNetwork_pb2.SliceLayerParams.SliceAxis.Value('HEIGHT_AXIS')
         elif axis == 'width':
             spec_layer_params.axis = \
-                        _NeuralNetwork_pb2.SliceLayerParams.SliceAxis.Value('WIDTH_AXIS')
+                        _NeuralNetwork_pb2.SliceLayerParams.SliceAxis.Value('WIDTH_AXIS')                
         else:
-            raise NotImplementedError(
-                'Unsupported Slice axis %s ' % axis)
-
+            raise NotImplementedError('Unsupported Slice axis %s ' % axis)
+        return spec_layer
 
     def add_reorganize_data(self, name, input_name, output_name, mode = 'SPACE_TO_DEPTH', block_size = 2):
         """
@@ -1995,18 +2398,18 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+        
         mode: str
-
+        
             - If mode == 'SPACE_TO_DEPTH': data is moved from the spatial to the channel dimension.
-              Input is spatially divided into non-overlapping blocks of size block_size X block_size
-              and data from each block is moved to the channel dimension.
+              Input is spatially divided into non-overlapping blocks of size block_size X block_size  
+              and data from each block is moved to the channel dimension.    
               Output CHW dimensions are: [C * block_size * block_size, H/block_size, C/block_size].
-
+        
             - If mode == 'DEPTH_TO_SPACE': data is moved from the channel to the spatial dimension.
               Reverse of the operation 'SPACE_TO_DEPTH'.
               Output CHW dimensions are: [C/(block_size * block_size), H * block_size, C * block_size].
-
+        
         block_size: int
             Must be greater than 1. Must divide H and W, when mode is 'SPACE_TO_DEPTH'. (block_size * block_size)
             must divide C when mode is 'DEPTH_TO_SPACE'.
@@ -2015,20 +2418,13 @@ class NeuralNetworkBuilder(object):
         --------
         add_flatten, add_reshape
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.reorganizeData
 
         # Set the parameters
         if block_size < 2:
             raise ValueError("Invalid block_size value %d. Must be greater than 1." % block_size)
-        spec_layer_params.blockSize = block_size
+        spec_layer_params.blockSize = block_size            
         if mode == 'SPACE_TO_DEPTH':
             spec_layer_params.mode = \
                         _NeuralNetwork_pb2.ReorganizeDataLayerParams.ReorganizationType.Value('SPACE_TO_DEPTH')
@@ -2036,12 +2432,12 @@ class NeuralNetworkBuilder(object):
             spec_layer_params.mode = \
                         _NeuralNetwork_pb2.ReorganizeDataLayerParams.ReorganizationType.Value('DEPTH_TO_SPACE')
         else:
-            raise NotImplementedError(
-                'Unknown reorganization mode %s ' % mode)
+            raise NotImplementedError('Unknown reorganization mode %s ' % mode)
+        return spec_layer
 
-    def add_batchnorm(self, name, channels, gamma, beta,
-                      mean = None, variance = None,
-                      input_name = 'data', output_name = 'out',
+    def add_batchnorm(self, name, channels, gamma, beta, 
+                      mean = None, variance = None, 
+                      input_name = 'data', output_name = 'out', 
                       compute_mean_var = False,
                       instance_normalization = False, epsilon = 1e-5):
         """
@@ -2080,16 +2476,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_convolution, add_pooling, add_inner_product
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
-
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.batchnorm
 
         # Set the parameters
@@ -2099,7 +2486,7 @@ class NeuralNetworkBuilder(object):
         spec_layer_params.epsilon = epsilon
         spec_layer_params.computeMeanVar = compute_mean_var
         spec_layer_params.instanceNormalization = instance_normalization
-
+        
         if compute_mean_var:
             if not instance_normalization:
                 raise NotImplementedError('Batch-instance norm is currently not supported')
@@ -2107,6 +2494,8 @@ class NeuralNetworkBuilder(object):
         if not compute_mean_var:
             spec_layer_params.mean.floatValue.extend(map(float, mean.flatten()))
             spec_layer_params.variance.floatValue.extend(map(float, variance.flatten()))
+
+        return spec_layer
 
 
     def add_permute(self, name, dim, input_name, output_name):
@@ -2120,23 +2509,23 @@ class NeuralNetworkBuilder(object):
         dim: tuple
             The order in which to permute the input dimensions = [seq,C,H,W].
             Must have length 4 and a permutation of ``[0, 1, 2, 3]``.
-
+        
             examples:
-
+            
             Lets say input has shape: [seq, C, H, W].
-
-            If ``dim`` is set to ``[0, 3, 1, 2]``,
-            then the output has shape ``[W,C,H]``
+            
+            If ``dim`` is set to ``[0, 3, 1, 2]``, 
+            then the output has shape ``[W,C,H]`` 
             and has the same sequence length that of the input.
-
-            If ``dim`` is set to ``[3, 1, 2, 0]``,
-            and the input is a sequence of data
-            with length ``Seq`` and shape ``[C, 1, 1]``,
+            
+            If ``dim`` is set to ``[3, 1, 2, 0]``, 
+            and the input is a sequence of data 
+            with length ``Seq`` and shape ``[C, 1, 1]``, 
             then the output is a unit sequence of data with shape ``[C, 1, Seq]``.
-
+            
             If ``dim`` is set to ``[0, 3, 2, 1]``,
             the output is a reverse of the input: ``[C, H, W] -> [W, H, C]``.
-
+            
             If ``dim`` is not set, or is set to ``[0, 1, 2, 3]``,
             the output is the same as the input.
         input_name: str
@@ -2148,24 +2537,17 @@ class NeuralNetworkBuilder(object):
         --------
         add_flatten, add_reshape
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
-
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.permute
         spec_layer_params.axis.extend(list(dim))
 
         if len(dim) != 4:
             raise ValueError("Length of the 'dim' parameter must be equal to 4")
+        return spec_layer
 
     def add_reshape(self, name, input_name, output_name, target_shape, mode):
         """
-        Add a reshape layer. Kindly refer to NeuralNetwork.proto for details.
+        Add a reshape layer. Kindly refer to NeuralNetwork.proto for details. 
 
         Parameters
         ----------
@@ -2189,16 +2571,7 @@ class NeuralNetworkBuilder(object):
         --------
         add_flatten, add_permute
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
-
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.reshape
         spec_layer_params.targetShape.extend(target_shape)
         if mode == 0:
@@ -2207,14 +2580,15 @@ class NeuralNetworkBuilder(object):
         else:
             spec_layer_params.mode = \
                     _NeuralNetwork_pb2.ReshapeLayerParams.ReshapeOrder.Value('CHANNEL_LAST')
-
+                    
         if len(target_shape) != 4 and len(target_shape) != 3:
-            raise ValueError("Length of the 'target-shape' parameter must be equal to 3 or 4")
+            raise ValueError("Length of the 'target-shape' parameter must be equal to 3 or 4")            
+        return spec_layer
 
     def add_reduce(self, name, input_name, output_name, axis, mode, epsilon = 1e-6):
         """
-        Add a reduce layer. Applies the function specified by the parameter mode,
-        along dimension(s) specified by the parameter axis.
+        Add a reduce layer. Applies the function specified by the parameter mode, 
+        along dimension(s) specified by the parameter axis. 
 
         Parameters
         ----------
@@ -2225,37 +2599,28 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+        
         axis: str
             dimensions along which the reduction operation is applied.
             Allowed values: 'CHW', 'HW', 'C', 'H', 'W'
-
+        
         mode: str
             Reduction operation to be applied.
             Allowed values:
             'sum', 'avg', 'prod', 'logsum', 'sumsquare', 'L1', 'L2', 'max', 'min', 'argmax'.
             'argmax' is only suuported with axis values 'C', 'H' and 'W'.
-
+        
         epsilon: float
-            number that is added to the input when 'logsum' function is applied.
+            number that is added to the input when 'logsum' function is applied. 
 
         See Also
         --------
         add_activation
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
-
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.reduce
         spec_layer_params.epsilon = epsilon
-
+        
         if mode == 'sum':
             spec_layer_params.mode = _NeuralNetwork_pb2.ReduceLayerParams.ReduceOperation.Value('SUM')
         elif mode == 'avg':
@@ -2277,7 +2642,7 @@ class NeuralNetworkBuilder(object):
         elif mode == 'argmax':
             spec_layer_params.mode = _NeuralNetwork_pb2.ReduceLayerParams.ReduceOperation.Value('ARGMAX')
         else:
-            raise NotImplementedError('Unknown reduction operation %s ' % mode)
+            raise NotImplementedError('Unknown reduction operation %s ' % mode)                                                        
 
         if axis == 'CHW':
             spec_layer_params.axis = _NeuralNetwork_pb2.ReduceLayerParams.ReduceAxis.Value('CHW')
@@ -2290,13 +2655,13 @@ class NeuralNetworkBuilder(object):
         elif axis == 'W':
             spec_layer_params.axis = _NeuralNetwork_pb2.ReduceLayerParams.ReduceAxis.Value('W')
         else:
-            raise NotImplementedError('Unknown reduction axis %s ' % axis)
-
-
+            raise NotImplementedError('Unknown reduction axis %s ' % axis)          
+        return spec_layer
+    
     def add_lrn(self, name, input_name, output_name, alpha, beta, local_size, k = 1.0):
         """
         Add a LRN (local response normalization) layer. Please see the LRNLayerParams message in Core ML neural network
-        protobuf for more information about the operation of this layer. Supports "across" channels normalization.
+        protobuf for more information about the operation of this layer. Supports "across" channels normalization. 
 
         Parameters
         ----------
@@ -2307,43 +2672,35 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+        
         alpha: float
             multiplicative constant in the denominator.
-
+        
         beta: float
             exponent of the normalizing term in the denominator.
-
+        
         k: float
-            bias term in the denominator. Must be positive.
-
+            bias term in the denominator. Must be positive. 
+        
         local_size: int
             size of the neighborhood along the channel axis.
-
+        
 
         See Also
         --------
         add_l2_normalize, add_mvn
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
-
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.lrn
         spec_layer_params.alpha = alpha
         spec_layer_params.beta = beta
         spec_layer_params.localSize = local_size
         spec_layer_params.k = k
+        return spec_layer
 
     def add_mvn(self, name, input_name, output_name, across_channels = True, normalize_variance = True, epsilon = 1e-5):
         """
-        Add an MVN (mean variance normalization) layer. Computes mean, variance and normalizes the input.
+        Add an MVN (mean variance normalization) layer. Computes mean, variance and normalizes the input. 
 
         Parameters
         ----------
@@ -2354,41 +2711,33 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+        
         across_channels: boolean
             If False, each channel plane is normalized separately
             If True, mean/variance is computed across all C, H and W dimensions
-
+        
         normalize_variance: boolean
             If False, only mean subtraction is performed.
-
+        
         epsilon: float
             small bias to avoid division by zero.
-
+        
 
         See Also
         --------
         add_l2_normalize, add_lrn
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
 
         spec_layer_params = spec_layer.mvn
         spec_layer_params.acrossChannels = across_channels
         spec_layer_params.normalizeVariance = normalize_variance
         spec_layer_params.epsilon = epsilon
-
-
+        return spec_layer
+    
     def add_l2_normalize(self, name, input_name, output_name, epsilon = 1e-5):
         """
-        Add L2 normalize layer. Normalizes the input by the L2 norm, i.e. divides by the
+        Add L2 normalize layer. Normalizes the input by the L2 norm, i.e. divides by the 
         the square root of the sum of squares of all elements of the input along C, H and W dimensions.
 
         Parameters
@@ -2400,37 +2749,28 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+        
         epsilon: float
             small bias to avoid division by zero.
-
+        
 
         See Also
         --------
         add_mvn, add_lrn
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
-
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.l2normalize
-        spec_layer_params.epsilon = epsilon
-
+        spec_layer_params.epsilon = epsilon    
+        return spec_layer
 
     def add_unary(self, name, input_name, output_name, mode, alpha = 1.0,
                     shift = 0, scale = 1.0, epsilon = 1e-6):
         """
         Add a Unary layer. Applies the specified function (mode) to all the elements of the input.
         Please see the UnaryFunctionLayerParams message in Core ML neural network
-        protobuf for more information about the operation of this layer.
+        protobuf for more information about the operation of this layer.   
         Prior to the application of the function the input can be scaled and shifted by using the 'scale',
-        'shift' parameters.
+        'shift' parameters.                         
 
         Parameters
         ----------
@@ -2441,63 +2781,55 @@ class NeuralNetworkBuilder(object):
             The input blob name of this layer.
         output_name: str
             The output blob name of this layer.
-
+        
         mode: str
-            Unary function.
-            Allowed values: 'sqrt', 'rsqrt', 'inverse', 'power', 'exp', 'log', 'abs', threshold'.
-
+            Unary function.  
+            Allowed values: 'sqrt', 'rsqrt', 'inverse', 'power', 'exp', 'log', 'abs', threshold'.        
+                    
         alpha: float
-            constant used in with modes 'power' and 'threshold'.
-
+            constant used in with modes 'power' and 'threshold'.     
+                    
         shift, scale: float
-            input is modified by scale and shift prior to the application of the unary function.
-
+            input is modified by scale and shift prior to the application of the unary function.                            
+        
         epsilon: float
-            small bias to prevent division by zero.
+            small bias to prevent division by zero. 
 
         See Also
         --------
         add_activation
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
-
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.unary
         spec_layer_params.epsilon = epsilon
         spec_layer_params.alpha = alpha
         spec_layer_params.shift = shift
         spec_layer_params.scale = scale
-
+        
         if mode == 'sqrt':
             spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('SQRT')
         elif mode == 'rsqrt':
-            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('RSQRT')
+            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('RSQRT')    
         elif mode == 'inverse':
-            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('INVERSE')
+            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('INVERSE')    
         elif mode == 'power':
-            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('POWER')
+            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('POWER')    
         elif mode == 'exp':
             spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('EXP')
         elif mode == 'log':
-            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('LOG')
+            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('LOG')        
         elif mode == 'abs':
-            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('ABS')
+            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('ABS')    
         elif mode == 'threshold':
-            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('THRESHOLD')
+            spec_layer_params.type = _NeuralNetwork_pb2.UnaryFunctionLayerParams.Operation.Value('THRESHOLD')    
         else:
-            raise NotImplementedError('Unknown unary function %s ' % mode)
+            raise NotImplementedError('Unknown unary function %s ' % mode)     
+        return spec_layer
 
     def add_split(self, name, input_name, output_names):
         """
-        Add a Split layer that uniformly splits the input along the channel dimension
-        to produce multiple outputs.
+        Add a Split layer that uniformly splits the input along the channel dimension 
+        to produce multiple outputs. 
 
         Parameters
         ----------
@@ -2513,22 +2845,14 @@ class NeuralNetworkBuilder(object):
         --------
         add_elementwise
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.extend(output_names)
-
+        spec_layer = self._add_generic_layer(name, [input_name], output_names)
         spec_layer_params = spec_layer.split
         spec_layer_params.nOutputs = len(output_names)
+        return spec_layer        
 
     def add_load_constant(self, name, output_name, constant_value, shape):
         """
-        Add a load constant layer.
+        Add a load constant layer. 
 
         Parameters
         ----------
@@ -2537,38 +2861,32 @@ class NeuralNetworkBuilder(object):
 
         output_name: str
             The output blob name of this layer.
-
+        
         constant_value: numpy.array
-            value of the constant as a numpy array.
-
+            value of the constant as a numpy array. 
+        
         shape: [int]
             List of ints representing the shape of the constant. Must be of length 3: [C,H,W]
-
+        
 
         See Also
         --------
         add_elementwise
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.output.append(output_name)
-
+        spec_layer = self._add_generic_layer(name, [], [output_name])
         spec_layer_params = spec_layer.loadConstant
-
+        
         data = spec_layer_params.data
-        data.floatValue.extend(map(float, constant_value.flatten()))
-
+        data.floatValue.extend(map(float, constant_value.flatten()))  
+        
         spec_layer_params.shape.extend(shape)
 
         if len(data.floatValue) != np.prod(shape):
             raise ValueError("Dimensions of 'shape' do not match the size of the provided constant")
-        if len(shape) != 3:
-            raise ValueError("'shape' must be of length 3")
-
+        if self._disable_rank5_shape_mapping == False:
+            if len(shape) != 3:
+                raise ValueError("'shape' must be of length 3")
+        return spec_layer
 
     def add_custom(self, name, input_names, output_names, custom_proto_spec = None):
         """
@@ -2588,31 +2906,21 @@ class NeuralNetworkBuilder(object):
         custom_proto_spec: CustomLayerParams
             A protobuf CustomLayerParams message. This can also be left blank and filled in later.
         """
-
-        spec = self.spec
-        nn_spec = self.nn_spec
-
         # custom layers require a newer specification version
         from coremltools import _MINIMUM_CUSTOM_LAYER_SPEC_VERSION
-        spec.specificationVersion = max(spec.specificationVersion, _MINIMUM_CUSTOM_LAYER_SPEC_VERSION)
+        self.spec.specificationVersion = max(self.spec.specificationVersion, _MINIMUM_CUSTOM_LAYER_SPEC_VERSION)
 
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        for inname in input_names:
-            spec_layer.input.append(inname)
-        for outname in output_names:
-            spec_layer.output.append(outname)
+        spec_layer = self._add_generic_layer(name, input_names, output_names)
 
-        # Have to do it this way since I can't just assign custom in a layer
         spec_layer.custom.MergeFromString(b'')
         if custom_proto_spec:
             spec_layer.custom.CopyFrom(custom_proto_spec)
-
+        return spec_layer
 
     def add_resize_bilinear(self, name, input_name, output_name, target_height=1, target_width=1,
                             mode='ALIGN_ENDPOINTS_MODE'):
         """
-        Add resize bilinear layer to the model. A layer that resizes the input to a given spatial size using bilinear interpolation.
+        Add resize bilinear layer to the model. A layer that resizes the input to a given spatial size using bilinear interpolation. 
 
         Parameters
         ----------
@@ -2628,20 +2936,13 @@ class NeuralNetworkBuilder(object):
             Output width dimension.
         mode: str
             Following values are supported: 'STRICT_ALIGN_ENDPOINTS_MODE', 'ALIGN_ENDPOINTS_MODE', 'UPSAMPLE_MODE', 'ROI_ALIGN_MODE'.
-            This parameter determines the sampling grid used for bilinear interpolation. Kindly refer to NeuralNetwork.proto for details.
+            This parameter determines the sampling grid used for bilinear interpolation. Kindly refer to NeuralNetwork.proto for details. 
 
         See Also
         --------
         add_upsample
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new inner-product layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.resizeBilinear
         spec_layer_params.targetSize.append(target_height)
         spec_layer_params.targetSize.append(target_width)
@@ -2655,6 +2956,7 @@ class NeuralNetworkBuilder(object):
             spec_layer_params.mode.samplingMethod = _NeuralNetwork_pb2.SamplingMode.Method.Value('ROI_ALIGN_MODE')
         else:
             raise ValueError("Unspported resize bilinear mode %s" % mode)
+        return spec_layer
 
     def add_crop_resize(self, name, input_names, output_name, target_height=1, target_width=1,
                             mode='STRICT_ALIGN_ENDPOINTS_MODE',
@@ -2662,27 +2964,27 @@ class NeuralNetworkBuilder(object):
                             box_indices_mode='CORNERS_HEIGHT_FIRST',
                             spatial_scale=1.0):
         """
-        Add crop resize layer to the model. A layer that extracts cropped spatial patches or RoIs (regions of interest)
-        from the input and resizes them to a pre-specified size using bilinear interpolation.
+        Add crop resize layer to the model. A layer that extracts cropped spatial patches or RoIs (regions of interest) 
+        from the input and resizes them to a pre-specified size using bilinear interpolation. 
         Note that RoI Align layer can be implemented with this layer followed by a pooling layer.
-        Kindly refer to NeuralNetwork.proto for details.
+        Kindly refer to NeuralNetwork.proto for details. 
 
         Parameters
         ----------
         name: str
             The name of this layer.
         input_names: [str]
-            Must be a list of two names: image feature map and crop indices/RoI input.
+            Must be a list of two names: image feature map and crop indices/RoI input. 
             First input corresponds to a blob with shape ``[1, Batch, C, H_in, W_in]``. This represents a batch of input image feature data with C channels.
-            The second input shape must be ``[N, 1, 4, 1, 1]`` or ``[N, 1, 5, 1, 1]``. This represents the bounding box coordinates for N patches/RoIs.
+            The second input shape must be ``[N, 1, 4, 1, 1]`` or ``[N, 1, 5, 1, 1]``. This represents the bounding box coordinates for N patches/RoIs. 
             N: number of patches/RoIs to be extracted
             If RoI shape = [N, 1, 4, 1, 1]
                     The channel axis corresponds to the four coordinates specifying the bounding box.
-                    All the N RoIs are extracted from all the batches of the input.
+                    All the N RoIs are extracted from all the batches of the input. 
             If RoI shape = [N, 1, 5, 1, 1]
-                    The first element of the channel axis specifies the input batch id from which to extract the RoI and
-					must be in the interval ``[0, Batch - 1]``. That is, n-th RoI is extracted from the RoI[n,0,0,0]-th input batch id.
-                    The last four elements of the channel axis specify the bounding box coordinates.
+                    The first element of the channel axis specifies the input batch id from which to extract the RoI and 
+					must be in the interval ``[0, Batch - 1]``. That is, n-th RoI is extracted from the RoI[n,0,0,0]-th input batch id. 
+                    The last four elements of the channel axis specify the bounding box coordinates. 
         output_name: str
             The output blob name of this layer.
         target_height: int
@@ -2691,10 +2993,10 @@ class NeuralNetworkBuilder(object):
             Output width dimension.
         mode: str
             Following values are supported: 'STRICT_ALIGN_ENDPOINTS_MODE', 'ALIGN_ENDPOINTS_MODE', 'UPSAMPLE_MODE', 'ROI_ALIGN_MODE'.
-            This parameter determines the sampling grid used for bilinear interpolation. Kindly refer to NeuralNetwork.proto for details.
+            This parameter determines the sampling grid used for bilinear interpolation. Kindly refer to NeuralNetwork.proto for details. 
         normalized_roi: bool
             If true the bounding box coordinates must be in the interval [0, 1].
-	        They are scaled by (input_height - 1), (input_width - 1), i.e. based on the input spatial dimensions.
+	        They are scaled by (input_height - 1), (input_width - 1), i.e. based on the input spatial dimensions.  
 	        If false the bounding box coordinates must be in the interval
 	        [0, input_height - 1] and [0, input_width - 1], respectively for height and width dimensions.
 	    box_indices_mode: str
@@ -2705,26 +3007,16 @@ class NeuralNetworkBuilder(object):
 	        'CENTER_SIZE_HEIGHT_FIRST': [h_center, w_center, box_height, box_width]
             'CENTER_SIZE_WIDTH_FIRST': [w_center, h_center, box_width, box_height]
         spatial_scale: float
-            Additional spatial scale that multiplies the bounding box coordinates.
-            Generally used while implementing the RoI Align layer,
-            which uses unnormalized RoI coordinates along with a spatial scale less than or equal to 1.
-
-
+            Additional spatial scale that multiplies the bounding box coordinates. 
+            Generally used while implementing the RoI Align layer, 
+            which uses unnormalized RoI coordinates along with a spatial scale less than or equal to 1. 
+            
+            
         See Also
         --------
         add_resize_bilinear, add_crop
         """
-        spec = self.spec
-        nn_spec = self.nn_spec
-
-        # Add a new inner-product layer
-        spec_layer = nn_spec.layers.add()
-        spec_layer.name = name
-        if len(input_names) != 2:
-            raise ValueError("crop resize layer must have exactly two inputs")
-        for input_name in input_names:
-            spec_layer.input.append(input_name)
-        spec_layer.output.append(output_name)
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
         spec_layer_params = spec_layer.cropResize
         spec_layer_params.targetSize.append(target_height)
         spec_layer_params.targetSize.append(target_width)
@@ -2751,7 +3043,7 @@ class NeuralNetworkBuilder(object):
             spec_layer_params.boxIndicesMode.boxMode = _NeuralNetwork_pb2.BoxCoordinatesMode.Coordinates.Value('CENTER_SIZE_WIDTH_FIRST')
         else:
             raise ValueError("Unsupported crop resize box indices mode %s" % box_indices_mode)
-
+        return spec_layer
 
     def set_pre_processing_parameters(self, image_input_names = [], is_bgr = False,
             red_bias = 0.0, green_bias = 0.0, blue_bias = 0.0, gray_bias = 0.0, image_scale = 1.0):
@@ -2775,9 +3067,9 @@ class NeuralNetworkBuilder(object):
 
         green_bias: float | dict()
             Image re-centering parameter (green channel)
-
+            
         gray_bias: float | dict()
-            Image re-centering parameter (for grayscale images)
+            Image re-centering parameter (for grayscale images)    
 
         image_scale: float | dict()
             Value by which to scale the images.
@@ -2790,14 +3082,19 @@ class NeuralNetworkBuilder(object):
         if not image_input_names:
             return # nothing to do here
 
-
-        if not isinstance(is_bgr, dict): is_bgr = dict.fromkeys(image_input_names, is_bgr)
-        if not isinstance(red_bias, dict): red_bias = dict.fromkeys(image_input_names, red_bias)
-        if not isinstance(blue_bias, dict): blue_bias = dict.fromkeys(image_input_names, blue_bias)
-        if not isinstance(green_bias, dict): green_bias = dict.fromkeys(image_input_names, green_bias)
-        if not isinstance(gray_bias, dict): gray_bias = dict.fromkeys(image_input_names, gray_bias)
-        if not isinstance(image_scale, dict): image_scale = dict.fromkeys(image_input_names, image_scale)
-
+        if not isinstance(is_bgr, dict):
+            is_bgr = dict.fromkeys(image_input_names, is_bgr)
+        if not isinstance(red_bias, dict):
+            red_bias = dict.fromkeys(image_input_names, red_bias)
+        if not isinstance(blue_bias, dict):
+            blue_bias = dict.fromkeys(image_input_names, blue_bias)
+        if not isinstance(green_bias, dict):
+            green_bias = dict.fromkeys(image_input_names, green_bias)
+        if not isinstance(gray_bias, dict):
+            gray_bias = dict.fromkeys(image_input_names, gray_bias)
+        if not isinstance(image_scale, dict):
+            image_scale = dict.fromkeys(image_input_names, image_scale)
+        
         # Add image inputs
         for input_ in spec.description.input:
             if input_.name in image_input_names:
@@ -2811,14 +3108,14 @@ class NeuralNetworkBuilder(object):
                             if is_bgr[input_.name]:
                                 input_.type.imageType.colorSpace = _FeatureTypes_pb2.ImageFeatureType.ColorSpace.Value('BGR')
                             else:
-                                input_.type.imageType.colorSpace = _FeatureTypes_pb2.ImageFeatureType.ColorSpace.Value('RGB')
+                                input_.type.imageType.colorSpace = _FeatureTypes_pb2.ImageFeatureType.ColorSpace.Value('RGB')    
                         else:
                             input_.type.imageType.colorSpace = _FeatureTypes_pb2.ImageFeatureType.ColorSpace.Value('RGB')
                     else:
                         raise ValueError("Channel Value %d not supported for image inputs" % channels)
                     input_.type.imageType.width = width
                     input_.type.imageType.height = height
-
+                    
                 preprocessing = self.nn_spec.preprocessing.add()
                 preprocessing.featureName = input_.name
                 scaler = preprocessing.scaler
@@ -2829,4 +3126,849 @@ class NeuralNetworkBuilder(object):
                 if input_.name in red_bias: scaler.redBias = red_bias[input_.name]
                 if input_.name in blue_bias: scaler.blueBias = blue_bias[input_.name]
                 if input_.name in green_bias: scaler.greenBias = green_bias[input_.name]
-                if input_.name in gray_bias: scaler.grayBias = gray_bias[input_.name]
+                if input_.name in gray_bias: scaler.grayBias = gray_bias[input_.name]                    
+
+    def add_transposeND(self, name, axes, input_name, output_name, rank=None, input_shape=None, output_shape=None):
+        """Add a N-D Transpose layer with axes as a parameter
+        
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+        
+        axes: [int]
+            The list containing a permutation of "[0,1,2,...,N-1]" where N is the rank of input/output tensor.
+        
+        input_name: str
+            The input blob name of this layer.
+        
+        output_name: str
+            The output blob name of this layer.
+        
+        rank: int | optional
+            The rank of an input and output tensor.
+            
+        input_shape: [int] | optional
+            The list containing shape of the input tensor. It may contain -1 for unknown dimensions if rank <= 5.
+            For rank > 5, exact shape must be known at compile time.
+            
+        output_shape: [int] | optional
+            The list containing shape of the output tensor. It may contain -1 for unknown dimensions if rank <= 5.
+            For rank > 5, exact shape must be known at compile time.
+            
+        See Also
+        --------
+        add_permute, add_reshape
+        """
+        ranks = None if rank is None else [rank]
+        input_shapes = None if input_shape is None else [input_shape]
+        output_shapes = None if output_shape is None else [output_shape]
+
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=ranks,
+                                             output_shapes=output_shapes)
+        spec_layer.transposeND.axes.extend(axes)
+
+        return spec_layer
+
+    def add_batchedMatMul(self, name, input_names, output_name, transposeA=False, transposeB=False,
+                          input_ranks=None, output_rank=None, input_shapes=None, output_shape=None,
+                          weight_matrix_rows = 0, weight_matrix_columns = 0,
+                          W = None, bias = None,
+                          is_quantized_weight=False,
+                          quantization_type='linear',
+                          nbits=8,
+                          quant_scale=None,
+                          quant_bias=None,
+                          quant_lut=None
+                          ):
+        """Add a N-D Batched Matrix Multiplication layer with numpy like broadcasting.
+        Please refer to the specification (NeuralNetwork.proto) for more details.
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+
+        input_names: [str]
+            The list containing one or two input blob names of this layer.
+
+        output_name: str
+            The output blob name of this layer.
+
+        input_ranks: [int] | optional
+            The list containing ranks of input tensors.
+
+        output_rank: int | optional
+            The rank of output blob of this layer.
+
+        input_shapes: [[int]] | optional
+            The list containing shapes of input tensors.
+
+        output_shape: [int]   | optional
+            The shape of the output tensor.
+
+        weight_matrix_rows: int | optional
+            must be equal to the last dimension of the input.
+
+        weight_matrix_columns: int | optional
+            must be equal to the last dimension of the output.
+
+        W: float32 numpy.array or bytes() | optional
+            Weight matrix of shape (weight_matrix_rows, weight_matrix_columns)
+            If W is of type bytes(), i.e. quantized to 1-8 bits, other quantization related arguments must be provided as well (see below).
+
+        bias: float32 numpy.array | optional
+            Bias vector of shape (weight_matrix_columns,).
+
+        Quantization arguments expected in kwargs, when W is of type bytes():
+
+        is_quantized_weight : bool
+            Set it to true when W is of type bytes(), representing quantized weights
+
+        quantization_type : str
+            When weights are quantized (i.e. W is of type bytes()), this should be either "linear" or "lut".
+
+        nbits: int
+            Should be between 1 and 8 (inclusive). Number of bits per weight value.
+
+        quant_scale: numpy.array(dtype=numpy.float32)
+            scale vector to be used with linear quantization. Must be of length either 1 or weight_matrix_columns.
+
+        quant_bias: numpy.array(dtype=numpy.float32)
+            bias vector to be used with linear quantization. Must be of length either 1 or weight_matrix_columns.
+
+        quant_lut: numpy.array(dtype=numpy.float32)
+            The LUT (look up table) to be used with LUT quantization. Must be of length 2^nbits.
+
+
+        See Also
+        --------
+        add_inner_product
+        """
+
+        output_ranks = None if output_rank is None else [output_rank]
+        output_shapes = None if output_shape is None else [output_shape]
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer_params = spec_layer.batchedMatmul
+        spec_layer_params.transposeA = transposeA
+        spec_layer_params.transposeB = transposeB
+
+        if (((W is not None) or (bias is not None)) and len(input_names) == 2):
+            raise ValueError("batchedMatMul: Weight and/or bias are ignored when there are two inputs")
+
+        if ((W is None) and len(input_names) == 1):
+            raise ValueError("batchedMatMul: Weight parameter must be provided when there is one input")
+
+        if len(input_names) == 1:
+            spec_layer_params.weightMatrixFirstDimension = weight_matrix_rows
+            spec_layer_params.weightMatrixSecondDimension = weight_matrix_columns
+            spec_layer_params.hasBias = bias is not None
+
+            weights = spec_layer_params.weights
+
+            if not is_quantized_weight:
+                weights.floatValue.extend(map(float, np.transpose(W).flatten()))
+            else:
+                _verify_quantization_arguments(weight=W, output_channels=weight_matrix_columns,
+                                               quantization_type=quantization_type, nbits=nbits,
+                                               quant_scale=quant_scale, quant_bias=quant_bias, quant_lut=quant_lut)
+
+                num_weights = weight_matrix_rows * weight_matrix_columns
+                if nbits < 8:
+                    byte_arr = np.frombuffer(W, dtype=np.uint8)
+                    W = unpack_to_bytes(byte_arr, num_weights, nbits)
+                else:
+                    W = np.frombuffer(W, dtype=np.uint8)
+
+                W = np.reshape(W, (weight_matrix_rows, weight_matrix_columns))
+                W = np.transpose(W)
+
+                W_bytes = bytes()
+                if nbits == 8:
+                    W_bytes += W.flatten().tobytes()
+                else:
+                    W_bytes += _convert_array_to_nbit_quantized_bytes(W.flatten(), nbits).tobytes()
+
+                _fill_quantized_weights(weights_message=weights, W=W_bytes,
+                                        quantization_type=quantization_type, nbits=nbits,
+                                        quant_scale=quant_scale, quant_bias=quant_bias, quant_lut=quant_lut)
+
+            if bias is not None:
+                bias_param = spec_layer_params.bias
+                bias_param.floatValue.extend(map(float, bias.flatten()))
+
+        return spec_layer
+
+    def add_softmaxND(self, name, input_name, output_name, axis, rank=None, shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        ranks = None if rank is None else [rank]
+        shapes = None if shape is None else [shape]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=ranks,
+                                             input_shapes=shapes,
+                                             output_ranks=ranks,
+                                             output_shapes=shapes)
+
+        spec_layer_params = spec_layer.softmaxND
+        spec_layer_params.axis = axis
+        return spec_layer
+
+    def add_concatND(self, name, input_names, output_name, axis):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer_params = spec_layer.concatND
+        spec_layer_params.axis = axis
+        return spec_layer
+
+    def add_rankPreservingReshape(self, name, input_name, output_name, target_shape):
+        """
+        Add a rank preserving reshape layer. Kindly refer to NeuralNetwork.proto for details.
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+        target_shape: tuple of ints
+            Determines the shape of the output blob.
+            0: copy the dimension of the input to output
+            -1: calculate dimensions from the rest of the shape
+            For examples, please see NeuralNetwork.proto
+        input_name: str
+            The input blob name of this layer.
+        output_name: str
+            The output blob name of this layer.
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=[len(target_shape)],
+                                             input_shapes=[target_shape],
+                                             output_ranks=[len(target_shape)],
+                                             output_shapes=[target_shape])
+
+        spec_layer_params = spec_layer.rankPreservingReshape
+        spec_layer_params.targetShape.extend(map(int, target_shape))
+        return spec_layer
+
+    def add_expandDims(self, name, input_name, output_name, axes, input_rank=None):
+        """
+        Add an expand dims layer. Kindly refer to NeuralNetwork.proto for details.
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+        input_rank: int
+            rank of the input. Rank of the output is input rank plus length of the axes
+        axes: [int]
+            For examples, please see NeuralNetwork.proto
+        input_name: str
+            The input blob name of this layer.
+        output_name: str
+            The output blob name of this layer.
+        """
+        input_ranks = None if input_rank is None else [input_rank]
+        output_ranks = None if input_rank is None else [len(axes) + input_rank]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=input_ranks,
+                                             output_ranks=output_ranks)
+
+        spec_layer_params = spec_layer.expandDims
+        spec_layer_params.axes.extend(axes)
+        return spec_layer
+
+    def add_squeeze(self, name, input_name, output_name, axes, input_rank=None):
+        """
+        Add a squeeze layer. Kindly refer to NeuralNetwork.proto for details.
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+        input_rank: int
+            rank of the input. Rank of the output is input rank minus length of the axes
+        axes: [int]
+            For examples, please see NeuralNetwork.proto
+        input_name: str
+            The input blob name of this layer.
+        output_name: str
+            The output blob name of this layer.
+        """
+        input_ranks = None if input_rank is None else [input_rank]
+        output_ranks = None if input_rank is None else [input_rank - len(axes)]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=input_ranks,
+                                             output_ranks=output_ranks)
+        spec_layer_params = spec_layer.squeeze
+        spec_layer_params.axes.extend(axes)
+        return spec_layer
+
+    def add_erfActivation(self, name, input_name, output_name):
+        """
+        Add a layer that corresponds to the erf function (gaussian error function)
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+        input_name: str
+            The input blob name of this layer.
+        output_name: str
+            The output blob name of this layer.
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.erfActivation.MergeFromString(b'')
+        return spec_layer
+
+    def add_geluActivation(self, name, input_name, output_name):
+        """
+        Add a layer that corresponds to gaussian error linear unit activation, which is:
+        0.5 * x * (1 + erf(x/sqrt(2)))
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+        input_name: str
+            The input blob name of this layer.
+        output_name: str
+            The output blob name of this layer.
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.geluActivation.MergeFromString(b'')
+        return spec_layer
+
+    def add_fill(self, name, input_names, output_name, rank=None, shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        Take two inputs, data and scalar.
+        Fill data with scalar.
+        """
+        input_ranks = None if rank is None else [rank, 1]
+        input_shapes = None if shape is None else [shape, [1]]
+        output_ranks = None if rank is None else [rank]
+        output_shapes = None if shape is None else [shape]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer.fill.MergeFromString(b'')
+        return spec_layer
+
+    def add_broadcastTo(self, name, input_name, output_name, target_shape, input_rank=None, input_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        input_ranks = None if input_rank is None else [input_rank]
+        input_shapes = None if input_shape is None else [input_shape]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=[len(target_shape)],
+                                             output_shapes=[target_shape])
+
+        spec_layer_params = spec_layer.broadcastTo
+        spec_layer_params.targetShape.extend(target_shape)
+        return spec_layer
+
+    def add_sine(self, name, input_name, output_name, rank=None, shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        ranks = None if rank is None else [rank]
+        shapes = None if shape is None else [shape]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=ranks,
+                                             input_shapes=shapes,
+                                             output_ranks=ranks,
+                                             output_shapes=shapes)
+
+        spec_layer.sine.MergeFromString(b'')
+        return spec_layer
+
+    def add_cosine(self, name, input_name, output_name, rank=None, shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        ranks = None if rank is None else [rank]
+        shapes = None if shape is None else [shape]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=ranks,
+                                             input_shapes=shapes,
+                                             output_ranks=ranks,
+                                             output_shapes=shapes)
+
+        spec_layer.cosine.MergeFromString(b'')
+        return spec_layer
+
+    def add_exp(self, name, input_name, output_name, withBase2 ,rank=None, shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        ranks = None if rank is None else [rank]
+        shapes = None if shape is None else [shape]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=ranks,
+                                             input_shapes=shapes,
+                                             output_ranks=ranks,
+                                             output_shapes=shapes)
+
+        spec_layer.exp.withBaseAs2 = withBase2
+        return spec_layer
+
+    def add_addBroadcastable(self, name, input_names, output_name,
+                             input_ranks=None, output_rank=None,
+                             input_shapes=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        output_ranks = None if output_rank is None else [output_rank]
+        output_shapes = None if output_shape is None else [output_shape]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+        spec_layer.addBroadcastable.MergeFromString(b'')
+        return spec_layer
+
+    def add_multiplyBroadcastable(self, name, input_names, output_name,
+                                  input_ranks=None, output_rank=None,
+                                  input_shapes=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        output_ranks = None if output_rank is None else [output_rank]
+        output_shapes = None if output_shape is None else [output_shape]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer.multiplyBroadcastable.MergeFromString(b'')
+        return spec_layer
+
+    def add_divideBroadcastable(self, name, input_names, output_name,
+                                input_ranks=None, output_rank=None,
+                                input_shapes=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        output_ranks = None if output_rank is None else [output_rank]
+        output_shapes = None if output_shape is None else [output_shape]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer.divideBroadcastable.MergeFromString(b'')
+        return spec_layer
+
+    def add_subtractBroadcastable(self, name, input_names, output_name,
+                                  input_ranks=None, output_rank=None,
+                                  input_shapes=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        output_ranks = None if output_rank is None else [output_rank]
+        output_shapes = None if output_shape is None else [output_shape]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer.subtractBroadcastable.MergeFromString(b'')
+        return spec_layer
+
+    def add_gather(self, name, input_names, output_name, axis,
+                   input_ranks=None, output_rank=None,
+                   input_shapes=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        output_ranks = None if output_rank is None else [output_rank]
+        output_shapes = None if output_shape is None else [output_shape]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer.gather.axis = axis
+        return spec_layer
+
+    def add_stackND(self, name, input_names, output_name, axis,
+                    input_rank=None, input_shape=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        num_inputs = len(input_names)
+        input_ranks = None if input_rank is None else [input_rank] * num_inputs
+        input_shapes = None if input_shape is None else [input_shape] * num_inputs
+        output_ranks = None if input_rank is None else [input_rank + 1]
+        output_shapes = None if output_shape is None else [output_shape]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer.stackND.axis = axis
+        return spec_layer
+
+    def add_ceil(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.ceil.MergeFromString(b'')
+        return spec_layer
+
+    def add_floor(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.floor.MergeFromString(b'')
+        return spec_layer
+
+    def add_clip(self, name, input_names, output_name, rank = None, shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        input_ranks = None if rank is None else [rank, 1, 1]
+        input_shapes = None if shape is None else [shape, [1], [1]]
+        output_ranks = None if rank is None else [rank]
+        output_shapes = None if shape is None else [shape]
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer.clip.MergeFromString(b'')
+        return spec_layer
+
+    def add_splitND(self, name, input_name, output_names, axis, num_splits, split_sizes=[],
+                    rank=None, input_shape=None, output_shapes=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        num_outputs = len(output_names)
+        input_ranks = None if rank is None else [rank]
+        input_shapes = None if input_shape is None else [input_shape]
+        output_ranks = None if rank is None else [rank] * num_outputs
+        spec_layer = self._add_generic_layer(name, [input_name], output_names,
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer_params = spec_layer.splitND
+        spec_layer_params.axis = axis
+        spec_layer_params.numSplits = num_splits
+        if list(split_sizes):
+            assert len(split_sizes) == num_splits
+            spec_layer_params.splitSizes.extend(split_sizes)
+        return spec_layer
+
+    def add_sliceND(self, name, input_name, output_name, begin_ids, end_ids, begin_masks, end_masks, strides,
+                    rank=None, input_shape=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        ranks = None if rank is None else [rank]
+        input_shapes = None if input_shape is None else [input_shape]
+        output_shapes = None if output_shape is None else [output_shape]
+
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer_params = spec_layer.sliceND
+
+        if rank:
+            assert len(begin_ids)   == rank
+            assert len(begin_masks) == rank
+            assert len(end_ids)     == rank
+            assert len(end_masks)   == rank
+            assert len(strides)     == rank
+
+        spec_layer_params.beginIds.extend(begin_ids)
+        spec_layer_params.endIds.extend(end_ids)
+        spec_layer_params.beginMasks.extend(begin_masks)
+        spec_layer_params.endMasks.extend(end_masks)
+        spec_layer_params.strides.extend(strides)
+        return spec_layer
+
+    def add_loadConstantND(self, name, output_name, constant_value, shape):
+        """
+        Add a load constant layer.
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+
+        output_name: str
+            The output blob name of this layer.
+
+        constant_value: numpy.array
+            value of the constant as a numpy array.
+
+        shape: [int]
+            List of ints representing the shape of the constant. Must be of length 3: [C,H,W]
+
+
+        See Also
+        --------
+        add_elementwise
+        """
+        spec_layer = self._add_generic_layer(name, [], [output_name])
+        spec_layer_params = spec_layer.loadConstantND
+
+        data = spec_layer_params.data
+        data.floatValue.extend(map(float, constant_value.flatten()))
+        spec_layer_params.shape.extend(shape)
+
+        if len(data.floatValue) != np.prod(shape):
+            raise ValueError("Dimensions of 'shape' do not match the size of the provided constant")
+        return spec_layer
+
+    def add_powBroadcastable(self, name, input_names, output_name,
+                             input_ranks=None, output_rank=None,
+                             input_shapes=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        output_ranks = None if output_rank is None else [output_rank]
+        output_shapes = None if output_shape is None else [output_shape]
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer.powBroadcastable.MergeFromString(b'')
+        return spec_layer
+
+    def add_tile(self, name, input_name, output_name, reps,
+                 rank=None, input_shape=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        ranks = None if rank is None else [rank]
+        input_shapes = None if input_shape is None else [input_shape]
+        output_shapes = None if output_shape is None else [output_shape]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer_params = spec_layer.tile
+        if rank:
+            assert len(reps) == rank
+
+        assert all([i > 0 for i in reps])
+        spec_layer_params.reps.extend(reps)
+        return spec_layer
+
+    def add_range(self, name, output_name, input_names=None, params=[0,1,1]):
+        """
+        Add range layer. The layer has either three inputs or no input and three parameters.
+        Similar to numpy's arange function.
+
+        Parameters
+        ----------
+        name: str
+            The name of this layer.
+        input_names: [str]
+            The input blob names. If empty, the range is static. If not empty, it is
+            a list of 3 strings that specifies blobs for [start, end, step]
+        output_name: str
+            The output blob name of this layer.
+        params: None or [int]
+            The values of range parameter. If input_names is empty, it must be a list of 3
+            integers: [start, end, step]. Otherwise it is ignored.
+        """
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.range.MergeFromString(b'')
+        spec_params = spec_layer.range
+
+        if input_names is None or len(input_names) == 0:
+            if len(params) != 3:
+                raise ValueError("Range layer: When no inputs are provided, params [start, end, step] must be provided")
+            start, end, step = params
+            spec_params.startValue = float(start)
+            spec_params.endValue = float(end)
+            spec_params.stepSizeValue = float(step)
+        elif len(input_names) != 3:
+            raise ValueError("Range layer: Requires either 0 or 3 inputs (start, end, step)")
+
+        return spec_layer
+
+    def add_branch(self, name, input_name, ifbranch=None, elsebranch=None):
+        layer = self._add_generic_layer(name, [input_name], [])
+        branch = layer.branch
+        if ifbranch is not None:
+            branch.ifBranch = ifbranch
+        else:
+            branch.ifBranch.MergeFromString(b'')
+        if elsebranch is not None:
+            branch.elseBranch = elsebranch
+        else:
+            branch.elseBranch.MergeFromString(b'')
+        return layer
+
+    def add_loop(self, name, body_network=None, input_name=None, condition=None, condition_network=None, max_iterations=None):
+        input_names = [] if input_name is None else [input_name]
+        spec_layer = self._add_generic_layer(name, input_names, [])
+        loop = spec_layer.loop
+        if condition_network is None:
+            loop.conditionNetwork.MergeFromString(b'')
+        else:
+            loop.conditionNetwork = condition_network
+
+        if condition is not None:
+            loop.conditionVar = str(condition)
+        if max_iterations is not None:
+            loop.maxLoopIterations = max_iterations if max_iterations is not None else -1
+
+        if body_network is None:
+            loop.bodyNetwork.MergeFromString(b'')
+        else:
+            loop.bodyNetwork = body_network
+        return spec_layer
+
+    def add_loop_break(self, name):
+        spec_layer = self.nn_spec.layers.add()
+        spec_layer.name = name
+        spec_layer.loopBreak.MergeFromString(b'')
+        return spec_layer
+
+    def add_loop_continue(self, name):
+        spec_layer = self.nn_spec.layers.add()
+        spec_layer.name = name
+        spec_layer.loopContinue.MergeFromString(b'')
+        return spec_layer
+
+    def add_copy(self, name, input_name, output_name):
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.copy.MergeFromString(b'')
+        return spec_layer
+
+    def add_get_shape(self, name, input_name, output_name):
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.getShape.MergeFromString(b'')
+        return spec_layer
+
+    def add_alloc(self, name, input_name, output_name):
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.alloc.MergeFromString(b'')
+        return spec_layer
+
+    def add_scatter(self, name, input_names, output_name):
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.scatter.MergeFromString(b'')
+        return spec_layer
+
+    def add_greater_than(self, name, input_names, output_name, use_greater_than_equal=False, alpha=0):
+        if isinstance(input_names, str):
+            input_names = [input_names]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.greaterThan.useNonStrictInequality = use_greater_than_equal
+        if len(input_names) == 1:
+            spec_layer.greaterThan.alpha = alpha
+        return spec_layer
+
+    def add_less_than(self, name, input_names, output_name, use_less_than_equal=False, alpha=0):
+        if isinstance(input_names, str):
+            input_names = [input_names]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.lessThan.useNonStrictInequality = use_less_than_equal
+        if len(input_names) == 1:
+            spec_layer.lessThan.alpha = alpha
+        return spec_layer
+
+    def add_equal(self, name, input_names, output_name, alpha=0):
+        if isinstance(input_names, str):
+            input_names = [input_names]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.equal.MergeFromString(b'')
+        if len(input_names) == 1:
+            spec_layer.equal.alpha = alpha
+        return spec_layer
+
+    def add_not_equal(self, name, input_names, output_name, alpha=0):
+        if isinstance(input_names, str):
+            input_names = [input_names]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.notEqual.MergeFromString(b'')
+        if len(input_names) == 1:
+            spec_layer.notEqual.alpha = alpha
+        return spec_layer
+
+    def add_logical(self, name, input_names, output_name, mode):
+        if isinstance(input_names, str):
+            input_names = [input_names]
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        if mode in ['AND', 'OR', 'XOR'] and len(input_names) != 2:
+            raise ValueError('Logical operation "%s" requires 2 inputs' %(name))
+        if mode in ['NOT'] and len(input_names) != 1:
+            raise ValueError('Logical operation "%s" requires 1 input' %(name))
+
+        if mode == 'AND':
+            spec_layer.logicalAnd.MergeFromString(b'')
+        elif mode == 'OR':
+            spec_layer.logicalOr.MergeFromString(b'')
+        elif mode == 'XOR':
+            spec_layer.logicalXor.MergeFromString(b'')
+        elif mode == 'NOT':
+            spec_layer.logicalNot.MergeFromString(b'')
+        else:
+            raise ValueError('Logical operation "%s" is not supported' %(mode))
+
+        return spec_layer
+
+    def add_sliding_windows(self, name, input_name, output_name, axis, window_size, step, input_rank=None, input_shape=None, output_shape=None):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        input_ranks = None if input_rank is None else [input_rank]
+        output_ranks = None if input_rank is None else [input_rank + 1]
+        input_shapes = None if input_shape is None else [input_shape]
+        output_shapes = None if output_shape is None else [output_shape]
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
+                                             input_ranks=input_ranks,
+                                             input_shapes=input_shapes,
+                                             output_ranks=output_ranks,
+                                             output_shapes=output_shapes)
+
+        spec_layer_params = spec_layer.slidingWindows
+        spec_layer_params.axis = axis
+        spec_layer_params.windowSize = window_size
+        spec_layer_params.step = step
+
+        return spec_layer

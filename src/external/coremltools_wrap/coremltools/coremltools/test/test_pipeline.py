@@ -37,7 +37,7 @@ class LinearRegressionPipelineCreationTest(unittest.TestCase):
         """
         Set up the unit test by loading the dataset and training a model.
         """
-
+        
         if not(HAS_SKLEARN):
             return
 

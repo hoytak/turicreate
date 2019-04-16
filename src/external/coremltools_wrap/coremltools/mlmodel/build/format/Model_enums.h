@@ -13,7 +13,9 @@ enum MLModelType: int {
     MLModelType_supportVectorClassifier = 401,
     MLModelType_treeEnsembleClassifier = 402,
     MLModelType_neuralNetworkClassifier = 403,
+    MLModelType_kNearestNeighborsClassifier = 404,
     MLModelType_neuralNetwork = 500,
+    MLModelType_itemSimilarityRecommender = 501,
     MLModelType_customModel = 555,
     MLModelType_oneHotEncoder = 600,
     MLModelType_imputer = 601,
@@ -28,6 +30,7 @@ enum MLModelType: int {
     MLModelType_textClassifier = 2000,
     MLModelType_wordTagger = 2001,
     MLModelType_visionFeaturePrint = 2002,
+    MLModelType_soundAnalysisPreprocessing = 2003,
     MLModelType_NOT_SET = 0,
 };
 
@@ -58,8 +61,12 @@ static const char * MLModelType_Name(MLModelType x) {
             return "MLModelType_treeEnsembleClassifier";
         case MLModelType_neuralNetworkClassifier:
             return "MLModelType_neuralNetworkClassifier";
+        case MLModelType_kNearestNeighborsClassifier:
+            return "MLModelType_kNearestNeighborsClassifier";
         case MLModelType_neuralNetwork:
             return "MLModelType_neuralNetwork";
+        case MLModelType_itemSimilarityRecommender:
+            return "MLModelType_itemSimilarityRecommender";
         case MLModelType_customModel:
             return "MLModelType_customModel";
         case MLModelType_oneHotEncoder:
@@ -88,6 +95,8 @@ static const char * MLModelType_Name(MLModelType x) {
             return "MLModelType_wordTagger";
         case MLModelType_visionFeaturePrint:
             return "MLModelType_visionFeaturePrint";
+        case MLModelType_soundAnalysisPreprocessing:
+            return "MLModelType_soundAnalysisPreprocessing";
         case MLModelType_NOT_SET:
             return "INVALID";
     }

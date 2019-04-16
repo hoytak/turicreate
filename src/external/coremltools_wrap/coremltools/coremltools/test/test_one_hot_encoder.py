@@ -84,7 +84,7 @@ class OneHotEncoderScikitTest(unittest.TestCase):
             self.assertIsNotNone(spec.description)
             self.assertEquals(metrics['num_errors'], 0)
 
-    def test_boston_OHE(self):
+    def test_boston_OHE(self): 
         data = load_boston()
 
         for categorical_features in [ [3], [8], [3, 8], [8,3] ]:
@@ -104,13 +104,13 @@ class OneHotEncoderScikitTest(unittest.TestCase):
                 assert result["num_errors"] == 0
 
     # This test still isn't working
-    def test_boston_OHE_pipeline(self):
+    def test_boston_OHE_pipeline(self): 
         data = load_boston()
-
+            
         for categorical_features in [ [3], [8], [3, 8], [8,3] ]:
 
             # Put it in a pipeline so that we can test whether the output dimension
-            # handling is correct.
+            # handling is correct. 
 
             model = Pipeline([("OHE", OneHotEncoder(categorical_features = categorical_features)),
                  ("Normalizer", Normalizer())])
@@ -127,8 +127,8 @@ class OneHotEncoderScikitTest(unittest.TestCase):
                 result = evaluate_transformer(spec, input_data, output_data)
 
                 assert result["num_errors"] == 0
-
-    def test_random_sparse_data(self):
+   
+    def test_random_sparse_data(self): 
 
         n_columns = 8
         n_categories = 20
@@ -139,12 +139,12 @@ class OneHotEncoderScikitTest(unittest.TestCase):
 
         for dt in ['int32', 'float32', 'float64']:
 
-            _X = np.array( [[categories[j,rn.randint(n_categories)]
-                             for j in range(n_columns)]
+            _X = np.array( [[categories[j,rn.randint(n_categories)] 
+                             for j in range(n_columns)] 
                             for i in range(100)], dtype=dt)
 
-            # Test this data on a bunch of possible inputs.
-            for sparse in (True, False):
+            # Test this data on a bunch of possible inputs. 
+            for sparse in (True, False): 
                 for categorical_features in ['all', [3], [4], range(2,8), range(0,4), range(0,8)]:
                     X = _X.copy()
 
@@ -170,7 +170,7 @@ class OneHotEncoderScikitTest(unittest.TestCase):
                         assert result["num_errors"] == 0
 
             # Test normal data inside a pipeline
-            for sparse in (True, False):
+            for sparse in (True, False): 
                 for categorical_features in [ 'all', [3], [4], range(2,8), range(0,4), range(0,8)]:
                     X = _X.copy()
 
@@ -181,7 +181,7 @@ class OneHotEncoderScikitTest(unittest.TestCase):
 
                     # Convert the model
                     spec = sklearn.convert(model, [('data', Array(n_columns))], 'out').get_spec()
-
+                    
                     if macos_version() >= (10, 13):
                         X_out = model.transform(X)
                         if sparse:

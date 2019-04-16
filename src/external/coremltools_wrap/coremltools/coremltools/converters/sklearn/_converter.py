@@ -46,12 +46,12 @@ def convert(sk_obj, input_features = None,
 
 
     input_features: str | dict | list
-
+    
         Optional name(s) that can be given to the inputs of the scikit-learn
         model. Defaults to 'input'.
-
+        
         Input features can be specified in a number of forms.
-
+        
         -   Single string: In this case, the input is assumed to be a single
             array, with the number of dimensions set using num_dimensions.
 
@@ -138,11 +138,12 @@ def convert(sk_obj, input_features = None,
     # that sklearn isn't actually imported unless this function is called
     from ...models import MLModel
 
-    # NOTE: Providing user-defined class labels will be enabled when
+    # NOTE: Providing user-defined class labels will be enabled when 
     # several issues with the ordering of the classes are worked out.  For now,
-    # to use custom class labels, directly import the internal function below.
+    # to use custom class labels, directly import the internal function below. 
     from ._converter_internal import _convert_sklearn_model
     spec = _convert_sklearn_model(
             sk_obj, input_features, output_feature_names, class_labels = None)
 
     return MLModel(spec)
+

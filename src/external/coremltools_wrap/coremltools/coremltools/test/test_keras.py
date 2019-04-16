@@ -947,3 +947,5 @@ class KerasSingleLayerTest(unittest.TestCase):
         self.assertEquals(len(spec.description.output), len(expected_output_names))
         self.assertEquals(expected_output_names,
                [x.name for x in spec.description.output])
+
+        

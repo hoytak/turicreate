@@ -36,14 +36,14 @@ void Utils::handleError(NSError *error) {
 MLDictionaryFeatureProvider * Utils::dictToFeatures(const py::dict& dict, NSError **error) {
     @autoreleasepool {
         NSMutableDictionary<NSString *, NSObject *> *inputDict = [[NSMutableDictionary<NSString *, NSObject *> alloc] init];
-
+        
         for (const auto element : dict) {
             std::string key = element.first.cast<std::string>();
             NSString *nsKey = [NSString stringWithUTF8String:key.c_str()];
             id nsValue = Utils::convertValueToObjC(element.second);
             inputDict[nsKey] = nsValue;
         }
-
+        
         return [[MLDictionaryFeatureProvider alloc] initWithDictionary:inputDict error:error];
     }
 }
@@ -106,17 +106,17 @@ static MLFeatureValue * convertToNSDictionary(const std::unordered_map<KEYTYPE, 
 }
 
 static MLFeatureValue * convertValueToDictionary(const py::handle& handle) {
-
+    
     if(!PyDict_Check(handle.ptr())) {
         throw std::runtime_error("Not a dictionary.");
     }
-
+    
     // Get the first value in the dictionary; use that as a hint.
     PyObject *key = nullptr, *value = nullptr;
     Py_ssize_t pos = 0;
-
+    
     int has_values = PyDict_Next(handle.ptr(), &pos, &key, &value);
-
+    
     // Is it an empty dict?  If so, just return an empty dictionary.
     if(!has_values) {
         return [MLFeatureValue featureValueWithDictionary:@{} error:nullptr];
@@ -168,12 +168,12 @@ static void handleCVReturn(CVReturn status) {
 static MLFeatureValue * convertValueToImage(const py::handle& handle) {
     // assumes handle is a valid PIL image!
     CVPixelBufferRef pixelBuffer = nil;
-
+    
     size_t width = handle.attr("width").cast<size_t>();
     size_t height = handle.attr("height").cast<size_t>();
     OSType format;
     std::string formatStr = handle.attr("mode").cast<std::string>();
-
+    
     if (formatStr == "RGB") {
         format = kCVPixelFormatType_32BGRA;
     } else if (formatStr == "RGBA") {
@@ -186,10 +186,10 @@ static MLFeatureValue * convertValueToImage(const py::handle& handle) {
         msg << "Supported types are: RGB, RGBA, L.";
         throw std::runtime_error(msg.str());
     }
-
+    
     CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, width, height, format, NULL, &pixelBuffer);
     handleCVReturn(status);
-
+    
     // get bytes out of the PIL image
     py::object tobytes = handle.attr("tobytes");
     py::object bytesResult = tobytes();
@@ -198,7 +198,7 @@ static MLFeatureValue * convertValueToImage(const py::handle& handle) {
     assert(bytesLength >= 0);
     const char *bytesPtr = PyBytes_AsString(bytesResult.ptr());
     std::string bytes(bytesPtr, static_cast<size_t>(bytesLength));
-
+    
     // copy data into the CVPixelBuffer
     status = CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     handleCVReturn(status);
@@ -207,77 +207,77 @@ static MLFeatureValue * convertValueToImage(const py::handle& handle) {
     assert(!CVPixelBufferIsPlanar(pixelBuffer));
     size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
     const char *srcPointer = bytes.data();
-
+    
     if (formatStr == "RGB") {
-
+        
         // convert RGB to BGRA
         assert(bytes.size() == width * height * 3);
         for (size_t row = 0; row < height; row++) {
             char *dstPointer = static_cast<char *>(baseAddress) + (row * bytesPerRow);
-
+            
             for (size_t col = 0; col < width; col++) {
-
+                
                 char R = *srcPointer++;
                 char G = *srcPointer++;
                 char B = *srcPointer++;
-
+                
                 *dstPointer++ = B;
                 *dstPointer++ = G;
                 *dstPointer++ = R;
                 *dstPointer++ = 0; // A
-
+                
             }
             assert(bytesPerRow >= width * 4);
         }
         assert(srcPointer == bytes.data() + bytes.size());
-
+        
     } else if (formatStr == "RGBA") {
-
+        
         // convert RGBA to BGRA
         assert(bytes.size() == width * height * 4);
         for (size_t row = 0; row < height; row++) {
             char *dstPointer = static_cast<char *>(baseAddress) + (row * bytesPerRow);
-
+            
             for (size_t col = 0; col < width; col++) {
-
+                
                 char R = *srcPointer++;
                 char G = *srcPointer++;
                 char B = *srcPointer++;
                 char A = *srcPointer++;
-
+                
                 *dstPointer++ = B;
                 *dstPointer++ = G;
                 *dstPointer++ = R;
                 *dstPointer++ = A;
-
+                
             }
             assert(bytesPerRow >= width * 4);
         }
         assert(srcPointer == bytes.data() + bytes.size());
-
+        
     } else {
-
+        
         // assume 8 bit grayscale (the only other case)
         assert(formatStr == "L");
         assert(bytes.size() == width * height);
-
+        
         for (size_t row = 0; row < height; row++) {
             char *dstPointer = static_cast<char *>(baseAddress) + (row * bytesPerRow);
-
+            
             std::memcpy(dstPointer, srcPointer, width);
             srcPointer += width;
         }
     }
-
+    
     assert(srcPointer == bytes.data() + bytes.size());
-
+    
 #ifdef COREML_SHOW_PIL_IMAGES
     if (formatStr == "RGB") {
         // for debugging purposes, convert back to PIL image and show it
         py::object scope = py::module::import("__main__").attr("__dict__");
         py::eval<py::eval_single_statement>("import PIL.Image", scope);
         py::object pilImage = py::eval<py::eval_expr>("PIL.Image");
-
+        
         std::string cvPixelStr(count, 0);
         const char *basePtr = static_cast<char *>(baseAddress);
         for (size_t row = 0; row < height; row++) {
@@ -287,7 +287,7 @@ static MLFeatureValue * convertValueToImage(const py::handle& handle) {
                 }
             }
         }
-
+        
         py::bytes cvPixelBytes = py::bytes(cvPixelStr);
         py::object frombytes = pilImage.attr("frombytes");
         py::str mode = "RGB";
@@ -296,7 +296,7 @@ static MLFeatureValue * convertValueToImage(const py::handle& handle) {
         img.attr("show")();
     }
 #endif
-
+    
     status = CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     handleCVReturn(status);
 
@@ -305,61 +305,61 @@ static MLFeatureValue * convertValueToImage(const py::handle& handle) {
 
 static bool IsPILImage(const py::handle& handle) {
     // TODO put try/catch around this?
-
+    
     try {
         py::module::import("PIL.Image");
     } catch(...) {
         return false;
     }
-
+    
     py::object scope = py::module::import("__main__").attr("__dict__");
     py::eval<py::eval_single_statement>("import PIL.Image", scope);
     py::handle imageTypeHandle = py::eval<py::eval_expr>("PIL.Image.Image", scope);
     assert(PyType_Check(imageTypeHandle.ptr())); // should be a Python type
-
+    
     return PyObject_TypeCheck(handle.ptr(), (PyTypeObject *)(imageTypeHandle.ptr()));
 }
 
 MLFeatureValue * Utils::convertValueToObjC(const py::handle& handle) {
-
+    
     if (PyAnyInteger_Check(handle.ptr())) {
         try {
             int64_t val = handle.cast<int64_t>();
             return [MLFeatureValue featureValueWithInt64:val];
         } catch(...) {}
     }
-
+    
     if (PyFloat_Check(handle.ptr())) {
         try {
             double val = handle.cast<double>();
             return [MLFeatureValue featureValueWithDouble:val];
         } catch(...) {}
     }
-
+    
     if (PyBytes_Check(handle.ptr()) || PyUnicode_Check(handle.ptr())) {
         try {
             std::string val = handle.cast<std::string>();
             return [MLFeatureValue featureValueWithString:[NSString stringWithUTF8String:val.c_str()]];
         } catch(...) {}
     }
-
+    
     if (PyDict_Check(handle.ptr())) {
         try {
             return convertValueToDictionary(handle);
         } catch(...) {}
     }
-
+    
     if(PyList_Check(handle.ptr()) || PyTuple_Check(handle.ptr())
        || PyObject_CheckBuffer(handle.ptr())) {
         try {
             return convertValueToArray(handle);
         } catch(...) {}
     }
-
+    
     if (IsPILImage(handle)) {
         return convertValueToImage(handle);
     }
-
+    
     py::print("Error: value type not convertible:");
     py::print(handle);
     throw std::runtime_error("value type not convertible");
@@ -402,12 +402,12 @@ py::object Utils::convertArrayValueToPython(MLMultiArray *value) {
     MLMultiArrayDataType type = value.dataType;
     std::vector<size_t> shape = Utils::convertNSArrayToCpp(value.shape);
     std::vector<size_t> strides = Utils::convertNSArrayToCpp(value.strides);
-
+    
     // convert strides to numpy (bytes) instead of mlkit (elements)
     for (size_t& stride : strides) {
         stride *= sizeOfArrayElement(type);
     }
-
+    
     switch (type) {
         case MLMultiArrayDataTypeInt32:
             return py::array(shape, strides, static_cast<int32_t*>(value.dataPointer));
@@ -437,28 +437,28 @@ py::object Utils::convertDictionaryValueToPython(NSDictionary<NSObject *,NSNumbe
             NSString *nskey = static_cast<NSString *>(key);
             pykey = py::str([nskey UTF8String]);
         }
-
+        
         NSNumber *value = dict[key];
         ret[pykey] = py::float_([value doubleValue]);
     }
-    return ret;
+    return std::move(ret);
 }
 
 py::object Utils::convertImageValueToPython(CVPixelBufferRef value) {
     if (CVPixelBufferIsPlanar(value)) {
         throw std::runtime_error("Only non-planar CVPixelBuffers are currently supported by this Python binding.");
     }
-
+    
     // supports grayscale and BGRA format types
     auto formatType = CVPixelBufferGetPixelFormatType(value);
     assert(formatType == kCVPixelFormatType_32BGRA || formatType == kCVPixelFormatType_OneComponent8);
-
+    
     auto result = CVPixelBufferLockBaseAddress(value, kCVPixelBufferLock_ReadOnly);
     assert(result == kCVReturnSuccess);
-
+    
     uint8_t *src = reinterpret_cast<uint8_t*>(CVPixelBufferGetBaseAddress(value));
     assert(src != nullptr);
-
+    
     auto height = CVPixelBufferGetHeight(value);
     auto width = CVPixelBufferGetWidth(value);
     size_t srcBytesPerRow = CVPixelBufferGetBytesPerRow(value);
@@ -486,10 +486,10 @@ py::object Utils::convertImageValueToPython(CVPixelBufferRef value) {
             }
         }
     }
-
+    
     result = CVPixelBufferUnlockBaseAddress(value, kCVPixelBufferLock_ReadOnly);
     assert(result == kCVReturnSuccess);
-
+    
     py::object scope = py::module::import("__main__").attr("__dict__");
     py::eval<py::eval_single_statement>("import PIL.Image", scope);
     py::object pilImage = py::eval<py::eval_expr>("PIL.Image", scope);

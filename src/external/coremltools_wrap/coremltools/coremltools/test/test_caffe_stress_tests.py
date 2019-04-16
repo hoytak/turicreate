@@ -135,7 +135,7 @@ class CaffeLayers(unittest.TestCase):
         failed_tests_evaluation = []
         counter = 0
         for net_name_proto in nets:
-
+            
             counter += 1
             net_data_files = []
             proto_name = \
@@ -240,18 +240,18 @@ class CaffeLayers(unittest.TestCase):
             output_layer_name = str(coremlmodel.output_description).split('(')[1].split(')')[0]
             coreml_preds = coremlmodel.predict(mlmodel_input)[output_layer_name].flatten()
             caffe_preds = output_data.flatten()
-
+        
         if len(coreml_preds) != len(caffe_preds):
             failed_tests.append(net_name)
-            return relative_error, failed_tests
-
+            return relative_error, failed_tests    
+            
         for i in range(len(caffe_preds)):
             max_den = max(1.0, np.abs(caffe_preds[i]), np.abs(coreml_preds[i]))
             relative_error = np.abs(caffe_preds[i]/max_den - coreml_preds[i]/max_den)
             if relative_error > delta and np.abs(caffe_preds[i]) < 1e10:
                 failed_tests.append(net_name)
                 break
-
+                
         return relative_error, failed_tests
 
     @pytest.mark.slow
@@ -278,8 +278,8 @@ class CaffeLayers(unittest.TestCase):
             input_layer='data',
             output_layer='LayerConvolution'
         )
-
-    #@unittest.skip("Add Test cases where group and dilation are not 1 Radar: 32739970")
+        
+    #@unittest.skip("Add Test cases where group and dilation are not 1 Radar: 32739970")    
     @pytest.mark.slow
     def test_deconvolution_layer(self):
         self.run_case(
@@ -348,7 +348,7 @@ class CaffeLayers(unittest.TestCase):
             output_layer='LayerLRN',
         )
 
-    @unittest.skip(" Radar: 33056676")
+    @unittest.skip(" Radar: 33056676") 
     def test_mvn(self):
         self.run_case(
             layer_type='mvn',
@@ -391,7 +391,7 @@ class CaffeLayers(unittest.TestCase):
             output_layer='LayerEltwise',
         )
 
-    @unittest.skip("Radar: 32739970")
+    @unittest.skip("Radar: 32739970")  
     def test_parameter(self):
         self.run_case(
             layer_type='parameter',

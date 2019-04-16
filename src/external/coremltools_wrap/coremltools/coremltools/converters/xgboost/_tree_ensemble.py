@@ -12,7 +12,7 @@ import numpy as _np
 if _HAS_XGBOOST:
     import xgboost as _xgboost
 
-def recurse_json(mlkit_tree, xgb_tree_json, tree_id, node_id, feature_map,
+def recurse_json(mlkit_tree, xgb_tree_json, tree_id, node_id, feature_map, 
         force_32bit_float):
     """Traverse through the tree and append to the tree spec.
     """
@@ -31,10 +31,10 @@ def recurse_json(mlkit_tree, xgb_tree_json, tree_id, node_id, feature_map,
         feature_index = split_name if not feature_map else feature_map[split_name]
 
         # xgboost internally uses float32, but the parsing from json pulls it out
-        # as a 64bit double.  To trigger the internal float32 detection in the
-        # tree ensemble compiler, we need to explicitly cast it to a float 32
-        # value, then back to the 64 bit float that protobuf expects.  This is
-        # controlled with the force_32bit_float flag.
+        # as a 64bit double.  To trigger the internal float32 detection in the 
+        # tree ensemble compiler, we need to explicitly cast it to a float 32 
+        # value, then back to the 64 bit float that protobuf expects.  This is 
+        # controlled with the force_32bit_float flag. 
         feature_value = xgb_tree_json['split_condition']
 
         if force_32bit_float:
@@ -62,7 +62,7 @@ def recurse_json(mlkit_tree, xgb_tree_json, tree_id, node_id, feature_map,
         value = xgb_tree_json["leaf"]
 
         if force_32bit_float:
-            value = float(_np.float32(value))
+            value = float(_np.float32(value))  
 
         mlkit_tree.add_leaf_node(tree_id, node_id, value,
                 relative_hit_rate = relative_hit_rate)
@@ -101,7 +101,7 @@ def convert_tree_ensemble(model, feature_names, target, force_32bit_float):
     """
     if not(_HAS_XGBOOST):
         raise RuntimeError('xgboost not found. xgboost conversion API is disabled.')
-
+    
     import json
     import os
     feature_map = None

@@ -29,7 +29,7 @@ class SvcScikitTest(unittest.TestCase):
     """
     Unit test class for testing scikit-learn converter.
     """
-    def _evaluation_test_helper(self, class_labels, use_probability_estimates,
+    def _evaluation_test_helper(self, class_labels, use_probability_estimates, 
             allow_slow, allowed_prob_delta=0.00001):
         # Parameters to test
         kernel_parameters = [{}, {'kernel': 'rbf', 'gamma': 1.2},
@@ -163,11 +163,11 @@ class CSVCLibSVMTest(unittest.TestCase):
         for _ in range(50):
             self.x.append([random.gauss(200,30), random.gauss(-100,22)])
             self.y.append(random.choice([1, 2]))
-        self.y[0] = 1           # Make sure 1 is always the first label it sees
+        self.y[0] = 1           # Make sure 1 is always the first label it sees 
         self.y[1] = 2
         self.column_names = ['x1', 'x2']
         self.prob = svmutil.svm_problem(self.y, self.x)
-
+        
         param = svmutil.svm_parameter()
         param.svm_type = svmutil.C_SVC
         param.kernel_type = svmutil.LINEAR
@@ -238,7 +238,7 @@ class CSVCLibSVMTest(unittest.TestCase):
         for i, val in enumerate(labels):
             y[i] = val
         probability_param = '-b 1'
-
+        
         for param1 in self.non_kernel_parameters:
             for param2 in self.kernel_parameters:
                 param_str = ' '.join([self.base_param, param1, param2, probability_param])
@@ -251,7 +251,7 @@ class CSVCLibSVMTest(unittest.TestCase):
                 (df['prediction'], _, probability_lists) = svm_predict(y, self.x, model, probability_param + ' -q')
                 probability_dicts = [dict(zip([1, 2], cur_vals)) for cur_vals in probability_lists]
                 df['probabilities'] = probability_dicts
-
+                
                 spec = libsvm.convert(model, self.column_names, 'target', 'probabilities')
 
                 if macos_version() >= (10, 13):
@@ -288,7 +288,7 @@ class CSVCLibSVMTest(unittest.TestCase):
                 param = svm_parameter(param_str)
 
                 model = svm_train(prob, param)
-
+                
                 # Get predictions with probabilities as dictionaries
                 (df['prediction'], _, _) = svm_predict(y, x, model, ' -q')
 
@@ -311,3 +311,4 @@ class CSVCLibSVMTest(unittest.TestCase):
         # libsvm's save(...) truncates floating points. So it's not going to match self.libsvm_model any more.
         spec = libsvm.convert(libsvm_model_path, self.column_names, 'target')
         self.assertIsNotNone(spec)
+

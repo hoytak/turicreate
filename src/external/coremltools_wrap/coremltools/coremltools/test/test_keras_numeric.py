@@ -42,7 +42,7 @@ def _keras_transpose(x, is_sequence=False):
     elif len(x.shape) == 1:
         if is_sequence: # (S) --> (S,N,1,1,1)
             return x.reshape((x.shape[0], 1, 1))
-        else:
+        else: 
             return x
     else:
         return x
@@ -99,15 +99,15 @@ class KerasNumericCorrectnessTest(unittest.TestCase):
     """
     def _test_keras_model(self, model, num_samples = 1, mode = 'random',
             input_blob = 'data', output_blob = 'output', delta = 1e-2,
-            model_dir = None, transpose_keras_result = True,
+            model_dir = None, transpose_keras_result = True, 
             one_dim_seq_flags = None ):
 
         # transpose_keras_result: if true, compare the transposed Keras result
-        # one_dim_seq_flags: a list of same length as the number of inputs in
+        # one_dim_seq_flags: a list of same length as the number of inputs in 
         # the model; if None, treat all 1D input (if any) as non-sequence
         # if one_dim_seq_flags[i] is True, it means the ith input, with shape
-        # (X,) is in fact a sequence of length X.
-
+        # (X,) is in fact a sequence of length X. 
+        
         # Get the CoreML model
         use_tmp_folder = False
         if model_dir is None:
@@ -126,30 +126,30 @@ class KerasNumericCorrectnessTest(unittest.TestCase):
                 feature_name = "data_%s" % i
                 input_names.append(feature_name)
                 input_data.append(X)
-                if one_dim_seq_flags is None:
+                if one_dim_seq_flags is None: 
                     coreml_input[feature_name] = _keras_transpose(X
                             ).astype('f').copy()
-                else:
-                    coreml_input[feature_name] = _keras_transpose(X,
+                else: 
+                    coreml_input[feature_name] = _keras_transpose(X, 
                             one_dim_seq_flags[i]).astype('f').copy()
         else:
             input_shape = [1 if a is None else a for a in model.input_shape]
             input_names = ['data']
             input_data = _generate_data(input_shape, mode)
-            if one_dim_seq_flags is None:
+            if one_dim_seq_flags is None: 
                 coreml_input = {'data': _keras_transpose(input_data).astype(
                         'f').copy()}
-            else:
-                coreml_input = {'data': _keras_transpose(input_data,
+            else: 
+                coreml_input = {'data': _keras_transpose(input_data, 
                         one_dim_seq_flags[0]).astype('f').copy()}
 
         # Compile the model
         output_names = ['output'+str(i) for i in range(len(model.outputs))]
-        coreml_model = _get_coreml_model(model, model_path, input_names,
+        coreml_model = _get_coreml_model(model, model_path, input_names, 
                 output_names)
-
+        
         if macos_version() >= (10, 13):
-            # Assuming coreml model output names are in the same order as Keras
+            # Assuming coreml model output names are in the same order as Keras 
             # Output list, put predictions into a list, sorted by output name
             coreml_preds = coreml_model.predict(coreml_input)
             c_preds = [coreml_preds[name] for name in output_names]
@@ -157,7 +157,7 @@ class KerasNumericCorrectnessTest(unittest.TestCase):
             # Run Keras predictions
             keras_preds = model.predict(input_data)
             k_preds = keras_preds if type(keras_preds) is list else [keras_preds]
-
+            
             # Compare each output blob
             for idx, k_pred in enumerate(k_preds):
                 if transpose_keras_result:
@@ -169,14 +169,14 @@ class KerasNumericCorrectnessTest(unittest.TestCase):
                 self.assertEquals(len(kp), len(cp))
                 for i in range(len(kp)):
                     max_den = max(1.0, kp[i], cp[i])
-                    self.assertAlmostEquals(kp[i]/max_den,
-                                            cp[i]/max_den,
+                    self.assertAlmostEquals(kp[i]/max_den, 
+                                            cp[i]/max_den, 
                                             delta=delta)
 
         # Cleanup files - models on disk no longer useful
         if use_tmp_folder and os.path.exists(model_dir):
             shutil.rmtree(model_dir)
-
+        
 
 @unittest.skipIf(not HAS_KERAS_TF, 'Missing keras. Skipping tests.')
 class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
@@ -272,7 +272,7 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Define a model
         model = Sequential()
-        model.add(AtrousConvolution2D(num_kernels, kernel_height, kernel_width,
+        model.add(AtrousConvolution2D(num_kernels, kernel_height, kernel_width, 
             input_shape = input_shape))
 
         # Set some random weights
@@ -280,7 +280,7 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Test the keras model
         self._test_keras_model(model)
-
+        
     def test_tiny_atrous_conv_random(self):
         np.random.seed(1988)
         input_dim = 8
@@ -291,14 +291,14 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Define a model
         model = Sequential()
-        model.add(AtrousConvolution2D(nb_filter=num_kernels, nb_row=kernel_height, nb_col=kernel_width,
+        model.add(AtrousConvolution2D(nb_filter=num_kernels, nb_row=kernel_height, nb_col=kernel_width, 
             input_shape = input_shape, atrous_rate = (2,2)))
 
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
 
         # Test the keras model
-        self._test_keras_model(model)
+        self._test_keras_model(model)        
 
     def test_tiny_atrous_conv_rect_random(self):
         np.random.seed(1988)
@@ -309,7 +309,7 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Define a model
         model = Sequential()
-        model.add(AtrousConvolution2D(nb_filter=num_kernels, nb_row=kernel_height, nb_col=kernel_width,
+        model.add(AtrousConvolution2D(nb_filter=num_kernels, nb_row=kernel_height, nb_col=kernel_width, 
             input_shape = input_shape, atrous_rate = (3,3)))
 
         # Set some random weights
@@ -377,7 +377,7 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Test the keras model
         self._test_keras_model(model)
-
+    
     def test_tiny_conv_pseudo_1d_x(self):
         np.random.seed(1988)
         input_dim = 2
@@ -432,14 +432,14 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Define a model
         model = Sequential()
-        model.add(AtrousConvolution1D(nb_filter=num_kernels, filter_length=kernel_length,
+        model.add(AtrousConvolution1D(nb_filter=num_kernels, filter_length=kernel_length, 
             input_shape = input_shape, atrous_rate = 2))
 
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
 
         # Test the keras model
-        self._test_keras_model(model)
+        self._test_keras_model(model)     
 
     def test_tiny_deconv_random(self):
         np.random.seed(1988)
@@ -662,23 +662,23 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
+    
     def test_tiny_no_sequence_bidir_random_gpu(self):
         np.random.seed(1988)
         input_dim = 1
         input_length = 1
         num_channels = 1
         num_samples = 1
-
+        
         # Define a model
         model = Sequential()
         model.add(Bidirectional(LSTM(num_channels, input_dim = input_dim,
                                      input_length = input_length, consume_less = 'gpu', inner_activation = 'sigmoid'),
                                 input_shape=(input_length, input_dim)))
-
+            
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
                                 # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
 
@@ -805,145 +805,145 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Test the keras model
         self._test_keras_model(model, input_blob='data', output_blob='output')
-
+    
     def test_medium_bidir_random_return_seq_true(self):
         np.random.seed(1988)
         input_dim = 7
         input_length = 5
         num_channels = 10
-
+        
         # Define a model
         model = Sequential()
         model.add(Bidirectional(LSTM(num_channels, input_dim = input_dim,
                                      input_length = input_length, return_sequences = True,
                                      consume_less = 'gpu', inner_activation = 'sigmoid'),
                                 input_shape=(input_length, input_dim)))
-
+            
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+                                
                                 # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
-
+    
+    
     def test_lstm_seq(self):
         np.random.seed(1988)
 
         input_dim = 11
         input_length = 5
-
+        
         # Define a model
         model = Sequential()
         model.add(LSTM(20, input_dim=input_dim, input_length=input_length, return_sequences=False))
-
+        
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
+    
     def test_lstm_seq_dense(self):
         np.random.seed(1988)
-
+        
         input_dim = 5
         num_hidden = 12
         num_classes = 6
         input_length = 3
-
+        
         # Define a model
         model = Sequential()
         model.add(LSTM(num_hidden, input_dim=input_dim, input_length=input_length, return_sequences=False))
         model.add(Dense(num_classes, activation='softmax'))
-
+        
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
-
-
+    
+    
+        
     def test_lstm_seq_backwards(self):
         np.random.seed(1988)
-
+        
         input_dim = 11
         input_length = 5
-
+        
         # Define a model
         model = Sequential()
         model.add(LSTM(20, input_dim=input_dim, input_length=input_length, return_sequences=False, go_backwards=True))
-
+        
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
+    
     def test_rnn_seq(self):
         np.random.seed(1988)
-
+        
         input_dim = 11
         input_length = 5
-
+        
         # Define a model
         model = Sequential()
         model.add(SimpleRNN(20, input_dim=input_dim, input_length=input_length, return_sequences=False))
-
+        
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
+    
     def test_rnn_seq_backwards(self):
         np.random.seed(1988)
-
+        
         input_dim = 11
         input_length = 5
-
+        
         # Define a model
         model = Sequential()
         model.add(SimpleRNN(20, input_dim=input_dim, input_length=input_length, return_sequences=False, go_backwards=True))
-
+        
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
+    
     def test_gru_seq(self):
         np.random.seed(1988)
-
+        
         input_dim = 11
         input_length = 5
-
+        
         # Define a model
         model = Sequential()
         model.add(GRU(20, input_dim=input_dim, input_length=input_length, return_sequences=False))
-
+        
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
+    
     def test_gru_seq_backwards(self):
         np.random.seed(1988)
-
+        
         input_dim = 11
         input_length = 5
-
+        
         # Define a model
         model = Sequential()
         model.add(GRU(20, input_dim=input_dim, input_length=input_length, return_sequences=False, go_backwards=True))
-
+        
         # Set some random weights
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         # Test the keras model
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output')
-
-
+    
+    
     def test_medium_no_sequence_simple_rnn_random(self):
         np.random.seed(1988)
         input_dim = 10
@@ -1242,9 +1242,9 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Get the coreml model
         self._test_keras_model(model)
-
+        
     def test_crop_simple(self):
-
+        
         input_shape = (48, 48, 3)
         model = Sequential()
         model.add(Cropping2D(cropping=((2,5),(2,5)),input_shape=input_shape))
@@ -1425,46 +1425,46 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
         model = Sequential()
         model.add(Flatten(input_shape=(2,2,2)))
         self._test_keras_model(model, mode='linear')
-
+    
     def test_reshape_3d(self):
         model = Sequential()
         model.add(Reshape((10,1,6), input_shape=(5,4,3)))
         self._test_keras_model(model,  mode = 'linear')
-
+    
     def test_embedding(self):
-
+        
         model = Sequential()
         num_inputs = 10
         num_outputs = 3
         model.add(Embedding(num_inputs, num_outputs))
-
+        
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         self._test_keras_model(model)
-
+            
     def test_embedding_seq(self):
-
+    
         model = Sequential()
         num_inputs = 10
         num_outputs = 3
         model.add(Embedding(num_inputs, num_outputs, input_length=7))
-
+        
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         self._test_keras_model(model, one_dim_seq_flags=[True])
-
+    
     def test_tiny_time_distrbuted(self):
-
+        
         # as the first layer in a model
         model = Sequential()
         model.add(TimeDistributed(Dense(8), input_shape=(10, 16)))
-
+        
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         self._test_keras_model(model)
-
+    
     def test_tiny_sequence_lstm(self):
-
+        
         np.random.seed(1988)
         input_dim = 1
         input_length = 2
@@ -1487,15 +1487,15 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
         x = ZeroPadding2D(padding=(1, 1))(x_in)
         x = BatchNormalization(axis=2)(x)
         model = Model(x_in, x)
-
+        
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output', delta=1e-2)
-
+        
     def test_dense_fused_act_in_td(self):
         np.random.seed(1988)
         x_in = Input(shape=(10,2))
         x = TimeDistributed(Dense(6, activation = 'softmax'))(x_in)
         model = Model(x_in, x)
-
+        
         self._test_keras_model(model, input_blob = 'data', output_blob = 'output', delta=1e-2)
 
     def test_tiny_conv_upsample_1d_random(self):
@@ -1571,7 +1571,7 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
         input_shape = (20, 20, 3)
         num_channels = 2049
         kernel_size = 3
-
+        
         model = Sequential()
         model.add(Convolution2D(input_shape = input_shape,
                                 nb_filter = num_channels, nb_row = kernel_size,
@@ -1583,16 +1583,16 @@ class KerasBasicNumericCorrectnessTest(KerasNumericCorrectnessTest):
 
     @pytest.mark.xfail(raises = Exception)
     def test_large_batch_gpu(self):
-
+    
         batch_size = 2049
         num_channels = 4
         kernel_size = 3
-
+        
         model = Sequential()
         model.add(TimeDistributed(Dense(num_channels), input_shape=(batch_size, kernel_size)))
-
+        
         model.set_weights([(np.random.rand(*w.shape)-0.5)/5.0 for w in model.get_weights()])
-
+        
         self._test_keras_model(model, input_blob='data', output_blob='output', delta=1e-2)
 
 
@@ -1618,21 +1618,21 @@ class KerasTopologyCorrectnessTest(KerasNumericCorrectnessTest):
 
         # Test the keras model
         self._test_keras_model(model3)
-
+    
     def test_dangling_merge_left(self):
-
+        
         x1 = Input(shape=(4,), name = 'input1')
         x2 = Input(shape=(5,), name = 'input2')
         y1 = Dense(6, name = 'dense')(x2)
         z = merge([x1, y1], mode='concat')
         model = Model([x1,x2], [z])
-
+        
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         self._test_keras_model(model)
-
+    
     def test_dangling_merge_right(self):
-
+        
         x1 = Input(shape=(4,), name = 'input1')
         x2 = Input(shape=(5,), name = 'input2')
         y1 = Dense(6, name = 'dense')(x2)
@@ -1640,9 +1640,9 @@ class KerasTopologyCorrectnessTest(KerasNumericCorrectnessTest):
         model = Model([x1,x2], [z])
 
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
-
+        
         self._test_keras_model(model)
-
+    
     def test_shared_vision(self):
         digit_input = Input(shape=(27, 27,1))
         x = Convolution2D(64, 3, 3)(digit_input)
@@ -2051,17 +2051,17 @@ class KerasNumericCorrectnessStressTest(KerasNumericCorrectnessTest):
                 feature_name = "data_%s" % i
                 input_names.append(feature_name)
                 input_data.append(X)
-                if one_dim_seq_flags is None:
+                if one_dim_seq_flags is None: 
                     coreml_input[feature_name] = _keras_transpose(X).astype('f')
-                else:
+                else: 
                     coreml_input[feature_name] = _keras_transpose(X, one_dim_seq_flags[i]).astype('f')
         else:
             input_shape = [1 if a is None else a for a in model.input_shape]
             input_names = ['data']
             input_data = _generate_data(input_shape)
-            if one_dim_seq_flags is None:
+            if one_dim_seq_flags is None: 
                 coreml_input = {'data': _keras_transpose(input_data).astype('f')}
-            else:
+            else: 
                 coreml_input = {'data': _keras_transpose(input_data, one_dim_seq_flags[0]).astype('f')}
 
         # Make predictions
@@ -2069,12 +2069,12 @@ class KerasNumericCorrectnessStressTest(KerasNumericCorrectnessTest):
             keras_preds = _keras_transpose(model.predict(input_data)).flatten()
         else:
             keras_preds = model.predict(input_data).flatten()
-
+        
         # Get the model
         coreml_model = _get_coreml_model(model, model_path, input_names, ['output'])
         if macos_version() >= (10, 13):
             # get prediction
-            coreml_preds = coreml_model.predict(coreml_input)['output'].flatten()
+            coreml_preds = coreml_model.predict(coreml_input)['output'].flatten() 
 
             if use_tmp_folder:
                 shutil.rmtree(model_dir)
@@ -2191,7 +2191,7 @@ class KerasNumericCorrectnessStressTest(KerasNumericCorrectnessTest):
         print("Testing a total of %s cases. This could take a while" % len(args))
         for param, model in args:
             self._run_test(model, param)
-
+            
     @pytest.mark.slow
     def test_dense_elementwise_params(self):
         options = dict(
@@ -2360,42 +2360,42 @@ class KerasNumericCorrectnessStressTest(KerasNumericCorrectnessTest):
 
         # Get the coreml model
         self._test_keras_model(model)
-
+    
     def test_imdb_fasttext_first_2(self):
 
         max_features = 10
         max_len = 6
         embedding_dims = 4
         pool_length = 2
-
-        model = Sequential()
+        
+        model = Sequential()        
         model.add(Embedding(max_features, embedding_dims, input_length=max_len))
         # we add a AveragePooling1D, which will average the embeddings
         # of all words in the document
         model.add(AveragePooling1D(pool_length=pool_length))
-
+        
         self._test_keras_model(model, one_dim_seq_flags=[True])
-
+        
     def test_tiny_mcrnn_td(self):
-
+        
         model = Sequential()
         model.add(Convolution2D(3,1,1, input_shape=(2,4,4), border_mode='same'))
         model.add(AveragePooling2D(pool_size=(2,2)))
         model.add(Reshape((2,3)))
         model.add(TimeDistributed(Dense(5)))
-
+        
         self._test_keras_model(model)
-
+        
     def test_tiny_mcrnn_recurrent(self):
-
+        
         model = Sequential()
         model.add(Convolution2D(3,1,1, input_shape=(2,4,4), border_mode='same'))
         model.add(AveragePooling2D(pool_size=(2,2)))
         model.add(Reshape((2,3)))
         model.add(LSTM(5, inner_activation = 'sigmoid'))
-
+        
         self._test_keras_model(model)
-
+    
     def test_tiny_mcrnn_music_tagger(self):
 
         x_in = Input(shape=(4,6,1))
@@ -2416,70 +2416,70 @@ class KerasNumericCorrectnessStressTest(KerasNumericCorrectnessTest):
         x = Reshape((2, 4))(x)
         x = GRU(32, return_sequences=True, name='gru1')(x)
         x = GRU(32, return_sequences=False, name='gru2')(x)
-
+        
         # Create model.
         model = Model(x_in, x)
         model.set_weights([np.random.rand(*w.shape) for w in model.get_weights()])
         self._test_keras_model(model, mode='random_zero_mean', delta=1e-2)
-
+    
     def test_tiny_apple_manual(self):
         model = Sequential()
         model.add(LSTM(3, input_shape=(4, 5), inner_activation='sigmoid'))
         model.add(Dense(5))
         model.add(Activation('softmax'))
-
+        
         self._test_keras_model(model)
-
+    
     def test_tiny_image_captioning_image_branch(self):
         img_input_1 = Input(shape=(16,16,3))
         x = Convolution2D(2,3,3)(img_input_1)
         x = Flatten()(x)
         img_model = Model([img_input_1], [x])
-
+        
         img_input = Input(shape=(16,16,3))
         x = img_model(img_input)
         x = Dense(8, name = 'cap_dense')(x)
         x = Reshape((1,8), name = 'cap_reshape')(x)
         image_branch = Model([img_input],[x])
         self._test_keras_model(image_branch)
-
+    
     def test_tiny_image_captioning_feature_merge(self):
-
+        
         img_input_1 = Input(shape=(16,16,3))
         x = Convolution2D(2,3,3)(img_input_1)
         x = Flatten()(x)
         img_model = Model([img_input_1], [x])
-
+        
         img_input = Input(shape=(16,16,3))
         x = img_model(img_input)
         x = Dense(8, name = 'cap_dense')(x)
         x = Reshape((1,8), name = 'cap_reshape')(x)
-
+        
         sentence_input = Input(shape=(5,)) # max_length = 5
         y = Embedding(8, 8, name = 'cap_embedding')(sentence_input)
         z = merge([x,y], mode = 'concat', concat_axis = 1, name = 'cap_merge')
-
+        
         combined_model = Model([img_input, sentence_input], [z])
         self._test_keras_model(combined_model, one_dim_seq_flags=[False, True])
-
+    
     def test_tiny_image_captioning(self):
         # use a conv layer as a image feature branch
         img_input_1 = Input(shape=(16,16,3))
         x = Convolution2D(2,3,3)(img_input_1)
         x = Flatten()(x)
         img_model = Model([img_input_1], [x])
-
+        
         img_input = Input(shape=(16,16,3))
         x = img_model(img_input)
         x = Dense(8, name = 'cap_dense')(x)
         x = Reshape((1,8), name = 'cap_reshape')(x)
-
+        
         sentence_input = Input(shape=(5,)) # max_length = 5
         y = Embedding(8, 8, name = 'cap_embedding')(sentence_input)
         z = merge([x,y], mode = 'concat', concat_axis = 1, name = 'cap_merge')
         z = LSTM(4, return_sequences = True, name = 'cap_lstm')(z)
         z = TimeDistributed(Dense(8), name = 'cap_timedistributed')(z)
-
+        
         combined_model = Model([img_input, sentence_input], [z])
         self._test_keras_model(combined_model, one_dim_seq_flags=[False, True])
 
@@ -2488,7 +2488,7 @@ class KerasNumericCorrectnessStressTest(KerasNumericCorrectnessTest):
         embed_hidden_size = 8
         story_maxlen = 5
         query_maxlen = 5
-
+        
         sentrnn = Sequential()
         sentrnn.add(Embedding(vocab_size, embed_hidden_size,
                               input_length=story_maxlen))
@@ -2506,15 +2506,15 @@ class KerasNumericCorrectnessStressTest(KerasNumericCorrectnessTest):
         model.add(LSTM(embed_hidden_size, return_sequences=False))
         model.add(Dropout(0.3))
         model.add(Dense(vocab_size, activation='softmax'))
-
+        
         self._test_keras_model(model, one_dim_seq_flags=[True, True])
-
+    
     def test_clickbait_cnn(self):
         # from: https://github.com/saurabhmathur96/clickbait-detector
         vocabulary_size = 500
         embedding_dimension = 30
         input_length = 20
-
+        
         model = Sequential()
         model.add(Embedding(vocabulary_size, embedding_dimension, input_length=input_length, trainable=True))
 
@@ -2538,3 +2538,6 @@ class KerasNumericCorrectnessStressTest(KerasNumericCorrectnessTest):
         model.add(Activation("sigmoid"))
 
         self._test_keras_model(model, one_dim_seq_flags=[True])
+
+
+        

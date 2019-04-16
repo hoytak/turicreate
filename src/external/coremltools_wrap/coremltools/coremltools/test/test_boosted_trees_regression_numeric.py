@@ -149,7 +149,7 @@ class XgboostBoosterBostonHousingNumericTest(unittest.TestCase):
                    'subsample': 0.5,
                    'objective': 'reg:linear',
                    'max_depth': 5}, num_boost_round = 2)
-
+        
     @pytest.mark.slow
     def test_boston_housing_parameter_stress_test(self):
 

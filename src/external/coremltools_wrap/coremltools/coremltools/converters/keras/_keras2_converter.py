@@ -23,7 +23,7 @@ if _HAS_KERAS2_TF:
 
         _keras.layers.convolutional.Conv2D: _layers2.convert_convolution,
         _keras.layers.convolutional.Conv2DTranspose: _layers2.convert_convolution,
-        _keras.layers.convolutional.SeparableConv2D: _layers2.convert_separable_convolution,
+        _keras.layers.convolutional.SeparableConv2D: _layers2.convert_separable_convolution, 
         _keras.layers.pooling.AveragePooling2D: _layers2.convert_pooling,
         _keras.layers.pooling.MaxPooling2D: _layers2.convert_pooling,
         _keras.layers.pooling.GlobalAveragePooling2D: _layers2.convert_pooling,
@@ -54,7 +54,7 @@ if _HAS_KERAS2_TF:
         _keras.layers.Maximum: _layers2.convert_merge,
         _keras.layers.Concatenate: _layers2.convert_merge,
         _keras.layers.Dot: _layers2.convert_merge,
-
+    
         _keras.layers.core.Flatten: _layers2.convert_flatten,
         _keras.layers.core.Permute:_layers2.convert_permute,
         _keras.layers.core.Reshape:_layers2.convert_reshape,
@@ -77,7 +77,7 @@ if _HAS_KERAS2_TF:
          _KERAS_LAYER_REGISTRY[_keras.applications.mobilenet.DepthwiseConv2D] = _layers2.convert_convolution
          _KERAS_LAYER_REGISTRY[_keras.engine.topology.InputLayer] = _layers2.default_skip
     # end if _HAS_KERAS2_TF
-
+    
 
 def _is_merge_layer(layer):
     if _HAS_KERAS2_TF:
@@ -143,7 +143,7 @@ def _load_keras_model(model_network_path, model_weight_path, custom_objects=None
         Path where the model network weights are (hd5 file)
 
     custom_objects:
-        A dictionary of layers or other custom classes
+        A dictionary of layers or other custom classes 
         or functions used by the model
 
     Returns
@@ -168,23 +168,26 @@ def _load_keras_model(model_network_path, model_weight_path, custom_objects=None
     return loaded_model
 
 
-def _convert(model,
-            input_names = None,
-            output_names = None,
+def _convert(model, 
+            input_names = None, 
+            output_names = None, 
             image_input_names = None,
             input_name_shape_dict = {},
-            is_bgr = False,
-            red_bias = 0.0,
-            green_bias = 0.0,
-            blue_bias = 0.0,
-            gray_bias = 0.0,
-            image_scale = 1.0,
-            class_labels = None,
+            is_bgr = False, 
+            red_bias = 0.0, 
+            green_bias = 0.0, 
+            blue_bias = 0.0, 
+            gray_bias = 0.0, 
+            image_scale = 1.0, 
+            class_labels = None, 
             predicted_feature_name = None,
             predicted_probabilities_output = '',
             add_custom_layers = False,
             custom_conversion_functions = None,
-            custom_objects = None):
+            custom_objects = None,
+            input_shapes = None,
+            output_shapes = None):
+
 
     # Check Keras format
     if _keras.backend.image_data_format() == 'channels_first':
@@ -192,7 +195,7 @@ def _convert(model,
             "Changing to 'channels_last', but your model may not be converted "
             "converted properly.")
         _keras.backend.set_image_data_format('channels_last')
-
+    
     # Check custom conversion functions / custom objects
     add_custom_layers = custom_conversion_functions is not None
 
@@ -200,10 +203,10 @@ def _convert(model,
         model = _keras.models.load_model(model, custom_objects = custom_objects)
     elif isinstance(model, tuple):
         model = _load_keras_model(model[0], model[1])
-
+    
     # Check valid versions
     _check_unsupported_layers(model, add_custom_layers)
-
+    
     # Build network graph to represent Keras model
     graph = _topology2.NetGraph(model)
     graph.build()
@@ -211,28 +214,29 @@ def _convert(model,
     # The graph should be finalized before executing this
     graph.generate_blob_names()
     graph.add_recurrent_optionals()
-
+    
     inputs = graph.get_input_layers()
     outputs = graph.get_output_layers()
-
+    
     # check input / output names validity
-    if input_names is not None:
+    if input_names is not None: 
         if isinstance(input_names, _string_types):
             input_names = [input_names]
-    else:
+    else: 
         input_names = ['input' + str(i+1) for i in range(len(inputs))]
-    if output_names is not None:
+
+    if output_names is not None: 
         if isinstance(output_names, _string_types):
             output_names = [output_names]
-    else:
+    else: 
         output_names = ['output' + str(i+1) for i in range(len(outputs))]
-
+    
     if image_input_names is not None and isinstance(image_input_names, _string_types):
         image_input_names = [image_input_names]
-
+    
     graph.reset_model_input_names(input_names)
     graph.reset_model_output_names(output_names)
-
+    
     # Keras -> Core ML input dimension dictionary
     # (None, None) -> [1, 1, 1, 1, 1]
     # (None, D) -> [D] or [D, 1, 1, 1, 1]
@@ -244,12 +248,16 @@ def _convert(model,
     # (Batch, Seq, H, W, C) -> (C,H,W)
 
     # Retrieve input shapes from model
-    if type(model.input_shape) is list:
-        input_dims = [filter(None, x) for x in model.input_shape]
-        unfiltered_shapes = model.input_shape
+    if len(model._inbound_nodes) > 1 and input_shapes is not None:
+        input_dims = [filter(None, x) for x in input_shapes]
+        unfiltered_shapes = input_shapes
     else:
-        input_dims = [filter(None, model.input_shape)]
-        unfiltered_shapes = [model.input_shape]
+        if type(model.input_shape) is list:
+            input_dims = [filter(None, x) for x in model.input_shape]
+            unfiltered_shapes = model.input_shape
+        else:
+            input_dims = [filter(None, model.input_shape)]
+            unfiltered_shapes = [model.input_shape]
 
     for idx, dim in enumerate(input_dims):
         if input_names[idx] in input_name_shape_dict:
@@ -315,10 +323,13 @@ def _convert(model,
 
 
     # Retrieve output shapes from model
-    if type(model.output_shape) is list:
-        output_dims = [filter(None, x) for x in model.output_shape]
+    if len(model._outbound_nodes) > 1 and output_shapes is not None:
+        output_dims = [filter(None, x) for x in output_shapes]
     else:
-        output_dims = [filter(None, model.output_shape[1:])]
+        if type(model.output_shape) is list:
+            output_dims = [filter(None, x) for x in model.output_shape]
+        else:
+            output_dims = [filter(None, model.output_shape[1:])]
 
     for idx, dim in enumerate(output_dims):
         dim = list(dim)
@@ -399,12 +410,12 @@ def _convert(model,
             builder.set_class_labels(classes)
 
     # Set pre-processing paramsters
-    builder.set_pre_processing_parameters(image_input_names = image_input_names,
-                                          is_bgr = is_bgr,
-                                          red_bias = red_bias,
-                                          green_bias = green_bias,
-                                          blue_bias = blue_bias,
-                                          gray_bias = gray_bias,
+    builder.set_pre_processing_parameters(image_input_names = image_input_names, 
+                                          is_bgr = is_bgr, 
+                                          red_bias = red_bias, 
+                                          green_bias = green_bias, 
+                                          blue_bias = blue_bias, 
+                                          gray_bias = gray_bias, 
                                           image_scale = image_scale)
 
     # Return the protobuf spec

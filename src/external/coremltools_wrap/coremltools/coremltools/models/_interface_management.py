@@ -59,7 +59,7 @@ def set_classifier_interface_params(spec, features, class_labels,
         input_ = spec.description.input.add()
         input_.name = cur_input_name
         datatypes._set_datatype(input_.type, input_type)
-
+    
     # add output
     for index, (cur_output_name, output_type) in enumerate(output_features):
         output_ = spec.description.output.add()
@@ -72,7 +72,7 @@ def set_classifier_interface_params(spec, features, class_labels,
             for c in class_labels:
                 getattr(spec, model_accessor_for_class_labels).stringClassLabels.vector.append(str(c))
         # Not all the classifiers have class labels; in particular the pipeline
-        # classifier.  Thus it's not an error if we can't actually set them.
+        # classifier.  Thus it's not an error if we can't actually set them. 
         except AttributeError:
             pass
 
@@ -88,11 +88,11 @@ def set_classifier_interface_params(spec, features, class_labels,
             if conv_error:
                 raise TypeError(("Cannot cast '%s' class to an int type " % str(c))
                 + "(class type determined by type of first class).")
-
+            
             try:
                 getattr(spec, model_accessor_for_class_labels).int64ClassLabels.vector.append(int(c))
             # Not all the classifiers have class labels; in particular the pipeline
-            # classifier.  Thus it's not an error if we can't actually set them.
+            # classifier.  Thus it's not an error if we can't actually set them. 
             except AttributeError:
                 break
 
@@ -106,15 +106,15 @@ def set_regressor_interface_params(spec, features, output_features):
         output_features = [("predicted_class", datatypes.Double())]
     else:
         output_features = _fm.process_or_validate_features(output_features, 1)
-
+ 
     if len(output_features) != 1:
         raise ValueError("Provided output features for a regressor must be "
                     "one Double feature.")
-
+    
     if output_features[0][1] != datatypes.Double():
         raise ValueError("Output type of a regressor must be a Double.")
 
-    prediction_name = output_features[0][0]
+    prediction_name = output_features[0][0] 
     spec.description.predictedFeatureName = prediction_name
 
     # Normalize the features list.
@@ -127,7 +127,7 @@ def set_regressor_interface_params(spec, features, output_features):
         datatypes._set_datatype(input_.type, feature_type)
 
     output_ = spec.description.output.add()
-    output_.name = prediction_name
+    output_.name = prediction_name 
     datatypes._set_datatype(output_.type, 'Double')
     return spec
 

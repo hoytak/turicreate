@@ -7,7 +7,7 @@
 //
 
 #include "NeuralNetworkShapes.hpp"
-#include "Utils.hpp"
+#include "../Utils.hpp"
 
 using namespace CoreML;
 
@@ -103,20 +103,20 @@ void NeuralNetworkShaper::shapeConvolutionLayer(const Specification::NeuralNetwo
                     if (Kh_dilated - b - t > 0) { // what's the else here? just doing the convolution on the padding?
                         size_t inputLowerBound = outputShape.heightRange().minimumValue() == 0 ? 0 : (outputShape.heightRange().minimumValue() - 1);
                         inputShape.lowerBoundHeight(inputLowerBound * static_cast<size_t>(hstride) + static_cast<size_t>(Kh_dilated - b - t));
-
+                        
                         RangeValue inputUpperBound = (outputShape.heightRange().maximumValue() - 1) * static_cast<size_t>(hstride) + static_cast<size_t>(Kh_dilated - b - t);
                         // We need to account for the integer division here
                         if (!inputShape.heightRange().maximumValue().isUnbound() && (inputShape.heightRange().maximumValue().value() + (t + b - Kh_dilated) % 2 != 0)) {
                             inputUpperBound = inputUpperBound + 1;
                         }
                         inputShape.upperBoundHeight(inputUpperBound);
-
+                        
                     }
                     outputShape.updateHeightRange((inputShape.heightRange() + (t + b - Kh_dilated))/hstride + 1);
                     if (Kw_dilated - l - r > 0) {
                         size_t inputLowerBound = outputShape.widthRange().minimumValue() == 0 ? 0 : (outputShape.widthRange().minimumValue() - 1);
                         inputShape.lowerBoundWidth(inputLowerBound * static_cast<size_t>(wstride) + static_cast<size_t>(Kw_dilated - l - r));
-
+                        
                         RangeValue inputUpperBound = (outputShape.widthRange().maximumValue() - 1) * static_cast<size_t>(wstride) + static_cast<size_t>(Kw_dilated - l - r);
                         if (!inputShape.widthRange().maximumValue().isUnbound() && (inputShape.widthRange().maximumValue().value() + (l + r - Kw_dilated) % 2 != 0)) {
                             inputUpperBound = inputUpperBound + 1;
@@ -230,9 +230,7 @@ void NeuralNetworkShaper::shapePoolingLayer(const Specification::NeuralNetworkLa
             case Specification::PoolingLayerParams::kIncludeLastPixel: {
                 if (pool.includelastpixel().paddingamounts_size() != 0){
                     t = static_cast<int>(pool.includelastpixel().paddingamounts(0));
-                    b = t;
                     l = static_cast<int>(pool.includelastpixel().paddingamounts(1));
-                    r = l;
                 }
                 // subtracting in the numerator and adding 1 in order to get integer division rounded up
                 int addExtra = 0;
@@ -453,7 +451,7 @@ void NeuralNetworkShaper::shapePaddingLayer(const Specification::NeuralNetworkLa
     outputShape.updateChannelRange(outputShape.channelRange().intersect(inputShape.channelRange()));
     outputShape.updateHeightRange(inputShape.heightRange() + t + b);
     outputShape.updateWidthRange(inputShape.widthRange() + r + l);
-
+    
     // If a fixed constraint for the output shape emerges later in the network, then we can infer a lower bound for the input shape
     inputShape.updateHeightRange(outputShape.heightRange() - t - b);
     inputShape.updateWidthRange(outputShape.widthRange() - l - r);
@@ -500,7 +498,7 @@ void NeuralNetworkShaper::shapeUpsampleLayer(const Specification::NeuralNetworkL
 
     outputShape.updateHeightRange(inputShape.heightRange() * scaling_factor_h);
     outputShape.updateWidthRange(inputShape.widthRange() * scaling_factor_w);
-
+    
     inputShape.updateHeightRange(outputShape.heightRange() / scaling_factor_h);
     inputShape.updateWidthRange(outputShape.widthRange() / scaling_factor_w);
 
@@ -879,7 +877,7 @@ void NeuralNetworkShaper::shapePermuteLayer(const Specification::NeuralNetworkLa
     std::cout << "Permute layer " << specLayer.name() << " output shapes (after): " << std::endl;
     std::cout << outputShape;
 #endif
-
+    
 }
 
 void NeuralNetworkShaper::shapeConcatLayer(const Specification::NeuralNetworkLayer& specLayer) {
@@ -981,7 +979,7 @@ void NeuralNetworkShaper::shapeSplitLayer(const Specification::NeuralNetworkLaye
         outputShape.updateWidthRange(inputShape.widthRange());
 
     }
-
+    
     ShapeConstraint& outputShape = blobShapes[specLayer.output(0)];
     inputShape.updateSequenceRange(outputShape.sequenceRange());
     inputShape.updateBatchRange(outputShape.batchRange());
@@ -1494,7 +1492,7 @@ void NeuralNetworkShaper::shapeBidirectionalLSTMLayer(const Specification::Neura
 
     // This is the current maximum sequence length for bidirectional models.
     inputShape.upperBoundSequence(400);
-
+    
     inputShape.setChannel(inSize);
     inputShape.setHeight(1);
     inputShape.setWidth(1);
@@ -1800,6 +1798,9 @@ void NeuralNetworkShaper::ProcessLayer(const Specification::NeuralNetworkLayer& 
         case Specification::NeuralNetworkLayer::LAYER_NOT_SET:
             throw std::runtime_error("Layer type not found.");
             break;
+        default:
+            throw std::runtime_error("Shape inference not implemented for this layer type.");
+            break;
     }
 }
 
@@ -1900,7 +1901,7 @@ NeuralNetworkShaper::NeuralNetworkShaper(const Specification::ModelDescription& 
                 || desc.name().compare(interface.predictedfeaturename()) == 0) {
                 continue;
             }
-
+            
             // using at because it needs to exist, this will throw if it doesn't
             ShapeConstraint& constraint = blobShapes.at(desc.name());
 
@@ -1965,3 +1966,7 @@ void NeuralNetworkShaper::print() const {
     std::cout << std::endl << std::endl;
 
 }
+
+
+
+

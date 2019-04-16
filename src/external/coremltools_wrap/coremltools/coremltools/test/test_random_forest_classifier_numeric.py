@@ -99,7 +99,7 @@ class RandomForestMultiClassClassificationBostonHousingScikitNumericTest(
         t = scikit_data.target
         num_classes = 3
         target = np.digitize(t, np.histogram(t, bins = num_classes - 1)[1]) - 1
-
+        
         # Save the data and the model
         self.scikit_data = scikit_data
         self.target = target

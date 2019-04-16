@@ -1,5 +1,15 @@
 #ifndef __NEURALNETWORK_ENUMS_H
 #define __NEURALNETWORK_ENUMS_H
+enum MLNeuralNetworkMultiArrayShapeMapping: int {
+    MLNeuralNetworkMultiArrayShapeMappingRANK5_ARRAY_MAPPING = 0,
+    MLNeuralNetworkMultiArrayShapeMappingEXACT_ARRAY_MAPPING = 1,
+};
+
+enum MLNeuralNetworkImageShapeMapping: int {
+    MLNeuralNetworkImageShapeMappingRANK5_IMAGE_MAPPING = 0,
+    MLNeuralNetworkImageShapeMappingRANK4_IMAGE_MAPPING = 1,
+};
+
 enum MLNeuralNetworkPreprocessingpreprocessor: int {
     MLNeuralNetworkPreprocessingpreprocessor_scaler = 10,
     MLNeuralNetworkPreprocessingpreprocessor_meanImage = 11,
@@ -109,6 +119,59 @@ enum MLNeuralNetworkLayerlayer: int {
     MLNeuralNetworkLayerlayer_uniDirectionalLSTM = 420,
     MLNeuralNetworkLayerlayer_biDirectionalLSTM = 430,
     MLNeuralNetworkLayerlayer_custom = 500,
+    MLNeuralNetworkLayerlayer_copy = 600,
+    MLNeuralNetworkLayerlayer_branch = 605,
+    MLNeuralNetworkLayerlayer_loop = 615,
+    MLNeuralNetworkLayerlayer_loopBreak = 620,
+    MLNeuralNetworkLayerlayer_loopContinue = 625,
+    MLNeuralNetworkLayerlayer_range = 635,
+    MLNeuralNetworkLayerlayer_clip = 660,
+    MLNeuralNetworkLayerlayer_ceil = 665,
+    MLNeuralNetworkLayerlayer_floor = 670,
+    MLNeuralNetworkLayerlayer_exp2 = 700,
+    MLNeuralNetworkLayerlayer_sine = 710,
+    MLNeuralNetworkLayerlayer_cosine = 715,
+    MLNeuralNetworkLayerlayer_erfActivation = 790,
+    MLNeuralNetworkLayerlayer_geluActivation = 795,
+    MLNeuralNetworkLayerlayer_equal = 815,
+    MLNeuralNetworkLayerlayer_notEqual = 820,
+    MLNeuralNetworkLayerlayer_lessThan = 825,
+    MLNeuralNetworkLayerlayer_greaterThan = 830,
+    MLNeuralNetworkLayerlayer_logicalOr = 840,
+    MLNeuralNetworkLayerlayer_logicalXor = 845,
+    MLNeuralNetworkLayerlayer_logicalNot = 850,
+    MLNeuralNetworkLayerlayer_logicalAnd = 855,
+    MLNeuralNetworkLayerlayer_addBroadcastable = 880,
+    MLNeuralNetworkLayerlayer_powBroadcastable = 885,
+    MLNeuralNetworkLayerlayer_divideBroadcastable = 890,
+    MLNeuralNetworkLayerlayer_multiplyBroadcastable = 900,
+    MLNeuralNetworkLayerlayer_subtractBroadcastable = 905,
+    MLNeuralNetworkLayerlayer_tile = 920,
+    MLNeuralNetworkLayerlayer_stackND = 925,
+    MLNeuralNetworkLayerlayer_gather = 930,
+    MLNeuralNetworkLayerlayer_scatter = 935,
+    MLNeuralNetworkLayerlayer_softmaxND = 950,
+    MLNeuralNetworkLayerlayer_splitND = 975,
+    MLNeuralNetworkLayerlayer_concatND = 980,
+    MLNeuralNetworkLayerlayer_transposeND = 985,
+    MLNeuralNetworkLayerlayer_sliceND = 995,
+    MLNeuralNetworkLayerlayer_slidingWindows = 1005,
+    MLNeuralNetworkLayerlayer_embeddingND = 1040,
+    MLNeuralNetworkLayerlayer_batchedMatmul = 1045,
+    MLNeuralNetworkLayerlayer_getShape = 1065,
+    MLNeuralNetworkLayerlayer_loadConstantND = 1070,
+    MLNeuralNetworkLayerlayer_fillLike = 1080,
+    MLNeuralNetworkLayerlayer_fillStatic = 1085,
+    MLNeuralNetworkLayerlayer_fillDynamic = 1090,
+    MLNeuralNetworkLayerlayer_broadcastToLike = 1100,
+    MLNeuralNetworkLayerlayer_broadcastToStatic = 1105,
+    MLNeuralNetworkLayerlayer_broadcastToDynamic = 1110,
+    MLNeuralNetworkLayerlayer_squeeze = 1120,
+    MLNeuralNetworkLayerlayer_expandDims = 1125,
+    MLNeuralNetworkLayerlayer_rankPreservingReshape = 1150,
+    MLNeuralNetworkLayerlayer_lowerTriangular = 1320,
+    MLNeuralNetworkLayerlayer_upperTriangular = 1325,
+    MLNeuralNetworkLayerlayer_where = 1330,
     MLNeuralNetworkLayerlayer_NOT_SET = 0,
 };
 
@@ -193,6 +256,112 @@ static const char * MLNeuralNetworkLayerlayer_Name(MLNeuralNetworkLayerlayer x) 
             return "MLNeuralNetworkLayerlayer_biDirectionalLSTM";
         case MLNeuralNetworkLayerlayer_custom:
             return "MLNeuralNetworkLayerlayer_custom";
+        case MLNeuralNetworkLayerlayer_copy:
+            return "MLNeuralNetworkLayerlayer_copy";
+        case MLNeuralNetworkLayerlayer_branch:
+            return "MLNeuralNetworkLayerlayer_branch";
+        case MLNeuralNetworkLayerlayer_loop:
+            return "MLNeuralNetworkLayerlayer_loop";
+        case MLNeuralNetworkLayerlayer_loopBreak:
+            return "MLNeuralNetworkLayerlayer_loopBreak";
+        case MLNeuralNetworkLayerlayer_loopContinue:
+            return "MLNeuralNetworkLayerlayer_loopContinue";
+        case MLNeuralNetworkLayerlayer_range:
+            return "MLNeuralNetworkLayerlayer_range";
+        case MLNeuralNetworkLayerlayer_clip:
+            return "MLNeuralNetworkLayerlayer_clip";
+        case MLNeuralNetworkLayerlayer_ceil:
+            return "MLNeuralNetworkLayerlayer_ceil";
+        case MLNeuralNetworkLayerlayer_floor:
+            return "MLNeuralNetworkLayerlayer_floor";
+        case MLNeuralNetworkLayerlayer_exp2:
+            return "MLNeuralNetworkLayerlayer_exp2";
+        case MLNeuralNetworkLayerlayer_sine:
+            return "MLNeuralNetworkLayerlayer_sine";
+        case MLNeuralNetworkLayerlayer_cosine:
+            return "MLNeuralNetworkLayerlayer_cosine";
+        case MLNeuralNetworkLayerlayer_erfActivation:
+            return "MLNeuralNetworkLayerlayer_erfActivation";
+        case MLNeuralNetworkLayerlayer_geluActivation:
+            return "MLNeuralNetworkLayerlayer_geluActivation";
+        case MLNeuralNetworkLayerlayer_equal:
+            return "MLNeuralNetworkLayerlayer_equal";
+        case MLNeuralNetworkLayerlayer_notEqual:
+            return "MLNeuralNetworkLayerlayer_notEqual";
+        case MLNeuralNetworkLayerlayer_lessThan:
+            return "MLNeuralNetworkLayerlayer_lessThan";
+        case MLNeuralNetworkLayerlayer_greaterThan:
+            return "MLNeuralNetworkLayerlayer_greaterThan";
+        case MLNeuralNetworkLayerlayer_logicalOr:
+            return "MLNeuralNetworkLayerlayer_logicalOr";
+        case MLNeuralNetworkLayerlayer_logicalXor:
+            return "MLNeuralNetworkLayerlayer_logicalXor";
+        case MLNeuralNetworkLayerlayer_logicalNot:
+            return "MLNeuralNetworkLayerlayer_logicalNot";
+        case MLNeuralNetworkLayerlayer_logicalAnd:
+            return "MLNeuralNetworkLayerlayer_logicalAnd";
+        case MLNeuralNetworkLayerlayer_addBroadcastable:
+            return "MLNeuralNetworkLayerlayer_addBroadcastable";
+        case MLNeuralNetworkLayerlayer_powBroadcastable:
+            return "MLNeuralNetworkLayerlayer_powBroadcastable";
+        case MLNeuralNetworkLayerlayer_divideBroadcastable:
+            return "MLNeuralNetworkLayerlayer_divideBroadcastable";
+        case MLNeuralNetworkLayerlayer_multiplyBroadcastable:
+            return "MLNeuralNetworkLayerlayer_multiplyBroadcastable";
+        case MLNeuralNetworkLayerlayer_subtractBroadcastable:
+            return "MLNeuralNetworkLayerlayer_subtractBroadcastable";
+        case MLNeuralNetworkLayerlayer_tile:
+            return "MLNeuralNetworkLayerlayer_tile";
+        case MLNeuralNetworkLayerlayer_stackND:
+            return "MLNeuralNetworkLayerlayer_stackND";
+        case MLNeuralNetworkLayerlayer_gather:
+            return "MLNeuralNetworkLayerlayer_gather";
+        case MLNeuralNetworkLayerlayer_scatter:
+            return "MLNeuralNetworkLayerlayer_scatter";
+        case MLNeuralNetworkLayerlayer_softmaxND:
+            return "MLNeuralNetworkLayerlayer_softmaxND";
+        case MLNeuralNetworkLayerlayer_splitND:
+            return "MLNeuralNetworkLayerlayer_splitND";
+        case MLNeuralNetworkLayerlayer_concatND:
+            return "MLNeuralNetworkLayerlayer_concatND";
+        case MLNeuralNetworkLayerlayer_transposeND:
+            return "MLNeuralNetworkLayerlayer_transposeND";
+        case MLNeuralNetworkLayerlayer_sliceND:
+            return "MLNeuralNetworkLayerlayer_sliceND";
+        case MLNeuralNetworkLayerlayer_slidingWindows:
+            return "MLNeuralNetworkLayerlayer_slidingWindows";
+        case MLNeuralNetworkLayerlayer_embeddingND:
+            return "MLNeuralNetworkLayerlayer_embeddingND";
+        case MLNeuralNetworkLayerlayer_batchedMatmul:
+            return "MLNeuralNetworkLayerlayer_batchedMatmul";
+        case MLNeuralNetworkLayerlayer_getShape:
+            return "MLNeuralNetworkLayerlayer_getShape";
+        case MLNeuralNetworkLayerlayer_loadConstantND:
+            return "MLNeuralNetworkLayerlayer_loadConstantND";
+        case MLNeuralNetworkLayerlayer_fillLike:
+            return "MLNeuralNetworkLayerlayer_fillLike";
+        case MLNeuralNetworkLayerlayer_fillStatic:
+            return "MLNeuralNetworkLayerlayer_fillStatic";
+        case MLNeuralNetworkLayerlayer_fillDynamic:
+            return "MLNeuralNetworkLayerlayer_fillDynamic";
+        case MLNeuralNetworkLayerlayer_broadcastToLike:
+            return "MLNeuralNetworkLayerlayer_broadcastToLike";
+        case MLNeuralNetworkLayerlayer_broadcastToStatic:
+            return "MLNeuralNetworkLayerlayer_broadcastToStatic";
+        case MLNeuralNetworkLayerlayer_broadcastToDynamic:
+            return "MLNeuralNetworkLayerlayer_broadcastToDynamic";
+        case MLNeuralNetworkLayerlayer_squeeze:
+            return "MLNeuralNetworkLayerlayer_squeeze";
+        case MLNeuralNetworkLayerlayer_expandDims:
+            return "MLNeuralNetworkLayerlayer_expandDims";
+        case MLNeuralNetworkLayerlayer_rankPreservingReshape:
+            return "MLNeuralNetworkLayerlayer_rankPreservingReshape";
+        case MLNeuralNetworkLayerlayer_lowerTriangular:
+            return "MLNeuralNetworkLayerlayer_lowerTriangular";
+        case MLNeuralNetworkLayerlayer_upperTriangular:
+            return "MLNeuralNetworkLayerlayer_upperTriangular";
+        case MLNeuralNetworkLayerlayer_where:
+            return "MLNeuralNetworkLayerlayer_where";
         case MLNeuralNetworkLayerlayer_NOT_SET:
             return "INVALID";
     }
@@ -400,6 +569,42 @@ static const char * MLNeuralNetworkClassifierClassLabels_Name(MLNeuralNetworkCla
         case MLNeuralNetworkClassifierClassLabels_int64ClassLabels:
             return "MLNeuralNetworkClassifierClassLabels_int64ClassLabels";
         case MLNeuralNetworkClassifierClassLabels_NOT_SET:
+            return "INVALID";
+    }
+}
+
+enum MLLossLayerLossLayerType: int {
+    MLLossLayerLossLayerType_crossEntropyLossLayer = 10,
+    MLLossLayerLossLayerType_mseLossLayer = 11,
+    MLLossLayerLossLayerType_NOT_SET = 0,
+};
+
+__attribute__((__unused__))
+static const char * MLLossLayerLossLayerType_Name(MLLossLayerLossLayerType x) {
+    switch (x) {
+        case MLLossLayerLossLayerType_crossEntropyLossLayer:
+            return "MLLossLayerLossLayerType_crossEntropyLossLayer";
+        case MLLossLayerLossLayerType_mseLossLayer:
+            return "MLLossLayerLossLayerType_mseLossLayer";
+        case MLLossLayerLossLayerType_NOT_SET:
+            return "INVALID";
+    }
+}
+
+enum MLOptimizerOptimizerType: int {
+    MLOptimizerOptimizerType_sgdOptimizer = 10,
+    MLOptimizerOptimizerType_adamOptimizer = 11,
+    MLOptimizerOptimizerType_NOT_SET = 0,
+};
+
+__attribute__((__unused__))
+static const char * MLOptimizerOptimizerType_Name(MLOptimizerOptimizerType x) {
+    switch (x) {
+        case MLOptimizerOptimizerType_sgdOptimizer:
+            return "MLOptimizerOptimizerType_sgdOptimizer";
+        case MLOptimizerOptimizerType_adamOptimizer:
+            return "MLOptimizerOptimizerType_adamOptimizer";
+        case MLOptimizerOptimizerType_NOT_SET:
             return "INVALID";
     }
 }

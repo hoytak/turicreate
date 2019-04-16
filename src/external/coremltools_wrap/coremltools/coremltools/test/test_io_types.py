@@ -291,7 +291,7 @@ class TestIODataTypes(unittest.TestCase):
         output.type.imageType.colorSpace = coremltools.proto.FeatureTypes_pb2.ImageFeatureType.ColorSpace.Value('RGB')
         output.type.imageType.height = input_shape[1]
         output.type.imageType.width = input_shape[2]
-
+        
         coreml_model = coremltools.models.MLModel(spec)
         input_data = np.floor(np.random.rand(*input_shape) * 255)
 
@@ -313,7 +313,7 @@ class TestIODataTypes(unittest.TestCase):
         output.type.imageType.colorSpace = coremltools.proto.FeatureTypes_pb2.ImageFeatureType.ColorSpace.Value('BGR')
         output.type.imageType.height = input_shape[1]
         output.type.imageType.width = input_shape[2]
-
+        
         coreml_model = coremltools.models.MLModel(spec)
         input_data = np.floor(np.random.rand(*input_shape) * 255)
 
@@ -335,7 +335,7 @@ class TestIODataTypes(unittest.TestCase):
         output.type.imageType.colorSpace = coremltools.proto.FeatureTypes_pb2.ImageFeatureType.ColorSpace.Value('GRAYSCALE')
         output.type.imageType.height = input_shape[1]
         output.type.imageType.width = input_shape[2]
-
+        
         coreml_model = coremltools.models.MLModel(spec)
         input_data = np.floor(np.random.rand(*input_shape) * 255)
 

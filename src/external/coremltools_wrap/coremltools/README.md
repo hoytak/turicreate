@@ -5,11 +5,11 @@ Core ML community tools contains all supporting tools for CoreML model
 conversion and validation. This includes Scikit Learn, LIBSVM, Caffe,
 Keras and XGBoost.
 
-API
+API 
 ---
-[Example Code snippets](docs/APIExamples.md)
-[CoreMLTools Documentation](https://apple.github.io/coremltools)
-[CoreML Specification Documentation](https://apple.github.io/coremltools/coremlspecification/)
+[Example Code snippets](docs/APIExamples.md)  
+[CoreMLTools Documentation](https://apple.github.io/coremltools)  
+[CoreML Specification Documentation](https://apple.github.io/coremltools/coremlspecification/)   
 [IPython Notebooks](https://github.com/apple/coremltools/tree/master/examples)
 
 Installation
@@ -73,13 +73,13 @@ To build the project, you need [CMake](https://cmake.org) to configure the proje
 cmake .
 ```
 
-When several python virtual environments are installed,
-it may be useful to use the following command instead,
+When several python virtual environments are installed, 
+it may be useful to use the following command instead, 
 to point to the correct intended version of python:
 
 ```shell
 cmake . -DPYTHON=$(which python) -DPYTHON_CONFIG=$(which python-config)
-```
+``` 
 
 after which you can use make to build the project
 
@@ -92,12 +92,12 @@ Building Installable Wheel
 To make a wheel/egg that you can distribute, you can do the following
 
 ```shell
-make dist
+make dist 
 ```
 
 Running Unit Tests
 -------------------
-In order to run unit tests, you need pytest, pandas, and h5py.
+In order to run unit tests, you need pytest, pandas, and h5py. 
 
 ```shell
 pip install pytest pandas h5py

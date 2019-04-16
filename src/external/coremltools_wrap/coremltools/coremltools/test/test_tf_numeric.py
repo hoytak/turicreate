@@ -12,13 +12,13 @@ np.random.seed(10)
 np.set_printoptions(precision=4, suppress=True)
 
 class CorrectnessTest(unittest.TestCase):
-
+    
     def _compare_shapes(self, ref_preds, coreml_preds):
         if np.squeeze(ref_preds).shape != np.squeeze(coreml_preds).shape:
             return False
-        else:
-            return True
-
+        else: 
+            return True    
+    
     def _compare_predictions_numerical(self, ref_preds, coreml_preds, snr_thresh=15, psnr_thresh=30):
         ref_preds = ref_preds.flatten()
         coreml_preds = coreml_preds.flatten()
@@ -56,7 +56,7 @@ class StressTest(CorrectnessTest):
 
     def runTest(self):
         pass
-
+    
     def test_data_reorganize(self, cpu_only=False):
 
         def get_coreml_model_reorganize(X, params):
@@ -86,7 +86,7 @@ class StressTest(CorrectnessTest):
                     y = tf.space_to_depth(x, params["block_size"])
                 else:
                     y = tf.depth_to_space(x, params["block_size"])
-            return sess.run(y, feed_dict={x: X})
+                return sess.run(y, feed_dict={x: X})
 
         '''
         Define Params
@@ -98,15 +98,15 @@ class StressTest(CorrectnessTest):
                             mode = ['SPACE_TO_DEPTH','DEPTH_TO_SPACE']
                             )
         params = [x for x in list(itertools.product(*params_dict.values()))]
-        all_candidates = [dict(zip(params_dict.keys(), x)) for x in params]
-        valid_params = []
+        all_candidates = [dict(zip(params_dict.keys(), x)) for x in params]     
+        valid_params = []               
         for pr in all_candidates:
-            if pr["mode"] == 'SPACE_TO_DEPTH':
+            if pr["mode"] == 'SPACE_TO_DEPTH': 
                 if pr["H"] % pr["block_size"] == 0 and pr["W"] % pr["block_size"] == 0:
-                    valid_params.append(pr)
+                    valid_params.append(pr)  
             else:
                 if pr["C"] % (pr["block_size"] ** 2) == 0:
-                    valid_params.append(pr)
+                    valid_params.append(pr)        
         print("Total params to be tested: ", len(valid_params), "out of canditates: ", len(all_candidates))
         '''
         Test
@@ -176,7 +176,7 @@ class StressTest(CorrectnessTest):
                 W = tf.constant(w, dtype=tf.float32, shape=[Kh, Kw, Cin, channel_multiplier])
                 y = tf.nn.depthwise_conv2d(x, W, strides=[1, params["stride"], params["stride"], 1],
                                            padding=params["padding"])
-            return sess.run(y, feed_dict={x: X})
+                return sess.run(y, feed_dict={x: X})
 
 
         '''
@@ -190,13 +190,13 @@ class StressTest(CorrectnessTest):
                            padding = ['SAME', 'VALID']
                            )
         params = [x for x in list(itertools.product(*params_dict.values()))]
-        all_candidates = [dict(zip(params_dict.keys(), x)) for x in params]
-        valid_params = []
+        all_candidates = [dict(zip(params_dict.keys(), x)) for x in params]     
+        valid_params = []               
         for pr in all_candidates:
             if pr["padding"] == 'VALID':
                 if np.floor((pr["H"]-pr["kernel_size"])/pr["stride"]) + 1 <= 0:
                     continue
-            valid_params.append(pr)
+            valid_params.append(pr)       
         print("Total params to be tested: ", len(valid_params), "out of canditates: ", len(all_candidates))
         '''
         Test
@@ -250,7 +250,7 @@ class StressTest(CorrectnessTest):
             with tf.Graph().as_default(), tf.Session() as sess:
                 x = tf.placeholder(tf.float32, shape=(params["batch"], params["H"], params["W"], params["ch"]))
                 y = tf.image.resize_bilinear(x, size = [params["Hnew"], params["Wnew"]], align_corners=params["align_corners"])
-            return sess.run(y, feed_dict={x: X})
+                return sess.run(y, feed_dict={x: X})
 
 
         '''
@@ -332,7 +332,7 @@ class StressTest(CorrectnessTest):
             with tf.Graph().as_default(), tf.Session() as sess:
                 x = tf.placeholder(tf.float32, shape=(batch, params["H"], params["W"], ch))
                 y = tf.image.crop_and_resize(x, boxes, box_ind, crop_size=[params["Hnew"], params["Wnew"]])
-            return sess.run(y, feed_dict={x: X})
+                return sess.run(y, feed_dict={x: X})
 
 
         '''
@@ -391,3 +391,4 @@ class StressTest(CorrectnessTest):
 
     def test_crop_resize_cpu_only(self):
         self.test_crop_resize(cpu_only=True)
+

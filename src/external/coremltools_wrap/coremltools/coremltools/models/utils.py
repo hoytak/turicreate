@@ -183,7 +183,7 @@ def _convert_nn_spec_to_half_precision(spec):
         'convolution', 'innerProduct', 'embedding',
         'batchnorm', 'scale', 'bias', 'loadConstant',
         'simpleRecurrent', 'gru', 'uniDirectionalLSTM',
-        'biDirectionalLSTM'
+        'biDirectionalLSTM', 'batchedMatmul', 'embeddingND'
     ]
 
     from coremltools import _MINIMUM_FP16_SPEC_VERSION
@@ -220,11 +220,23 @@ def _convert_nn_spec_to_half_precision(spec):
             if layer.innerProduct.hasBias:
                 _wp_to_fp16wp(layer.innerProduct.bias)
 
+        # batchedMatmul
+        elif layer_type == 'batchedMatmul':
+            _wp_to_fp16wp(layer.batchedMatmul.weights)
+            if layer.batchedMatmul.hasBias:
+                _wp_to_fp16wp(layer.batchedMatmul.bias)
+
         # Embedding layer
         elif layer_type == 'embedding':
             _wp_to_fp16wp(layer.embedding.weights)
             if layer.embedding.hasBias:
                 _wp_to_fp16wp(layer.embedding.bias)
+
+        # EmbeddingND layer
+        elif layer_type == 'embeddingND':
+            _wp_to_fp16wp(layer.embeddingND.weights)
+            if layer.embeddingND.hasBias:
+                _wp_to_fp16wp(layer.embeddingND.bias)
 
         # Scale layer
         elif layer_type == 'scale':
@@ -348,7 +360,6 @@ def convert_neural_network_weights_to_fp16(full_precision_model):
     """
     Utility function to convert a full precision (float) MLModel to a
     half precision MLModel (float16).
-
     Parameter
     ----------
     full_precision_model: MLModel
@@ -356,12 +367,10 @@ def convert_neural_network_weights_to_fp16(full_precision_model):
         for only neural network models is supported. If a pipeline model is
         passed in then all embedded neural network models embedded within
         will be converted.
-
     Returns
     -------
     model: MLModel
         The converted half precision MLModel
-
     Examples
     --------
     .. sourcecode:: python

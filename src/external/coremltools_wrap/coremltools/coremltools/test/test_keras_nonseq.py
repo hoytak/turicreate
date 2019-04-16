@@ -15,7 +15,7 @@ if HAS_KERAS_TF:
 @unittest.skipIf(not HAS_KERAS_TF, 'Missing keras. Skipping tests.')
 class KerasNonSequentialModelTest(unittest.TestCase):
     """
-    Unit test class for testing non-sequential Keras models.
+    Unit test class for testing non-sequential Keras models. 
     """
     @classmethod
     def setUpClass(self):

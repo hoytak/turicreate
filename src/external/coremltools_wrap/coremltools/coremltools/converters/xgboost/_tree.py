@@ -42,10 +42,11 @@ def convert(model, feature_names = None, target = 'target', force_32bit_float = 
     .. sourcecode:: python
 
 		# Convert it with default input and output names
-		>>> import coremltools
+   		>>> import coremltools
 		>>> coreml_model = coremltools.converters.xgboost.convert(model)
 
 		# Saving the Core ML model to a file.
 		>>> coremltools.save('my_model.mlmodel')
     """
     return _MLModel(_convert_tree_ensemble(model, feature_names, target, force_32bit_float = force_32bit_float))
+

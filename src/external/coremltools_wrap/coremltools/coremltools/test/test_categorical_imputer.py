@@ -45,7 +45,7 @@ class ImputerTestCase(unittest.TestCase):
 
         # Test the interface
         self.assertTrue(spec.pipeline.models[-1].HasField('imputer'))
-
+        
     def test_conversion_bad_inputs(self):
 
         # Error on converting an untrained model

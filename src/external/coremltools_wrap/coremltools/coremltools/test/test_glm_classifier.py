@@ -42,7 +42,7 @@ class GlmCassifierTest(unittest.TestCase):
     def _conversion_and_evaluation_helper_for_logistic_regression(self, class_labels):
         options = {
             'C': (0.1, 1., 2.),
-            'fit_intercept': (True, False),
+            'fit_intercept': (True, False), 
             'class_weight': ('balanced', None),
             'solver': ('newton-cg', 'lbfgs', 'liblinear', 'sag')
             }
@@ -88,7 +88,7 @@ class GlmCassifierTest(unittest.TestCase):
         x, y = GlmCassifierTest._generate_random_data(class_labels)
         column_names = ['x1', 'x2']
         df = pd.DataFrame(x, columns=column_names)
-
+        
         for cur_args in ARGS:
             print(class_labels, cur_args)
             cur_model = LinearSVC(**cur_args)

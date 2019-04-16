@@ -212,3 +212,4 @@ Contents
    coremltools.converters.rst
    coremltools.models.rst
    coremltools.utils.rst
+

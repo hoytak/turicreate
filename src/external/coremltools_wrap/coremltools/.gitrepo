@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:apple/coremltools.git
+	branch = master
+	commit = 2b0c00eaec53338d3539bc4009210985fc7c2477
+	parent = 9fa5b711ada338386962b62a220976e5f8638ec6
+	cmdver = 0.4.0
+	method = merge

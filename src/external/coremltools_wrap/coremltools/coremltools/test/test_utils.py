@@ -46,11 +46,11 @@ class PipeLineRenameTests(unittest.TestCase):
         scikit_spec = converter.convert(self.scikit_model).get_spec()
         model = MLModel(scikit_spec)
         sample_data = self.scikit_data.data[0]
-
+        
         # Rename
         rename_feature(scikit_spec, 'input', 'renamed_input')
         renamed_model = MLModel(scikit_spec)
-
+        
         # Check the predictions
         if macos_version() >= (10, 13):
             self.assertEquals(model.predict({'input': sample_data}),

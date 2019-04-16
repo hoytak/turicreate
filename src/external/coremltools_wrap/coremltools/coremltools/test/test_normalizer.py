@@ -33,20 +33,20 @@ class NormalizerScikitTest(unittest.TestCase):
             spec = converter.convert(cur_model, ["a", 'b', 'c'], 'out')
 
             if macos_version() >= (10, 13):
-                metrics = evaluate_transformer(spec,
-                        [dict(zip(["a", "b", "c"], row)) for row in X],
-                        [{"out" : row} for row in output])
+                metrics = evaluate_transformer(spec, 
+                        [dict(zip(["a", "b", "c"], row)) for row in X], 
+                        [{"out" : row} for row in output]) 
 
     def test_boston(self):
         from sklearn.datasets import load_boston
-
+        
         scikit_data = load_boston()
         scikit_model = Normalizer(norm='l2').fit(scikit_data.data)
 
         spec = converter.convert(scikit_model, scikit_data.feature_names, 'out')
 
         if macos_version() >= (10, 13):
-            input_data = [dict(zip(scikit_data.feature_names, row))
+            input_data = [dict(zip(scikit_data.feature_names, row)) 
                     for row in scikit_data.data]
 
             output_data = [{"out" : row} for row in scikit_model.transform(scikit_data.data)]

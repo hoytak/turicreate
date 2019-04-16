@@ -44,10 +44,10 @@ class BoostedTreeClassificationBostonHousingScikitNumericTest(unittest.TestCase)
         """
         scikit_model = GradientBoostingClassifier(random_state = 1, **scikit_params)
         scikit_model.fit(self.X, self.target)
-
+        
         # Convert the model
         spec = skl_converter.convert(scikit_model, self.feature_names, self.output_name)
-
+        
         if macos_version() >= (10, 13):
             # Get predictions
             df = pd.DataFrame(self.X, columns=self.feature_names)
@@ -105,10 +105,10 @@ class BoostedTreeMultiClassClassificationBostonHousingScikitNumericTest(
         self.target = target
         self.feature_names = scikit_data.feature_names
         self.output_name = 'target'
-
+        
     def test_simple_multiclass(self):
         self._train_convert_evaluate_assert()
-
+    
     @pytest.mark.slow
     def test_multiclass_stress_test(self):
         options = dict(

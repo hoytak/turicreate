@@ -312,7 +312,7 @@ class KerasSingleLayerTest(unittest.TestCase):
         # Create a simple Keras model
         model = Sequential()
         model.add(Conv2D(input_shape=(64, 64, 3),
-                                filters=32, kernel_size=(5,5), strides=(1,1), activation=None,
+                                filters=32, kernel_size=(5,5), strides=(1,1), activation=None, 
                                 padding='valid', use_bias=True))
         model.add(MaxPooling2D(pool_size=(2,2)))
 
@@ -594,7 +594,7 @@ class KerasSingleLayerTest(unittest.TestCase):
         self.assertTrue(spec.HasField('neuralNetwork'))
 
         # Test the inputs and outputs
-        # We're giving state input and output so expect description to differ.
+        # We're giving state input and output so expect description to differ. 
         self.assertEquals(len(spec.description.input), len(input_names) + 2)
         self.assertEquals(len(spec.description.output), len(output_names) + 2)
 
@@ -640,7 +640,7 @@ class KerasSingleLayerTest(unittest.TestCase):
         # Create a simple Keras model
         model = Sequential()
         model.add(Conv2D(input_shape=(64, 64, 3),
-                               filters=32, kernel_size=(5,5), strides=(1,1), activation=None,
+                               filters=32, kernel_size=(5,5), strides=(1,1), activation=None, 
                                padding='valid', use_bias=True))
         # epsilon in CoreML is currently fixed at 1e-5
         model.add(BatchNormalization(epsilon=1e-5))
@@ -714,8 +714,8 @@ class KerasSingleLayerTest(unittest.TestCase):
         # Create a simple Keras model
         model = Sequential()
         model.add(Conv2D(input_shape=(64, 64, 3),
-                         filters=32, kernel_size=(5,5),
-                         activation=None, padding='valid',
+                         filters=32, kernel_size=(5,5), 
+                         activation=None, padding='valid', 
                          strides=(1, 1), use_bias=True))
         input_names = ['input']
         output_names = ['output']
@@ -998,3 +998,5 @@ class KerasSingleLayerTest(unittest.TestCase):
         self.assertEquals(len(spec.description.output), len(expected_output_names))
         self.assertEquals(sorted(expected_output_names),
                sorted(map(lambda x: x.name, spec.description.output)))
+
+        

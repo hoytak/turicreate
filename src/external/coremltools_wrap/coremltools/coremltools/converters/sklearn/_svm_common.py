@@ -35,3 +35,4 @@ def _set_kernel(model, spec):
     else:
         raise ValueError('Unsupported kernel. The following kernel are supported: linear, RBF, polynomial and sigmoid.')
     return result
+

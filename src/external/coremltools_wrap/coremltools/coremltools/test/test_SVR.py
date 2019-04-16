@@ -228,3 +228,4 @@ class EpsilonSVRLibSVMTest(unittest.TestCase):
 
             if not allow_slow:
                 break
+

@@ -25,15 +25,15 @@ class DictVectorizerScikitTest(unittest.TestCase):
 
     def _test_conversion(self, data, trained_dict_vectorizer):
 
-        X = trained_dict_vectorizer.transform(data)
+        X = trained_dict_vectorizer.transform(data) 
 
-        m = sklearn.convert(trained_dict_vectorizer,
-                input_features = "features",
+        m = sklearn.convert(trained_dict_vectorizer, 
+                input_features = "features", 
                 output_feature_names = "output")
 
         if macos_version() >= (10, 13):
             ret = evaluate_transformer(
-                    m, [{"features" : row} for row in data],
+                    m, [{"features" : row} for row in data], 
                     [{"output" : x_r} for x_r in X], True)
             assert ret["num_errors"] == 0
 
@@ -59,17 +59,17 @@ class DictVectorizerScikitTest(unittest.TestCase):
             for dtype in (int, np.float32, np.int16):
                 for sort in (True, False):
                     v = DictVectorizer(sparse=sparse, dtype=dtype, sort=sort)
-                    v = v.fit(D1)
+                    v = v.fit(D1) 
                     self._test_conversion(D2, v)
 
-    def test_int_features_in_pipeline(self):
+    def test_int_features_in_pipeline(self): 
 
         import numpy.random as rn
         import pandas as pd
         rn.seed(0)
 
-        x_train_dict = [ dict( (rn.randint(100), 1)
-                          for i in range(20))
+        x_train_dict = [ dict( (rn.randint(100), 1) 
+                          for i in range(20)) 
                             for j in range(100)]
         y_train = [0,1]*50
 
@@ -85,7 +85,7 @@ class DictVectorizerScikitTest(unittest.TestCase):
         model = coremltools.converters.sklearn.convert(pl, input_features = "features", output_feature_names = "target")
 
         if macos_version() >= (10, 13):
-            x = pd.DataFrame( {"features" : x_train_dict,
+            x = pd.DataFrame( {"features" : x_train_dict, 
                                "prediction" : pl.predict(x_train_dict)})
 
             cur_eval_metics = evaluate_classifier(model, x)

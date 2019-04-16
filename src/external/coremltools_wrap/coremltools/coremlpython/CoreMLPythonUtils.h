@@ -19,15 +19,15 @@ namespace CoreML {
 
             NSURL * stringToNSURL(const std::string& str);
             void handleError(NSError *error);
-
+            
             // python -> objc
             MLDictionaryFeatureProvider * dictToFeatures(const py::dict& dict, NSError **error);
             MLFeatureValue * convertValueToObjC(const py::handle& handle);
-
+            
             // objc -> cpp
             std::vector<size_t> convertNSArrayToCpp(NSArray<NSNumber *> *array);
             NSArray<NSNumber *>* convertCppArrayToObjC(const std::vector<size_t>& array);
-
+            
             // objc -> python
             py::dict featuresToDict(id<MLFeatureProvider> features);
             py::object convertValueToPython(MLFeatureValue *value);

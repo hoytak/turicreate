@@ -4,7 +4,7 @@
 # found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
 
 """
-Utilities to annotate Neural Network Features with flexible shape information.
+Utilities to annotate Neural Network Features with flexible shape information. 
 Only available in coremltools 2.0b1 and onwards
 """
 

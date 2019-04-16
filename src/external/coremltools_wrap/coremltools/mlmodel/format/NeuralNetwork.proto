@@ -4,6 +4,7 @@
 // found in LICENSE.txt or at https://opensource.org/licenses/BSD-3-Clause
 
 /**
+ *
  * A neural network is defined through a collection of layers
  * and represents a directed acyclic graph (DAG).
  * Each layer has a name, a layer type,
@@ -22,51 +23,95 @@
  * and a layer may not have input or output names that
  * refer to layers that are not yet defined.
  *
- * CoreML supports sequential data that can be 1- or 3-dimensional.
- * 3-dimensional data typically represents an image feature map,
- * whose shape is denoted by ``[C, H, W]``,
- * which corresponds to the channel, height, and width, respectively.
- * 1-dimensional data is a set of features
- * whose shape is denoted by ``[C]``,
- * and is equivalent to 3-dimensional data
- * with the shape ``[C, 1, 1]``.
  *
- * For the purposes of this specification,
- * batch dimension is ignored.
- * Thus, a sequence of 3-dimensional data
- * is to be understood as a 4-dimensional array,
- * whose shape is denoted by ``[Seq_length, C, H, W]``,
- * and a sequence of 1-dimensional data
- * is to be understood as a 2-dimensional array,
- * whose shape is denoted by ``[Seq_length, C]``,
- * which is equivalent to a 4-dimensional array
- * with the shape ``[Seq_length, C, 1, 1]``. This axes order is important to
- * remember while setting parameters for layers such as "reshape" and "permute".
+ * For CoreML specification version <=2,
+ * all inputs are mapped to static rank 5 tensors, with axis notations
+ * [Sequence, Batch, Channel, Height, Width].
  *
+ * From specification version 3 onwards (iOS >= 13, macOS >= 10.15), more options are available
+ * (see enums "NeuralNetworkMultiArrayShapeMapping", "NeuralNetworkImageShapeMapping")
+ * to map inputs to generic N-Dimensional (or N rank) tensors, where N >= 1.
  *
- * At runtime, all data blobs are internally represented
- * as 5-dimensional blobs
- * with the shape ``[Seq_length, Batch, C, H, W]``.
+ * Each layer type may have specific constraints on the ranks of its inputs and outputs.
  *
- * A layer may process input data differently if operating over a sequence;
- * details of this behavior is documented in the layer's message.
- * Otherwise, sequential data is processed like a batch ---
- * that is, the sequence of inputs are processed independently and in parallel.
+ * Some of the layers (such as softmax, reduce, etc) have parameters that have been described in
+ * terms of notational axis "Channel", "Height", "Width" or "Sequence". They can be re-interpreted easily in
+ * the general ND setting by using the following rule:
+ * "width" is same as axis = -1 (i.e. the last axis from the end)
+ * "height" is same as axis = -2 (i.e. the second last axis from the end)
+ * "channel" is same as axis = -3 (i.e. the third last axis from the end)
+ * "sequence" is same as axis = -5 (i.e. the fifth last axis from the end)
  *
- * The network input shape specified by ``Model.description.input.type``
- * must be compatible with the expected input shape
- * of the network input layer, i.e. the last dimension is the fastest moving one.
- *
- * All data blobs, as well as weight parameters,
- * are stored using row-major ordering, i.e. the last dimension is the fastest moving one.
  */
 
 syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import public "DataStructures.proto";
+import public "Parameters.proto";
 
 package CoreML.Specification;
+
+
+enum NeuralNetworkMultiArrayShapeMapping {
+    /*
+     * Describes how the MultiArray shape for the inputs,
+     * provided in Features Types proto via model description,
+     * is mapped to construct tensors that are fed into the Neural Network layers.
+     */
+
+
+    /*
+     * Default legacy value. Only supported for CoreML Sepcification version <= 2.
+     *
+     * The default legacy shape mapping resolves all input shapes to a rank 5 equivalent
+     * with axis notation of [Seq, Batch, Channel, Height, Width].
+     *
+     * When this enum value is selected,
+     * the repeated shape field in the message "ArrayFeatureType" in feature types proto,
+     * must be either length 1 or length 3.
+     *
+     * The following rule is used to map the values in the shape field to the actual tensor shape:
+     * rank 1 shape is mapped to shape [1,1,C,1,1]
+     * rank 3 shape is mapped to shape [1,1,C,H,W]
+     * At runtime, the first two dimensions (Seq or Batch) can be presented as well, with non-1 values.
+     *
+     * It is invalid to use this enum value if any of the layers added
+     * Specification version 3 (iOS >= 13, macOS >= 10.15) onwards are used in the network.
+     * Validator will raise an error in that case.
+     */
+    RANK5_ARRAY_MAPPING = 0;
+
+    /*
+     * The exact shape and rank (i.e. number of dimensions in the shape) of the input,
+     * as specified in the message "ArrayFeatureType", is passed through to the layers.
+     * Supported only for Specification version >= 3 (iOS >= 13, macOS >= 10.15).
+     */
+    EXACT_ARRAY_MAPPING = 1;
+}
+
+enum NeuralNetworkImageShapeMapping {
+
+    /*
+     * Describes how the shape of the input tensors is constructed from image inputs.
+     */
+
+
+    /*
+     * In this case, image input is mapped to a rank 5 tensor.
+     * For Color images, input tensor is shaped as [1,1,3,H,W].
+     * For Gray images, input tensor is shaped as [1,1,1,H,W].
+     */
+    RANK5_IMAGE_MAPPING = 0;
+
+    /*
+     * For Color images, input tensor is shaped as [1,3,H,W].
+     * For Gray images, input tensor is shaped as [1,1,H,W].
+     * Supported only for Specification version >= 3 (iOS >= 13, macOS >= 10.15).
+     */
+    RANK4_IMAGE_MAPPING = 1;
+}
+
 
 /**
  A neural network.
@@ -74,6 +119,16 @@ package CoreML.Specification;
 message NeuralNetwork {
     repeated NeuralNetworkLayer layers = 1;
     repeated NeuralNetworkPreprocessing preprocessing = 2;
+
+    // use this enum value to determine the input tensor shapes to the neural network, for multiarray inputs
+    NeuralNetworkMultiArrayShapeMapping arrayInputShapeMapping = 5;
+
+    // use this enum value to determine the input tensor shapes to the neural network, for image inputs
+    NeuralNetworkImageShapeMapping imageInputShapeMapping = 6;
+
+
+    NetworkUpdateParameters updateParams = 10;
+
 }
 
 /// Preprocessing
@@ -234,10 +289,9 @@ message ActivationSigmoidHard {
 }
 
 /**
- * A parameterized rectified linear unit (PReLU) activation function,
- * which takes ``[C]`` or ``[C,H,W]`` as an input and
- * applies different parameters in each channel dimension
- * (shared across the ``H`` and ``W`` components).
+ * A parameterized rectified linear unit (PReLU) activation function.
+ * Input must be at least rank 3. Axis = -3 is denoted by "C", or channels.
+ * "alpha" parameter can be a vector of length C.
  *
  * This function has the following formula:
  *
@@ -306,10 +360,9 @@ message ActivationSoftplus {
 }
 
 /**
- * A parametric softplus activation function,
- * which takes ``[C]`` or ``[C,H,W]`` as an input and
- * applies different parameters in each channel dimension
- * (shared across the ``H`` and ``W`` components).
+ * A parametric softplus activation function.
+ * Input must be at least rank 3. axis = -3 is denoted by "C", or channels.
+ * "alpha"/"beta" parameter can be a vector of length C.
  *
  * This function has the following formula:
  *
@@ -346,6 +399,17 @@ message ActivationParams {
 }
 
 /**
+ * Representation of the intermediate tensors
+ */
+message Tensor {
+    // Number of dimensions in the tensor shape
+    uint32 rank = 1;
+    // actual value of the tensor shape.
+    // must be of length "rank". Can contain -1s for unknown dimensions.
+    repeated int64 dimValue = 2;
+}
+
+/**
  * A single neural network layer.
  */
 message NeuralNetworkLayer {
@@ -353,7 +417,16 @@ message NeuralNetworkLayer {
     repeated string input = 2;
     repeated string output = 3;
 
+    repeated Tensor inputTensor = 4; // must be the same length as the "input" field
+    repeated Tensor outputTensor = 5; // must be the same length as the "output" field
+
+    // Must be set to true to mark the layer as updatable.
+    // If true, the weightParams in the layer's properties must also be set to updatable
+    // If false, the value of the isUpdatable parameter within the layer's weights are ignored
+    bool isUpdatable = 10;
+
     oneof layer {
+
         // start at 100 here
         ConvolutionLayerParams convolution = 100;
 
@@ -414,8 +487,488 @@ message NeuralNetworkLayer {
 
         // Custom (user-implemented) Layer
         CustomLayerParams custom = 500;
+
+// Following layers are available only after CoreML Specification version >= 3 (iOS >= 13, macOS >= 10.15)
+
+        // Control Flow related Layers
+        CopyLayerParams copy = 600;
+        BranchLayerParams branch = 605;
+
+        LoopLayerParams loop = 615;
+        LoopBreakLayerParams loopBreak = 620;
+        LoopContinueLayerParams loopContinue = 625;
+
+        RangeLayerParams range = 635;   // [RENAME] RangeStaticLayerParams rangeStatic = 635;
+//[ADD] RangeDynamicLayerParams rangeDynamic = 640;
+
+
+        // Elementwise Unary Layers
+        ClipLayerParams clip = 660;
+        CeilLayerParams ceil = 665;
+        FloorLayerParams floor = 670;
+
+//[ADD] SignLayerParams sign = 680;
+//[ADD] RoundLayerParams round = 685;
+//[ADD] DropoutLayerParams dropout = 690;
+
+		Exp2LayerParams exp2 = 700;
+
+        SineLayerParams sine = 710; // [RENAME] SinLayerParams sin = 710;
+        CosineLayerParams cosine = 715; // [RENAME] CosLayerParams cos = 715;
+//[ADD] TanLayerParams tan = 720;
+
+//[ADD] AsinLayerParams asin = 730;
+//[ADD] AcosLayerParams acos = 735;
+//[ADD] AtanLayerParams atan = 740;
+
+//[ADD] SinhLayerParams sinh = 750;
+//[ADD] CoshLayerParams cosh = 755;
+//[ADD] TanhLayerParams tanh = 760;
+
+//[ADD] AsinhLayerParams asinh = 770;
+//[ADD] AcoshLayerParams acosh = 775;
+//[ADD] AtanhLayerParams atanh = 780;
+
+        ErfActivationLayerParams erfActivation = 790; // [RENAME] ErfLayerParams erf = 790;
+        GeluActivationLayerParams geluActivation = 795; // [RENAME] GeluLayerParams gelu = 795; + Add approximate mode
+
+
+        // Elementwise Binary with Broadcasting Support
+        EqualLayerParams equal = 815;
+        NotEqualLayerParams notEqual = 820;
+        LessThanLayerParams lessThan = 825;
+        GreaterThanLayerParams greaterThan = 830;
+
+        LogicalOrLayerParams logicalOr = 840;
+        LogicalXorLayerParams logicalXor = 845;
+        LogicalNotLayerParams logicalNot = 850;
+        LogicalAndLayerParams logicalAnd = 855;
+
+//[ADD] ModBroadcastableLayerParams modBroadcastable = 865;
+//[ADD] MinBroadcastableLayerParams minBroadcastable = 870;
+//[ADD] MaxBroadcastableLayerParams maxBroadcastable = 875;
+        AddBroadcastableLayerParams addBroadcastable = 880;
+        PowBroadcastableLayerParams powBroadcastable = 885;
+        DivideBroadcastableLayerParams divideBroadcastable = 890;
+//[ADD] FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
+        MultiplyBroadcastableLayerParams multiplyBroadcastable = 900;
+        SubtractBroadcastableLayerParams subtractBroadcastable = 905;
+
+
+        // Tensor Manipulations
+//[ADD] PadLayerParams pad = 915;
+        TileLayerParams tile = 920;
+        StackNDLayerParams stackND = 925; // [RENAME] StackLayerParams stack = 925;
+        GatherLayerParams gather = 930;
+        ScatterLayerParams scatter = 935;
+//[ADD] GatherNDLayerParams gatherND = 940;
+//[ADD] ScatterNDLayerParams scatterND = 945;
+        SoftmaxNDLayerParams softmaxND = 950;
+
+//[ADD] ReverseLayerParams reverse = 960;
+//[ADD] ReverseSeqLayerParams reverseSeq = 965;
+
+        SplitNDLayerParams splitND = 975;
+        ConcatNDLayerParams concatND = 980;
+        TransposeNDLayerParams transposeND = 985; // [RENAME] TransposeLayerParams transpose = 985;
+
+        SliceNDLayerParams sliceND = 995; // [RENAME] SliceStaticLayerParams sliceStatic = 995;
+//[ADD] SliceDynamicLayerParams sliceDynamic = 1000;
+        SlidingWindowsLayerParams slidingWindows = 1005;
+
+//[ADD] TopKLayerParams topK = 1015;
+//[ADD] ArgMinLayerParams argMin = 1020;
+//[ADD] ArgMaxLayerParams argMax = 1025;
+
+//[ADD] Conv3DLayerParams conv3D = 1035;
+        EmbeddingNDLayerParams embeddingND = 1040;
+        BatchedMatMulParams batchedMatmul = 1045; // [RENAME] BatchedMatMulLayerParams batchedMatmul = 1045;
+
+
+        // Tensor Allocation / Reshape sort of operations
+        GetShapeLayerParams getShape = 1065;
+        LoadConstantNDLayerParams loadConstantND = 1070;
+
+		FillLikeLayerParams fillLike = 1080;
+        FillStaticLayerParams fillStatic= 1085;
+        FillDynamicLayerParams fillDynamic = 1090;
+
+		BroadcastToLikeLayerParams broadcastToLike = 1100;
+        BroadcastToStaticLayerParams broadcastToStatic = 1105;
+		BroadcastToDynamicLayerParams broadcastToDynamic = 1110;
+
+        SqueezeLayerParams squeeze = 1120; // [To do] Remove rank dependency
+        ExpandDimsLayerParams expandDims = 1125; //[To do] Remove rank dependency
+//[ADD] FlattenTo2DLayerParams flattenTo2D = 1130;
+//[ADD] ReshapeLikeLayerParams reshapeLike = 1135;
+//[ADD] ReshapeStaticLayerParams reshapeStatic = 1140;
+//[ADD] ReshapeDynamicLayerParams reshapeDynamic = 1145;
+        RankPreservingReshapeLayerParams rankPreservingReshape = 1150; //[To do] Remove rank dependency
+
+
+        // Random Distributions
+//[ADD] RandomNormalLikeLayerParams randomNormalLike = 1170;
+//[ADD] RandomNormalStaticLayerParams randomNormalStatic = 1175;
+//[ADD] RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
+
+//[ADD] RandomUniformLikeLayerParams randomUniformLike = 1190;
+//[ADD] RandomUniformStaticLayerParams randomUniformStatic = 1195;
+//[ADD] RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
+
+//[ADD] RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
+//[ADD] RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
+//[ADD] RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
+
+//[ADD] CategoricalDistributionLayerParams categoricalDistribution = 1230;
+
+        // Reduction related Layers:
+//[ADD] ReduceL1LayerParams reduceL1 = 1250;
+//[ADD] ReduceL2LayerParams reduceL2 = 1255;
+//[ADD] ReduceMaxLayerParams reduceMax = 1260;
+//[ADD] ReduceMinLayerParams reduceMin = 1265;
+//[ADD] ReduceSumLayerParams reduceSum = 1270;
+//[ADD] ReduceProdLayerParams reduceProd = 1275;
+//[ADD] ReduceMeanLayerParams reduceMean = 1280;
+//[ADD] ReduceLogSumLayerParams reduceLogSum = 1285;
+//[ADD] ReduceSumSquareLayerParams reduceSumSquare = 1290;
+//[ADD] ReduceLogSumExpLayerParams reduceLogSumExp = 1295;
+
+        // Masking / Selection Layers
+//[ADD] MatrixBandPartLayerParams matrixBandPart = 1315;
+        LowerTriangularLayerParams lowerTriangular = 1320;
+        UpperTriangularLayerParams upperTriangular = 1325;
+        WhereLayerParams where = 1330;     // [RENAME] WhereBroadcastableLayerParams whereBroadcastable = 1330;
+
+        // Normalization Layers
+//[ADD] LpNormalizationLayerParams lpNormalization = 1350;
+//[ADD] InstanceNormalizationLayerParams instanceNormalization = 1355;
+
     }
 }
+
+/**
+ * Branching Layer
+ *
+ * A layer that providies the functionality of branching or an If-Else block.
+ *
+ * Must have 1 input. There are no outputs as the execution is transferred to either the
+ * if or the else branch based on the value of the input.
+ *
+ * Input is the condition predicate. Must be a scalar (length 1 tensor).
+ *
+ */
+message BranchLayerParams {
+    /**
+     * execute this graph if the absolute value of the input Tensor is greater than 1e-6
+     * This must be present.
+     */
+    NeuralNetwork ifBranch = 1;
+    /**
+     * execute this graph if the absolute value of the input Tensor is less than 1e-6
+     * This is optional.
+     */
+    NeuralNetwork elseBranch = 2;
+}
+
+/**
+ * Loop Layer
+ *
+ * A layer that providies the functionality of a "for" loop or a "while" loop.
+ *
+ * There are either no inputs or 1 input. When an input is present, it corresponds to the maximum loop count,
+ * in that case the value of the "maxLoopIterations" field is ignored. Input must be a scalar.
+ * (For description below, maxLoopIterations is assumed to be the value of the input, when its present)
+ *
+ * No outputs are produced. Blobs produced by the condition or the body network are visible in the scope of the overall network.
+ *
+ * "conditionNetwork" must produce a tensor with the name specified in the "conditionVar" field.
+ *
+ * There are 3 possible cases for determining the termination condition:
+ *
+ * Case 1:
+ *
+ * If there is no "conditionNetwork", in this case the layer corresponds to a pure for loop, which is run "maxLoopIterations" number of times.
+ * Equivalent pseudo-code:
+ *
+ * for loopIterator = 0 : maxLoopIterations
+ *      bodyNetwork()
+ *
+ *
+ * Case 2:
+ *
+ * "conditionNetwork" is present, and "maxLoopIterations" is 0 and there is no input,
+ * in this case the layer corresponds to a while loop. Equivalent pseudo-code:
+ *
+ * conditionVar = conditionNetwork()
+ * while conditionVar:
+ *      bodyNetwork()
+ *      conditionVar = conditionNetwork()
+ *
+ *
+ * Case 3:
+ *
+ * "conditionNetwork" is provided, and "maxLoopIterations" is positive or there is an input,
+ * in this case the layer corresponds to a while loop with a joint condition. Equivalent pseudo-code:
+ *
+ * loopIterator = 0
+ * conditionVar = conditionNetwork()
+ * while (conditionVar and loopIterator < maxLoopIterations):
+ *      bodyNetwork()
+ *      loopIterator = loopIterator + 1
+ *      conditionVar = conditionNetwork()
+ *
+ */
+message LoopLayerParams {
+    /**
+     * maximum number of iterations. Ignored if input is present.
+     */
+    uint64 maxLoopIterations = 1;
+    /**
+     * This field provides the name of the tensor which is produced by the conditionNetwork
+     * and whose value is checked to start/continue/terminate the loop. Value close to 0.0f is treated as False.
+     * This field is optional.
+     * Must be a non empty string if and only if "conditionNetwork" is present.
+     */
+    string conditionVar = 2;
+    /**
+     * Must generate a tensor with the name provided in the "conditionVar" field.
+     * This field is optional.
+     * Must be present if and only if "conditionVar" field is a non empty string.
+     */
+    NeuralNetwork conditionNetwork = 3;
+    /**
+     * Body of the loop.
+     * This field must be present.
+     */
+    NeuralNetwork bodyNetwork = 4;
+}
+
+/**
+ * Loop break Layer
+ *
+ * Terminate the loop that has this layer.
+ * If present, it should always reside in the "bodyNetwork" of the loop layer
+ *
+ * No inputs/outptus
+ *
+ */
+message LoopBreakLayerParams {
+
+}
+
+/**
+ * Loop Continue Layer
+ *
+ * Stop the current loop iteration and continue on the next iteration.
+ * If present, it should always reside in the "bodyNetwork" of the loop layer
+ *
+ * No inputs/outptus
+ *
+ */
+message LoopContinueLayerParams {
+
+}
+
+
+/**
+ * Copy Layer
+ *
+ * A layer that copies its input tensor to the output tensor.
+ * Must have 1 input and 1 output, with distinct names.
+ * This is the only layer that is allowed to re-generate an output that is already present in the neural network prior to this layer,
+ * in which case it will overwrite the output tensor.
+ *
+ */
+message CopyLayerParams {
+}
+
+/**
+ * GreaterThan Layer
+ *
+ * Either 1 or 2 inputs.
+ * Produces 1 output.
+ * Perform elementwise greater than operation.
+ *
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = x1 > x2
+ *          or
+ *      y = x1 > alpha, if only one input is provided
+ *
+ * Broadcasting is supported.
+ *
+ */
+message GreaterThanLayerParams {
+    /**
+     * If true, greater than equal operation is used instead
+     */
+    bool useNonStrictInequality = 1;
+    /**
+     * Compare to the scalar value provided here if there is 1 input
+     */
+    float alpha = 2;
+}
+
+/**
+ * LessThan Layer
+ *
+ * Either 1 or 2 inputs.
+ * Produces 1 output.
+ * Perform elementwise less than operation.
+ *
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = x1 < x2
+ *          or
+ *      y = x1 < alpha, if only one input is provided
+ *
+ * Broadcasting is supported.
+ *
+ */
+message LessThanLayerParams {
+    /**
+     * If true, less than equal operation is used instead
+     */
+    bool useNonStrictInequality = 1;
+    /**
+     * Compare to the scalar value provided here if there is 1 input
+     */
+    float alpha = 2;
+}
+
+/**
+ * Equal Layer
+ *
+ * Either 1 or 2 inputs.
+ * Produces 1 output.
+ * Perform elementwise equal operation.
+ *
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = x1 == x2
+ *          or
+ *      y = x1 == alpha, if only one input is provided
+ *
+ * Broadcasting is supported.
+ *
+ */
+message EqualLayerParams {
+    /**
+     * Compare to the scalar value provided here if there is 1 input
+     */
+    float alpha = 1;
+}
+
+
+
+/**
+ * NotEqual Layer
+ *
+ * Either 1 or 2 inputs.
+ * Produces 1 output.
+ * Perform elementwise not equal operation.
+ *
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = x1 != x2
+ *          or
+ *      y = x1 != alpha, if only one input is provided
+ *
+ * Broadcasting is supported.
+ *
+ */
+message NotEqualLayerParams {
+    /**
+     * Compare to the scalar value provided here if there is 1 input
+     */
+    float alpha = 1;
+}
+
+
+/**
+ * LogicalAnd Layer
+ *
+ * Must have 2 inputs, produces 1 output.
+ * Perform elementwise logical AND operation.
+ *
+ * Input is considered False if equal to 0.0f otherwise True.
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = AND(x1, x2)
+ *
+ * Broadcasting is supported.
+ *
+ */
+message LogicalAndLayerParams {
+}
+
+/**
+ * LogicalOr Layer
+ *
+ * Must have 2 inputs, produces 1 output.
+ * Perform elementwise logical OR operation.
+ *
+ * Input is considered False if equal to 0.0f otherwise True.
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = OR(x1, x2)
+ *
+ * Broadcasting is supported.
+ *
+ */
+message LogicalOrLayerParams {
+}
+
+/**
+ * LogicalXor Layer
+ *
+ * Must have 2 inputs, produces 1 output.
+ * Perform elementwise logical XOR operation.
+ *
+ * Input is considered False if equal to 0.0f otherwise True.
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = XOR(x1, x2)
+ *
+ * Broadcasting is supported.
+ *
+ */
+message LogicalXorLayerParams {
+}
+
+/**
+ * LogicalNot Layer
+ *
+ * Must have 1 input, produces 1 output.
+ * Perform elementwise logical NOT operation.
+ *
+ * Input is considered False if equal to 0.0f otherwise True.
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = NOT(x)
+ *
+ *
+ */
+message LogicalNotLayerParams {
+}
+
+
 
 /// Border Amounts
 /// --------------
@@ -676,6 +1229,7 @@ message WeightParams {
      */
     QuantizationParams quantization = 40;
 
+    bool isUpdatable = 50;
 }
 
 /**
@@ -720,10 +1274,12 @@ message LookUpTableQuantizationParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *  A blob with shape ``[inputChannels,inputHeight,inputWidth]`` or ``[C_in, H_in, W_in]``.
+ *     A blob with rank greater than equal to 4.
+ *     Rank 4 blob represents [Batch, channels, height, width]
+ *     For ranks greater than 4, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  *
  * Output
- *  A blob with shape ``[outputChannels,outputHeight,outputWidth]`` or  ``[C_out, H_out, W_out]``.
+ *   Rank is same as the input. e.g.: for rank 4 input, output shape is [B, C_out, H_out, W_out]
  *
  *
  * If ``dilationFactor`` is not 1, effective kernel size is
@@ -821,8 +1377,9 @@ message ConvolutionLayerParams {
 }
 
 /**
- * A layer that performs a matrix vector product.
+ * A layer that performs a matrix-vector or matrix-matrix product.
  * This is equivalent to a fully-connected, or dense layer.
+ * The weight parameters correspond to a matrix of dimensions (inputChannels, outputChannels) i.e. (C_in, C_out)
  *
  * .. code::
  *
@@ -831,10 +1388,21 @@ message ConvolutionLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *  A blob with shape ``[C_in]`` or ``[C_in, 1, 1]``, where ``C_in`` is equal to ``inputChannels``.
+ *      Input can have rank 1 to rank 5. This is how it is reshaped in to the matrix (for rank > 1):
+ *      rank 1 (x1) : in this case, the layer corresponds to a matrix-vector product. x1 must be equal to C_in
+ *      rank 2 (x1, x2): x2 must be equal to C_in
+ *      rank 3 (x1, x2, x3) --> (x1 * x2, x3). x3 must be equal to C_in
+ *      rank 4 (x1, x2, x3, x4) ---> (x1, x2 * x3 * x4). x2 * x3 * x4 must be equal to C_in
+ *      rank 5 (x1, x2, x3, x4, x5) ---> (x1 * x2, x3 * x4 * x5). x3 * x4 * x5 must be equal to C_in
  *
  * Output
- *  A blob with shape ``[C_out]``, where ``C_out`` is equal to ``outputChannels``.
+ *      Output rank is same as the input rank
+ *      rank 1: (C_out)
+ *      rank 2: (x1, C_out)
+ *      rank 3: (x1, x2, C_out)
+ *      rank 4: (x1, C_out, 1, 1)
+ *      rank 5: (x1, x2, C_out, 1, 1)
+ *
  */
 message InnerProductLayerParams {
     uint64 inputChannels = 1; /// Input size: C_in.
@@ -848,6 +1416,7 @@ message InnerProductLayerParams {
 
 /**
  * A layer that performs a matrix lookup and optionally adds a bias.
+ * The weights matrix is stored with dimensions [outputChannels, inputDim].
  *
  * .. code::
  *
@@ -856,12 +1425,17 @@ message InnerProductLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A sequence of integers with shape ``[1]`` or ``[1, 1, 1]``, (equivalent to ``[Seq_length, 1, 1, 1]``).
  *     Input values must be in the range ``[0, inputDim - 1]``.
  *
+ *     Input must have rank equal to 4 or 5, such that the last 3 dimensions are all 1.
+ *     rank 4: shape (x1, 1, 1, 1). x1 is effectively the batch/sequence length.
+ *     rank 5: shape (x1, x2 , 1, 1, 1). x1 * x2 is effectively the combined batch/sequence length.
+ *
  * Output
- *     A sequence of 1-dimensional features of size ``outputChannels``
- *     (equivalent to ``[Seq_length, outputChannels, 1, 1]``).
+ *      Output rank is same as the input rank. Please see input description above.
+ *      rank 4: shape (x1, outputChannels, 1, 1)
+ *      rank 5: shape (x1, x2, outputChannels, 1, 1)
+ *
  */
 message EmbeddingLayerParams {
     uint64 inputDim = 1; /// Size of the input dictionary.
@@ -874,8 +1448,42 @@ message EmbeddingLayerParams {
 }
 
 /**
+ * A layer that performs a matrix lookup and optionally adds a bias.
+ * The weights matrix is stored with dimensions [embeddingSize, vocabSize].
+ *
+ * .. code::
+ *
+ *      y = EmbeddingNDLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     Input values must be in the range ``[0, vocabSize - 1]``.
+ *     Input must have rank at least 2. The last dimension must always be 1.
+ *     rank 2: shape (x1, 1). x1 is the batch/sequence length.
+ *     rank 3: shape (x1, x2, 1). x1 * x2 is effectively the combined batch/sequence length.
+ *     rank 4: shape (x1, x2, x3, 1). x1 * x2 * x2 is effectively the combined batch/sequence length.
+ *     rank 5: shape (x1, x2 , x3, x4, 1). x1 * x2 * x3 * x4 is effectively the combined batch/sequence length.
+ *
+ * Output
+ *      Output rank is same as the input rank. Please see input description above.
+ *      rank 2: shape (x1, embeddingSize)
+ *      rank 3: shape (x1, x2, embeddingSize)
+ *      rank 4: shape (x1, x2, x3, embeddingSize)
+ *      rank 5: shape (x1, x2, x3, x4, embeddingSize)
+ *
+ */
+message EmbeddingNDLayerParams {
+    uint64 vocabSize = 1; /// Size of the input dictionary.
+    uint64 embeddingSize = 2; /// Size of the output vectors.
+    bool hasBias = 3; /// Whether a bias is added or not.
+    WeightParams weights = 20; /// 2-D weights of dimensions [embeddingSize, vocabSize].
+    WeightParams bias = 21; /// Bias of size [embeddingSize].
+}
+
+/**
  * A layer that performs batch normalization,
- * which is performed along the channel axis,
+ * which is performed along axis = -3,
  * and repeated along the other axes, if present.
  *
  * .. code::
@@ -890,7 +1498,9 @@ message EmbeddingLayerParams {
  *     y_i = \gamma_i \dfrac{ (x_i - \mu_i)}{\sqrt{\sigma_i^2 + \epsilon}} + \beta_i \;,\;i=1,....,C
  *
  * Input
- *     A blob with shape ``[C]`` or ``[C, H, W]``.
+ *     A blob with rank greater than equal to 3.
+ *     Example: Rank 4 blob represents [Batch, channels, height, width]
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  *
  * Output
  *     A blob with the same shape as the input.
@@ -930,9 +1540,12 @@ message BatchnormLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H_in, W_in]``.
+ *     A blob with rank greater than equal to 4.
+ *     Rank 4 blob represents [Batch, channels, height, width]
+ *     For ranks greater than 4, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
+ *
  * Output
- *     A blob with shape ``[C, H_out, W_out]``.
+ *     Rank is same as the input. e.g.: for rank 4 input, output shape is [B, C, H_out, W_out]
  *
  * Padding options are similar to ``ConvolutionLayerParams``
  * with the additional option of ``ValidCompletePadding`` (``includeLastPixel``),
@@ -1008,10 +1621,13 @@ message PoolingLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H_in, W_in]``.
+ *     A blob with rank at least 3.
+ *     e.g.: blob with shape ``[C, H_in, W_in]``.
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  *
  * Output
- *     A blob with shape ``[C, H_out, W_out]``.
+ *     Same rank as the input.
+ *     e.g.: blob with shape ``[C, H_out, W_out]``.
  *
  * Output dimensions are calculated as follows:
  *
@@ -1100,7 +1716,8 @@ message PaddingLayerParams {
 }
 
 /**
- * A layer that concatenates along the channel axis (default) or sequence axis.
+ * A layer that concatenates along the axis = -3 or -5.
+ * For general concatenation along any axis, see ConcatNDLayer.
  *
  * .. code::
  *
@@ -1108,25 +1725,18 @@ message PaddingLayerParams {
  *
  * Requires more than 1 input and produces 1 output.
  *
- * The input and output formats are dependent on ``sequenceConcat``.
- *
- * If ``sequenceConcat == true``:
- *
  * Input
- *     Sequences of length ``Seq_i`` of blobs with shape ``[C, H, W]``.
- * Output
- *     A Sequence of length ``summation(Seq_i)`` of blobs with shape ``[C, H, W]``.
+ *   All input blobs must have same rank.
+ *   If "sequenceConcat" = False, rank must be greater than equal to 3. In this case concatenation is along axis = -3
+ *   If "sequenceConcat" = True, rank must be greater than equal to 5. In this case concatenation is along axis = -5
  *
- * If ``sequenceConcat == false``:
- *
- * Input
- *     A blob with shape ``[C_i, H, W]``, where ``i = 1, 2, ...``.
  * Output
- *     A blob with shape ``[summation(C_i), H, W]``.
+ *   Same rank as the input.
+ *
  */
 message ConcatLayerParams {
     /**
-     * If true, concatenate along the sequence axis instead of the channel axis.
+     * If true, concatenate along the axis = -5 instead of axis = -3.
      */
     bool sequenceConcat = 100;
 }
@@ -1141,7 +1751,9 @@ message ConcatLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H, W]``
+ *     A blob with rank greater than equal to 3.
+ *     Example: Rank 4 blob represents [Batch, channels, height, width]
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  * Output
  *     A blob with the same shape as the input.
  *
@@ -1164,7 +1776,9 @@ message LRNLayerParams {
  * Softmax Normalization Layer
  *
  * A layer that performs softmax normalization.
- * Normalization is done along the channel axis.
+ * Normalization is applied along axis = -3 or N-3 (where N is the rank of the input)
+ * For softmax layer that can operate on any axis, see SoftmaxNDLayer.
+ *
  *
  * .. code::
  *
@@ -1173,7 +1787,7 @@ message LRNLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C]`` or ``[C, H, W]``.
+ *     Must be a blob with rank >= 3.
  * Output
  *     A blob with the same shape as the input.
  *
@@ -1186,8 +1800,8 @@ message SoftmaxLayerParams {
 }
 
 /**
- * A layer that uniformly splits across the channel dimension
- * to produce a specified number of outputs.
+ * A layer that uniformly splits across axis = -3 to produce a specified number of outputs.
+ * For general split operation along any axis, see SplitNDLayer.
  *
  * .. code::
  *
@@ -1196,10 +1810,11 @@ message SoftmaxLayerParams {
  * Requires 1 input and produces multiple outputs.
  *
  * Input
- *     A blob with shape ``[C]`` or ``[C, H, W]``
+ *     A blob with rank at least 3.
+ *     e.g.: blob with shape ``[C, H, W]``
  * Output
- *     ``nOutputs`` blobs with shapes
- *     ``[C/nOutputs]`` or ``[C/nOutputs, H, W]``
+ *     ``nOutputs`` blobs each with same rank as the input.
+ *     e.g.: For input that is of shape ``[C, H, W]``, output shapes will be ``[C/nOutputs, H, W]``
  */
 message SplitLayerParams {
     uint64 nOutputs=1; /// The number of outputs.
@@ -1207,6 +1822,7 @@ message SplitLayerParams {
 
 /**
  * A layer that performs elementwise addition.
+ * This layer has limited broadcasting support. For general broadcasting see AddBroadcastableLayer.
  *
  * .. code::
  *
@@ -1215,7 +1831,9 @@ message SplitLayerParams {
  * Requires 1 or more than 1 input and produces 1 output.
  *
  * Input
- *     One or more blobs with broadcastable shapes ``[1]``, ``[C]``, ``[1, H, W]``, or ``[C, H, W]``.
+ *     In general, there are no rank constraints.
+ *     However, only certain set of shapes are broadcastable. For example:
+ *     [B, 1, 1, 1], [B, C, 1, 1], [B, 1, H, W], [B, C, H, W]
  * Output
  *     A blob with shape equal to the input blob.
  *
@@ -1235,6 +1853,7 @@ message AddLayerParams {
 
 /**
  * A layer that performs elementwise multiplication.
+ * This layer has limited broadcasting support. For general broadcasting see MultiplyBroadcastableLayer.
  *
  * .. code::
  *
@@ -1243,7 +1862,9 @@ message AddLayerParams {
  * Requires 1 or more than 1 input and produces 1 output.
  *
  * Input
- *     One or more blobs with broadcastable shapes ``[1]``, ``[C]``, ``[1, H, W]``, or ``[C, H, W]``.
+ *     In general, there are no rank constraints.
+ *     However, only certain set of shapes are broadcastable. For example:
+ *     [B, 1, 1, 1], [B, C, 1, 1], [B, 1, H, W], [B, C, H, W]
  * Output
  *     A blob with shape equal to the first input blob.
  *
@@ -1271,7 +1892,7 @@ message MultiplyLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C]`` or ``[C, H, W]``.
+ *     A blob with no rank constraints.
  * Output
  *     A blob with the same shape as the input.
  *
@@ -1359,9 +1980,13 @@ message UnaryFunctionLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H, W]``.
+ *     A blob with rank at least 3.
+ *     e.g.: blob with shape ``[C, H, W]``.
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
+ *
  * Output
- *     A blob with shape ``[C, scalingFactor[0] * H, scalingFactor[1] * W]``
+ *     Same rank as the input.
+ *     e.g.: blob with shape ``[C, scalingFactor[0] * H, scalingFactor[1] * W]``
  */
 message UpsampleLayerParams {
     /**
@@ -1390,10 +2015,13 @@ message UpsampleLayerParams {
 * Requires 1 input and produces 1 output.
 *
 * Input
-*     A blob with shape ``[C, H_in, W_in]``.
+*     A blob with rank at least 3.
+*     e.g.: blob with shape ``[C, H_in, W_in]``.
+*     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
 *
 * Output
-*     A blob with shape ``[C, H_out, W_out]``.
+*     Same rank as the input.
+*     e.g.: blob with shape ``[C, H_out, W_out]``.
 *
 */
 message ResizeBilinearLayerParams {
@@ -1424,29 +2052,28 @@ message ResizeBilinearLayerParams {
 * Requires 2 inputs and produces 1 output.
 *
 * Input
-*     A blob with shape ``[C, H_in, W_in]``.
-*			This represents an image feature map.
-*			Note that the full batched input shape is ``[Seq = 1, Batch = Batch, C, H_in, W_in]``
-*     A second input with shape ``[N, 4, 1, 1]`` or ``[N, 5, 1, 1]``.
-*			This represents the bounding box coordinates for N patches/RoIs.
-*			Note that the full batched shape is ``[Seq = N, Batch = 1, C = 4 or 5, 1, 1]``
-*			That is, sequence dimension = N, channel dimension = 4 or 5.
+*     There are two inputs.
+*     First input represents an image feature map.
+*     Second input represents the bounding box coordinates for N patches or RoIs (region of interest).
+*
+*     First input is rank 5: [1, Batch, C, H_in, W_in].
+*     Second input is rank 5. Its shape can be either [N, 1, 4, 1, 1] or [N, 1, 5, 1, 1].
 *
 *     N: number of patches/RoIs to be extracted
-*     If RoI shape = ``[N, 4, 1, 1]``
-*                    The channel axis corresponds to the four coordinates specifying the bounding box.
+*
+*     If RoI shape = ``[N, 1, 4, 1, 1]``
+*                    The axis=-3 corresponds to the four coordinates specifying the bounding box.
 *                    All the N RoIs are extracted from all the batches of the input.
-*     If RoI shape = ``[N, 5, 1, 1]``
-*                     The first element of the channel axis specifies the input batch id from which to extract the RoI and
-*					  must be in the interval ``[0, Batch - 1]``. That is, n-th RoI is extracted from the RoI[n,0,0,0]-th input batch id.
-*                     The last four elements of the channel axis specify the bounding box coordinates.
+*
+*     If RoI shape = ``[N, 1, 5, 1, 1]``
+*                     The first element of the axis=-3 specifies the input batch id from which to extract the RoI and
+*					            must be in the interval ``[0, Batch - 1]``. That is, n-th RoI is extracted from the RoI[n,0,0,0,0]-th
+*                     input batch id. The last four elements of the axis=-3 specify the bounding box coordinates.
 *
 * Output
-*     A blob with shape ``[N, C, H_out, W_out]``.
-*			This represents the output image feature map for each input RoI.
-*	  		Note that the full batched output shape is:
-*			- ``[Seq = N, Batch = Batch, C, H_out, W_out]`` if input RoI shape is ``[N, 4, 1, 1]``
-*			- ``[Seq = N, Batch = 1, C, H_out, W_out]`` if input RoI shape is ``[N, 5, 1, 1]``
+*     A blob with rank 5.
+*			- Shape is [N, Batch, C, H_out, W_out] if input RoI shape is [N, 1, 4, 1, 1]
+*			- Shape is [N, 1, C, H_out, W_out] if input RoI shape is [N, 1, 5, 1, 1]
 *
 */
 message CropResizeLayerParams {
@@ -1500,7 +2127,9 @@ message CropResizeLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H, W]``.
+ *     A blob with rank at least 3.
+ *     e.g.: blob with shape ``[C, H, W]``.
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  * Output
  *     A blob with the same shape as the input.
  */
@@ -1531,7 +2160,9 @@ message BiasLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H, W]``.
+ *     A blob with rank at least 3.
+ *     e.g.: blob with shape ``[C, H, W]``.
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  * Output
  *     A blob with the same shape as the input.
  */
@@ -1567,6 +2198,7 @@ message ScaleLayerParams {
 
 /**
  * A layer that loads data as a parameter and provides it as an output.
+ * The output is rank 5. For general rank, see LoadConstantNDLayer.
  *
  * .. code::
  *
@@ -1577,12 +2209,12 @@ message ScaleLayerParams {
  * Input
  *     None
  * Output:
- *     A blob with shape ``[C, H, W]``
+ *     A blob with rank 5 and shape ``[1, 1, C, H, W]``
  */
 message LoadConstantLayerParams {
     /**
      * The shape of the constant to be loaded,
-     * which must be``[C, H, W]``.
+     * which must be``[C, H, W]``, that is length 3.
      */
     repeated uint64 shape = 1;
 
@@ -1604,7 +2236,8 @@ message LoadConstantLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C]`` or ``[C, H, W]``.
+ *     A blob with rank greater than equal to 3.
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  * Output
  *     A blob with the same shape as the input.
  *
@@ -1634,11 +2267,14 @@ message L2NormalizeLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H, W]``.
+ *     A blob with rank greater than equal to 3.
+ *     e.g.: Rank 4 blob represents [Batch, C, H, W]
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  * Output
- *     A blob with shape ``[C * H * W, 1, 1]``
+ *     Same rank as the input, such that last two dimensions are both 1.
+ *     e.g.: For rank 4 input, output shape is ``[Batch, C * H * W, 1, 1]``
  *
- * There are two flatten orders: ``CHANNEL_FIRST`` and ``CHANNEL_LAST``.
+ * There are two X orders: ``CHANNEL_FIRST`` and ``CHANNEL_LAST``.
  * ``CHANNEL_FIRST`` does not require data to be rearranged,
  * because row major ordering is used by internal storage.
  * ``CHANNEL_LAST`` requires data to be rearranged.
@@ -1661,19 +2297,20 @@ message FlattenLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H, W]`` or ``[Seq, C, H, W]``.
+ *     A blob with rank 5.
+ *     e.g.: ``[1, 1, C, H, W]`` or ``[Seq, 1, C, H, W]``.
  * Output
- *     A blob with shape ``[C_out, H_out, W_out]``
- *     or ``[Seq_out, C_out, H_out, W_out]``.
+ *     A blob with rank 5.
+ *     e.g.: ``[1, 1, C_out, H_out, W_out]`` or ``[Seq_out, 1, C_out, H_out, W_out]``.
  *
  * There are two reshape orders: ``CHANNEL_FIRST`` and ``CHANNEL_LAST``.
  * ``CHANNEL_FIRST`` is equivalent to
- * flattening the input to ``[C * H * W, 1, 1]`` in channel first order
+ * flattening the input to ``[Seq, 1, C * H * W, 1, 1]`` in channel first order
  * and then reshaping it to the target shape;
  * no data rearrangement is required.
  * ``CHANNEL_LAST`` is equivalent to
- * flattening the input to ``[H * W * C, 1, 1]`` in channel last order,
- * reshaping it to ``[H_out, W_out, C_out]`` (it is now in "H_out-major"" order),
+ * flattening the input to ``[Seq, 1, H * W * C, 1, 1]`` in channel last order,
+ * reshaping it to ``[Seq_out, 1, H_out, W_out, C_out]`` (it is now in "H_out-major"" order),
  * and then permuting it to ``[C_out, H_out, W_out]``;
  * both the flattening and permuting requires the data to be rearranged.
  */
@@ -1682,9 +2319,9 @@ message ReshapeLayerParams {
      * The shape of the output.
      * Must be of length 3 or 4.
      * If set to 3, ``targetShape`` is interpreted as
-     * ``[C_out, H_out, W_out]``, and sequence length of the input is preserved.
+     * ``[1, 1, C_out, H_out, W_out]``, and sequence length of the input is preserved.
      * If set to 4, ``targetShape`` is interpreted as
-     * ``[Seq_out, C_out, H_out, W_out]``,
+     * ``[Seq_out, 1, C_out, H_out, W_out]``,
      * where ``Seq_out`` is the new sequence length.
      */
     repeated int64 targetShape = 1;
@@ -1698,6 +2335,7 @@ message ReshapeLayerParams {
 
 /**
  * A layer that rearranges the dimensions and data of an input.
+ * For generic transpose/permute operation see TransposeNDLayer.
  *
  * .. code::
  *
@@ -1706,25 +2344,24 @@ message ReshapeLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A sequence of 3-dimensional blobs. ``InputShape = [Seq, C, H, W]``.
+ *     Must be a rank 5 blob.
+ *     e.g.: shape ``[Seq, B, C, H, W]``.
  * Output
- *     A sequence of a different length of 3-dimensional blobs.
- *     Shape: ``[InputShape[axis[0]], InputShape[axis[1]],
- *     InputShape[axis[2]], InputShape[axis[3]]]``. Hence output is a sequence of length ``InputShape[axis[0]]``.
+ *     Rank 5 blob. Tranposed version of the input, such that dimensions at axis=1 or axis=-4 is unchanged.
+ *
  *
  * Examples:
  *
+ *  Assume input shape is [Seq, B, C, H, W]
+ *
  * - If ``axis`` is set to ``[0, 3, 1, 2]``,
- *   then the output has shape ``[W,C,H]``
- *   and has the same sequence length that of the input.
+ *   then the output has shape ``[Seq, B, W, C, H]``
  *
  * - If ``axis`` is set to ``[3, 1, 2, 0]``,
- *   and the input is a sequence of data
- *   with length ``Seq`` and shape ``[C, 1, 1]``,
- *   then the output is a unit sequence of data with shape ``[C, 1, Seq]``.
+ *   then the output has shape ``[W, B, C, H, Seq]``
  *
  * - If ``axis`` is set to ``[0, 3, 2, 1]``,
- *   the output is a reverse of the input: ``[C, H, W] -> [W, H, C]``.
+ *   then the output has shape ``[Seq, B, W, H, C]``
  *
  * - If ``axis`` is not set, or is set to ``[0, 1, 2, 3]``,
  *   the output is the same as the input.
@@ -1747,9 +2384,12 @@ message PermuteLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H, W]``.
+ *     A blob with rank at least 3.
+ *     e.g.: blob with shape ``[C, H, W]``.
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
  * Output
- *     A blob with shape ``[C_out, H_out, W_out]``.
+ *     Same rank as the input.
+ *     e.g.: blob with shape ``[C_out, H_out, W_out]``.
  *
  * mode == SPACE_TO_DEPTH
  *  ``[C_out, H_out, W_out]`` : ``[C * blockSize * blockSize, H/blockSize, W/blockSize]``.
@@ -1775,7 +2415,8 @@ message ReorganizeDataLayerParams {
 }
 
 /**
- * A layer that slices the input data along a given axis.
+ * A layer that slices the input data along axis = -1 or -2 or -3.
+ * For general slice along any axis, please see SliceNDLayer.
  *
  * .. code::
  *
@@ -1784,9 +2425,10 @@ message ReorganizeDataLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[Seq, C, H, W]``.
+ *     A blob that can, in general, have any rank. However, depending on the value of "axis" ,
+ *     there may be additional rank constraints.
  * Output
- *     A blob with shape ``[Seq_out, C_out, H_out, W_out]``.
+ *     A blob with the same rank as the input.
  *
  * Sliced section is taken from the interval ``[startIndex, endIndex)``, i.e.
  * startIndex is inclusive while endIndex is exclusive.
@@ -1806,8 +2448,11 @@ message SliceLayerParams {
         HEIGHT_AXIS = 1;
         WIDTH_AXIS = 2;
     }
+    // The following mapping is used for interpreting this parameter:
+    // CHANNEL_AXIS => axis = -3, input must have rank at least 3.
+    // HEIGHT_AXIS => axis = -2, input must have rank at least 2.
+    // WIDTH_AXIS => axis = -1
     SliceAxis axis = 4;
-
 }
 
 /**
@@ -1820,14 +2465,14 @@ message SliceLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C, H, W]``.
+ *     A blob that can, in general, have any rank. However, depending on the value of "axis" ,
+ *      there may be additional rank constraints.
  * Output
- *     A blob whose shape depends on the value of axis, the dimension(s) along which reduction is performed.
- *     if axis == C   : ``[1, H, W]``
- *     if axis == H   : ``[C, 1, W]``
- *     if axis == W   : ``[C, H, 1]``
- *     if axis == HW  : ``[C, 1, 1]``
- *     if axis == CHW : ``[1, 1, 1]`` [Default]
+ *     A blob with the same rank as the input, which has 1s on the dimensions specififed in the parameter "axis"
+ *
+ *     Values supported for axis are [-1], [-2], [-3], [-2,-1], [-3,-2,-1]
+ *     and the equivalent positive values (depending on the rank of the input)
+ *     For mode == 'ArgMax', axis must be [-1] or [-2] or [-3].
  */
 message ReduceLayerParams {
     /*
@@ -1913,8 +2558,13 @@ message ReduceLayerParams {
         W = 4;
     }
 
+    // The following mapping is used for interpreting this parameter:
+    // CHW = axis [-3, -2, -1], input must have rank at least 3.
+    // HW = axis [-2, -1], input must have rank at least 2.
+    // C = axis [-3]
+    // H = axis [-2]
+    // W = axis [-1]
     ReduceAxis axis = 3;
-
 }
 
 /**
@@ -1928,11 +2578,16 @@ message ReduceLayerParams {
  * Requires 1 or 2 inputs and produces 1 output.
  *
  * Input
+ *    1 or 2 tensors, each with rank at least 3, both inputs must have equal rank.
+ *    Example:
  *     - 1 input case: A blob with shape ``[C, H_in, W_in]``.
  *     - 2 input case: 1st blob with shape ``[C, H_in, W_in]``, 2nd blob with shape ``[C, H_out, W_out]``.
  *
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
+ *
  * Output
- *     A blob with shape ``[C, H_out, W_out]``.
+ *     Same rank as the inputs.
+ *     e.g.: A blob with shape ``[C, H_out, W_out]``.
  *
  * If one input is used, output is computed as follows:
  *
@@ -1971,6 +2626,7 @@ message CropLayerParams {
 
 /**
  * A layer that computes the elementwise average of the inputs.
+ * This layer has limited broadcasting support. For general broadcasting see AddBroadcastableLayer.
  *
  * .. code::
  *
@@ -1979,7 +2635,9 @@ message CropLayerParams {
  * Requires multiple inputs and produces 1 output.
  *
  * Input
- *     Multiple blobs with broadcastable shapes ``[1]``, ``[C]``, ``[1, H, W]``, or ``[C, H, W]``.
+ *     In general, there are no rank constraints.
+ *     However, only certain set of shapes are broadcastable. For example:
+ *     [B, 1, 1, 1], [B, C, 1, 1], [B, 1, H, W], [B, C, H, W]
  * Output
  *     A blob with the same shape as each input.
  */
@@ -1996,7 +2654,9 @@ message AverageLayerParams {
  * Requires multiple inputs and produces 1 output.
  *
  * Input
- *     Multiple blobs, each with shape ``[C]`` or ``[C, H, W]``.
+ *     In general, there are no rank constraints.
+ *     However, only certain set of shapes are broadcastable. For example:
+ *     [B, C, 1, 1], [B, C, H, W]
  * Output
  *     A blob with the same shape as each input.
  */
@@ -2013,7 +2673,9 @@ message MaxLayerParams {
  * Requires multiple inputs and produces 1 output.
  *
  * Input
- *     Multiple blobs, each with shape ``[C]`` or ``[C, H, W]``.
+ *     In general, there are no rank constraints.
+ *     However, only certain set of shapes are broadcastable. For example:
+ *     [B, C, 1, 1], [B, C, H, W]
  * Output
  *     A blob with the same shape as each input.
  */
@@ -2030,9 +2692,13 @@ message MinLayerParams {
  * Requires 2 inputs and produces 1 output.
  *
  * Input
- *     Two blobs with shape ``[C]``.
+ *     Two blobs with rank at least 3, such that the last two dimensions must be 1.
+ *     e.g.: blobs with shape ``[B, C, 1, 1]``.
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
+ *
  * Output
- *     A scalar.
+ *     Same rank as the input.
+ *     e.g. for rank 4 inputs, output shape: [B, 1, 1, 1]
  */
 message DotProductLayerParams {
     /**
@@ -2043,7 +2709,7 @@ message DotProductLayerParams {
 }
 
 /**
- * A layer that performs mean variance normalization.
+ * A layer that performs mean variance normalization, along axis = -3.
  *
  * .. code::
  *
@@ -2052,16 +2718,20 @@ message DotProductLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A blob with shape ``[C]`` or ``[C, H, W]``.
+ *     A blob with rank greater than equal to 3.
+ *     Example: Rank 4 blob represents [Batch, channels, height, width]
+ *     For ranks greater than 3, the leading dimensions, starting from 0 to -4 (inclusive), are all treated as batch.
+ *
  * Output
  *     A blob with the same shape as the input.
  *
  * If ``acrossChannels == true``
- * normalization is performed on flattened input.
+ * normalization is performed on flattened input, i.e. the input is reshaped to (Batch,C), where "Batch" constains
+ * all dimensions from 0 to -4 (inclusive), and C constains dimensions -1, -2, -3.
  *
  * If ``acrossChannels == false``
  * normalization is performed within a channel,
- * across spatial dimensions.
+ * across spatial dimensions (i.e. last two dimensions).
  */
 message MeanVarianceNormalizeLayerParams {
     /**
@@ -2082,7 +2752,7 @@ message MeanVarianceNormalizeLayerParams {
 }
 
 /**
- * A layer that repeats a sequence.
+ * A layer that repeats a sequence or the dimension sitting at axis = -5
  *
  * .. code::
  *
@@ -2091,11 +2761,11 @@ message MeanVarianceNormalizeLayerParams {
  * Requires 1 input and produces 1 output.
  *
  * Input
- *     A sequence of blobs, i.e. shape is either ``[Seq, C]`` or ``[Seq, C, H, W]``.
+ *     A blob with rank at least 5.
+ *     e.g: shape ``[Seq, B, C, H, W]``
  * Output
- *     A sequence of length ``nRepetitions * Seq``
- *     with shape corresponding to the input,
- *     i.e. shape is either ``[nRepetitions * Seq, C]`` or ``[nRepetitions * Seq, C, H, W]``.
+ *     A blob with the same rank as the input.
+ *     e.g.: for input shape ``[Seq, B, C, H, W]``, output shape is ``[nRepetitions * Seq, B, C, H, W]``.
  */
 message SequenceRepeatLayerParams {
     /**
@@ -2126,13 +2796,14 @@ message SequenceRepeatLayerParams {
  *      y_t = SimpleRecurrentLayer(x_t, y_{t-1})
  *
  * Input
- *    A sequence of vectors of size ``inputVectorSize``
- *    with shape ``[Seq, inputVectorSize]``.
+ *    A blob of rank 5, with shape `[Seq, Batch, inputVectorSize, 1, 1]``.
+ *    This represents a sequence of vectors of size ``inputVectorSize``.
  * Output
- *    A vector of size ``outputVectorSize``. It is either the final output or a sequence of outputs at all time steps.
+ *    Same rank as the input.
+ *    Represents a vector of size ``outputVectorSize``. It is either the final output or a sequence of outputs at all time steps.
  *
- * - Output Shape: ``[1,outputVectorSize]`` , if ``sequenceOutput == false``
- * - Output Shape: ``[Seq,outputVectorSize]`` , if ``sequenceOutput == true``
+ * - Output Shape: ``[1, Batch, outputVectorSize, 1, 1]`` , if ``sequenceOutput == false``
+ * - Output Shape: ``[Seq, Batch, outputVectorSize, 1, 1]`` , if ``sequenceOutput == true``
  *
  * This layer is described by the following equation:
  *
@@ -2181,13 +2852,14 @@ message SimpleRecurrentLayerParams {
  *      y_t = GRULayer(x_t, y_{t-1})
  *
  * Input
- *    A sequence of vectors of size ``inputVectorSize``
- *    with shape ``[Seq, inputVectorSize]``.
+ *    A blob of rank 5, with shape `[Seq, Batch, inputVectorSize, 1, 1]``.
+ *    This represents a sequence of vectors of size ``inputVectorSize``.
  * Output
- *    A vector of size ``outputVectorSize``. It is either the final output or a sequence of outputs at all time steps.
+ *    Same rank as the input.
+ *    Represents a vector of size ``outputVectorSize``. It is either the final output or a sequence of outputs at all time steps.
  *
- * - Output Shape: ``[1,outputVectorSize]`` , if ``sequenceOutput == false``
- * - Output Shape: ``[Seq,outputVectorSize]`` , if ``sequenceOutput == true``
+ * - Output Shape: ``[1, Batch, outputVectorSize, 1, 1]`` , if ``sequenceOutput == false``
+ * - Output Shape: ``[Seq, Batch, outputVectorSize, 1, 1]`` , if ``sequenceOutput == true``
  *
  * This layer is described by the following equations:
  *
@@ -2400,13 +3072,14 @@ message LSTMWeightParams {
  *      (y_t, c_t) = UniDirectionalLSTMLayer(x_t, y_{t-1}, c_{t-1})
  *
  * Input
- *    A sequence of vectors of size ``inputVectorSize``
- *    with shape ``[Seq, inputVectorSize]``.
+ *    A blob of rank 5, with shape `[Seq, Batch, inputVectorSize, 1, 1]``.
+ *    This represents a sequence of vectors of size ``inputVectorSize``.
  * Output
- *    A vector of size ``outputVectorSize``. It is either the final output or a sequence of outputs at all time steps.
+ *    Same rank as the input.
+ *    Represents a vector of size ``outputVectorSize``. It is either the final output or a sequence of outputs at all time steps.
  *
- * - Output Shape: ``[1,outputVectorSize]`` , if ``sequenceOutput == false``
- * - Output Shape: ``[Seq,outputVectorSize]`` , if ``sequenceOutput == true``
+ * - Output Shape: ``[1, Batch, outputVectorSize, 1, 1]`` , if ``sequenceOutput == false``
+ * - Output Shape: ``[Seq, Batch, outputVectorSize, 1, 1]`` , if ``sequenceOutput == true``
  *
  */
 message UniDirectionalLSTMLayerParams {
@@ -2436,13 +3109,15 @@ message UniDirectionalLSTMLayerParams {
  *      (y_t, c_t, y_t_reverse, c_t_reverse) = BiDirectionalLSTMLayer(x_t, y_{t-1}, c_{t-1}, y_{t-1}_reverse, c_{t-1}_reverse)
  *
  * Input
- *    A sequence of vectors of size ``inputVectorSize``
- *    with shape ``[Seq, inputVectorSize]``.
+ *    A blob of rank 5, with shape `[Seq, Batch, inputVectorSize, 1, 1]``.
+ *    This represents a sequence of vectors of size ``inputVectorSize``.
  * Output
- *    A vector of size ``2 * outputVectorSize``. It is either the final output or a sequence of outputs at all time steps.
+ *    Same rank as the input.
+ *    Represents a vector of size ``2 * outputVectorSize``. It is either the final output or a sequence of outputs at all time steps.
  *
- * - Output Shape: ``[1, 2 * outputVectorSize]`` , if ``sequenceOutput == false``
- * - Output Shape: ``[Seq, 2 * outputVectorSize]`` , if ``sequenceOutput == true``
+ * - Output Shape: ``[1, Batch, 2 * outputVectorSize, 1, 1]`` , if ``sequenceOutput == false``
+ * - Output Shape: ``[Seq, Batch, 2 * outputVectorSize, 1, 1]`` , if ``sequenceOutput == true``
+ *
  *
  * The first LSTM operates on the input sequence in the forward direction.
  * The second LSTM operates on the input sequence in the reverse direction.
@@ -2526,6 +3201,832 @@ message CustomLayerParams {
 
 }
 
+/**
+ * A layer that rearranges the dimensions and data of an input.
+ *
+ * .. code::
+ *
+ *      y = TransposeNDLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional blob.
+ * Output
+ *     An N-dimensional blob of the same rank but with dimensions and data permuted according to axes.
+ *     Shape: ``[InputShape[axis[0]], InputShape[axis[1]], ... , InputShape[axis[N-1]]]``
+ *
+ * Examples:
+ *
+ * - If ``axes`` is set to ``[3, 1, 2, 0]`` and the input shape is ``[6,7,8,9]``,
+ *   then the output has shape ``[9,7,8,6]``
+ */
+
+message TransposeNDLayerParams{
+    /**
+     * Length of "axes" should match the rank of input & output tensor
+     * "axes" should be a permutation of "[0,1,2,...,N-1]" where N is the rank.
+     */
+    repeated uint64 axes = 1; //
+}
+
+/**
+ * A layer that computes the matrix multiplication of two tensors with numpy like broadcasting
+ * where the matrices reside in the last two indices of the tensor.
+ *
+ * .. code::
+ *
+ *      y = BatchedMatMul(a,b)
+ *
+ * Requires 1 or 2 inputs and produces 1 output.
+ * The first tensor, "a", must be provided as an input. The second tensor can either be an input or provided as a weight matrix parameter.
+ *
+ * Input
+ *     - a: First N-D tensor
+ *     - b: Second N-D tensor (either an N rank input or a matrix, i.e. N=2, provided as a layer parameter)
+ *
+ * Output
+ *     A tensor containing the matrix product of two tensors.
+ *     When there are two inputs: rank is max(2, rank(a), rank(b))
+ *     When there is one input: rank is same as that of the input.
+ *
+ * This operation behaves as following:
+ *
+ *  When there are two inputs:
+ *      - If N >= 2 for both tensors, it is treated as a batch of matrices residing in the last two indices.
+ *        All the indices, except for the last two, are broadcasted using conventional rules.
+ *      - If the first tensor is 1-D, it is converted to a 2-D tensor by prepending a 1 to its shape. Eg. (D) -> (1,D)
+ *      - If the second tensor is 1-D, it is converted to a 2-D tensor by appending a 1 to its shape. Eg. (D) -> (D,1)
+ *
+ *  When there is one input:
+ *      - The weight matrix corresponds to a matrix, of shape (X1, X2). Values of X1, X2 must be provided as layer parameters.
+ *      - The input, "a", is reshaped into a matrix by combining all the leading dimensions, except the last, into a batch dimension. eg:
+ *             - if "a" is rank 1 (X1,) -->  (1, X1). Output shape will be (X2,)
+ *             - if "a" is rank 2 (B1, X1) --> no need to reshape. Output shape will be (B1, X2)
+ *             - if "a" is rank 3 (B1, B2, X1) --> (B1 * B2, X1). Output shape will be (B1, B2, X2)
+ *             - etc
+ */
+message BatchedMatMulParams{
+    /**
+     * If transposeA is true, it transposes the left matrix on the fly before matrix multiplication.
+     * (is ignored when there is one input)
+     */
+    bool transposeA = 1;
+    /**
+     * If transposeB is true, it transposes the right matrix on the fly before matrix multiplication.
+     * (is ignored when there is one input)
+     */
+    bool transposeB = 2;
+
+    /*
+     * Following parameters are ignored when there are two inputs.
+     */
+
+    uint64 weightMatrixFirstDimension = 5; /// X1: same as the last dimension of the input tensor
+    uint64 weightMatrixSecondDimension = 6; /// X2: same as the last dimension of the output tensor
+
+    bool hasBias = 7; /// Whether a bias is added or not. Supported only when there is one input.
+
+    /*
+     * Weight matrix representing shape [X1, X2].
+     * Values are however stored in column major order,
+     * in the "repeated float" or "bytes" fields of the message "WeightParams"
+     */
+    WeightParams weights = 8;
+    WeightParams bias = 9; /// Bias vector [X2]. Supported only when there is one input.
+
+}
+
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * A layer that concatenates a list of tensors along a specified axis.
+ *
+ * .. code::
+ *
+ *      y = ConcatNDLayer(x1,x2,....)
+ *
+ * Requires more than 1 input and produces 1 output.
+ *
+ *
+ * Input
+ *     A Sequence of N-dimensional tensors. The rank of the input tensors must match and all dimensions except 'axis' must be equal.
+ * Output
+ *     An N-dimensional tensor with the same rank .
+ *
+ *
+ * To do: // Include Examples:
+ */
+
+message ConcatNDLayerParams{
+    /**
+     * Dimension along which to concatenate. Supports negative values of the parameter 'axis'.
+     */
+    int64 axis = 1;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that performs softmax normalization along a specified axis.
+ *
+ * .. code::
+ *
+ *      y = SoftmaxNDLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor.
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message SoftmaxNDLayerParams{
+    /**
+     * Dimension on which the softmax would be performed. Supports negative values of the parameter 'axis'.
+     */
+    int64 axis = 1;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that loads data as a parameter and provides it as an output.
+ *
+ * .. code::
+ *
+ *      y = LoadConstantNDLayer()
+ *
+ * Takes no input. Produces 1 output.
+ *
+ * Input
+ *     None
+ * Output:
+ *     A blob whose rank is between 1 to 4.
+ */
+message LoadConstantNDLayerParams {
+    /**
+     * The shape of the constant to be loaded.
+     */
+    repeated uint64 shape = 1;
+    WeightParams data = 2;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that fills the tensor with a scalar value.
+ *
+ * .. code::
+ *
+ *      y = FillLikeLayer(x)
+ *
+ * Input
+ *
+ * Output
+ *
+ *
+ * // To do: Include examples
+ *
+ */
+message FillLikeLayerParams{
+
+    float value = 1;
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that fills the tensor with a scalar value.
+ *
+ * .. code::
+ *
+ *      y = FillStaticLayer(x)
+ *
+ * Input
+ *
+ * Output
+ *
+ *
+ * // To do: Include examples
+ *
+ */
+message FillStaticLayerParams{
+
+    float value = 1;
+    repeated uint64 targetShape = 2;
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that fills the tensor with a scalar value.
+ *
+ * .. code::
+ *
+ *      y = FillDynamicLayer(x)
+ *
+ * Input
+ *
+ * Output
+ *
+ *
+ * // To do: Include examples
+ *
+ */
+message FillDynamicLayerParams{
+
+    float value = 1;
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that replaces the masked data with a fill value.
+ * All the entries where mask value == 1 gets replaced with the fill value.
+ * All the entries where mask value == 0 remains unchanged.
+ *
+ * .. code::
+ *
+ *      y = WhereLayer(x)
+ *
+ * Requires 3 inputs and produces 1 output.
+ *
+ * Input
+ *     - input tensor: An N-dimensional tensor
+ *     - mask: An N-dimensional tensor with the same shape as input tensor
+ *     - fill value: A scalar
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message WhereLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric sine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = SineLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message SineLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric cosine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = CosineLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message CosineLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that raises each element in first tensor to the power of corresponding element in the second tensor.
+ * Supports conventional numpy like broadcasting.
+ *
+ * .. code::
+ *
+ *      y = PowBroadcastableLayer(x)
+ *
+ * Requires 2 inputs and produces 1 output.
+ *
+ * Input
+ *     - First N-D tensor
+ *     - Second N-D tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the broadcasted shape.
+ *
+ * // To do: Include examples
+ *
+ */
+message PowBroadcastableLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes the exponential of all elements in the input tensor.
+ *
+ *
+ * .. code::
+ *
+ *      y = ExpLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message Exp2LayerParams{
+
+}
+
+message UpperTriangularLayerParams{
+
+}
+
+message LowerTriangularLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that broadcasts a tensor to a new shape.
+ *
+ *
+ * .. code::
+ *
+ *      y = BroadcastToLikeLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *
+ * Output
+ *
+ * // To do: Include examples
+ *
+ */
+message BroadcastToLikeLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that broadcasts a tensor to a new shape.
+ *
+ *
+ * .. code::
+ *
+ *      y = BroadcastToStaticLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *
+ * Output
+ *
+ * // To do: Include examples
+ *
+ */
+message BroadcastToStaticLayerParams{
+    repeated uint64 targetShape = 1;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that broadcasts a tensor to a new shape.
+ *
+ *
+ * .. code::
+ *
+ *      y = BroadcastToDynamicLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *
+ * Output
+ *
+ * // To do: Include examples
+ *
+ */
+message BroadcastToDynamicLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ *
+ *
+ */
+message AddBroadcastableLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ *
+ *
+ */
+message SubtractBroadcastableLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ *
+ *
+ */
+message MultiplyBroadcastableLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ *
+ *
+ */
+message DivideBroadcastableLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * Please refer https://www.tensorflow.org/api_docs/python/tf/gather
+ *
+ * Requires 2 inputs and produces 1 output.
+ *
+ * Given two inputs, 'data' and 'indices', gather the slices of 'data'
+ * and store into output.
+ * E.g. output[i] = data[indices[i]], for i in [0, length(indices) - 1] (1-D case, axis=0)
+ * Support negative indices and negative axis
+ *
+ */
+message GatherLayerParams{
+    int64 axis = 1;
+}
+
+/* Placeholder for ScatterND Layer
+ * Given three inputs, container, indices, slices, where:
+ * - container is an N-Dimensional array
+ * - indices is a 2-Dimensional array [Ni, L], where Ni is the number of slices,
+ *   L = 1, ..., 5, indicating the N-Dimensional index of slices.
+ *   Each index is a vector of dimension L.
+ *   For each i = 1, ..., L, if index[i] > 0, the slice at index[i] is retrieved.
+ *   If index[i] < 0, the entire slice is retrieved.
+ * - slices is a N-Dimensional array of size [Ni, ...,]
+ * The effect of this operation is as follows:
+ * output = array;
+ * For each i in 1, ..., Ni
+ * output[indices[i]] = value[i,:]
+ *
+ * Implementation of this is currently blocked by:
+ * <rdar://problem/47825420> Espresso scatter op fails to recognize index -1 as input
+ */
+
+//message ScatterNDLayerParams {
+//
+//}
+//
+
+/*
+ * Scatter operation.
+ *
+ * Requires 3 inputs and produces 1 output.
+ *
+ * Output is initialized with the first input.
+ * Then updated with the values in the third input, at indices specified by the second input.
+ * That is,
+ *
+ * Given three inputs, in order, "container", "indices", "slices", where:
+ *
+ * - container is a rank R+1 tensor of shape [D_0, D_1, ..., D_R], which
+ *   contains D_0 number of tensors, each with shape [D_1, ..., D_R].
+ *
+ * - indices is a rank 1 tensor with shape [N], where N is the number of slices.
+ *   The values in this tensor must be in the range [0, D_0 - 1]. (is negative indexing supported?)
+ *
+ * - slices is a rank R+1 tensor with shape [N, D_1, ..., D_R], which represents
+ *   a total number of N tensors, each of shape [D_1, ..., D_R].
+ *
+ * The effect of this operation is as follows:
+ *
+ * output = container;
+ * For each i in 0, ..., N - 1
+ *    output[indices[i], :, ..., :] = slices[i, :, ..., :]
+ *
+ * The output is a rank R+1 tensor of shape [D_0, D_1, ..., D_R], same shape as the first input.
+ */
+
+message ScatterLayerParams {
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * Please refer https://docs.scipy.org/doc/numpy/reference/generated/numpy.stack.html
+ * Support negative indexing
+ *
+ */
+message StackNDLayerParams{
+    int64 axis = 1;
+}
+
+/**
+ * Reshape layer that does not alter the rank of the input.
+ * Order of the data is left unchanged.
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * e.g:
+ *
+ * input shape = (20,10)
+ * targetShape = (5,-1)
+ * output shape = (5,40)
+ *
+ * input shape = (20,10,5)
+ * targetShape = (0,2,25)
+ * output shape = (20,2,25)
+ *
+ * input shape = (10,3,5)
+ * targetShape = (25,0,-1)
+ * output shape = (25,3,2)
+ *
+ *
+ */
+message RankPreservingReshapeLayerParams {
+    /**
+     * Length of this field must be same as the input/output rank.
+     * It can have 0's, in which case the corresponding input dimension is kept intact.
+     * At most one element can be -1, in which case the output dimension is calculated from rest of the shape.
+     */
+    repeated int64 targetShape = 1;
+
+}
+
+/**
+ * Increase the rank of the input tensor by adding unit dimensions.
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * e.g.:
+ *
+ * input shape = (10,5)
+ * axes = (0,1)
+ * output shape = (1,1,10,5)
+ *
+ * input shape = (10,5)
+ * axes = (0,2)
+ * output shape = (1,10,1,5)
+ *
+ * input shape = (10,5)
+ * axes = (-2,-1)
+ * output shape = (10,5,1,1)
+ *
+ */
+message ExpandDimsLayerParams {
+    /**
+     * Axis values provided here get dimension 1 in the output tensor.
+     * Negative indexing is supported.
+     */
+    repeated int64 axes = 1;
+}
+
+/**
+ * Decrease the rank of the input tensor by removing unit dimensions.
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * e.g.:
+ *
+ * input shape = (1,1,10,5)
+ * axes = (0,1)
+ * output shape = (10,5)
+ *
+ * input shape = (1,10,5,1)
+ * axes = (0,3)
+ * output shape = (10,5)
+ *
+ * input shape = (10,5,1,1)
+ * axes = (-2,-1)
+ * output shape = (10,5)
+ *
+ */
+message SqueezeLayerParams {
+    /**
+     * Axis values provided here get removed from the input tensor.
+     * Negative indexing is supported.
+     */
+    repeated int64 axes = 1;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * Please refer https://www.tensorflow.org/api_docs/python/tf/split
+ * Support unequal splits and negative indexing
+ *
+ */
+message SplitNDLayerParams{
+
+    int64 axis = 1;
+
+    uint64 numSplits = 2;
+
+    repeated uint64 splitSizes = 3;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ *
+ *
+ */
+message CeilLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ *
+ *
+ */
+message FloorLayerParams{
+
+}
+
+/**
+ * Clip the input value within a minimum and maximum threshold values
+ *
+ * Requires 1 input and produces 1 output.
+ * Parameter minVal: the minimum threshold.
+ * Parameter maxVal: the maximum threshold.
+ *
+ * output =  min(max(input[0], input[1]), input[2])
+ */
+message ClipLayerParams{
+
+    float minVal = 1;
+    float maxVal = 2;
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * Please refer https://www.tensorflow.org/api_docs/python/tf/strided_slice
+ * Support negative indexing and negative strides
+ *
+ */
+message SliceNDLayerParams{
+
+    repeated int64 beginIds = 1;
+    repeated bool  beginMasks = 2;
+
+    repeated int64 endIds   = 3;
+    repeated bool  endMasks = 4;
+
+    repeated int64 strides = 5;
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * Please refer https://docs.scipy.org/doc/numpy/reference/generated/numpy.tile.html
+ *
+ *
+ */
+message TileLayerParams{
+
+    repeated uint64 reps = 1;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * Input: a tensor.
+ * Output: a vector of length R, where R is the rank of the input tensor
+ */
+message GetShapeLayerParams {
+
+}
+
+/**
+ * Error function (also known as Gauss error function)
+ *
+ * Requires 1 input and produces 1 output.
+ */
+message ErfActivationLayerParams {
+
+}
+
+/**
+ * Gaussian error linear unit activation, which is:
+ *
+ * y = 0.5 * x * (1 + erf(x/sqrt(2)))
+ *
+ * Requires 1 input and produces 1 output.
+ */
+message GeluActivationLayerParams {
+
+}
+
+/**
+ * Range function.
+ *
+ * Requires either no input, 1 input, 2 inputs, or 3 inputs and produces 1 output.
+ *
+ * The three inputs are in order: end, start, stepSize.
+ * Each input is a scalar, or rank 1 and shape (1,).
+
+ * When there are no inputs, all values of the parameters of the layer are used.
+ * When there are 1 input, end. Value of parameters startValue and stepSizeValue are used.
+ * When there are 2 inputs, end and start. Value of parameters stepSizeValue are used.
+ * When there are 3 inputs, end, start and stepSize. Nothing in parameters will be used.
+ * Produces a rank 1 output.
+ *
+ * Similar as np.arange() function.
+ */
+message RangeLayerParams {
+
+    float endValue = 1;
+    float startValue = 2;
+    float stepSizeValue = 3;
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * A layer that returns a tensor containing all windows of size "window_size"
+ * separated by "step" along the dimension "axis".
+ *
+ * .. code::
+ *
+ *      y = SlidingWindows(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     A N+1 dimensioal tensor
+ *
+ * This operation behaves as following:
+ *      - if axis = 0 & input is rank 1 (L,). Output shape will be (M, W).
+ *      - if axis = 1 & input is rank 3 (B1, L, C1). Output shape will be (B1, M, W, C1)
+ *      - if axis = 2 & input is rank 5 (B1, B2, L, C1, C2) --> (B1 * B2, L, C1 * C2) --> (B1 * B2, M, W, C1 * C2). Output shape will be (B1, B2, M, W, C1, C2)
+ *      - etc
+ * where
+ *      - L, C, B refer to input length, feature dimension length & batch size respectively
+ *      - W is the window size.
+ *      - M is the number of windows/slices calculated as M = (L - W) / step + 1
+ */
+message SlidingWindowsLayerParams {
+    int64 axis = 1;
+    uint64 windowSize = 2;
+    uint64 step = 3;
+}
+
 /// Neural Network Specializations
 /// ------------------------------
 
@@ -2535,6 +4036,14 @@ message CustomLayerParams {
 message NeuralNetworkClassifier {
     repeated NeuralNetworkLayer layers = 1;
     repeated NeuralNetworkPreprocessing preprocessing = 2;
+
+    // use this enum value to determine the input tensor shapes to the neural network, for multiarray inputs
+    NeuralNetworkMultiArrayShapeMapping arrayInputShapeMapping = 5;
+
+    // use this enum value to determine the input tensor shapes to the neural network, for image inputs
+    NeuralNetworkImageShapeMapping imageInputShapeMapping = 6;
+
+    NetworkUpdateParameters updateParams = 10;
 
     /**
      * Mapping from indexed vector of probabilities to class label
@@ -2558,4 +4067,84 @@ message NeuralNetworkRegressor {
     repeated NeuralNetworkLayer layers = 1;
     repeated NeuralNetworkPreprocessing preprocessing = 2;
 
+    // use this enum value to determine the input tensor shapes to the neural network, for multiarray inputs
+    NeuralNetworkMultiArrayShapeMapping arrayInputShapeMapping = 5;
+
+    // use this enum value to determine the input tensor shapes to the neural network, for image inputs
+    NeuralNetworkImageShapeMapping imageInputShapeMapping = 6;
+
+    NetworkUpdateParameters updateParams = 10;
+}
+
+
+/// On-device Training related messages
+/// ---------------------------------------------------------
+/*
+ * Details on how the network will be updated
+ */
+message NetworkUpdateParameters {
+    repeated LossLayer lossLayers = 1;
+    Optimizer optimizer = 2;
+    Int64Parameter epochs = 3;
+}
+
+/*
+ * Loss layer - cross entropy and mse are the only supported loss functions currently
+ */
+message LossLayer {
+    string name = 1;
+    oneof LossLayerType {
+        CrossEntropyLossLayer crossEntropyLossLayer = 10;
+        MSELossLayer mseLossLayer = 11;
+    }
+}
+
+/*
+ * Cross entropy loss layer,
+ * specifying input and target
+ */
+message CrossEntropyLossLayer {
+    string input = 1;
+    string target = 2;
+}
+
+/*
+ * Mean squared error loss layer,
+ * specifying input and target
+ */
+message MSELossLayer {
+    string input = 1;
+    string target = 2;
+}
+
+/*
+ * Optimizer - stochastic gradient descent and adam are the only supported optimizers currently
+ */
+message Optimizer {
+    oneof OptimizerType {
+        SGDOptimizer sgdOptimizer = 10;
+        AdamOptimizer adamOptimizer = 11;
+    }
+}
+
+/*
+ * Stochastic gradient descent optimizer,
+ * specifying configurable learning rate, mini batch size, and momentum
+ */
+message SGDOptimizer {
+    DoubleParameter learningRate = 1;
+    Int64Parameter miniBatchSize = 2;
+    DoubleParameter momentum = 3;
+}
+
+/*
+ * Adam optimizer,
+ * specifying configurable learning rate, mini batch size, betas, and eps
+ */
+message AdamOptimizer {
+    DoubleParameter learningRate = 1;
+    Int64Parameter miniBatchSize = 2;
+    DoubleParameter beta1 = 3;
+    DoubleParameter beta2 = 4;
+    DoubleParameter eps = 5;
 }

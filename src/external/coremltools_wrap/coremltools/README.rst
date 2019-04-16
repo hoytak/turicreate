@@ -58,6 +58,6 @@ License
 -------
 Copyright (c) 2018, Apple Inc. All rights reserved.
 
-Use of this source code is governed by the
+Use of this source code is governed by the 
 `3-Clause BSD License <https://opensource.org/licenses/BSD-3-Clause>`_
 that can be found in the LICENSE.txt file.

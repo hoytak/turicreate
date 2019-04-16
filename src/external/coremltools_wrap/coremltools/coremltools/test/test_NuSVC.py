@@ -77,7 +77,7 @@ class NuSvcScikitTest(unittest.TestCase):
                         df['prediction'] = cur_model.predict(x)
                         metrics = evaluate_classifier(spec, df, verbose=False)
                         self.assertEquals(metrics['num_errors'], 0)
-
+                
                 if not allow_slow:
                     break
 

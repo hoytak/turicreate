@@ -16,9 +16,9 @@ import sys, os
 from .optimization_utils import _optimize_nn
 
 from coremltools.models import (
-    _SUPPORTED_QUANTIZATION_MODES,
-    _QUANTIZATION_MODE_DEQUANTIZE,
-    _QUANTIZATION_MODE_LOOKUP_TABLE_LINEAR,
+    _SUPPORTED_QUANTIZATION_MODES, 
+    _QUANTIZATION_MODE_DEQUANTIZE, 
+    _QUANTIZATION_MODE_LOOKUP_TABLE_LINEAR, 
     _QUANTIZATION_MODE_LOOKUP_TABLE_KMEANS,
     _QUANTIZATION_MODE_CUSTOM_LOOKUP_TABLE,
     _QUANTIZATION_MODE_LINEAR_QUANTIZATION,
@@ -236,7 +236,7 @@ def _quantize_wp(wp, nbits, qm, axis=0, **kwargs):
     quantized_wp: numpy.array
         Quantized weight of same shape as wp, with dtype numpy.uint8
     """
-
+    
     scale = bias = lut = None
     # Linear Quantization
     if qm == _QUANTIZATION_MODE_LINEAR_QUANTIZATION:
@@ -353,7 +353,7 @@ def _dequantize_linear(weight_8bit, scale, bias, axis=0):
     if axis == 1:
         transposed_axis_order = (1,0) + tuple(range(2,rank))
         weight_8bit = _np.transpose(weight_8bit, transposed_axis_order)
-
+    
     num_channels = weight_8bit.shape[0]
     broadcast_shape = (num_channels, ) + (1,) * (rank - 1)
     scale = scale.reshape(broadcast_shape)
@@ -393,7 +393,7 @@ def _dequantize_wp(wp, shape, axis=0):
 
     weight_8bit = byte_arr if nbits == 8 else unpack_to_bytes(byte_arr, num_weights, nbits)
     weight_8bit = weight_8bit.reshape(shape)
-
+    
     if is_linear:
         scale = _np.array(wp.quantization.linearQuantization.scale)
         bias = _np.array(wp.quantization.linearQuantization.bias)
@@ -401,7 +401,7 @@ def _dequantize_wp(wp, shape, axis=0):
     else:
         lut = _np.array(wp.quantization.lookupTableQuantization.floatValue)
         dequantized_weight = _dequantize_lut(weight_8bit, lut)
-
+    
     wp.rawValue = bytes()
     wp.quantization.Clear()
     wp.floatValue.extend(dequantized_weight.flatten())

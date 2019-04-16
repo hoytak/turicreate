@@ -22,17 +22,17 @@ if HAS_SKLEARN:
     from sklearn.pipeline import Pipeline
     from sklearn.preprocessing import StandardScaler
     from sklearn.preprocessing import OneHotEncoder
-
+        
 
 @unittest.skipIf(not HAS_SKLEARN, 'Missing sklearn. Skipping tests.')
 class GradientBoostingRegressorBostonHousingScikitNumericTest(unittest.TestCase):
 
-    def test_boston_OHE_plus_normalizer(self):
+    def test_boston_OHE_plus_normalizer(self): 
 
         data = load_boston()
 
         pl = Pipeline([
-            ("OHE", OneHotEncoder(categorical_features = [8], sparse=False)),
+            ("OHE", OneHotEncoder(categorical_features = [8], sparse=False)), 
             ("Scaler",StandardScaler())])
 
         pl.fit(data.data, data.target)
@@ -46,13 +46,13 @@ class GradientBoostingRegressorBostonHousingScikitNumericTest(unittest.TestCase)
 
             result = evaluate_transformer(spec, input_data, output_data)
             assert result["num_errors"] == 0
-
-    def test_boston_OHE_plus_trees(self):
+    
+    def test_boston_OHE_plus_trees(self): 
 
         data = load_boston()
 
         pl = Pipeline([
-            ("OHE", OneHotEncoder(categorical_features = [8], sparse=False)),
+            ("OHE", OneHotEncoder(categorical_features = [8], sparse=False)), 
             ("Trees",GradientBoostingRegressor(random_state = 1))])
 
         pl.fit(data.data, data.target)
@@ -69,3 +69,5 @@ class GradientBoostingRegressorBostonHousingScikitNumericTest(unittest.TestCase)
             result = evaluate_regressor(spec, df, 'target', verbose = False)
 
             assert result["max_error"] < 0.0001
+
+    

@@ -9,7 +9,7 @@
 #include "MLModelTests.hpp"
 #include "../src/Format.hpp"
 #include "../src/Model.hpp"
-#include "../src/NeuralNetworkShapes.hpp"
+#include "../src/NeuralNetwork/NeuralNetworkShapes.hpp"
 
 #include "framework/TestUtils.hpp"
 
@@ -367,6 +367,28 @@ int testNNValidatorBadInputs() {
     ML_ASSERT_BAD(res);
 
     return 0;
+}
+
+// rdar://problem/44325863 Fuzzing creates a NN model with *no* layers. Guard against this.
+int testNNMissingLayer() {
+
+    Specification::Model m1;
+
+    auto *topIn = m1.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+
+    auto *out = m1.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+
+    Result res = validate<MLModelType_neuralNetwork>(m1);
+    ML_ASSERT_BAD(res);
+
+    return 0;
+
 }
 
 int testRNNLayer() {
@@ -1294,6 +1316,185 @@ int testValidUpsample() {
     return 0;
 }
 
+int testValidSoftmax() {
+
+    Specification::Model m1;
+
+    auto *topIn = m1.mutable_description()->add_input();
+    topIn->set_name("input");
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(5);
+    shape->add_shape(5);
+    shape->add_shape(5);
+
+    auto *out3 = m1.mutable_description()->add_output();
+    out3->set_name("probs");
+    out3->mutable_type()->mutable_multiarraytype();
+
+    const auto nn = m1.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+
+    Specification::NeuralNetworkLayer *layer = nn->add_layers();
+    layer->add_input("input");
+    layer->add_output("probs");
+    layer->add_inputtensor()->set_rank(3);
+    (void) layer->mutable_softmax();
+
+    Result res = validate<MLModelType_neuralNetwork>(m1);
+    ML_ASSERT_GOOD(res);
+    return 0;
+}
+
+int testInvalidSoftmax() {
+
+    Specification::Model m1;
+
+    auto *topIn = m1.mutable_description()->add_input();
+    topIn->set_name("input");
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(5);
+    shape->add_shape(5);
+
+    auto *out3 = m1.mutable_description()->add_output();
+    out3->set_name("probs");
+    out3->mutable_type()->mutable_multiarraytype();
+
+    const auto nn = m1.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    
+    Specification::NeuralNetworkLayer *layer = nn->add_layers();
+    layer->set_name("softmax");
+    layer->add_input("input");
+    layer->add_output("probs");
+    layer->add_inputtensor()->set_rank(2); // rank must be at least 3
+    (void) layer->mutable_softmax();
+
+    Result res = validate<MLModelType_neuralNetwork>(m1);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidSoftmax2() {
+    
+    Specification::Model m1;
+    
+    auto *topIn = m1.mutable_description()->add_input();
+    topIn->set_name("input");
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    // rank must be at least length 3
+    shape->add_shape(5);
+    shape->add_shape(5);
+    
+    auto *out3 = m1.mutable_description()->add_output();
+    out3->set_name("probs");
+    out3->mutable_type()->mutable_multiarraytype();
+    
+    const auto nn = m1.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    
+    Specification::NeuralNetworkLayer *layer = nn->add_layers();
+    layer->set_name("softmax");
+    layer->add_input("input");
+    layer->add_output("probs");
+    (void) layer->mutable_softmax();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m1);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testValidReduce() {
+
+    Specification::Model m1;
+
+    auto *topIn = m1.mutable_description()->add_input();
+    topIn->set_name("input");
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(5);
+    shape->add_shape(5);
+    shape->add_shape(5);
+
+    auto *out3 = m1.mutable_description()->add_output();
+    out3->set_name("probs");
+    out3->mutable_type()->mutable_multiarraytype();
+
+    const auto nn = m1.mutable_neuralnetwork();
+
+    Specification::NeuralNetworkLayer *layer = nn->add_layers();
+    layer->set_name("reduce");
+    layer->add_input("input");
+    layer->add_output("probs");
+    layer->add_inputtensor()->set_rank(3);
+    auto params = layer->mutable_reduce();
+    params->set_mode(Specification::ReduceLayerParams::SUM);
+    params->set_axis(Specification::ReduceLayerParams::CHW);
+
+    Result res = validate<MLModelType_neuralNetwork>(m1);
+    ML_ASSERT_GOOD(res);
+    return 0;
+}
+
+int testInvalidReduce() {
+
+    Specification::Model m1;
+
+    auto *topIn = m1.mutable_description()->add_input();
+    topIn->set_name("input");
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(5);
+    shape->add_shape(5);
+
+    auto *out3 = m1.mutable_description()->add_output();
+    out3->set_name("probs");
+    out3->mutable_type()->mutable_multiarraytype();
+
+    const auto nn = m1.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+
+    Specification::NeuralNetworkLayer *layer = nn->add_layers();
+    layer->set_name("reduce");
+    layer->add_input("input");
+    layer->add_output("probs");
+    layer->add_inputtensor()->set_rank(2);
+    auto params = layer->mutable_reduce();
+    params->set_mode(Specification::ReduceLayerParams::SUM);
+    params->set_axis(Specification::ReduceLayerParams::CHW); // rank must be at least 3
+
+    Result res = validate<MLModelType_neuralNetwork>(m1);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidRank() {
+
+    Specification::Model m1;
+
+    auto *topIn = m1.mutable_description()->add_input();
+    topIn->set_name("input");
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(5);
+    shape->add_shape(5);
+    shape->add_shape(5);
+
+    auto *out3 = m1.mutable_description()->add_output();
+    out3->set_name("probs");
+    out3->mutable_type()->mutable_multiarraytype();
+
+    const auto nn = m1.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+
+    Specification::NeuralNetworkLayer *layer = nn->add_layers();
+    layer->set_name("softmax");
+    layer->add_input("input");
+    layer->add_output("probs");
+    layer->add_inputtensor()->set_rank(2); // this is incorrect, rank must be 3 since shape is (5,5,5)
+    (void) layer->mutable_softmax();
+
+    Result res = validate<MLModelType_neuralNetwork>(m1);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
 int testValidScale() {
 
     Specification::Model m1;
@@ -1875,7 +2076,7 @@ int testInvalidCustomNoName() {
     auto *params = layer->mutable_custom();
 
     // No name, should be invalids
-//    params->set_classname("CustomClassName");
+    //    params->set_classname("CustomClassName");
 
     auto *weights = params->add_weights();
     weights->set_float16value("somebitshere");
@@ -2061,6 +2262,36 @@ int testSpecDowngradeFlexibleShapes() {
 
 }
 
+int testValidTransposeND() {
+
+    Specification::Model m1;
+
+    auto *topIn = m1.mutable_description()->add_input();
+    topIn->set_name("input");
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(5);
+    shape->add_shape(5);
+
+    auto *out3 = m1.mutable_description()->add_output();
+    out3->set_name("probs");
+    out3->mutable_type()->mutable_multiarraytype();
+
+    const auto nn = m1.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+
+    Specification::NeuralNetworkLayer *layer = nn->add_layers();
+    layer->add_input("input");
+    layer->add_output("probs");
+    layer->add_inputtensor()->set_rank(2);
+    layer->add_outputtensor()->set_rank(2);
+    auto* params = layer->mutable_transposend();
+    params->add_axes(1);
+    params->add_axes(0);
+    Result res = validate<MLModelType_neuralNetwork>(m1);
+    ML_ASSERT_GOOD(res);
+    return 0;
+}
+
 
 int testSpecDowngradeFlexibleShapes2() {
 
@@ -2099,7 +2330,758 @@ int testSpecDowngradeFlexibleShapes2() {
 
 }
 
+int testValidBranch() {
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    // "If" net
+    Specification::NeuralNetwork nnIf;
+    auto *l1 = nnIf.add_layers();
+    (void)l1->mutable_activation()->mutable_relu();
+    l1->set_name("if_relu");
+    l1->add_input("A");
+    l1->add_output("B");
+    
+    // "else" net
+    Specification::NeuralNetwork nnElse;
+    auto *l2 = nnElse.add_layers();
+    (void)l2->mutable_activation()->mutable_relu();
+    l2->set_name("else_relu");
+    l2->add_input("A");
+    l2->add_output("B");
+    
+    // Main network
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l3 = nnMain->add_layers();
+    (void)l3->mutable_activation()->mutable_relu();
+    l3->set_name("condition_producing_layer");
+    l3->add_input("A");
+    l3->add_output("cond");
+    
+    auto *l4 = nnMain->add_layers();
+    auto *branch_layer = l4->mutable_branch();
+    l4->set_name("branch_layer");
+    l4->add_input("cond");
+    branch_layer->mutable_ifbranch()->CopyFrom(nnIf);
+    branch_layer->mutable_elsebranch()->CopyFrom(nnElse);
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_GOOD(res);
+    return 0;
+}
 
+int testInvalidBranchOutputNotProduced1() {
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    // "If" net
+    Specification::NeuralNetwork nnIf;
+    auto *l1 = nnIf.add_layers();
+    (void)l1->mutable_activation()->mutable_relu();
+    l1->set_name("if_relu");
+    l1->add_input("A");
+    l1->add_output("B");
+    
+    // "else" net
+    Specification::NeuralNetwork nnElse;
+    auto *l2 = nnElse.add_layers();
+    (void)l2->mutable_activation()->mutable_relu();
+    l2->set_name("else_relu");
+    l2->add_input("A");
+    l2->add_output("B2");
+    
+    // Main network
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l3 = nnMain->add_layers();
+    (void)l3->mutable_activation()->mutable_relu();
+    l3->set_name("condition_producing_layer");
+    l3->add_input("A");
+    l3->add_output("cond");
+    
+    auto *l4 = nnMain->add_layers();
+    auto *branch_layer = l4->mutable_branch();
+    l4->set_name("branch_layer");
+    l4->add_input("cond");
+    branch_layer->mutable_ifbranch()->CopyFrom(nnIf);
+    branch_layer->mutable_elsebranch()->CopyFrom(nnElse);
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
 
+int testInvalidBranchOutputNotProduced2() {
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    // "If" net
+    Specification::NeuralNetwork nnIf;
+    auto *l1 = nnIf.add_layers();
+    (void)l1->mutable_activation()->mutable_relu();
+    l1->set_name("if_relu");
+    l1->add_input("A");
+    l1->add_output("B");
+    
+    // Main network
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l3 = nnMain->add_layers();
+    (void)l3->mutable_activation()->mutable_relu();
+    l3->set_name("condition_producing_layer");
+    l3->add_input("A");
+    l3->add_output("cond");
+    
+    auto *l4 = nnMain->add_layers();
+    auto *branch_layer = l4->mutable_branch();
+    l4->set_name("branch_layer");
+    l4->add_input("cond");
+    branch_layer->mutable_ifbranch()->CopyFrom(nnIf);
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidBranchBlobOverwrite() {
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    // "If" net
+    Specification::NeuralNetwork nnIf;
+    auto *l1 = nnIf.add_layers();
+    (void)l1->mutable_activation()->mutable_relu();
+    l1->set_name("if_relu");
+    l1->add_input("A");
+    l1->add_output("cond");
+    
+    // "else" net
+    Specification::NeuralNetwork nnElse;
+    auto *l2 = nnElse.add_layers();
+    (void)l2->mutable_activation()->mutable_relu();
+    l2->set_name("else_relu");
+    l2->add_input("A");
+    l2->add_output("B");
+    
+    // Main network
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l3 = nnMain->add_layers();
+    (void)l3->mutable_activation()->mutable_relu();
+    l3->set_name("condition_producing_layer");
+    l3->add_input("A");
+    l3->add_output("cond");
+    
+    auto *l4 = nnMain->add_layers();
+    auto *branch_layer = l4->mutable_branch();
+    l4->set_name("branch_layer");
+    l4->add_input("cond");
+    branch_layer->mutable_ifbranch()->CopyFrom(nnIf);
+    branch_layer->mutable_elsebranch()->CopyFrom(nnElse);
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidCopy() {
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    auto *nn = m.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l = nn->add_layers();
+    (void)l->mutable_copy();
+    l->set_name("copy");
+    l->add_input("A");
+    l->add_output("A");
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidLoop1() {
+    /*
+     no input, no condition network, 0 max loop
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    
+    Specification::NeuralNetwork nnBody;
+    auto *l1 = nnBody.add_layers();
+    (void)l1->mutable_activation()->mutable_relu();
+    l1->set_name("relu");
+    l1->add_input("A");
+    l1->add_output("B");
+    
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l2 = nnMain->add_layers();
+    l2->set_name("for_loop");
+    auto *loop_params = l2->mutable_loop();
+    loop_params->mutable_bodynetwork()->CopyFrom(nnBody);
+    
+    auto *l3 = nnMain->add_layers();
+    l3->set_name("copy");
+    l3->add_input("A");
+    l3->add_output("B");
+    (void) l3->mutable_copy();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidLoop2() {
+    /*
+     condition network present but no condition variable
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    Specification::NeuralNetwork nnCondition;
+    auto *l1 = nnCondition.add_layers();
+    l1->mutable_greaterthan()->set_alpha(1.0);
+    l1->set_name("cond");
+    l1->add_input("A");
+    l1->add_output("cond");
+    
+    Specification::NeuralNetwork nnBody;
+    auto *l2 = nnBody.add_layers();
+    (void)l2->mutable_activation()->mutable_relu();
+    l2->set_name("relu");
+    l2->add_input("A");
+    l2->add_output("B");
+    
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l3 = nnMain->add_layers();
+    l3->set_name("for_loop");
+    auto *loop_params = l3->mutable_loop();
+    loop_params->mutable_bodynetwork()->CopyFrom(nnBody);
+    loop_params->mutable_conditionnetwork()->CopyFrom(nnCondition);
+    
+    auto *l4 = nnMain->add_layers();
+    l4->set_name("copy");
+    l4->add_input("A");
+    l4->add_output("B");
+    (void) l4->mutable_copy();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidLoop3() {
+    /*
+     condition variable present but no condition network
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    Specification::NeuralNetwork nnBody;
+    
+    auto *l2 = nnBody.add_layers();
+    (void)l2->mutable_activation()->mutable_relu();
+    l2->set_name("relu");
+    l2->add_input("A");
+    l2->add_output("B");
+    
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l3 = nnMain->add_layers();
+    l3->set_name("for_loop");
+    auto *loop_params = l3->mutable_loop();
+    loop_params->mutable_bodynetwork()->CopyFrom(nnBody);
+    loop_params->set_conditionvar("cond");
+    
+    auto *l4 = nnMain->add_layers();
+    l4->set_name("copy");
+    l4->add_input("A");
+    l4->add_output("B");
+    (void) l4->mutable_copy();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidLoop4() {
+    /*
+     condition network present, condition variable present, but condition var not in condition network
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    Specification::NeuralNetwork nnCondition;
+    auto *l1 = nnCondition.add_layers();
+    l1->mutable_greaterthan()->set_alpha(1.0);
+    l1->set_name("cond2");
+    l1->add_input("A");
+    l1->add_output("cond2");
+    
+    Specification::NeuralNetwork nnBody;
+    auto *l2 = nnBody.add_layers();
+    (void)l2->mutable_activation()->mutable_relu();
+    l2->set_name("relu");
+    l2->add_input("A");
+    l2->add_output("B");
+    
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    
+    auto *l3 = nnMain->add_layers();
+    l3->set_name("for_loop");
+    auto *loop_params = l3->mutable_loop();
+    loop_params->mutable_bodynetwork()->CopyFrom(nnBody);
+    loop_params->mutable_conditionnetwork()->CopyFrom(nnCondition);
+    loop_params->set_conditionvar("cond");
+    
+    auto *l4 = nnMain->add_layers();
+    l4->set_name("copy");
+    l4->add_input("A");
+    l4->add_output("B");
+    (void) l4->mutable_copy();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidLoop5() {
+    /*
+     output blob not generated outside the loop
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    Specification::NeuralNetwork nnCondition;
+    auto *l1 = nnCondition.add_layers();
+    l1->mutable_greaterthan()->set_alpha(1.0);
+    l1->set_name("cond");
+    l1->add_input("A");
+    l1->add_output("cond");
+    
+    Specification::NeuralNetwork nnBody;
+    auto *l2 = nnBody.add_layers();
+    (void)l2->mutable_activation()->mutable_relu();
+    l2->set_name("relu");
+    l2->add_input("A");
+    l2->add_output("B");
+    
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    
+    auto *l3 = nnMain->add_layers();
+    l3->set_name("for_loop");
+    auto *loop_params = l3->mutable_loop();
+    loop_params->mutable_bodynetwork()->CopyFrom(nnBody);
+    loop_params->mutable_conditionnetwork()->CopyFrom(nnCondition);
+    loop_params->set_conditionvar("cond");
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidLoopBreak() {
+    /*
+     loop break layer not inside a loop
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    
+    auto *l1 = nnMain->add_layers();
+    l1->set_name("copy");
+    l1->add_input("A");
+    l1->add_output("B");
+    (void) l1->mutable_copy();
+    
+    auto *l2 = nnMain->add_layers();
+    l2->set_name("break");
+    (void) l2->mutable_loopbreak();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidLoopContinue() {
+    /*
+     loop continue layer not inside a loop
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    auto *nnMain = m.mutable_neuralnetwork();
+    nnMain->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    
+    auto *l1 = nnMain->add_layers();
+    l1->set_name("copy");
+    l1->add_input("A");
+    l1->add_output("B");
+    (void) l1->mutable_copy();
+    
+    auto *l2 = nnMain->add_layers();
+    l2->set_name("continue");
+    (void) l2->mutable_loopcontinue();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidRankInconsistency() {
+    /*
+     A -> relu1 -> B -> relu2 -> C
+     rank of B when output of relu1 : 1
+     rank of B when input of relu2: 2 (makes the model invalid)
+     */
+    
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("C");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    auto *nn = m.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    
+    auto *l = nn->add_layers();
+    (void)l->mutable_activation()->mutable_relu();
+    l->set_name("relu1");
+    l->add_input("A");
+    l->add_output("B");
+    l->add_outputtensor()->set_rank(1);
+    
+    auto *l2 = nn->add_layers();
+    (void)l2->mutable_activation()->mutable_relu();
+    l2->set_name("relu2");
+    l2->add_input("B");
+    l2->add_output("C");
+    l2->add_inputtensor()->set_rank(2);
+    
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidExpandDims1() {
+    /*
+     A -> expand dims -> B
+     shape of A: (2)
+     shape of B: (2, 1, 1)
+     axes parameter = [-1]
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(2);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    auto *shape_out = out->mutable_type()->mutable_multiarraytype();
+    shape_out->add_shape(2);
+    shape_out->add_shape(1);
+    shape_out->add_shape(1);
+    
+    auto *nn = m.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    
+    auto *l = nn->add_layers();
+    l->set_name("ED");
+    l->add_input("A");
+    l->add_output("B");
+    l->add_inputtensor()->set_rank(1);
+    l->add_outputtensor()->set_rank(3);
+    auto *params = l->mutable_expanddims();
+    params->add_axes(-1);
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidExpandDims2() {
+    /*
+     A -> expand dims -> B
+     shape of A: (2)
+     shape of B: (2, 1, 1)
+     axes parameter = [2,-4]
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(2);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    auto *shape_out = out->mutable_type()->mutable_multiarraytype();
+    shape_out->add_shape(2);
+    shape_out->add_shape(1);
+    shape_out->add_shape(1);
+    
+    auto *nn = m.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l = nn->add_layers();
+    l->set_name("ED");
+    l->add_input("A");
+    l->add_output("B");
+    l->add_inputtensor()->set_rank(1);
+    l->add_outputtensor()->set_rank(3);
+    auto *params = l->mutable_expanddims();
+    params->add_axes(2);
+    params->add_axes(-4);
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidSqueeze1() {
+    /*
+     A -> expand dims -> B
+     shape of A: (2, 1, 1)
+     shape of B: (2)
+     axes parameter = [1,1]
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(2);
+    shape->add_shape(1);
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    auto *shape_out = out->mutable_type()->mutable_multiarraytype();
+    shape_out->add_shape(2);
+    
+    auto *nn = m.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l = nn->add_layers();
+    l->set_name("squeeze");
+    l->add_input("A");
+    l->add_output("B");
+    l->add_inputtensor()->set_rank(3);
+    l->add_outputtensor()->set_rank(1);
+    auto *params = l->mutable_squeeze();
+    params->add_axes(1);
+    params->add_axes(1);
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidPoolingRank1() {
+    /*
+     A -> pooling -> B
+     invalid since the rank of the input is 3, in the proto, whereas it should be at least 4.
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(2);
+    shape->add_shape(1);
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    auto *nn = m.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l = nn->add_layers();
+    l->set_name("pool_layer");
+    l->add_input("A");
+    l->add_output("B");
+    l->add_inputtensor()->set_rank(3);
+    auto *params = l->mutable_pooling();
+    params->set_type(::Specification::PoolingLayerParams::AVERAGE);
+    params->set_globalpooling(true);
+    params->mutable_valid();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidPoolingRank2() {
+    /*
+     A -> pooling -> B
+     invalid since the rank of the input and output is not same, in the proto
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    shape->add_shape(2);
+    shape->add_shape(1);
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    auto *nn = m.mutable_neuralnetwork();
+    nn->set_arrayinputshapemapping(Specification::NeuralNetworkMultiArrayShapeMapping::EXACT_ARRAY_MAPPING);
+    auto *l = nn->add_layers();
+    l->set_name("pool_layer");
+    l->add_input("A");
+    l->add_output("B");
+    l->add_inputtensor()->set_rank(4);
+    l->add_outputtensor()->set_rank(5);
+    auto *params = l->mutable_pooling();
+    params->set_type(::Specification::PoolingLayerParams::AVERAGE);
+    params->set_globalpooling(true);
+    params->mutable_valid();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
+
+int testInvalidIOS13LayerOldRank() {
+    /*
+     a new layer, added in iOS 13 is used along with the old rank 5 mapping: not allowed.
+     */
+    Specification::Model m;
+    auto *topIn = m.mutable_description()->add_input();
+    topIn->set_name("A");
+    topIn->mutable_type()->mutable_multiarraytype();
+    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
+    shape->add_shape(1);
+    shape->add_shape(2);
+    shape->add_shape(1);
+    shape->add_shape(1);
+    
+    auto *out = m.mutable_description()->add_output();
+    out->set_name("B");
+    out->mutable_type()->mutable_multiarraytype();
+    
+    auto *nn = m.mutable_neuralnetwork();
+   
+    auto *l = nn->add_layers();
+    l->set_name("erf");
+    l->add_input("A");
+    l->add_output("B");
+    l->mutable_erfactivation();
+    
+    Result res = validate<MLModelType_neuralNetwork>(m);
+    ML_ASSERT_BAD(res);
+    return 0;
+}
 
 #pragma clang diagnostic pop

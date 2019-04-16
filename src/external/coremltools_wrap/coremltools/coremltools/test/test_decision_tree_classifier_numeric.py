@@ -26,12 +26,12 @@ class DecisionTreeClassificationBostonHousingScikitNumericTest(unittest.TestCase
 
         # Convert the model
         spec = skl_converter.convert(scikit_model, self.feature_names, self.output_name)
-
+        
         if macos_version() >= (10, 13):
             # Get predictions
             df = pd.DataFrame(self.X, columns=self.feature_names)
             df['prediction'] = scikit_model.predict(self.X)
-
+            
             # Evaluate it
             metrics = evaluate_classifier(spec, df)
             self._check_metrics(metrics, scikit_params)
@@ -55,7 +55,7 @@ class DecisionTreeBinaryClassificationBostonHousingScikitNumericTest(
 
     def test_simple_binary_classifier(self):
         self._train_convert_evaluate_assert()
-
+    
     @pytest.mark.slow
     def test_binary_classifier_stress_test(self):
         options = dict(

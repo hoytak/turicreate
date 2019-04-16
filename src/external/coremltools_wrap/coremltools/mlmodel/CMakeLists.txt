@@ -38,6 +38,9 @@ add_library(mlmodel_test
     tests/BayesianProbitRegressionValidatorTests.cpp
     tests/NNShapeTests.cpp
     tests/NNShaperTest.cpp
+    tests/KNNValidatorTests.cpp
+    tests/UpdatableModelValidatorTests.cpp
+    tests/ParameterTests.cpp
 )
 
 set_property(TARGET mlmodel_test
@@ -73,6 +76,7 @@ add_library(mlmodel
     build/format/GLMRegressor.pb.cc
     build/format/Identity.pb.cc
     build/format/Imputer.pb.cc
+    build/format/KNearestNeighborsClassifier.pb.cc
     build/format/Model.pb.cc
     build/format/NeuralNetwork.pb.cc
     build/format/NonMaximumSuppression.pb.cc
@@ -84,7 +88,9 @@ add_library(mlmodel
     build/format/TextClassifier.pb.cc
     build/format/VisionFeaturePrint.pb.cc
     build/format/WordTagger.pb.cc
-
+    build/format/Parameters.pb.cc
+    build/format/ItemSimilarityRecommender.pb.cc
+    build/format/SoundAnalysisPreprocessing.pb.cc
 
     src/Comparison.cpp
     src/DataType.cpp
@@ -102,7 +108,8 @@ add_library(mlmodel
     src/ImputerValidator.cpp
     src/InterfaceValidators.cpp
     src/LinearModelValidator.cpp
-    src/NeuralNetworkValidator.cpp
+    src/NeuralNetwork/NeuralNetworkValidator.cpp
+    src/NeuralNetwork/NeuralNetworkLayerValidator.cpp
     src/NonMaximumSuppressionValidator.cpp
     src/NormalizerValidator.cpp
     src/OneHotEncoderValidator.cpp
@@ -114,7 +121,10 @@ add_library(mlmodel
     src/VisionFeaturePrintValidator.cpp
     src/WordTaggerValidator.cpp
     src/QuantizationValidationUtils.cpp
-
+    src/KNearestNeighborsClassifierValidator.cpp
+    src/ParameterValidator.cpp
+    src/ItemSimilarityRecommenderValidator.cpp
+    src/ItemSimilarityRecommenderCommon.cpp
     src/TreeEnsembleCommon.cpp
 
     src/transforms/LinearModel.cpp
@@ -124,9 +134,11 @@ add_library(mlmodel
     src/transforms/FeatureVectorizer.cpp
     src/transforms/DictVectorizer.cpp
     src/transforms/OneHotEncoder.cpp
+    src/transforms/ItemSimilarityRecommender.cpp
 
     src/LayerShapeConstraints.cpp
-    src/NeuralNetworkShapes.cpp
+    src/NeuralNetwork/NeuralNetworkShapes.cpp
+    src/NeuralNetwork/UpdatableNeuralNetworkValidator.cpp
     src/QuantizationValidationUtils.cpp
 )
 
@@ -169,6 +181,7 @@ add_custom_target(protosrc
         format/GLMRegressor.proto
         format/Identity.proto
         format/Imputer.proto
+        format/KNearestNeighborsClassifier.proto
         format/Model.proto
         format/NeuralNetwork.proto
         format/NonMaximumSuppression.proto
@@ -180,4 +193,7 @@ add_custom_target(protosrc
         format/TreeEnsemble.proto
         format/VisionFeaturePrint.proto
         format/WordTagger.proto
+        format/Parameters.proto
+        format/ItemSimilarityRecommender.proto
 )
+

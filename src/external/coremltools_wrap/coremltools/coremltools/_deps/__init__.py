@@ -66,7 +66,7 @@ try:
     import sys
     if six.PY2:
         import StringIO
-        temp = StringIO.StringIO()
+        temp = StringIO.StringIO()        
     else:
         import io
         temp = io.StringIO()
@@ -85,7 +85,7 @@ try:
 
     tf_ver = __get_version(tensorflow.__version__)
     k_ver = __get_version(keras.__version__)
-
+    
     # keras 1 version too old
     if k_ver < _StrictVersion(KERAS_MIN_VERSION):
         HAS_KERAS_TF = False

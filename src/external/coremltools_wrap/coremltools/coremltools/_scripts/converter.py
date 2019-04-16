@@ -62,7 +62,7 @@ def _convert(args):
                 model = (args.kerasJsonPath, args.srcModelPath)
             else:
                 model = args.srcModelPath
-
+            
             model = converters.keras.convert(model,
                                     args.inputNames,
                                     args.outputNames,
@@ -109,3 +109,4 @@ def _main():
     args = parser.parse_args()
     ret = _convert(args)
     _sys.exit(int(ret)) # cast to int or else the exit code is always 1
+

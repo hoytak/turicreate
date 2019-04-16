@@ -153,7 +153,7 @@ class NuSVRLibSVMTest(unittest.TestCase):
     def test_evaluation(self):
         self._test_evaluation(allow_slow = False)
 
-
+  
     def _test_evaluation(self, allow_slow):
         """
         Test that the same predictions are made
@@ -201,3 +201,4 @@ class NuSVRLibSVMTest(unittest.TestCase):
 
             if not allow_slow:
                 break
+
