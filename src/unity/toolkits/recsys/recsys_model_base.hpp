@@ -336,7 +336,7 @@ public:
 
   std::shared_ptr<unity_sframe_base> get_num_items_per_user_extension_wrapper() const; 
 
-  virtual std::shared_ptr<coreml::MLModelWrapper> export_to_coreml(const std::string& filename);
+  virtual std::shared_ptr<coreml::MLModelWrapper> export_to_coreml(const std::string& filename, bool);
 
   variant_map_type summary();
 
