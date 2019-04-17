@@ -399,7 +399,10 @@ public:
   /// constructor
   worker_pool(size_t num_workers,
               std::vector<std::string> worker_binary_and_args,
-              int connection_timeout = 3) {
+              int connection_timeout = -1) {
+    if(connection_timeout <= 0) {
+      connection_timeout = int(std::ceil(LAMBDA_WORKER_CONNECTION_TIMEOUT));
+    }
     m_connection_timeout = connection_timeout;
     m_worker_binary_and_args = worker_binary_and_args;
     m_num_workers = 0;

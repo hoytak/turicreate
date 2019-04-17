@@ -56,8 +56,45 @@ def setup_environment(info_log_function = None, error_log_function = None):
     os.environ["OPENBLAS_NUM_THREADS"] = "1"
     os.environ["MKL_NUM_THREADS"] = "1"
     os.environ["MKL_DOMAIN_NUM_THREADS"] = "1"
-    os.environ["NUMBA_NUM_THREADS"] = "1"
+    #os.environ["NUMBA_NUM_THREADS"] = "1"
 
+    # Do some numba configuration things:
+    import numba
+    
+    print(">>>>>>>>>>>>>  Imported <<<<<<<<<<<<<<<<< ")
+
+    #os.environ["NUMBA_FUNCTION_CACHE_SIZE"] = "0"
+   
+    @numba.jit
+    def _alt_sum(x):            
+        return x[0]
+
+    if 0:
+        @numba.jit
+        def _alt_sum(x):
+            _sum = 0
+            for i in x:
+                _sum += i
+
+            return _sum
+    
+    print(">>>>>>>>>>>>>  Compiled <<<<<<<<<<<<<<<<< ")
+
+
+    import numpy
+    x = _alt_sum(numpy.random.normal(size = 10))
+    
+    print(">>>>>>>>>>>>>  Executed <<<<<<<<<<<<<<<<< ")
+    print("x = ", x)
+   
+
+    print("ATTACH TO ", os.getpid())
+
+    import time
+    # time.sleep(10)
+
+    print(">>>>>>>>>>>>>  Continuing <<<<<<<<<<<<<<<<< ")
+ 
 
     ########################################
     # Now, import thnigs

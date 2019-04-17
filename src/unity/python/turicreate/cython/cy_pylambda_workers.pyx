@@ -41,7 +41,10 @@ cdef extern from "<sframe/sframe_rows.hpp>" namespace "turi":
         size_t num_columns()
         size_t num_rows()
 
-
+# For fast checking of, e.g. numpy buffers or the like
+cdef extern from "Python.h":
+    void PyEval_ReInitThreads()
+ 
 cdef extern from "<lambda/pylambda.hpp>" namespace "turi::lambda":
 
     cdef struct lambda_call_data:
@@ -134,6 +137,9 @@ cdef class lambda_evaluator(object):
             self.lambda_function = py_pickle.loads(self.lambda_string)
 
         self.output_buffer = []
+        
+        PyEval_ReInitThreads();
+
 
     @cython.boundscheck(False)
     cdef _set_dict_keys(self, const vector[string]* input_keys):
