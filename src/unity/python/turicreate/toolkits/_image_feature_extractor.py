@@ -196,8 +196,9 @@ class MXFeatureExtractor(ImageFeatureExtractor):
         model: MLModel
             Return the underlying model.
         """
-        from ._mxnet._mxnet_to_coreml import _mxnet_converter
         import mxnet as _mx
+        from ._mxnet import _mxnet_utils
+        from ._mxnet._mxnet_to_coreml import _mxnet_converter
 
         (sym, arg_params, aux_params) = self.ptModel.mxmodel
         fe_mxmodel = self.ptModel.mxmodel
