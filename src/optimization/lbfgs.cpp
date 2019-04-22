@@ -260,7 +260,7 @@ RECOMPUTE_AT_NEW_POINT:;
   //    inbetween with a better solution than the new one.  In that case, see if that better
   //    point is sufficiently different than the current one.
   //
-  if (current_iteration >= 2
+  if (current_iteration >= 1
       && ( (previous_function_value > function_value && recompute_count < 3)
           || recompute_count == 0)) {
     // Is the projection of the gradient on the line from the previous point
@@ -329,10 +329,11 @@ RECOMPUTE_AT_NEW_POINT:;
   }
 
   if (current_iteration == 0) {
-    // Initialize with a line search
+    // Initialize with a line search.  Do at max 4 at the first stage to get 
+    // this going; otherwise, default to 1 
     ls_return lsm_status =
         more_thuente(*model, m_status.step_size, function_value, point,
-                     gradient, -gradient, function_scaling_factor, reg);
+                     gradient, -gradient, function_scaling_factor, reg, 4);
 
     m_status.step_size = lsm_status.step_size;
 
@@ -342,8 +343,9 @@ RECOMPUTE_AT_NEW_POINT:;
 
     // Line search failed
     if (lsm_status.status == false) {
-      fill_current_status(OPTIMIZATION_STATUS::OPT_LS_FAILURE);
-      return true;
+      // In this case, set it to a reasonable default and then possibly backtrack 
+      // using the bisection code above if this fails.
+      m_status.step_size = 1; 
     }
 
     // Store this delta for use in the next iteration of the algorithm
@@ -405,15 +407,14 @@ RECOMPUTE_AT_NEW_POINT:;
         || force_step_size_recompute 
         || (std::pow(gradient.dot(previous_gradient), 2)
             > 0.9 * gradient.squaredNorm() * previous_gradient.squaredNorm())) {
-      // Reset the step size.
+      // Reset the step size; make a maximum of four passes through the data.  
       ls_return lsm_status =
           more_thuente(*model, m_status.step_size, function_value, point,
-                       gradient, -q, function_scaling_factor, reg);
+                       gradient, -q, function_scaling_factor, reg, 4);
 
       // Line search failed
       if (lsm_status.status == false) {
-        fill_current_status(OPTIMIZATION_STATUS::OPT_LS_FAILURE);
-        return true;
+        m_status.step_size = 1;
       }
 
       m_status.step_size = lsm_status.step_size;

@@ -497,8 +497,7 @@ inline ls_return more_thuente(
 
       // Step is smaller than LS_ZERO
       if ((stp <= LS_ZERO) && ((f > ftest) || (dg >= wolfe_func_dec))){
-        logprogress_stream << "Error: Reached min step size."
-                           << " Cannot proceed anymore."
+        logprogress_stream << "Warning: Reached min step size."
                            << std::endl;
         stats.step_size = stp;
         stats.status = false;
