@@ -36,7 +36,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='NeuralNetwork.proto',
   package='CoreML.Specification',
   syntax='proto3',
-  serialized_pb=_b('\n\x13NeuralNetwork.proto\x12\x14\x43oreML.Specification\x1a\x14\x44\x61taStructures.proto\x1a\x10Parameters.proto\"\x88\x03\n\rNeuralNetwork\x12\x38\n\x06layers\x18\x01 \x03(\x0b\x32(.CoreML.Specification.NeuralNetworkLayer\x12G\n\rpreprocessing\x18\x02 \x03(\x0b\x32\x30.CoreML.Specification.NeuralNetworkPreprocessing\x12Y\n\x16\x61rrayInputShapeMapping\x18\x05 \x01(\x0e\x32\x39.CoreML.Specification.NeuralNetworkMultiArrayShapeMapping\x12T\n\x16imageInputShapeMapping\x18\x06 \x01(\x0e\x32\x34.CoreML.Specification.NeuralNetworkImageShapeMapping\x12\x43\n\x0cupdateParams\x18\n \x01(\x0b\x32-.CoreML.Specification.NetworkUpdateParameters\"x\n\x18NeuralNetworkImageScaler\x12\x14\n\x0c\x63hannelScale\x18\n \x01(\x02\x12\x10\n\x08\x62lueBias\x18\x14 \x01(\x02\x12\x11\n\tgreenBias\x18\x15 \x01(\x02\x12\x0f\n\x07redBias\x18\x16 \x01(\x02\x12\x10\n\x08grayBias\x18\x1e \x01(\x02\"+\n\x16NeuralNetworkMeanImage\x12\x11\n\tmeanImage\x18\x01 \x03(\x02\"\xc6\x01\n\x1aNeuralNetworkPreprocessing\x12\x13\n\x0b\x66\x65\x61tureName\x18\x01 \x01(\t\x12@\n\x06scaler\x18\n \x01(\x0b\x32..CoreML.Specification.NeuralNetworkImageScalerH\x00\x12\x41\n\tmeanImage\x18\x0b \x01(\x0b\x32,.CoreML.Specification.NeuralNetworkMeanImageH\x00\x42\x0e\n\x0cpreprocessor\"\x10\n\x0e\x41\x63tivationReLU\"$\n\x13\x41\x63tivationLeakyReLU\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"\x10\n\x0e\x41\x63tivationTanh\"3\n\x14\x41\x63tivationScaledTanh\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\x12\x0c\n\x04\x62\x65ta\x18\x02 \x01(\x02\"\x13\n\x11\x41\x63tivationSigmoid\"/\n\x10\x41\x63tivationLinear\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\x12\x0c\n\x04\x62\x65ta\x18\x02 \x01(\x02\"4\n\x15\x41\x63tivationSigmoidHard\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\x12\x0c\n\x04\x62\x65ta\x18\x02 \x01(\x02\"D\n\x0f\x41\x63tivationPReLU\x12\x31\n\x05\x61lpha\x18\x01 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\x1e\n\rActivationELU\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"*\n\x19\x41\x63tivationThresholdedReLU\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"\x14\n\x12\x41\x63tivationSoftsign\"\x14\n\x12\x41\x63tivationSoftplus\"\x83\x01\n\x1c\x41\x63tivationParametricSoftplus\x12\x31\n\x05\x61lpha\x18\x01 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62\x65ta\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xd4\x06\n\x10\x41\x63tivationParams\x12\x38\n\x06linear\x18\x05 \x01(\x0b\x32&.CoreML.Specification.ActivationLinearH\x00\x12\x34\n\x04ReLU\x18\n \x01(\x0b\x32$.CoreML.Specification.ActivationReLUH\x00\x12>\n\tleakyReLU\x18\x0f \x01(\x0b\x32).CoreML.Specification.ActivationLeakyReLUH\x00\x12J\n\x0fthresholdedReLU\x18\x14 \x01(\x0b\x32/.CoreML.Specification.ActivationThresholdedReLUH\x00\x12\x36\n\x05PReLU\x18\x19 \x01(\x0b\x32%.CoreML.Specification.ActivationPReLUH\x00\x12\x34\n\x04tanh\x18\x1e \x01(\x0b\x32$.CoreML.Specification.ActivationTanhH\x00\x12@\n\nscaledTanh\x18\x1f \x01(\x0b\x32*.CoreML.Specification.ActivationScaledTanhH\x00\x12:\n\x07sigmoid\x18( \x01(\x0b\x32\'.CoreML.Specification.ActivationSigmoidH\x00\x12\x42\n\x0bsigmoidHard\x18) \x01(\x0b\x32+.CoreML.Specification.ActivationSigmoidHardH\x00\x12\x32\n\x03\x45LU\x18\x32 \x01(\x0b\x32#.CoreML.Specification.ActivationELUH\x00\x12<\n\x08softsign\x18< \x01(\x0b\x32(.CoreML.Specification.ActivationSoftsignH\x00\x12<\n\x08softplus\x18\x46 \x01(\x0b\x32(.CoreML.Specification.ActivationSoftplusH\x00\x12P\n\x12parametricSoftplus\x18G \x01(\x0b\x32\x32.CoreML.Specification.ActivationParametricSoftplusH\x00\x42\x12\n\x10NonlinearityType\"(\n\x06Tensor\x12\x0c\n\x04rank\x18\x01 \x01(\r\x12\x10\n\x08\x64imValue\x18\x02 \x03(\x03\"\xab/\n\x12NeuralNetworkLayer\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05input\x18\x02 \x03(\t\x12\x0e\n\x06output\x18\x03 \x03(\t\x12\x31\n\x0binputTensor\x18\x04 \x03(\x0b\x32\x1c.CoreML.Specification.Tensor\x12\x32\n\x0coutputTensor\x18\x05 \x03(\x0b\x32\x1c.CoreML.Specification.Tensor\x12\x13\n\x0bisUpdatable\x18\n \x01(\x08\x12\x43\n\x0b\x63onvolution\x18\x64 \x01(\x0b\x32,.CoreML.Specification.ConvolutionLayerParamsH\x00\x12;\n\x07pooling\x18x \x01(\x0b\x32(.CoreML.Specification.PoolingLayerParamsH\x00\x12=\n\nactivation\x18\x82\x01 \x01(\x0b\x32&.CoreML.Specification.ActivationParamsH\x00\x12\x46\n\x0cinnerProduct\x18\x8c\x01 \x01(\x0b\x32-.CoreML.Specification.InnerProductLayerParamsH\x00\x12@\n\tembedding\x18\x96\x01 \x01(\x0b\x32*.CoreML.Specification.EmbeddingLayerParamsH\x00\x12@\n\tbatchnorm\x18\xa0\x01 \x01(\x0b\x32*.CoreML.Specification.BatchnormLayerParamsH\x00\x12\x46\n\x03mvn\x18\xa5\x01 \x01(\x0b\x32\x36.CoreML.Specification.MeanVarianceNormalizeLayerParamsH\x00\x12\x44\n\x0bl2normalize\x18\xaa\x01 \x01(\x0b\x32,.CoreML.Specification.L2NormalizeLayerParamsH\x00\x12<\n\x07softmax\x18\xaf\x01 \x01(\x0b\x32(.CoreML.Specification.SoftmaxLayerParamsH\x00\x12\x34\n\x03lrn\x18\xb4\x01 \x01(\x0b\x32$.CoreML.Specification.LRNLayerParamsH\x00\x12\x36\n\x04\x63rop\x18\xbe\x01 \x01(\x0b\x32%.CoreML.Specification.CropLayerParamsH\x00\x12<\n\x07padding\x18\xc8\x01 \x01(\x0b\x32(.CoreML.Specification.PaddingLayerParamsH\x00\x12>\n\x08upsample\x18\xd2\x01 \x01(\x0b\x32).CoreML.Specification.UpsampleLayerParamsH\x00\x12J\n\x0eresizeBilinear\x18\xd3\x01 \x01(\x0b\x32/.CoreML.Specification.ResizeBilinearLayerParamsH\x00\x12\x42\n\ncropResize\x18\xd4\x01 \x01(\x0b\x32+.CoreML.Specification.CropResizeLayerParamsH\x00\x12@\n\x05unary\x18\xdc\x01 \x01(\x0b\x32..CoreML.Specification.UnaryFunctionLayerParamsH\x00\x12\x34\n\x03\x61\x64\x64\x18\xe6\x01 \x01(\x0b\x32$.CoreML.Specification.AddLayerParamsH\x00\x12>\n\x08multiply\x18\xe7\x01 \x01(\x0b\x32).CoreML.Specification.MultiplyLayerParamsH\x00\x12<\n\x07\x61verage\x18\xf0\x01 \x01(\x0b\x32(.CoreML.Specification.AverageLayerParamsH\x00\x12\x38\n\x05scale\x18\xf5\x01 \x01(\x0b\x32&.CoreML.Specification.ScaleLayerParamsH\x00\x12\x36\n\x04\x62ias\x18\xfa\x01 \x01(\x0b\x32%.CoreML.Specification.BiasLayerParamsH\x00\x12\x34\n\x03max\x18\x84\x02 \x01(\x0b\x32$.CoreML.Specification.MaxLayerParamsH\x00\x12\x34\n\x03min\x18\x85\x02 \x01(\x0b\x32$.CoreML.Specification.MinLayerParamsH\x00\x12;\n\x03\x64ot\x18\x8e\x02 \x01(\x0b\x32+.CoreML.Specification.DotProductLayerParamsH\x00\x12:\n\x06reduce\x18\x98\x02 \x01(\x0b\x32\'.CoreML.Specification.ReduceLayerParamsH\x00\x12\x46\n\x0cloadConstant\x18\xa2\x02 \x01(\x0b\x32-.CoreML.Specification.LoadConstantLayerParamsH\x00\x12<\n\x07reshape\x18\xac\x02 \x01(\x0b\x32(.CoreML.Specification.ReshapeLayerParamsH\x00\x12<\n\x07\x66latten\x18\xad\x02 \x01(\x0b\x32(.CoreML.Specification.FlattenLayerParamsH\x00\x12<\n\x07permute\x18\xb6\x02 \x01(\x0b\x32(.CoreML.Specification.PermuteLayerParamsH\x00\x12:\n\x06\x63oncat\x18\xc0\x02 \x01(\x0b\x32\'.CoreML.Specification.ConcatLayerParamsH\x00\x12\x38\n\x05split\x18\xca\x02 \x01(\x0b\x32&.CoreML.Specification.SplitLayerParamsH\x00\x12J\n\x0esequenceRepeat\x18\xd4\x02 \x01(\x0b\x32/.CoreML.Specification.SequenceRepeatLayerParamsH\x00\x12J\n\x0ereorganizeData\x18\xd9\x02 \x01(\x0b\x32/.CoreML.Specification.ReorganizeDataLayerParamsH\x00\x12\x38\n\x05slice\x18\xde\x02 \x01(\x0b\x32&.CoreML.Specification.SliceLayerParamsH\x00\x12L\n\x0fsimpleRecurrent\x18\x90\x03 \x01(\x0b\x32\x30.CoreML.Specification.SimpleRecurrentLayerParamsH\x00\x12\x34\n\x03gru\x18\x9a\x03 \x01(\x0b\x32$.CoreML.Specification.GRULayerParamsH\x00\x12R\n\x12uniDirectionalLSTM\x18\xa4\x03 \x01(\x0b\x32\x33.CoreML.Specification.UniDirectionalLSTMLayerParamsH\x00\x12P\n\x11\x62iDirectionalLSTM\x18\xae\x03 \x01(\x0b\x32\x32.CoreML.Specification.BiDirectionalLSTMLayerParamsH\x00\x12:\n\x06\x63ustom\x18\xf4\x03 \x01(\x0b\x32\'.CoreML.Specification.CustomLayerParamsH\x00\x12\x44\n\x0btransposeND\x18\xf5\x03 \x01(\x0b\x32,.CoreML.Specification.TransposeNDLayerParamsH\x00\x12\x43\n\rbatchedMatmul\x18\xf6\x03 \x01(\x0b\x32).CoreML.Specification.BatchedMatMulParamsH\x00\x12>\n\x08\x63oncatND\x18\xf7\x03 \x01(\x0b\x32).CoreML.Specification.ConcatNDLayerParamsH\x00\x12@\n\tsoftmaxND\x18\xf8\x03 \x01(\x0b\x32*.CoreML.Specification.SoftmaxNDLayerParamsH\x00\x12\x36\n\x04\x66ill\x18\xf9\x03 \x01(\x0b\x32%.CoreML.Specification.FillLayerParamsH\x00\x12\x38\n\x05where\x18\xfa\x03 \x01(\x0b\x32&.CoreML.Specification.WhereLayerParamsH\x00\x12\x36\n\x04sine\x18\xfb\x03 \x01(\x0b\x32%.CoreML.Specification.SineLayerParamsH\x00\x12:\n\x06\x63osine\x18\xfc\x03 \x01(\x0b\x32\'.CoreML.Specification.CosineLayerParamsH\x00\x12N\n\x10powBroadcastable\x18\xfd\x03 \x01(\x0b\x32\x31.CoreML.Specification.PowBroadcastableLayerParamsH\x00\x12\x34\n\x03\x65xp\x18\xfe\x03 \x01(\x0b\x32$.CoreML.Specification.ExpLayerParamsH\x00\x12L\n\x0fupperTriangular\x18\xff\x03 \x01(\x0b\x32\x30.CoreML.Specification.UpperTriangularLayerParamsH\x00\x12L\n\x0flowerTriangular\x18\x80\x04 \x01(\x0b\x32\x30.CoreML.Specification.LowerTriangularLayerParamsH\x00\x12\x44\n\x0b\x62roadcastTo\x18\x81\x04 \x01(\x0b\x32,.CoreML.Specification.BroadcastToLayerParamsH\x00\x12N\n\x10\x61\x64\x64\x42roadcastable\x18\x82\x04 \x01(\x0b\x32\x31.CoreML.Specification.AddBroadcastableLayerParamsH\x00\x12X\n\x15subtractBroadcastable\x18\x83\x04 \x01(\x0b\x32\x36.CoreML.Specification.SubtractBroadcastableLayerParamsH\x00\x12X\n\x15multiplyBroadcastable\x18\x84\x04 \x01(\x0b\x32\x36.CoreML.Specification.MultiplyBroadcastableLayerParamsH\x00\x12T\n\x13\x64ivideBroadcastable\x18\x85\x04 \x01(\x0b\x32\x34.CoreML.Specification.DivideBroadcastableLayerParamsH\x00\x12:\n\x06gather\x18\x86\x04 \x01(\x0b\x32\'.CoreML.Specification.GatherLayerParamsH\x00\x12<\n\x07stackND\x18\x87\x04 \x01(\x0b\x32(.CoreML.Specification.StackNDLayerParamsH\x00\x12X\n\x15rankPreservingReshape\x18\x88\x04 \x01(\x0b\x32\x36.CoreML.Specification.RankPreservingReshapeLayerParamsH\x00\x12\x42\n\nexpandDims\x18\x89\x04 \x01(\x0b\x32+.CoreML.Specification.ExpandDimsLayerParamsH\x00\x12<\n\x07squeeze\x18\x8a\x04 \x01(\x0b\x32(.CoreML.Specification.SqueezeLayerParamsH\x00\x12<\n\x07splitND\x18\x8b\x04 \x01(\x0b\x32(.CoreML.Specification.SplitNDLayerParamsH\x00\x12\x36\n\x04\x63\x65il\x18\x8c\x04 \x01(\x0b\x32%.CoreML.Specification.CeilLayerParamsH\x00\x12\x38\n\x05\x66loor\x18\x8d\x04 \x01(\x0b\x32&.CoreML.Specification.FloorLayerParamsH\x00\x12\x36\n\x04\x63lip\x18\x8e\x04 \x01(\x0b\x32%.CoreML.Specification.ClipLayerParamsH\x00\x12<\n\x07sliceND\x18\x8f\x04 \x01(\x0b\x32(.CoreML.Specification.SliceNDLayerParamsH\x00\x12\x36\n\x04tile\x18\x90\x04 \x01(\x0b\x32%.CoreML.Specification.TileLayerParamsH\x00\x12J\n\x0eloadConstantND\x18\x91\x04 \x01(\x0b\x32/.CoreML.Specification.LoadConstantNDLayerParamsH\x00\x12\x38\n\x05range\x18\x92\x04 \x01(\x0b\x32&.CoreML.Specification.RangeLayerParamsH\x00\x12>\n\x08getShape\x18\x93\x04 \x01(\x0b\x32).CoreML.Specification.GetShapeLayerParamsH\x00\x12\x44\n\x0b\x65mbeddingND\x18\x94\x04 \x01(\x0b\x32,.CoreML.Specification.EmbeddingNDLayerParamsH\x00\x12<\n\x07scatter\x18\x9c\x04 \x01(\x0b\x32(.CoreML.Specification.ScatterLayerParamsH\x00\x12J\n\x0eslidingWindows\x18\x95\x04 \x01(\x0b\x32/.CoreML.Specification.SlidingWindowsLayerParamsH\x00\x12H\n\rerfActivation\x18\xa6\x04 \x01(\x0b\x32..CoreML.Specification.ErfActivationLayerParamsH\x00\x12J\n\x0egeluActivation\x18\xa7\x04 \x01(\x0b\x32/.CoreML.Specification.GeluActivationLayerParamsH\x00\x12:\n\x06\x62ranch\x18\xd8\x04 \x01(\x0b\x32\'.CoreML.Specification.BranchLayerParamsH\x00\x12\x36\n\x04loop\x18\xd9\x04 \x01(\x0b\x32%.CoreML.Specification.LoopLayerParamsH\x00\x12@\n\tloopBreak\x18\xda\x04 \x01(\x0b\x32*.CoreML.Specification.LoopBreakLayerParamsH\x00\x12\x46\n\x0cloopContinue\x18\xdb\x04 \x01(\x0b\x32-.CoreML.Specification.LoopContinueLayerParamsH\x00\x12\x36\n\x04\x63opy\x18\xe2\x04 \x01(\x0b\x32%.CoreML.Specification.CopyLayerParamsH\x00\x12\x38\n\x05\x61lloc\x18\xe7\x04 \x01(\x0b\x32&.CoreML.Specification.AllocLayerParamsH\x00\x12\x44\n\x0bgreaterThan\x18\xec\x04 \x01(\x0b\x32,.CoreML.Specification.GreaterThanLayerParamsH\x00\x12>\n\x08lessThan\x18\xed\x04 \x01(\x0b\x32).CoreML.Specification.LessThanLayerParamsH\x00\x12\x38\n\x05\x65qual\x18\xee\x04 \x01(\x0b\x32&.CoreML.Specification.EqualLayerParamsH\x00\x12>\n\x08notEqual\x18\xef\x04 \x01(\x0b\x32).CoreML.Specification.NotEqualLayerParamsH\x00\x12\x42\n\nlogicalAnd\x18\xf0\x04 \x01(\x0b\x32+.CoreML.Specification.LogicalAndLayerParamsH\x00\x12@\n\tlogicalOr\x18\xf1\x04 \x01(\x0b\x32*.CoreML.Specification.LogicalOrLayerParamsH\x00\x12\x42\n\nlogicalXor\x18\xf2\x04 \x01(\x0b\x32+.CoreML.Specification.LogicalXorLayerParamsH\x00\x12\x42\n\nlogicalNot\x18\xf3\x04 \x01(\x0b\x32+.CoreML.Specification.LogicalNotLayerParamsH\x00\x42\x07\n\x05layer\"\x83\x01\n\x11\x42ranchLayerParams\x12\x35\n\x08ifBranch\x18\x01 \x01(\x0b\x32#.CoreML.Specification.NeuralNetwork\x12\x37\n\nelseBranch\x18\x02 \x01(\x0b\x32#.CoreML.Specification.NeuralNetwork\"\xbb\x01\n\x0fLoopLayerParams\x12\x19\n\x11maxLoopIterations\x18\x01 \x01(\x04\x12\x14\n\x0c\x63onditionVar\x18\x02 \x01(\t\x12=\n\x10\x63onditionNetwork\x18\x03 \x01(\x0b\x32#.CoreML.Specification.NeuralNetwork\x12\x38\n\x0b\x62odyNetwork\x18\x04 \x01(\x0b\x32#.CoreML.Specification.NeuralNetwork\"\x16\n\x14LoopBreakLayerParams\"\x19\n\x17LoopContinueLayerParams\"\x11\n\x0f\x43opyLayerParams\"G\n\x16GreaterThanLayerParams\x12\x1e\n\x16useNonStrictInequality\x18\x01 \x01(\x08\x12\r\n\x05\x61lpha\x18\x02 \x01(\x02\"D\n\x13LessThanLayerParams\x12\x1e\n\x16useNonStrictInequality\x18\x01 \x01(\x08\x12\r\n\x05\x61lpha\x18\x02 \x01(\x02\"!\n\x10\x45qualLayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"$\n\x13NotEqualLayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"\x17\n\x15LogicalAndLayerParams\"\x16\n\x14LogicalOrLayerParams\"\x17\n\x15LogicalXorLayerParams\"\x17\n\x15LogicalNotLayerParams\"\x8e\x01\n\rBorderAmounts\x12\x44\n\rborderAmounts\x18\n \x03(\x0b\x32-.CoreML.Specification.BorderAmounts.EdgeSizes\x1a\x37\n\tEdgeSizes\x12\x15\n\rstartEdgeSize\x18\x01 \x01(\x04\x12\x13\n\x0b\x65ndEdgeSize\x18\x02 \x01(\x04\"K\n\x0cValidPadding\x12;\n\x0epaddingAmounts\x18\x01 \x01(\x0b\x32#.CoreML.Specification.BorderAmounts\"\x96\x01\n\x0bSamePadding\x12H\n\rasymmetryMode\x18\x01 \x01(\x0e\x32\x31.CoreML.Specification.SamePadding.SamePaddingMode\"=\n\x0fSamePaddingMode\x12\x16\n\x12\x42OTTOM_RIGHT_HEAVY\x10\x00\x12\x12\n\x0eTOP_LEFT_HEAVY\x10\x01\"\xbd\x01\n\x0cSamplingMode\x12\x41\n\x0esamplingMethod\x18\x01 \x01(\x0e\x32).CoreML.Specification.SamplingMode.Method\"j\n\x06Method\x12\x1f\n\x1bSTRICT_ALIGN_ENDPOINTS_MODE\x10\x00\x12\x18\n\x14\x41LIGN_ENDPOINTS_MODE\x10\x01\x12\x11\n\rUPSAMPLE_MODE\x10\x02\x12\x12\n\x0eROI_ALIGN_MODE\x10\x03\"\xd8\x01\n\x12\x42oxCoordinatesMode\x12\x45\n\x07\x62oxMode\x18\x01 \x01(\x0e\x32\x34.CoreML.Specification.BoxCoordinatesMode.Coordinates\"{\n\x0b\x43oordinates\x12\x18\n\x14\x43ORNERS_HEIGHT_FIRST\x10\x00\x12\x17\n\x13\x43ORNERS_WIDTH_FIRST\x10\x01\x12\x1c\n\x18\x43\x45NTER_SIZE_HEIGHT_FIRST\x10\x02\x12\x1b\n\x17\x43\x45NTER_SIZE_WIDTH_FIRST\x10\x03\"\x9f\x01\n\x0cWeightParams\x12\x12\n\nfloatValue\x18\x01 \x03(\x02\x12\x14\n\x0c\x66loat16Value\x18\x02 \x01(\x0c\x12\x10\n\x08rawValue\x18\x1e \x01(\x0c\x12>\n\x0cquantization\x18( \x01(\x0b\x32(.CoreML.Specification.QuantizationParams\x12\x13\n\x0bisUpdatable\x18\x32 \x01(\x08\"\xe4\x01\n\x12QuantizationParams\x12\x14\n\x0cnumberOfBits\x18\x01 \x01(\x04\x12L\n\x12linearQuantization\x18\x65 \x01(\x0b\x32..CoreML.Specification.LinearQuantizationParamsH\x00\x12V\n\x17lookupTableQuantization\x18\x66 \x01(\x0b\x32\x33.CoreML.Specification.LookUpTableQuantizationParamsH\x00\x42\x12\n\x10QuantizationType\"7\n\x18LinearQuantizationParams\x12\r\n\x05scale\x18\x01 \x03(\x02\x12\x0c\n\x04\x62ias\x18\x02 \x03(\x02\"3\n\x1dLookUpTableQuantizationParams\x12\x12\n\nfloatValue\x18\x01 \x03(\x02\"\xbd\x03\n\x16\x43onvolutionLayerParams\x12\x16\n\x0eoutputChannels\x18\x01 \x01(\x04\x12\x16\n\x0ekernelChannels\x18\x02 \x01(\x04\x12\x0f\n\x07nGroups\x18\n \x01(\x04\x12\x12\n\nkernelSize\x18\x14 \x03(\x04\x12\x0e\n\x06stride\x18\x1e \x03(\x04\x12\x16\n\x0e\x64ilationFactor\x18( \x03(\x04\x12\x33\n\x05valid\x18\x32 \x01(\x0b\x32\".CoreML.Specification.ValidPaddingH\x00\x12\x31\n\x04same\x18\x33 \x01(\x0b\x32!.CoreML.Specification.SamePaddingH\x00\x12\x17\n\x0fisDeconvolution\x18< \x01(\x08\x12\x0f\n\x07hasBias\x18\x46 \x01(\x08\x12\x33\n\x07weights\x18Z \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18[ \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x13\n\x0boutputShape\x18\x64 \x03(\x04\x42\x18\n\x16\x43onvolutionPaddingType\"\xc0\x01\n\x17InnerProductLayerParams\x12\x15\n\rinputChannels\x18\x01 \x01(\x04\x12\x16\n\x0eoutputChannels\x18\x02 \x01(\x04\x12\x0f\n\x07hasBias\x18\n \x01(\x08\x12\x33\n\x07weights\x18\x14 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18\x15 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xb8\x01\n\x14\x45mbeddingLayerParams\x12\x10\n\x08inputDim\x18\x01 \x01(\x04\x12\x16\n\x0eoutputChannels\x18\x02 \x01(\x04\x12\x0f\n\x07hasBias\x18\n \x01(\x08\x12\x33\n\x07weights\x18\x14 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18\x15 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xba\x01\n\x16\x45mbeddingNDLayerParams\x12\x11\n\tvocabSize\x18\x01 \x01(\x04\x12\x15\n\rembeddingSize\x18\x02 \x01(\x04\x12\x0f\n\x07hasBias\x18\x03 \x01(\x08\x12\x33\n\x07weights\x18\x14 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18\x15 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xbd\x02\n\x14\x42\x61tchnormLayerParams\x12\x10\n\x08\x63hannels\x18\x01 \x01(\x04\x12\x16\n\x0e\x63omputeMeanVar\x18\x05 \x01(\x08\x12\x1d\n\x15instanceNormalization\x18\x06 \x01(\x08\x12\x0f\n\x07\x65psilon\x18\n \x01(\x02\x12\x31\n\x05gamma\x18\x0f \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62\x65ta\x18\x10 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04mean\x18\x11 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x34\n\x08variance\x18\x12 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xe8\x03\n\x12PoolingLayerParams\x12\x42\n\x04type\x18\x01 \x01(\x0e\x32\x34.CoreML.Specification.PoolingLayerParams.PoolingType\x12\x12\n\nkernelSize\x18\n \x03(\x04\x12\x0e\n\x06stride\x18\x14 \x03(\x04\x12\x33\n\x05valid\x18\x1e \x01(\x0b\x32\".CoreML.Specification.ValidPaddingH\x00\x12\x31\n\x04same\x18\x1f \x01(\x0b\x32!.CoreML.Specification.SamePaddingH\x00\x12Y\n\x10includeLastPixel\x18  \x01(\x0b\x32=.CoreML.Specification.PoolingLayerParams.ValidCompletePaddingH\x00\x12\x1d\n\x15\x61vgPoolExcludePadding\x18\x32 \x01(\x08\x12\x15\n\rglobalPooling\x18< \x01(\x08\x1a.\n\x14ValidCompletePadding\x12\x16\n\x0epaddingAmounts\x18\n \x03(\x04\"+\n\x0bPoolingType\x12\x07\n\x03MAX\x10\x00\x12\x0b\n\x07\x41VERAGE\x10\x01\x12\x06\n\x02L2\x10\x02\x42\x14\n\x12PoolingPaddingType\"\xa1\x03\n\x12PaddingLayerParams\x12L\n\x08\x63onstant\x18\x01 \x01(\x0b\x32\x38.CoreML.Specification.PaddingLayerParams.PaddingConstantH\x00\x12P\n\nreflection\x18\x02 \x01(\x0b\x32:.CoreML.Specification.PaddingLayerParams.PaddingReflectionH\x00\x12R\n\x0breplication\x18\x03 \x01(\x0b\x32;.CoreML.Specification.PaddingLayerParams.PaddingReplicationH\x00\x12;\n\x0epaddingAmounts\x18\n \x01(\x0b\x32#.CoreML.Specification.BorderAmounts\x1a \n\x0fPaddingConstant\x12\r\n\x05value\x18\x01 \x01(\x02\x1a\x13\n\x11PaddingReflection\x1a\x14\n\x12PaddingReplicationB\r\n\x0bPaddingType\"+\n\x11\x43oncatLayerParams\x12\x16\n\x0esequenceConcat\x18\x64 \x01(\x08\"K\n\x0eLRNLayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\x12\x0c\n\x04\x62\x65ta\x18\x02 \x01(\x02\x12\x11\n\tlocalSize\x18\x03 \x01(\x04\x12\t\n\x01k\x18\x04 \x01(\x02\"\x14\n\x12SoftmaxLayerParams\"$\n\x10SplitLayerParams\x12\x10\n\x08nOutputs\x18\x01 \x01(\x04\"\x1f\n\x0e\x41\x64\x64LayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"$\n\x13MultiplyLayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"\x84\x02\n\x18UnaryFunctionLayerParams\x12\x46\n\x04type\x18\x01 \x01(\x0e\x32\x38.CoreML.Specification.UnaryFunctionLayerParams.Operation\x12\r\n\x05\x61lpha\x18\x02 \x01(\x02\x12\x0f\n\x07\x65psilon\x18\x03 \x01(\x02\x12\r\n\x05shift\x18\x04 \x01(\x02\x12\r\n\x05scale\x18\x05 \x01(\x02\"b\n\tOperation\x12\x08\n\x04SQRT\x10\x00\x12\t\n\x05RSQRT\x10\x01\x12\x0b\n\x07INVERSE\x10\x02\x12\t\n\x05POWER\x10\x03\x12\x07\n\x03\x45XP\x10\x04\x12\x07\n\x03LOG\x10\x05\x12\x07\n\x03\x41\x42S\x10\x06\x12\r\n\tTHRESHOLD\x10\x07\"\xa2\x01\n\x13UpsampleLayerParams\x12\x15\n\rscalingFactor\x18\x01 \x03(\x04\x12I\n\x04mode\x18\x05 \x01(\x0e\x32;.CoreML.Specification.UpsampleLayerParams.InterpolationMode\")\n\x11InterpolationMode\x12\x06\n\x02NN\x10\x00\x12\x0c\n\x08\x42ILINEAR\x10\x01\"a\n\x19ResizeBilinearLayerParams\x12\x12\n\ntargetSize\x18\x01 \x03(\x04\x12\x30\n\x04mode\x18\x02 \x01(\x0b\x32\".CoreML.Specification.SamplingMode\"\xd4\x01\n\x15\x43ropResizeLayerParams\x12\x12\n\ntargetSize\x18\x01 \x03(\x04\x12\x1d\n\x15normalizedCoordinates\x18\x02 \x01(\x08\x12\x30\n\x04mode\x18\x03 \x01(\x0b\x32\".CoreML.Specification.SamplingMode\x12@\n\x0e\x62oxIndicesMode\x18\x04 \x01(\x0b\x32(.CoreML.Specification.BoxCoordinatesMode\x12\x14\n\x0cspatialScale\x18\x05 \x01(\x02\"R\n\x0f\x42iasLayerParams\x12\r\n\x05shape\x18\x01 \x03(\x04\x12\x30\n\x04\x62ias\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xaf\x01\n\x10ScaleLayerParams\x12\x12\n\nshapeScale\x18\x01 \x03(\x04\x12\x31\n\x05scale\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x0f\n\x07hasBias\x18\x03 \x01(\x08\x12\x11\n\tshapeBias\x18\x04 \x03(\x04\x12\x30\n\x04\x62ias\x18\x05 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"Z\n\x17LoadConstantLayerParams\x12\r\n\x05shape\x18\x01 \x03(\x04\x12\x30\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\")\n\x16L2NormalizeLayerParams\x12\x0f\n\x07\x65psilon\x18\x01 \x01(\x02\"\x8e\x01\n\x12\x46lattenLayerParams\x12\x43\n\x04mode\x18\x01 \x01(\x0e\x32\x35.CoreML.Specification.FlattenLayerParams.FlattenOrder\"3\n\x0c\x46lattenOrder\x12\x11\n\rCHANNEL_FIRST\x10\x00\x12\x10\n\x0c\x43HANNEL_LAST\x10\x01\"\xa3\x01\n\x12ReshapeLayerParams\x12\x13\n\x0btargetShape\x18\x01 \x03(\x03\x12\x43\n\x04mode\x18\x02 \x01(\x0e\x32\x35.CoreML.Specification.ReshapeLayerParams.ReshapeOrder\"3\n\x0cReshapeOrder\x12\x11\n\rCHANNEL_FIRST\x10\x00\x12\x10\n\x0c\x43HANNEL_LAST\x10\x01\"\"\n\x12PermuteLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x03(\x04\"\xbe\x01\n\x19ReorganizeDataLayerParams\x12P\n\x04mode\x18\x01 \x01(\x0e\x32\x42.CoreML.Specification.ReorganizeDataLayerParams.ReorganizationType\x12\x11\n\tblockSize\x18\x02 \x01(\x04\"<\n\x12ReorganizationType\x12\x12\n\x0eSPACE_TO_DEPTH\x10\x00\x12\x12\n\x0e\x44\x45PTH_TO_SPACE\x10\x01\"\xc8\x01\n\x10SliceLayerParams\x12\x12\n\nstartIndex\x18\x01 \x01(\x03\x12\x10\n\x08\x65ndIndex\x18\x02 \x01(\x03\x12\x0e\n\x06stride\x18\x03 \x01(\x04\x12>\n\x04\x61xis\x18\x04 \x01(\x0e\x32\x30.CoreML.Specification.SliceLayerParams.SliceAxis\">\n\tSliceAxis\x12\x10\n\x0c\x43HANNEL_AXIS\x10\x00\x12\x0f\n\x0bHEIGHT_AXIS\x10\x01\x12\x0e\n\nWIDTH_AXIS\x10\x02\"\xd9\x02\n\x11ReduceLayerParams\x12\x45\n\x04mode\x18\x01 \x01(\x0e\x32\x37.CoreML.Specification.ReduceLayerParams.ReduceOperation\x12\x0f\n\x07\x65psilon\x18\x02 \x01(\x02\x12@\n\x04\x61xis\x18\x03 \x01(\x0e\x32\x32.CoreML.Specification.ReduceLayerParams.ReduceAxis\"v\n\x0fReduceOperation\x12\x07\n\x03SUM\x10\x00\x12\x07\n\x03\x41VG\x10\x01\x12\x08\n\x04PROD\x10\x02\x12\n\n\x06LOGSUM\x10\x03\x12\r\n\tSUMSQUARE\x10\x04\x12\x06\n\x02L1\x10\x05\x12\x06\n\x02L2\x10\x06\x12\x07\n\x03MAX\x10\x07\x12\x07\n\x03MIN\x10\x08\x12\n\n\x06\x41RGMAX\x10\t\"2\n\nReduceAxis\x12\x07\n\x03\x43HW\x10\x00\x12\x06\n\x02HW\x10\x01\x12\x05\n\x01\x43\x10\x02\x12\x05\n\x01H\x10\x03\x12\x05\n\x01W\x10\x04\"[\n\x0f\x43ropLayerParams\x12\x38\n\x0b\x63ropAmounts\x18\x01 \x01(\x0b\x32#.CoreML.Specification.BorderAmounts\x12\x0e\n\x06offset\x18\x05 \x03(\x04\"\x14\n\x12\x41verageLayerParams\"\x10\n\x0eMaxLayerParams\"\x10\n\x0eMinLayerParams\"1\n\x15\x44otProductLayerParams\x12\x18\n\x10\x63osineSimilarity\x18\x01 \x01(\x08\"f\n MeanVarianceNormalizeLayerParams\x12\x16\n\x0e\x61\x63rossChannels\x18\x01 \x01(\x08\x12\x19\n\x11normalizeVariance\x18\x02 \x01(\x08\x12\x0f\n\x07\x65psilon\x18\x03 \x01(\x02\"1\n\x19SequenceRepeatLayerParams\x12\x14\n\x0cnRepetitions\x18\x01 \x01(\x04\"\xff\x02\n\x1aSimpleRecurrentLayerParams\x12\x17\n\x0finputVectorSize\x18\x01 \x01(\x04\x12\x18\n\x10outputVectorSize\x18\x02 \x01(\x04\x12:\n\nactivation\x18\n \x01(\x0b\x32&.CoreML.Specification.ActivationParams\x12\x16\n\x0esequenceOutput\x18\x0f \x01(\x08\x12\x15\n\rhasBiasVector\x18\x14 \x01(\x08\x12\x38\n\x0cweightMatrix\x18\x1e \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12;\n\x0frecursionMatrix\x18\x1f \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x36\n\nbiasVector\x18  \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x14\n\x0creverseInput\x18\x64 \x01(\x08\"\xaa\x06\n\x0eGRULayerParams\x12\x17\n\x0finputVectorSize\x18\x01 \x01(\x04\x12\x18\n\x10outputVectorSize\x18\x02 \x01(\x04\x12;\n\x0b\x61\x63tivations\x18\n \x03(\x0b\x32&.CoreML.Specification.ActivationParams\x12\x16\n\x0esequenceOutput\x18\x0f \x01(\x08\x12\x16\n\x0ehasBiasVectors\x18\x14 \x01(\x08\x12\x42\n\x16updateGateWeightMatrix\x18\x1e \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x41\n\x15resetGateWeightMatrix\x18\x1f \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x42\n\x16outputGateWeightMatrix\x18  \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19updateGateRecursionMatrix\x18\x32 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x44\n\x18resetGateRecursionMatrix\x18\x33 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19outputGateRecursionMatrix\x18\x34 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14updateGateBiasVector\x18\x46 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12?\n\x13resetGateBiasVector\x18G \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14outputGateBiasVector\x18H \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x14\n\x0creverseInput\x18\x64 \x01(\x08\"\xaa\x01\n\nLSTMParams\x12\x16\n\x0esequenceOutput\x18\n \x01(\x08\x12\x16\n\x0ehasBiasVectors\x18\x14 \x01(\x08\x12\x12\n\nforgetBias\x18\x1e \x01(\x08\x12\x1a\n\x12hasPeepholeVectors\x18( \x01(\x08\x12!\n\x19\x63oupledInputAndForgetGate\x18\x32 \x01(\x08\x12\x19\n\x11\x63\x65llClipThreshold\x18< \x01(\x02\"\x94\x08\n\x10LSTMWeightParams\x12\x41\n\x15inputGateWeightMatrix\x18\x01 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x42\n\x16\x66orgetGateWeightMatrix\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x42\n\x16\x62lockInputWeightMatrix\x18\x03 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x42\n\x16outputGateWeightMatrix\x18\x04 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x44\n\x18inputGateRecursionMatrix\x18\x14 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19\x66orgetGateRecursionMatrix\x18\x15 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19\x62lockInputRecursionMatrix\x18\x16 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19outputGateRecursionMatrix\x18\x17 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12?\n\x13inputGateBiasVector\x18( \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14\x66orgetGateBiasVector\x18) \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14\x62lockInputBiasVector\x18* \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14outputGateBiasVector\x18+ \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x43\n\x17inputGatePeepholeVector\x18< \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x44\n\x18\x66orgetGatePeepholeVector\x18= \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x44\n\x18outputGatePeepholeVector\x18> \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\x95\x02\n\x1dUniDirectionalLSTMLayerParams\x12\x17\n\x0finputVectorSize\x18\x01 \x01(\x04\x12\x18\n\x10outputVectorSize\x18\x02 \x01(\x04\x12;\n\x0b\x61\x63tivations\x18\n \x03(\x0b\x32&.CoreML.Specification.ActivationParams\x12\x30\n\x06params\x18\x0f \x01(\x0b\x32 .CoreML.Specification.LSTMParams\x12<\n\x0cweightParams\x18\x14 \x01(\x0b\x32&.CoreML.Specification.LSTMWeightParams\x12\x14\n\x0creverseInput\x18\x64 \x01(\x08\"\xd2\x02\n\x1c\x42iDirectionalLSTMLayerParams\x12\x17\n\x0finputVectorSize\x18\x01 \x01(\x04\x12\x18\n\x10outputVectorSize\x18\x02 \x01(\x04\x12\x46\n\x16\x61\x63tivationsForwardLSTM\x18\n \x03(\x0b\x32&.CoreML.Specification.ActivationParams\x12G\n\x17\x61\x63tivationsBackwardLSTM\x18\x0b \x03(\x0b\x32&.CoreML.Specification.ActivationParams\x12\x30\n\x06params\x18\x0f \x01(\x0b\x32 .CoreML.Specification.LSTMParams\x12<\n\x0cweightParams\x18\x14 \x03(\x0b\x32&.CoreML.Specification.LSTMWeightParams\"\xbe\x03\n\x11\x43ustomLayerParams\x12\x11\n\tclassName\x18\n \x01(\t\x12\x33\n\x07weights\x18\x14 \x03(\x0b\x32\".CoreML.Specification.WeightParams\x12K\n\nparameters\x18\x1e \x03(\x0b\x32\x37.CoreML.Specification.CustomLayerParams.ParametersEntry\x12\x13\n\x0b\x64\x65scription\x18( \x01(\t\x1a\x8c\x01\n\x15\x43ustomLayerParamValue\x12\x15\n\x0b\x64oubleValue\x18\n \x01(\x01H\x00\x12\x15\n\x0bstringValue\x18\x14 \x01(\tH\x00\x12\x12\n\x08intValue\x18\x1e \x01(\x05H\x00\x12\x13\n\tlongValue\x18( \x01(\x03H\x00\x12\x13\n\tboolValue\x18\x32 \x01(\x08H\x00\x42\x07\n\x05value\x1ap\n\x0fParametersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12L\n\x05value\x18\x02 \x01(\x0b\x32=.CoreML.Specification.CustomLayerParams.CustomLayerParamValue:\x02\x38\x01\"&\n\x16TransposeNDLayerParams\x12\x0c\n\x04\x61xes\x18\x01 \x03(\x04\"\xfe\x01\n\x13\x42\x61tchedMatMulParams\x12\x12\n\ntransposeA\x18\x01 \x01(\x08\x12\x12\n\ntransposeB\x18\x02 \x01(\x08\x12\"\n\x1aweightMatrixFirstDimension\x18\x05 \x01(\x04\x12#\n\x1bweightMatrixSecondDimension\x18\x06 \x01(\x04\x12\x0f\n\x07hasBias\x18\x07 \x01(\x08\x12\x33\n\x07weights\x18\x08 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18\t \x01(\x0b\x32\".CoreML.Specification.WeightParams\"#\n\x13\x43oncatNDLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"$\n\x14SoftmaxNDLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"\\\n\x19LoadConstantNDLayerParams\x12\r\n\x05shape\x18\x01 \x03(\x04\x12\x30\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\x11\n\x0f\x46illLayerParams\"\x12\n\x10WhereLayerParams\"\x11\n\x0fSineLayerParams\"\x13\n\x11\x43osineLayerParams\"\x1d\n\x1bPowBroadcastableLayerParams\"%\n\x0e\x45xpLayerParams\x12\x13\n\x0bwithBaseAs2\x18\x01 \x01(\x08\"\x1c\n\x1aUpperTriangularLayerParams\"\x1c\n\x1aLowerTriangularLayerParams\"-\n\x16\x42roadcastToLayerParams\x12\x13\n\x0btargetShape\x18\x01 \x03(\x04\"\x1d\n\x1b\x41\x64\x64\x42roadcastableLayerParams\"\"\n SubtractBroadcastableLayerParams\"\"\n MultiplyBroadcastableLayerParams\" \n\x1e\x44ivideBroadcastableLayerParams\"!\n\x11GatherLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"\x14\n\x12ScatterLayerParams\"\"\n\x12StackNDLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"7\n RankPreservingReshapeLayerParams\x12\x13\n\x0btargetShape\x18\x01 \x03(\x03\"%\n\x15\x45xpandDimsLayerParams\x12\x0c\n\x04\x61xes\x18\x01 \x03(\x03\"\"\n\x12SqueezeLayerParams\x12\x0c\n\x04\x61xes\x18\x01 \x03(\x03\"I\n\x12SplitNDLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\x12\x11\n\tnumSplits\x18\x02 \x01(\x04\x12\x12\n\nsplitSizes\x18\x03 \x03(\x04\"\x11\n\x0f\x43\x65ilLayerParams\"\x12\n\x10\x46loorLayerParams\"\x11\n\x0f\x43lipLayerParams\"m\n\x12SliceNDLayerParams\x12\x10\n\x08\x62\x65ginIds\x18\x01 \x03(\x03\x12\x12\n\nbeginMasks\x18\x02 \x03(\x08\x12\x0e\n\x06\x65ndIds\x18\x03 \x03(\x03\x12\x10\n\x08\x65ndMasks\x18\x04 \x03(\x08\x12\x0f\n\x07strides\x18\x05 \x03(\x03\"\x1f\n\x0fTileLayerParams\x12\x0c\n\x04reps\x18\x01 \x03(\x04\"\x15\n\x13GetShapeLayerParams\"\x1a\n\x18\x45rfActivationLayerParams\"\x1b\n\x19GeluActivationLayerParams\"O\n\x10RangeLayerParams\x12\x12\n\nstartValue\x18\x01 \x01(\x02\x12\x10\n\x08\x65ndValue\x18\x02 \x01(\x02\x12\x15\n\rstepSizeValue\x18\x03 \x01(\x02\"\x12\n\x10\x41llocLayerParams\"K\n\x19SlidingWindowsLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\x12\x12\n\nwindowSize\x18\x02 \x01(\x04\x12\x0c\n\x04step\x18\x03 \x01(\x04\"\xc5\x04\n\x17NeuralNetworkClassifier\x12\x38\n\x06layers\x18\x01 \x03(\x0b\x32(.CoreML.Specification.NeuralNetworkLayer\x12G\n\rpreprocessing\x18\x02 \x03(\x0b\x32\x30.CoreML.Specification.NeuralNetworkPreprocessing\x12Y\n\x16\x61rrayInputShapeMapping\x18\x05 \x01(\x0e\x32\x39.CoreML.Specification.NeuralNetworkMultiArrayShapeMapping\x12T\n\x16imageInputShapeMapping\x18\x06 \x01(\x0e\x32\x34.CoreML.Specification.NeuralNetworkImageShapeMapping\x12\x43\n\x0cupdateParams\x18\n \x01(\x0b\x32-.CoreML.Specification.NetworkUpdateParameters\x12?\n\x11stringClassLabels\x18\x64 \x01(\x0b\x32\".CoreML.Specification.StringVectorH\x00\x12=\n\x10int64ClassLabels\x18\x65 \x01(\x0b\x32!.CoreML.Specification.Int64VectorH\x00\x12\"\n\x19labelProbabilityLayerName\x18\xc8\x01 \x01(\tB\r\n\x0b\x43lassLabels\"\x91\x03\n\x16NeuralNetworkRegressor\x12\x38\n\x06layers\x18\x01 \x03(\x0b\x32(.CoreML.Specification.NeuralNetworkLayer\x12G\n\rpreprocessing\x18\x02 \x03(\x0b\x32\x30.CoreML.Specification.NeuralNetworkPreprocessing\x12Y\n\x16\x61rrayInputShapeMapping\x18\x05 \x01(\x0e\x32\x39.CoreML.Specification.NeuralNetworkMultiArrayShapeMapping\x12T\n\x16imageInputShapeMapping\x18\x06 \x01(\x0e\x32\x34.CoreML.Specification.NeuralNetworkImageShapeMapping\x12\x43\n\x0cupdateParams\x18\n \x01(\x0b\x32-.CoreML.Specification.NetworkUpdateParameters\"\xb8\x01\n\x17NetworkUpdateParameters\x12\x33\n\nlossLayers\x18\x01 \x03(\x0b\x32\x1f.CoreML.Specification.LossLayer\x12\x32\n\toptimizer\x18\x02 \x01(\x0b\x32\x1f.CoreML.Specification.Optimizer\x12\x34\n\x06\x65pochs\x18\x03 \x01(\x0b\x32$.CoreML.Specification.Int64Parameter\"\xb4\x01\n\tLossLayer\x12\x0c\n\x04name\x18\x01 \x01(\t\x12L\n\x15\x63rossEntropyLossLayer\x18\n \x01(\x0b\x32+.CoreML.Specification.CrossEntropyLossLayerH\x00\x12:\n\x0cmseLossLayer\x18\x0b \x01(\x0b\x32\".CoreML.Specification.MSELossLayerH\x00\x42\x0f\n\rLossLayerType\"6\n\x15\x43rossEntropyLossLayer\x12\r\n\x05input\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\"-\n\x0cMSELossLayer\x12\r\n\x05input\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\"\x96\x01\n\tOptimizer\x12:\n\x0csgdOptimizer\x18\n \x01(\x0b\x32\".CoreML.Specification.SGDOptimizerH\x00\x12<\n\radamOptimizer\x18\x0b \x01(\x0b\x32#.CoreML.Specification.AdamOptimizerH\x00\x42\x0f\n\rOptimizerType\"\xc1\x01\n\x0cSGDOptimizer\x12;\n\x0clearningRate\x18\x01 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\x12;\n\rminiBatchSize\x18\x02 \x01(\x0b\x32$.CoreML.Specification.Int64Parameter\x12\x37\n\x08momentum\x18\x03 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\"\xa9\x02\n\rAdamOptimizer\x12;\n\x0clearningRate\x18\x01 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\x12;\n\rminiBatchSize\x18\x02 \x01(\x0b\x32$.CoreML.Specification.Int64Parameter\x12\x34\n\x05\x62\x65ta1\x18\x03 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\x12\x34\n\x05\x62\x65ta2\x18\x04 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\x12\x32\n\x03\x65ps\x18\x05 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter*W\n#NeuralNetworkMultiArrayShapeMapping\x12\x17\n\x13RANK5_ARRAY_MAPPING\x10\x00\x12\x17\n\x13\x45XACT_ARRAY_MAPPING\x10\x01*R\n\x1eNeuralNetworkImageShapeMapping\x12\x17\n\x13RANK5_IMAGE_MAPPING\x10\x00\x12\x17\n\x13RANK4_IMAGE_MAPPING\x10\x01\x42\x02H\x03P\x00P\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x13NeuralNetwork.proto\x12\x14\x43oreML.Specification\x1a\x14\x44\x61taStructures.proto\x1a\x10Parameters.proto\"\x88\x03\n\rNeuralNetwork\x12\x38\n\x06layers\x18\x01 \x03(\x0b\x32(.CoreML.Specification.NeuralNetworkLayer\x12G\n\rpreprocessing\x18\x02 \x03(\x0b\x32\x30.CoreML.Specification.NeuralNetworkPreprocessing\x12Y\n\x16\x61rrayInputShapeMapping\x18\x05 \x01(\x0e\x32\x39.CoreML.Specification.NeuralNetworkMultiArrayShapeMapping\x12T\n\x16imageInputShapeMapping\x18\x06 \x01(\x0e\x32\x34.CoreML.Specification.NeuralNetworkImageShapeMapping\x12\x43\n\x0cupdateParams\x18\n \x01(\x0b\x32-.CoreML.Specification.NetworkUpdateParameters\"x\n\x18NeuralNetworkImageScaler\x12\x14\n\x0c\x63hannelScale\x18\n \x01(\x02\x12\x10\n\x08\x62lueBias\x18\x14 \x01(\x02\x12\x11\n\tgreenBias\x18\x15 \x01(\x02\x12\x0f\n\x07redBias\x18\x16 \x01(\x02\x12\x10\n\x08grayBias\x18\x1e \x01(\x02\"+\n\x16NeuralNetworkMeanImage\x12\x11\n\tmeanImage\x18\x01 \x03(\x02\"\xc6\x01\n\x1aNeuralNetworkPreprocessing\x12\x13\n\x0b\x66\x65\x61tureName\x18\x01 \x01(\t\x12@\n\x06scaler\x18\n \x01(\x0b\x32..CoreML.Specification.NeuralNetworkImageScalerH\x00\x12\x41\n\tmeanImage\x18\x0b \x01(\x0b\x32,.CoreML.Specification.NeuralNetworkMeanImageH\x00\x42\x0e\n\x0cpreprocessor\"\x10\n\x0e\x41\x63tivationReLU\"$\n\x13\x41\x63tivationLeakyReLU\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"\x10\n\x0e\x41\x63tivationTanh\"3\n\x14\x41\x63tivationScaledTanh\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\x12\x0c\n\x04\x62\x65ta\x18\x02 \x01(\x02\"\x13\n\x11\x41\x63tivationSigmoid\"/\n\x10\x41\x63tivationLinear\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\x12\x0c\n\x04\x62\x65ta\x18\x02 \x01(\x02\"4\n\x15\x41\x63tivationSigmoidHard\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\x12\x0c\n\x04\x62\x65ta\x18\x02 \x01(\x02\"D\n\x0f\x41\x63tivationPReLU\x12\x31\n\x05\x61lpha\x18\x01 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\x1e\n\rActivationELU\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"*\n\x19\x41\x63tivationThresholdedReLU\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"\x14\n\x12\x41\x63tivationSoftsign\"\x14\n\x12\x41\x63tivationSoftplus\"\x83\x01\n\x1c\x41\x63tivationParametricSoftplus\x12\x31\n\x05\x61lpha\x18\x01 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62\x65ta\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xd4\x06\n\x10\x41\x63tivationParams\x12\x38\n\x06linear\x18\x05 \x01(\x0b\x32&.CoreML.Specification.ActivationLinearH\x00\x12\x34\n\x04ReLU\x18\n \x01(\x0b\x32$.CoreML.Specification.ActivationReLUH\x00\x12>\n\tleakyReLU\x18\x0f \x01(\x0b\x32).CoreML.Specification.ActivationLeakyReLUH\x00\x12J\n\x0fthresholdedReLU\x18\x14 \x01(\x0b\x32/.CoreML.Specification.ActivationThresholdedReLUH\x00\x12\x36\n\x05PReLU\x18\x19 \x01(\x0b\x32%.CoreML.Specification.ActivationPReLUH\x00\x12\x34\n\x04tanh\x18\x1e \x01(\x0b\x32$.CoreML.Specification.ActivationTanhH\x00\x12@\n\nscaledTanh\x18\x1f \x01(\x0b\x32*.CoreML.Specification.ActivationScaledTanhH\x00\x12:\n\x07sigmoid\x18( \x01(\x0b\x32\'.CoreML.Specification.ActivationSigmoidH\x00\x12\x42\n\x0bsigmoidHard\x18) \x01(\x0b\x32+.CoreML.Specification.ActivationSigmoidHardH\x00\x12\x32\n\x03\x45LU\x18\x32 \x01(\x0b\x32#.CoreML.Specification.ActivationELUH\x00\x12<\n\x08softsign\x18< \x01(\x0b\x32(.CoreML.Specification.ActivationSoftsignH\x00\x12<\n\x08softplus\x18\x46 \x01(\x0b\x32(.CoreML.Specification.ActivationSoftplusH\x00\x12P\n\x12parametricSoftplus\x18G \x01(\x0b\x32\x32.CoreML.Specification.ActivationParametricSoftplusH\x00\x42\x12\n\x10NonlinearityType\"(\n\x06Tensor\x12\x0c\n\x04rank\x18\x01 \x01(\r\x12\x10\n\x08\x64imValue\x18\x02 \x03(\x03\"\x88\x42\n\x12NeuralNetworkLayer\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05input\x18\x02 \x03(\t\x12\x0e\n\x06output\x18\x03 \x03(\t\x12\x31\n\x0binputTensor\x18\x04 \x03(\x0b\x32\x1c.CoreML.Specification.Tensor\x12\x32\n\x0coutputTensor\x18\x05 \x03(\x0b\x32\x1c.CoreML.Specification.Tensor\x12\x13\n\x0bisUpdatable\x18\n \x01(\x08\x12\x43\n\x0b\x63onvolution\x18\x64 \x01(\x0b\x32,.CoreML.Specification.ConvolutionLayerParamsH\x00\x12;\n\x07pooling\x18x \x01(\x0b\x32(.CoreML.Specification.PoolingLayerParamsH\x00\x12=\n\nactivation\x18\x82\x01 \x01(\x0b\x32&.CoreML.Specification.ActivationParamsH\x00\x12\x46\n\x0cinnerProduct\x18\x8c\x01 \x01(\x0b\x32-.CoreML.Specification.InnerProductLayerParamsH\x00\x12@\n\tembedding\x18\x96\x01 \x01(\x0b\x32*.CoreML.Specification.EmbeddingLayerParamsH\x00\x12@\n\tbatchnorm\x18\xa0\x01 \x01(\x0b\x32*.CoreML.Specification.BatchnormLayerParamsH\x00\x12\x46\n\x03mvn\x18\xa5\x01 \x01(\x0b\x32\x36.CoreML.Specification.MeanVarianceNormalizeLayerParamsH\x00\x12\x44\n\x0bl2normalize\x18\xaa\x01 \x01(\x0b\x32,.CoreML.Specification.L2NormalizeLayerParamsH\x00\x12<\n\x07softmax\x18\xaf\x01 \x01(\x0b\x32(.CoreML.Specification.SoftmaxLayerParamsH\x00\x12\x34\n\x03lrn\x18\xb4\x01 \x01(\x0b\x32$.CoreML.Specification.LRNLayerParamsH\x00\x12\x36\n\x04\x63rop\x18\xbe\x01 \x01(\x0b\x32%.CoreML.Specification.CropLayerParamsH\x00\x12<\n\x07padding\x18\xc8\x01 \x01(\x0b\x32(.CoreML.Specification.PaddingLayerParamsH\x00\x12>\n\x08upsample\x18\xd2\x01 \x01(\x0b\x32).CoreML.Specification.UpsampleLayerParamsH\x00\x12J\n\x0eresizeBilinear\x18\xd3\x01 \x01(\x0b\x32/.CoreML.Specification.ResizeBilinearLayerParamsH\x00\x12\x42\n\ncropResize\x18\xd4\x01 \x01(\x0b\x32+.CoreML.Specification.CropResizeLayerParamsH\x00\x12@\n\x05unary\x18\xdc\x01 \x01(\x0b\x32..CoreML.Specification.UnaryFunctionLayerParamsH\x00\x12\x34\n\x03\x61\x64\x64\x18\xe6\x01 \x01(\x0b\x32$.CoreML.Specification.AddLayerParamsH\x00\x12>\n\x08multiply\x18\xe7\x01 \x01(\x0b\x32).CoreML.Specification.MultiplyLayerParamsH\x00\x12<\n\x07\x61verage\x18\xf0\x01 \x01(\x0b\x32(.CoreML.Specification.AverageLayerParamsH\x00\x12\x38\n\x05scale\x18\xf5\x01 \x01(\x0b\x32&.CoreML.Specification.ScaleLayerParamsH\x00\x12\x36\n\x04\x62ias\x18\xfa\x01 \x01(\x0b\x32%.CoreML.Specification.BiasLayerParamsH\x00\x12\x34\n\x03max\x18\x84\x02 \x01(\x0b\x32$.CoreML.Specification.MaxLayerParamsH\x00\x12\x34\n\x03min\x18\x85\x02 \x01(\x0b\x32$.CoreML.Specification.MinLayerParamsH\x00\x12;\n\x03\x64ot\x18\x8e\x02 \x01(\x0b\x32+.CoreML.Specification.DotProductLayerParamsH\x00\x12:\n\x06reduce\x18\x98\x02 \x01(\x0b\x32\'.CoreML.Specification.ReduceLayerParamsH\x00\x12\x46\n\x0cloadConstant\x18\xa2\x02 \x01(\x0b\x32-.CoreML.Specification.LoadConstantLayerParamsH\x00\x12<\n\x07reshape\x18\xac\x02 \x01(\x0b\x32(.CoreML.Specification.ReshapeLayerParamsH\x00\x12<\n\x07\x66latten\x18\xad\x02 \x01(\x0b\x32(.CoreML.Specification.FlattenLayerParamsH\x00\x12<\n\x07permute\x18\xb6\x02 \x01(\x0b\x32(.CoreML.Specification.PermuteLayerParamsH\x00\x12:\n\x06\x63oncat\x18\xc0\x02 \x01(\x0b\x32\'.CoreML.Specification.ConcatLayerParamsH\x00\x12\x38\n\x05split\x18\xca\x02 \x01(\x0b\x32&.CoreML.Specification.SplitLayerParamsH\x00\x12J\n\x0esequenceRepeat\x18\xd4\x02 \x01(\x0b\x32/.CoreML.Specification.SequenceRepeatLayerParamsH\x00\x12J\n\x0ereorganizeData\x18\xd9\x02 \x01(\x0b\x32/.CoreML.Specification.ReorganizeDataLayerParamsH\x00\x12\x38\n\x05slice\x18\xde\x02 \x01(\x0b\x32&.CoreML.Specification.SliceLayerParamsH\x00\x12L\n\x0fsimpleRecurrent\x18\x90\x03 \x01(\x0b\x32\x30.CoreML.Specification.SimpleRecurrentLayerParamsH\x00\x12\x34\n\x03gru\x18\x9a\x03 \x01(\x0b\x32$.CoreML.Specification.GRULayerParamsH\x00\x12R\n\x12uniDirectionalLSTM\x18\xa4\x03 \x01(\x0b\x32\x33.CoreML.Specification.UniDirectionalLSTMLayerParamsH\x00\x12P\n\x11\x62iDirectionalLSTM\x18\xae\x03 \x01(\x0b\x32\x32.CoreML.Specification.BiDirectionalLSTMLayerParamsH\x00\x12:\n\x06\x63ustom\x18\xf4\x03 \x01(\x0b\x32\'.CoreML.Specification.CustomLayerParamsH\x00\x12\x36\n\x04\x63opy\x18\xd8\x04 \x01(\x0b\x32%.CoreML.Specification.CopyLayerParamsH\x00\x12:\n\x06\x62ranch\x18\xdd\x04 \x01(\x0b\x32\'.CoreML.Specification.BranchLayerParamsH\x00\x12\x36\n\x04loop\x18\xe7\x04 \x01(\x0b\x32%.CoreML.Specification.LoopLayerParamsH\x00\x12@\n\tloopBreak\x18\xec\x04 \x01(\x0b\x32*.CoreML.Specification.LoopBreakLayerParamsH\x00\x12\x46\n\x0cloopContinue\x18\xf1\x04 \x01(\x0b\x32-.CoreML.Specification.LoopContinueLayerParamsH\x00\x12\x38\n\x05range\x18\xfb\x04 \x01(\x0b\x32&.CoreML.Specification.RangeLayerParamsH\x00\x12\x36\n\x04\x63lip\x18\x94\x05 \x01(\x0b\x32%.CoreML.Specification.ClipLayerParamsH\x00\x12\x36\n\x04\x63\x65il\x18\x99\x05 \x01(\x0b\x32%.CoreML.Specification.CeilLayerParamsH\x00\x12\x38\n\x05\x66loor\x18\x9e\x05 \x01(\x0b\x32&.CoreML.Specification.FloorLayerParamsH\x00\x12\x36\n\x04\x65xp2\x18\xbc\x05 \x01(\x0b\x32%.CoreML.Specification.Exp2LayerParamsH\x00\x12\x34\n\x03sin\x18\xc6\x05 \x01(\x0b\x32$.CoreML.Specification.SinLayerParamsH\x00\x12\x34\n\x03\x63os\x18\xcb\x05 \x01(\x0b\x32$.CoreML.Specification.CosLayerParamsH\x00\x12\x34\n\x03tan\x18\xd0\x05 \x01(\x0b\x32$.CoreML.Specification.TanLayerParamsH\x00\x12\x36\n\x04\x61sin\x18\xda\x05 \x01(\x0b\x32%.CoreML.Specification.AsinLayerParamsH\x00\x12\x36\n\x04\x61\x63os\x18\xdf\x05 \x01(\x0b\x32%.CoreML.Specification.AcosLayerParamsH\x00\x12\x36\n\x04\x61tan\x18\xe4\x05 \x01(\x0b\x32%.CoreML.Specification.AtanLayerParamsH\x00\x12\x36\n\x04sinh\x18\xee\x05 \x01(\x0b\x32%.CoreML.Specification.SinhLayerParamsH\x00\x12\x36\n\x04\x63osh\x18\xf3\x05 \x01(\x0b\x32%.CoreML.Specification.CoshLayerParamsH\x00\x12\x36\n\x04tanh\x18\xf8\x05 \x01(\x0b\x32%.CoreML.Specification.TanhLayerParamsH\x00\x12\x38\n\x05\x61sinh\x18\x82\x06 \x01(\x0b\x32&.CoreML.Specification.AsinhLayerParamsH\x00\x12\x38\n\x05\x61\x63osh\x18\x87\x06 \x01(\x0b\x32&.CoreML.Specification.AcoshLayerParamsH\x00\x12\x38\n\x05\x61tanh\x18\x8c\x06 \x01(\x0b\x32&.CoreML.Specification.AtanhLayerParamsH\x00\x12\x34\n\x03\x65rf\x18\x96\x06 \x01(\x0b\x32$.CoreML.Specification.ErfLayerParamsH\x00\x12\x36\n\x04gelu\x18\x9b\x06 \x01(\x0b\x32%.CoreML.Specification.GeluLayerParamsH\x00\x12\x38\n\x05\x65qual\x18\xaf\x06 \x01(\x0b\x32&.CoreML.Specification.EqualLayerParamsH\x00\x12>\n\x08notEqual\x18\xb4\x06 \x01(\x0b\x32).CoreML.Specification.NotEqualLayerParamsH\x00\x12>\n\x08lessThan\x18\xb9\x06 \x01(\x0b\x32).CoreML.Specification.LessThanLayerParamsH\x00\x12@\n\tlessEqual\x18\xbb\x06 \x01(\x0b\x32*.CoreML.Specification.LessEqualLayerParamsH\x00\x12\x44\n\x0bgreaterThan\x18\xbe\x06 \x01(\x0b\x32,.CoreML.Specification.GreaterThanLayerParamsH\x00\x12\x46\n\x0cgreaterEqual\x18\xc0\x06 \x01(\x0b\x32-.CoreML.Specification.GreaterEqualLayerParamsH\x00\x12@\n\tlogicalOr\x18\xc8\x06 \x01(\x0b\x32*.CoreML.Specification.LogicalOrLayerParamsH\x00\x12\x42\n\nlogicalXor\x18\xcd\x06 \x01(\x0b\x32+.CoreML.Specification.LogicalXorLayerParamsH\x00\x12\x42\n\nlogicalNot\x18\xd2\x06 \x01(\x0b\x32+.CoreML.Specification.LogicalNotLayerParamsH\x00\x12\x42\n\nlogicalAnd\x18\xd7\x06 \x01(\x0b\x32+.CoreML.Specification.LogicalAndLayerParamsH\x00\x12N\n\x10minBroadcastable\x18\xe6\x06 \x01(\x0b\x32\x31.CoreML.Specification.MinBroadcastableLayerParamsH\x00\x12N\n\x10maxBroadcastable\x18\xeb\x06 \x01(\x0b\x32\x31.CoreML.Specification.MaxBroadcastableLayerParamsH\x00\x12N\n\x10\x61\x64\x64\x42roadcastable\x18\xf0\x06 \x01(\x0b\x32\x31.CoreML.Specification.AddBroadcastableLayerParamsH\x00\x12N\n\x10powBroadcastable\x18\xf5\x06 \x01(\x0b\x32\x31.CoreML.Specification.PowBroadcastableLayerParamsH\x00\x12T\n\x13\x64ivideBroadcastable\x18\xfa\x06 \x01(\x0b\x32\x34.CoreML.Specification.DivideBroadcastableLayerParamsH\x00\x12X\n\x15\x66loorDivBroadcastable\x18\xff\x06 \x01(\x0b\x32\x36.CoreML.Specification.FloorDivBroadcastableLayerParamsH\x00\x12X\n\x15multiplyBroadcastable\x18\x84\x07 \x01(\x0b\x32\x36.CoreML.Specification.MultiplyBroadcastableLayerParamsH\x00\x12X\n\x15subtractBroadcastable\x18\x89\x07 \x01(\x0b\x32\x36.CoreML.Specification.SubtractBroadcastableLayerParamsH\x00\x12\x36\n\x04tile\x18\x98\x07 \x01(\x0b\x32%.CoreML.Specification.TileLayerParamsH\x00\x12<\n\x07stackND\x18\x9d\x07 \x01(\x0b\x32(.CoreML.Specification.StackNDLayerParamsH\x00\x12:\n\x06gather\x18\xa2\x07 \x01(\x0b\x32\'.CoreML.Specification.GatherLayerParamsH\x00\x12<\n\x07scatter\x18\xa7\x07 \x01(\x0b\x32(.CoreML.Specification.ScatterLayerParamsH\x00\x12@\n\tsoftmaxND\x18\xb6\x07 \x01(\x0b\x32*.CoreML.Specification.SoftmaxNDLayerParamsH\x00\x12<\n\x07reverse\x18\xc0\x07 \x01(\x0b\x32(.CoreML.Specification.ReverseLayerParamsH\x00\x12<\n\x07splitND\x18\xcf\x07 \x01(\x0b\x32(.CoreML.Specification.SplitNDLayerParamsH\x00\x12>\n\x08\x63oncatND\x18\xd4\x07 \x01(\x0b\x32).CoreML.Specification.ConcatNDLayerParamsH\x00\x12@\n\ttranspose\x18\xd9\x07 \x01(\x0b\x32*.CoreML.Specification.TransposeLayerParamsH\x00\x12<\n\x07sliceND\x18\xe3\x07 \x01(\x0b\x32(.CoreML.Specification.SliceNDLayerParamsH\x00\x12J\n\x0eslidingWindows\x18\xed\x07 \x01(\x0b\x32/.CoreML.Specification.SlidingWindowsLayerParamsH\x00\x12\x44\n\x0b\x65mbeddingND\x18\x90\x08 \x01(\x0b\x32,.CoreML.Specification.EmbeddingNDLayerParamsH\x00\x12H\n\rbatchedMatmul\x18\x95\x08 \x01(\x0b\x32..CoreML.Specification.BatchedMatMulLayerParamsH\x00\x12>\n\x08getShape\x18\xa9\x08 \x01(\x0b\x32).CoreML.Specification.GetShapeLayerParamsH\x00\x12J\n\x0eloadConstantND\x18\xae\x08 \x01(\x0b\x32/.CoreML.Specification.LoadConstantNDLayerParamsH\x00\x12>\n\x08\x66illLike\x18\xb8\x08 \x01(\x0b\x32).CoreML.Specification.FillLikeLayerParamsH\x00\x12\x42\n\nfillStatic\x18\xbd\x08 \x01(\x0b\x32+.CoreML.Specification.FillStaticLayerParamsH\x00\x12\x44\n\x0b\x66illDynamic\x18\xc2\x08 \x01(\x0b\x32,.CoreML.Specification.FillDynamicLayerParamsH\x00\x12L\n\x0f\x62roadcastToLike\x18\xcc\x08 \x01(\x0b\x32\x30.CoreML.Specification.BroadcastToLikeLayerParamsH\x00\x12P\n\x11\x62roadcastToStatic\x18\xd1\x08 \x01(\x0b\x32\x32.CoreML.Specification.BroadcastToStaticLayerParamsH\x00\x12R\n\x12\x62roadcastToDynamic\x18\xd6\x08 \x01(\x0b\x32\x33.CoreML.Specification.BroadcastToDynamicLayerParamsH\x00\x12<\n\x07squeeze\x18\xe0\x08 \x01(\x0b\x32(.CoreML.Specification.SqueezeLayerParamsH\x00\x12\x42\n\nexpandDims\x18\xe5\x08 \x01(\x0b\x32+.CoreML.Specification.ExpandDimsLayerParamsH\x00\x12\x44\n\x0b\x66lattenTo2D\x18\xea\x08 \x01(\x0b\x32,.CoreML.Specification.FlattenTo2DLayerParamsH\x00\x12\x44\n\x0breshapeLike\x18\xef\x08 \x01(\x0b\x32,.CoreML.Specification.ReshapeLikeLayerParamsH\x00\x12H\n\rreshapeStatic\x18\xf4\x08 \x01(\x0b\x32..CoreML.Specification.ReshapeStaticLayerParamsH\x00\x12J\n\x0ereshapeDynamic\x18\xf9\x08 \x01(\x0b\x32/.CoreML.Specification.ReshapeDynamicLayerParamsH\x00\x12X\n\x15rankPreservingReshape\x18\xfe\x08 \x01(\x0b\x32\x36.CoreML.Specification.RankPreservingReshapeLayerParamsH\x00\x12N\n\x10randomNormalLike\x18\x92\t \x01(\x0b\x32\x31.CoreML.Specification.RandomNormalLikeLayerParamsH\x00\x12R\n\x12randomNormalStatic\x18\x97\t \x01(\x0b\x32\x33.CoreML.Specification.RandomNormalStaticLayerParamsH\x00\x12T\n\x13randomNormalDynamic\x18\x9c\t \x01(\x0b\x32\x34.CoreML.Specification.RandomNormalDynamicLayerParamsH\x00\x12P\n\x11randomUniformLike\x18\xa6\t \x01(\x0b\x32\x32.CoreML.Specification.RandomUniformLikeLayerParamsH\x00\x12T\n\x13randomUniformStatic\x18\xab\t \x01(\x0b\x32\x34.CoreML.Specification.RandomUniformStaticLayerParamsH\x00\x12V\n\x14randomUniformDynamic\x18\xb0\t \x01(\x0b\x32\x35.CoreML.Specification.RandomUniformDynamicLayerParamsH\x00\x12T\n\x13randomBernoulliLike\x18\xba\t \x01(\x0b\x32\x34.CoreML.Specification.RandomBernoulliLikeLayerParamsH\x00\x12X\n\x15randomBernoulliStatic\x18\xbf\t \x01(\x0b\x32\x36.CoreML.Specification.RandomBernoulliStaticLayerParamsH\x00\x12Z\n\x16randomBernoulliDynamic\x18\xc4\t \x01(\x0b\x32\x37.CoreML.Specification.RandomBernoulliDynamicLayerParamsH\x00\x12J\n\x0ematrixBandPart\x18\xa3\n \x01(\x0b\x32/.CoreML.Specification.MatrixBandPartLayerParamsH\x00\x12L\n\x0flowerTriangular\x18\xa8\n \x01(\x0b\x32\x30.CoreML.Specification.LowerTriangularLayerParamsH\x00\x12L\n\x0fupperTriangular\x18\xad\n \x01(\x0b\x32\x30.CoreML.Specification.UpperTriangularLayerParamsH\x00\x12R\n\x12whereBroadcastable\x18\xb2\n \x01(\x0b\x32\x33.CoreML.Specification.WhereBroadcastableLayerParamsH\x00\x42\x07\n\x05layer\"\x83\x01\n\x11\x42ranchLayerParams\x12\x35\n\x08ifBranch\x18\x01 \x01(\x0b\x32#.CoreML.Specification.NeuralNetwork\x12\x37\n\nelseBranch\x18\x02 \x01(\x0b\x32#.CoreML.Specification.NeuralNetwork\"\xbb\x01\n\x0fLoopLayerParams\x12\x19\n\x11maxLoopIterations\x18\x01 \x01(\x04\x12\x14\n\x0c\x63onditionVar\x18\x02 \x01(\t\x12=\n\x10\x63onditionNetwork\x18\x03 \x01(\x0b\x32#.CoreML.Specification.NeuralNetwork\x12\x38\n\x0b\x62odyNetwork\x18\x04 \x01(\x0b\x32#.CoreML.Specification.NeuralNetwork\"\x16\n\x14LoopBreakLayerParams\"\x19\n\x17LoopContinueLayerParams\"\x11\n\x0f\x43opyLayerParams\"\'\n\x16GreaterThanLayerParams\x12\r\n\x05\x61lpha\x18\x02 \x01(\x02\"(\n\x17GreaterEqualLayerParams\x12\r\n\x05\x61lpha\x18\x02 \x01(\x02\"$\n\x13LessThanLayerParams\x12\r\n\x05\x61lpha\x18\x02 \x01(\x02\"%\n\x14LessEqualLayerParams\x12\r\n\x05\x61lpha\x18\x02 \x01(\x02\"!\n\x10\x45qualLayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"$\n\x13NotEqualLayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"\x17\n\x15LogicalAndLayerParams\"\x16\n\x14LogicalOrLayerParams\"\x17\n\x15LogicalXorLayerParams\"\x17\n\x15LogicalNotLayerParams\"\x8e\x01\n\rBorderAmounts\x12\x44\n\rborderAmounts\x18\n \x03(\x0b\x32-.CoreML.Specification.BorderAmounts.EdgeSizes\x1a\x37\n\tEdgeSizes\x12\x15\n\rstartEdgeSize\x18\x01 \x01(\x04\x12\x13\n\x0b\x65ndEdgeSize\x18\x02 \x01(\x04\"K\n\x0cValidPadding\x12;\n\x0epaddingAmounts\x18\x01 \x01(\x0b\x32#.CoreML.Specification.BorderAmounts\"\x96\x01\n\x0bSamePadding\x12H\n\rasymmetryMode\x18\x01 \x01(\x0e\x32\x31.CoreML.Specification.SamePadding.SamePaddingMode\"=\n\x0fSamePaddingMode\x12\x16\n\x12\x42OTTOM_RIGHT_HEAVY\x10\x00\x12\x12\n\x0eTOP_LEFT_HEAVY\x10\x01\"\xbd\x01\n\x0cSamplingMode\x12\x41\n\x0esamplingMethod\x18\x01 \x01(\x0e\x32).CoreML.Specification.SamplingMode.Method\"j\n\x06Method\x12\x1f\n\x1bSTRICT_ALIGN_ENDPOINTS_MODE\x10\x00\x12\x18\n\x14\x41LIGN_ENDPOINTS_MODE\x10\x01\x12\x11\n\rUPSAMPLE_MODE\x10\x02\x12\x12\n\x0eROI_ALIGN_MODE\x10\x03\"\xd8\x01\n\x12\x42oxCoordinatesMode\x12\x45\n\x07\x62oxMode\x18\x01 \x01(\x0e\x32\x34.CoreML.Specification.BoxCoordinatesMode.Coordinates\"{\n\x0b\x43oordinates\x12\x18\n\x14\x43ORNERS_HEIGHT_FIRST\x10\x00\x12\x17\n\x13\x43ORNERS_WIDTH_FIRST\x10\x01\x12\x1c\n\x18\x43\x45NTER_SIZE_HEIGHT_FIRST\x10\x02\x12\x1b\n\x17\x43\x45NTER_SIZE_WIDTH_FIRST\x10\x03\"\x9f\x01\n\x0cWeightParams\x12\x12\n\nfloatValue\x18\x01 \x03(\x02\x12\x14\n\x0c\x66loat16Value\x18\x02 \x01(\x0c\x12\x10\n\x08rawValue\x18\x1e \x01(\x0c\x12>\n\x0cquantization\x18( \x01(\x0b\x32(.CoreML.Specification.QuantizationParams\x12\x13\n\x0bisUpdatable\x18\x32 \x01(\x08\"\xe4\x01\n\x12QuantizationParams\x12\x14\n\x0cnumberOfBits\x18\x01 \x01(\x04\x12L\n\x12linearQuantization\x18\x65 \x01(\x0b\x32..CoreML.Specification.LinearQuantizationParamsH\x00\x12V\n\x17lookupTableQuantization\x18\x66 \x01(\x0b\x32\x33.CoreML.Specification.LookUpTableQuantizationParamsH\x00\x42\x12\n\x10QuantizationType\"7\n\x18LinearQuantizationParams\x12\r\n\x05scale\x18\x01 \x03(\x02\x12\x0c\n\x04\x62ias\x18\x02 \x03(\x02\"3\n\x1dLookUpTableQuantizationParams\x12\x12\n\nfloatValue\x18\x01 \x03(\x02\"\xbd\x03\n\x16\x43onvolutionLayerParams\x12\x16\n\x0eoutputChannels\x18\x01 \x01(\x04\x12\x16\n\x0ekernelChannels\x18\x02 \x01(\x04\x12\x0f\n\x07nGroups\x18\n \x01(\x04\x12\x12\n\nkernelSize\x18\x14 \x03(\x04\x12\x0e\n\x06stride\x18\x1e \x03(\x04\x12\x16\n\x0e\x64ilationFactor\x18( \x03(\x04\x12\x33\n\x05valid\x18\x32 \x01(\x0b\x32\".CoreML.Specification.ValidPaddingH\x00\x12\x31\n\x04same\x18\x33 \x01(\x0b\x32!.CoreML.Specification.SamePaddingH\x00\x12\x17\n\x0fisDeconvolution\x18< \x01(\x08\x12\x0f\n\x07hasBias\x18\x46 \x01(\x08\x12\x33\n\x07weights\x18Z \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18[ \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x13\n\x0boutputShape\x18\x64 \x03(\x04\x42\x18\n\x16\x43onvolutionPaddingType\"\xc0\x01\n\x17InnerProductLayerParams\x12\x15\n\rinputChannels\x18\x01 \x01(\x04\x12\x16\n\x0eoutputChannels\x18\x02 \x01(\x04\x12\x0f\n\x07hasBias\x18\n \x01(\x08\x12\x33\n\x07weights\x18\x14 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18\x15 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xb8\x01\n\x14\x45mbeddingLayerParams\x12\x10\n\x08inputDim\x18\x01 \x01(\x04\x12\x16\n\x0eoutputChannels\x18\x02 \x01(\x04\x12\x0f\n\x07hasBias\x18\n \x01(\x08\x12\x33\n\x07weights\x18\x14 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18\x15 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xba\x01\n\x16\x45mbeddingNDLayerParams\x12\x11\n\tvocabSize\x18\x01 \x01(\x04\x12\x15\n\rembeddingSize\x18\x02 \x01(\x04\x12\x0f\n\x07hasBias\x18\x03 \x01(\x08\x12\x33\n\x07weights\x18\x14 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18\x15 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xbd\x02\n\x14\x42\x61tchnormLayerParams\x12\x10\n\x08\x63hannels\x18\x01 \x01(\x04\x12\x16\n\x0e\x63omputeMeanVar\x18\x05 \x01(\x08\x12\x1d\n\x15instanceNormalization\x18\x06 \x01(\x08\x12\x0f\n\x07\x65psilon\x18\n \x01(\x02\x12\x31\n\x05gamma\x18\x0f \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62\x65ta\x18\x10 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04mean\x18\x11 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x34\n\x08variance\x18\x12 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xe8\x03\n\x12PoolingLayerParams\x12\x42\n\x04type\x18\x01 \x01(\x0e\x32\x34.CoreML.Specification.PoolingLayerParams.PoolingType\x12\x12\n\nkernelSize\x18\n \x03(\x04\x12\x0e\n\x06stride\x18\x14 \x03(\x04\x12\x33\n\x05valid\x18\x1e \x01(\x0b\x32\".CoreML.Specification.ValidPaddingH\x00\x12\x31\n\x04same\x18\x1f \x01(\x0b\x32!.CoreML.Specification.SamePaddingH\x00\x12Y\n\x10includeLastPixel\x18  \x01(\x0b\x32=.CoreML.Specification.PoolingLayerParams.ValidCompletePaddingH\x00\x12\x1d\n\x15\x61vgPoolExcludePadding\x18\x32 \x01(\x08\x12\x15\n\rglobalPooling\x18< \x01(\x08\x1a.\n\x14ValidCompletePadding\x12\x16\n\x0epaddingAmounts\x18\n \x03(\x04\"+\n\x0bPoolingType\x12\x07\n\x03MAX\x10\x00\x12\x0b\n\x07\x41VERAGE\x10\x01\x12\x06\n\x02L2\x10\x02\x42\x14\n\x12PoolingPaddingType\"\xa1\x03\n\x12PaddingLayerParams\x12L\n\x08\x63onstant\x18\x01 \x01(\x0b\x32\x38.CoreML.Specification.PaddingLayerParams.PaddingConstantH\x00\x12P\n\nreflection\x18\x02 \x01(\x0b\x32:.CoreML.Specification.PaddingLayerParams.PaddingReflectionH\x00\x12R\n\x0breplication\x18\x03 \x01(\x0b\x32;.CoreML.Specification.PaddingLayerParams.PaddingReplicationH\x00\x12;\n\x0epaddingAmounts\x18\n \x01(\x0b\x32#.CoreML.Specification.BorderAmounts\x1a \n\x0fPaddingConstant\x12\r\n\x05value\x18\x01 \x01(\x02\x1a\x13\n\x11PaddingReflection\x1a\x14\n\x12PaddingReplicationB\r\n\x0bPaddingType\"+\n\x11\x43oncatLayerParams\x12\x16\n\x0esequenceConcat\x18\x64 \x01(\x08\"K\n\x0eLRNLayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\x12\x0c\n\x04\x62\x65ta\x18\x02 \x01(\x02\x12\x11\n\tlocalSize\x18\x03 \x01(\x04\x12\t\n\x01k\x18\x04 \x01(\x02\"\x14\n\x12SoftmaxLayerParams\"$\n\x10SplitLayerParams\x12\x10\n\x08nOutputs\x18\x01 \x01(\x04\"\x1f\n\x0e\x41\x64\x64LayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"$\n\x13MultiplyLayerParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x02\"\x84\x02\n\x18UnaryFunctionLayerParams\x12\x46\n\x04type\x18\x01 \x01(\x0e\x32\x38.CoreML.Specification.UnaryFunctionLayerParams.Operation\x12\r\n\x05\x61lpha\x18\x02 \x01(\x02\x12\x0f\n\x07\x65psilon\x18\x03 \x01(\x02\x12\r\n\x05shift\x18\x04 \x01(\x02\x12\r\n\x05scale\x18\x05 \x01(\x02\"b\n\tOperation\x12\x08\n\x04SQRT\x10\x00\x12\t\n\x05RSQRT\x10\x01\x12\x0b\n\x07INVERSE\x10\x02\x12\t\n\x05POWER\x10\x03\x12\x07\n\x03\x45XP\x10\x04\x12\x07\n\x03LOG\x10\x05\x12\x07\n\x03\x41\x42S\x10\x06\x12\r\n\tTHRESHOLD\x10\x07\"\xa2\x01\n\x13UpsampleLayerParams\x12\x15\n\rscalingFactor\x18\x01 \x03(\x04\x12I\n\x04mode\x18\x05 \x01(\x0e\x32;.CoreML.Specification.UpsampleLayerParams.InterpolationMode\")\n\x11InterpolationMode\x12\x06\n\x02NN\x10\x00\x12\x0c\n\x08\x42ILINEAR\x10\x01\"a\n\x19ResizeBilinearLayerParams\x12\x12\n\ntargetSize\x18\x01 \x03(\x04\x12\x30\n\x04mode\x18\x02 \x01(\x0b\x32\".CoreML.Specification.SamplingMode\"\xd4\x01\n\x15\x43ropResizeLayerParams\x12\x12\n\ntargetSize\x18\x01 \x03(\x04\x12\x1d\n\x15normalizedCoordinates\x18\x02 \x01(\x08\x12\x30\n\x04mode\x18\x03 \x01(\x0b\x32\".CoreML.Specification.SamplingMode\x12@\n\x0e\x62oxIndicesMode\x18\x04 \x01(\x0b\x32(.CoreML.Specification.BoxCoordinatesMode\x12\x14\n\x0cspatialScale\x18\x05 \x01(\x02\"R\n\x0f\x42iasLayerParams\x12\r\n\x05shape\x18\x01 \x03(\x04\x12\x30\n\x04\x62ias\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\xaf\x01\n\x10ScaleLayerParams\x12\x12\n\nshapeScale\x18\x01 \x03(\x04\x12\x31\n\x05scale\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x0f\n\x07hasBias\x18\x03 \x01(\x08\x12\x11\n\tshapeBias\x18\x04 \x03(\x04\x12\x30\n\x04\x62ias\x18\x05 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"Z\n\x17LoadConstantLayerParams\x12\r\n\x05shape\x18\x01 \x03(\x04\x12\x30\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\")\n\x16L2NormalizeLayerParams\x12\x0f\n\x07\x65psilon\x18\x01 \x01(\x02\"\x8e\x01\n\x12\x46lattenLayerParams\x12\x43\n\x04mode\x18\x01 \x01(\x0e\x32\x35.CoreML.Specification.FlattenLayerParams.FlattenOrder\"3\n\x0c\x46lattenOrder\x12\x11\n\rCHANNEL_FIRST\x10\x00\x12\x10\n\x0c\x43HANNEL_LAST\x10\x01\"\xa3\x01\n\x12ReshapeLayerParams\x12\x13\n\x0btargetShape\x18\x01 \x03(\x03\x12\x43\n\x04mode\x18\x02 \x01(\x0e\x32\x35.CoreML.Specification.ReshapeLayerParams.ReshapeOrder\"3\n\x0cReshapeOrder\x12\x11\n\rCHANNEL_FIRST\x10\x00\x12\x10\n\x0c\x43HANNEL_LAST\x10\x01\"\"\n\x12PermuteLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x03(\x04\"\xbe\x01\n\x19ReorganizeDataLayerParams\x12P\n\x04mode\x18\x01 \x01(\x0e\x32\x42.CoreML.Specification.ReorganizeDataLayerParams.ReorganizationType\x12\x11\n\tblockSize\x18\x02 \x01(\x04\"<\n\x12ReorganizationType\x12\x12\n\x0eSPACE_TO_DEPTH\x10\x00\x12\x12\n\x0e\x44\x45PTH_TO_SPACE\x10\x01\"\xc8\x01\n\x10SliceLayerParams\x12\x12\n\nstartIndex\x18\x01 \x01(\x03\x12\x10\n\x08\x65ndIndex\x18\x02 \x01(\x03\x12\x0e\n\x06stride\x18\x03 \x01(\x04\x12>\n\x04\x61xis\x18\x04 \x01(\x0e\x32\x30.CoreML.Specification.SliceLayerParams.SliceAxis\">\n\tSliceAxis\x12\x10\n\x0c\x43HANNEL_AXIS\x10\x00\x12\x0f\n\x0bHEIGHT_AXIS\x10\x01\x12\x0e\n\nWIDTH_AXIS\x10\x02\"\xd9\x02\n\x11ReduceLayerParams\x12\x45\n\x04mode\x18\x01 \x01(\x0e\x32\x37.CoreML.Specification.ReduceLayerParams.ReduceOperation\x12\x0f\n\x07\x65psilon\x18\x02 \x01(\x02\x12@\n\x04\x61xis\x18\x03 \x01(\x0e\x32\x32.CoreML.Specification.ReduceLayerParams.ReduceAxis\"v\n\x0fReduceOperation\x12\x07\n\x03SUM\x10\x00\x12\x07\n\x03\x41VG\x10\x01\x12\x08\n\x04PROD\x10\x02\x12\n\n\x06LOGSUM\x10\x03\x12\r\n\tSUMSQUARE\x10\x04\x12\x06\n\x02L1\x10\x05\x12\x06\n\x02L2\x10\x06\x12\x07\n\x03MAX\x10\x07\x12\x07\n\x03MIN\x10\x08\x12\n\n\x06\x41RGMAX\x10\t\"2\n\nReduceAxis\x12\x07\n\x03\x43HW\x10\x00\x12\x06\n\x02HW\x10\x01\x12\x05\n\x01\x43\x10\x02\x12\x05\n\x01H\x10\x03\x12\x05\n\x01W\x10\x04\"[\n\x0f\x43ropLayerParams\x12\x38\n\x0b\x63ropAmounts\x18\x01 \x01(\x0b\x32#.CoreML.Specification.BorderAmounts\x12\x0e\n\x06offset\x18\x05 \x03(\x04\"\x14\n\x12\x41verageLayerParams\"\x10\n\x0eMaxLayerParams\"\x10\n\x0eMinLayerParams\"1\n\x15\x44otProductLayerParams\x12\x18\n\x10\x63osineSimilarity\x18\x01 \x01(\x08\"f\n MeanVarianceNormalizeLayerParams\x12\x16\n\x0e\x61\x63rossChannels\x18\x01 \x01(\x08\x12\x19\n\x11normalizeVariance\x18\x02 \x01(\x08\x12\x0f\n\x07\x65psilon\x18\x03 \x01(\x02\"1\n\x19SequenceRepeatLayerParams\x12\x14\n\x0cnRepetitions\x18\x01 \x01(\x04\"\xff\x02\n\x1aSimpleRecurrentLayerParams\x12\x17\n\x0finputVectorSize\x18\x01 \x01(\x04\x12\x18\n\x10outputVectorSize\x18\x02 \x01(\x04\x12:\n\nactivation\x18\n \x01(\x0b\x32&.CoreML.Specification.ActivationParams\x12\x16\n\x0esequenceOutput\x18\x0f \x01(\x08\x12\x15\n\rhasBiasVector\x18\x14 \x01(\x08\x12\x38\n\x0cweightMatrix\x18\x1e \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12;\n\x0frecursionMatrix\x18\x1f \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x36\n\nbiasVector\x18  \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x14\n\x0creverseInput\x18\x64 \x01(\x08\"\xaa\x06\n\x0eGRULayerParams\x12\x17\n\x0finputVectorSize\x18\x01 \x01(\x04\x12\x18\n\x10outputVectorSize\x18\x02 \x01(\x04\x12;\n\x0b\x61\x63tivations\x18\n \x03(\x0b\x32&.CoreML.Specification.ActivationParams\x12\x16\n\x0esequenceOutput\x18\x0f \x01(\x08\x12\x16\n\x0ehasBiasVectors\x18\x14 \x01(\x08\x12\x42\n\x16updateGateWeightMatrix\x18\x1e \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x41\n\x15resetGateWeightMatrix\x18\x1f \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x42\n\x16outputGateWeightMatrix\x18  \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19updateGateRecursionMatrix\x18\x32 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x44\n\x18resetGateRecursionMatrix\x18\x33 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19outputGateRecursionMatrix\x18\x34 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14updateGateBiasVector\x18\x46 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12?\n\x13resetGateBiasVector\x18G \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14outputGateBiasVector\x18H \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x14\n\x0creverseInput\x18\x64 \x01(\x08\"\xaa\x01\n\nLSTMParams\x12\x16\n\x0esequenceOutput\x18\n \x01(\x08\x12\x16\n\x0ehasBiasVectors\x18\x14 \x01(\x08\x12\x12\n\nforgetBias\x18\x1e \x01(\x08\x12\x1a\n\x12hasPeepholeVectors\x18( \x01(\x08\x12!\n\x19\x63oupledInputAndForgetGate\x18\x32 \x01(\x08\x12\x19\n\x11\x63\x65llClipThreshold\x18< \x01(\x02\"\x94\x08\n\x10LSTMWeightParams\x12\x41\n\x15inputGateWeightMatrix\x18\x01 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x42\n\x16\x66orgetGateWeightMatrix\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x42\n\x16\x62lockInputWeightMatrix\x18\x03 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x42\n\x16outputGateWeightMatrix\x18\x04 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x44\n\x18inputGateRecursionMatrix\x18\x14 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19\x66orgetGateRecursionMatrix\x18\x15 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19\x62lockInputRecursionMatrix\x18\x16 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x45\n\x19outputGateRecursionMatrix\x18\x17 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12?\n\x13inputGateBiasVector\x18( \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14\x66orgetGateBiasVector\x18) \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14\x62lockInputBiasVector\x18* \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12@\n\x14outputGateBiasVector\x18+ \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x43\n\x17inputGatePeepholeVector\x18< \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x44\n\x18\x66orgetGatePeepholeVector\x18= \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x44\n\x18outputGatePeepholeVector\x18> \x01(\x0b\x32\".CoreML.Specification.WeightParams\"\x95\x02\n\x1dUniDirectionalLSTMLayerParams\x12\x17\n\x0finputVectorSize\x18\x01 \x01(\x04\x12\x18\n\x10outputVectorSize\x18\x02 \x01(\x04\x12;\n\x0b\x61\x63tivations\x18\n \x03(\x0b\x32&.CoreML.Specification.ActivationParams\x12\x30\n\x06params\x18\x0f \x01(\x0b\x32 .CoreML.Specification.LSTMParams\x12<\n\x0cweightParams\x18\x14 \x01(\x0b\x32&.CoreML.Specification.LSTMWeightParams\x12\x14\n\x0creverseInput\x18\x64 \x01(\x08\"\xd2\x02\n\x1c\x42iDirectionalLSTMLayerParams\x12\x17\n\x0finputVectorSize\x18\x01 \x01(\x04\x12\x18\n\x10outputVectorSize\x18\x02 \x01(\x04\x12\x46\n\x16\x61\x63tivationsForwardLSTM\x18\n \x03(\x0b\x32&.CoreML.Specification.ActivationParams\x12G\n\x17\x61\x63tivationsBackwardLSTM\x18\x0b \x03(\x0b\x32&.CoreML.Specification.ActivationParams\x12\x30\n\x06params\x18\x0f \x01(\x0b\x32 .CoreML.Specification.LSTMParams\x12<\n\x0cweightParams\x18\x14 \x03(\x0b\x32&.CoreML.Specification.LSTMWeightParams\"\xbe\x03\n\x11\x43ustomLayerParams\x12\x11\n\tclassName\x18\n \x01(\t\x12\x33\n\x07weights\x18\x14 \x03(\x0b\x32\".CoreML.Specification.WeightParams\x12K\n\nparameters\x18\x1e \x03(\x0b\x32\x37.CoreML.Specification.CustomLayerParams.ParametersEntry\x12\x13\n\x0b\x64\x65scription\x18( \x01(\t\x1a\x8c\x01\n\x15\x43ustomLayerParamValue\x12\x15\n\x0b\x64oubleValue\x18\n \x01(\x01H\x00\x12\x15\n\x0bstringValue\x18\x14 \x01(\tH\x00\x12\x12\n\x08intValue\x18\x1e \x01(\x05H\x00\x12\x13\n\tlongValue\x18( \x01(\x03H\x00\x12\x13\n\tboolValue\x18\x32 \x01(\x08H\x00\x42\x07\n\x05value\x1ap\n\x0fParametersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12L\n\x05value\x18\x02 \x01(\x0b\x32=.CoreML.Specification.CustomLayerParams.CustomLayerParamValue:\x02\x38\x01\"$\n\x14TransposeLayerParams\x12\x0c\n\x04\x61xes\x18\x01 \x03(\x04\"\x83\x02\n\x18\x42\x61tchedMatMulLayerParams\x12\x12\n\ntransposeA\x18\x01 \x01(\x08\x12\x12\n\ntransposeB\x18\x02 \x01(\x08\x12\"\n\x1aweightMatrixFirstDimension\x18\x05 \x01(\x04\x12#\n\x1bweightMatrixSecondDimension\x18\x06 \x01(\x04\x12\x0f\n\x07hasBias\x18\x07 \x01(\x08\x12\x33\n\x07weights\x18\x08 \x01(\x0b\x32\".CoreML.Specification.WeightParams\x12\x30\n\x04\x62ias\x18\t \x01(\x0b\x32\".CoreML.Specification.WeightParams\"#\n\x13\x43oncatNDLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"$\n\x14SoftmaxNDLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"(\n\x12ReverseLayerParams\x12\x12\n\nreverseDim\x18\x01 \x03(\x08\"\\\n\x19LoadConstantNDLayerParams\x12\r\n\x05shape\x18\x01 \x03(\x04\x12\x30\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\".CoreML.Specification.WeightParams\"$\n\x13\x46illLikeLayerParams\x12\r\n\x05value\x18\x01 \x01(\x02\";\n\x15\x46illStaticLayerParams\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x13\n\x0btargetShape\x18\x02 \x03(\x04\"\'\n\x16\x46illDynamicLayerParams\x12\r\n\x05value\x18\x01 \x01(\x02\"\x1f\n\x1dWhereBroadcastableLayerParams\"\x10\n\x0eSinLayerParams\"\x10\n\x0e\x43osLayerParams\"\x10\n\x0eTanLayerParams\"\x11\n\x0f\x41sinLayerParams\"\x11\n\x0f\x41\x63osLayerParams\"\x11\n\x0f\x41tanLayerParams\"\x11\n\x0fSinhLayerParams\"\x11\n\x0f\x43oshLayerParams\"\x11\n\x0fTanhLayerParams\"\x12\n\x10\x41sinhLayerParams\"\x12\n\x10\x41\x63oshLayerParams\"\x12\n\x10\x41tanhLayerParams\"\x1d\n\x1bPowBroadcastableLayerParams\"\x11\n\x0f\x45xp2LayerParams\"?\n\x19MatrixBandPartLayerParams\x12\x10\n\x08numLower\x18\x01 \x01(\x03\x12\x10\n\x08numUpper\x18\x02 \x01(\x03\"\'\n\x1aUpperTriangularLayerParams\x12\t\n\x01k\x18\x01 \x01(\x03\"\'\n\x1aLowerTriangularLayerParams\x12\t\n\x01k\x18\x01 \x01(\x03\"\x1c\n\x1a\x42roadcastToLikeLayerParams\"3\n\x1c\x42roadcastToStaticLayerParams\x12\x13\n\x0btargetShape\x18\x01 \x03(\x04\"\x1f\n\x1d\x42roadcastToDynamicLayerParams\"\x1d\n\x1b\x41\x64\x64\x42roadcastableLayerParams\"\x1d\n\x1bMaxBroadcastableLayerParams\"\x1d\n\x1bMinBroadcastableLayerParams\"\"\n FloorDivBroadcastableLayerParams\"\"\n SubtractBroadcastableLayerParams\"\"\n MultiplyBroadcastableLayerParams\" \n\x1e\x44ivideBroadcastableLayerParams\"!\n\x11GatherLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"\x14\n\x12ScatterLayerParams\"\"\n\x12StackNDLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"7\n RankPreservingReshapeLayerParams\x12\x13\n\x0btargetShape\x18\x01 \x03(\x03\"I\n\x1bRandomNormalLikeLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0c\n\x04mean\x18\x02 \x01(\x02\x12\x0e\n\x06stdDev\x18\x03 \x01(\x02\"`\n\x1dRandomNormalStaticLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0c\n\x04mean\x18\x02 \x01(\x02\x12\x0e\n\x06stdDev\x18\x03 \x01(\x02\x12\x13\n\x0boutputShape\x18\x04 \x03(\x04\"L\n\x1eRandomNormalDynamicLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0c\n\x04mean\x18\x02 \x01(\x02\x12\x0e\n\x06stdDev\x18\x03 \x01(\x02\"L\n\x1cRandomUniformLikeLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0e\n\x06minVal\x18\x02 \x01(\x02\x12\x0e\n\x06maxVal\x18\x03 \x01(\x02\"c\n\x1eRandomUniformStaticLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0e\n\x06minVal\x18\x02 \x01(\x02\x12\x0e\n\x06maxVal\x18\x03 \x01(\x02\x12\x13\n\x0boutputShape\x18\x04 \x03(\x04\"O\n\x1fRandomUniformDynamicLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0e\n\x06minVal\x18\x02 \x01(\x02\x12\x0e\n\x06maxVal\x18\x03 \x01(\x02\"<\n\x1eRandomBernoulliLikeLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0c\n\x04prob\x18\x02 \x01(\x02\"S\n RandomBernoulliStaticLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0c\n\x04prob\x18\x02 \x01(\x02\x12\x13\n\x0boutputShape\x18\x03 \x03(\x04\"?\n!RandomBernoulliDynamicLayerParams\x12\x0c\n\x04seed\x18\x01 \x01(\x03\x12\x0c\n\x04prob\x18\x02 \x01(\x02\"%\n\x15\x45xpandDimsLayerParams\x12\x0c\n\x04\x61xes\x18\x01 \x03(\x03\"&\n\x16\x46lattenTo2DLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\"/\n\x18ReshapeStaticLayerParams\x12\x13\n\x0btargetShape\x18\x01 \x03(\x03\"\x18\n\x16ReshapeLikeLayerParams\"\x1b\n\x19ReshapeDynamicLayerParams\"\"\n\x12SqueezeLayerParams\x12\x0c\n\x04\x61xes\x18\x01 \x03(\x03\"I\n\x12SplitNDLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\x12\x11\n\tnumSplits\x18\x02 \x01(\x04\x12\x12\n\nsplitSizes\x18\x03 \x03(\x04\"\x11\n\x0f\x43\x65ilLayerParams\"\x12\n\x10\x46loorLayerParams\"1\n\x0f\x43lipLayerParams\x12\x0e\n\x06minVal\x18\x01 \x01(\x02\x12\x0e\n\x06maxVal\x18\x02 \x01(\x02\"m\n\x12SliceNDLayerParams\x12\x10\n\x08\x62\x65ginIds\x18\x01 \x03(\x03\x12\x12\n\nbeginMasks\x18\x02 \x03(\x08\x12\x0e\n\x06\x65ndIds\x18\x03 \x03(\x03\x12\x10\n\x08\x65ndMasks\x18\x04 \x03(\x08\x12\x0f\n\x07strides\x18\x05 \x03(\x03\"\x1f\n\x0fTileLayerParams\x12\x0c\n\x04reps\x18\x01 \x03(\x04\"\x15\n\x13GetShapeLayerParams\"\x10\n\x0e\x45rfLayerParams\"\x99\x01\n\x0fGeluLayerParams\x12<\n\x04mode\x18\x01 \x01(\x0e\x32..CoreML.Specification.GeluLayerParams.GeluMode\"H\n\x08GeluMode\x12\t\n\x05\x45XACT\x10\x00\x12\x16\n\x12TANH_APPROXIMATION\x10\x01\x12\x19\n\x15SIGMOID_APPROXIMATION\x10\x02\"O\n\x10RangeLayerParams\x12\x10\n\x08\x65ndValue\x18\x01 \x01(\x02\x12\x12\n\nstartValue\x18\x02 \x01(\x02\x12\x15\n\rstepSizeValue\x18\x03 \x01(\x02\"K\n\x19SlidingWindowsLayerParams\x12\x0c\n\x04\x61xis\x18\x01 \x01(\x03\x12\x12\n\nwindowSize\x18\x02 \x01(\x04\x12\x0c\n\x04step\x18\x03 \x01(\x04\"\xc5\x04\n\x17NeuralNetworkClassifier\x12\x38\n\x06layers\x18\x01 \x03(\x0b\x32(.CoreML.Specification.NeuralNetworkLayer\x12G\n\rpreprocessing\x18\x02 \x03(\x0b\x32\x30.CoreML.Specification.NeuralNetworkPreprocessing\x12Y\n\x16\x61rrayInputShapeMapping\x18\x05 \x01(\x0e\x32\x39.CoreML.Specification.NeuralNetworkMultiArrayShapeMapping\x12T\n\x16imageInputShapeMapping\x18\x06 \x01(\x0e\x32\x34.CoreML.Specification.NeuralNetworkImageShapeMapping\x12\x43\n\x0cupdateParams\x18\n \x01(\x0b\x32-.CoreML.Specification.NetworkUpdateParameters\x12?\n\x11stringClassLabels\x18\x64 \x01(\x0b\x32\".CoreML.Specification.StringVectorH\x00\x12=\n\x10int64ClassLabels\x18\x65 \x01(\x0b\x32!.CoreML.Specification.Int64VectorH\x00\x12\"\n\x19labelProbabilityLayerName\x18\xc8\x01 \x01(\tB\r\n\x0b\x43lassLabels\"\x91\x03\n\x16NeuralNetworkRegressor\x12\x38\n\x06layers\x18\x01 \x03(\x0b\x32(.CoreML.Specification.NeuralNetworkLayer\x12G\n\rpreprocessing\x18\x02 \x03(\x0b\x32\x30.CoreML.Specification.NeuralNetworkPreprocessing\x12Y\n\x16\x61rrayInputShapeMapping\x18\x05 \x01(\x0e\x32\x39.CoreML.Specification.NeuralNetworkMultiArrayShapeMapping\x12T\n\x16imageInputShapeMapping\x18\x06 \x01(\x0e\x32\x34.CoreML.Specification.NeuralNetworkImageShapeMapping\x12\x43\n\x0cupdateParams\x18\n \x01(\x0b\x32-.CoreML.Specification.NetworkUpdateParameters\"\xb8\x01\n\x17NetworkUpdateParameters\x12\x33\n\nlossLayers\x18\x01 \x03(\x0b\x32\x1f.CoreML.Specification.LossLayer\x12\x32\n\toptimizer\x18\x02 \x01(\x0b\x32\x1f.CoreML.Specification.Optimizer\x12\x34\n\x06\x65pochs\x18\x03 \x01(\x0b\x32$.CoreML.Specification.Int64Parameter\"\xb4\x01\n\tLossLayer\x12\x0c\n\x04name\x18\x01 \x01(\t\x12L\n\x15\x63rossEntropyLossLayer\x18\n \x01(\x0b\x32+.CoreML.Specification.CrossEntropyLossLayerH\x00\x12:\n\x0cmseLossLayer\x18\x0b \x01(\x0b\x32\".CoreML.Specification.MSELossLayerH\x00\x42\x0f\n\rLossLayerType\"6\n\x15\x43rossEntropyLossLayer\x12\r\n\x05input\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\"-\n\x0cMSELossLayer\x12\r\n\x05input\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\"\x96\x01\n\tOptimizer\x12:\n\x0csgdOptimizer\x18\n \x01(\x0b\x32\".CoreML.Specification.SGDOptimizerH\x00\x12<\n\radamOptimizer\x18\x0b \x01(\x0b\x32#.CoreML.Specification.AdamOptimizerH\x00\x42\x0f\n\rOptimizerType\"\xc1\x01\n\x0cSGDOptimizer\x12;\n\x0clearningRate\x18\x01 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\x12;\n\rminiBatchSize\x18\x02 \x01(\x0b\x32$.CoreML.Specification.Int64Parameter\x12\x37\n\x08momentum\x18\x03 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\"\xa9\x02\n\rAdamOptimizer\x12;\n\x0clearningRate\x18\x01 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\x12;\n\rminiBatchSize\x18\x02 \x01(\x0b\x32$.CoreML.Specification.Int64Parameter\x12\x34\n\x05\x62\x65ta1\x18\x03 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\x12\x34\n\x05\x62\x65ta2\x18\x04 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter\x12\x32\n\x03\x65ps\x18\x05 \x01(\x0b\x32%.CoreML.Specification.DoubleParameter*W\n#NeuralNetworkMultiArrayShapeMapping\x12\x17\n\x13RANK5_ARRAY_MAPPING\x10\x00\x12\x17\n\x13\x45XACT_ARRAY_MAPPING\x10\x01*R\n\x1eNeuralNetworkImageShapeMapping\x12\x17\n\x13RANK5_IMAGE_MAPPING\x10\x00\x12\x17\n\x13RANK4_IMAGE_MAPPING\x10\x01\x42\x02H\x03P\x00P\x01\x62\x06proto3')
   ,
   dependencies=[DataStructures__pb2.DESCRIPTOR,Parameters__pb2.DESCRIPTOR,],
   public_dependencies=[DataStructures__pb2.DESCRIPTOR,Parameters__pb2.DESCRIPTOR,])
@@ -58,8 +58,8 @@ _NEURALNETWORKMULTIARRAYSHAPEMAPPING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=22688,
-  serialized_end=22775,
+  serialized_start=26699,
+  serialized_end=26786,
 )
 _sym_db.RegisterEnumDescriptor(_NEURALNETWORKMULTIARRAYSHAPEMAPPING)
 
@@ -81,8 +81,8 @@ _NEURALNETWORKIMAGESHAPEMAPPING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=22777,
-  serialized_end=22859,
+  serialized_start=26788,
+  serialized_end=26870,
 )
 _sym_db.RegisterEnumDescriptor(_NEURALNETWORKIMAGESHAPEMAPPING)
 
@@ -110,8 +110,8 @@ _SAMEPADDING_SAMEPADDINGMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=9403,
-  serialized_end=9464,
+  serialized_start=11817,
+  serialized_end=11878,
 )
 _sym_db.RegisterEnumDescriptor(_SAMEPADDING_SAMEPADDINGMODE)
 
@@ -140,8 +140,8 @@ _SAMPLINGMODE_METHOD = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=9550,
-  serialized_end=9656,
+  serialized_start=11964,
+  serialized_end=12070,
 )
 _sym_db.RegisterEnumDescriptor(_SAMPLINGMODE_METHOD)
 
@@ -170,8 +170,8 @@ _BOXCOORDINATESMODE_COORDINATES = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=9752,
-  serialized_end=9875,
+  serialized_start=12166,
+  serialized_end=12289,
 )
 _sym_db.RegisterEnumDescriptor(_BOXCOORDINATESMODE_COORDINATES)
 
@@ -196,8 +196,8 @@ _POOLINGLAYERPARAMS_POOLINGTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=12143,
-  serialized_end=12186,
+  serialized_start=14557,
+  serialized_end=14600,
 )
 _sym_db.RegisterEnumDescriptor(_POOLINGLAYERPARAMS_POOLINGTYPE)
 
@@ -242,8 +242,8 @@ _UNARYFUNCTIONLAYERPARAMS_OPERATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=13046,
-  serialized_end=13144,
+  serialized_start=15460,
+  serialized_end=15558,
 )
 _sym_db.RegisterEnumDescriptor(_UNARYFUNCTIONLAYERPARAMS_OPERATION)
 
@@ -264,8 +264,8 @@ _UPSAMPLELAYERPARAMS_INTERPOLATIONMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=13268,
-  serialized_end=13309,
+  serialized_start=15682,
+  serialized_end=15723,
 )
 _sym_db.RegisterEnumDescriptor(_UPSAMPLELAYERPARAMS_INTERPOLATIONMODE)
 
@@ -286,8 +286,8 @@ _FLATTENLAYERPARAMS_FLATTENORDER = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=14114,
-  serialized_end=14165,
+  serialized_start=16528,
+  serialized_end=16579,
 )
 _sym_db.RegisterEnumDescriptor(_FLATTENLAYERPARAMS_FLATTENORDER)
 
@@ -308,8 +308,8 @@ _RESHAPELAYERPARAMS_RESHAPEORDER = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=14280,
-  serialized_end=14331,
+  serialized_start=16694,
+  serialized_end=16745,
 )
 _sym_db.RegisterEnumDescriptor(_RESHAPELAYERPARAMS_RESHAPEORDER)
 
@@ -330,8 +330,8 @@ _REORGANIZEDATALAYERPARAMS_REORGANIZATIONTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=14500,
-  serialized_end=14560,
+  serialized_start=16914,
+  serialized_end=16974,
 )
 _sym_db.RegisterEnumDescriptor(_REORGANIZEDATALAYERPARAMS_REORGANIZATIONTYPE)
 
@@ -356,8 +356,8 @@ _SLICELAYERPARAMS_SLICEAXIS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=14701,
-  serialized_end=14763,
+  serialized_start=17115,
+  serialized_end=17177,
 )
 _sym_db.RegisterEnumDescriptor(_SLICELAYERPARAMS_SLICEAXIS)
 
@@ -410,8 +410,8 @@ _REDUCELAYERPARAMS_REDUCEOPERATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=14941,
-  serialized_end=15059,
+  serialized_start=17355,
+  serialized_end=17473,
 )
 _sym_db.RegisterEnumDescriptor(_REDUCELAYERPARAMS_REDUCEOPERATION)
 
@@ -444,10 +444,36 @@ _REDUCELAYERPARAMS_REDUCEAXIS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=15061,
-  serialized_end=15111,
+  serialized_start=17475,
+  serialized_end=17525,
 )
 _sym_db.RegisterEnumDescriptor(_REDUCELAYERPARAMS_REDUCEAXIS)
+
+_GELULAYERPARAMS_GELUMODE = _descriptor.EnumDescriptor(
+  name='GeluMode',
+  full_name='CoreML.Specification.GeluLayerParams.GeluMode',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='EXACT', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='TANH_APPROXIMATION', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SIGMOID_APPROXIMATION', index=2, number=2,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=24357,
+  serialized_end=24429,
+)
+_sym_db.RegisterEnumDescriptor(_GELULAYERPARAMS_GELUMODE)
 
 
 _NEURALNETWORK = _descriptor.Descriptor(
@@ -1522,351 +1548,582 @@ _NEURALNETWORKLAYER = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='transposeND', full_name='CoreML.Specification.NeuralNetworkLayer.transposeND', index=45,
-      number=501, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='batchedMatmul', full_name='CoreML.Specification.NeuralNetworkLayer.batchedMatmul', index=46,
-      number=502, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='concatND', full_name='CoreML.Specification.NeuralNetworkLayer.concatND', index=47,
-      number=503, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='softmaxND', full_name='CoreML.Specification.NeuralNetworkLayer.softmaxND', index=48,
-      number=504, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='fill', full_name='CoreML.Specification.NeuralNetworkLayer.fill', index=49,
-      number=505, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='where', full_name='CoreML.Specification.NeuralNetworkLayer.where', index=50,
-      number=506, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='sine', full_name='CoreML.Specification.NeuralNetworkLayer.sine', index=51,
-      number=507, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='cosine', full_name='CoreML.Specification.NeuralNetworkLayer.cosine', index=52,
-      number=508, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='powBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.powBroadcastable', index=53,
-      number=509, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='exp', full_name='CoreML.Specification.NeuralNetworkLayer.exp', index=54,
-      number=510, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='upperTriangular', full_name='CoreML.Specification.NeuralNetworkLayer.upperTriangular', index=55,
-      number=511, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='lowerTriangular', full_name='CoreML.Specification.NeuralNetworkLayer.lowerTriangular', index=56,
-      number=512, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='broadcastTo', full_name='CoreML.Specification.NeuralNetworkLayer.broadcastTo', index=57,
-      number=513, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='addBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.addBroadcastable', index=58,
-      number=514, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='subtractBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.subtractBroadcastable', index=59,
-      number=515, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='multiplyBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.multiplyBroadcastable', index=60,
-      number=516, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='divideBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.divideBroadcastable', index=61,
-      number=517, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='gather', full_name='CoreML.Specification.NeuralNetworkLayer.gather', index=62,
-      number=518, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='stackND', full_name='CoreML.Specification.NeuralNetworkLayer.stackND', index=63,
-      number=519, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='rankPreservingReshape', full_name='CoreML.Specification.NeuralNetworkLayer.rankPreservingReshape', index=64,
-      number=520, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='expandDims', full_name='CoreML.Specification.NeuralNetworkLayer.expandDims', index=65,
-      number=521, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='squeeze', full_name='CoreML.Specification.NeuralNetworkLayer.squeeze', index=66,
-      number=522, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='splitND', full_name='CoreML.Specification.NeuralNetworkLayer.splitND', index=67,
-      number=523, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='ceil', full_name='CoreML.Specification.NeuralNetworkLayer.ceil', index=68,
-      number=524, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='floor', full_name='CoreML.Specification.NeuralNetworkLayer.floor', index=69,
-      number=525, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='clip', full_name='CoreML.Specification.NeuralNetworkLayer.clip', index=70,
-      number=526, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='sliceND', full_name='CoreML.Specification.NeuralNetworkLayer.sliceND', index=71,
-      number=527, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='tile', full_name='CoreML.Specification.NeuralNetworkLayer.tile', index=72,
-      number=528, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='loadConstantND', full_name='CoreML.Specification.NeuralNetworkLayer.loadConstantND', index=73,
-      number=529, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='range', full_name='CoreML.Specification.NeuralNetworkLayer.range', index=74,
-      number=530, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='getShape', full_name='CoreML.Specification.NeuralNetworkLayer.getShape', index=75,
-      number=531, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='embeddingND', full_name='CoreML.Specification.NeuralNetworkLayer.embeddingND', index=76,
-      number=532, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='scatter', full_name='CoreML.Specification.NeuralNetworkLayer.scatter', index=77,
-      number=540, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='slidingWindows', full_name='CoreML.Specification.NeuralNetworkLayer.slidingWindows', index=78,
-      number=533, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='erfActivation', full_name='CoreML.Specification.NeuralNetworkLayer.erfActivation', index=79,
-      number=550, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='geluActivation', full_name='CoreML.Specification.NeuralNetworkLayer.geluActivation', index=80,
-      number=551, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='branch', full_name='CoreML.Specification.NeuralNetworkLayer.branch', index=81,
+      name='copy', full_name='CoreML.Specification.NeuralNetworkLayer.copy', index=45,
       number=600, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='loop', full_name='CoreML.Specification.NeuralNetworkLayer.loop', index=82,
-      number=601, type=11, cpp_type=10, label=1,
+      name='branch', full_name='CoreML.Specification.NeuralNetworkLayer.branch', index=46,
+      number=605, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='loopBreak', full_name='CoreML.Specification.NeuralNetworkLayer.loopBreak', index=83,
-      number=602, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='loopContinue', full_name='CoreML.Specification.NeuralNetworkLayer.loopContinue', index=84,
-      number=603, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='copy', full_name='CoreML.Specification.NeuralNetworkLayer.copy', index=85,
-      number=610, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='alloc', full_name='CoreML.Specification.NeuralNetworkLayer.alloc', index=86,
+      name='loop', full_name='CoreML.Specification.NeuralNetworkLayer.loop', index=47,
       number=615, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='greaterThan', full_name='CoreML.Specification.NeuralNetworkLayer.greaterThan', index=87,
+      name='loopBreak', full_name='CoreML.Specification.NeuralNetworkLayer.loopBreak', index=48,
       number=620, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='lessThan', full_name='CoreML.Specification.NeuralNetworkLayer.lessThan', index=88,
-      number=621, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='equal', full_name='CoreML.Specification.NeuralNetworkLayer.equal', index=89,
-      number=622, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='notEqual', full_name='CoreML.Specification.NeuralNetworkLayer.notEqual', index=90,
-      number=623, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='logicalAnd', full_name='CoreML.Specification.NeuralNetworkLayer.logicalAnd', index=91,
-      number=624, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='logicalOr', full_name='CoreML.Specification.NeuralNetworkLayer.logicalOr', index=92,
+      name='loopContinue', full_name='CoreML.Specification.NeuralNetworkLayer.loopContinue', index=49,
       number=625, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='logicalXor', full_name='CoreML.Specification.NeuralNetworkLayer.logicalXor', index=93,
-      number=626, type=11, cpp_type=10, label=1,
+      name='range', full_name='CoreML.Specification.NeuralNetworkLayer.range', index=50,
+      number=635, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='logicalNot', full_name='CoreML.Specification.NeuralNetworkLayer.logicalNot', index=94,
-      number=627, type=11, cpp_type=10, label=1,
+      name='clip', full_name='CoreML.Specification.NeuralNetworkLayer.clip', index=51,
+      number=660, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='ceil', full_name='CoreML.Specification.NeuralNetworkLayer.ceil', index=52,
+      number=665, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='floor', full_name='CoreML.Specification.NeuralNetworkLayer.floor', index=53,
+      number=670, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='exp2', full_name='CoreML.Specification.NeuralNetworkLayer.exp2', index=54,
+      number=700, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='sin', full_name='CoreML.Specification.NeuralNetworkLayer.sin', index=55,
+      number=710, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='cos', full_name='CoreML.Specification.NeuralNetworkLayer.cos', index=56,
+      number=715, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='tan', full_name='CoreML.Specification.NeuralNetworkLayer.tan', index=57,
+      number=720, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='asin', full_name='CoreML.Specification.NeuralNetworkLayer.asin', index=58,
+      number=730, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='acos', full_name='CoreML.Specification.NeuralNetworkLayer.acos', index=59,
+      number=735, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='atan', full_name='CoreML.Specification.NeuralNetworkLayer.atan', index=60,
+      number=740, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='sinh', full_name='CoreML.Specification.NeuralNetworkLayer.sinh', index=61,
+      number=750, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='cosh', full_name='CoreML.Specification.NeuralNetworkLayer.cosh', index=62,
+      number=755, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='tanh', full_name='CoreML.Specification.NeuralNetworkLayer.tanh', index=63,
+      number=760, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='asinh', full_name='CoreML.Specification.NeuralNetworkLayer.asinh', index=64,
+      number=770, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='acosh', full_name='CoreML.Specification.NeuralNetworkLayer.acosh', index=65,
+      number=775, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='atanh', full_name='CoreML.Specification.NeuralNetworkLayer.atanh', index=66,
+      number=780, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='erf', full_name='CoreML.Specification.NeuralNetworkLayer.erf', index=67,
+      number=790, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='gelu', full_name='CoreML.Specification.NeuralNetworkLayer.gelu', index=68,
+      number=795, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='equal', full_name='CoreML.Specification.NeuralNetworkLayer.equal', index=69,
+      number=815, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='notEqual', full_name='CoreML.Specification.NeuralNetworkLayer.notEqual', index=70,
+      number=820, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='lessThan', full_name='CoreML.Specification.NeuralNetworkLayer.lessThan', index=71,
+      number=825, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='lessEqual', full_name='CoreML.Specification.NeuralNetworkLayer.lessEqual', index=72,
+      number=827, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='greaterThan', full_name='CoreML.Specification.NeuralNetworkLayer.greaterThan', index=73,
+      number=830, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='greaterEqual', full_name='CoreML.Specification.NeuralNetworkLayer.greaterEqual', index=74,
+      number=832, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='logicalOr', full_name='CoreML.Specification.NeuralNetworkLayer.logicalOr', index=75,
+      number=840, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='logicalXor', full_name='CoreML.Specification.NeuralNetworkLayer.logicalXor', index=76,
+      number=845, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='logicalNot', full_name='CoreML.Specification.NeuralNetworkLayer.logicalNot', index=77,
+      number=850, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='logicalAnd', full_name='CoreML.Specification.NeuralNetworkLayer.logicalAnd', index=78,
+      number=855, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='minBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.minBroadcastable', index=79,
+      number=870, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='maxBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.maxBroadcastable', index=80,
+      number=875, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='addBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.addBroadcastable', index=81,
+      number=880, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='powBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.powBroadcastable', index=82,
+      number=885, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='divideBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.divideBroadcastable', index=83,
+      number=890, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='floorDivBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable', index=84,
+      number=895, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='multiplyBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.multiplyBroadcastable', index=85,
+      number=900, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='subtractBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.subtractBroadcastable', index=86,
+      number=905, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='tile', full_name='CoreML.Specification.NeuralNetworkLayer.tile', index=87,
+      number=920, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='stackND', full_name='CoreML.Specification.NeuralNetworkLayer.stackND', index=88,
+      number=925, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='gather', full_name='CoreML.Specification.NeuralNetworkLayer.gather', index=89,
+      number=930, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='scatter', full_name='CoreML.Specification.NeuralNetworkLayer.scatter', index=90,
+      number=935, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='softmaxND', full_name='CoreML.Specification.NeuralNetworkLayer.softmaxND', index=91,
+      number=950, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='reverse', full_name='CoreML.Specification.NeuralNetworkLayer.reverse', index=92,
+      number=960, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='splitND', full_name='CoreML.Specification.NeuralNetworkLayer.splitND', index=93,
+      number=975, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='concatND', full_name='CoreML.Specification.NeuralNetworkLayer.concatND', index=94,
+      number=980, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='transpose', full_name='CoreML.Specification.NeuralNetworkLayer.transpose', index=95,
+      number=985, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='sliceND', full_name='CoreML.Specification.NeuralNetworkLayer.sliceND', index=96,
+      number=995, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='slidingWindows', full_name='CoreML.Specification.NeuralNetworkLayer.slidingWindows', index=97,
+      number=1005, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='embeddingND', full_name='CoreML.Specification.NeuralNetworkLayer.embeddingND', index=98,
+      number=1040, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='batchedMatmul', full_name='CoreML.Specification.NeuralNetworkLayer.batchedMatmul', index=99,
+      number=1045, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='getShape', full_name='CoreML.Specification.NeuralNetworkLayer.getShape', index=100,
+      number=1065, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='loadConstantND', full_name='CoreML.Specification.NeuralNetworkLayer.loadConstantND', index=101,
+      number=1070, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='fillLike', full_name='CoreML.Specification.NeuralNetworkLayer.fillLike', index=102,
+      number=1080, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='fillStatic', full_name='CoreML.Specification.NeuralNetworkLayer.fillStatic', index=103,
+      number=1085, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='fillDynamic', full_name='CoreML.Specification.NeuralNetworkLayer.fillDynamic', index=104,
+      number=1090, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='broadcastToLike', full_name='CoreML.Specification.NeuralNetworkLayer.broadcastToLike', index=105,
+      number=1100, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='broadcastToStatic', full_name='CoreML.Specification.NeuralNetworkLayer.broadcastToStatic', index=106,
+      number=1105, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='broadcastToDynamic', full_name='CoreML.Specification.NeuralNetworkLayer.broadcastToDynamic', index=107,
+      number=1110, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='squeeze', full_name='CoreML.Specification.NeuralNetworkLayer.squeeze', index=108,
+      number=1120, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='expandDims', full_name='CoreML.Specification.NeuralNetworkLayer.expandDims', index=109,
+      number=1125, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='flattenTo2D', full_name='CoreML.Specification.NeuralNetworkLayer.flattenTo2D', index=110,
+      number=1130, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='reshapeLike', full_name='CoreML.Specification.NeuralNetworkLayer.reshapeLike', index=111,
+      number=1135, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='reshapeStatic', full_name='CoreML.Specification.NeuralNetworkLayer.reshapeStatic', index=112,
+      number=1140, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='reshapeDynamic', full_name='CoreML.Specification.NeuralNetworkLayer.reshapeDynamic', index=113,
+      number=1145, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='rankPreservingReshape', full_name='CoreML.Specification.NeuralNetworkLayer.rankPreservingReshape', index=114,
+      number=1150, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomNormalLike', full_name='CoreML.Specification.NeuralNetworkLayer.randomNormalLike', index=115,
+      number=1170, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomNormalStatic', full_name='CoreML.Specification.NeuralNetworkLayer.randomNormalStatic', index=116,
+      number=1175, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomNormalDynamic', full_name='CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic', index=117,
+      number=1180, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomUniformLike', full_name='CoreML.Specification.NeuralNetworkLayer.randomUniformLike', index=118,
+      number=1190, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomUniformStatic', full_name='CoreML.Specification.NeuralNetworkLayer.randomUniformStatic', index=119,
+      number=1195, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomUniformDynamic', full_name='CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic', index=120,
+      number=1200, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomBernoulliLike', full_name='CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike', index=121,
+      number=1210, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomBernoulliStatic', full_name='CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic', index=122,
+      number=1215, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='randomBernoulliDynamic', full_name='CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic', index=123,
+      number=1220, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='matrixBandPart', full_name='CoreML.Specification.NeuralNetworkLayer.matrixBandPart', index=124,
+      number=1315, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='lowerTriangular', full_name='CoreML.Specification.NeuralNetworkLayer.lowerTriangular', index=125,
+      number=1320, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='upperTriangular', full_name='CoreML.Specification.NeuralNetworkLayer.upperTriangular', index=126,
+      number=1325, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='whereBroadcastable', full_name='CoreML.Specification.NeuralNetworkLayer.whereBroadcastable', index=127,
+      number=1330, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1887,7 +2144,7 @@ _NEURALNETWORKLAYER = _descriptor.Descriptor(
       index=0, containing_type=None, fields=[]),
   ],
   serialized_start=2321,
-  serialized_end=8380,
+  serialized_end=10777,
 )
 
 
@@ -1924,8 +2181,8 @@ _BRANCHLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8383,
-  serialized_end=8514,
+  serialized_start=10780,
+  serialized_end=10911,
 )
 
 
@@ -1976,8 +2233,8 @@ _LOOPLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8517,
-  serialized_end=8704,
+  serialized_start=10914,
+  serialized_end=11101,
 )
 
 
@@ -2000,8 +2257,8 @@ _LOOPBREAKLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8706,
-  serialized_end=8728,
+  serialized_start=11103,
+  serialized_end=11125,
 )
 
 
@@ -2024,8 +2281,8 @@ _LOOPCONTINUELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8730,
-  serialized_end=8755,
+  serialized_start=11127,
+  serialized_end=11152,
 )
 
 
@@ -2048,8 +2305,8 @@ _COPYLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8757,
-  serialized_end=8774,
+  serialized_start=11154,
+  serialized_end=11171,
 )
 
 
@@ -2061,14 +2318,7 @@ _GREATERTHANLAYERPARAMS = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='useNonStrictInequality', full_name='CoreML.Specification.GreaterThanLayerParams.useNonStrictInequality', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='alpha', full_name='CoreML.Specification.GreaterThanLayerParams.alpha', index=1,
+      name='alpha', full_name='CoreML.Specification.GreaterThanLayerParams.alpha', index=0,
       number=2, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -2086,8 +2336,39 @@ _GREATERTHANLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8776,
-  serialized_end=8847,
+  serialized_start=11173,
+  serialized_end=11212,
+)
+
+
+_GREATEREQUALLAYERPARAMS = _descriptor.Descriptor(
+  name='GreaterEqualLayerParams',
+  full_name='CoreML.Specification.GreaterEqualLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='alpha', full_name='CoreML.Specification.GreaterEqualLayerParams.alpha', index=0,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=11214,
+  serialized_end=11254,
 )
 
 
@@ -2099,14 +2380,7 @@ _LESSTHANLAYERPARAMS = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='useNonStrictInequality', full_name='CoreML.Specification.LessThanLayerParams.useNonStrictInequality', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='alpha', full_name='CoreML.Specification.LessThanLayerParams.alpha', index=1,
+      name='alpha', full_name='CoreML.Specification.LessThanLayerParams.alpha', index=0,
       number=2, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -2124,8 +2398,39 @@ _LESSTHANLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8849,
-  serialized_end=8917,
+  serialized_start=11256,
+  serialized_end=11292,
+)
+
+
+_LESSEQUALLAYERPARAMS = _descriptor.Descriptor(
+  name='LessEqualLayerParams',
+  full_name='CoreML.Specification.LessEqualLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='alpha', full_name='CoreML.Specification.LessEqualLayerParams.alpha', index=0,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=11294,
+  serialized_end=11331,
 )
 
 
@@ -2155,8 +2460,8 @@ _EQUALLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8919,
-  serialized_end=8952,
+  serialized_start=11333,
+  serialized_end=11366,
 )
 
 
@@ -2186,8 +2491,8 @@ _NOTEQUALLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8954,
-  serialized_end=8990,
+  serialized_start=11368,
+  serialized_end=11404,
 )
 
 
@@ -2210,8 +2515,8 @@ _LOGICALANDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8992,
-  serialized_end=9015,
+  serialized_start=11406,
+  serialized_end=11429,
 )
 
 
@@ -2234,8 +2539,8 @@ _LOGICALORLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9017,
-  serialized_end=9039,
+  serialized_start=11431,
+  serialized_end=11453,
 )
 
 
@@ -2258,8 +2563,8 @@ _LOGICALXORLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9041,
-  serialized_end=9064,
+  serialized_start=11455,
+  serialized_end=11478,
 )
 
 
@@ -2282,8 +2587,8 @@ _LOGICALNOTLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9066,
-  serialized_end=9089,
+  serialized_start=11480,
+  serialized_end=11503,
 )
 
 
@@ -2320,8 +2625,8 @@ _BORDERAMOUNTS_EDGESIZES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9179,
-  serialized_end=9234,
+  serialized_start=11593,
+  serialized_end=11648,
 )
 
 _BORDERAMOUNTS = _descriptor.Descriptor(
@@ -2350,8 +2655,8 @@ _BORDERAMOUNTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9092,
-  serialized_end=9234,
+  serialized_start=11506,
+  serialized_end=11648,
 )
 
 
@@ -2381,8 +2686,8 @@ _VALIDPADDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9236,
-  serialized_end=9311,
+  serialized_start=11650,
+  serialized_end=11725,
 )
 
 
@@ -2413,8 +2718,8 @@ _SAMEPADDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9314,
-  serialized_end=9464,
+  serialized_start=11728,
+  serialized_end=11878,
 )
 
 
@@ -2445,8 +2750,8 @@ _SAMPLINGMODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9467,
-  serialized_end=9656,
+  serialized_start=11881,
+  serialized_end=12070,
 )
 
 
@@ -2477,8 +2782,8 @@ _BOXCOORDINATESMODE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9659,
-  serialized_end=9875,
+  serialized_start=12073,
+  serialized_end=12289,
 )
 
 
@@ -2536,8 +2841,8 @@ _WEIGHTPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9878,
-  serialized_end=10037,
+  serialized_start=12292,
+  serialized_end=12451,
 )
 
 
@@ -2584,8 +2889,8 @@ _QUANTIZATIONPARAMS = _descriptor.Descriptor(
       name='QuantizationType', full_name='CoreML.Specification.QuantizationParams.QuantizationType',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=10040,
-  serialized_end=10268,
+  serialized_start=12454,
+  serialized_end=12682,
 )
 
 
@@ -2622,8 +2927,8 @@ _LINEARQUANTIZATIONPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10270,
-  serialized_end=10325,
+  serialized_start=12684,
+  serialized_end=12739,
 )
 
 
@@ -2653,8 +2958,8 @@ _LOOKUPTABLEQUANTIZATIONPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10327,
-  serialized_end=10378,
+  serialized_start=12741,
+  serialized_end=12792,
 )
 
 
@@ -2771,8 +3076,8 @@ _CONVOLUTIONLAYERPARAMS = _descriptor.Descriptor(
       name='ConvolutionPaddingType', full_name='CoreML.Specification.ConvolutionLayerParams.ConvolutionPaddingType',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=10381,
-  serialized_end=10826,
+  serialized_start=12795,
+  serialized_end=13240,
 )
 
 
@@ -2830,8 +3135,8 @@ _INNERPRODUCTLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10829,
-  serialized_end=11021,
+  serialized_start=13243,
+  serialized_end=13435,
 )
 
 
@@ -2889,8 +3194,8 @@ _EMBEDDINGLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11024,
-  serialized_end=11208,
+  serialized_start=13438,
+  serialized_end=13622,
 )
 
 
@@ -2948,8 +3253,8 @@ _EMBEDDINGNDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11211,
-  serialized_end=11397,
+  serialized_start=13625,
+  serialized_end=13811,
 )
 
 
@@ -3028,8 +3333,8 @@ _BATCHNORMLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11400,
-  serialized_end=11717,
+  serialized_start=13814,
+  serialized_end=14131,
 )
 
 
@@ -3059,8 +3364,8 @@ _POOLINGLAYERPARAMS_VALIDCOMPLETEPADDING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12095,
-  serialized_end=12141,
+  serialized_start=14509,
+  serialized_end=14555,
 )
 
 _POOLINGLAYERPARAMS = _descriptor.Descriptor(
@@ -3142,8 +3447,8 @@ _POOLINGLAYERPARAMS = _descriptor.Descriptor(
       name='PoolingPaddingType', full_name='CoreML.Specification.PoolingLayerParams.PoolingPaddingType',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=11720,
-  serialized_end=12208,
+  serialized_start=14134,
+  serialized_end=14622,
 )
 
 
@@ -3173,8 +3478,8 @@ _PADDINGLAYERPARAMS_PADDINGCONSTANT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12538,
-  serialized_end=12570,
+  serialized_start=14952,
+  serialized_end=14984,
 )
 
 _PADDINGLAYERPARAMS_PADDINGREFLECTION = _descriptor.Descriptor(
@@ -3196,8 +3501,8 @@ _PADDINGLAYERPARAMS_PADDINGREFLECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12572,
-  serialized_end=12591,
+  serialized_start=14986,
+  serialized_end=15005,
 )
 
 _PADDINGLAYERPARAMS_PADDINGREPLICATION = _descriptor.Descriptor(
@@ -3219,8 +3524,8 @@ _PADDINGLAYERPARAMS_PADDINGREPLICATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12593,
-  serialized_end=12613,
+  serialized_start=15007,
+  serialized_end=15027,
 )
 
 _PADDINGLAYERPARAMS = _descriptor.Descriptor(
@@ -3273,8 +3578,8 @@ _PADDINGLAYERPARAMS = _descriptor.Descriptor(
       name='PaddingType', full_name='CoreML.Specification.PaddingLayerParams.PaddingType',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=12211,
-  serialized_end=12628,
+  serialized_start=14625,
+  serialized_end=15042,
 )
 
 
@@ -3304,8 +3609,8 @@ _CONCATLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12630,
-  serialized_end=12673,
+  serialized_start=15044,
+  serialized_end=15087,
 )
 
 
@@ -3356,8 +3661,8 @@ _LRNLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12675,
-  serialized_end=12750,
+  serialized_start=15089,
+  serialized_end=15164,
 )
 
 
@@ -3380,8 +3685,8 @@ _SOFTMAXLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12752,
-  serialized_end=12772,
+  serialized_start=15166,
+  serialized_end=15186,
 )
 
 
@@ -3411,8 +3716,8 @@ _SPLITLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12774,
-  serialized_end=12810,
+  serialized_start=15188,
+  serialized_end=15224,
 )
 
 
@@ -3442,8 +3747,8 @@ _ADDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12812,
-  serialized_end=12843,
+  serialized_start=15226,
+  serialized_end=15257,
 )
 
 
@@ -3473,8 +3778,8 @@ _MULTIPLYLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12845,
-  serialized_end=12881,
+  serialized_start=15259,
+  serialized_end=15295,
 )
 
 
@@ -3533,8 +3838,8 @@ _UNARYFUNCTIONLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12884,
-  serialized_end=13144,
+  serialized_start=15298,
+  serialized_end=15558,
 )
 
 
@@ -3572,8 +3877,8 @@ _UPSAMPLELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13147,
-  serialized_end=13309,
+  serialized_start=15561,
+  serialized_end=15723,
 )
 
 
@@ -3610,8 +3915,8 @@ _RESIZEBILINEARLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13311,
-  serialized_end=13408,
+  serialized_start=15725,
+  serialized_end=15822,
 )
 
 
@@ -3669,8 +3974,8 @@ _CROPRESIZELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13411,
-  serialized_end=13623,
+  serialized_start=15825,
+  serialized_end=16037,
 )
 
 
@@ -3707,8 +4012,8 @@ _BIASLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13625,
-  serialized_end=13707,
+  serialized_start=16039,
+  serialized_end=16121,
 )
 
 
@@ -3766,8 +4071,8 @@ _SCALELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13710,
-  serialized_end=13885,
+  serialized_start=16124,
+  serialized_end=16299,
 )
 
 
@@ -3804,8 +4109,8 @@ _LOADCONSTANTLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13887,
-  serialized_end=13977,
+  serialized_start=16301,
+  serialized_end=16391,
 )
 
 
@@ -3835,8 +4140,8 @@ _L2NORMALIZELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13979,
-  serialized_end=14020,
+  serialized_start=16393,
+  serialized_end=16434,
 )
 
 
@@ -3867,8 +4172,8 @@ _FLATTENLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14023,
-  serialized_end=14165,
+  serialized_start=16437,
+  serialized_end=16579,
 )
 
 
@@ -3906,8 +4211,8 @@ _RESHAPELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14168,
-  serialized_end=14331,
+  serialized_start=16582,
+  serialized_end=16745,
 )
 
 
@@ -3937,8 +4242,8 @@ _PERMUTELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14333,
-  serialized_end=14367,
+  serialized_start=16747,
+  serialized_end=16781,
 )
 
 
@@ -3976,8 +4281,8 @@ _REORGANIZEDATALAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14370,
-  serialized_end=14560,
+  serialized_start=16784,
+  serialized_end=16974,
 )
 
 
@@ -4029,8 +4334,8 @@ _SLICELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14563,
-  serialized_end=14763,
+  serialized_start=16977,
+  serialized_end=17177,
 )
 
 
@@ -4076,8 +4381,8 @@ _REDUCELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14766,
-  serialized_end=15111,
+  serialized_start=17180,
+  serialized_end=17525,
 )
 
 
@@ -4114,8 +4419,8 @@ _CROPLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15113,
-  serialized_end=15204,
+  serialized_start=17527,
+  serialized_end=17618,
 )
 
 
@@ -4138,8 +4443,8 @@ _AVERAGELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15206,
-  serialized_end=15226,
+  serialized_start=17620,
+  serialized_end=17640,
 )
 
 
@@ -4162,8 +4467,8 @@ _MAXLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15228,
-  serialized_end=15244,
+  serialized_start=17642,
+  serialized_end=17658,
 )
 
 
@@ -4186,8 +4491,8 @@ _MINLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15246,
-  serialized_end=15262,
+  serialized_start=17660,
+  serialized_end=17676,
 )
 
 
@@ -4217,8 +4522,8 @@ _DOTPRODUCTLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15264,
-  serialized_end=15313,
+  serialized_start=17678,
+  serialized_end=17727,
 )
 
 
@@ -4262,8 +4567,8 @@ _MEANVARIANCENORMALIZELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15315,
-  serialized_end=15417,
+  serialized_start=17729,
+  serialized_end=17831,
 )
 
 
@@ -4293,8 +4598,8 @@ _SEQUENCEREPEATLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15419,
-  serialized_end=15468,
+  serialized_start=17833,
+  serialized_end=17882,
 )
 
 
@@ -4380,8 +4685,8 @@ _SIMPLERECURRENTLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15471,
-  serialized_end=15854,
+  serialized_start=17885,
+  serialized_end=18268,
 )
 
 
@@ -4509,8 +4814,8 @@ _GRULAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15857,
-  serialized_end=16667,
+  serialized_start=18271,
+  serialized_end=19081,
 )
 
 
@@ -4575,8 +4880,8 @@ _LSTMPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=16670,
-  serialized_end=16840,
+  serialized_start=19084,
+  serialized_end=19254,
 )
 
 
@@ -4704,8 +5009,8 @@ _LSTMWEIGHTPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=16843,
-  serialized_end=17887,
+  serialized_start=19257,
+  serialized_end=20301,
 )
 
 
@@ -4770,8 +5075,8 @@ _UNIDIRECTIONALLSTMLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17890,
-  serialized_end=18167,
+  serialized_start=20304,
+  serialized_end=20581,
 )
 
 
@@ -4836,8 +5141,8 @@ _BIDIRECTIONALLSTMLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18170,
-  serialized_end=18508,
+  serialized_start=20584,
+  serialized_end=20922,
 )
 
 
@@ -4898,8 +5203,8 @@ _CUSTOMLAYERPARAMS_CUSTOMLAYERPARAMVALUE = _descriptor.Descriptor(
       name='value', full_name='CoreML.Specification.CustomLayerParams.CustomLayerParamValue.value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=18703,
-  serialized_end=18843,
+  serialized_start=21117,
+  serialized_end=21257,
 )
 
 _CUSTOMLAYERPARAMS_PARAMETERSENTRY = _descriptor.Descriptor(
@@ -4935,8 +5240,8 @@ _CUSTOMLAYERPARAMS_PARAMETERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18845,
-  serialized_end=18957,
+  serialized_start=21259,
+  serialized_end=21371,
 )
 
 _CUSTOMLAYERPARAMS = _descriptor.Descriptor(
@@ -4986,20 +5291,20 @@ _CUSTOMLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18511,
-  serialized_end=18957,
+  serialized_start=20925,
+  serialized_end=21371,
 )
 
 
-_TRANSPOSENDLAYERPARAMS = _descriptor.Descriptor(
-  name='TransposeNDLayerParams',
-  full_name='CoreML.Specification.TransposeNDLayerParams',
+_TRANSPOSELAYERPARAMS = _descriptor.Descriptor(
+  name='TransposeLayerParams',
+  full_name='CoreML.Specification.TransposeLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='axes', full_name='CoreML.Specification.TransposeNDLayerParams.axes', index=0,
+      name='axes', full_name='CoreML.Specification.TransposeLayerParams.axes', index=0,
       number=1, type=4, cpp_type=4, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -5017,62 +5322,62 @@ _TRANSPOSENDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18959,
-  serialized_end=18997,
+  serialized_start=21373,
+  serialized_end=21409,
 )
 
 
-_BATCHEDMATMULPARAMS = _descriptor.Descriptor(
-  name='BatchedMatMulParams',
-  full_name='CoreML.Specification.BatchedMatMulParams',
+_BATCHEDMATMULLAYERPARAMS = _descriptor.Descriptor(
+  name='BatchedMatMulLayerParams',
+  full_name='CoreML.Specification.BatchedMatMulLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='transposeA', full_name='CoreML.Specification.BatchedMatMulParams.transposeA', index=0,
+      name='transposeA', full_name='CoreML.Specification.BatchedMatMulLayerParams.transposeA', index=0,
       number=1, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='transposeB', full_name='CoreML.Specification.BatchedMatMulParams.transposeB', index=1,
+      name='transposeB', full_name='CoreML.Specification.BatchedMatMulLayerParams.transposeB', index=1,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='weightMatrixFirstDimension', full_name='CoreML.Specification.BatchedMatMulParams.weightMatrixFirstDimension', index=2,
+      name='weightMatrixFirstDimension', full_name='CoreML.Specification.BatchedMatMulLayerParams.weightMatrixFirstDimension', index=2,
       number=5, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='weightMatrixSecondDimension', full_name='CoreML.Specification.BatchedMatMulParams.weightMatrixSecondDimension', index=3,
+      name='weightMatrixSecondDimension', full_name='CoreML.Specification.BatchedMatMulLayerParams.weightMatrixSecondDimension', index=3,
       number=6, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='hasBias', full_name='CoreML.Specification.BatchedMatMulParams.hasBias', index=4,
+      name='hasBias', full_name='CoreML.Specification.BatchedMatMulLayerParams.hasBias', index=4,
       number=7, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='weights', full_name='CoreML.Specification.BatchedMatMulParams.weights', index=5,
+      name='weights', full_name='CoreML.Specification.BatchedMatMulLayerParams.weights', index=5,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='bias', full_name='CoreML.Specification.BatchedMatMulParams.bias', index=6,
+      name='bias', full_name='CoreML.Specification.BatchedMatMulLayerParams.bias', index=6,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -5090,8 +5395,8 @@ _BATCHEDMATMULPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19000,
-  serialized_end=19254,
+  serialized_start=21412,
+  serialized_end=21671,
 )
 
 
@@ -5121,8 +5426,8 @@ _CONCATNDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19256,
-  serialized_end=19291,
+  serialized_start=21673,
+  serialized_end=21708,
 )
 
 
@@ -5152,8 +5457,39 @@ _SOFTMAXNDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19293,
-  serialized_end=19329,
+  serialized_start=21710,
+  serialized_end=21746,
+)
+
+
+_REVERSELAYERPARAMS = _descriptor.Descriptor(
+  name='ReverseLayerParams',
+  full_name='CoreML.Specification.ReverseLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='reverseDim', full_name='CoreML.Specification.ReverseLayerParams.reverseDim', index=0,
+      number=1, type=8, cpp_type=7, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=21748,
+  serialized_end=21788,
 )
 
 
@@ -5190,14 +5526,114 @@ _LOADCONSTANTNDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19331,
-  serialized_end=19423,
+  serialized_start=21790,
+  serialized_end=21882,
 )
 
 
-_FILLLAYERPARAMS = _descriptor.Descriptor(
-  name='FillLayerParams',
-  full_name='CoreML.Specification.FillLayerParams',
+_FILLLIKELAYERPARAMS = _descriptor.Descriptor(
+  name='FillLikeLayerParams',
+  full_name='CoreML.Specification.FillLikeLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='CoreML.Specification.FillLikeLayerParams.value', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=21884,
+  serialized_end=21920,
+)
+
+
+_FILLSTATICLAYERPARAMS = _descriptor.Descriptor(
+  name='FillStaticLayerParams',
+  full_name='CoreML.Specification.FillStaticLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='CoreML.Specification.FillStaticLayerParams.value', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='targetShape', full_name='CoreML.Specification.FillStaticLayerParams.targetShape', index=1,
+      number=2, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=21922,
+  serialized_end=21981,
+)
+
+
+_FILLDYNAMICLAYERPARAMS = _descriptor.Descriptor(
+  name='FillDynamicLayerParams',
+  full_name='CoreML.Specification.FillDynamicLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='value', full_name='CoreML.Specification.FillDynamicLayerParams.value', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=21983,
+  serialized_end=22022,
+)
+
+
+_WHEREBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
+  name='WhereBroadcastableLayerParams',
+  full_name='CoreML.Specification.WhereBroadcastableLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -5214,14 +5650,14 @@ _FILLLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19425,
-  serialized_end=19442,
+  serialized_start=22024,
+  serialized_end=22055,
 )
 
 
-_WHERELAYERPARAMS = _descriptor.Descriptor(
-  name='WhereLayerParams',
-  full_name='CoreML.Specification.WhereLayerParams',
+_SINLAYERPARAMS = _descriptor.Descriptor(
+  name='SinLayerParams',
+  full_name='CoreML.Specification.SinLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -5238,14 +5674,14 @@ _WHERELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19444,
-  serialized_end=19462,
+  serialized_start=22057,
+  serialized_end=22073,
 )
 
 
-_SINELAYERPARAMS = _descriptor.Descriptor(
-  name='SineLayerParams',
-  full_name='CoreML.Specification.SineLayerParams',
+_COSLAYERPARAMS = _descriptor.Descriptor(
+  name='CosLayerParams',
+  full_name='CoreML.Specification.CosLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -5262,14 +5698,14 @@ _SINELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19464,
-  serialized_end=19481,
+  serialized_start=22075,
+  serialized_end=22091,
 )
 
 
-_COSINELAYERPARAMS = _descriptor.Descriptor(
-  name='CosineLayerParams',
-  full_name='CoreML.Specification.CosineLayerParams',
+_TANLAYERPARAMS = _descriptor.Descriptor(
+  name='TanLayerParams',
+  full_name='CoreML.Specification.TanLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -5286,8 +5722,224 @@ _COSINELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19483,
-  serialized_end=19502,
+  serialized_start=22093,
+  serialized_end=22109,
+)
+
+
+_ASINLAYERPARAMS = _descriptor.Descriptor(
+  name='AsinLayerParams',
+  full_name='CoreML.Specification.AsinLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22111,
+  serialized_end=22128,
+)
+
+
+_ACOSLAYERPARAMS = _descriptor.Descriptor(
+  name='AcosLayerParams',
+  full_name='CoreML.Specification.AcosLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22130,
+  serialized_end=22147,
+)
+
+
+_ATANLAYERPARAMS = _descriptor.Descriptor(
+  name='AtanLayerParams',
+  full_name='CoreML.Specification.AtanLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22149,
+  serialized_end=22166,
+)
+
+
+_SINHLAYERPARAMS = _descriptor.Descriptor(
+  name='SinhLayerParams',
+  full_name='CoreML.Specification.SinhLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22168,
+  serialized_end=22185,
+)
+
+
+_COSHLAYERPARAMS = _descriptor.Descriptor(
+  name='CoshLayerParams',
+  full_name='CoreML.Specification.CoshLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22187,
+  serialized_end=22204,
+)
+
+
+_TANHLAYERPARAMS = _descriptor.Descriptor(
+  name='TanhLayerParams',
+  full_name='CoreML.Specification.TanhLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22206,
+  serialized_end=22223,
+)
+
+
+_ASINHLAYERPARAMS = _descriptor.Descriptor(
+  name='AsinhLayerParams',
+  full_name='CoreML.Specification.AsinhLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22225,
+  serialized_end=22243,
+)
+
+
+_ACOSHLAYERPARAMS = _descriptor.Descriptor(
+  name='AcoshLayerParams',
+  full_name='CoreML.Specification.AcoshLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22245,
+  serialized_end=22263,
+)
+
+
+_ATANHLAYERPARAMS = _descriptor.Descriptor(
+  name='AtanhLayerParams',
+  full_name='CoreML.Specification.AtanhLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22265,
+  serialized_end=22283,
 )
 
 
@@ -5310,22 +5962,53 @@ _POWBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19504,
-  serialized_end=19533,
+  serialized_start=22285,
+  serialized_end=22314,
 )
 
 
-_EXPLAYERPARAMS = _descriptor.Descriptor(
-  name='ExpLayerParams',
-  full_name='CoreML.Specification.ExpLayerParams',
+_EXP2LAYERPARAMS = _descriptor.Descriptor(
+  name='Exp2LayerParams',
+  full_name='CoreML.Specification.Exp2LayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22316,
+  serialized_end=22333,
+)
+
+
+_MATRIXBANDPARTLAYERPARAMS = _descriptor.Descriptor(
+  name='MatrixBandPartLayerParams',
+  full_name='CoreML.Specification.MatrixBandPartLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='withBaseAs2', full_name='CoreML.Specification.ExpLayerParams.withBaseAs2', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      name='numLower', full_name='CoreML.Specification.MatrixBandPartLayerParams.numLower', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='numUpper', full_name='CoreML.Specification.MatrixBandPartLayerParams.numUpper', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -5341,8 +6024,8 @@ _EXPLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19535,
-  serialized_end=19572,
+  serialized_start=22335,
+  serialized_end=22398,
 )
 
 
@@ -5353,6 +6036,13 @@ _UPPERTRIANGULARLAYERPARAMS = _descriptor.Descriptor(
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='k', full_name='CoreML.Specification.UpperTriangularLayerParams.k', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -5365,8 +6055,8 @@ _UPPERTRIANGULARLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19574,
-  serialized_end=19602,
+  serialized_start=22400,
+  serialized_end=22439,
 )
 
 
@@ -5377,6 +6067,13 @@ _LOWERTRIANGULARLAYERPARAMS = _descriptor.Descriptor(
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='k', full_name='CoreML.Specification.LowerTriangularLayerParams.k', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -5389,20 +6086,44 @@ _LOWERTRIANGULARLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19604,
-  serialized_end=19632,
+  serialized_start=22441,
+  serialized_end=22480,
 )
 
 
-_BROADCASTTOLAYERPARAMS = _descriptor.Descriptor(
-  name='BroadcastToLayerParams',
-  full_name='CoreML.Specification.BroadcastToLayerParams',
+_BROADCASTTOLIKELAYERPARAMS = _descriptor.Descriptor(
+  name='BroadcastToLikeLayerParams',
+  full_name='CoreML.Specification.BroadcastToLikeLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22482,
+  serialized_end=22510,
+)
+
+
+_BROADCASTTOSTATICLAYERPARAMS = _descriptor.Descriptor(
+  name='BroadcastToStaticLayerParams',
+  full_name='CoreML.Specification.BroadcastToStaticLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='targetShape', full_name='CoreML.Specification.BroadcastToLayerParams.targetShape', index=0,
+      name='targetShape', full_name='CoreML.Specification.BroadcastToStaticLayerParams.targetShape', index=0,
       number=1, type=4, cpp_type=4, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -5420,8 +6141,32 @@ _BROADCASTTOLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19634,
-  serialized_end=19679,
+  serialized_start=22512,
+  serialized_end=22563,
+)
+
+
+_BROADCASTTODYNAMICLAYERPARAMS = _descriptor.Descriptor(
+  name='BroadcastToDynamicLayerParams',
+  full_name='CoreML.Specification.BroadcastToDynamicLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22565,
+  serialized_end=22596,
 )
 
 
@@ -5444,8 +6189,80 @@ _ADDBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19681,
-  serialized_end=19710,
+  serialized_start=22598,
+  serialized_end=22627,
+)
+
+
+_MAXBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
+  name='MaxBroadcastableLayerParams',
+  full_name='CoreML.Specification.MaxBroadcastableLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22629,
+  serialized_end=22658,
+)
+
+
+_MINBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
+  name='MinBroadcastableLayerParams',
+  full_name='CoreML.Specification.MinBroadcastableLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22660,
+  serialized_end=22689,
+)
+
+
+_FLOORDIVBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
+  name='FloorDivBroadcastableLayerParams',
+  full_name='CoreML.Specification.FloorDivBroadcastableLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22691,
+  serialized_end=22725,
 )
 
 
@@ -5468,8 +6285,8 @@ _SUBTRACTBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19712,
-  serialized_end=19746,
+  serialized_start=22727,
+  serialized_end=22761,
 )
 
 
@@ -5492,8 +6309,8 @@ _MULTIPLYBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19748,
-  serialized_end=19782,
+  serialized_start=22763,
+  serialized_end=22797,
 )
 
 
@@ -5516,8 +6333,8 @@ _DIVIDEBROADCASTABLELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19784,
-  serialized_end=19816,
+  serialized_start=22799,
+  serialized_end=22831,
 )
 
 
@@ -5547,8 +6364,8 @@ _GATHERLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19818,
-  serialized_end=19851,
+  serialized_start=22833,
+  serialized_end=22866,
 )
 
 
@@ -5571,8 +6388,8 @@ _SCATTERLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19853,
-  serialized_end=19873,
+  serialized_start=22868,
+  serialized_end=22888,
 )
 
 
@@ -5602,8 +6419,8 @@ _STACKNDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19875,
-  serialized_end=19909,
+  serialized_start=22890,
+  serialized_end=22924,
 )
 
 
@@ -5633,8 +6450,413 @@ _RANKPRESERVINGRESHAPELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19911,
-  serialized_end=19966,
+  serialized_start=22926,
+  serialized_end=22981,
+)
+
+
+_RANDOMNORMALLIKELAYERPARAMS = _descriptor.Descriptor(
+  name='RandomNormalLikeLayerParams',
+  full_name='CoreML.Specification.RandomNormalLikeLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomNormalLikeLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='mean', full_name='CoreML.Specification.RandomNormalLikeLayerParams.mean', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='stdDev', full_name='CoreML.Specification.RandomNormalLikeLayerParams.stdDev', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=22983,
+  serialized_end=23056,
+)
+
+
+_RANDOMNORMALSTATICLAYERPARAMS = _descriptor.Descriptor(
+  name='RandomNormalStaticLayerParams',
+  full_name='CoreML.Specification.RandomNormalStaticLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomNormalStaticLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='mean', full_name='CoreML.Specification.RandomNormalStaticLayerParams.mean', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='stdDev', full_name='CoreML.Specification.RandomNormalStaticLayerParams.stdDev', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='outputShape', full_name='CoreML.Specification.RandomNormalStaticLayerParams.outputShape', index=3,
+      number=4, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23058,
+  serialized_end=23154,
+)
+
+
+_RANDOMNORMALDYNAMICLAYERPARAMS = _descriptor.Descriptor(
+  name='RandomNormalDynamicLayerParams',
+  full_name='CoreML.Specification.RandomNormalDynamicLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomNormalDynamicLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='mean', full_name='CoreML.Specification.RandomNormalDynamicLayerParams.mean', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='stdDev', full_name='CoreML.Specification.RandomNormalDynamicLayerParams.stdDev', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23156,
+  serialized_end=23232,
+)
+
+
+_RANDOMUNIFORMLIKELAYERPARAMS = _descriptor.Descriptor(
+  name='RandomUniformLikeLayerParams',
+  full_name='CoreML.Specification.RandomUniformLikeLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomUniformLikeLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='minVal', full_name='CoreML.Specification.RandomUniformLikeLayerParams.minVal', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='maxVal', full_name='CoreML.Specification.RandomUniformLikeLayerParams.maxVal', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23234,
+  serialized_end=23310,
+)
+
+
+_RANDOMUNIFORMSTATICLAYERPARAMS = _descriptor.Descriptor(
+  name='RandomUniformStaticLayerParams',
+  full_name='CoreML.Specification.RandomUniformStaticLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomUniformStaticLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='minVal', full_name='CoreML.Specification.RandomUniformStaticLayerParams.minVal', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='maxVal', full_name='CoreML.Specification.RandomUniformStaticLayerParams.maxVal', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='outputShape', full_name='CoreML.Specification.RandomUniformStaticLayerParams.outputShape', index=3,
+      number=4, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23312,
+  serialized_end=23411,
+)
+
+
+_RANDOMUNIFORMDYNAMICLAYERPARAMS = _descriptor.Descriptor(
+  name='RandomUniformDynamicLayerParams',
+  full_name='CoreML.Specification.RandomUniformDynamicLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomUniformDynamicLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='minVal', full_name='CoreML.Specification.RandomUniformDynamicLayerParams.minVal', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='maxVal', full_name='CoreML.Specification.RandomUniformDynamicLayerParams.maxVal', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23413,
+  serialized_end=23492,
+)
+
+
+_RANDOMBERNOULLILIKELAYERPARAMS = _descriptor.Descriptor(
+  name='RandomBernoulliLikeLayerParams',
+  full_name='CoreML.Specification.RandomBernoulliLikeLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomBernoulliLikeLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='prob', full_name='CoreML.Specification.RandomBernoulliLikeLayerParams.prob', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23494,
+  serialized_end=23554,
+)
+
+
+_RANDOMBERNOULLISTATICLAYERPARAMS = _descriptor.Descriptor(
+  name='RandomBernoulliStaticLayerParams',
+  full_name='CoreML.Specification.RandomBernoulliStaticLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomBernoulliStaticLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='prob', full_name='CoreML.Specification.RandomBernoulliStaticLayerParams.prob', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='outputShape', full_name='CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape', index=2,
+      number=3, type=4, cpp_type=4, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23556,
+  serialized_end=23639,
+)
+
+
+_RANDOMBERNOULLIDYNAMICLAYERPARAMS = _descriptor.Descriptor(
+  name='RandomBernoulliDynamicLayerParams',
+  full_name='CoreML.Specification.RandomBernoulliDynamicLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='seed', full_name='CoreML.Specification.RandomBernoulliDynamicLayerParams.seed', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='prob', full_name='CoreML.Specification.RandomBernoulliDynamicLayerParams.prob', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23641,
+  serialized_end=23704,
 )
 
 
@@ -5664,8 +6886,118 @@ _EXPANDDIMSLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19968,
-  serialized_end=20005,
+  serialized_start=23706,
+  serialized_end=23743,
+)
+
+
+_FLATTENTO2DLAYERPARAMS = _descriptor.Descriptor(
+  name='FlattenTo2DLayerParams',
+  full_name='CoreML.Specification.FlattenTo2DLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='axis', full_name='CoreML.Specification.FlattenTo2DLayerParams.axis', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23745,
+  serialized_end=23783,
+)
+
+
+_RESHAPESTATICLAYERPARAMS = _descriptor.Descriptor(
+  name='ReshapeStaticLayerParams',
+  full_name='CoreML.Specification.ReshapeStaticLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='targetShape', full_name='CoreML.Specification.ReshapeStaticLayerParams.targetShape', index=0,
+      number=1, type=3, cpp_type=2, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23785,
+  serialized_end=23832,
+)
+
+
+_RESHAPELIKELAYERPARAMS = _descriptor.Descriptor(
+  name='ReshapeLikeLayerParams',
+  full_name='CoreML.Specification.ReshapeLikeLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23834,
+  serialized_end=23858,
+)
+
+
+_RESHAPEDYNAMICLAYERPARAMS = _descriptor.Descriptor(
+  name='ReshapeDynamicLayerParams',
+  full_name='CoreML.Specification.ReshapeDynamicLayerParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=23860,
+  serialized_end=23887,
 )
 
 
@@ -5695,8 +7027,8 @@ _SQUEEZELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20007,
-  serialized_end=20041,
+  serialized_start=23889,
+  serialized_end=23923,
 )
 
 
@@ -5740,8 +7072,8 @@ _SPLITNDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20043,
-  serialized_end=20116,
+  serialized_start=23925,
+  serialized_end=23998,
 )
 
 
@@ -5764,8 +7096,8 @@ _CEILLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20118,
-  serialized_end=20135,
+  serialized_start=24000,
+  serialized_end=24017,
 )
 
 
@@ -5788,8 +7120,8 @@ _FLOORLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20137,
-  serialized_end=20155,
+  serialized_start=24019,
+  serialized_end=24037,
 )
 
 
@@ -5800,6 +7132,20 @@ _CLIPLAYERPARAMS = _descriptor.Descriptor(
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='minVal', full_name='CoreML.Specification.ClipLayerParams.minVal', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='maxVal', full_name='CoreML.Specification.ClipLayerParams.maxVal', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -5812,8 +7158,8 @@ _CLIPLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20157,
-  serialized_end=20174,
+  serialized_start=24039,
+  serialized_end=24088,
 )
 
 
@@ -5871,8 +7217,8 @@ _SLICENDLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20176,
-  serialized_end=20285,
+  serialized_start=24090,
+  serialized_end=24199,
 )
 
 
@@ -5902,8 +7248,8 @@ _TILELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20287,
-  serialized_end=20318,
+  serialized_start=24201,
+  serialized_end=24232,
 )
 
 
@@ -5926,14 +7272,14 @@ _GETSHAPELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20320,
-  serialized_end=20341,
+  serialized_start=24234,
+  serialized_end=24255,
 )
 
 
-_ERFACTIVATIONLAYERPARAMS = _descriptor.Descriptor(
-  name='ErfActivationLayerParams',
-  full_name='CoreML.Specification.ErfActivationLayerParams',
+_ERFLAYERPARAMS = _descriptor.Descriptor(
+  name='ErfLayerParams',
+  full_name='CoreML.Specification.ErfLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -5950,23 +7296,31 @@ _ERFACTIVATIONLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20343,
-  serialized_end=20369,
+  serialized_start=24257,
+  serialized_end=24273,
 )
 
 
-_GELUACTIVATIONLAYERPARAMS = _descriptor.Descriptor(
-  name='GeluActivationLayerParams',
-  full_name='CoreML.Specification.GeluActivationLayerParams',
+_GELULAYERPARAMS = _descriptor.Descriptor(
+  name='GeluLayerParams',
+  full_name='CoreML.Specification.GeluLayerParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='mode', full_name='CoreML.Specification.GeluLayerParams.mode', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
   nested_types=[],
   enum_types=[
+    _GELULAYERPARAMS_GELUMODE,
   ],
   options=None,
   is_extendable=False,
@@ -5974,8 +7328,8 @@ _GELUACTIVATIONLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20371,
-  serialized_end=20398,
+  serialized_start=24276,
+  serialized_end=24429,
 )
 
 
@@ -5987,14 +7341,14 @@ _RANGELAYERPARAMS = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='startValue', full_name='CoreML.Specification.RangeLayerParams.startValue', index=0,
+      name='endValue', full_name='CoreML.Specification.RangeLayerParams.endValue', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='endValue', full_name='CoreML.Specification.RangeLayerParams.endValue', index=1,
+      name='startValue', full_name='CoreML.Specification.RangeLayerParams.startValue', index=1,
       number=2, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -6019,32 +7373,8 @@ _RANGELAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20400,
-  serialized_end=20479,
-)
-
-
-_ALLOCLAYERPARAMS = _descriptor.Descriptor(
-  name='AllocLayerParams',
-  full_name='CoreML.Specification.AllocLayerParams',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=20481,
-  serialized_end=20499,
+  serialized_start=24431,
+  serialized_end=24510,
 )
 
 
@@ -6088,8 +7418,8 @@ _SLIDINGWINDOWSLAYERPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=20501,
-  serialized_end=20576,
+  serialized_start=24512,
+  serialized_end=24587,
 )
 
 
@@ -6171,8 +7501,8 @@ _NEURALNETWORKCLASSIFIER = _descriptor.Descriptor(
       name='ClassLabels', full_name='CoreML.Specification.NeuralNetworkClassifier.ClassLabels',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=20579,
-  serialized_end=21160,
+  serialized_start=24590,
+  serialized_end=25171,
 )
 
 
@@ -6230,8 +7560,8 @@ _NEURALNETWORKREGRESSOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=21163,
-  serialized_end=21564,
+  serialized_start=25174,
+  serialized_end=25575,
 )
 
 
@@ -6275,8 +7605,8 @@ _NETWORKUPDATEPARAMETERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=21567,
-  serialized_end=21751,
+  serialized_start=25578,
+  serialized_end=25762,
 )
 
 
@@ -6323,8 +7653,8 @@ _LOSSLAYER = _descriptor.Descriptor(
       name='LossLayerType', full_name='CoreML.Specification.LossLayer.LossLayerType',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=21754,
-  serialized_end=21934,
+  serialized_start=25765,
+  serialized_end=25945,
 )
 
 
@@ -6361,8 +7691,8 @@ _CROSSENTROPYLOSSLAYER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=21936,
-  serialized_end=21990,
+  serialized_start=25947,
+  serialized_end=26001,
 )
 
 
@@ -6399,8 +7729,8 @@ _MSELOSSLAYER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=21992,
-  serialized_end=22037,
+  serialized_start=26003,
+  serialized_end=26048,
 )
 
 
@@ -6440,8 +7770,8 @@ _OPTIMIZER = _descriptor.Descriptor(
       name='OptimizerType', full_name='CoreML.Specification.Optimizer.OptimizerType',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=22040,
-  serialized_end=22190,
+  serialized_start=26051,
+  serialized_end=26201,
 )
 
 
@@ -6485,8 +7815,8 @@ _SGDOPTIMIZER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=22193,
-  serialized_end=22386,
+  serialized_start=26204,
+  serialized_end=26397,
 )
 
 
@@ -6544,8 +7874,8 @@ _ADAMOPTIMIZER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=22389,
-  serialized_end=22686,
+  serialized_start=26400,
+  serialized_end=26697,
 )
 
 _NEURALNETWORK.fields_by_name['layers'].message_type = _NEURALNETWORKLAYER
@@ -6657,56 +7987,89 @@ _NEURALNETWORKLAYER.fields_by_name['gru'].message_type = _GRULAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['uniDirectionalLSTM'].message_type = _UNIDIRECTIONALLSTMLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['biDirectionalLSTM'].message_type = _BIDIRECTIONALLSTMLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['custom'].message_type = _CUSTOMLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['transposeND'].message_type = _TRANSPOSENDLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['batchedMatmul'].message_type = _BATCHEDMATMULPARAMS
-_NEURALNETWORKLAYER.fields_by_name['concatND'].message_type = _CONCATNDLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['softmaxND'].message_type = _SOFTMAXNDLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['fill'].message_type = _FILLLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['where'].message_type = _WHERELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['sine'].message_type = _SINELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['cosine'].message_type = _COSINELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['powBroadcastable'].message_type = _POWBROADCASTABLELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['exp'].message_type = _EXPLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['upperTriangular'].message_type = _UPPERTRIANGULARLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['lowerTriangular'].message_type = _LOWERTRIANGULARLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['broadcastTo'].message_type = _BROADCASTTOLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['addBroadcastable'].message_type = _ADDBROADCASTABLELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['subtractBroadcastable'].message_type = _SUBTRACTBROADCASTABLELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['multiplyBroadcastable'].message_type = _MULTIPLYBROADCASTABLELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['divideBroadcastable'].message_type = _DIVIDEBROADCASTABLELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['gather'].message_type = _GATHERLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['stackND'].message_type = _STACKNDLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['rankPreservingReshape'].message_type = _RANKPRESERVINGRESHAPELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['expandDims'].message_type = _EXPANDDIMSLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['squeeze'].message_type = _SQUEEZELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['splitND'].message_type = _SPLITNDLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['ceil'].message_type = _CEILLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['floor'].message_type = _FLOORLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['clip'].message_type = _CLIPLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['sliceND'].message_type = _SLICENDLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['tile'].message_type = _TILELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['loadConstantND'].message_type = _LOADCONSTANTNDLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['range'].message_type = _RANGELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['getShape'].message_type = _GETSHAPELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['embeddingND'].message_type = _EMBEDDINGNDLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['scatter'].message_type = _SCATTERLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['slidingWindows'].message_type = _SLIDINGWINDOWSLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['erfActivation'].message_type = _ERFACTIVATIONLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['geluActivation'].message_type = _GELUACTIVATIONLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['copy'].message_type = _COPYLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['branch'].message_type = _BRANCHLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['loop'].message_type = _LOOPLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['loopBreak'].message_type = _LOOPBREAKLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['loopContinue'].message_type = _LOOPCONTINUELAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['copy'].message_type = _COPYLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['alloc'].message_type = _ALLOCLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['greaterThan'].message_type = _GREATERTHANLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['lessThan'].message_type = _LESSTHANLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['range'].message_type = _RANGELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['clip'].message_type = _CLIPLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['ceil'].message_type = _CEILLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['floor'].message_type = _FLOORLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['exp2'].message_type = _EXP2LAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['sin'].message_type = _SINLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['cos'].message_type = _COSLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['tan'].message_type = _TANLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['asin'].message_type = _ASINLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['acos'].message_type = _ACOSLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['atan'].message_type = _ATANLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['sinh'].message_type = _SINHLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['cosh'].message_type = _COSHLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['tanh'].message_type = _TANHLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['asinh'].message_type = _ASINHLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['acosh'].message_type = _ACOSHLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['atanh'].message_type = _ATANHLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['erf'].message_type = _ERFLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['gelu'].message_type = _GELULAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['equal'].message_type = _EQUALLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['notEqual'].message_type = _NOTEQUALLAYERPARAMS
-_NEURALNETWORKLAYER.fields_by_name['logicalAnd'].message_type = _LOGICALANDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['lessThan'].message_type = _LESSTHANLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['lessEqual'].message_type = _LESSEQUALLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['greaterThan'].message_type = _GREATERTHANLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['greaterEqual'].message_type = _GREATEREQUALLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['logicalOr'].message_type = _LOGICALORLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['logicalXor'].message_type = _LOGICALXORLAYERPARAMS
 _NEURALNETWORKLAYER.fields_by_name['logicalNot'].message_type = _LOGICALNOTLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['logicalAnd'].message_type = _LOGICALANDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['minBroadcastable'].message_type = _MINBROADCASTABLELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['maxBroadcastable'].message_type = _MAXBROADCASTABLELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['addBroadcastable'].message_type = _ADDBROADCASTABLELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['powBroadcastable'].message_type = _POWBROADCASTABLELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['divideBroadcastable'].message_type = _DIVIDEBROADCASTABLELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['floorDivBroadcastable'].message_type = _FLOORDIVBROADCASTABLELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['multiplyBroadcastable'].message_type = _MULTIPLYBROADCASTABLELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['subtractBroadcastable'].message_type = _SUBTRACTBROADCASTABLELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['tile'].message_type = _TILELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['stackND'].message_type = _STACKNDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['gather'].message_type = _GATHERLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['scatter'].message_type = _SCATTERLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['softmaxND'].message_type = _SOFTMAXNDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['reverse'].message_type = _REVERSELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['splitND'].message_type = _SPLITNDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['concatND'].message_type = _CONCATNDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['transpose'].message_type = _TRANSPOSELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['sliceND'].message_type = _SLICENDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['slidingWindows'].message_type = _SLIDINGWINDOWSLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['embeddingND'].message_type = _EMBEDDINGNDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['batchedMatmul'].message_type = _BATCHEDMATMULLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['getShape'].message_type = _GETSHAPELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['loadConstantND'].message_type = _LOADCONSTANTNDLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['fillLike'].message_type = _FILLLIKELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['fillStatic'].message_type = _FILLSTATICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['fillDynamic'].message_type = _FILLDYNAMICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['broadcastToLike'].message_type = _BROADCASTTOLIKELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['broadcastToStatic'].message_type = _BROADCASTTOSTATICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['broadcastToDynamic'].message_type = _BROADCASTTODYNAMICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['squeeze'].message_type = _SQUEEZELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['expandDims'].message_type = _EXPANDDIMSLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['flattenTo2D'].message_type = _FLATTENTO2DLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['reshapeLike'].message_type = _RESHAPELIKELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['reshapeStatic'].message_type = _RESHAPESTATICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['reshapeDynamic'].message_type = _RESHAPEDYNAMICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['rankPreservingReshape'].message_type = _RANKPRESERVINGRESHAPELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomNormalLike'].message_type = _RANDOMNORMALLIKELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomNormalStatic'].message_type = _RANDOMNORMALSTATICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomNormalDynamic'].message_type = _RANDOMNORMALDYNAMICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomUniformLike'].message_type = _RANDOMUNIFORMLIKELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomUniformStatic'].message_type = _RANDOMUNIFORMSTATICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomUniformDynamic'].message_type = _RANDOMUNIFORMDYNAMICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomBernoulliLike'].message_type = _RANDOMBERNOULLILIKELAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomBernoulliStatic'].message_type = _RANDOMBERNOULLISTATICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['randomBernoulliDynamic'].message_type = _RANDOMBERNOULLIDYNAMICLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['matrixBandPart'].message_type = _MATRIXBANDPARTLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['lowerTriangular'].message_type = _LOWERTRIANGULARLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['upperTriangular'].message_type = _UPPERTRIANGULARLAYERPARAMS
+_NEURALNETWORKLAYER.fields_by_name['whereBroadcastable'].message_type = _WHEREBROADCASTABLELAYERPARAMS
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
   _NEURALNETWORKLAYER.fields_by_name['convolution'])
 _NEURALNETWORKLAYER.fields_by_name['convolution'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
@@ -6825,113 +8188,8 @@ _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
   _NEURALNETWORKLAYER.fields_by_name['custom'])
 _NEURALNETWORKLAYER.fields_by_name['custom'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['transposeND'])
-_NEURALNETWORKLAYER.fields_by_name['transposeND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['batchedMatmul'])
-_NEURALNETWORKLAYER.fields_by_name['batchedMatmul'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['concatND'])
-_NEURALNETWORKLAYER.fields_by_name['concatND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['softmaxND'])
-_NEURALNETWORKLAYER.fields_by_name['softmaxND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['fill'])
-_NEURALNETWORKLAYER.fields_by_name['fill'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['where'])
-_NEURALNETWORKLAYER.fields_by_name['where'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['sine'])
-_NEURALNETWORKLAYER.fields_by_name['sine'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['cosine'])
-_NEURALNETWORKLAYER.fields_by_name['cosine'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['powBroadcastable'])
-_NEURALNETWORKLAYER.fields_by_name['powBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['exp'])
-_NEURALNETWORKLAYER.fields_by_name['exp'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['upperTriangular'])
-_NEURALNETWORKLAYER.fields_by_name['upperTriangular'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['lowerTriangular'])
-_NEURALNETWORKLAYER.fields_by_name['lowerTriangular'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['broadcastTo'])
-_NEURALNETWORKLAYER.fields_by_name['broadcastTo'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['addBroadcastable'])
-_NEURALNETWORKLAYER.fields_by_name['addBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['subtractBroadcastable'])
-_NEURALNETWORKLAYER.fields_by_name['subtractBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['multiplyBroadcastable'])
-_NEURALNETWORKLAYER.fields_by_name['multiplyBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['divideBroadcastable'])
-_NEURALNETWORKLAYER.fields_by_name['divideBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['gather'])
-_NEURALNETWORKLAYER.fields_by_name['gather'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['stackND'])
-_NEURALNETWORKLAYER.fields_by_name['stackND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['rankPreservingReshape'])
-_NEURALNETWORKLAYER.fields_by_name['rankPreservingReshape'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['expandDims'])
-_NEURALNETWORKLAYER.fields_by_name['expandDims'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['squeeze'])
-_NEURALNETWORKLAYER.fields_by_name['squeeze'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['splitND'])
-_NEURALNETWORKLAYER.fields_by_name['splitND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['ceil'])
-_NEURALNETWORKLAYER.fields_by_name['ceil'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['floor'])
-_NEURALNETWORKLAYER.fields_by_name['floor'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['clip'])
-_NEURALNETWORKLAYER.fields_by_name['clip'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['sliceND'])
-_NEURALNETWORKLAYER.fields_by_name['sliceND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['tile'])
-_NEURALNETWORKLAYER.fields_by_name['tile'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['loadConstantND'])
-_NEURALNETWORKLAYER.fields_by_name['loadConstantND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['range'])
-_NEURALNETWORKLAYER.fields_by_name['range'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['getShape'])
-_NEURALNETWORKLAYER.fields_by_name['getShape'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['embeddingND'])
-_NEURALNETWORKLAYER.fields_by_name['embeddingND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['scatter'])
-_NEURALNETWORKLAYER.fields_by_name['scatter'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['slidingWindows'])
-_NEURALNETWORKLAYER.fields_by_name['slidingWindows'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['erfActivation'])
-_NEURALNETWORKLAYER.fields_by_name['erfActivation'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
-_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['geluActivation'])
-_NEURALNETWORKLAYER.fields_by_name['geluActivation'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+  _NEURALNETWORKLAYER.fields_by_name['copy'])
+_NEURALNETWORKLAYER.fields_by_name['copy'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
   _NEURALNETWORKLAYER.fields_by_name['branch'])
 _NEURALNETWORKLAYER.fields_by_name['branch'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
@@ -6945,17 +8203,62 @@ _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
   _NEURALNETWORKLAYER.fields_by_name['loopContinue'])
 _NEURALNETWORKLAYER.fields_by_name['loopContinue'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['copy'])
-_NEURALNETWORKLAYER.fields_by_name['copy'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+  _NEURALNETWORKLAYER.fields_by_name['range'])
+_NEURALNETWORKLAYER.fields_by_name['range'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['alloc'])
-_NEURALNETWORKLAYER.fields_by_name['alloc'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+  _NEURALNETWORKLAYER.fields_by_name['clip'])
+_NEURALNETWORKLAYER.fields_by_name['clip'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['greaterThan'])
-_NEURALNETWORKLAYER.fields_by_name['greaterThan'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+  _NEURALNETWORKLAYER.fields_by_name['ceil'])
+_NEURALNETWORKLAYER.fields_by_name['ceil'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['lessThan'])
-_NEURALNETWORKLAYER.fields_by_name['lessThan'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+  _NEURALNETWORKLAYER.fields_by_name['floor'])
+_NEURALNETWORKLAYER.fields_by_name['floor'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['exp2'])
+_NEURALNETWORKLAYER.fields_by_name['exp2'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['sin'])
+_NEURALNETWORKLAYER.fields_by_name['sin'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['cos'])
+_NEURALNETWORKLAYER.fields_by_name['cos'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['tan'])
+_NEURALNETWORKLAYER.fields_by_name['tan'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['asin'])
+_NEURALNETWORKLAYER.fields_by_name['asin'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['acos'])
+_NEURALNETWORKLAYER.fields_by_name['acos'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['atan'])
+_NEURALNETWORKLAYER.fields_by_name['atan'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['sinh'])
+_NEURALNETWORKLAYER.fields_by_name['sinh'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['cosh'])
+_NEURALNETWORKLAYER.fields_by_name['cosh'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['tanh'])
+_NEURALNETWORKLAYER.fields_by_name['tanh'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['asinh'])
+_NEURALNETWORKLAYER.fields_by_name['asinh'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['acosh'])
+_NEURALNETWORKLAYER.fields_by_name['acosh'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['atanh'])
+_NEURALNETWORKLAYER.fields_by_name['atanh'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['erf'])
+_NEURALNETWORKLAYER.fields_by_name['erf'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['gelu'])
+_NEURALNETWORKLAYER.fields_by_name['gelu'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
   _NEURALNETWORKLAYER.fields_by_name['equal'])
 _NEURALNETWORKLAYER.fields_by_name['equal'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
@@ -6963,8 +8266,17 @@ _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
   _NEURALNETWORKLAYER.fields_by_name['notEqual'])
 _NEURALNETWORKLAYER.fields_by_name['notEqual'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
-  _NEURALNETWORKLAYER.fields_by_name['logicalAnd'])
-_NEURALNETWORKLAYER.fields_by_name['logicalAnd'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+  _NEURALNETWORKLAYER.fields_by_name['lessThan'])
+_NEURALNETWORKLAYER.fields_by_name['lessThan'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['lessEqual'])
+_NEURALNETWORKLAYER.fields_by_name['lessEqual'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['greaterThan'])
+_NEURALNETWORKLAYER.fields_by_name['greaterThan'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['greaterEqual'])
+_NEURALNETWORKLAYER.fields_by_name['greaterEqual'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
   _NEURALNETWORKLAYER.fields_by_name['logicalOr'])
 _NEURALNETWORKLAYER.fields_by_name['logicalOr'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
@@ -6974,6 +8286,156 @@ _NEURALNETWORKLAYER.fields_by_name['logicalXor'].containing_oneof = _NEURALNETWO
 _NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
   _NEURALNETWORKLAYER.fields_by_name['logicalNot'])
 _NEURALNETWORKLAYER.fields_by_name['logicalNot'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['logicalAnd'])
+_NEURALNETWORKLAYER.fields_by_name['logicalAnd'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['minBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['minBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['maxBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['maxBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['addBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['addBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['powBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['powBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['divideBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['divideBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['floorDivBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['floorDivBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['multiplyBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['multiplyBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['subtractBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['subtractBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['tile'])
+_NEURALNETWORKLAYER.fields_by_name['tile'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['stackND'])
+_NEURALNETWORKLAYER.fields_by_name['stackND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['gather'])
+_NEURALNETWORKLAYER.fields_by_name['gather'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['scatter'])
+_NEURALNETWORKLAYER.fields_by_name['scatter'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['softmaxND'])
+_NEURALNETWORKLAYER.fields_by_name['softmaxND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['reverse'])
+_NEURALNETWORKLAYER.fields_by_name['reverse'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['splitND'])
+_NEURALNETWORKLAYER.fields_by_name['splitND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['concatND'])
+_NEURALNETWORKLAYER.fields_by_name['concatND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['transpose'])
+_NEURALNETWORKLAYER.fields_by_name['transpose'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['sliceND'])
+_NEURALNETWORKLAYER.fields_by_name['sliceND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['slidingWindows'])
+_NEURALNETWORKLAYER.fields_by_name['slidingWindows'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['embeddingND'])
+_NEURALNETWORKLAYER.fields_by_name['embeddingND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['batchedMatmul'])
+_NEURALNETWORKLAYER.fields_by_name['batchedMatmul'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['getShape'])
+_NEURALNETWORKLAYER.fields_by_name['getShape'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['loadConstantND'])
+_NEURALNETWORKLAYER.fields_by_name['loadConstantND'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['fillLike'])
+_NEURALNETWORKLAYER.fields_by_name['fillLike'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['fillStatic'])
+_NEURALNETWORKLAYER.fields_by_name['fillStatic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['fillDynamic'])
+_NEURALNETWORKLAYER.fields_by_name['fillDynamic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['broadcastToLike'])
+_NEURALNETWORKLAYER.fields_by_name['broadcastToLike'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['broadcastToStatic'])
+_NEURALNETWORKLAYER.fields_by_name['broadcastToStatic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['broadcastToDynamic'])
+_NEURALNETWORKLAYER.fields_by_name['broadcastToDynamic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['squeeze'])
+_NEURALNETWORKLAYER.fields_by_name['squeeze'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['expandDims'])
+_NEURALNETWORKLAYER.fields_by_name['expandDims'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['flattenTo2D'])
+_NEURALNETWORKLAYER.fields_by_name['flattenTo2D'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['reshapeLike'])
+_NEURALNETWORKLAYER.fields_by_name['reshapeLike'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['reshapeStatic'])
+_NEURALNETWORKLAYER.fields_by_name['reshapeStatic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['reshapeDynamic'])
+_NEURALNETWORKLAYER.fields_by_name['reshapeDynamic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['rankPreservingReshape'])
+_NEURALNETWORKLAYER.fields_by_name['rankPreservingReshape'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomNormalLike'])
+_NEURALNETWORKLAYER.fields_by_name['randomNormalLike'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomNormalStatic'])
+_NEURALNETWORKLAYER.fields_by_name['randomNormalStatic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomNormalDynamic'])
+_NEURALNETWORKLAYER.fields_by_name['randomNormalDynamic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomUniformLike'])
+_NEURALNETWORKLAYER.fields_by_name['randomUniformLike'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomUniformStatic'])
+_NEURALNETWORKLAYER.fields_by_name['randomUniformStatic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomUniformDynamic'])
+_NEURALNETWORKLAYER.fields_by_name['randomUniformDynamic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomBernoulliLike'])
+_NEURALNETWORKLAYER.fields_by_name['randomBernoulliLike'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomBernoulliStatic'])
+_NEURALNETWORKLAYER.fields_by_name['randomBernoulliStatic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['randomBernoulliDynamic'])
+_NEURALNETWORKLAYER.fields_by_name['randomBernoulliDynamic'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['matrixBandPart'])
+_NEURALNETWORKLAYER.fields_by_name['matrixBandPart'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['lowerTriangular'])
+_NEURALNETWORKLAYER.fields_by_name['lowerTriangular'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['upperTriangular'])
+_NEURALNETWORKLAYER.fields_by_name['upperTriangular'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
+_NEURALNETWORKLAYER.oneofs_by_name['layer'].fields.append(
+  _NEURALNETWORKLAYER.fields_by_name['whereBroadcastable'])
+_NEURALNETWORKLAYER.fields_by_name['whereBroadcastable'].containing_oneof = _NEURALNETWORKLAYER.oneofs_by_name['layer']
 _BRANCHLAYERPARAMS.fields_by_name['ifBranch'].message_type = _NEURALNETWORK
 _BRANCHLAYERPARAMS.fields_by_name['elseBranch'].message_type = _NEURALNETWORK
 _LOOPLAYERPARAMS.fields_by_name['conditionNetwork'].message_type = _NEURALNETWORK
@@ -7127,9 +8589,11 @@ _CUSTOMLAYERPARAMS_PARAMETERSENTRY.fields_by_name['value'].message_type = _CUSTO
 _CUSTOMLAYERPARAMS_PARAMETERSENTRY.containing_type = _CUSTOMLAYERPARAMS
 _CUSTOMLAYERPARAMS.fields_by_name['weights'].message_type = _WEIGHTPARAMS
 _CUSTOMLAYERPARAMS.fields_by_name['parameters'].message_type = _CUSTOMLAYERPARAMS_PARAMETERSENTRY
-_BATCHEDMATMULPARAMS.fields_by_name['weights'].message_type = _WEIGHTPARAMS
-_BATCHEDMATMULPARAMS.fields_by_name['bias'].message_type = _WEIGHTPARAMS
+_BATCHEDMATMULLAYERPARAMS.fields_by_name['weights'].message_type = _WEIGHTPARAMS
+_BATCHEDMATMULLAYERPARAMS.fields_by_name['bias'].message_type = _WEIGHTPARAMS
 _LOADCONSTANTNDLAYERPARAMS.fields_by_name['data'].message_type = _WEIGHTPARAMS
+_GELULAYERPARAMS.fields_by_name['mode'].enum_type = _GELULAYERPARAMS_GELUMODE
+_GELULAYERPARAMS_GELUMODE.containing_type = _GELULAYERPARAMS
 _NEURALNETWORKCLASSIFIER.fields_by_name['layers'].message_type = _NEURALNETWORKLAYER
 _NEURALNETWORKCLASSIFIER.fields_by_name['preprocessing'].message_type = _NEURALNETWORKPREPROCESSING
 _NEURALNETWORKCLASSIFIER.fields_by_name['arrayInputShapeMapping'].enum_type = _NEURALNETWORKMULTIARRAYSHAPEMAPPING
@@ -7201,7 +8665,9 @@ DESCRIPTOR.message_types_by_name['LoopBreakLayerParams'] = _LOOPBREAKLAYERPARAMS
 DESCRIPTOR.message_types_by_name['LoopContinueLayerParams'] = _LOOPCONTINUELAYERPARAMS
 DESCRIPTOR.message_types_by_name['CopyLayerParams'] = _COPYLAYERPARAMS
 DESCRIPTOR.message_types_by_name['GreaterThanLayerParams'] = _GREATERTHANLAYERPARAMS
+DESCRIPTOR.message_types_by_name['GreaterEqualLayerParams'] = _GREATEREQUALLAYERPARAMS
 DESCRIPTOR.message_types_by_name['LessThanLayerParams'] = _LESSTHANLAYERPARAMS
+DESCRIPTOR.message_types_by_name['LessEqualLayerParams'] = _LESSEQUALLAYERPARAMS
 DESCRIPTOR.message_types_by_name['EqualLayerParams'] = _EQUALLAYERPARAMS
 DESCRIPTOR.message_types_by_name['NotEqualLayerParams'] = _NOTEQUALLAYERPARAMS
 DESCRIPTOR.message_types_by_name['LogicalAndLayerParams'] = _LOGICALANDLAYERPARAMS
@@ -7258,21 +8724,40 @@ DESCRIPTOR.message_types_by_name['LSTMWeightParams'] = _LSTMWEIGHTPARAMS
 DESCRIPTOR.message_types_by_name['UniDirectionalLSTMLayerParams'] = _UNIDIRECTIONALLSTMLAYERPARAMS
 DESCRIPTOR.message_types_by_name['BiDirectionalLSTMLayerParams'] = _BIDIRECTIONALLSTMLAYERPARAMS
 DESCRIPTOR.message_types_by_name['CustomLayerParams'] = _CUSTOMLAYERPARAMS
-DESCRIPTOR.message_types_by_name['TransposeNDLayerParams'] = _TRANSPOSENDLAYERPARAMS
-DESCRIPTOR.message_types_by_name['BatchedMatMulParams'] = _BATCHEDMATMULPARAMS
+DESCRIPTOR.message_types_by_name['TransposeLayerParams'] = _TRANSPOSELAYERPARAMS
+DESCRIPTOR.message_types_by_name['BatchedMatMulLayerParams'] = _BATCHEDMATMULLAYERPARAMS
 DESCRIPTOR.message_types_by_name['ConcatNDLayerParams'] = _CONCATNDLAYERPARAMS
 DESCRIPTOR.message_types_by_name['SoftmaxNDLayerParams'] = _SOFTMAXNDLAYERPARAMS
+DESCRIPTOR.message_types_by_name['ReverseLayerParams'] = _REVERSELAYERPARAMS
 DESCRIPTOR.message_types_by_name['LoadConstantNDLayerParams'] = _LOADCONSTANTNDLAYERPARAMS
-DESCRIPTOR.message_types_by_name['FillLayerParams'] = _FILLLAYERPARAMS
-DESCRIPTOR.message_types_by_name['WhereLayerParams'] = _WHERELAYERPARAMS
-DESCRIPTOR.message_types_by_name['SineLayerParams'] = _SINELAYERPARAMS
-DESCRIPTOR.message_types_by_name['CosineLayerParams'] = _COSINELAYERPARAMS
+DESCRIPTOR.message_types_by_name['FillLikeLayerParams'] = _FILLLIKELAYERPARAMS
+DESCRIPTOR.message_types_by_name['FillStaticLayerParams'] = _FILLSTATICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['FillDynamicLayerParams'] = _FILLDYNAMICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['WhereBroadcastableLayerParams'] = _WHEREBROADCASTABLELAYERPARAMS
+DESCRIPTOR.message_types_by_name['SinLayerParams'] = _SINLAYERPARAMS
+DESCRIPTOR.message_types_by_name['CosLayerParams'] = _COSLAYERPARAMS
+DESCRIPTOR.message_types_by_name['TanLayerParams'] = _TANLAYERPARAMS
+DESCRIPTOR.message_types_by_name['AsinLayerParams'] = _ASINLAYERPARAMS
+DESCRIPTOR.message_types_by_name['AcosLayerParams'] = _ACOSLAYERPARAMS
+DESCRIPTOR.message_types_by_name['AtanLayerParams'] = _ATANLAYERPARAMS
+DESCRIPTOR.message_types_by_name['SinhLayerParams'] = _SINHLAYERPARAMS
+DESCRIPTOR.message_types_by_name['CoshLayerParams'] = _COSHLAYERPARAMS
+DESCRIPTOR.message_types_by_name['TanhLayerParams'] = _TANHLAYERPARAMS
+DESCRIPTOR.message_types_by_name['AsinhLayerParams'] = _ASINHLAYERPARAMS
+DESCRIPTOR.message_types_by_name['AcoshLayerParams'] = _ACOSHLAYERPARAMS
+DESCRIPTOR.message_types_by_name['AtanhLayerParams'] = _ATANHLAYERPARAMS
 DESCRIPTOR.message_types_by_name['PowBroadcastableLayerParams'] = _POWBROADCASTABLELAYERPARAMS
-DESCRIPTOR.message_types_by_name['ExpLayerParams'] = _EXPLAYERPARAMS
+DESCRIPTOR.message_types_by_name['Exp2LayerParams'] = _EXP2LAYERPARAMS
+DESCRIPTOR.message_types_by_name['MatrixBandPartLayerParams'] = _MATRIXBANDPARTLAYERPARAMS
 DESCRIPTOR.message_types_by_name['UpperTriangularLayerParams'] = _UPPERTRIANGULARLAYERPARAMS
 DESCRIPTOR.message_types_by_name['LowerTriangularLayerParams'] = _LOWERTRIANGULARLAYERPARAMS
-DESCRIPTOR.message_types_by_name['BroadcastToLayerParams'] = _BROADCASTTOLAYERPARAMS
+DESCRIPTOR.message_types_by_name['BroadcastToLikeLayerParams'] = _BROADCASTTOLIKELAYERPARAMS
+DESCRIPTOR.message_types_by_name['BroadcastToStaticLayerParams'] = _BROADCASTTOSTATICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['BroadcastToDynamicLayerParams'] = _BROADCASTTODYNAMICLAYERPARAMS
 DESCRIPTOR.message_types_by_name['AddBroadcastableLayerParams'] = _ADDBROADCASTABLELAYERPARAMS
+DESCRIPTOR.message_types_by_name['MaxBroadcastableLayerParams'] = _MAXBROADCASTABLELAYERPARAMS
+DESCRIPTOR.message_types_by_name['MinBroadcastableLayerParams'] = _MINBROADCASTABLELAYERPARAMS
+DESCRIPTOR.message_types_by_name['FloorDivBroadcastableLayerParams'] = _FLOORDIVBROADCASTABLELAYERPARAMS
 DESCRIPTOR.message_types_by_name['SubtractBroadcastableLayerParams'] = _SUBTRACTBROADCASTABLELAYERPARAMS
 DESCRIPTOR.message_types_by_name['MultiplyBroadcastableLayerParams'] = _MULTIPLYBROADCASTABLELAYERPARAMS
 DESCRIPTOR.message_types_by_name['DivideBroadcastableLayerParams'] = _DIVIDEBROADCASTABLELAYERPARAMS
@@ -7280,7 +8765,20 @@ DESCRIPTOR.message_types_by_name['GatherLayerParams'] = _GATHERLAYERPARAMS
 DESCRIPTOR.message_types_by_name['ScatterLayerParams'] = _SCATTERLAYERPARAMS
 DESCRIPTOR.message_types_by_name['StackNDLayerParams'] = _STACKNDLAYERPARAMS
 DESCRIPTOR.message_types_by_name['RankPreservingReshapeLayerParams'] = _RANKPRESERVINGRESHAPELAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomNormalLikeLayerParams'] = _RANDOMNORMALLIKELAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomNormalStaticLayerParams'] = _RANDOMNORMALSTATICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomNormalDynamicLayerParams'] = _RANDOMNORMALDYNAMICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomUniformLikeLayerParams'] = _RANDOMUNIFORMLIKELAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomUniformStaticLayerParams'] = _RANDOMUNIFORMSTATICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomUniformDynamicLayerParams'] = _RANDOMUNIFORMDYNAMICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomBernoulliLikeLayerParams'] = _RANDOMBERNOULLILIKELAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomBernoulliStaticLayerParams'] = _RANDOMBERNOULLISTATICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['RandomBernoulliDynamicLayerParams'] = _RANDOMBERNOULLIDYNAMICLAYERPARAMS
 DESCRIPTOR.message_types_by_name['ExpandDimsLayerParams'] = _EXPANDDIMSLAYERPARAMS
+DESCRIPTOR.message_types_by_name['FlattenTo2DLayerParams'] = _FLATTENTO2DLAYERPARAMS
+DESCRIPTOR.message_types_by_name['ReshapeStaticLayerParams'] = _RESHAPESTATICLAYERPARAMS
+DESCRIPTOR.message_types_by_name['ReshapeLikeLayerParams'] = _RESHAPELIKELAYERPARAMS
+DESCRIPTOR.message_types_by_name['ReshapeDynamicLayerParams'] = _RESHAPEDYNAMICLAYERPARAMS
 DESCRIPTOR.message_types_by_name['SqueezeLayerParams'] = _SQUEEZELAYERPARAMS
 DESCRIPTOR.message_types_by_name['SplitNDLayerParams'] = _SPLITNDLAYERPARAMS
 DESCRIPTOR.message_types_by_name['CeilLayerParams'] = _CEILLAYERPARAMS
@@ -7289,10 +8787,9 @@ DESCRIPTOR.message_types_by_name['ClipLayerParams'] = _CLIPLAYERPARAMS
 DESCRIPTOR.message_types_by_name['SliceNDLayerParams'] = _SLICENDLAYERPARAMS
 DESCRIPTOR.message_types_by_name['TileLayerParams'] = _TILELAYERPARAMS
 DESCRIPTOR.message_types_by_name['GetShapeLayerParams'] = _GETSHAPELAYERPARAMS
-DESCRIPTOR.message_types_by_name['ErfActivationLayerParams'] = _ERFACTIVATIONLAYERPARAMS
-DESCRIPTOR.message_types_by_name['GeluActivationLayerParams'] = _GELUACTIVATIONLAYERPARAMS
+DESCRIPTOR.message_types_by_name['ErfLayerParams'] = _ERFLAYERPARAMS
+DESCRIPTOR.message_types_by_name['GeluLayerParams'] = _GELULAYERPARAMS
 DESCRIPTOR.message_types_by_name['RangeLayerParams'] = _RANGELAYERPARAMS
-DESCRIPTOR.message_types_by_name['AllocLayerParams'] = _ALLOCLAYERPARAMS
 DESCRIPTOR.message_types_by_name['SlidingWindowsLayerParams'] = _SLIDINGWINDOWSLAYERPARAMS
 DESCRIPTOR.message_types_by_name['NeuralNetworkClassifier'] = _NEURALNETWORKCLASSIFIER
 DESCRIPTOR.message_types_by_name['NeuralNetworkRegressor'] = _NEURALNETWORKREGRESSOR
@@ -7489,12 +8986,26 @@ GreaterThanLayerParams = _reflection.GeneratedProtocolMessageType('GreaterThanLa
   ))
 _sym_db.RegisterMessage(GreaterThanLayerParams)
 
+GreaterEqualLayerParams = _reflection.GeneratedProtocolMessageType('GreaterEqualLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _GREATEREQUALLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.GreaterEqualLayerParams)
+  ))
+_sym_db.RegisterMessage(GreaterEqualLayerParams)
+
 LessThanLayerParams = _reflection.GeneratedProtocolMessageType('LessThanLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _LESSTHANLAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
   # @@protoc_insertion_point(class_scope:CoreML.Specification.LessThanLayerParams)
   ))
 _sym_db.RegisterMessage(LessThanLayerParams)
+
+LessEqualLayerParams = _reflection.GeneratedProtocolMessageType('LessEqualLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _LESSEQUALLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.LessEqualLayerParams)
+  ))
+_sym_db.RegisterMessage(LessEqualLayerParams)
 
 EqualLayerParams = _reflection.GeneratedProtocolMessageType('EqualLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _EQUALLAYERPARAMS,
@@ -7944,19 +9455,19 @@ _sym_db.RegisterMessage(CustomLayerParams)
 _sym_db.RegisterMessage(CustomLayerParams.CustomLayerParamValue)
 _sym_db.RegisterMessage(CustomLayerParams.ParametersEntry)
 
-TransposeNDLayerParams = _reflection.GeneratedProtocolMessageType('TransposeNDLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _TRANSPOSENDLAYERPARAMS,
+TransposeLayerParams = _reflection.GeneratedProtocolMessageType('TransposeLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _TRANSPOSELAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.TransposeNDLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.TransposeLayerParams)
   ))
-_sym_db.RegisterMessage(TransposeNDLayerParams)
+_sym_db.RegisterMessage(TransposeLayerParams)
 
-BatchedMatMulParams = _reflection.GeneratedProtocolMessageType('BatchedMatMulParams', (_message.Message,), dict(
-  DESCRIPTOR = _BATCHEDMATMULPARAMS,
+BatchedMatMulLayerParams = _reflection.GeneratedProtocolMessageType('BatchedMatMulLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _BATCHEDMATMULLAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.BatchedMatMulParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.BatchedMatMulLayerParams)
   ))
-_sym_db.RegisterMessage(BatchedMatMulParams)
+_sym_db.RegisterMessage(BatchedMatMulLayerParams)
 
 ConcatNDLayerParams = _reflection.GeneratedProtocolMessageType('ConcatNDLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _CONCATNDLAYERPARAMS,
@@ -7972,6 +9483,13 @@ SoftmaxNDLayerParams = _reflection.GeneratedProtocolMessageType('SoftmaxNDLayerP
   ))
 _sym_db.RegisterMessage(SoftmaxNDLayerParams)
 
+ReverseLayerParams = _reflection.GeneratedProtocolMessageType('ReverseLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _REVERSELAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.ReverseLayerParams)
+  ))
+_sym_db.RegisterMessage(ReverseLayerParams)
+
 LoadConstantNDLayerParams = _reflection.GeneratedProtocolMessageType('LoadConstantNDLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _LOADCONSTANTNDLAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
@@ -7979,33 +9497,117 @@ LoadConstantNDLayerParams = _reflection.GeneratedProtocolMessageType('LoadConsta
   ))
 _sym_db.RegisterMessage(LoadConstantNDLayerParams)
 
-FillLayerParams = _reflection.GeneratedProtocolMessageType('FillLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _FILLLAYERPARAMS,
+FillLikeLayerParams = _reflection.GeneratedProtocolMessageType('FillLikeLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _FILLLIKELAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.FillLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.FillLikeLayerParams)
   ))
-_sym_db.RegisterMessage(FillLayerParams)
+_sym_db.RegisterMessage(FillLikeLayerParams)
 
-WhereLayerParams = _reflection.GeneratedProtocolMessageType('WhereLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _WHERELAYERPARAMS,
+FillStaticLayerParams = _reflection.GeneratedProtocolMessageType('FillStaticLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _FILLSTATICLAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.WhereLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.FillStaticLayerParams)
   ))
-_sym_db.RegisterMessage(WhereLayerParams)
+_sym_db.RegisterMessage(FillStaticLayerParams)
 
-SineLayerParams = _reflection.GeneratedProtocolMessageType('SineLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _SINELAYERPARAMS,
+FillDynamicLayerParams = _reflection.GeneratedProtocolMessageType('FillDynamicLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _FILLDYNAMICLAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.SineLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.FillDynamicLayerParams)
   ))
-_sym_db.RegisterMessage(SineLayerParams)
+_sym_db.RegisterMessage(FillDynamicLayerParams)
 
-CosineLayerParams = _reflection.GeneratedProtocolMessageType('CosineLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _COSINELAYERPARAMS,
+WhereBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('WhereBroadcastableLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _WHEREBROADCASTABLELAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.CosineLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.WhereBroadcastableLayerParams)
   ))
-_sym_db.RegisterMessage(CosineLayerParams)
+_sym_db.RegisterMessage(WhereBroadcastableLayerParams)
+
+SinLayerParams = _reflection.GeneratedProtocolMessageType('SinLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _SINLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.SinLayerParams)
+  ))
+_sym_db.RegisterMessage(SinLayerParams)
+
+CosLayerParams = _reflection.GeneratedProtocolMessageType('CosLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _COSLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.CosLayerParams)
+  ))
+_sym_db.RegisterMessage(CosLayerParams)
+
+TanLayerParams = _reflection.GeneratedProtocolMessageType('TanLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _TANLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.TanLayerParams)
+  ))
+_sym_db.RegisterMessage(TanLayerParams)
+
+AsinLayerParams = _reflection.GeneratedProtocolMessageType('AsinLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _ASINLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.AsinLayerParams)
+  ))
+_sym_db.RegisterMessage(AsinLayerParams)
+
+AcosLayerParams = _reflection.GeneratedProtocolMessageType('AcosLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _ACOSLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.AcosLayerParams)
+  ))
+_sym_db.RegisterMessage(AcosLayerParams)
+
+AtanLayerParams = _reflection.GeneratedProtocolMessageType('AtanLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _ATANLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.AtanLayerParams)
+  ))
+_sym_db.RegisterMessage(AtanLayerParams)
+
+SinhLayerParams = _reflection.GeneratedProtocolMessageType('SinhLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _SINHLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.SinhLayerParams)
+  ))
+_sym_db.RegisterMessage(SinhLayerParams)
+
+CoshLayerParams = _reflection.GeneratedProtocolMessageType('CoshLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _COSHLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.CoshLayerParams)
+  ))
+_sym_db.RegisterMessage(CoshLayerParams)
+
+TanhLayerParams = _reflection.GeneratedProtocolMessageType('TanhLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _TANHLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.TanhLayerParams)
+  ))
+_sym_db.RegisterMessage(TanhLayerParams)
+
+AsinhLayerParams = _reflection.GeneratedProtocolMessageType('AsinhLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _ASINHLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.AsinhLayerParams)
+  ))
+_sym_db.RegisterMessage(AsinhLayerParams)
+
+AcoshLayerParams = _reflection.GeneratedProtocolMessageType('AcoshLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _ACOSHLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.AcoshLayerParams)
+  ))
+_sym_db.RegisterMessage(AcoshLayerParams)
+
+AtanhLayerParams = _reflection.GeneratedProtocolMessageType('AtanhLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _ATANHLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.AtanhLayerParams)
+  ))
+_sym_db.RegisterMessage(AtanhLayerParams)
 
 PowBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('PowBroadcastableLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _POWBROADCASTABLELAYERPARAMS,
@@ -8014,12 +9616,19 @@ PowBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('PowBroad
   ))
 _sym_db.RegisterMessage(PowBroadcastableLayerParams)
 
-ExpLayerParams = _reflection.GeneratedProtocolMessageType('ExpLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _EXPLAYERPARAMS,
+Exp2LayerParams = _reflection.GeneratedProtocolMessageType('Exp2LayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _EXP2LAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.ExpLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.Exp2LayerParams)
   ))
-_sym_db.RegisterMessage(ExpLayerParams)
+_sym_db.RegisterMessage(Exp2LayerParams)
+
+MatrixBandPartLayerParams = _reflection.GeneratedProtocolMessageType('MatrixBandPartLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _MATRIXBANDPARTLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.MatrixBandPartLayerParams)
+  ))
+_sym_db.RegisterMessage(MatrixBandPartLayerParams)
 
 UpperTriangularLayerParams = _reflection.GeneratedProtocolMessageType('UpperTriangularLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _UPPERTRIANGULARLAYERPARAMS,
@@ -8035,12 +9644,26 @@ LowerTriangularLayerParams = _reflection.GeneratedProtocolMessageType('LowerTria
   ))
 _sym_db.RegisterMessage(LowerTriangularLayerParams)
 
-BroadcastToLayerParams = _reflection.GeneratedProtocolMessageType('BroadcastToLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _BROADCASTTOLAYERPARAMS,
+BroadcastToLikeLayerParams = _reflection.GeneratedProtocolMessageType('BroadcastToLikeLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _BROADCASTTOLIKELAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.BroadcastToLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.BroadcastToLikeLayerParams)
   ))
-_sym_db.RegisterMessage(BroadcastToLayerParams)
+_sym_db.RegisterMessage(BroadcastToLikeLayerParams)
+
+BroadcastToStaticLayerParams = _reflection.GeneratedProtocolMessageType('BroadcastToStaticLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _BROADCASTTOSTATICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.BroadcastToStaticLayerParams)
+  ))
+_sym_db.RegisterMessage(BroadcastToStaticLayerParams)
+
+BroadcastToDynamicLayerParams = _reflection.GeneratedProtocolMessageType('BroadcastToDynamicLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _BROADCASTTODYNAMICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.BroadcastToDynamicLayerParams)
+  ))
+_sym_db.RegisterMessage(BroadcastToDynamicLayerParams)
 
 AddBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('AddBroadcastableLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _ADDBROADCASTABLELAYERPARAMS,
@@ -8048,6 +9671,27 @@ AddBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('AddBroad
   # @@protoc_insertion_point(class_scope:CoreML.Specification.AddBroadcastableLayerParams)
   ))
 _sym_db.RegisterMessage(AddBroadcastableLayerParams)
+
+MaxBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('MaxBroadcastableLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _MAXBROADCASTABLELAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.MaxBroadcastableLayerParams)
+  ))
+_sym_db.RegisterMessage(MaxBroadcastableLayerParams)
+
+MinBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('MinBroadcastableLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _MINBROADCASTABLELAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.MinBroadcastableLayerParams)
+  ))
+_sym_db.RegisterMessage(MinBroadcastableLayerParams)
+
+FloorDivBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('FloorDivBroadcastableLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _FLOORDIVBROADCASTABLELAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  ))
+_sym_db.RegisterMessage(FloorDivBroadcastableLayerParams)
 
 SubtractBroadcastableLayerParams = _reflection.GeneratedProtocolMessageType('SubtractBroadcastableLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _SUBTRACTBROADCASTABLELAYERPARAMS,
@@ -8098,12 +9742,103 @@ RankPreservingReshapeLayerParams = _reflection.GeneratedProtocolMessageType('Ran
   ))
 _sym_db.RegisterMessage(RankPreservingReshapeLayerParams)
 
+RandomNormalLikeLayerParams = _reflection.GeneratedProtocolMessageType('RandomNormalLikeLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMNORMALLIKELAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomNormalLikeLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomNormalLikeLayerParams)
+
+RandomNormalStaticLayerParams = _reflection.GeneratedProtocolMessageType('RandomNormalStaticLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMNORMALSTATICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomNormalStaticLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomNormalStaticLayerParams)
+
+RandomNormalDynamicLayerParams = _reflection.GeneratedProtocolMessageType('RandomNormalDynamicLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMNORMALDYNAMICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomNormalDynamicLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomNormalDynamicLayerParams)
+
+RandomUniformLikeLayerParams = _reflection.GeneratedProtocolMessageType('RandomUniformLikeLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMUNIFORMLIKELAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomUniformLikeLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomUniformLikeLayerParams)
+
+RandomUniformStaticLayerParams = _reflection.GeneratedProtocolMessageType('RandomUniformStaticLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMUNIFORMSTATICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomUniformStaticLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomUniformStaticLayerParams)
+
+RandomUniformDynamicLayerParams = _reflection.GeneratedProtocolMessageType('RandomUniformDynamicLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMUNIFORMDYNAMICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomUniformDynamicLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomUniformDynamicLayerParams)
+
+RandomBernoulliLikeLayerParams = _reflection.GeneratedProtocolMessageType('RandomBernoulliLikeLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMBERNOULLILIKELAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomBernoulliLikeLayerParams)
+
+RandomBernoulliStaticLayerParams = _reflection.GeneratedProtocolMessageType('RandomBernoulliStaticLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMBERNOULLISTATICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomBernoulliStaticLayerParams)
+
+RandomBernoulliDynamicLayerParams = _reflection.GeneratedProtocolMessageType('RandomBernoulliDynamicLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RANDOMBERNOULLIDYNAMICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  ))
+_sym_db.RegisterMessage(RandomBernoulliDynamicLayerParams)
+
 ExpandDimsLayerParams = _reflection.GeneratedProtocolMessageType('ExpandDimsLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _EXPANDDIMSLAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
   # @@protoc_insertion_point(class_scope:CoreML.Specification.ExpandDimsLayerParams)
   ))
 _sym_db.RegisterMessage(ExpandDimsLayerParams)
+
+FlattenTo2DLayerParams = _reflection.GeneratedProtocolMessageType('FlattenTo2DLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _FLATTENTO2DLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.FlattenTo2DLayerParams)
+  ))
+_sym_db.RegisterMessage(FlattenTo2DLayerParams)
+
+ReshapeStaticLayerParams = _reflection.GeneratedProtocolMessageType('ReshapeStaticLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RESHAPESTATICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.ReshapeStaticLayerParams)
+  ))
+_sym_db.RegisterMessage(ReshapeStaticLayerParams)
+
+ReshapeLikeLayerParams = _reflection.GeneratedProtocolMessageType('ReshapeLikeLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RESHAPELIKELAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.ReshapeLikeLayerParams)
+  ))
+_sym_db.RegisterMessage(ReshapeLikeLayerParams)
+
+ReshapeDynamicLayerParams = _reflection.GeneratedProtocolMessageType('ReshapeDynamicLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _RESHAPEDYNAMICLAYERPARAMS,
+  __module__ = 'NeuralNetwork_pb2'
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.ReshapeDynamicLayerParams)
+  ))
+_sym_db.RegisterMessage(ReshapeDynamicLayerParams)
 
 SqueezeLayerParams = _reflection.GeneratedProtocolMessageType('SqueezeLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _SQUEEZELAYERPARAMS,
@@ -8161,19 +9896,19 @@ GetShapeLayerParams = _reflection.GeneratedProtocolMessageType('GetShapeLayerPar
   ))
 _sym_db.RegisterMessage(GetShapeLayerParams)
 
-ErfActivationLayerParams = _reflection.GeneratedProtocolMessageType('ErfActivationLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _ERFACTIVATIONLAYERPARAMS,
+ErfLayerParams = _reflection.GeneratedProtocolMessageType('ErfLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _ERFLAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.ErfActivationLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.ErfLayerParams)
   ))
-_sym_db.RegisterMessage(ErfActivationLayerParams)
+_sym_db.RegisterMessage(ErfLayerParams)
 
-GeluActivationLayerParams = _reflection.GeneratedProtocolMessageType('GeluActivationLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _GELUACTIVATIONLAYERPARAMS,
+GeluLayerParams = _reflection.GeneratedProtocolMessageType('GeluLayerParams', (_message.Message,), dict(
+  DESCRIPTOR = _GELULAYERPARAMS,
   __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.GeluActivationLayerParams)
+  # @@protoc_insertion_point(class_scope:CoreML.Specification.GeluLayerParams)
   ))
-_sym_db.RegisterMessage(GeluActivationLayerParams)
+_sym_db.RegisterMessage(GeluLayerParams)
 
 RangeLayerParams = _reflection.GeneratedProtocolMessageType('RangeLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _RANGELAYERPARAMS,
@@ -8181,13 +9916,6 @@ RangeLayerParams = _reflection.GeneratedProtocolMessageType('RangeLayerParams', 
   # @@protoc_insertion_point(class_scope:CoreML.Specification.RangeLayerParams)
   ))
 _sym_db.RegisterMessage(RangeLayerParams)
-
-AllocLayerParams = _reflection.GeneratedProtocolMessageType('AllocLayerParams', (_message.Message,), dict(
-  DESCRIPTOR = _ALLOCLAYERPARAMS,
-  __module__ = 'NeuralNetwork_pb2'
-  # @@protoc_insertion_point(class_scope:CoreML.Specification.AllocLayerParams)
-  ))
-_sym_db.RegisterMessage(AllocLayerParams)
 
 SlidingWindowsLayerParams = _reflection.GeneratedProtocolMessageType('SlidingWindowsLayerParams', (_message.Message,), dict(
   DESCRIPTOR = _SLIDINGWINDOWSLAYERPARAMS,

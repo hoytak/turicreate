@@ -55,6 +55,35 @@ class CorrectnessTest(unittest.TestCase):
                 return False
         return True
 
+    @staticmethod
+    def _compare_moments(model, inputs, expected, use_cpu_only=True, num_moments=10):
+        """
+        This utility function is used for validate random distributions layers.
+        It validates the first 10 moments of prediction and expected values.
+        """
+
+        def get_moment(data, k):
+            return np.mean(np.power(data - np.mean(data), k))
+
+        if isinstance(model, str):
+            model = coremltools.models.MLModel(model)
+
+        model = coremltools.models.MLModel(model, useCPUOnly=use_cpu_only)
+        prediction = model.predict(inputs, useCPUOnly=use_cpu_only)
+
+        for output_name in expected:
+            np_preds = expected[output_name]
+            coreml_preds = prediction[output_name]
+
+            np_moments = [get_moment(np_preds.flatten(), k) for k in range(num_moments)]
+            coreml_moments = [get_moment(coreml_preds.flatten(), k) for k in range(num_moments)]
+
+            np.testing.assert_almost_equal(np_moments, coreml_moments, decimal=2)
+
+        # override expected values to allow element-wise compares
+        for output_name in expected:
+            expected[output_name] = prediction[output_name]
+
     def _test_model(self,
                     model,
                     input,
@@ -82,10 +111,10 @@ class CorrectnessTest(unittest.TestCase):
                 model)
 
         prediction = model.predict(input, useCPUOnly=useCPUOnly)
-
         for output_name in expected:
             assert (self._compare_shapes(expected[output_name],
                                          prediction[output_name]))
+
             if not validate_shapes_only:
                 assert (self._compare_predictions(expected[output_name],
                                                   prediction[output_name]))
@@ -93,7 +122,6 @@ class CorrectnessTest(unittest.TestCase):
         # Remove the temporary directory if we created one
         if model_dir and os.path.exists(model_dir):
             shutil.rmtree(model_dir)
-
 
 @unittest.skipIf(macos_version() < MIN_MACOS_VERSION_REQUIRED,
                  'macOS 10.13+ is required. Skipping tests.')
@@ -348,11 +376,6 @@ class SimpleTest(CorrectnessTest):
         builder.add_elementwise(name='add', input_names=['data', 'bias'],
                                 output_name='output', mode='ADD')
 
-        # save the model
-        model_dir = tempfile.mkdtemp()
-        model_path = os.path.join(model_dir, 'test_layer.mlmodel')
-        coremltools.utils.save_spec(builder.spec, model_path)
-
         x = np.reshape(np.arange(4, dtype=np.float32), (1, 2, 2))
         input = {'data': x}
         expected = {'output': x + b}
@@ -556,7 +579,7 @@ class SimpleTest(CorrectnessTest):
 
         self._test_model(builder.spec, input, expected)
 
-    def test_bias_matrix_CPU(self):
+    def test_bias_matrix_cpu(self):
         input_dim = (1, 2, 2)
         input_features = [('data', datatypes.Array(*input_dim))]
         output_features = [('output', None)]
@@ -575,7 +598,7 @@ class SimpleTest(CorrectnessTest):
 
         self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_linear_activation_CPU(self):
+    def test_linear_activation_cpu(self):
         input_dim = (10, 15, 15)
         input_features = [('data', datatypes.Array(*input_dim))]
         output_features = [('output', None)]
@@ -597,83 +620,54 @@ class SimpleTest(CorrectnessTest):
 @unittest.skipIf(macos_version() < LAYERS_10_15_MACOS_VERSION,
                  'macOS 10.15+ required. Skipping tests.')
 class NewLayersSimpleTest(CorrectnessTest):
-    def test_transposeND_CPU(self):
+    def test_transpose_cpu(self):
         for rank in range(1, 6):
             axes = np.random.permutation(rank)
-            input_dim = np.random.randint(low=2, high=6, size=rank)
-            output_dim = tuple(input_dim[axes])
-            input_dim = tuple(input_dim)
-            input_features = [('data', datatypes.Array(*input_dim))]
-            output_features = [('output', datatypes.Array(*output_dim))]
+            axes = [axis-rank if np.random.choice([True, False]) else axis for axis in axes]
+            input_shape = np.random.randint(low=2, high=6, size=rank)
+            input_features = [('data', datatypes.Array(*input_shape))]
+            output_features = [('output', None)]
 
             builder = neural_network.NeuralNetworkBuilder(
                 input_features, output_features,
                 disable_rank5_shape_mapping=True)
 
-            if rank <= 5:
-                builder.add_transposeND(name='TransposeND',
-                                        axes=axes,
-                                        input_name='data',
-                                        output_name='output',
-                                        rank=rank)
-            else:
-                builder.add_transposeND(name='TransposeND',
-                                        axes=axes,
-                                        input_name='data',
-                                        output_name='output',
-                                        rank=rank,
-                                        input_shape=input_dim,
-                                        output_shape=output_dim)
+            builder.add_transpose(name='TransposeND',
+                                    axes=axes,
+                                    input_name='data',
+                                    output_name='output')
 
-            x = np.random.rand(*input_dim)
+            x = np.random.rand(*input_shape)
             input = {'data': x}
             expected = {'output': np.transpose(x, axes)}
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_batchedMatMul_CPU(self):
+    def test_batchedMatMul_cpu(self):
         aShapes = [(10,), (4, 10), (10,), (10,), (2, 3), (1, 3, 4),
                    (1, 3, 1, 2, 3),
-                   (1, 1, 2, 3, 1, 3, 4)]
+                   (2, 3, 1, 3, 4)]
         bShapes = [(10,), (10,), (10, 3), (2, 10, 3), (3, 4), (3, 2, 4, 5),
                    (1, 4, 3, 2),
-                   (2, 1, 1, 2, 4, 5)]
+                   (2, 1, 2, 4, 5)]
         outShapes = [(1, 1), (4, 1), (1, 3), (2, 1, 3), (2, 4), (3, 2, 3, 5),
-                     (1, 3, 4, 2, 2), (1, 2, 2, 3, 2, 3, 5)]
-        transposeA = False
-        transposeB = False
+                     (1, 3, 4, 2, 2), (2, 3, 2, 3, 5)]
+
         for aShape, bShape, outShape in zip(aShapes, bShapes, outShapes):
             input_shapes = [aShape, bShape]
-            output_shape = outShape
-            input_ranks = [len(i) for i in input_shapes]
-            output_rank = len(output_shape)
-            input_names = ['A', 'B']
             input_features = [('A', datatypes.Array(*input_shapes[0]))]
             input_features.append(('B', datatypes.Array(*input_shapes[1])))
-            output_features = [('output', datatypes.Array(*output_shape))]
+            output_features = [('output', None)]
 
             builder = neural_network.NeuralNetworkBuilder(
                 input_features, output_features,
                 disable_rank5_shape_mapping=True)
 
-            if output_rank <= 5:
-                builder.add_batchedMatMul(name='BatchedMatMul',
-                                          input_names=input_names,
-                                          output_name='output',
-                                          transposeA=transposeA,
-                                          transposeB=transposeB,
-                                          input_ranks=input_ranks,
-                                          output_rank=output_rank)
-            else:
-                builder.add_batchedMatMul(name='BatchedMatMul',
-                                          input_names=input_names,
-                                          output_name='output',
-                                          transposeA=transposeA,
-                                          transposeB=transposeB,
-                                          input_ranks=input_ranks,
-                                          output_rank=output_rank,
-                                          input_shapes=input_shapes,
-                                          output_shape=output_shape)
+            builder.add_batchedMatMul(name='BatchedMatMul',
+                                      input_names=['A', 'B'],
+                                      output_name='output',
+                                      transposeA=False,
+                                      transposeB=False)
 
             a = np.random.rand(*input_shapes[0])
             b = np.random.rand(*input_shapes[1])
@@ -682,32 +676,26 @@ class NewLayersSimpleTest(CorrectnessTest):
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_batchedMatMul_withTransposes_CPU(self):
+    def test_batchedMatMul_withTransposes_cpu(self):
         for transposeA, transposeB in itertools.product([True, False],
                                                         [True, False]):
             aShape = (3, 4)
             bShape = (4, 5)
-            outShape = (3, 5)
             aShape = aShape[::-1] if transposeA else aShape
             bShape = bShape[::-1] if transposeB else bShape
             input_shapes = [aShape, bShape]
-            output_shape = outShape
-            input_ranks = [len(i) for i in input_shapes]
-            output_rank = len(output_shape)
-            input_names = ['A', 'B']
             input_features = [('A', datatypes.Array(*input_shapes[0]))]
             input_features.append(('B', datatypes.Array(*input_shapes[1])))
-            output_features = [('output', datatypes.Array(*output_shape))]
+            output_features = [('output', None)]
 
             builder = neural_network.NeuralNetworkBuilder(
                 input_features, output_features,
                 disable_rank5_shape_mapping=True
             )
             builder.add_batchedMatMul(
-                name='BatchedMatMul', input_names=input_names,
+                name='BatchedMatMul', input_names=['A', 'B'],
                 output_name='output', transposeA=transposeA,
-                transposeB=transposeB, input_ranks=input_ranks,
-                output_rank=output_rank
+                transposeB=transposeB
             )
             a = np.random.rand(*input_shapes[0])
             b = np.random.rand(*input_shapes[1])
@@ -718,7 +706,7 @@ class NewLayersSimpleTest(CorrectnessTest):
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_batchedMatMul_single_input_CPU(
+    def test_batchedMatMul_single_input_cpu(
             self, model_precision=_MLMODEL_FULL_PRECISION):
         X1 = 11
         X2 = 23
@@ -749,11 +737,11 @@ class NewLayersSimpleTest(CorrectnessTest):
                 builder.spec, input, expected,
                 model_precision=model_precision, useCPUOnly=True)
 
-    def test_batchedMatMul_single_input_half_precision_CPU(self):
-        self.test_batchedMatMul_single_input_CPU(
+    def test_batchedMatMul_single_input_half_precision_cpu(self):
+        self.test_batchedMatMul_single_input_cpu(
             model_precision=_MLMODEL_HALF_PRECISION)
 
-    def test_embeddingND_CPU(
+    def test_embeddingND_cpu(
             self, model_precision=_MLMODEL_FULL_PRECISION, useCPUOnly=True):
         vocab_size = 10
         embedding_size = 19
@@ -784,47 +772,42 @@ class NewLayersSimpleTest(CorrectnessTest):
                 builder.spec, input, expected,
                 model_precision=model_precision, useCPUOnly=useCPUOnly)
 
-    def test_embeddingND_half_precision_CPU(self):
-        self.test_embeddingND_CPU(
+    def test_embeddingND_half_precision_cpu(self):
+        self.test_embeddingND_cpu(
             model_precision=_MLMODEL_HALF_PRECISION, useCPUOnly=True)
 
     def test_embeddingND_GPU(self):
-        self.test_embeddingND_CPU(
+        self.test_embeddingND_cpu(
             model_precision=_MLMODEL_FULL_PRECISION, useCPUOnly=False)
 
     def test_embeddingND_half_precision_GPU(self):
-        self.test_embeddingND_CPU(
+        self.test_embeddingND_cpu(
             model_precision=_MLMODEL_HALF_PRECISION, useCPUOnly=False)
 
-    def test_softmaxND_CPU(self):
-        input_shapes = [(10, 15), (10, 15, 2, 3), (10, 2, 4, 15, 1, 4), (6,)]
-        axes = [1, -3, -6, 0]
-        for axis, input_dim in zip(axes, input_shapes):
-            input_features = [('data', datatypes.Array(*input_dim))]
-            output_features = [('output', datatypes.Array(*input_dim))]
+    def test_softmaxND_cpu(self):
+        for rank in range(1, 6):
+            for axis in range(-rank, rank):
+                input_shape = np.random.randint(low=2, high=5, size=rank)
+                input_features = [('data', datatypes.Array(*input_shape))]
+                output_features = [('output', None)]
 
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, output_features,
+                    disable_rank5_shape_mapping=True)
 
-            if len(input_dim) > 5:
+
                 builder.add_softmaxND(name='softmaxND', input_name='data',
-                                      output_name='output', axis=axis,
-                                      rank=len(input_dim), shape=input_dim)
-            else:
-                builder.add_softmaxND(name='softmaxND', input_name='data',
-                                      output_name='output', axis=axis,
-                                      rank=len(input_dim))
+                                      output_name='output', axis=axis)
 
-            x = np.random.rand(*input_dim)
-            input = {'data': x}
-            y = np.exp(x - np.max(x, axis=axis, keepdims=True))
-            y = y / np.sum(y, axis=axis, keepdims=True)
-            expected = {'output': y}
+                x = np.random.rand(*input_shape)
+                input = {'data': x}
+                y = np.exp(x - np.max(x, axis=axis, keepdims=True))
+                y = y / np.sum(y, axis=axis, keepdims=True)
+                expected = {'output': y}
 
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
+                self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_concatND_CPU(self):
+    def test_concatND_cpu(self):
         for rank in range(1, 6):
             for axis in range(-rank, rank):
                 nInputs = np.random.choice(range(2, 5))
@@ -842,7 +825,7 @@ class NewLayersSimpleTest(CorrectnessTest):
                     input_names.append(input_name)
                     input_features.append((input_name, datatypes.Array(*input_dim)))
 
-                output_features = [('output', datatypes.Array(*output_shape))]
+                output_features = [('output', None)]
 
                 builder = neural_network.NeuralNetworkBuilder(input_features, output_features, disable_rank5_shape_mapping=True)
 
@@ -856,306 +839,255 @@ class NewLayersSimpleTest(CorrectnessTest):
 
                 self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_fill_CPU(self):
-        for rank in range(1, 6):
-            shape = np.random.randint(low=2, high=8, size=rank)
-            input_features = []
-            input_names = ["tensor", "fill_value"]
-            input_shapes = [shape, [1]]
-            for i, input_dim in enumerate(input_shapes):
-                input_features.append(
-                    (input_names[i], datatypes.Array(*input_dim)))
+    def test_fill_like_cpu(self):
 
-            output_features = [('output', datatypes.Array(*shape))]
+        for rank in range(1, 6):
+            target_shape = np.random.randint(low=2, high=6, size=rank)
+            value = np.random.rand()
+
+            input_features = [('tensor', datatypes.Array(*target_shape))]
 
             builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
+                input_features, [('output', None)],
                 disable_rank5_shape_mapping=True)
-            builder.add_fill(name='fill', input_names=input_names,
-                             output_name='output', rank=rank)
 
-            input_tensors = []
-            for input_dim in input_shapes:
-                input_tensors.append(np.random.rand(*input_dim))
+            builder.add_fillLike(name='fillLike', input_name='tensor',
+                                 output_name='output', value=value)
 
-            input_tensors[0].fill(input_tensors[1][0])
-            input = dict(zip(input_names, input_tensors))
-            expected = {'output': input_tensors[0]}
+            tensor = np.random.rand(*target_shape)
+            input = {'tensor': tensor}
+            expected = {'output': np.zeros(target_shape) + value}
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_broadcastTo_CPU(self):
+    def test_fill_static_cpu(self):
 
-        input_shapes = [(2, 1, 3, 1), (1, 2, 1, 3), (3, 4, 5), (1, 4, 1, 3),
-                        (4, 5), (2, 1), (1, 3, 1), (1, 2, 1, 3, 1),
-                        (1, 2, 1, 3, 1, 2, 1)]
-        target_shapes = [(2, 2, 3, 3), (2, 2, 3, 3), (3, 4, 5), (3, 4, 2, 3),
-                         (2, 3, 4, 5), (3, 2, 1, 2, 2), (2, 3, 3, 4),
-                         (3, 2, 2, 3, 1), (2, 2, 2, 3, 3, 2, 2, 3)]
-        for input_shape, target_shape in zip(input_shapes, target_shapes):
+        for rank in range(1, 6):
+            shape = np.random.randint(low=2, high=8, size=rank)
+
+            input_features = [('data', datatypes.Array(*shape))]
+            value = np.random.rand()
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)],
+                disable_rank5_shape_mapping=True)
+            builder.add_fillStatic(name='fillStatic', output_name='tmp',
+                                    target_shape=shape, value=value)
+
+            builder.add_elementwise('add_layer', ['data', 'tmp'], 'output', mode='ADD')
+
+            data = np.random.rand(*shape)
+            input = {'data': data}
+            expected = {'output': data + value}
+
+            self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+    def test_fill_dynamic_cpu(self):
+
+        for rank in range(1, 6):
+            input_shape = np.random.randint(low=2, high=8, size=rank)
+            value = np.random.rand()
+
+            input_features = [('shape', datatypes.Array(len(input_shape)))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)],
+                disable_rank5_shape_mapping=True)
+
+            builder.add_fillDynamic(name='fillDynamic', input_name='shape',
+                                    output_name='output', value=value)
+
+            input = {'shape': np.array(input_shape, dtype='float')}
+            expected = {'output': np.zeros(input_shape) + value}
+
+            self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+    def test_broadcast_to_like_cpu(self):
+
+        for rank in range(1, 6):
+            input_shape = np.random.randint(low=2, high=8, size=rank)
+            mask = [np.random.choice([True, False, False]) for _ in range(rank)]
+            input_shape = np.where(mask, 1, input_shape)
+
+            target_rank = np.random.randint(low=rank, high=6)
+            target_shape = [np.random.randint(low=2, high=8) if (-i > rank or input_shape[i] == 1)
+                            else input_shape[i] for i in range(-1, -target_rank - 1, -1)][::-1]
+
+            input_features = [('data', datatypes.Array(*input_shape)),
+                              ('tensor', datatypes.Array(*target_shape))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)],
+                disable_rank5_shape_mapping=True)
+
+            builder.add_broadcastToLike(name='broadcastToLike',
+                                        input_name=['data', 'tensor'],
+                                        output_name='output')
+
+            data = np.random.rand(*input_shape)
+            tensor = np.random.rand(*target_shape)
+            inputs = {'data': data, 'tensor': tensor}
+            expected = {'output': np.broadcast_to(data, target_shape)}
+
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_broadcast_to_static_cpu(self):
+
+        for rank in range(1, 6):
+            input_shape = np.random.randint(low=2, high=8, size=rank)
+            mask = [np.random.choice([True, False, False]) for _ in range(rank)]
+            input_shape = np.where(mask, 1, input_shape)
+
+            target_rank = np.random.randint(low=rank, high=6)
+            target_shape = [np.random.randint(low=2, high=8) if (-i > rank or input_shape[i] == 1)
+                            else input_shape[i] for i in range(-1, -target_rank - 1, -1)][::-1]
+
             input_features = [('data', datatypes.Array(*input_shape))]
-            output_features = [('output', datatypes.Array(*target_shape))]
 
             builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
+                input_features, [('output', None)],
                 disable_rank5_shape_mapping=True)
 
-            if len(target_shape) <= 5:
-                builder.add_broadcastTo(name='broadcastTo', input_name='data',
-                                        output_name='output',
-                                        target_shape=target_shape,
-                                        input_rank=len(input_shape))
-            else:
-                builder.add_broadcastTo(name='broadcastTo', input_name='data',
-                                        output_name='output',
-                                        target_shape=target_shape,
-                                        input_rank=len(input_shape),
-                                        input_shape=input_shape)
+            builder.add_broadcastToStatic(name='broadcastToStatic',
+                                          input_name='data',
+                                          output_name='output',
+                                          target_shape=target_shape)
 
-            x = np.random.rand(*input_shape)
-            input = {'data': x}
-            expected = {'output': np.broadcast_to(x, target_shape)}
+            data = np.random.rand(*input_shape)
+            input = {'data': data}
+            expected = {'output': np.broadcast_to(data, target_shape)}
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_sine_CPU(self):
+    def test_broadcast_to_dynamic_cpu(self):
+
+        for rank in range(1, 6):
+            input_shape = np.random.randint(low=2, high=8, size=rank)
+            mask = [np.random.choice([True, False, False]) for _ in range(rank)]
+            input_shape = np.where(mask, 1, input_shape)
+
+            target_rank = np.random.randint(low=rank, high=6)
+            target_shape = [np.random.randint(low=2, high=8) if (-i > rank or input_shape[i] == 1)
+                            else input_shape[i] for i in range(-1, -target_rank - 1, -1)][::-1]
+
+            input_features = [('data', datatypes.Array(*input_shape)),
+                              ('shape', datatypes.Array(len(target_shape)))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)],
+                disable_rank5_shape_mapping=True)
+
+            builder.add_broadcastToDynamic(name='broadcastToDynamic',
+                                           input_name=['data', 'shape'],
+                                           output_name='output')
+
+            data = np.random.rand(*input_shape)
+            inputs = {'data': data, 'shape': np.array(target_shape, dtype='float')}
+            expected = {'output': np.broadcast_to(data, target_shape)}
+
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_trigonometry_cpu(self):
+
+        ops = ['sin', 'cos', 'tan',
+               'asin', 'acos', 'atan',
+               'sinh', 'cosh', 'tanh',
+               'asinh', 'acosh', 'atanh']
+
+        for op in ops:
+            for rank in range(1, 6):
+                shape = np.random.randint(low=2, high=8, size=rank)
+                input_features = [('data', datatypes.Array(*shape))]
+
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+                x = np.random.rand(*shape)
+
+                if op == 'sin':
+                    builder.add_sin(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.sin(x)}
+                elif op == 'cos':
+                    builder.add_cos(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.cos(x)}
+                elif op == 'tan':
+                    builder.add_tan(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.tan(x)}
+                elif op == 'asin':
+                    builder.add_asin(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.arcsin(x)}
+                elif op == 'acos':
+                    builder.add_acos(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.arccos(x)}
+                elif op == 'atan':
+                    builder.add_atan(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.arctan(x)}
+                elif op == 'sinh':
+                    builder.add_sinh(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.sinh(x)}
+                elif op == 'cosh':
+                    builder.add_cosh(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.cosh(x)}
+                elif op == 'tanh':
+                    builder.add_tanh(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.tanh(x)}
+                elif op == 'asinh':
+                    builder.add_asinh(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.arcsinh(x)}
+                elif op == 'acosh':
+                    x = np.random.choice([10, np.e, 1], tuple(shape)).astype(np.float32)
+                    builder.add_acosh(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.arccosh(x)}
+                elif op == 'atanh':
+                    builder.add_atanh(name=op, input_name='data', output_name='output')
+                    expected = {'output': np.arctanh(x)}
+
+                self._test_model(builder.spec, {'data': x}, expected, useCPUOnly=True)
+
+    def test_exp2_cpu(self):
         for rank in range(1, 6):
             shape = np.random.randint(low=2, high=8, size=rank)
             input_features = [('data', datatypes.Array(*shape))]
-            output_features = [('output', datatypes.Array(*shape))]
 
             builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
+                input_features, [('output', None)],
                 disable_rank5_shape_mapping=True)
-            builder.add_sine(name='sine', input_name='data',
-                             output_name='output', rank=rank)
+            builder.add_exp2(name='exp2', input_name='data', output_name='output')
 
             x = np.random.rand(*shape)
             input = {'data': x}
-            expected = {'output': np.sin(x)}
+            expected = {'output': np.exp2(x)}
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_cosine_CPU(self):
-        for rank in range(1, 6):
-            shape = np.random.randint(low=2, high=8, size=rank)
-            input_features = [('data', datatypes.Array(*shape))]
-            output_features = [('output', datatypes.Array(*shape))]
-
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
-
-            builder.add_cosine(name='cosine', input_name='data',
-                               output_name='output', rank=rank)
-
-            x = np.random.rand(*shape)
-            input = {'data': x}
-            expected = {'output': np.cos(x)}
-
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_exp_CPU(self):
-        for rank in range(1, 6):
-            shape = np.random.randint(low=2, high=8, size=rank)
-            input_features = [('data', datatypes.Array(*shape))]
-            output_features = [('output', datatypes.Array(*shape))]
-            withBase2 = random.choice([True, False])
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
-            builder.add_exp(name='exp', input_name='data', output_name='output',
-                            withBase2=withBase2, rank=rank)
-
-            x = np.random.rand(*shape)
-            input = {'data': x}
-            expected = {'output': np.exp2(x) if withBase2 else np.exp(x)}
-
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_addBroadcastable_CPU(self):
-        aShapes = [(1, 2, 3, 1), (3, 1, 2, 1, 2), (1, 2, 1, 3), (2, 3),
-                   (2, 1, 1), (2, 3, 4), (2, 4), (1,), (1,)]
-        bShapes = [(2, 3, 1, 2, 1, 1, 2), (2, 2, 3, 1), (2, 1, 3, 1), (2, 3),
-                   (2, 3, 4), (3, 1), (1,), (2, 3), (1,)]
-        outShapes = [(2, 3, 1, 2, 2, 3, 2), (3, 2, 2, 3, 2), (2, 2, 3, 3),
-                     (2, 3), (2, 3, 4), (2, 3, 4), (2, 4), (2, 3), (1,)]
-        for aShape, bShape, outShape in zip(aShapes, bShapes, outShapes):
-            input_shapes = [aShape, bShape]
-            output_shape = outShape
-            input_ranks = [len(i) for i in input_shapes]
-            output_rank = len(output_shape)
-            input_names = ['A', 'B']
-            input_features = [('A', datatypes.Array(*input_shapes[0])),
-                              ('B', datatypes.Array(*input_shapes[1]))]
-            output_features = [('output', datatypes.Array(*output_shape))]
-
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
-
-            if output_rank <= 5:
-                builder.add_addBroadcastable(name='addBroadcastable',
-                                             input_names=input_names,
-                                             output_name='output',
-                                             input_ranks=input_ranks,
-                                             output_rank=output_rank)
-            else:
-                builder.add_addBroadcastable(name='addBroadcastable',
-                                             input_names=input_names,
-                                             output_name='output',
-                                             input_ranks=input_ranks,
-                                             output_rank=output_rank,
-                                             input_shapes=input_shapes,
-                                             output_shape=output_shape)
-
-            a = np.random.rand(*input_shapes[0])
-            b = np.random.rand(*input_shapes[1])
-            input = {'A': a, 'B': b}
-            expected = {'output': np.add(a, b)}
-
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_multiplyBroadcastable_CPU(self):
-        aShapes = [(1, 2, 3, 1), (3, 1, 2, 1, 2), (1, 2, 1, 3), (2, 3),
-                   (2, 1, 1), (2, 3, 4), (2, 4), (1,), (1,)]
-        bShapes = [(2, 3, 1, 2, 1, 1, 2), (2, 2, 3, 1), (2, 1, 3, 1), (2, 3),
-                   (2, 3, 4), (3, 1), (1,), (2, 3), (1,)]
-        outShapes = [(2, 3, 1, 2, 2, 3, 2), (3, 2, 2, 3, 2), (2, 2, 3, 3),
-                     (2, 3), (2, 3, 4), (2, 3, 4), (2, 4), (2, 3), (1,)]
-        for aShape, bShape, outShape in zip(aShapes, bShapes, outShapes):
-            input_shapes = [aShape, bShape]
-            output_shape = outShape
-            input_ranks = [len(i) for i in input_shapes]
-            output_rank = len(output_shape)
-            input_names = ['A', 'B']
-            input_features = [('A', datatypes.Array(*input_shapes[0])),
-                              ('B', datatypes.Array(*input_shapes[1]))]
-            output_features = [('output', datatypes.Array(*output_shape))]
-
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
-
-            if output_rank <= 5:
-                builder.add_multiplyBroadcastable(name='multiplyBroadcastable',
-                                                  input_names=input_names,
-                                                  output_name='output',
-                                                  input_ranks=input_ranks,
-                                                  output_rank=output_rank)
-            else:
-                builder.add_multiplyBroadcastable(name='multiplyBroadcastable',
-                                                  input_names=input_names,
-                                                  output_name='output',
-                                                  input_ranks=input_ranks,
-                                                  output_rank=output_rank,
-                                                  input_shapes=input_shapes,
-                                                  output_shape=output_shape)
-
-            a = np.random.rand(*input_shapes[0])
-            b = np.random.rand(*input_shapes[1])
-            input = {'A': a, 'B': b}
-            expected = {'output': np.multiply(a, b)}
-
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_divideBroadcastable_CPU(self):
-        aShapes = [(1, 2, 3, 1), (3, 1, 2, 1, 2), (1, 2, 1, 3), (2, 3),
-                   (2, 1, 1), (2, 3, 4), (2, 4), (1,), (1,)]
-        bShapes = [(2, 3, 1, 2, 1, 1, 2), (2, 2, 3, 1), (2, 1, 3, 1), (2, 3),
-                   (2, 3, 4), (3, 1), (1,), (2, 3), (1,)]
-        outShapes = [(2, 3, 1, 2, 2, 3, 2), (3, 2, 2, 3, 2), (2, 2, 3, 3),
-                     (2, 3), (2, 3, 4), (2, 3, 4), (2, 4), (2, 3), (1,)]
-        for aShape, bShape, outShape in zip(aShapes, bShapes, outShapes):
-            input_shapes = [aShape, bShape]
-            output_shape = outShape
-            input_ranks = [len(i) for i in input_shapes]
-            output_rank = len(output_shape)
-            input_names = ['A', 'B']
-            input_features = [('A', datatypes.Array(*input_shapes[0])),
-                              ('B', datatypes.Array(*input_shapes[1]))]
-            output_features = [('output', datatypes.Array(*output_shape))]
-
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
-
-            if output_rank <= 5:
-                builder.add_divideBroadcastable(name='divideBroadcastable',
-                                                input_names=input_names,
-                                                output_name='output',
-                                                input_ranks=input_ranks,
-                                                output_rank=output_rank)
-            else:
-                builder.add_divideBroadcastable(name='divideBroadcastable',
-                                                input_names=input_names,
-                                                output_name='output',
-                                                input_ranks=input_ranks,
-                                                output_rank=output_rank,
-                                                input_shapes=input_shapes,
-                                                output_shape=output_shape)
-
-            a = np.random.rand(*input_shapes[0])
-            b = np.random.rand(*input_shapes[1])
-            input = {'A': a, 'B': b}
-            expected = {'output': np.divide(a, b)}
-
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_subtractBroadcastable_CPU(self):
-        aShapes = [(1, 2, 3, 1), (3, 1, 2, 1, 2), (1, 2, 1, 3), (2, 3),
-                   (2, 1, 1), (2, 3, 4), (2, 4), (1,), (1,)]
-        bShapes = [(2, 3, 1, 2, 1, 1, 2), (2, 2, 3, 1), (2, 1, 3, 1), (2, 3),
-                   (2, 3, 4), (3, 1), (1,), (2, 3), (1,)]
-        outShapes = [(2, 3, 1, 2, 2, 3, 2), (3, 2, 2, 3, 2), (2, 2, 3, 3),
-                     (2, 3), (2, 3, 4), (2, 3, 4), (2, 4), (2, 3), (1,)]
-        for aShape, bShape, outShape in zip(aShapes, bShapes, outShapes):
-            input_shapes = [aShape, bShape]
-            output_shape = outShape
-            input_ranks = [len(i) for i in input_shapes]
-            output_rank = len(output_shape)
-            input_names = ['A', 'B']
-            input_features = [('A', datatypes.Array(*input_shapes[0])),
-                              ('B', datatypes.Array(*input_shapes[1]))]
-            output_features = [('output', datatypes.Array(*output_shape))]
-
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
-
-            if output_rank <= 5:
-                builder.add_subtractBroadcastable(name='subtractBroadcastable',
-                                                  input_names=input_names,
-                                                  output_name='output',
-                                                  input_ranks=input_ranks,
-                                                  output_rank=output_rank)
-            else:
-                builder.add_subtractBroadcastable(name='subtractBroadcastable',
-                                                  input_names=input_names,
-                                                  output_name='output',
-                                                  input_ranks=input_ranks,
-                                                  output_rank=output_rank,
-                                                  input_shapes=input_shapes,
-                                                  output_shape=output_shape)
-
-            a = np.random.rand(*input_shapes[0])
-            b = np.random.rand(*input_shapes[1])
-            input = {'A': a, 'B': b}
-            expected = {'output': np.subtract(a, b)}
-
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_elementwise_boolean_binary_CPU(self):
+    def test_elementwise_binary_cpu(self):
         input_names = ['A', 'B']
-        aShapes = [(1, 2, 3, 1), (3, 1, 2, 1, 2), (1, 2, 1, 3), (2, 3),
-                   (2, 1, 1), (2, 3, 4), (2, 4), (1,), (1,)]
-        bShapes = [(3, 2, 1, 1, 2), (2, 2, 3, 1), (2, 1, 3, 1), (2, 3),
-                   (2, 3, 4), (3, 1), (1,), (2, 3), (1,)]
         test_cases = ['greater', 'less', 'equal', 'not_equal', 'greater_equal',
-                      'less_equal', 'logical_and', 'logical_or', 'logical_xor']
+                      'less_equal', 'logical_and', 'logical_or', 'logical_xor',
+                      'add', 'subtract', 'multiply', 'divide', 'power',
+                      'maximum', 'minimum', 'floor_divide']
         for aCase in test_cases:
-            for aShape, bShape in zip(aShapes, bShapes):
-                input_shapes = [aShape, bShape]
+            for _ in range(10):
+                rankA  = np.random.randint(low = 1, high = 6)
+                rankB  = np.random.randint(low = 1, high = 6)
+
+                rankOut = max(rankA, rankB)
+
+                shapeA = np.random.randint(low=2, high=8, size=rankA)
+                shapeB = np.random.randint(low=2, high=8, size=rankB)
+
+                shapesList = [shapeA, shapeB]
+
+                for i in range(-1,-rankOut-1,-1):
+                    dimList = []
+                    if -i <= rankA: dimList.append(shapeA[i])
+                    if -i <= rankB: dimList.append(shapeB[i])
+
+                    dim = np.random.choice(dimList)
+                    if -i <= rankA: shapeA[i] = np.random.choice([1,dim])
+                    if -i <= rankB: shapeB[i] = np.random.choice([1,dim])
+
+                input_shapes = [shapeA, shapeB]
                 input_features = [('A', datatypes.Array(*input_shapes[0])),
                                   ('B', datatypes.Array(*input_shapes[1]))]
 
@@ -1191,20 +1123,50 @@ class NewLayersSimpleTest(CorrectnessTest):
                 elif aCase == 'logical_xor':
                     builder.add_logical(aCase, input_names=input_names,
                                         output_name='output', mode='XOR')
+                elif aCase == 'add':
+                    builder.add_addBroadcastable(aCase, input_names=input_names,
+                                             output_name='output')
+                elif aCase == 'subtract':
+                    builder.add_subtractBroadcastable(aCase,
+                                                     input_names=input_names,
+                                                     output_name='output')
+                elif aCase == 'multiply':
+                    builder.add_multiplyBroadcastable(aCase,
+                                                      input_names=input_names,
+                                                      output_name='output')
+                elif aCase == 'divide':
+                    builder.add_divideBroadcastable(aCase,
+                                                    input_names=input_names,
+                                                    output_name='output')
+                elif aCase == 'power':
+                    builder.add_powBroadcastable(aCase,
+                                                input_names=input_names,
+                                                output_name='output')
+                elif aCase == 'maximum':
+                    builder.add_maxBroadcastable(aCase,
+                                                input_names=input_names,
+                                                output_name='output')
+                elif aCase == 'minimum':
+                    builder.add_minBroadcastable(aCase,
+                                                 input_names=input_names,
+                                                 output_name='output')
+                elif aCase == 'floor_divide':
+                    builder.add_floorDivBroadcastable(aCase,
+                                                      input_names=input_names,
+                                                      output_name='output')
 
                 a = np.random.rand(*input_shapes[0])
                 b = np.random.rand(*input_shapes[1])
                 input = {'A': a, 'B': b}
                 expected = {'output': func(a, b, dtype=np.float32)}
-
                 self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_elementwise_boolean_unary_CPU(self):
+    def test_elementwise_boolean_unary_cpu(self):
         input_names = ['input']
         aShapes = [(1, 2, 3, 1), (3, 1, 2, 1, 2), (1, 2, 1, 3), (2, 3),
                    (2, 1, 1), (2, 3, 4), (2, 4), (1,), (1,)]
         test_cases = ['greater', 'less', 'equal', 'not_equal', 'greater_equal',
-                      'less_equal']
+                       'less_equal']
         for aCase in test_cases:
             for aShape in aShapes:
                 input_features = [('input', datatypes.Array(*aShape))]
@@ -1242,7 +1204,7 @@ class NewLayersSimpleTest(CorrectnessTest):
 
                 self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_logical_not_CPU(self):
+    def test_logical_not_cpu(self):
         input_names = ['input']
         aShapes = [(1, 2, 3, 1), (3, 1, 2, 1, 2), (1, 2, 1, 3), (2, 3),
                    (2, 1, 1), (2, 3, 4), (2, 4), (1,), (1,)]
@@ -1260,7 +1222,7 @@ class NewLayersSimpleTest(CorrectnessTest):
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_gather_CPU(self):
+    def test_gather_cpu(self):
         for rankParams, rankIndices in [(i, j) for i in range(1, 5) for j in
                                         range(1, 5)]:
             for axis in range(-rankParams, rankParams):
@@ -1271,6 +1233,8 @@ class NewLayersSimpleTest(CorrectnessTest):
                 posAxis = axis if axis >= 0 else axis + rankParams
                 output_shape = list(shapeParams[:posAxis]) + list(
                     shapeIndices) + list(shapeParams[posAxis + 1:])
+
+                if len(output_shape) > 5: continue
                 input_ranks = [len(i) for i in input_shapes]
                 output_rank = len(output_shape)
                 input_names = ['params', 'indices']
@@ -1278,26 +1242,14 @@ class NewLayersSimpleTest(CorrectnessTest):
                     ('params', datatypes.Array(*input_shapes[0])),
                     ('indices', datatypes.Array(*input_shapes[1]))
                 ]
-                output_features = [
-                    ('output', datatypes.Array(*output_shape))
-                ]
+                output_features = [('output', None)]
 
                 builder = neural_network.NeuralNetworkBuilder(
                     input_features, output_features,
                     disable_rank5_shape_mapping=True)
 
-                if output_rank <= 5:
-                    builder.add_gather(name='gather', input_names=input_names,
-                                       output_name='output',
-                                       axis=axis, input_ranks=input_ranks,
-                                       output_rank=output_rank)
-                else:
-                    builder.add_gather(name='gather', input_names=input_names,
-                                       output_name='output',
-                                       axis=axis, input_ranks=input_ranks,
-                                       output_rank=output_rank,
-                                       input_shapes=input_shapes,
-                                       output_shape=output_shape)
+                builder.add_gather(name='gather', input_names=input_names,
+                                   output_name='output', axis=axis)
 
                 a = np.random.rand(*input_shapes[0])
                 b = np.random.randint(-shapeParams[axis], shapeParams[axis],
@@ -1307,49 +1259,38 @@ class NewLayersSimpleTest(CorrectnessTest):
 
                 self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_stackND_CPU(self):
-        for input_rank in range(1, 6):
-            for axis in range(-input_rank, input_rank):
-                nInputs = np.random.choice(range(2, 5))
-                input_shape = np.random.randint(low=2, high=5, size=input_rank)
-                posAxis = axis if axis >= 0 else axis + input_rank + 1
-                output_shape = list(input_shape[:posAxis]) + [nInputs] + list(
-                    input_shape[posAxis:])
-                output_rank = input_rank + 1
-                input_features = []
-                input_names = []
-                for i in range(nInputs):
-                    input_name = 'input_%s' % str(i)
-                    input_names.append(input_name)
-                    input_features.append(
-                        (input_name, datatypes.Array(*input_shape)))
+# PLEASE DON'T DELETE THE TEST
+#    def test_stackND_cpu(self):
+#        for input_rank in range(1, 5):
+#            for axis in range(-input_rank-1, input_rank + 1):
+#                nInputs = np.random.choice(range(2, 5))
+#                input_shape = np.random.randint(low=2, high=5, size=input_rank)
+#                input_features = []
+#                input_names = []
+#                for i in range(nInputs):
+#                    input_name = 'input_%s' % str(i)
+#                    input_names.append(input_name)
+#                    input_features.append(
+#                        (input_name, datatypes.Array(*input_shape)))
+#                output_features = [('output', None)]
+#
+#                builder = neural_network.NeuralNetworkBuilder(
+#                    input_features, output_features,
+#                    disable_rank5_shape_mapping=True)
+#
+#                builder.add_stackND(name='stackND', input_names=input_names,
+#                                    output_name='output', axis=axis)
+#
+#
+#                input_tensors = []
+#                for _ in range(nInputs):
+#                    input_tensors.append(np.random.rand(*input_shape))
+#                input = dict(zip(input_names, input_tensors))
+#                expected = {'output': np.stack(input_tensors, axis)}
+#
+#                self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-                output_features = [('output', datatypes.Array(*output_shape))]
-
-                builder = neural_network.NeuralNetworkBuilder(
-                    input_features, output_features,
-                    disable_rank5_shape_mapping=True)
-
-                if output_rank <= 5:
-                    builder.add_stackND(name='stackND', input_names=input_names,
-                                        output_name='output', axis=axis,
-                                        input_rank=len(input_shape))
-                else:
-                    builder.add_stackND(name='stackND', input_names=input_names,
-                                        output_name='output', axis=axis,
-                                        input_rank=len(input_shape),
-                                        input_shape=input_shape,
-                                        output_shape=output_shape)
-
-                input_tensors = []
-                for _ in range(nInputs):
-                    input_tensors.append(np.random.rand(*input_shape))
-                input = dict(zip(input_names, input_tensors))
-                expected = {'output': np.stack(input_tensors, axis)}
-
-                self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_ceil_CPU(self):
+    def test_ceil_cpu(self):
         for rank in range(1, 6):
             shape = np.random.randint(low=2, high=8, size=rank)
             input_features = [('data', datatypes.Array(*shape))]
@@ -1367,7 +1308,7 @@ class NewLayersSimpleTest(CorrectnessTest):
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_floor_CPU(self):
+    def test_floor_cpu(self):
         for rank in range(1, 6):
             shape = np.random.randint(low=2, high=8, size=rank)
             input_features = [('data', datatypes.Array(*shape))]
@@ -1385,31 +1326,27 @@ class NewLayersSimpleTest(CorrectnessTest):
 
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_clip_CPU(self):
+    def test_clip_cpu(self):
         for rank in range(1, 6):
             shape = np.random.randint(low=2, high=6, size=rank)
-            input_features = [('data', datatypes.Array(*shape)),
-                              ('min_value', datatypes.Array(1, )),
-                              ('max_value', datatypes.Array(1, ))]
+            input_features = [('data', datatypes.Array(*shape))]
             output_features = [('output', datatypes.Array(*shape))]
+
+            x = np.random.rand(*shape)
+            min_value = np.percentile(x, 25)
+            max_value = np.percentile(x, 75)
+            input = {'data': x}
 
             builder = neural_network.NeuralNetworkBuilder(
                 input_features, output_features,
                 disable_rank5_shape_mapping=True)
-            builder.add_clip(name='clip',
-                             input_names=['data', 'min_value', 'max_value'],
-                             output_name='output', rank=rank)
+            builder.add_clip(name='clip', input_names='data', output_name='output',
+                             min_value=min_value, max_value=max_value)
 
-            x = np.random.rand(*shape)
-            min = np.percentile(x, 25)
-            max = np.percentile(x, 75)
-            input = {'data': x, 'min_value': np.reshape(min, (1,)),
-                     'max_value': np.reshape(max, (1,))}
-            expected = {'output': np.clip(x, min, max)}
-
+            expected = {'output': np.clip(x, min_value, max_value)}
             self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_splitND_CPU(self):
+    def test_splitND_cpu(self):
         for rank in range(1, 6):
             for axis in range(-rank, rank):
                 nOutputs = np.random.choice(range(2, 4))
@@ -1428,11 +1365,11 @@ class NewLayersSimpleTest(CorrectnessTest):
                         axis] = value + 1 if k < remainder else value
                     input_shape[axis] += output_shapes[-1][axis]
 
-                for i, output_dim in enumerate(output_shapes):
+                for i in range(nOutputs):
                     output_name = 'output_%s' % str(i)
                     output_names.append(output_name)
                     output_features.append(
-                        (output_name, datatypes.Array(*output_dim)))
+                        (output_name, None))
 
                 input_features = [('data', datatypes.Array(*input_shape))]
 
@@ -1440,16 +1377,9 @@ class NewLayersSimpleTest(CorrectnessTest):
                     input_features, output_features,
                     disable_rank5_shape_mapping=True)
 
-                if rank <= 5:
-                    builder.add_splitND(name='splitND', input_name='data',
-                                        output_names=output_names, axis=axis,
-                                        num_splits=nOutputs, rank=rank)
-                else:
-                    builder.add_splitND(name='splitND', input_name='data',
-                                        output_names=output_names, axis=axis,
-                                        num_splits=nOutputs, rank=rank,
-                                        input_shape=input_shape,
-                                        output_shapes=output_shapes)
+                builder.add_splitND(name='splitND', input_name='data',
+                                    output_names=output_names, axis=axis,
+                                    num_splits=nOutputs)
 
                 x = np.random.rand(*input_shape)
                 input = {'data': x}
@@ -1463,17 +1393,14 @@ class NewLayersSimpleTest(CorrectnessTest):
 
                 self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_splitND_with_split_sizes_CPU(self):
+    def test_splitND_with_split_sizes_cpu(self):
         for rank in range(1, 6):
             for axis in range(-rank, rank):
                 nOutputs = np.random.choice(range(2, 4))
                 input_shape = np.random.randint(low=2, high=5, size=rank)
                 input_shape[axis] = 0
-                output_shapes = []
-                output_features = []
-                output_names = []
-                sections = []
-                split_sizes = []
+                output_shapes, output_features, output_names  = [], [], []
+                sections, split_sizes = [], []
                 for _ in range(nOutputs):
                     output_shapes.append(np.copy(input_shape))
                     output_shapes[-1][axis] = np.random.choice(range(2, 5))
@@ -1482,11 +1409,11 @@ class NewLayersSimpleTest(CorrectnessTest):
                     split_sizes.append(output_shapes[-1][axis])
 
                 sections.pop()
-                for i, output_dim in enumerate(output_shapes):
+                for i in range(nOutputs):
                     output_name = 'output_%s' % str(i)
                     output_names.append(output_name)
                     output_features.append(
-                        (output_name, datatypes.Array(*output_dim)))
+                        (output_name, None))
 
                 input_features = [('data', datatypes.Array(*input_shape))]
 
@@ -1494,18 +1421,10 @@ class NewLayersSimpleTest(CorrectnessTest):
                     input_features, output_features,
                     disable_rank5_shape_mapping=True)
 
-                if rank <= 5:
-                    builder.add_splitND(name='splitND', input_name='data',
-                                        output_names=output_names, axis=axis,
-                                        num_splits=len(split_sizes),
-                                        split_sizes=split_sizes, rank=rank)
-                else:
-                    builder.add_splitND(name='splitND', input_name='data',
-                                        output_names=output_names, axis=axis,
-                                        num_splits=len(split_sizes),
-                                        split_sizes=split_sizes, rank=rank,
-                                        input_shape=input_shape,
-                                        output_shapes=output_shapes)
+
+                builder.add_splitND(name='splitND', input_name='data',
+                                    output_names=output_names, axis=axis,
+                                    split_sizes=split_sizes)
 
                 x = np.random.rand(*input_shape)
                 input = {'data': x}
@@ -1514,130 +1433,71 @@ class NewLayersSimpleTest(CorrectnessTest):
 
                 self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_sliceND_CPU(self):
+    def test_sliceND_cpu(self):
+
         for rank in range(1, 6):
-            input_shape = np.array([5 for _ in range(rank)])
-            objs, strides, begin_masks, end_ids, end_masks, begin_ids, output_shape = [], [], [], [], [], [], []
-            for dim in range(rank):
-                stride = random.choice([-3, -1, 1, 2])
-                begin_mask = random.choice([True, False])
-                end_mask = random.choice([True, False])
-                length = 0
-                while length <= 0:
-                    begin_id = np.random.randint(low=-input_shape[dim],
-                                                 high=input_shape[dim])
-                    end_id = np.random.randint(low=-input_shape[dim],
-                                               high=input_shape[dim])
-                    obj = slice(None if begin_mask else begin_id,
-                                None if end_mask else end_id, stride)
-                    length = np.arange(input_shape[dim])[(obj,)].shape[0]
+            for _ in range(200):
+                input_shape = np.array([5 for _ in range(rank)])
+                objs, strides, begin_masks, end_ids, end_masks, begin_ids = [], [], [], [], [], []
+                for dim in range(rank):
+                    stride = random.choice([-3, -1, 1, 2])
+                    begin_mask = random.choice([True, False])
+                    end_mask = random.choice([True, False])
+                    length = 0
+                    while length <= 0:
+                        begin_id = np.random.randint(low=-input_shape[dim],
+                                                     high=input_shape[dim])
+                        end_id = np.random.randint(low=-input_shape[dim],
+                                                   high=input_shape[dim])
+                        obj = slice(None if begin_mask else begin_id,
+                                    None if end_mask else end_id, stride)
+                        length = np.arange(input_shape[dim])[(obj,)].shape[0]
 
-                objs.append(obj), strides.append(stride), begin_masks.append(
-                    begin_mask)
-                end_masks.append(end_mask), begin_ids.append(
-                    begin_id), end_ids.append(end_id)
-                output_shape.append(length)
+                    objs.append(obj), strides.append(stride), begin_masks.append(
+                        begin_mask)
+                    end_masks.append(end_mask), begin_ids.append(
+                        begin_id), end_ids.append(end_id)
 
-            input_features = [('data', datatypes.Array(*input_shape))]
-            output_features = [('output', datatypes.Array(*output_shape))]
+                input_features = [('data', datatypes.Array(*input_shape))]
+                output_features = [('output', None)]
 
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
-            if rank <= 5:
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, output_features,
+                    disable_rank5_shape_mapping=True)
+
                 builder.add_sliceND('SliceND', 'data', 'output', begin_ids,
-                                    end_ids, begin_masks, end_masks, strides,
-                                    rank)
-            else:
-                builder.add_sliceND('SliceND', 'data', 'output', begin_ids,
-                                    end_ids, begin_masks, end_masks, strides,
-                                    rank, input_shape, output_shape)
+                                     end_ids, begin_masks, end_masks, strides)
 
-            # save the model
-            model_dir = tempfile.mkdtemp()
-            model_path = os.path.join(model_dir, 'test_layer.mlmodel')
-            coremltools.utils.save_spec(builder.spec, model_path)
 
-            x = np.random.rand(*input_shape)
-            input = {'data': x}
-            expected = {'output': x[tuple(objs)]}
+                x = np.random.rand(*input_shape)
+                input = {'data': x}
+                expected = {'output': x[tuple(objs)]}
 
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
+                self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_powBroadcastable_CPU(self):
-        aShapes = [(1, 2, 3, 1), (3, 1, 2, 1, 2), (1, 2, 1, 3), (2, 3),
-                   (2, 1, 1), (2, 3, 4), (2, 4), (1,), (1,)]
-        bShapes = [(2, 3, 1, 2, 1, 1, 2), (2, 2, 3, 1), (2, 1, 3, 1), (2, 3),
-                   (2, 3, 4), (3, 1), (1,), (2, 3), (1,)]
-        outShapes = [(2, 3, 1, 2, 2, 3, 2), (3, 2, 2, 3, 2), (2, 2, 3, 3),
-                     (2, 3), (2, 3, 4), (2, 3, 4), (2, 4), (2, 3), (1,)]
-        for aShape, bShape, outShape in zip(aShapes, bShapes, outShapes):
-            input_shapes = [aShape, bShape]
-            output_shape = outShape
-            input_ranks = [len(i) for i in input_shapes]
-            output_rank = len(output_shape)
-            input_names = ['A', 'B']
-            input_features = [('A', datatypes.Array(*input_shapes[0])),
-                              ('B', datatypes.Array(*input_shapes[1]))]
-            output_features = [('output', datatypes.Array(*output_shape))]
+# PLEASE DON'T DELETE THE TEST
+#    def test_tile_cpu(self):
+#        for rank in range(1, 6):
+#            input_shape = np.random.randint(low=2, high=5, size=rank)
+#            reps = np.random.randint(low=1, high=4, size=rank)
+#
+#            input_features = [('data', datatypes.Array(*input_shape))]
+#            output_features = [('output', None)]
+#
+#            builder = neural_network.NeuralNetworkBuilder(
+#                input_features, output_features,
+#                disable_rank5_shape_mapping=True
+#            )
+#
+#            builder.add_tile('Tile', 'data', 'output', reps)
+#
+#            x = np.random.rand(*input_shape)
+#            input = {'data': x}
+#            expected = {'output': np.tile(x, reps)}
+#
+#            self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True)
-
-            if output_rank <= 5:
-                builder.add_powBroadcastable(name='powBroadcastable',
-                                             input_names=input_names,
-                                             output_name='output',
-                                             input_ranks=input_ranks,
-                                             output_rank=output_rank)
-            else:
-                builder.add_powBroadcastable(name='powBroadcastable',
-                                             input_names=input_names,
-                                             output_name='output',
-                                             input_ranks=input_ranks,
-                                             output_rank=output_rank,
-                                             input_shapes=input_shapes,
-                                             output_shape=output_shape)
-
-            a = np.random.rand(*input_shapes[0])
-            b = np.random.rand(*input_shapes[1])
-            input = {'A': a, 'B': b}
-            expected = {'output': np.power(a, b)}
-
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_tile_CPU(self):
-        for rank in range(1, 6):
-            input_shape = np.random.randint(low=2, high=5, size=rank)
-            reps = np.random.randint(low=1, high=4, size=rank)
-            output_shape = [i * j for i, j in zip(reps, input_shape)]
-
-            input_features = [('data', datatypes.Array(*input_shape))]
-            output_features = [('output', datatypes.Array(*output_shape))]
-
-            builder = neural_network.NeuralNetworkBuilder(
-                input_features, output_features,
-                disable_rank5_shape_mapping=True
-            )
-            if rank <= 5:
-                builder.add_tile('Tile', 'data', 'output', reps, rank)
-            else:
-                builder.add_tile('Tile', 'data', 'output', reps, rank,
-                                 input_shape, output_shape)
-
-            # save the model
-            model_dir = tempfile.mkdtemp()
-            model_path = os.path.join(model_dir, 'test_layer.mlmodel')
-            coremltools.utils.save_spec(builder.spec, model_path)
-
-            x = np.random.rand(*input_shape)
-            input = {'data': x}
-            expected = {'output': np.tile(x, reps)}
-
-            self._test_model(builder.spec, input, expected, useCPUOnly=True)
-
-    def test_sliding_windows_CPU(self):
+    def test_sliding_windows_cpu(self):
 
         def numpy_sliding(a, axis, size, step):
             N = (a.shape[axis] - size) // step + 1
@@ -1651,7 +1511,7 @@ class NewLayersSimpleTest(CorrectnessTest):
             strides.insert(axis, effstride)
             return np.lib.stride_tricks.as_strided(a, shape, strides)
 
-        for rank in range(1, 6):
+        for rank in range(1, 5):
             for axis in range(-rank, rank):
                 input_shape = np.random.randint(low=2, high=5, size=rank)
                 output_shape = list(input_shape)
@@ -1670,28 +1530,14 @@ class NewLayersSimpleTest(CorrectnessTest):
                 output_rank = rank + 1
 
                 input_features = [('data', datatypes.Array(*input_shape))]
+                output_features = [('output', None)]
 
-                if output_rank <= 5:
-                    output_features = [('output', None)]
-                    builder = neural_network.NeuralNetworkBuilder(
-                        input_features, output_features,
-                        disable_rank5_shape_mapping=True)
-                    builder.add_sliding_windows('sw', 'data', 'output', axis,
-                                                window_size, step, rank)
-                else:
-                    output_features = [
-                        ('output', datatypes.Array(*output_shape))]
-                    builder = neural_network.NeuralNetworkBuilder(
-                        input_features, output_features,
-                        disable_rank5_shape_mapping=True)
-                    builder.add_sliding_windows('sw', 'data', 'output', axis,
-                                                window_size, step, rank,
-                                                input_shape, output_shape)
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, output_features,
+                    disable_rank5_shape_mapping=True)
 
-                # save the model
-                model_dir = tempfile.mkdtemp()
-                model_path = os.path.join(model_dir, 'test_layer.mlmodel')
-                coremltools.utils.save_spec(builder.spec, model_path)
+                builder.add_sliding_windows('sw', 'data', 'output', axis,
+                                            window_size, step)
 
                 x = np.random.rand(*input_shape)
                 input = {'data': x}
@@ -1699,22 +1545,28 @@ class NewLayersSimpleTest(CorrectnessTest):
 
                 self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_range_CPU(self):
+    def test_range_cpu(self):
         params = [(-10.4, 23, 12.2), (0, 1000, 1), (50.5, 90.5, 1.5), (5, 8, 2),
                   (5, 8, 98), (5, 8, 1.5), (10, 5, -0.6), (24, -65, -2)]
 
         # mode 0: all parameters as input: in that case the op is dynamic
-        # mode 1: static case when start, end, step are all parameters of the layer
-        for mode in [0, 1]:
+        # mode 1: end, start as input, step is a parameter
+        # mode 2: end as input, start and step are parameters
+        # mode 3: static case when start, end, step are all parameters of the layer
+        for mode in [0, 1, 2, 3]:
             for param in params:
                 start, end, step = param
                 if mode == 0:
-                    input_features = [('start', datatypes.Array(1)),
-                                      ('end', datatypes.Array(1)),
+                    input_features = [('end', datatypes.Array(1)),
+                                      ('start', datatypes.Array(1)),
                                       ('step', datatypes.Array(1))]
+                elif mode == 1:
+                    input_features = [('end', datatypes.Array(1)),
+                                      ('start', datatypes.Array(1))]
+                elif mode == 2:
+                    input_features = [('end', datatypes.Array(1))]
                 else:
-                    input_features = [
-                        ('multiplicative_input', datatypes.Array(1))]
+                    input_features = [('multiplicative_input', datatypes.Array(1))]
 
                 output_features = [('output', None)]
                 builder = neural_network.NeuralNetworkBuilder(
@@ -1723,34 +1575,38 @@ class NewLayersSimpleTest(CorrectnessTest):
 
                 if mode == 0:
                     builder.add_range('Range', 'output',
-                                      input_names=['start', 'end', 'step'])
+                                      input_names=['end', 'start', 'step'])
+                elif mode == 1:
+                    builder.add_range('Range', 'output',
+                                      input_names=['end', 'start'], step=step)
+                elif mode == 2:
+                    builder.add_range('Range', 'output',
+                                      input_names=['end'], start=start, step=step)
                 else:
                     builder.add_range('Range', 'output_range', input_names=None,
-                                      params=[start, end, step])
+                                      end=end, start=start, step=step)
                     builder.add_multiplyBroadcastable(
                         name='multiplyBroadcastable',
                         input_names=['multiplicative_input', 'output_range'],
-                        output_name='output',
-                        input_ranks=[1, 1], output_rank=1)
-
-                # save the model
-                model_dir = tempfile.mkdtemp()
-                model_path = os.path.join(model_dir, 'test_layer.mlmodel')
-                coremltools.utils.save_spec(builder.spec, model_path)
+                        output_name='output')
 
                 input = dict()
                 if mode == 0:
-                    input['start'] = start * np.ones((1,), dtype=np.float64)
                     input['end'] = end * np.ones((1,), dtype=np.float64)
+                    input['start'] = start * np.ones((1,), dtype=np.float64)
                     input['step'] = step * np.ones((1,), dtype=np.float64)
+                elif mode == 1:
+                    input['end'] = end * np.ones((1,), dtype=np.float64)
+                    input['start'] = start * np.ones((1,), dtype=np.float64)
+                elif mode == 2:
+                    input['end'] = end * np.ones((1,), dtype=np.float64)
                 else:
-                    input['multiplicative_input'] = np.ones((1,),
-                                                            dtype=np.float64)
+                    input['multiplicative_input'] = np.ones((1,), dtype=np.float64)
                 expected = {'output': np.arange(start, end, step)}
 
                 self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
-    def test_linear_activation_different_ranks_CPU(self):
+    def test_linear_activation_different_ranks_cpu(self):
         for input_dim in [(10, 15), (10, 15, 2, 3),
                           (10, 2, 4, 15, 1, 4), (6,)]:
             input_features = [('data', datatypes.Array(*input_dim))]
@@ -1889,8 +1745,8 @@ class NewLayersSimpleTest(CorrectnessTest):
 
         builder = neural_network.NeuralNetworkBuilder(
             input_features, output_features, disable_rank5_shape_mapping=True)
-        builder.add_alloc(name='alloc_layer', input_name='alloc_shape',
-                          output_name='array')
+        builder.add_fillDynamic(name='fillDynamic_layer', input_name='alloc_shape',
+                                output_name='array', value=np.float(0.0))
         # CoreML input order: container (array), indices, slices (value)
         builder.add_scatter(name='scatter_layer',
                             input_names=['array', 'index', 'value'],
@@ -1913,7 +1769,7 @@ class NewLayersSimpleTest(CorrectnessTest):
 
         builder = neural_network.NeuralNetworkBuilder(
             input_features, output_features, disable_rank5_shape_mapping=True)
-        builder.add_erfActivation(name='erf', input_name='data',
+        builder.add_erf(name='erf', input_name='data',
                                   output_name='output')
         x = np.random.rand(10, 45)
         input = {'data': x}
@@ -1925,22 +1781,543 @@ class NewLayersSimpleTest(CorrectnessTest):
         self._test_model(builder.spec, input, expected, useCPUOnly=True)
 
     def test_gelu_activation(self):
-        input_features = [('data', datatypes.Array(10, 45))]
-        output_features = [('output', datatypes.Array(10, 45))]
 
-        builder = neural_network.NeuralNetworkBuilder(
-            input_features, output_features, disable_rank5_shape_mapping=True)
-        builder.add_geluActivation(name='erf', input_name='data',
-                                   output_name='output')
+        for mode in ['EXACT', 'TANH_APPROXIMATION', 'SIGMOID_APPROXIMATION']:
+            for rank in range(1,6):
+                shape = np.random.randint(low=2, high=5, size=rank)
+                input_features = [('data', datatypes.Array(*shape))]
+                output_features = [('output', None)]
 
-        x = np.random.rand(10, 45)
-        input = {'data': x}
-        y = np.asarray([0.5 * i * (1.0 + math.erf(i / math.sqrt(2)))
-                        for i in x.flatten().tolist()]).reshape(10, 45)
-        expected = {'output': y}
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, output_features, disable_rank5_shape_mapping=True)
+                builder.add_gelu(name='gelu', input_name='data',
+                                           output_name='output', mode = mode)
 
-        self._test_model(builder.spec, input, expected, useCPUOnly=True)
+                x = np.random.rand(*shape)
+                input = {'data': x}
+                exact = np.asarray([0.5 * i * (1.0 + math.erf(i / math.sqrt(2)))
+                                for i in x.flatten().tolist()]).reshape(*shape)
 
+                tanh = 0.5 * x * (1 + np.tanh(np.sqrt(2/np.pi) * (x + 0.044715 * np.power(x,3))))
+                sigmoid = x / (1. + np.exp(-1.702 * x))
+                expected = {'output': exact}
+                self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+    def test_lower_triangular_cpu(self):
+
+        for rank in range(2,6):
+            for k in range(-7,8):
+                shape = np.random.randint(low=2, high=6, size=rank)
+                input_features = [('data', datatypes.Array(*shape))]
+                output_features = [('output', None)]
+
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, output_features, disable_rank5_shape_mapping=True)
+
+                builder.add_lower_triangular('tril', 'data', 'output', k=k)
+
+                x = np.random.rand(*shape)
+                input = {'data' : x}
+                expected = {'output': np.tril(x,k=k)}
+                self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+    def test_upper_triangular_cpu(self):
+
+        for rank in range(2,6):
+            for k in range(-7,8):
+                shape = np.random.randint(low=2, high=6, size=rank)
+                input_features = [('data', datatypes.Array(*shape))]
+                output_features = [('output', None)]
+
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, output_features, disable_rank5_shape_mapping=True)
+
+                builder.add_upper_triangular('triu', 'data', 'output', k=k)
+
+                x = np.random.rand(*shape)
+                input = {'data' : x}
+                expected = {'output': np.triu(x,k=k)}
+                self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+    def test_where_cpu(self):
+
+        for _ in range(150):
+            rank_cond  = np.random.randint(low = 1, high = 6)
+            rank_true  = np.random.randint(low = 1, high = 6)
+            rank_false = np.random.randint(low = 1, high = 6)
+
+            rank_out = max(rank_cond, rank_true, rank_false)
+
+            shape_cond = np.random.randint(low=2, high=8, size=rank_cond)
+            shape_true = np.random.randint(low=2, high=8, size=rank_true)
+            shape_false = np.random.randint(low=2, high=8, size=rank_false)
+
+            shapesList = [shape_cond, shape_true, shape_false]
+
+            for i in range(-1,-rank_out-1,-1):
+                dimList = []
+                if -i <= rank_cond: dimList.append(shape_cond[i])
+                if -i <= rank_true: dimList.append(shape_true[i])
+                if -i <= rank_false: dimList.append(shape_false[i])
+
+                dim = np.random.choice(dimList)
+                if -i <= rank_cond: shape_cond[i] = np.random.choice([1,dim])
+                if -i <= rank_true: shape_true[i] = np.random.choice([1,dim])
+                if -i <= rank_false: shape_false[i] = np.random.choice([1,dim])
+
+            input_features = [('cond', datatypes.Array(*shape_cond)),
+                              ('true', datatypes.Array(*shape_true)),('false', datatypes.Array(*shape_false))]
+            output_features = [('output', None)]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, output_features, disable_rank5_shape_mapping=True)
+
+            builder.add_whereBroadcastable('if_broadcastable', input_names=['cond', 'true' , 'false'],
+                                           output_name='output')
+
+            cond = np.random.choice([1.0,0.0], size = shape_cond)
+            true = np.random.rand(*shape_true)
+            false = np.random.rand(*shape_false)
+
+            input = {'cond': cond, 'true': true , 'false': false}
+            expected = {'output': np.where(cond,true,false)}
+            self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+    def test_random_normal_like_cpu(self):
+
+        mean, stddev, seed = 0., 1., 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('tensor', datatypes.Array(*shape))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_normal_like(name='random_normal_like',
+                                           input_name='tensor',
+                                           output_name='output',
+                                           mean=mean, stddev=stddev, seed=seed)
+
+            inputs = {'tensor': np.random.rand(*shape)}
+            expected = {'output': np.random.normal(mean, stddev, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected, num_moments=2)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_random_normal_static_cpu(self):
+
+        mean, stddev, seed = 0., 1., 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('data', datatypes.Array(*shape))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_normal_static(name='random_normal_static', output_name='tmp',
+                                             output_shape=shape, mean=mean, stddev=stddev, seed=seed)
+
+            builder.add_elementwise('add_layer', ['data', 'tmp'], 'output', mode='ADD')
+
+            data = np.zeros(shape)
+            inputs = {'data': data}
+            expected = {'output': data + np.random.normal(mean, stddev, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected, num_moments=2)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_random_normal_dynamic_cpu(self):
+
+        mean, stddev, seed = 0., 1., 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('shape', datatypes.Array(len(shape)))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_normal_dynamic(name='random_normal_dynamic',
+                                              input_names=['shape'],
+                                              output_name='output',
+                                              mean=mean, stddev=stddev, seed=seed)
+
+            inputs = {'shape': np.array(shape, np.float)}
+            expected = {'output': np.random.normal(mean, stddev, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected, num_moments=2)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_random_uniform_like_cpu(self):
+
+        minval, maxval, seed = 0., 1., 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('tensor', datatypes.Array(*shape))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_uniform_like(name='random_uniform_like',
+                                            input_name='tensor',
+                                            output_name='output',
+                                            minval=minval, maxval=maxval, seed=seed)
+
+            tensor = np.random.rand(*shape)
+            inputs = {'tensor': tensor}
+            expected = {'output': np.random.uniform(minval, maxval, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_random_uniform_static_cpu(self):
+
+        minval, maxval, seed = 0., 1., 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('data', datatypes.Array(*shape))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_uniform_static(name='random_uniform_static', output_name='tmp',
+                                              output_shape=shape, minval=minval, maxval=maxval, seed=seed)
+
+            builder.add_elementwise('add_layer', ['data', 'tmp'], 'output', mode='ADD')
+
+            data = np.zeros(shape)
+            inputs = {'data': data}
+            expected = {'output': data + np.random.uniform(minval, maxval, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_random_uniform_dynamic_cpu(self):
+
+        minval, maxval, seed = 0., 1., 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('shape', datatypes.Array(len(shape)))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_uniform_dynamic(name='random_uniform_dynamic',
+                                               input_names=['shape'],
+                                               output_name='output',
+                                               minval=minval, maxval=maxval, seed=seed)
+
+            inputs = {'shape': np.array(shape, np.float)}
+            expected = {'output': np.random.uniform(minval, maxval, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_random_bernoulli_like_cpu(self):
+
+        prob, seed = 0.5, 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('tensor', datatypes.Array(*shape))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_bernoulli_like(name='random_bernoulli_like',
+                                              input_name='tensor',
+                                              output_name='output',
+                                              prob=prob, seed=seed)
+
+            tensor = np.random.rand(*shape)
+            inputs = {'tensor': tensor}
+            expected = {'output': np.random.binomial(1, prob, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_random_bernoulli_static_cpu(self):
+
+        prob, seed = 0.5, 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('data', datatypes.Array(*shape))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_bernoulli_static(name='random_bernoulli_static', output_name='tmp',
+                                                output_shape=shape, prob=prob, seed=seed)
+
+            builder.add_elementwise('add_layer', ['data', 'tmp'], 'output', mode='ADD')
+
+            data = np.zeros(shape)
+            inputs = {'data': data}
+            expected = {'output': data + np.random.binomial(1, prob, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_random_bernoulli_dynamic_cpu(self):
+
+        prob, seed = 0.5, 42
+
+        for rank in range(1, 6):
+            low_factor = np.random.randint(low=2, high=4)
+            low = int(np.power(1000, 1. / rank)) * low_factor
+            high = int(np.power(2000, 1. / rank)) * np.random.randint(low=low_factor, high=4)
+
+            shape = np.random.randint(low=low, high=high, size=rank)
+
+            input_features = [('shape', datatypes.Array(len(shape)))]
+
+            builder = neural_network.NeuralNetworkBuilder(
+                input_features, [('output', None)], disable_rank5_shape_mapping=True)
+
+            builder.add_random_bernoulli_dynamic(name='random_bernoulli_dynamic',
+                                                 input_names=['shape'],
+                                                 output_name='output',
+                                                 prob=prob, seed=seed)
+
+            inputs = {'shape': np.array(shape, np.float)}
+            expected = {'output': np.random.binomial(1, prob, shape)}
+
+            CorrectnessTest._compare_moments(builder.spec, inputs, expected)
+            self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_reverse_cpu(self):
+
+        for rank in range(1,6):
+            for _ in range(20):
+                input_shape = np.random.randint(low=2, high=8, size=rank)
+                reverse_dim = [np.random.choice([True, False]) for _ in range(rank)]
+                axes = [i for i in range(rank) if reverse_dim[i] == True]
+
+                input_features = [('data', datatypes.Array(*input_shape))]
+                output_features = [('output', None)]
+
+                builder = neural_network.NeuralNetworkBuilder(
+                          input_features, output_features,
+                          disable_rank5_shape_mapping=True)
+
+                builder.add_reverse('Reverse', 'data', 'output', reverse_dim)
+
+                x = np.random.rand(*input_shape)
+                input = {'data': x}
+                expected = {'output': np.flip(x, axis=axes)}
+
+                self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+    def test_matrix_band_part_cpu(self):
+
+        for rank in range(2,6):
+            for _ in range(20):
+                num_lower = np.random.randint(low = -7, high = 8)
+                num_upper = np.random.randint(low = -7, high = 8)
+                shape = np.random.randint(low = 2, high = 6, size=rank)
+                input_features = [('data', datatypes.Array(*shape))]
+                output_features = [('output', None)]
+
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, output_features, disable_rank5_shape_mapping=True)
+
+                builder.add_matrix_band_part('matrix_band_part', 'data', 'output',
+                                             num_lower=num_lower, num_upper=num_upper)
+
+                x = np.random.rand(*shape)
+                input = {'data' : x}
+
+                rows,cols = shape[-2:]
+                band = np.ones((rows, cols))
+                for m in range(rows):
+                    for n in range(cols):
+                        band[m,n]  = (num_lower < 0 or (m-n) <= num_lower) and (num_upper < 0 or (n-m) <= num_upper)
+
+                expected = {'output': np.multiply(band,x)}
+                self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+
+    def test_flatten_to_2d_cpu(self):
+
+        for rank in range(1,6):
+            for axis in range(-rank, rank+1):
+                shape = np.random.randint(low = 2, high = 6, size=rank)
+                input_features = [('data', datatypes.Array(*shape))]
+                output_features = [('output', None)]
+
+                builder = neural_network.NeuralNetworkBuilder(
+                          input_features, output_features, disable_rank5_shape_mapping=True)
+
+                builder.add_flatten_to_2d('flattenTo2D', 'data', 'output', axis = axis)
+
+                x = np.random.rand(*shape)
+                np_axis = axis + rank if axis < 0 else axis
+                pl, pr = 1,1
+                for i in range(0,np_axis):
+                    pl *= shape[i]
+                for i in range(np_axis,len(shape)):
+                    pr *= shape[i]
+
+                new_shape = [pl, pr]
+                ref = x.reshape(new_shape)
+
+                input = {'data' : x}
+                expected = {'output': ref}
+                self._test_model(builder.spec, input, expected, useCPUOnly=True)
+
+# PLEASE DO NOT DELETE THIS TEST
+#    def test_reshape_like_cpu(self):
+#
+#        for rank in range(1, 6):
+#            for _ in range(20):
+#                input_shape = np.random.randint(low=2, high=8, size=rank)
+#                n = np.prod(input_shape)
+#                divisors = [d for d in xrange(1, n) if n % d == 0]
+#                target_rank = np.random.randint(low=2, high=6)
+#
+#                target_shape = [1]
+#                for i in range(target_rank-1):
+#                    dim_size = np.random.choice(divisors)
+#                    while n % (np.prod(target_shape)* dim_size) != 0:
+#                        dim_size = np.random.choice(divisors)
+#                    target_shape.append(dim_size)
+#                target_shape[0] = n / np.prod(target_shape)
+#
+#                np.random.shuffle(target_shape)
+#                input_features = [('data', datatypes.Array(*input_shape)),
+#                                  ('tensor', datatypes.Array(*target_shape))]
+#
+#                builder = neural_network.NeuralNetworkBuilder(
+#                    input_features, [('output', None)],
+#                    disable_rank5_shape_mapping=True)
+#
+#                builder.add_reshape_like(name='reshapeLike',
+#                                            input_names=['data', 'tensor'],
+#                                            output_name='output')
+#
+#                data = np.random.rand(*input_shape)
+#                tensor = np.random.rand(*target_shape)
+#                inputs = {'data': data, 'tensor': tensor}
+#                expected = {'output': np.reshape(data, target_shape)}
+#
+#                self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_reshape_static_cpu(self):
+
+        for rank in range(1, 6):
+            for _ in range(20):
+                input_shape = np.random.randint(low=2, high=8, size=rank)
+                n = np.prod(input_shape)
+                divisors = [d for d in xrange(1, n) if n % d == 0]
+                target_rank = np.random.randint(low=2, high=6)
+
+                target_shape = [1]
+                for i in range(target_rank-1):
+                    dim_size = np.random.choice(divisors)
+                    while n % (np.prod(target_shape)* dim_size) != 0:
+                        dim_size = np.random.choice(divisors)
+                    target_shape.append(dim_size)
+
+                target_shape[0] = -1
+
+                np.random.shuffle(target_shape)
+                input_features = [('data', datatypes.Array(*input_shape))]
+
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, [('output', None)],
+                    disable_rank5_shape_mapping=True)
+
+                builder.add_reshape_static(name='reshapeStatic',
+                                            input_name='data',
+                                            output_name='output', target_shape = target_shape)
+
+                data = np.random.rand(*input_shape)
+                inputs = {'data': data}
+                expected = {'output': np.reshape(data, target_shape)}
+
+                self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
+
+    def test_reshape_dynamic_cpu(self):
+
+        for rank in range(1, 6):
+            for _ in range(20):
+                input_shape = np.random.randint(low=2, high=8, size=rank)
+                n = np.prod(input_shape)
+                divisors = [d for d in xrange(1, n) if n % d == 0]
+                target_rank = np.random.randint(low=2, high=6)
+
+                target_shape = [1]
+                for i in range(target_rank-1):
+                    dim_size = np.random.choice(divisors)
+                    while n % (np.prod(target_shape)* dim_size) != 0:
+                        dim_size = np.random.choice(divisors)
+                    target_shape.append(dim_size)
+
+                target_shape[0] = -1
+
+                np.random.shuffle(target_shape)
+                input_features = [('data', datatypes.Array(*input_shape)),
+                                  ('shape', datatypes.Array(len(target_shape)))]
+
+                builder = neural_network.NeuralNetworkBuilder(
+                    input_features, [('output', None)],
+                    disable_rank5_shape_mapping=True)
+
+                builder.add_reshape_dynamic(name='reshapeDynamic',
+                                            input_names=['data','shape'],
+                                            output_name='output')
+
+                data = np.random.rand(*input_shape)
+                inputs = {'data': data, 'shape': np.array(target_shape, dtype='float')}
+                expected = {'output': np.reshape(data, target_shape)}
+
+                self._test_model(builder.spec, inputs, expected, useCPUOnly=True)
 
 def get_size_after_stride(X, params):
     start = params["start"]
@@ -2158,6 +2535,6 @@ class StressTest(CorrectnessTest):
 
 if __name__ == '__main__':
     unittest.main()
-    #suite = unittest.TestSuite()
-    #suite.addTest(NewLayersSimpleTest("test_load_constant_nd"))
-    #unittest.TextTestRunner().run(suite)
+    # suite = unittest.TestSuite()
+    # suite.addTest(NewLayersSimpleTest("test_load_constant_nd"))
+    # unittest.TextTestRunner().run(suite)

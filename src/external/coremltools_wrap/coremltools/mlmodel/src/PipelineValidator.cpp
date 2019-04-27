@@ -79,6 +79,28 @@ namespace CoreML {
                               ("Type of pipeline output '" + output.name() + "' does not match type produced in pipeline input."));
             }
         }
+        
+        if (spec.isupdatable()) {
+            for (int modelIdx = 0; modelIdx < nModels - 1; modelIdx++) {
+                auto model = pipelineParams.models(modelIdx);
+                if (model.isupdatable()) {
+                    return Result(ResultType::INVALID_UPDATABLE_MODEL_CONFIGURATION,
+                                  ("Only the last model in the pipeline can be updatable. Model at position '" + std::to_string(modelIdx) + "' is marked as updatable."));
+                }
+            }
+            if (false == pipelineParams.models(nModels - 1).isupdatable()) {
+                return Result(ResultType::INVALID_UPDATABLE_MODEL_CONFIGURATION,
+                              ("Last model in an updatable pipeline model should be marked as updatable."));
+            }
+        } else {
+            for (int modelIdx = 0; modelIdx < nModels; modelIdx++) {
+                auto model = pipelineParams.models(modelIdx);
+                if (model.isupdatable()) {
+                    return Result(ResultType::INVALID_UPDATABLE_MODEL_CONFIGURATION,
+                                  ("Found an updatable model at '" + std::to_string(modelIdx) + "' inside a non-updatable pipeline."));
+                }
+            }
+        }
 
         // if we get here, no input of any model caused a type mismatch with
         // any other prior model in the chain, or had an independent validation

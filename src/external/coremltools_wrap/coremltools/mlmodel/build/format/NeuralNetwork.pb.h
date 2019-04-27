@@ -36,6 +36,12 @@
 // @@protoc_insertion_point(includes)
 namespace CoreML {
 namespace Specification {
+class AcosLayerParams;
+class AcosLayerParamsDefaultTypeInternal;
+extern AcosLayerParamsDefaultTypeInternal _AcosLayerParams_default_instance_;
+class AcoshLayerParams;
+class AcoshLayerParamsDefaultTypeInternal;
+extern AcoshLayerParamsDefaultTypeInternal _AcoshLayerParams_default_instance_;
 class ActivationELU;
 class ActivationELUDefaultTypeInternal;
 extern ActivationELUDefaultTypeInternal _ActivationELU_default_instance_;
@@ -99,12 +105,24 @@ extern ArrayFeatureType_ShapeDefaultTypeInternal _ArrayFeatureType_Shape_default
 class ArrayFeatureType_ShapeRange;
 class ArrayFeatureType_ShapeRangeDefaultTypeInternal;
 extern ArrayFeatureType_ShapeRangeDefaultTypeInternal _ArrayFeatureType_ShapeRange_default_instance_;
+class AsinLayerParams;
+class AsinLayerParamsDefaultTypeInternal;
+extern AsinLayerParamsDefaultTypeInternal _AsinLayerParams_default_instance_;
+class AsinhLayerParams;
+class AsinhLayerParamsDefaultTypeInternal;
+extern AsinhLayerParamsDefaultTypeInternal _AsinhLayerParams_default_instance_;
+class AtanLayerParams;
+class AtanLayerParamsDefaultTypeInternal;
+extern AtanLayerParamsDefaultTypeInternal _AtanLayerParams_default_instance_;
+class AtanhLayerParams;
+class AtanhLayerParamsDefaultTypeInternal;
+extern AtanhLayerParamsDefaultTypeInternal _AtanhLayerParams_default_instance_;
 class AverageLayerParams;
 class AverageLayerParamsDefaultTypeInternal;
 extern AverageLayerParamsDefaultTypeInternal _AverageLayerParams_default_instance_;
-class BatchedMatMulParams;
-class BatchedMatMulParamsDefaultTypeInternal;
-extern BatchedMatMulParamsDefaultTypeInternal _BatchedMatMulParams_default_instance_;
+class BatchedMatMulLayerParams;
+class BatchedMatMulLayerParamsDefaultTypeInternal;
+extern BatchedMatMulLayerParamsDefaultTypeInternal _BatchedMatMulLayerParams_default_instance_;
 class BatchnormLayerParams;
 class BatchnormLayerParamsDefaultTypeInternal;
 extern BatchnormLayerParamsDefaultTypeInternal _BatchnormLayerParams_default_instance_;
@@ -153,9 +171,12 @@ extern ConvolutionLayerParamsDefaultTypeInternal _ConvolutionLayerParams_default
 class CopyLayerParams;
 class CopyLayerParamsDefaultTypeInternal;
 extern CopyLayerParamsDefaultTypeInternal _CopyLayerParams_default_instance_;
-class CosineLayerParams;
-class CosineLayerParamsDefaultTypeInternal;
-extern CosineLayerParamsDefaultTypeInternal _CosineLayerParams_default_instance_;
+class CosLayerParams;
+class CosLayerParamsDefaultTypeInternal;
+extern CosLayerParamsDefaultTypeInternal _CosLayerParams_default_instance_;
+class CoshLayerParams;
+class CoshLayerParamsDefaultTypeInternal;
+extern CoshLayerParamsDefaultTypeInternal _CoshLayerParams_default_instance_;
 class CropLayerParams;
 class CropLayerParamsDefaultTypeInternal;
 extern CropLayerParamsDefaultTypeInternal _CropLayerParams_default_instance_;
@@ -204,9 +225,9 @@ extern EmbeddingNDLayerParamsDefaultTypeInternal _EmbeddingNDLayerParams_default
 class EqualLayerParams;
 class EqualLayerParamsDefaultTypeInternal;
 extern EqualLayerParamsDefaultTypeInternal _EqualLayerParams_default_instance_;
-class ErfActivationLayerParams;
-class ErfActivationLayerParamsDefaultTypeInternal;
-extern ErfActivationLayerParamsDefaultTypeInternal _ErfActivationLayerParams_default_instance_;
+class ErfLayerParams;
+class ErfLayerParamsDefaultTypeInternal;
+extern ErfLayerParamsDefaultTypeInternal _ErfLayerParams_default_instance_;
 class Exp2LayerParams;
 class Exp2LayerParamsDefaultTypeInternal;
 extern Exp2LayerParamsDefaultTypeInternal _Exp2LayerParams_default_instance_;
@@ -228,6 +249,15 @@ extern FillStaticLayerParamsDefaultTypeInternal _FillStaticLayerParams_default_i
 class FlattenLayerParams;
 class FlattenLayerParamsDefaultTypeInternal;
 extern FlattenLayerParamsDefaultTypeInternal _FlattenLayerParams_default_instance_;
+class FlattenTo2DLayerParams;
+class FlattenTo2DLayerParamsDefaultTypeInternal;
+extern FlattenTo2DLayerParamsDefaultTypeInternal _FlattenTo2DLayerParams_default_instance_;
+class FloatVector;
+class FloatVectorDefaultTypeInternal;
+extern FloatVectorDefaultTypeInternal _FloatVector_default_instance_;
+class FloorDivBroadcastableLayerParams;
+class FloorDivBroadcastableLayerParamsDefaultTypeInternal;
+extern FloorDivBroadcastableLayerParamsDefaultTypeInternal _FloorDivBroadcastableLayerParams_default_instance_;
 class FloorLayerParams;
 class FloorLayerParamsDefaultTypeInternal;
 extern FloorLayerParamsDefaultTypeInternal _FloorLayerParams_default_instance_;
@@ -237,12 +267,15 @@ extern GRULayerParamsDefaultTypeInternal _GRULayerParams_default_instance_;
 class GatherLayerParams;
 class GatherLayerParamsDefaultTypeInternal;
 extern GatherLayerParamsDefaultTypeInternal _GatherLayerParams_default_instance_;
-class GeluActivationLayerParams;
-class GeluActivationLayerParamsDefaultTypeInternal;
-extern GeluActivationLayerParamsDefaultTypeInternal _GeluActivationLayerParams_default_instance_;
+class GeluLayerParams;
+class GeluLayerParamsDefaultTypeInternal;
+extern GeluLayerParamsDefaultTypeInternal _GeluLayerParams_default_instance_;
 class GetShapeLayerParams;
 class GetShapeLayerParamsDefaultTypeInternal;
 extern GetShapeLayerParamsDefaultTypeInternal _GetShapeLayerParams_default_instance_;
+class GreaterEqualLayerParams;
+class GreaterEqualLayerParamsDefaultTypeInternal;
+extern GreaterEqualLayerParamsDefaultTypeInternal _GreaterEqualLayerParams_default_instance_;
 class GreaterThanLayerParams;
 class GreaterThanLayerParamsDefaultTypeInternal;
 extern GreaterThanLayerParamsDefaultTypeInternal _GreaterThanLayerParams_default_instance_;
@@ -300,6 +333,9 @@ extern LSTMParamsDefaultTypeInternal _LSTMParams_default_instance_;
 class LSTMWeightParams;
 class LSTMWeightParamsDefaultTypeInternal;
 extern LSTMWeightParamsDefaultTypeInternal _LSTMWeightParams_default_instance_;
+class LessEqualLayerParams;
+class LessEqualLayerParamsDefaultTypeInternal;
+extern LessEqualLayerParamsDefaultTypeInternal _LessEqualLayerParams_default_instance_;
 class LessThanLayerParams;
 class LessThanLayerParamsDefaultTypeInternal;
 extern LessThanLayerParamsDefaultTypeInternal _LessThanLayerParams_default_instance_;
@@ -345,12 +381,21 @@ extern LowerTriangularLayerParamsDefaultTypeInternal _LowerTriangularLayerParams
 class MSELossLayer;
 class MSELossLayerDefaultTypeInternal;
 extern MSELossLayerDefaultTypeInternal _MSELossLayer_default_instance_;
+class MatrixBandPartLayerParams;
+class MatrixBandPartLayerParamsDefaultTypeInternal;
+extern MatrixBandPartLayerParamsDefaultTypeInternal _MatrixBandPartLayerParams_default_instance_;
+class MaxBroadcastableLayerParams;
+class MaxBroadcastableLayerParamsDefaultTypeInternal;
+extern MaxBroadcastableLayerParamsDefaultTypeInternal _MaxBroadcastableLayerParams_default_instance_;
 class MaxLayerParams;
 class MaxLayerParamsDefaultTypeInternal;
 extern MaxLayerParamsDefaultTypeInternal _MaxLayerParams_default_instance_;
 class MeanVarianceNormalizeLayerParams;
 class MeanVarianceNormalizeLayerParamsDefaultTypeInternal;
 extern MeanVarianceNormalizeLayerParamsDefaultTypeInternal _MeanVarianceNormalizeLayerParams_default_instance_;
+class MinBroadcastableLayerParams;
+class MinBroadcastableLayerParamsDefaultTypeInternal;
+extern MinBroadcastableLayerParamsDefaultTypeInternal _MinBroadcastableLayerParams_default_instance_;
 class MinLayerParams;
 class MinLayerParamsDefaultTypeInternal;
 extern MinLayerParamsDefaultTypeInternal _MinLayerParams_default_instance_;
@@ -417,6 +462,33 @@ extern PowBroadcastableLayerParamsDefaultTypeInternal _PowBroadcastableLayerPara
 class QuantizationParams;
 class QuantizationParamsDefaultTypeInternal;
 extern QuantizationParamsDefaultTypeInternal _QuantizationParams_default_instance_;
+class RandomBernoulliDynamicLayerParams;
+class RandomBernoulliDynamicLayerParamsDefaultTypeInternal;
+extern RandomBernoulliDynamicLayerParamsDefaultTypeInternal _RandomBernoulliDynamicLayerParams_default_instance_;
+class RandomBernoulliLikeLayerParams;
+class RandomBernoulliLikeLayerParamsDefaultTypeInternal;
+extern RandomBernoulliLikeLayerParamsDefaultTypeInternal _RandomBernoulliLikeLayerParams_default_instance_;
+class RandomBernoulliStaticLayerParams;
+class RandomBernoulliStaticLayerParamsDefaultTypeInternal;
+extern RandomBernoulliStaticLayerParamsDefaultTypeInternal _RandomBernoulliStaticLayerParams_default_instance_;
+class RandomNormalDynamicLayerParams;
+class RandomNormalDynamicLayerParamsDefaultTypeInternal;
+extern RandomNormalDynamicLayerParamsDefaultTypeInternal _RandomNormalDynamicLayerParams_default_instance_;
+class RandomNormalLikeLayerParams;
+class RandomNormalLikeLayerParamsDefaultTypeInternal;
+extern RandomNormalLikeLayerParamsDefaultTypeInternal _RandomNormalLikeLayerParams_default_instance_;
+class RandomNormalStaticLayerParams;
+class RandomNormalStaticLayerParamsDefaultTypeInternal;
+extern RandomNormalStaticLayerParamsDefaultTypeInternal _RandomNormalStaticLayerParams_default_instance_;
+class RandomUniformDynamicLayerParams;
+class RandomUniformDynamicLayerParamsDefaultTypeInternal;
+extern RandomUniformDynamicLayerParamsDefaultTypeInternal _RandomUniformDynamicLayerParams_default_instance_;
+class RandomUniformLikeLayerParams;
+class RandomUniformLikeLayerParamsDefaultTypeInternal;
+extern RandomUniformLikeLayerParamsDefaultTypeInternal _RandomUniformLikeLayerParams_default_instance_;
+class RandomUniformStaticLayerParams;
+class RandomUniformStaticLayerParamsDefaultTypeInternal;
+extern RandomUniformStaticLayerParamsDefaultTypeInternal _RandomUniformStaticLayerParams_default_instance_;
 class RangeLayerParams;
 class RangeLayerParamsDefaultTypeInternal;
 extern RangeLayerParamsDefaultTypeInternal _RangeLayerParams_default_instance_;
@@ -429,12 +501,24 @@ extern ReduceLayerParamsDefaultTypeInternal _ReduceLayerParams_default_instance_
 class ReorganizeDataLayerParams;
 class ReorganizeDataLayerParamsDefaultTypeInternal;
 extern ReorganizeDataLayerParamsDefaultTypeInternal _ReorganizeDataLayerParams_default_instance_;
+class ReshapeDynamicLayerParams;
+class ReshapeDynamicLayerParamsDefaultTypeInternal;
+extern ReshapeDynamicLayerParamsDefaultTypeInternal _ReshapeDynamicLayerParams_default_instance_;
 class ReshapeLayerParams;
 class ReshapeLayerParamsDefaultTypeInternal;
 extern ReshapeLayerParamsDefaultTypeInternal _ReshapeLayerParams_default_instance_;
+class ReshapeLikeLayerParams;
+class ReshapeLikeLayerParamsDefaultTypeInternal;
+extern ReshapeLikeLayerParamsDefaultTypeInternal _ReshapeLikeLayerParams_default_instance_;
+class ReshapeStaticLayerParams;
+class ReshapeStaticLayerParamsDefaultTypeInternal;
+extern ReshapeStaticLayerParamsDefaultTypeInternal _ReshapeStaticLayerParams_default_instance_;
 class ResizeBilinearLayerParams;
 class ResizeBilinearLayerParamsDefaultTypeInternal;
 extern ResizeBilinearLayerParamsDefaultTypeInternal _ResizeBilinearLayerParams_default_instance_;
+class ReverseLayerParams;
+class ReverseLayerParamsDefaultTypeInternal;
+extern ReverseLayerParamsDefaultTypeInternal _ReverseLayerParams_default_instance_;
 class SGDOptimizer;
 class SGDOptimizerDefaultTypeInternal;
 extern SGDOptimizerDefaultTypeInternal _SGDOptimizer_default_instance_;
@@ -459,9 +543,12 @@ extern SequenceRepeatLayerParamsDefaultTypeInternal _SequenceRepeatLayerParams_d
 class SimpleRecurrentLayerParams;
 class SimpleRecurrentLayerParamsDefaultTypeInternal;
 extern SimpleRecurrentLayerParamsDefaultTypeInternal _SimpleRecurrentLayerParams_default_instance_;
-class SineLayerParams;
-class SineLayerParamsDefaultTypeInternal;
-extern SineLayerParamsDefaultTypeInternal _SineLayerParams_default_instance_;
+class SinLayerParams;
+class SinLayerParamsDefaultTypeInternal;
+extern SinLayerParamsDefaultTypeInternal _SinLayerParams_default_instance_;
+class SinhLayerParams;
+class SinhLayerParamsDefaultTypeInternal;
+extern SinhLayerParamsDefaultTypeInternal _SinhLayerParams_default_instance_;
 class SizeRange;
 class SizeRangeDefaultTypeInternal;
 extern SizeRangeDefaultTypeInternal _SizeRange_default_instance_;
@@ -513,15 +600,21 @@ extern StringVectorDefaultTypeInternal _StringVector_default_instance_;
 class SubtractBroadcastableLayerParams;
 class SubtractBroadcastableLayerParamsDefaultTypeInternal;
 extern SubtractBroadcastableLayerParamsDefaultTypeInternal _SubtractBroadcastableLayerParams_default_instance_;
+class TanLayerParams;
+class TanLayerParamsDefaultTypeInternal;
+extern TanLayerParamsDefaultTypeInternal _TanLayerParams_default_instance_;
+class TanhLayerParams;
+class TanhLayerParamsDefaultTypeInternal;
+extern TanhLayerParamsDefaultTypeInternal _TanhLayerParams_default_instance_;
 class Tensor;
 class TensorDefaultTypeInternal;
 extern TensorDefaultTypeInternal _Tensor_default_instance_;
 class TileLayerParams;
 class TileLayerParamsDefaultTypeInternal;
 extern TileLayerParamsDefaultTypeInternal _TileLayerParams_default_instance_;
-class TransposeNDLayerParams;
-class TransposeNDLayerParamsDefaultTypeInternal;
-extern TransposeNDLayerParamsDefaultTypeInternal _TransposeNDLayerParams_default_instance_;
+class TransposeLayerParams;
+class TransposeLayerParamsDefaultTypeInternal;
+extern TransposeLayerParamsDefaultTypeInternal _TransposeLayerParams_default_instance_;
 class UnaryFunctionLayerParams;
 class UnaryFunctionLayerParamsDefaultTypeInternal;
 extern UnaryFunctionLayerParamsDefaultTypeInternal _UnaryFunctionLayerParams_default_instance_;
@@ -540,9 +633,9 @@ extern ValidPaddingDefaultTypeInternal _ValidPadding_default_instance_;
 class WeightParams;
 class WeightParamsDefaultTypeInternal;
 extern WeightParamsDefaultTypeInternal _WeightParams_default_instance_;
-class WhereLayerParams;
-class WhereLayerParamsDefaultTypeInternal;
-extern WhereLayerParamsDefaultTypeInternal _WhereLayerParams_default_instance_;
+class WhereBroadcastableLayerParams;
+class WhereBroadcastableLayerParamsDefaultTypeInternal;
+extern WhereBroadcastableLayerParamsDefaultTypeInternal _WhereBroadcastableLayerParams_default_instance_;
 }  // namespace Specification
 }  // namespace CoreML
 
@@ -717,6 +810,18 @@ bool ReduceLayerParams_ReduceAxis_IsValid(int value);
 const ReduceLayerParams_ReduceAxis ReduceLayerParams_ReduceAxis_ReduceAxis_MIN = ReduceLayerParams_ReduceAxis_CHW;
 const ReduceLayerParams_ReduceAxis ReduceLayerParams_ReduceAxis_ReduceAxis_MAX = ReduceLayerParams_ReduceAxis_W;
 const int ReduceLayerParams_ReduceAxis_ReduceAxis_ARRAYSIZE = ReduceLayerParams_ReduceAxis_ReduceAxis_MAX + 1;
+
+enum GeluLayerParams_GeluMode {
+  GeluLayerParams_GeluMode_EXACT = 0,
+  GeluLayerParams_GeluMode_TANH_APPROXIMATION = 1,
+  GeluLayerParams_GeluMode_SIGMOID_APPROXIMATION = 2,
+  GeluLayerParams_GeluMode_GeluLayerParams_GeluMode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  GeluLayerParams_GeluMode_GeluLayerParams_GeluMode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool GeluLayerParams_GeluMode_IsValid(int value);
+const GeluLayerParams_GeluMode GeluLayerParams_GeluMode_GeluMode_MIN = GeluLayerParams_GeluMode_EXACT;
+const GeluLayerParams_GeluMode GeluLayerParams_GeluMode_GeluMode_MAX = GeluLayerParams_GeluMode_SIGMOID_APPROXIMATION;
+const int GeluLayerParams_GeluMode_GeluMode_ARRAYSIZE = GeluLayerParams_GeluMode_GeluMode_MAX + 1;
 
 enum NeuralNetworkMultiArrayShapeMapping {
   RANK5_ARRAY_MAPPING = 0,
@@ -2591,21 +2696,36 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
     kCeil = 665,
     kFloor = 670,
     kExp2 = 700,
-    kSine = 710,
-    kCosine = 715,
-    kErfActivation = 790,
-    kGeluActivation = 795,
+    kSin = 710,
+    kCos = 715,
+    kTan = 720,
+    kAsin = 730,
+    kAcos = 735,
+    kAtan = 740,
+    kSinh = 750,
+    kCosh = 755,
+    kTanh = 760,
+    kAsinh = 770,
+    kAcosh = 775,
+    kAtanh = 780,
+    kErf = 790,
+    kGelu = 795,
     kEqual = 815,
     kNotEqual = 820,
     kLessThan = 825,
+    kLessEqual = 827,
     kGreaterThan = 830,
+    kGreaterEqual = 832,
     kLogicalOr = 840,
     kLogicalXor = 845,
     kLogicalNot = 850,
     kLogicalAnd = 855,
+    kMinBroadcastable = 870,
+    kMaxBroadcastable = 875,
     kAddBroadcastable = 880,
     kPowBroadcastable = 885,
     kDivideBroadcastable = 890,
+    kFloorDivBroadcastable = 895,
     kMultiplyBroadcastable = 900,
     kSubtractBroadcastable = 905,
     kTile = 920,
@@ -2613,9 +2733,10 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
     kGather = 930,
     kScatter = 935,
     kSoftmaxND = 950,
+    kReverse = 960,
     kSplitND = 975,
     kConcatND = 980,
-    kTransposeND = 985,
+    kTranspose = 985,
     kSliceND = 995,
     kSlidingWindows = 1005,
     kEmbeddingND = 1040,
@@ -2630,10 +2751,24 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
     kBroadcastToDynamic = 1110,
     kSqueeze = 1120,
     kExpandDims = 1125,
+    kFlattenTo2D = 1130,
+    kReshapeLike = 1135,
+    kReshapeStatic = 1140,
+    kReshapeDynamic = 1145,
     kRankPreservingReshape = 1150,
+    kRandomNormalLike = 1170,
+    kRandomNormalStatic = 1175,
+    kRandomNormalDynamic = 1180,
+    kRandomUniformLike = 1190,
+    kRandomUniformStatic = 1195,
+    kRandomUniformDynamic = 1200,
+    kRandomBernoulliLike = 1210,
+    kRandomBernoulliStatic = 1215,
+    kRandomBernoulliDynamic = 1220,
+    kMatrixBandPart = 1315,
     kLowerTriangular = 1320,
     kUpperTriangular = 1325,
-    kWhere = 1330,
+    kWhereBroadcastable = 1330,
     LAYER_NOT_SET = 0,
   };
 
@@ -3214,41 +3349,131 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::Exp2LayerParams* release_exp2();
   void set_allocated_exp2(::CoreML::Specification::Exp2LayerParams* exp2);
 
-  // .CoreML.Specification.SineLayerParams sine = 710;
-  bool has_sine() const;
-  void clear_sine();
-  static const int kSineFieldNumber = 710;
-  const ::CoreML::Specification::SineLayerParams& sine() const;
-  ::CoreML::Specification::SineLayerParams* mutable_sine();
-  ::CoreML::Specification::SineLayerParams* release_sine();
-  void set_allocated_sine(::CoreML::Specification::SineLayerParams* sine);
+  // .CoreML.Specification.SinLayerParams sin = 710;
+  bool has_sin() const;
+  void clear_sin();
+  static const int kSinFieldNumber = 710;
+  const ::CoreML::Specification::SinLayerParams& sin() const;
+  ::CoreML::Specification::SinLayerParams* mutable_sin();
+  ::CoreML::Specification::SinLayerParams* release_sin();
+  void set_allocated_sin(::CoreML::Specification::SinLayerParams* sin);
 
-  // .CoreML.Specification.CosineLayerParams cosine = 715;
-  bool has_cosine() const;
-  void clear_cosine();
-  static const int kCosineFieldNumber = 715;
-  const ::CoreML::Specification::CosineLayerParams& cosine() const;
-  ::CoreML::Specification::CosineLayerParams* mutable_cosine();
-  ::CoreML::Specification::CosineLayerParams* release_cosine();
-  void set_allocated_cosine(::CoreML::Specification::CosineLayerParams* cosine);
+  // .CoreML.Specification.CosLayerParams cos = 715;
+  bool has_cos() const;
+  void clear_cos();
+  static const int kCosFieldNumber = 715;
+  const ::CoreML::Specification::CosLayerParams& cos() const;
+  ::CoreML::Specification::CosLayerParams* mutable_cos();
+  ::CoreML::Specification::CosLayerParams* release_cos();
+  void set_allocated_cos(::CoreML::Specification::CosLayerParams* cos);
 
-  // .CoreML.Specification.ErfActivationLayerParams erfActivation = 790;
-  bool has_erfactivation() const;
-  void clear_erfactivation();
-  static const int kErfActivationFieldNumber = 790;
-  const ::CoreML::Specification::ErfActivationLayerParams& erfactivation() const;
-  ::CoreML::Specification::ErfActivationLayerParams* mutable_erfactivation();
-  ::CoreML::Specification::ErfActivationLayerParams* release_erfactivation();
-  void set_allocated_erfactivation(::CoreML::Specification::ErfActivationLayerParams* erfactivation);
+  // .CoreML.Specification.TanLayerParams tan = 720;
+  bool has_tan() const;
+  void clear_tan();
+  static const int kTanFieldNumber = 720;
+  const ::CoreML::Specification::TanLayerParams& tan() const;
+  ::CoreML::Specification::TanLayerParams* mutable_tan();
+  ::CoreML::Specification::TanLayerParams* release_tan();
+  void set_allocated_tan(::CoreML::Specification::TanLayerParams* tan);
 
-  // .CoreML.Specification.GeluActivationLayerParams geluActivation = 795;
-  bool has_geluactivation() const;
-  void clear_geluactivation();
-  static const int kGeluActivationFieldNumber = 795;
-  const ::CoreML::Specification::GeluActivationLayerParams& geluactivation() const;
-  ::CoreML::Specification::GeluActivationLayerParams* mutable_geluactivation();
-  ::CoreML::Specification::GeluActivationLayerParams* release_geluactivation();
-  void set_allocated_geluactivation(::CoreML::Specification::GeluActivationLayerParams* geluactivation);
+  // .CoreML.Specification.AsinLayerParams asin = 730;
+  bool has_asin() const;
+  void clear_asin();
+  static const int kAsinFieldNumber = 730;
+  const ::CoreML::Specification::AsinLayerParams& asin() const;
+  ::CoreML::Specification::AsinLayerParams* mutable_asin();
+  ::CoreML::Specification::AsinLayerParams* release_asin();
+  void set_allocated_asin(::CoreML::Specification::AsinLayerParams* asin);
+
+  // .CoreML.Specification.AcosLayerParams acos = 735;
+  bool has_acos() const;
+  void clear_acos();
+  static const int kAcosFieldNumber = 735;
+  const ::CoreML::Specification::AcosLayerParams& acos() const;
+  ::CoreML::Specification::AcosLayerParams* mutable_acos();
+  ::CoreML::Specification::AcosLayerParams* release_acos();
+  void set_allocated_acos(::CoreML::Specification::AcosLayerParams* acos);
+
+  // .CoreML.Specification.AtanLayerParams atan = 740;
+  bool has_atan() const;
+  void clear_atan();
+  static const int kAtanFieldNumber = 740;
+  const ::CoreML::Specification::AtanLayerParams& atan() const;
+  ::CoreML::Specification::AtanLayerParams* mutable_atan();
+  ::CoreML::Specification::AtanLayerParams* release_atan();
+  void set_allocated_atan(::CoreML::Specification::AtanLayerParams* atan);
+
+  // .CoreML.Specification.SinhLayerParams sinh = 750;
+  bool has_sinh() const;
+  void clear_sinh();
+  static const int kSinhFieldNumber = 750;
+  const ::CoreML::Specification::SinhLayerParams& sinh() const;
+  ::CoreML::Specification::SinhLayerParams* mutable_sinh();
+  ::CoreML::Specification::SinhLayerParams* release_sinh();
+  void set_allocated_sinh(::CoreML::Specification::SinhLayerParams* sinh);
+
+  // .CoreML.Specification.CoshLayerParams cosh = 755;
+  bool has_cosh() const;
+  void clear_cosh();
+  static const int kCoshFieldNumber = 755;
+  const ::CoreML::Specification::CoshLayerParams& cosh() const;
+  ::CoreML::Specification::CoshLayerParams* mutable_cosh();
+  ::CoreML::Specification::CoshLayerParams* release_cosh();
+  void set_allocated_cosh(::CoreML::Specification::CoshLayerParams* cosh);
+
+  // .CoreML.Specification.TanhLayerParams tanh = 760;
+  bool has_tanh() const;
+  void clear_tanh();
+  static const int kTanhFieldNumber = 760;
+  const ::CoreML::Specification::TanhLayerParams& tanh() const;
+  ::CoreML::Specification::TanhLayerParams* mutable_tanh();
+  ::CoreML::Specification::TanhLayerParams* release_tanh();
+  void set_allocated_tanh(::CoreML::Specification::TanhLayerParams* tanh);
+
+  // .CoreML.Specification.AsinhLayerParams asinh = 770;
+  bool has_asinh() const;
+  void clear_asinh();
+  static const int kAsinhFieldNumber = 770;
+  const ::CoreML::Specification::AsinhLayerParams& asinh() const;
+  ::CoreML::Specification::AsinhLayerParams* mutable_asinh();
+  ::CoreML::Specification::AsinhLayerParams* release_asinh();
+  void set_allocated_asinh(::CoreML::Specification::AsinhLayerParams* asinh);
+
+  // .CoreML.Specification.AcoshLayerParams acosh = 775;
+  bool has_acosh() const;
+  void clear_acosh();
+  static const int kAcoshFieldNumber = 775;
+  const ::CoreML::Specification::AcoshLayerParams& acosh() const;
+  ::CoreML::Specification::AcoshLayerParams* mutable_acosh();
+  ::CoreML::Specification::AcoshLayerParams* release_acosh();
+  void set_allocated_acosh(::CoreML::Specification::AcoshLayerParams* acosh);
+
+  // .CoreML.Specification.AtanhLayerParams atanh = 780;
+  bool has_atanh() const;
+  void clear_atanh();
+  static const int kAtanhFieldNumber = 780;
+  const ::CoreML::Specification::AtanhLayerParams& atanh() const;
+  ::CoreML::Specification::AtanhLayerParams* mutable_atanh();
+  ::CoreML::Specification::AtanhLayerParams* release_atanh();
+  void set_allocated_atanh(::CoreML::Specification::AtanhLayerParams* atanh);
+
+  // .CoreML.Specification.ErfLayerParams erf = 790;
+  bool has_erf() const;
+  void clear_erf();
+  static const int kErfFieldNumber = 790;
+  const ::CoreML::Specification::ErfLayerParams& erf() const;
+  ::CoreML::Specification::ErfLayerParams* mutable_erf();
+  ::CoreML::Specification::ErfLayerParams* release_erf();
+  void set_allocated_erf(::CoreML::Specification::ErfLayerParams* erf);
+
+  // .CoreML.Specification.GeluLayerParams gelu = 795;
+  bool has_gelu() const;
+  void clear_gelu();
+  static const int kGeluFieldNumber = 795;
+  const ::CoreML::Specification::GeluLayerParams& gelu() const;
+  ::CoreML::Specification::GeluLayerParams* mutable_gelu();
+  ::CoreML::Specification::GeluLayerParams* release_gelu();
+  void set_allocated_gelu(::CoreML::Specification::GeluLayerParams* gelu);
 
   // .CoreML.Specification.EqualLayerParams equal = 815;
   bool has_equal() const;
@@ -3277,6 +3502,15 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::LessThanLayerParams* release_lessthan();
   void set_allocated_lessthan(::CoreML::Specification::LessThanLayerParams* lessthan);
 
+  // .CoreML.Specification.LessEqualLayerParams lessEqual = 827;
+  bool has_lessequal() const;
+  void clear_lessequal();
+  static const int kLessEqualFieldNumber = 827;
+  const ::CoreML::Specification::LessEqualLayerParams& lessequal() const;
+  ::CoreML::Specification::LessEqualLayerParams* mutable_lessequal();
+  ::CoreML::Specification::LessEqualLayerParams* release_lessequal();
+  void set_allocated_lessequal(::CoreML::Specification::LessEqualLayerParams* lessequal);
+
   // .CoreML.Specification.GreaterThanLayerParams greaterThan = 830;
   bool has_greaterthan() const;
   void clear_greaterthan();
@@ -3285,6 +3519,15 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::GreaterThanLayerParams* mutable_greaterthan();
   ::CoreML::Specification::GreaterThanLayerParams* release_greaterthan();
   void set_allocated_greaterthan(::CoreML::Specification::GreaterThanLayerParams* greaterthan);
+
+  // .CoreML.Specification.GreaterEqualLayerParams greaterEqual = 832;
+  bool has_greaterequal() const;
+  void clear_greaterequal();
+  static const int kGreaterEqualFieldNumber = 832;
+  const ::CoreML::Specification::GreaterEqualLayerParams& greaterequal() const;
+  ::CoreML::Specification::GreaterEqualLayerParams* mutable_greaterequal();
+  ::CoreML::Specification::GreaterEqualLayerParams* release_greaterequal();
+  void set_allocated_greaterequal(::CoreML::Specification::GreaterEqualLayerParams* greaterequal);
 
   // .CoreML.Specification.LogicalOrLayerParams logicalOr = 840;
   bool has_logicalor() const;
@@ -3322,6 +3565,24 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::LogicalAndLayerParams* release_logicaland();
   void set_allocated_logicaland(::CoreML::Specification::LogicalAndLayerParams* logicaland);
 
+  // .CoreML.Specification.MinBroadcastableLayerParams minBroadcastable = 870;
+  bool has_minbroadcastable() const;
+  void clear_minbroadcastable();
+  static const int kMinBroadcastableFieldNumber = 870;
+  const ::CoreML::Specification::MinBroadcastableLayerParams& minbroadcastable() const;
+  ::CoreML::Specification::MinBroadcastableLayerParams* mutable_minbroadcastable();
+  ::CoreML::Specification::MinBroadcastableLayerParams* release_minbroadcastable();
+  void set_allocated_minbroadcastable(::CoreML::Specification::MinBroadcastableLayerParams* minbroadcastable);
+
+  // .CoreML.Specification.MaxBroadcastableLayerParams maxBroadcastable = 875;
+  bool has_maxbroadcastable() const;
+  void clear_maxbroadcastable();
+  static const int kMaxBroadcastableFieldNumber = 875;
+  const ::CoreML::Specification::MaxBroadcastableLayerParams& maxbroadcastable() const;
+  ::CoreML::Specification::MaxBroadcastableLayerParams* mutable_maxbroadcastable();
+  ::CoreML::Specification::MaxBroadcastableLayerParams* release_maxbroadcastable();
+  void set_allocated_maxbroadcastable(::CoreML::Specification::MaxBroadcastableLayerParams* maxbroadcastable);
+
   // .CoreML.Specification.AddBroadcastableLayerParams addBroadcastable = 880;
   bool has_addbroadcastable() const;
   void clear_addbroadcastable();
@@ -3348,6 +3609,15 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::DivideBroadcastableLayerParams* mutable_dividebroadcastable();
   ::CoreML::Specification::DivideBroadcastableLayerParams* release_dividebroadcastable();
   void set_allocated_dividebroadcastable(::CoreML::Specification::DivideBroadcastableLayerParams* dividebroadcastable);
+
+  // .CoreML.Specification.FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
+  bool has_floordivbroadcastable() const;
+  void clear_floordivbroadcastable();
+  static const int kFloorDivBroadcastableFieldNumber = 895;
+  const ::CoreML::Specification::FloorDivBroadcastableLayerParams& floordivbroadcastable() const;
+  ::CoreML::Specification::FloorDivBroadcastableLayerParams* mutable_floordivbroadcastable();
+  ::CoreML::Specification::FloorDivBroadcastableLayerParams* release_floordivbroadcastable();
+  void set_allocated_floordivbroadcastable(::CoreML::Specification::FloorDivBroadcastableLayerParams* floordivbroadcastable);
 
   // .CoreML.Specification.MultiplyBroadcastableLayerParams multiplyBroadcastable = 900;
   bool has_multiplybroadcastable() const;
@@ -3412,6 +3682,15 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::SoftmaxNDLayerParams* release_softmaxnd();
   void set_allocated_softmaxnd(::CoreML::Specification::SoftmaxNDLayerParams* softmaxnd);
 
+  // .CoreML.Specification.ReverseLayerParams reverse = 960;
+  bool has_reverse() const;
+  void clear_reverse();
+  static const int kReverseFieldNumber = 960;
+  const ::CoreML::Specification::ReverseLayerParams& reverse() const;
+  ::CoreML::Specification::ReverseLayerParams* mutable_reverse();
+  ::CoreML::Specification::ReverseLayerParams* release_reverse();
+  void set_allocated_reverse(::CoreML::Specification::ReverseLayerParams* reverse);
+
   // .CoreML.Specification.SplitNDLayerParams splitND = 975;
   bool has_splitnd() const;
   void clear_splitnd();
@@ -3430,14 +3709,14 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::ConcatNDLayerParams* release_concatnd();
   void set_allocated_concatnd(::CoreML::Specification::ConcatNDLayerParams* concatnd);
 
-  // .CoreML.Specification.TransposeNDLayerParams transposeND = 985;
-  bool has_transposend() const;
-  void clear_transposend();
-  static const int kTransposeNDFieldNumber = 985;
-  const ::CoreML::Specification::TransposeNDLayerParams& transposend() const;
-  ::CoreML::Specification::TransposeNDLayerParams* mutable_transposend();
-  ::CoreML::Specification::TransposeNDLayerParams* release_transposend();
-  void set_allocated_transposend(::CoreML::Specification::TransposeNDLayerParams* transposend);
+  // .CoreML.Specification.TransposeLayerParams transpose = 985;
+  bool has_transpose() const;
+  void clear_transpose();
+  static const int kTransposeFieldNumber = 985;
+  const ::CoreML::Specification::TransposeLayerParams& transpose() const;
+  ::CoreML::Specification::TransposeLayerParams* mutable_transpose();
+  ::CoreML::Specification::TransposeLayerParams* release_transpose();
+  void set_allocated_transpose(::CoreML::Specification::TransposeLayerParams* transpose);
 
   // .CoreML.Specification.SliceNDLayerParams sliceND = 995;
   bool has_slicend() const;
@@ -3466,14 +3745,14 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::EmbeddingNDLayerParams* release_embeddingnd();
   void set_allocated_embeddingnd(::CoreML::Specification::EmbeddingNDLayerParams* embeddingnd);
 
-  // .CoreML.Specification.BatchedMatMulParams batchedMatmul = 1045;
+  // .CoreML.Specification.BatchedMatMulLayerParams batchedMatmul = 1045;
   bool has_batchedmatmul() const;
   void clear_batchedmatmul();
   static const int kBatchedMatmulFieldNumber = 1045;
-  const ::CoreML::Specification::BatchedMatMulParams& batchedmatmul() const;
-  ::CoreML::Specification::BatchedMatMulParams* mutable_batchedmatmul();
-  ::CoreML::Specification::BatchedMatMulParams* release_batchedmatmul();
-  void set_allocated_batchedmatmul(::CoreML::Specification::BatchedMatMulParams* batchedmatmul);
+  const ::CoreML::Specification::BatchedMatMulLayerParams& batchedmatmul() const;
+  ::CoreML::Specification::BatchedMatMulLayerParams* mutable_batchedmatmul();
+  ::CoreML::Specification::BatchedMatMulLayerParams* release_batchedmatmul();
+  void set_allocated_batchedmatmul(::CoreML::Specification::BatchedMatMulLayerParams* batchedmatmul);
 
   // .CoreML.Specification.GetShapeLayerParams getShape = 1065;
   bool has_getshape() const;
@@ -3565,6 +3844,42 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::ExpandDimsLayerParams* release_expanddims();
   void set_allocated_expanddims(::CoreML::Specification::ExpandDimsLayerParams* expanddims);
 
+  // .CoreML.Specification.FlattenTo2DLayerParams flattenTo2D = 1130;
+  bool has_flattento2d() const;
+  void clear_flattento2d();
+  static const int kFlattenTo2DFieldNumber = 1130;
+  const ::CoreML::Specification::FlattenTo2DLayerParams& flattento2d() const;
+  ::CoreML::Specification::FlattenTo2DLayerParams* mutable_flattento2d();
+  ::CoreML::Specification::FlattenTo2DLayerParams* release_flattento2d();
+  void set_allocated_flattento2d(::CoreML::Specification::FlattenTo2DLayerParams* flattento2d);
+
+  // .CoreML.Specification.ReshapeLikeLayerParams reshapeLike = 1135;
+  bool has_reshapelike() const;
+  void clear_reshapelike();
+  static const int kReshapeLikeFieldNumber = 1135;
+  const ::CoreML::Specification::ReshapeLikeLayerParams& reshapelike() const;
+  ::CoreML::Specification::ReshapeLikeLayerParams* mutable_reshapelike();
+  ::CoreML::Specification::ReshapeLikeLayerParams* release_reshapelike();
+  void set_allocated_reshapelike(::CoreML::Specification::ReshapeLikeLayerParams* reshapelike);
+
+  // .CoreML.Specification.ReshapeStaticLayerParams reshapeStatic = 1140;
+  bool has_reshapestatic() const;
+  void clear_reshapestatic();
+  static const int kReshapeStaticFieldNumber = 1140;
+  const ::CoreML::Specification::ReshapeStaticLayerParams& reshapestatic() const;
+  ::CoreML::Specification::ReshapeStaticLayerParams* mutable_reshapestatic();
+  ::CoreML::Specification::ReshapeStaticLayerParams* release_reshapestatic();
+  void set_allocated_reshapestatic(::CoreML::Specification::ReshapeStaticLayerParams* reshapestatic);
+
+  // .CoreML.Specification.ReshapeDynamicLayerParams reshapeDynamic = 1145;
+  bool has_reshapedynamic() const;
+  void clear_reshapedynamic();
+  static const int kReshapeDynamicFieldNumber = 1145;
+  const ::CoreML::Specification::ReshapeDynamicLayerParams& reshapedynamic() const;
+  ::CoreML::Specification::ReshapeDynamicLayerParams* mutable_reshapedynamic();
+  ::CoreML::Specification::ReshapeDynamicLayerParams* release_reshapedynamic();
+  void set_allocated_reshapedynamic(::CoreML::Specification::ReshapeDynamicLayerParams* reshapedynamic);
+
   // .CoreML.Specification.RankPreservingReshapeLayerParams rankPreservingReshape = 1150;
   bool has_rankpreservingreshape() const;
   void clear_rankpreservingreshape();
@@ -3573,6 +3888,96 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::RankPreservingReshapeLayerParams* mutable_rankpreservingreshape();
   ::CoreML::Specification::RankPreservingReshapeLayerParams* release_rankpreservingreshape();
   void set_allocated_rankpreservingreshape(::CoreML::Specification::RankPreservingReshapeLayerParams* rankpreservingreshape);
+
+  // .CoreML.Specification.RandomNormalLikeLayerParams randomNormalLike = 1170;
+  bool has_randomnormallike() const;
+  void clear_randomnormallike();
+  static const int kRandomNormalLikeFieldNumber = 1170;
+  const ::CoreML::Specification::RandomNormalLikeLayerParams& randomnormallike() const;
+  ::CoreML::Specification::RandomNormalLikeLayerParams* mutable_randomnormallike();
+  ::CoreML::Specification::RandomNormalLikeLayerParams* release_randomnormallike();
+  void set_allocated_randomnormallike(::CoreML::Specification::RandomNormalLikeLayerParams* randomnormallike);
+
+  // .CoreML.Specification.RandomNormalStaticLayerParams randomNormalStatic = 1175;
+  bool has_randomnormalstatic() const;
+  void clear_randomnormalstatic();
+  static const int kRandomNormalStaticFieldNumber = 1175;
+  const ::CoreML::Specification::RandomNormalStaticLayerParams& randomnormalstatic() const;
+  ::CoreML::Specification::RandomNormalStaticLayerParams* mutable_randomnormalstatic();
+  ::CoreML::Specification::RandomNormalStaticLayerParams* release_randomnormalstatic();
+  void set_allocated_randomnormalstatic(::CoreML::Specification::RandomNormalStaticLayerParams* randomnormalstatic);
+
+  // .CoreML.Specification.RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
+  bool has_randomnormaldynamic() const;
+  void clear_randomnormaldynamic();
+  static const int kRandomNormalDynamicFieldNumber = 1180;
+  const ::CoreML::Specification::RandomNormalDynamicLayerParams& randomnormaldynamic() const;
+  ::CoreML::Specification::RandomNormalDynamicLayerParams* mutable_randomnormaldynamic();
+  ::CoreML::Specification::RandomNormalDynamicLayerParams* release_randomnormaldynamic();
+  void set_allocated_randomnormaldynamic(::CoreML::Specification::RandomNormalDynamicLayerParams* randomnormaldynamic);
+
+  // .CoreML.Specification.RandomUniformLikeLayerParams randomUniformLike = 1190;
+  bool has_randomuniformlike() const;
+  void clear_randomuniformlike();
+  static const int kRandomUniformLikeFieldNumber = 1190;
+  const ::CoreML::Specification::RandomUniformLikeLayerParams& randomuniformlike() const;
+  ::CoreML::Specification::RandomUniformLikeLayerParams* mutable_randomuniformlike();
+  ::CoreML::Specification::RandomUniformLikeLayerParams* release_randomuniformlike();
+  void set_allocated_randomuniformlike(::CoreML::Specification::RandomUniformLikeLayerParams* randomuniformlike);
+
+  // .CoreML.Specification.RandomUniformStaticLayerParams randomUniformStatic = 1195;
+  bool has_randomuniformstatic() const;
+  void clear_randomuniformstatic();
+  static const int kRandomUniformStaticFieldNumber = 1195;
+  const ::CoreML::Specification::RandomUniformStaticLayerParams& randomuniformstatic() const;
+  ::CoreML::Specification::RandomUniformStaticLayerParams* mutable_randomuniformstatic();
+  ::CoreML::Specification::RandomUniformStaticLayerParams* release_randomuniformstatic();
+  void set_allocated_randomuniformstatic(::CoreML::Specification::RandomUniformStaticLayerParams* randomuniformstatic);
+
+  // .CoreML.Specification.RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
+  bool has_randomuniformdynamic() const;
+  void clear_randomuniformdynamic();
+  static const int kRandomUniformDynamicFieldNumber = 1200;
+  const ::CoreML::Specification::RandomUniformDynamicLayerParams& randomuniformdynamic() const;
+  ::CoreML::Specification::RandomUniformDynamicLayerParams* mutable_randomuniformdynamic();
+  ::CoreML::Specification::RandomUniformDynamicLayerParams* release_randomuniformdynamic();
+  void set_allocated_randomuniformdynamic(::CoreML::Specification::RandomUniformDynamicLayerParams* randomuniformdynamic);
+
+  // .CoreML.Specification.RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
+  bool has_randombernoullilike() const;
+  void clear_randombernoullilike();
+  static const int kRandomBernoulliLikeFieldNumber = 1210;
+  const ::CoreML::Specification::RandomBernoulliLikeLayerParams& randombernoullilike() const;
+  ::CoreML::Specification::RandomBernoulliLikeLayerParams* mutable_randombernoullilike();
+  ::CoreML::Specification::RandomBernoulliLikeLayerParams* release_randombernoullilike();
+  void set_allocated_randombernoullilike(::CoreML::Specification::RandomBernoulliLikeLayerParams* randombernoullilike);
+
+  // .CoreML.Specification.RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
+  bool has_randombernoullistatic() const;
+  void clear_randombernoullistatic();
+  static const int kRandomBernoulliStaticFieldNumber = 1215;
+  const ::CoreML::Specification::RandomBernoulliStaticLayerParams& randombernoullistatic() const;
+  ::CoreML::Specification::RandomBernoulliStaticLayerParams* mutable_randombernoullistatic();
+  ::CoreML::Specification::RandomBernoulliStaticLayerParams* release_randombernoullistatic();
+  void set_allocated_randombernoullistatic(::CoreML::Specification::RandomBernoulliStaticLayerParams* randombernoullistatic);
+
+  // .CoreML.Specification.RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
+  bool has_randombernoullidynamic() const;
+  void clear_randombernoullidynamic();
+  static const int kRandomBernoulliDynamicFieldNumber = 1220;
+  const ::CoreML::Specification::RandomBernoulliDynamicLayerParams& randombernoullidynamic() const;
+  ::CoreML::Specification::RandomBernoulliDynamicLayerParams* mutable_randombernoullidynamic();
+  ::CoreML::Specification::RandomBernoulliDynamicLayerParams* release_randombernoullidynamic();
+  void set_allocated_randombernoullidynamic(::CoreML::Specification::RandomBernoulliDynamicLayerParams* randombernoullidynamic);
+
+  // .CoreML.Specification.MatrixBandPartLayerParams matrixBandPart = 1315;
+  bool has_matrixbandpart() const;
+  void clear_matrixbandpart();
+  static const int kMatrixBandPartFieldNumber = 1315;
+  const ::CoreML::Specification::MatrixBandPartLayerParams& matrixbandpart() const;
+  ::CoreML::Specification::MatrixBandPartLayerParams* mutable_matrixbandpart();
+  ::CoreML::Specification::MatrixBandPartLayerParams* release_matrixbandpart();
+  void set_allocated_matrixbandpart(::CoreML::Specification::MatrixBandPartLayerParams* matrixbandpart);
 
   // .CoreML.Specification.LowerTriangularLayerParams lowerTriangular = 1320;
   bool has_lowertriangular() const;
@@ -3592,14 +3997,14 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   ::CoreML::Specification::UpperTriangularLayerParams* release_uppertriangular();
   void set_allocated_uppertriangular(::CoreML::Specification::UpperTriangularLayerParams* uppertriangular);
 
-  // .CoreML.Specification.WhereLayerParams where = 1330;
-  bool has_where() const;
-  void clear_where();
-  static const int kWhereFieldNumber = 1330;
-  const ::CoreML::Specification::WhereLayerParams& where() const;
-  ::CoreML::Specification::WhereLayerParams* mutable_where();
-  ::CoreML::Specification::WhereLayerParams* release_where();
-  void set_allocated_where(::CoreML::Specification::WhereLayerParams* where);
+  // .CoreML.Specification.WhereBroadcastableLayerParams whereBroadcastable = 1330;
+  bool has_wherebroadcastable() const;
+  void clear_wherebroadcastable();
+  static const int kWhereBroadcastableFieldNumber = 1330;
+  const ::CoreML::Specification::WhereBroadcastableLayerParams& wherebroadcastable() const;
+  ::CoreML::Specification::WhereBroadcastableLayerParams* mutable_wherebroadcastable();
+  ::CoreML::Specification::WhereBroadcastableLayerParams* release_wherebroadcastable();
+  void set_allocated_wherebroadcastable(::CoreML::Specification::WhereBroadcastableLayerParams* wherebroadcastable);
 
   LayerCase layer_case() const;
   // @@protoc_insertion_point(class_scope:CoreML.Specification.NeuralNetworkLayer)
@@ -3653,21 +4058,36 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   void set_has_ceil();
   void set_has_floor();
   void set_has_exp2();
-  void set_has_sine();
-  void set_has_cosine();
-  void set_has_erfactivation();
-  void set_has_geluactivation();
+  void set_has_sin();
+  void set_has_cos();
+  void set_has_tan();
+  void set_has_asin();
+  void set_has_acos();
+  void set_has_atan();
+  void set_has_sinh();
+  void set_has_cosh();
+  void set_has_tanh();
+  void set_has_asinh();
+  void set_has_acosh();
+  void set_has_atanh();
+  void set_has_erf();
+  void set_has_gelu();
   void set_has_equal();
   void set_has_notequal();
   void set_has_lessthan();
+  void set_has_lessequal();
   void set_has_greaterthan();
+  void set_has_greaterequal();
   void set_has_logicalor();
   void set_has_logicalxor();
   void set_has_logicalnot();
   void set_has_logicaland();
+  void set_has_minbroadcastable();
+  void set_has_maxbroadcastable();
   void set_has_addbroadcastable();
   void set_has_powbroadcastable();
   void set_has_dividebroadcastable();
+  void set_has_floordivbroadcastable();
   void set_has_multiplybroadcastable();
   void set_has_subtractbroadcastable();
   void set_has_tile();
@@ -3675,9 +4095,10 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   void set_has_gather();
   void set_has_scatter();
   void set_has_softmaxnd();
+  void set_has_reverse();
   void set_has_splitnd();
   void set_has_concatnd();
-  void set_has_transposend();
+  void set_has_transpose();
   void set_has_slicend();
   void set_has_slidingwindows();
   void set_has_embeddingnd();
@@ -3692,10 +4113,24 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
   void set_has_broadcasttodynamic();
   void set_has_squeeze();
   void set_has_expanddims();
+  void set_has_flattento2d();
+  void set_has_reshapelike();
+  void set_has_reshapestatic();
+  void set_has_reshapedynamic();
   void set_has_rankpreservingreshape();
+  void set_has_randomnormallike();
+  void set_has_randomnormalstatic();
+  void set_has_randomnormaldynamic();
+  void set_has_randomuniformlike();
+  void set_has_randomuniformstatic();
+  void set_has_randomuniformdynamic();
+  void set_has_randombernoullilike();
+  void set_has_randombernoullistatic();
+  void set_has_randombernoullidynamic();
+  void set_has_matrixbandpart();
   void set_has_lowertriangular();
   void set_has_uppertriangular();
-  void set_has_where();
+  void set_has_wherebroadcastable();
 
   inline bool has_layer() const;
   void clear_layer();
@@ -3759,21 +4194,36 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
     ::CoreML::Specification::CeilLayerParams* ceil_;
     ::CoreML::Specification::FloorLayerParams* floor_;
     ::CoreML::Specification::Exp2LayerParams* exp2_;
-    ::CoreML::Specification::SineLayerParams* sine_;
-    ::CoreML::Specification::CosineLayerParams* cosine_;
-    ::CoreML::Specification::ErfActivationLayerParams* erfactivation_;
-    ::CoreML::Specification::GeluActivationLayerParams* geluactivation_;
+    ::CoreML::Specification::SinLayerParams* sin_;
+    ::CoreML::Specification::CosLayerParams* cos_;
+    ::CoreML::Specification::TanLayerParams* tan_;
+    ::CoreML::Specification::AsinLayerParams* asin_;
+    ::CoreML::Specification::AcosLayerParams* acos_;
+    ::CoreML::Specification::AtanLayerParams* atan_;
+    ::CoreML::Specification::SinhLayerParams* sinh_;
+    ::CoreML::Specification::CoshLayerParams* cosh_;
+    ::CoreML::Specification::TanhLayerParams* tanh_;
+    ::CoreML::Specification::AsinhLayerParams* asinh_;
+    ::CoreML::Specification::AcoshLayerParams* acosh_;
+    ::CoreML::Specification::AtanhLayerParams* atanh_;
+    ::CoreML::Specification::ErfLayerParams* erf_;
+    ::CoreML::Specification::GeluLayerParams* gelu_;
     ::CoreML::Specification::EqualLayerParams* equal_;
     ::CoreML::Specification::NotEqualLayerParams* notequal_;
     ::CoreML::Specification::LessThanLayerParams* lessthan_;
+    ::CoreML::Specification::LessEqualLayerParams* lessequal_;
     ::CoreML::Specification::GreaterThanLayerParams* greaterthan_;
+    ::CoreML::Specification::GreaterEqualLayerParams* greaterequal_;
     ::CoreML::Specification::LogicalOrLayerParams* logicalor_;
     ::CoreML::Specification::LogicalXorLayerParams* logicalxor_;
     ::CoreML::Specification::LogicalNotLayerParams* logicalnot_;
     ::CoreML::Specification::LogicalAndLayerParams* logicaland_;
+    ::CoreML::Specification::MinBroadcastableLayerParams* minbroadcastable_;
+    ::CoreML::Specification::MaxBroadcastableLayerParams* maxbroadcastable_;
     ::CoreML::Specification::AddBroadcastableLayerParams* addbroadcastable_;
     ::CoreML::Specification::PowBroadcastableLayerParams* powbroadcastable_;
     ::CoreML::Specification::DivideBroadcastableLayerParams* dividebroadcastable_;
+    ::CoreML::Specification::FloorDivBroadcastableLayerParams* floordivbroadcastable_;
     ::CoreML::Specification::MultiplyBroadcastableLayerParams* multiplybroadcastable_;
     ::CoreML::Specification::SubtractBroadcastableLayerParams* subtractbroadcastable_;
     ::CoreML::Specification::TileLayerParams* tile_;
@@ -3781,13 +4231,14 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
     ::CoreML::Specification::GatherLayerParams* gather_;
     ::CoreML::Specification::ScatterLayerParams* scatter_;
     ::CoreML::Specification::SoftmaxNDLayerParams* softmaxnd_;
+    ::CoreML::Specification::ReverseLayerParams* reverse_;
     ::CoreML::Specification::SplitNDLayerParams* splitnd_;
     ::CoreML::Specification::ConcatNDLayerParams* concatnd_;
-    ::CoreML::Specification::TransposeNDLayerParams* transposend_;
+    ::CoreML::Specification::TransposeLayerParams* transpose_;
     ::CoreML::Specification::SliceNDLayerParams* slicend_;
     ::CoreML::Specification::SlidingWindowsLayerParams* slidingwindows_;
     ::CoreML::Specification::EmbeddingNDLayerParams* embeddingnd_;
-    ::CoreML::Specification::BatchedMatMulParams* batchedmatmul_;
+    ::CoreML::Specification::BatchedMatMulLayerParams* batchedmatmul_;
     ::CoreML::Specification::GetShapeLayerParams* getshape_;
     ::CoreML::Specification::LoadConstantNDLayerParams* loadconstantnd_;
     ::CoreML::Specification::FillLikeLayerParams* filllike_;
@@ -3798,10 +4249,24 @@ class NeuralNetworkLayer : public ::google::protobuf::MessageLite /* @@protoc_in
     ::CoreML::Specification::BroadcastToDynamicLayerParams* broadcasttodynamic_;
     ::CoreML::Specification::SqueezeLayerParams* squeeze_;
     ::CoreML::Specification::ExpandDimsLayerParams* expanddims_;
+    ::CoreML::Specification::FlattenTo2DLayerParams* flattento2d_;
+    ::CoreML::Specification::ReshapeLikeLayerParams* reshapelike_;
+    ::CoreML::Specification::ReshapeStaticLayerParams* reshapestatic_;
+    ::CoreML::Specification::ReshapeDynamicLayerParams* reshapedynamic_;
     ::CoreML::Specification::RankPreservingReshapeLayerParams* rankpreservingreshape_;
+    ::CoreML::Specification::RandomNormalLikeLayerParams* randomnormallike_;
+    ::CoreML::Specification::RandomNormalStaticLayerParams* randomnormalstatic_;
+    ::CoreML::Specification::RandomNormalDynamicLayerParams* randomnormaldynamic_;
+    ::CoreML::Specification::RandomUniformLikeLayerParams* randomuniformlike_;
+    ::CoreML::Specification::RandomUniformStaticLayerParams* randomuniformstatic_;
+    ::CoreML::Specification::RandomUniformDynamicLayerParams* randomuniformdynamic_;
+    ::CoreML::Specification::RandomBernoulliLikeLayerParams* randombernoullilike_;
+    ::CoreML::Specification::RandomBernoulliStaticLayerParams* randombernoullistatic_;
+    ::CoreML::Specification::RandomBernoulliDynamicLayerParams* randombernoullidynamic_;
+    ::CoreML::Specification::MatrixBandPartLayerParams* matrixbandpart_;
     ::CoreML::Specification::LowerTriangularLayerParams* lowertriangular_;
     ::CoreML::Specification::UpperTriangularLayerParams* uppertriangular_;
-    ::CoreML::Specification::WhereLayerParams* where_;
+    ::CoreML::Specification::WhereBroadcastableLayerParams* wherebroadcastable_;
   } layer_;
   mutable int _cached_size_;
   ::google::protobuf::uint32 _oneof_case_[1];
@@ -4289,12 +4754,6 @@ class GreaterThanLayerParams : public ::google::protobuf::MessageLite /* @@proto
 
   // accessors -------------------------------------------------------
 
-  // bool useNonStrictInequality = 1;
-  void clear_usenonstrictinequality();
-  static const int kUseNonStrictInequalityFieldNumber = 1;
-  bool usenonstrictinequality() const;
-  void set_usenonstrictinequality(bool value);
-
   // float alpha = 2;
   void clear_alpha();
   static const int kAlphaFieldNumber = 2;
@@ -4305,7 +4764,84 @@ class GreaterThanLayerParams : public ::google::protobuf::MessageLite /* @@proto
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  bool usenonstrictinequality_;
+  float alpha_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class GreaterEqualLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.GreaterEqualLayerParams) */ {
+ public:
+  GreaterEqualLayerParams();
+  virtual ~GreaterEqualLayerParams();
+
+  GreaterEqualLayerParams(const GreaterEqualLayerParams& from);
+
+  inline GreaterEqualLayerParams& operator=(const GreaterEqualLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const GreaterEqualLayerParams& default_instance();
+
+  static inline const GreaterEqualLayerParams* internal_default_instance() {
+    return reinterpret_cast<const GreaterEqualLayerParams*>(
+               &_GreaterEqualLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    26;
+
+  void Swap(GreaterEqualLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline GreaterEqualLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GreaterEqualLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const GreaterEqualLayerParams& from);
+  void MergeFrom(const GreaterEqualLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(GreaterEqualLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // float alpha = 2;
+  void clear_alpha();
+  static const int kAlphaFieldNumber = 2;
+  float alpha() const;
+  void set_alpha(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.GreaterEqualLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   float alpha_;
   mutable int _cached_size_;
   friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
@@ -4331,7 +4867,7 @@ class LessThanLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
                &_LessThanLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    27;
 
   void Swap(LessThanLayerParams* other);
 
@@ -4374,12 +4910,6 @@ class LessThanLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
 
   // accessors -------------------------------------------------------
 
-  // bool useNonStrictInequality = 1;
-  void clear_usenonstrictinequality();
-  static const int kUseNonStrictInequalityFieldNumber = 1;
-  bool usenonstrictinequality() const;
-  void set_usenonstrictinequality(bool value);
-
   // float alpha = 2;
   void clear_alpha();
   static const int kAlphaFieldNumber = 2;
@@ -4390,7 +4920,84 @@ class LessThanLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
-  bool usenonstrictinequality_;
+  float alpha_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class LessEqualLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.LessEqualLayerParams) */ {
+ public:
+  LessEqualLayerParams();
+  virtual ~LessEqualLayerParams();
+
+  LessEqualLayerParams(const LessEqualLayerParams& from);
+
+  inline LessEqualLayerParams& operator=(const LessEqualLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const LessEqualLayerParams& default_instance();
+
+  static inline const LessEqualLayerParams* internal_default_instance() {
+    return reinterpret_cast<const LessEqualLayerParams*>(
+               &_LessEqualLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    28;
+
+  void Swap(LessEqualLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline LessEqualLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  LessEqualLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const LessEqualLayerParams& from);
+  void MergeFrom(const LessEqualLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(LessEqualLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // float alpha = 2;
+  void clear_alpha();
+  static const int kAlphaFieldNumber = 2;
+  float alpha() const;
+  void set_alpha(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.LessEqualLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
   float alpha_;
   mutable int _cached_size_;
   friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
@@ -4416,7 +5023,7 @@ class EqualLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
                &_EqualLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    29;
 
   void Swap(EqualLayerParams* other);
 
@@ -4494,7 +5101,7 @@ class NotEqualLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
                &_NotEqualLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    30;
 
   void Swap(NotEqualLayerParams* other);
 
@@ -4572,7 +5179,7 @@ class LogicalAndLayerParams : public ::google::protobuf::MessageLite /* @@protoc
                &_LogicalAndLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    31;
 
   void Swap(LogicalAndLayerParams* other);
 
@@ -4643,7 +5250,7 @@ class LogicalOrLayerParams : public ::google::protobuf::MessageLite /* @@protoc_
                &_LogicalOrLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    32;
 
   void Swap(LogicalOrLayerParams* other);
 
@@ -4714,7 +5321,7 @@ class LogicalXorLayerParams : public ::google::protobuf::MessageLite /* @@protoc
                &_LogicalXorLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    33;
 
   void Swap(LogicalXorLayerParams* other);
 
@@ -4785,7 +5392,7 @@ class LogicalNotLayerParams : public ::google::protobuf::MessageLite /* @@protoc
                &_LogicalNotLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    34;
 
   void Swap(LogicalNotLayerParams* other);
 
@@ -4856,7 +5463,7 @@ class BorderAmounts_EdgeSizes : public ::google::protobuf::MessageLite /* @@prot
                &_BorderAmounts_EdgeSizes_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    35;
 
   void Swap(BorderAmounts_EdgeSizes* other);
 
@@ -4941,7 +5548,7 @@ class BorderAmounts : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_BorderAmounts_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    36;
 
   void Swap(BorderAmounts* other);
 
@@ -5027,7 +5634,7 @@ class ValidPadding : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_ValidPadding_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    37;
 
   void Swap(ValidPadding* other);
 
@@ -5108,7 +5715,7 @@ class SamePadding : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_SamePadding_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    38;
 
   void Swap(SamePadding* other);
 
@@ -5201,7 +5808,7 @@ class SamplingMode : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_SamplingMode_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    39;
 
   void Swap(SamplingMode* other);
 
@@ -5298,7 +5905,7 @@ class BoxCoordinatesMode : public ::google::protobuf::MessageLite /* @@protoc_in
                &_BoxCoordinatesMode_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    40;
 
   void Swap(BoxCoordinatesMode* other);
 
@@ -5395,7 +6002,7 @@ class WeightParams : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_WeightParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    41;
 
   void Swap(WeightParams* other);
 
@@ -5533,7 +6140,7 @@ class QuantizationParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_QuantizationParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    42;
 
   void Swap(QuantizationParams* other);
 
@@ -5643,7 +6250,7 @@ class LinearQuantizationParams : public ::google::protobuf::MessageLite /* @@pro
                &_LinearQuantizationParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    43;
 
   void Swap(LinearQuantizationParams* other);
 
@@ -5742,7 +6349,7 @@ class LookUpTableQuantizationParams : public ::google::protobuf::MessageLite /* 
                &_LookUpTableQuantizationParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    42;
+    44;
 
   void Swap(LookUpTableQuantizationParams* other);
 
@@ -5833,7 +6440,7 @@ class ConvolutionLayerParams : public ::google::protobuf::MessageLite /* @@proto
                &_ConvolutionLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    43;
+    45;
 
   void Swap(ConvolutionLayerParams* other);
 
@@ -6047,7 +6654,7 @@ class InnerProductLayerParams : public ::google::protobuf::MessageLite /* @@prot
                &_InnerProductLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    44;
+    46;
 
   void Swap(InnerProductLayerParams* other);
 
@@ -6159,7 +6766,7 @@ class EmbeddingLayerParams : public ::google::protobuf::MessageLite /* @@protoc_
                &_EmbeddingLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    45;
+    47;
 
   void Swap(EmbeddingLayerParams* other);
 
@@ -6271,7 +6878,7 @@ class EmbeddingNDLayerParams : public ::google::protobuf::MessageLite /* @@proto
                &_EmbeddingNDLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    46;
+    48;
 
   void Swap(EmbeddingNDLayerParams* other);
 
@@ -6383,7 +6990,7 @@ class BatchnormLayerParams : public ::google::protobuf::MessageLite /* @@protoc_
                &_BatchnormLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    47;
+    49;
 
   void Swap(BatchnormLayerParams* other);
 
@@ -6522,7 +7129,7 @@ class PoolingLayerParams_ValidCompletePadding : public ::google::protobuf::Messa
                &_PoolingLayerParams_ValidCompletePadding_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    48;
+    50;
 
   void Swap(PoolingLayerParams_ValidCompletePadding* other);
 
@@ -6614,7 +7221,7 @@ class PoolingLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_PoolingLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    49;
+    51;
 
   void Swap(PoolingLayerParams* other);
 
@@ -6796,7 +7403,7 @@ class PaddingLayerParams_PaddingConstant : public ::google::protobuf::MessageLit
                &_PaddingLayerParams_PaddingConstant_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    50;
+    52;
 
   void Swap(PaddingLayerParams_PaddingConstant* other);
 
@@ -6874,7 +7481,7 @@ class PaddingLayerParams_PaddingReflection : public ::google::protobuf::MessageL
                &_PaddingLayerParams_PaddingReflection_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    51;
+    53;
 
   void Swap(PaddingLayerParams_PaddingReflection* other);
 
@@ -6945,7 +7552,7 @@ class PaddingLayerParams_PaddingReplication : public ::google::protobuf::Message
                &_PaddingLayerParams_PaddingReplication_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    52;
+    54;
 
   void Swap(PaddingLayerParams_PaddingReplication* other);
 
@@ -7023,7 +7630,7 @@ class PaddingLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_PaddingLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    53;
+    55;
 
   void Swap(PaddingLayerParams* other);
 
@@ -7151,7 +7758,7 @@ class ConcatLayerParams : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_ConcatLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    54;
+    56;
 
   void Swap(ConcatLayerParams* other);
 
@@ -7229,7 +7836,7 @@ class LRNLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_LRNLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    55;
+    57;
 
   void Swap(LRNLayerParams* other);
 
@@ -7328,7 +7935,7 @@ class SoftmaxLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_SoftmaxLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    56;
+    58;
 
   void Swap(SoftmaxLayerParams* other);
 
@@ -7399,7 +8006,7 @@ class SplitLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
                &_SplitLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    57;
+    59;
 
   void Swap(SplitLayerParams* other);
 
@@ -7477,7 +8084,7 @@ class AddLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_AddLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    58;
+    60;
 
   void Swap(AddLayerParams* other);
 
@@ -7555,7 +8162,7 @@ class MultiplyLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
                &_MultiplyLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    59;
+    61;
 
   void Swap(MultiplyLayerParams* other);
 
@@ -7633,7 +8240,7 @@ class UnaryFunctionLayerParams : public ::google::protobuf::MessageLite /* @@pro
                &_UnaryFunctionLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    60;
+    62;
 
   void Swap(UnaryFunctionLayerParams* other);
 
@@ -7766,7 +8373,7 @@ class UpsampleLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
                &_UpsampleLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    61;
+    63;
 
   void Swap(UpsampleLayerParams* other);
 
@@ -7873,7 +8480,7 @@ class ResizeBilinearLayerParams : public ::google::protobuf::MessageLite /* @@pr
                &_ResizeBilinearLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    62;
+    64;
 
   void Swap(ResizeBilinearLayerParams* other);
 
@@ -7968,7 +8575,7 @@ class CropResizeLayerParams : public ::google::protobuf::MessageLite /* @@protoc
                &_CropResizeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    63;
+    65;
 
   void Swap(CropResizeLayerParams* other);
 
@@ -8087,7 +8694,7 @@ class BiasLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_BiasLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    64;
+    66;
 
   void Swap(BiasLayerParams* other);
 
@@ -8182,7 +8789,7 @@ class ScaleLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
                &_ScaleLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    65;
+    67;
 
   void Swap(ScaleLayerParams* other);
 
@@ -8308,7 +8915,7 @@ class LoadConstantLayerParams : public ::google::protobuf::MessageLite /* @@prot
                &_LoadConstantLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    66;
+    68;
 
   void Swap(LoadConstantLayerParams* other);
 
@@ -8403,7 +9010,7 @@ class L2NormalizeLayerParams : public ::google::protobuf::MessageLite /* @@proto
                &_L2NormalizeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    67;
+    69;
 
   void Swap(L2NormalizeLayerParams* other);
 
@@ -8481,7 +9088,7 @@ class FlattenLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_FlattenLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    68;
+    70;
 
   void Swap(FlattenLayerParams* other);
 
@@ -8574,7 +9181,7 @@ class ReshapeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_ReshapeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    69;
+    71;
 
   void Swap(ReshapeLayerParams* other);
 
@@ -8681,7 +9288,7 @@ class PermuteLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_PermuteLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    70;
+    72;
 
   void Swap(PermuteLayerParams* other);
 
@@ -8766,7 +9373,7 @@ class ReorganizeDataLayerParams : public ::google::protobuf::MessageLite /* @@pr
                &_ReorganizeDataLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    71;
+    73;
 
   void Swap(ReorganizeDataLayerParams* other);
 
@@ -8866,7 +9473,7 @@ class SliceLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
                &_SliceLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    72;
+    74;
 
   void Swap(SliceLayerParams* other);
 
@@ -8982,7 +9589,7 @@ class ReduceLayerParams : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_ReduceLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    73;
+    75;
 
   void Swap(ReduceLayerParams* other);
 
@@ -9126,7 +9733,7 @@ class CropLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_CropLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    74;
+    76;
 
   void Swap(CropLayerParams* other);
 
@@ -9221,7 +9828,7 @@ class AverageLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_AverageLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    75;
+    77;
 
   void Swap(AverageLayerParams* other);
 
@@ -9292,7 +9899,7 @@ class MaxLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_MaxLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    76;
+    78;
 
   void Swap(MaxLayerParams* other);
 
@@ -9363,7 +9970,7 @@ class MinLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_MinLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    77;
+    79;
 
   void Swap(MinLayerParams* other);
 
@@ -9434,7 +10041,7 @@ class DotProductLayerParams : public ::google::protobuf::MessageLite /* @@protoc
                &_DotProductLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    78;
+    80;
 
   void Swap(DotProductLayerParams* other);
 
@@ -9512,7 +10119,7 @@ class MeanVarianceNormalizeLayerParams : public ::google::protobuf::MessageLite 
                &_MeanVarianceNormalizeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    79;
+    81;
 
   void Swap(MeanVarianceNormalizeLayerParams* other);
 
@@ -9604,7 +10211,7 @@ class SequenceRepeatLayerParams : public ::google::protobuf::MessageLite /* @@pr
                &_SequenceRepeatLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    80;
+    82;
 
   void Swap(SequenceRepeatLayerParams* other);
 
@@ -9682,7 +10289,7 @@ class SimpleRecurrentLayerParams : public ::google::protobuf::MessageLite /* @@p
                &_SimpleRecurrentLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    81;
+    83;
 
   void Swap(SimpleRecurrentLayerParams* other);
 
@@ -9828,7 +10435,7 @@ class GRULayerParams : public ::google::protobuf::MessageLite /* @@protoc_insert
                &_GRULayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    82;
+    84;
 
   void Swap(GRULayerParams* other);
 
@@ -10037,7 +10644,7 @@ class LSTMParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_LSTMParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    83;
+    85;
 
   void Swap(LSTMParams* other);
 
@@ -10150,7 +10757,7 @@ class LSTMWeightParams : public ::google::protobuf::MessageLite /* @@protoc_inse
                &_LSTMWeightParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    84;
+    86;
 
   void Swap(LSTMWeightParams* other);
 
@@ -10371,7 +10978,7 @@ class UniDirectionalLSTMLayerParams : public ::google::protobuf::MessageLite /* 
                &_UniDirectionalLSTMLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    85;
+    87;
 
   void Swap(UniDirectionalLSTMLayerParams* other);
 
@@ -10496,7 +11103,7 @@ class BiDirectionalLSTMLayerParams : public ::google::protobuf::MessageLite /* @
                &_BiDirectionalLSTMLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    86;
+    88;
 
   void Swap(BiDirectionalLSTMLayerParams* other);
 
@@ -10639,7 +11246,7 @@ class CustomLayerParams_CustomLayerParamValue : public ::google::protobuf::Messa
                &_CustomLayerParams_CustomLayerParamValue_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    87;
+    89;
 
   void Swap(CustomLayerParams_CustomLayerParamValue* other);
 
@@ -10786,7 +11393,7 @@ class CustomLayerParams : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_CustomLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    89;
+    91;
 
   void Swap(CustomLayerParams* other);
 
@@ -10906,38 +11513,38 @@ class CustomLayerParams : public ::google::protobuf::MessageLite /* @@protoc_ins
 };
 // -------------------------------------------------------------------
 
-class TransposeNDLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.TransposeNDLayerParams) */ {
+class TransposeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.TransposeLayerParams) */ {
  public:
-  TransposeNDLayerParams();
-  virtual ~TransposeNDLayerParams();
+  TransposeLayerParams();
+  virtual ~TransposeLayerParams();
 
-  TransposeNDLayerParams(const TransposeNDLayerParams& from);
+  TransposeLayerParams(const TransposeLayerParams& from);
 
-  inline TransposeNDLayerParams& operator=(const TransposeNDLayerParams& from) {
+  inline TransposeLayerParams& operator=(const TransposeLayerParams& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const TransposeNDLayerParams& default_instance();
+  static const TransposeLayerParams& default_instance();
 
-  static inline const TransposeNDLayerParams* internal_default_instance() {
-    return reinterpret_cast<const TransposeNDLayerParams*>(
-               &_TransposeNDLayerParams_default_instance_);
+  static inline const TransposeLayerParams* internal_default_instance() {
+    return reinterpret_cast<const TransposeLayerParams*>(
+               &_TransposeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    90;
+    92;
 
-  void Swap(TransposeNDLayerParams* other);
+  void Swap(TransposeLayerParams* other);
 
   // implements Message ----------------------------------------------
 
-  inline TransposeNDLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline TransposeLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  TransposeNDLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  TransposeLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const TransposeNDLayerParams& from);
-  void MergeFrom(const TransposeNDLayerParams& from);
+  void CopyFrom(const TransposeLayerParams& from);
+  void MergeFrom(const TransposeLayerParams& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -10952,7 +11559,7 @@ class TransposeNDLayerParams : public ::google::protobuf::MessageLite /* @@proto
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(TransposeNDLayerParams* other);
+  void InternalSwap(TransposeLayerParams* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -10980,7 +11587,7 @@ class TransposeNDLayerParams : public ::google::protobuf::MessageLite /* @@proto
   ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
       mutable_axes();
 
-  // @@protoc_insertion_point(class_scope:CoreML.Specification.TransposeNDLayerParams)
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.TransposeLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -10991,38 +11598,38 @@ class TransposeNDLayerParams : public ::google::protobuf::MessageLite /* @@proto
 };
 // -------------------------------------------------------------------
 
-class BatchedMatMulParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.BatchedMatMulParams) */ {
+class BatchedMatMulLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.BatchedMatMulLayerParams) */ {
  public:
-  BatchedMatMulParams();
-  virtual ~BatchedMatMulParams();
+  BatchedMatMulLayerParams();
+  virtual ~BatchedMatMulLayerParams();
 
-  BatchedMatMulParams(const BatchedMatMulParams& from);
+  BatchedMatMulLayerParams(const BatchedMatMulLayerParams& from);
 
-  inline BatchedMatMulParams& operator=(const BatchedMatMulParams& from) {
+  inline BatchedMatMulLayerParams& operator=(const BatchedMatMulLayerParams& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const BatchedMatMulParams& default_instance();
+  static const BatchedMatMulLayerParams& default_instance();
 
-  static inline const BatchedMatMulParams* internal_default_instance() {
-    return reinterpret_cast<const BatchedMatMulParams*>(
-               &_BatchedMatMulParams_default_instance_);
+  static inline const BatchedMatMulLayerParams* internal_default_instance() {
+    return reinterpret_cast<const BatchedMatMulLayerParams*>(
+               &_BatchedMatMulLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    91;
+    93;
 
-  void Swap(BatchedMatMulParams* other);
+  void Swap(BatchedMatMulLayerParams* other);
 
   // implements Message ----------------------------------------------
 
-  inline BatchedMatMulParams* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline BatchedMatMulLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  BatchedMatMulParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  BatchedMatMulLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const BatchedMatMulParams& from);
-  void MergeFrom(const BatchedMatMulParams& from);
+  void CopyFrom(const BatchedMatMulLayerParams& from);
+  void MergeFrom(const BatchedMatMulLayerParams& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -11037,7 +11644,7 @@ class BatchedMatMulParams : public ::google::protobuf::MessageLite /* @@protoc_i
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(BatchedMatMulParams* other);
+  void InternalSwap(BatchedMatMulLayerParams* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -11101,7 +11708,7 @@ class BatchedMatMulParams : public ::google::protobuf::MessageLite /* @@protoc_i
   bool hasbias() const;
   void set_hasbias(bool value);
 
-  // @@protoc_insertion_point(class_scope:CoreML.Specification.BatchedMatMulParams)
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.BatchedMatMulLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -11136,7 +11743,7 @@ class ConcatNDLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
                &_ConcatNDLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    92;
+    94;
 
   void Swap(ConcatNDLayerParams* other);
 
@@ -11214,7 +11821,7 @@ class SoftmaxNDLayerParams : public ::google::protobuf::MessageLite /* @@protoc_
                &_SoftmaxNDLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    93;
+    95;
 
   void Swap(SoftmaxNDLayerParams* other);
 
@@ -11273,6 +11880,91 @@ class SoftmaxNDLayerParams : public ::google::protobuf::MessageLite /* @@protoc_
 };
 // -------------------------------------------------------------------
 
+class ReverseLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.ReverseLayerParams) */ {
+ public:
+  ReverseLayerParams();
+  virtual ~ReverseLayerParams();
+
+  ReverseLayerParams(const ReverseLayerParams& from);
+
+  inline ReverseLayerParams& operator=(const ReverseLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ReverseLayerParams& default_instance();
+
+  static inline const ReverseLayerParams* internal_default_instance() {
+    return reinterpret_cast<const ReverseLayerParams*>(
+               &_ReverseLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    96;
+
+  void Swap(ReverseLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline ReverseLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ReverseLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const ReverseLayerParams& from);
+  void MergeFrom(const ReverseLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(ReverseLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated bool reverseDim = 1;
+  int reversedim_size() const;
+  void clear_reversedim();
+  static const int kReverseDimFieldNumber = 1;
+  bool reversedim(int index) const;
+  void set_reversedim(int index, bool value);
+  void add_reversedim(bool value);
+  const ::google::protobuf::RepeatedField< bool >&
+      reversedim() const;
+  ::google::protobuf::RepeatedField< bool >*
+      mutable_reversedim();
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.ReverseLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedField< bool > reversedim_;
+  mutable int _reversedim_cached_byte_size_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class LoadConstantNDLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.LoadConstantNDLayerParams) */ {
  public:
   LoadConstantNDLayerParams();
@@ -11292,7 +11984,7 @@ class LoadConstantNDLayerParams : public ::google::protobuf::MessageLite /* @@pr
                &_LoadConstantNDLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    94;
+    97;
 
   void Swap(LoadConstantNDLayerParams* other);
 
@@ -11387,7 +12079,7 @@ class FillLikeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
                &_FillLikeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    95;
+    98;
 
   void Swap(FillLikeLayerParams* other);
 
@@ -11465,7 +12157,7 @@ class FillStaticLayerParams : public ::google::protobuf::MessageLite /* @@protoc
                &_FillStaticLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    96;
+    99;
 
   void Swap(FillStaticLayerParams* other);
 
@@ -11557,7 +12249,7 @@ class FillDynamicLayerParams : public ::google::protobuf::MessageLite /* @@proto
                &_FillDynamicLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    97;
+    100;
 
   void Swap(FillDynamicLayerParams* other);
 
@@ -11616,38 +12308,38 @@ class FillDynamicLayerParams : public ::google::protobuf::MessageLite /* @@proto
 };
 // -------------------------------------------------------------------
 
-class WhereLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.WhereLayerParams) */ {
+class WhereBroadcastableLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.WhereBroadcastableLayerParams) */ {
  public:
-  WhereLayerParams();
-  virtual ~WhereLayerParams();
+  WhereBroadcastableLayerParams();
+  virtual ~WhereBroadcastableLayerParams();
 
-  WhereLayerParams(const WhereLayerParams& from);
+  WhereBroadcastableLayerParams(const WhereBroadcastableLayerParams& from);
 
-  inline WhereLayerParams& operator=(const WhereLayerParams& from) {
+  inline WhereBroadcastableLayerParams& operator=(const WhereBroadcastableLayerParams& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const WhereLayerParams& default_instance();
+  static const WhereBroadcastableLayerParams& default_instance();
 
-  static inline const WhereLayerParams* internal_default_instance() {
-    return reinterpret_cast<const WhereLayerParams*>(
-               &_WhereLayerParams_default_instance_);
+  static inline const WhereBroadcastableLayerParams* internal_default_instance() {
+    return reinterpret_cast<const WhereBroadcastableLayerParams*>(
+               &_WhereBroadcastableLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    98;
+    101;
 
-  void Swap(WhereLayerParams* other);
+  void Swap(WhereBroadcastableLayerParams* other);
 
   // implements Message ----------------------------------------------
 
-  inline WhereLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline WhereBroadcastableLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  WhereLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  WhereBroadcastableLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const WhereLayerParams& from);
-  void MergeFrom(const WhereLayerParams& from);
+  void CopyFrom(const WhereBroadcastableLayerParams& from);
+  void MergeFrom(const WhereBroadcastableLayerParams& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -11662,7 +12354,7 @@ class WhereLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(WhereLayerParams* other);
+  void InternalSwap(WhereBroadcastableLayerParams* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -11678,7 +12370,7 @@ class WhereLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:CoreML.Specification.WhereLayerParams)
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.WhereBroadcastableLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -11687,38 +12379,38 @@ class WhereLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
 };
 // -------------------------------------------------------------------
 
-class SineLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.SineLayerParams) */ {
+class SinLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.SinLayerParams) */ {
  public:
-  SineLayerParams();
-  virtual ~SineLayerParams();
+  SinLayerParams();
+  virtual ~SinLayerParams();
 
-  SineLayerParams(const SineLayerParams& from);
+  SinLayerParams(const SinLayerParams& from);
 
-  inline SineLayerParams& operator=(const SineLayerParams& from) {
+  inline SinLayerParams& operator=(const SinLayerParams& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const SineLayerParams& default_instance();
+  static const SinLayerParams& default_instance();
 
-  static inline const SineLayerParams* internal_default_instance() {
-    return reinterpret_cast<const SineLayerParams*>(
-               &_SineLayerParams_default_instance_);
+  static inline const SinLayerParams* internal_default_instance() {
+    return reinterpret_cast<const SinLayerParams*>(
+               &_SinLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    99;
+    102;
 
-  void Swap(SineLayerParams* other);
+  void Swap(SinLayerParams* other);
 
   // implements Message ----------------------------------------------
 
-  inline SineLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline SinLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  SineLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  SinLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const SineLayerParams& from);
-  void MergeFrom(const SineLayerParams& from);
+  void CopyFrom(const SinLayerParams& from);
+  void MergeFrom(const SinLayerParams& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -11733,7 +12425,7 @@ class SineLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(SineLayerParams* other);
+  void InternalSwap(SinLayerParams* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -11749,7 +12441,7 @@ class SineLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:CoreML.Specification.SineLayerParams)
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.SinLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -11758,38 +12450,38 @@ class SineLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
 };
 // -------------------------------------------------------------------
 
-class CosineLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.CosineLayerParams) */ {
+class CosLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.CosLayerParams) */ {
  public:
-  CosineLayerParams();
-  virtual ~CosineLayerParams();
+  CosLayerParams();
+  virtual ~CosLayerParams();
 
-  CosineLayerParams(const CosineLayerParams& from);
+  CosLayerParams(const CosLayerParams& from);
 
-  inline CosineLayerParams& operator=(const CosineLayerParams& from) {
+  inline CosLayerParams& operator=(const CosLayerParams& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const CosineLayerParams& default_instance();
+  static const CosLayerParams& default_instance();
 
-  static inline const CosineLayerParams* internal_default_instance() {
-    return reinterpret_cast<const CosineLayerParams*>(
-               &_CosineLayerParams_default_instance_);
+  static inline const CosLayerParams* internal_default_instance() {
+    return reinterpret_cast<const CosLayerParams*>(
+               &_CosLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    100;
+    103;
 
-  void Swap(CosineLayerParams* other);
+  void Swap(CosLayerParams* other);
 
   // implements Message ----------------------------------------------
 
-  inline CosineLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline CosLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  CosineLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  CosLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const CosineLayerParams& from);
-  void MergeFrom(const CosineLayerParams& from);
+  void CopyFrom(const CosLayerParams& from);
+  void MergeFrom(const CosLayerParams& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -11804,7 +12496,7 @@ class CosineLayerParams : public ::google::protobuf::MessageLite /* @@protoc_ins
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(CosineLayerParams* other);
+  void InternalSwap(CosLayerParams* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -11820,7 +12512,717 @@ class CosineLayerParams : public ::google::protobuf::MessageLite /* @@protoc_ins
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:CoreML.Specification.CosineLayerParams)
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.CosLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class TanLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.TanLayerParams) */ {
+ public:
+  TanLayerParams();
+  virtual ~TanLayerParams();
+
+  TanLayerParams(const TanLayerParams& from);
+
+  inline TanLayerParams& operator=(const TanLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const TanLayerParams& default_instance();
+
+  static inline const TanLayerParams* internal_default_instance() {
+    return reinterpret_cast<const TanLayerParams*>(
+               &_TanLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    104;
+
+  void Swap(TanLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline TanLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  TanLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const TanLayerParams& from);
+  void MergeFrom(const TanLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(TanLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.TanLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class AsinLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.AsinLayerParams) */ {
+ public:
+  AsinLayerParams();
+  virtual ~AsinLayerParams();
+
+  AsinLayerParams(const AsinLayerParams& from);
+
+  inline AsinLayerParams& operator=(const AsinLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const AsinLayerParams& default_instance();
+
+  static inline const AsinLayerParams* internal_default_instance() {
+    return reinterpret_cast<const AsinLayerParams*>(
+               &_AsinLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    105;
+
+  void Swap(AsinLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline AsinLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  AsinLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const AsinLayerParams& from);
+  void MergeFrom(const AsinLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(AsinLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.AsinLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class AcosLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.AcosLayerParams) */ {
+ public:
+  AcosLayerParams();
+  virtual ~AcosLayerParams();
+
+  AcosLayerParams(const AcosLayerParams& from);
+
+  inline AcosLayerParams& operator=(const AcosLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const AcosLayerParams& default_instance();
+
+  static inline const AcosLayerParams* internal_default_instance() {
+    return reinterpret_cast<const AcosLayerParams*>(
+               &_AcosLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    106;
+
+  void Swap(AcosLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline AcosLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  AcosLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const AcosLayerParams& from);
+  void MergeFrom(const AcosLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(AcosLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.AcosLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class AtanLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.AtanLayerParams) */ {
+ public:
+  AtanLayerParams();
+  virtual ~AtanLayerParams();
+
+  AtanLayerParams(const AtanLayerParams& from);
+
+  inline AtanLayerParams& operator=(const AtanLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const AtanLayerParams& default_instance();
+
+  static inline const AtanLayerParams* internal_default_instance() {
+    return reinterpret_cast<const AtanLayerParams*>(
+               &_AtanLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    107;
+
+  void Swap(AtanLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline AtanLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  AtanLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const AtanLayerParams& from);
+  void MergeFrom(const AtanLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(AtanLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.AtanLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class SinhLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.SinhLayerParams) */ {
+ public:
+  SinhLayerParams();
+  virtual ~SinhLayerParams();
+
+  SinhLayerParams(const SinhLayerParams& from);
+
+  inline SinhLayerParams& operator=(const SinhLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const SinhLayerParams& default_instance();
+
+  static inline const SinhLayerParams* internal_default_instance() {
+    return reinterpret_cast<const SinhLayerParams*>(
+               &_SinhLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    108;
+
+  void Swap(SinhLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline SinhLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  SinhLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const SinhLayerParams& from);
+  void MergeFrom(const SinhLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(SinhLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.SinhLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class CoshLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.CoshLayerParams) */ {
+ public:
+  CoshLayerParams();
+  virtual ~CoshLayerParams();
+
+  CoshLayerParams(const CoshLayerParams& from);
+
+  inline CoshLayerParams& operator=(const CoshLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const CoshLayerParams& default_instance();
+
+  static inline const CoshLayerParams* internal_default_instance() {
+    return reinterpret_cast<const CoshLayerParams*>(
+               &_CoshLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    109;
+
+  void Swap(CoshLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CoshLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  CoshLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const CoshLayerParams& from);
+  void MergeFrom(const CoshLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CoshLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.CoshLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class TanhLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.TanhLayerParams) */ {
+ public:
+  TanhLayerParams();
+  virtual ~TanhLayerParams();
+
+  TanhLayerParams(const TanhLayerParams& from);
+
+  inline TanhLayerParams& operator=(const TanhLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const TanhLayerParams& default_instance();
+
+  static inline const TanhLayerParams* internal_default_instance() {
+    return reinterpret_cast<const TanhLayerParams*>(
+               &_TanhLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    110;
+
+  void Swap(TanhLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline TanhLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  TanhLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const TanhLayerParams& from);
+  void MergeFrom(const TanhLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(TanhLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.TanhLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class AsinhLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.AsinhLayerParams) */ {
+ public:
+  AsinhLayerParams();
+  virtual ~AsinhLayerParams();
+
+  AsinhLayerParams(const AsinhLayerParams& from);
+
+  inline AsinhLayerParams& operator=(const AsinhLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const AsinhLayerParams& default_instance();
+
+  static inline const AsinhLayerParams* internal_default_instance() {
+    return reinterpret_cast<const AsinhLayerParams*>(
+               &_AsinhLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    111;
+
+  void Swap(AsinhLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline AsinhLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  AsinhLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const AsinhLayerParams& from);
+  void MergeFrom(const AsinhLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(AsinhLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.AsinhLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class AcoshLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.AcoshLayerParams) */ {
+ public:
+  AcoshLayerParams();
+  virtual ~AcoshLayerParams();
+
+  AcoshLayerParams(const AcoshLayerParams& from);
+
+  inline AcoshLayerParams& operator=(const AcoshLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const AcoshLayerParams& default_instance();
+
+  static inline const AcoshLayerParams* internal_default_instance() {
+    return reinterpret_cast<const AcoshLayerParams*>(
+               &_AcoshLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    112;
+
+  void Swap(AcoshLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline AcoshLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  AcoshLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const AcoshLayerParams& from);
+  void MergeFrom(const AcoshLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(AcoshLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.AcoshLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class AtanhLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.AtanhLayerParams) */ {
+ public:
+  AtanhLayerParams();
+  virtual ~AtanhLayerParams();
+
+  AtanhLayerParams(const AtanhLayerParams& from);
+
+  inline AtanhLayerParams& operator=(const AtanhLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const AtanhLayerParams& default_instance();
+
+  static inline const AtanhLayerParams* internal_default_instance() {
+    return reinterpret_cast<const AtanhLayerParams*>(
+               &_AtanhLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    113;
+
+  void Swap(AtanhLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline AtanhLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  AtanhLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const AtanhLayerParams& from);
+  void MergeFrom(const AtanhLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(AtanhLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.AtanhLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -11848,7 +13250,7 @@ class PowBroadcastableLayerParams : public ::google::protobuf::MessageLite /* @@
                &_PowBroadcastableLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    101;
+    114;
 
   void Swap(PowBroadcastableLayerParams* other);
 
@@ -11919,7 +13321,7 @@ class Exp2LayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_Exp2LayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    102;
+    115;
 
   void Swap(Exp2LayerParams* other);
 
@@ -11971,6 +13373,91 @@ class Exp2LayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
 };
 // -------------------------------------------------------------------
 
+class MatrixBandPartLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.MatrixBandPartLayerParams) */ {
+ public:
+  MatrixBandPartLayerParams();
+  virtual ~MatrixBandPartLayerParams();
+
+  MatrixBandPartLayerParams(const MatrixBandPartLayerParams& from);
+
+  inline MatrixBandPartLayerParams& operator=(const MatrixBandPartLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const MatrixBandPartLayerParams& default_instance();
+
+  static inline const MatrixBandPartLayerParams* internal_default_instance() {
+    return reinterpret_cast<const MatrixBandPartLayerParams*>(
+               &_MatrixBandPartLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    116;
+
+  void Swap(MatrixBandPartLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline MatrixBandPartLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  MatrixBandPartLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const MatrixBandPartLayerParams& from);
+  void MergeFrom(const MatrixBandPartLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(MatrixBandPartLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 numLower = 1;
+  void clear_numlower();
+  static const int kNumLowerFieldNumber = 1;
+  ::google::protobuf::int64 numlower() const;
+  void set_numlower(::google::protobuf::int64 value);
+
+  // int64 numUpper = 2;
+  void clear_numupper();
+  static const int kNumUpperFieldNumber = 2;
+  ::google::protobuf::int64 numupper() const;
+  void set_numupper(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.MatrixBandPartLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 numlower_;
+  ::google::protobuf::int64 numupper_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class UpperTriangularLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.UpperTriangularLayerParams) */ {
  public:
   UpperTriangularLayerParams();
@@ -11990,7 +13477,7 @@ class UpperTriangularLayerParams : public ::google::protobuf::MessageLite /* @@p
                &_UpperTriangularLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    103;
+    117;
 
   void Swap(UpperTriangularLayerParams* other);
 
@@ -12033,10 +13520,17 @@ class UpperTriangularLayerParams : public ::google::protobuf::MessageLite /* @@p
 
   // accessors -------------------------------------------------------
 
+  // int64 k = 1;
+  void clear_k();
+  static const int kKFieldNumber = 1;
+  ::google::protobuf::int64 k() const;
+  void set_k(::google::protobuf::int64 value);
+
   // @@protoc_insertion_point(class_scope:CoreML.Specification.UpperTriangularLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 k_;
   mutable int _cached_size_;
   friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
 };
@@ -12061,7 +13555,7 @@ class LowerTriangularLayerParams : public ::google::protobuf::MessageLite /* @@p
                &_LowerTriangularLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    104;
+    118;
 
   void Swap(LowerTriangularLayerParams* other);
 
@@ -12104,10 +13598,17 @@ class LowerTriangularLayerParams : public ::google::protobuf::MessageLite /* @@p
 
   // accessors -------------------------------------------------------
 
+  // int64 k = 1;
+  void clear_k();
+  static const int kKFieldNumber = 1;
+  ::google::protobuf::int64 k() const;
+  void set_k(::google::protobuf::int64 value);
+
   // @@protoc_insertion_point(class_scope:CoreML.Specification.LowerTriangularLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 k_;
   mutable int _cached_size_;
   friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
 };
@@ -12132,7 +13633,7 @@ class BroadcastToLikeLayerParams : public ::google::protobuf::MessageLite /* @@p
                &_BroadcastToLikeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    105;
+    119;
 
   void Swap(BroadcastToLikeLayerParams* other);
 
@@ -12203,7 +13704,7 @@ class BroadcastToStaticLayerParams : public ::google::protobuf::MessageLite /* @
                &_BroadcastToStaticLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    106;
+    120;
 
   void Swap(BroadcastToStaticLayerParams* other);
 
@@ -12288,7 +13789,7 @@ class BroadcastToDynamicLayerParams : public ::google::protobuf::MessageLite /* 
                &_BroadcastToDynamicLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    107;
+    121;
 
   void Swap(BroadcastToDynamicLayerParams* other);
 
@@ -12359,7 +13860,7 @@ class AddBroadcastableLayerParams : public ::google::protobuf::MessageLite /* @@
                &_AddBroadcastableLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    108;
+    122;
 
   void Swap(AddBroadcastableLayerParams* other);
 
@@ -12411,6 +13912,219 @@ class AddBroadcastableLayerParams : public ::google::protobuf::MessageLite /* @@
 };
 // -------------------------------------------------------------------
 
+class MaxBroadcastableLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.MaxBroadcastableLayerParams) */ {
+ public:
+  MaxBroadcastableLayerParams();
+  virtual ~MaxBroadcastableLayerParams();
+
+  MaxBroadcastableLayerParams(const MaxBroadcastableLayerParams& from);
+
+  inline MaxBroadcastableLayerParams& operator=(const MaxBroadcastableLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const MaxBroadcastableLayerParams& default_instance();
+
+  static inline const MaxBroadcastableLayerParams* internal_default_instance() {
+    return reinterpret_cast<const MaxBroadcastableLayerParams*>(
+               &_MaxBroadcastableLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    123;
+
+  void Swap(MaxBroadcastableLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline MaxBroadcastableLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  MaxBroadcastableLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const MaxBroadcastableLayerParams& from);
+  void MergeFrom(const MaxBroadcastableLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(MaxBroadcastableLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.MaxBroadcastableLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class MinBroadcastableLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.MinBroadcastableLayerParams) */ {
+ public:
+  MinBroadcastableLayerParams();
+  virtual ~MinBroadcastableLayerParams();
+
+  MinBroadcastableLayerParams(const MinBroadcastableLayerParams& from);
+
+  inline MinBroadcastableLayerParams& operator=(const MinBroadcastableLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const MinBroadcastableLayerParams& default_instance();
+
+  static inline const MinBroadcastableLayerParams* internal_default_instance() {
+    return reinterpret_cast<const MinBroadcastableLayerParams*>(
+               &_MinBroadcastableLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    124;
+
+  void Swap(MinBroadcastableLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline MinBroadcastableLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  MinBroadcastableLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const MinBroadcastableLayerParams& from);
+  void MergeFrom(const MinBroadcastableLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(MinBroadcastableLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.MinBroadcastableLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class FloorDivBroadcastableLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.FloorDivBroadcastableLayerParams) */ {
+ public:
+  FloorDivBroadcastableLayerParams();
+  virtual ~FloorDivBroadcastableLayerParams();
+
+  FloorDivBroadcastableLayerParams(const FloorDivBroadcastableLayerParams& from);
+
+  inline FloorDivBroadcastableLayerParams& operator=(const FloorDivBroadcastableLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const FloorDivBroadcastableLayerParams& default_instance();
+
+  static inline const FloorDivBroadcastableLayerParams* internal_default_instance() {
+    return reinterpret_cast<const FloorDivBroadcastableLayerParams*>(
+               &_FloorDivBroadcastableLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    125;
+
+  void Swap(FloorDivBroadcastableLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline FloorDivBroadcastableLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  FloorDivBroadcastableLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const FloorDivBroadcastableLayerParams& from);
+  void MergeFrom(const FloorDivBroadcastableLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(FloorDivBroadcastableLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.FloorDivBroadcastableLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class SubtractBroadcastableLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.SubtractBroadcastableLayerParams) */ {
  public:
   SubtractBroadcastableLayerParams();
@@ -12430,7 +14144,7 @@ class SubtractBroadcastableLayerParams : public ::google::protobuf::MessageLite 
                &_SubtractBroadcastableLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    109;
+    126;
 
   void Swap(SubtractBroadcastableLayerParams* other);
 
@@ -12501,7 +14215,7 @@ class MultiplyBroadcastableLayerParams : public ::google::protobuf::MessageLite 
                &_MultiplyBroadcastableLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    110;
+    127;
 
   void Swap(MultiplyBroadcastableLayerParams* other);
 
@@ -12572,7 +14286,7 @@ class DivideBroadcastableLayerParams : public ::google::protobuf::MessageLite /*
                &_DivideBroadcastableLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    111;
+    128;
 
   void Swap(DivideBroadcastableLayerParams* other);
 
@@ -12643,7 +14357,7 @@ class GatherLayerParams : public ::google::protobuf::MessageLite /* @@protoc_ins
                &_GatherLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    112;
+    129;
 
   void Swap(GatherLayerParams* other);
 
@@ -12721,7 +14435,7 @@ class ScatterLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_ScatterLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    113;
+    130;
 
   void Swap(ScatterLayerParams* other);
 
@@ -12792,7 +14506,7 @@ class StackNDLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_StackNDLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    114;
+    131;
 
   void Swap(StackNDLayerParams* other);
 
@@ -12870,7 +14584,7 @@ class RankPreservingReshapeLayerParams : public ::google::protobuf::MessageLite 
                &_RankPreservingReshapeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    115;
+    132;
 
   void Swap(RankPreservingReshapeLayerParams* other);
 
@@ -12936,6 +14650,855 @@ class RankPreservingReshapeLayerParams : public ::google::protobuf::MessageLite 
 };
 // -------------------------------------------------------------------
 
+class RandomNormalLikeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomNormalLikeLayerParams) */ {
+ public:
+  RandomNormalLikeLayerParams();
+  virtual ~RandomNormalLikeLayerParams();
+
+  RandomNormalLikeLayerParams(const RandomNormalLikeLayerParams& from);
+
+  inline RandomNormalLikeLayerParams& operator=(const RandomNormalLikeLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomNormalLikeLayerParams& default_instance();
+
+  static inline const RandomNormalLikeLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomNormalLikeLayerParams*>(
+               &_RandomNormalLikeLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    133;
+
+  void Swap(RandomNormalLikeLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomNormalLikeLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomNormalLikeLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomNormalLikeLayerParams& from);
+  void MergeFrom(const RandomNormalLikeLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomNormalLikeLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float mean = 2;
+  void clear_mean();
+  static const int kMeanFieldNumber = 2;
+  float mean() const;
+  void set_mean(float value);
+
+  // float stdDev = 3;
+  void clear_stddev();
+  static const int kStdDevFieldNumber = 3;
+  float stddev() const;
+  void set_stddev(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomNormalLikeLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 seed_;
+  float mean_;
+  float stddev_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RandomNormalStaticLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomNormalStaticLayerParams) */ {
+ public:
+  RandomNormalStaticLayerParams();
+  virtual ~RandomNormalStaticLayerParams();
+
+  RandomNormalStaticLayerParams(const RandomNormalStaticLayerParams& from);
+
+  inline RandomNormalStaticLayerParams& operator=(const RandomNormalStaticLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomNormalStaticLayerParams& default_instance();
+
+  static inline const RandomNormalStaticLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomNormalStaticLayerParams*>(
+               &_RandomNormalStaticLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    134;
+
+  void Swap(RandomNormalStaticLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomNormalStaticLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomNormalStaticLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomNormalStaticLayerParams& from);
+  void MergeFrom(const RandomNormalStaticLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomNormalStaticLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated uint64 outputShape = 4;
+  int outputshape_size() const;
+  void clear_outputshape();
+  static const int kOutputShapeFieldNumber = 4;
+  ::google::protobuf::uint64 outputshape(int index) const;
+  void set_outputshape(int index, ::google::protobuf::uint64 value);
+  void add_outputshape(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      outputshape() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_outputshape();
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float mean = 2;
+  void clear_mean();
+  static const int kMeanFieldNumber = 2;
+  float mean() const;
+  void set_mean(float value);
+
+  // float stdDev = 3;
+  void clear_stddev();
+  static const int kStdDevFieldNumber = 3;
+  float stddev() const;
+  void set_stddev(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomNormalStaticLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > outputshape_;
+  mutable int _outputshape_cached_byte_size_;
+  ::google::protobuf::int64 seed_;
+  float mean_;
+  float stddev_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RandomNormalDynamicLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomNormalDynamicLayerParams) */ {
+ public:
+  RandomNormalDynamicLayerParams();
+  virtual ~RandomNormalDynamicLayerParams();
+
+  RandomNormalDynamicLayerParams(const RandomNormalDynamicLayerParams& from);
+
+  inline RandomNormalDynamicLayerParams& operator=(const RandomNormalDynamicLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomNormalDynamicLayerParams& default_instance();
+
+  static inline const RandomNormalDynamicLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomNormalDynamicLayerParams*>(
+               &_RandomNormalDynamicLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    135;
+
+  void Swap(RandomNormalDynamicLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomNormalDynamicLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomNormalDynamicLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomNormalDynamicLayerParams& from);
+  void MergeFrom(const RandomNormalDynamicLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomNormalDynamicLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float mean = 2;
+  void clear_mean();
+  static const int kMeanFieldNumber = 2;
+  float mean() const;
+  void set_mean(float value);
+
+  // float stdDev = 3;
+  void clear_stddev();
+  static const int kStdDevFieldNumber = 3;
+  float stddev() const;
+  void set_stddev(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomNormalDynamicLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 seed_;
+  float mean_;
+  float stddev_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RandomUniformLikeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomUniformLikeLayerParams) */ {
+ public:
+  RandomUniformLikeLayerParams();
+  virtual ~RandomUniformLikeLayerParams();
+
+  RandomUniformLikeLayerParams(const RandomUniformLikeLayerParams& from);
+
+  inline RandomUniformLikeLayerParams& operator=(const RandomUniformLikeLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomUniformLikeLayerParams& default_instance();
+
+  static inline const RandomUniformLikeLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomUniformLikeLayerParams*>(
+               &_RandomUniformLikeLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    136;
+
+  void Swap(RandomUniformLikeLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomUniformLikeLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomUniformLikeLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomUniformLikeLayerParams& from);
+  void MergeFrom(const RandomUniformLikeLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomUniformLikeLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float minVal = 2;
+  void clear_minval();
+  static const int kMinValFieldNumber = 2;
+  float minval() const;
+  void set_minval(float value);
+
+  // float maxVal = 3;
+  void clear_maxval();
+  static const int kMaxValFieldNumber = 3;
+  float maxval() const;
+  void set_maxval(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomUniformLikeLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 seed_;
+  float minval_;
+  float maxval_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RandomUniformStaticLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomUniformStaticLayerParams) */ {
+ public:
+  RandomUniformStaticLayerParams();
+  virtual ~RandomUniformStaticLayerParams();
+
+  RandomUniformStaticLayerParams(const RandomUniformStaticLayerParams& from);
+
+  inline RandomUniformStaticLayerParams& operator=(const RandomUniformStaticLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomUniformStaticLayerParams& default_instance();
+
+  static inline const RandomUniformStaticLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomUniformStaticLayerParams*>(
+               &_RandomUniformStaticLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    137;
+
+  void Swap(RandomUniformStaticLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomUniformStaticLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomUniformStaticLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomUniformStaticLayerParams& from);
+  void MergeFrom(const RandomUniformStaticLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomUniformStaticLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated uint64 outputShape = 4;
+  int outputshape_size() const;
+  void clear_outputshape();
+  static const int kOutputShapeFieldNumber = 4;
+  ::google::protobuf::uint64 outputshape(int index) const;
+  void set_outputshape(int index, ::google::protobuf::uint64 value);
+  void add_outputshape(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      outputshape() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_outputshape();
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float minVal = 2;
+  void clear_minval();
+  static const int kMinValFieldNumber = 2;
+  float minval() const;
+  void set_minval(float value);
+
+  // float maxVal = 3;
+  void clear_maxval();
+  static const int kMaxValFieldNumber = 3;
+  float maxval() const;
+  void set_maxval(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomUniformStaticLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > outputshape_;
+  mutable int _outputshape_cached_byte_size_;
+  ::google::protobuf::int64 seed_;
+  float minval_;
+  float maxval_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RandomUniformDynamicLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomUniformDynamicLayerParams) */ {
+ public:
+  RandomUniformDynamicLayerParams();
+  virtual ~RandomUniformDynamicLayerParams();
+
+  RandomUniformDynamicLayerParams(const RandomUniformDynamicLayerParams& from);
+
+  inline RandomUniformDynamicLayerParams& operator=(const RandomUniformDynamicLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomUniformDynamicLayerParams& default_instance();
+
+  static inline const RandomUniformDynamicLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomUniformDynamicLayerParams*>(
+               &_RandomUniformDynamicLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    138;
+
+  void Swap(RandomUniformDynamicLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomUniformDynamicLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomUniformDynamicLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomUniformDynamicLayerParams& from);
+  void MergeFrom(const RandomUniformDynamicLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomUniformDynamicLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float minVal = 2;
+  void clear_minval();
+  static const int kMinValFieldNumber = 2;
+  float minval() const;
+  void set_minval(float value);
+
+  // float maxVal = 3;
+  void clear_maxval();
+  static const int kMaxValFieldNumber = 3;
+  float maxval() const;
+  void set_maxval(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomUniformDynamicLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 seed_;
+  float minval_;
+  float maxval_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RandomBernoulliLikeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomBernoulliLikeLayerParams) */ {
+ public:
+  RandomBernoulliLikeLayerParams();
+  virtual ~RandomBernoulliLikeLayerParams();
+
+  RandomBernoulliLikeLayerParams(const RandomBernoulliLikeLayerParams& from);
+
+  inline RandomBernoulliLikeLayerParams& operator=(const RandomBernoulliLikeLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomBernoulliLikeLayerParams& default_instance();
+
+  static inline const RandomBernoulliLikeLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomBernoulliLikeLayerParams*>(
+               &_RandomBernoulliLikeLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    139;
+
+  void Swap(RandomBernoulliLikeLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomBernoulliLikeLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomBernoulliLikeLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomBernoulliLikeLayerParams& from);
+  void MergeFrom(const RandomBernoulliLikeLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomBernoulliLikeLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float prob = 2;
+  void clear_prob();
+  static const int kProbFieldNumber = 2;
+  float prob() const;
+  void set_prob(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomBernoulliLikeLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 seed_;
+  float prob_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RandomBernoulliStaticLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomBernoulliStaticLayerParams) */ {
+ public:
+  RandomBernoulliStaticLayerParams();
+  virtual ~RandomBernoulliStaticLayerParams();
+
+  RandomBernoulliStaticLayerParams(const RandomBernoulliStaticLayerParams& from);
+
+  inline RandomBernoulliStaticLayerParams& operator=(const RandomBernoulliStaticLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomBernoulliStaticLayerParams& default_instance();
+
+  static inline const RandomBernoulliStaticLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomBernoulliStaticLayerParams*>(
+               &_RandomBernoulliStaticLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    140;
+
+  void Swap(RandomBernoulliStaticLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomBernoulliStaticLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomBernoulliStaticLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomBernoulliStaticLayerParams& from);
+  void MergeFrom(const RandomBernoulliStaticLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomBernoulliStaticLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated uint64 outputShape = 3;
+  int outputshape_size() const;
+  void clear_outputshape();
+  static const int kOutputShapeFieldNumber = 3;
+  ::google::protobuf::uint64 outputshape(int index) const;
+  void set_outputshape(int index, ::google::protobuf::uint64 value);
+  void add_outputshape(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      outputshape() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_outputshape();
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float prob = 2;
+  void clear_prob();
+  static const int kProbFieldNumber = 2;
+  float prob() const;
+  void set_prob(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomBernoulliStaticLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > outputshape_;
+  mutable int _outputshape_cached_byte_size_;
+  ::google::protobuf::int64 seed_;
+  float prob_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class RandomBernoulliDynamicLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.RandomBernoulliDynamicLayerParams) */ {
+ public:
+  RandomBernoulliDynamicLayerParams();
+  virtual ~RandomBernoulliDynamicLayerParams();
+
+  RandomBernoulliDynamicLayerParams(const RandomBernoulliDynamicLayerParams& from);
+
+  inline RandomBernoulliDynamicLayerParams& operator=(const RandomBernoulliDynamicLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const RandomBernoulliDynamicLayerParams& default_instance();
+
+  static inline const RandomBernoulliDynamicLayerParams* internal_default_instance() {
+    return reinterpret_cast<const RandomBernoulliDynamicLayerParams*>(
+               &_RandomBernoulliDynamicLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    141;
+
+  void Swap(RandomBernoulliDynamicLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline RandomBernoulliDynamicLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  RandomBernoulliDynamicLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const RandomBernoulliDynamicLayerParams& from);
+  void MergeFrom(const RandomBernoulliDynamicLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(RandomBernoulliDynamicLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 seed = 1;
+  void clear_seed();
+  static const int kSeedFieldNumber = 1;
+  ::google::protobuf::int64 seed() const;
+  void set_seed(::google::protobuf::int64 value);
+
+  // float prob = 2;
+  void clear_prob();
+  static const int kProbFieldNumber = 2;
+  float prob() const;
+  void set_prob(float value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 seed_;
+  float prob_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class ExpandDimsLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.ExpandDimsLayerParams) */ {
  public:
   ExpandDimsLayerParams();
@@ -12955,7 +15518,7 @@ class ExpandDimsLayerParams : public ::google::protobuf::MessageLite /* @@protoc
                &_ExpandDimsLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    116;
+    142;
 
   void Swap(ExpandDimsLayerParams* other);
 
@@ -13021,6 +15584,311 @@ class ExpandDimsLayerParams : public ::google::protobuf::MessageLite /* @@protoc
 };
 // -------------------------------------------------------------------
 
+class FlattenTo2DLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.FlattenTo2DLayerParams) */ {
+ public:
+  FlattenTo2DLayerParams();
+  virtual ~FlattenTo2DLayerParams();
+
+  FlattenTo2DLayerParams(const FlattenTo2DLayerParams& from);
+
+  inline FlattenTo2DLayerParams& operator=(const FlattenTo2DLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const FlattenTo2DLayerParams& default_instance();
+
+  static inline const FlattenTo2DLayerParams* internal_default_instance() {
+    return reinterpret_cast<const FlattenTo2DLayerParams*>(
+               &_FlattenTo2DLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    143;
+
+  void Swap(FlattenTo2DLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline FlattenTo2DLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  FlattenTo2DLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const FlattenTo2DLayerParams& from);
+  void MergeFrom(const FlattenTo2DLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(FlattenTo2DLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int64 axis = 1;
+  void clear_axis();
+  static const int kAxisFieldNumber = 1;
+  ::google::protobuf::int64 axis() const;
+  void set_axis(::google::protobuf::int64 value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.FlattenTo2DLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::int64 axis_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class ReshapeStaticLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.ReshapeStaticLayerParams) */ {
+ public:
+  ReshapeStaticLayerParams();
+  virtual ~ReshapeStaticLayerParams();
+
+  ReshapeStaticLayerParams(const ReshapeStaticLayerParams& from);
+
+  inline ReshapeStaticLayerParams& operator=(const ReshapeStaticLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ReshapeStaticLayerParams& default_instance();
+
+  static inline const ReshapeStaticLayerParams* internal_default_instance() {
+    return reinterpret_cast<const ReshapeStaticLayerParams*>(
+               &_ReshapeStaticLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    144;
+
+  void Swap(ReshapeStaticLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline ReshapeStaticLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ReshapeStaticLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const ReshapeStaticLayerParams& from);
+  void MergeFrom(const ReshapeStaticLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(ReshapeStaticLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated int64 targetShape = 1;
+  int targetshape_size() const;
+  void clear_targetshape();
+  static const int kTargetShapeFieldNumber = 1;
+  ::google::protobuf::int64 targetshape(int index) const;
+  void set_targetshape(int index, ::google::protobuf::int64 value);
+  void add_targetshape(::google::protobuf::int64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::int64 >&
+      targetshape() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int64 >*
+      mutable_targetshape();
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.ReshapeStaticLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int64 > targetshape_;
+  mutable int _targetshape_cached_byte_size_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class ReshapeLikeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.ReshapeLikeLayerParams) */ {
+ public:
+  ReshapeLikeLayerParams();
+  virtual ~ReshapeLikeLayerParams();
+
+  ReshapeLikeLayerParams(const ReshapeLikeLayerParams& from);
+
+  inline ReshapeLikeLayerParams& operator=(const ReshapeLikeLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ReshapeLikeLayerParams& default_instance();
+
+  static inline const ReshapeLikeLayerParams* internal_default_instance() {
+    return reinterpret_cast<const ReshapeLikeLayerParams*>(
+               &_ReshapeLikeLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    145;
+
+  void Swap(ReshapeLikeLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline ReshapeLikeLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ReshapeLikeLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const ReshapeLikeLayerParams& from);
+  void MergeFrom(const ReshapeLikeLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(ReshapeLikeLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.ReshapeLikeLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class ReshapeDynamicLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.ReshapeDynamicLayerParams) */ {
+ public:
+  ReshapeDynamicLayerParams();
+  virtual ~ReshapeDynamicLayerParams();
+
+  ReshapeDynamicLayerParams(const ReshapeDynamicLayerParams& from);
+
+  inline ReshapeDynamicLayerParams& operator=(const ReshapeDynamicLayerParams& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ReshapeDynamicLayerParams& default_instance();
+
+  static inline const ReshapeDynamicLayerParams* internal_default_instance() {
+    return reinterpret_cast<const ReshapeDynamicLayerParams*>(
+               &_ReshapeDynamicLayerParams_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    146;
+
+  void Swap(ReshapeDynamicLayerParams* other);
+
+  // implements Message ----------------------------------------------
+
+  inline ReshapeDynamicLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  ReshapeDynamicLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const ReshapeDynamicLayerParams& from);
+  void MergeFrom(const ReshapeDynamicLayerParams& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(ReshapeDynamicLayerParams* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.ReshapeDynamicLayerParams)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class SqueezeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.SqueezeLayerParams) */ {
  public:
   SqueezeLayerParams();
@@ -13040,7 +15908,7 @@ class SqueezeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_SqueezeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    117;
+    147;
 
   void Swap(SqueezeLayerParams* other);
 
@@ -13125,7 +15993,7 @@ class SplitNDLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_SplitNDLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    118;
+    148;
 
   void Swap(SplitNDLayerParams* other);
 
@@ -13224,7 +16092,7 @@ class CeilLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_CeilLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    119;
+    149;
 
   void Swap(CeilLayerParams* other);
 
@@ -13295,7 +16163,7 @@ class FloorLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
                &_FloorLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    120;
+    150;
 
   void Swap(FloorLayerParams* other);
 
@@ -13366,7 +16234,7 @@ class ClipLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_ClipLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    121;
+    151;
 
   void Swap(ClipLayerParams* other);
 
@@ -13451,7 +16319,7 @@ class SliceNDLayerParams : public ::google::protobuf::MessageLite /* @@protoc_in
                &_SliceNDLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    122;
+    152;
 
   void Swap(SliceNDLayerParams* other);
 
@@ -13592,7 +16460,7 @@ class TileLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inser
                &_TileLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    123;
+    153;
 
   void Swap(TileLayerParams* other);
 
@@ -13677,7 +16545,7 @@ class GetShapeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
                &_GetShapeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    124;
+    154;
 
   void Swap(GetShapeLayerParams* other);
 
@@ -13729,38 +16597,38 @@ class GetShapeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_i
 };
 // -------------------------------------------------------------------
 
-class ErfActivationLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.ErfActivationLayerParams) */ {
+class ErfLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.ErfLayerParams) */ {
  public:
-  ErfActivationLayerParams();
-  virtual ~ErfActivationLayerParams();
+  ErfLayerParams();
+  virtual ~ErfLayerParams();
 
-  ErfActivationLayerParams(const ErfActivationLayerParams& from);
+  ErfLayerParams(const ErfLayerParams& from);
 
-  inline ErfActivationLayerParams& operator=(const ErfActivationLayerParams& from) {
+  inline ErfLayerParams& operator=(const ErfLayerParams& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const ErfActivationLayerParams& default_instance();
+  static const ErfLayerParams& default_instance();
 
-  static inline const ErfActivationLayerParams* internal_default_instance() {
-    return reinterpret_cast<const ErfActivationLayerParams*>(
-               &_ErfActivationLayerParams_default_instance_);
+  static inline const ErfLayerParams* internal_default_instance() {
+    return reinterpret_cast<const ErfLayerParams*>(
+               &_ErfLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    125;
+    155;
 
-  void Swap(ErfActivationLayerParams* other);
+  void Swap(ErfLayerParams* other);
 
   // implements Message ----------------------------------------------
 
-  inline ErfActivationLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline ErfLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  ErfActivationLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  ErfLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const ErfActivationLayerParams& from);
-  void MergeFrom(const ErfActivationLayerParams& from);
+  void CopyFrom(const ErfLayerParams& from);
+  void MergeFrom(const ErfLayerParams& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -13775,7 +16643,7 @@ class ErfActivationLayerParams : public ::google::protobuf::MessageLite /* @@pro
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(ErfActivationLayerParams* other);
+  void InternalSwap(ErfLayerParams* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -13791,7 +16659,7 @@ class ErfActivationLayerParams : public ::google::protobuf::MessageLite /* @@pro
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:CoreML.Specification.ErfActivationLayerParams)
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.ErfLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
@@ -13800,38 +16668,38 @@ class ErfActivationLayerParams : public ::google::protobuf::MessageLite /* @@pro
 };
 // -------------------------------------------------------------------
 
-class GeluActivationLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.GeluActivationLayerParams) */ {
+class GeluLayerParams : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.GeluLayerParams) */ {
  public:
-  GeluActivationLayerParams();
-  virtual ~GeluActivationLayerParams();
+  GeluLayerParams();
+  virtual ~GeluLayerParams();
 
-  GeluActivationLayerParams(const GeluActivationLayerParams& from);
+  GeluLayerParams(const GeluLayerParams& from);
 
-  inline GeluActivationLayerParams& operator=(const GeluActivationLayerParams& from) {
+  inline GeluLayerParams& operator=(const GeluLayerParams& from) {
     CopyFrom(from);
     return *this;
   }
 
-  static const GeluActivationLayerParams& default_instance();
+  static const GeluLayerParams& default_instance();
 
-  static inline const GeluActivationLayerParams* internal_default_instance() {
-    return reinterpret_cast<const GeluActivationLayerParams*>(
-               &_GeluActivationLayerParams_default_instance_);
+  static inline const GeluLayerParams* internal_default_instance() {
+    return reinterpret_cast<const GeluLayerParams*>(
+               &_GeluLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    126;
+    156;
 
-  void Swap(GeluActivationLayerParams* other);
+  void Swap(GeluLayerParams* other);
 
   // implements Message ----------------------------------------------
 
-  inline GeluActivationLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline GeluLayerParams* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  GeluActivationLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  GeluLayerParams* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
     PROTOBUF_FINAL;
-  void CopyFrom(const GeluActivationLayerParams& from);
-  void MergeFrom(const GeluActivationLayerParams& from);
+  void CopyFrom(const GeluLayerParams& from);
+  void MergeFrom(const GeluLayerParams& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -13846,7 +16714,7 @@ class GeluActivationLayerParams : public ::google::protobuf::MessageLite /* @@pr
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(GeluActivationLayerParams* other);
+  void InternalSwap(GeluLayerParams* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -13860,12 +16728,36 @@ class GeluActivationLayerParams : public ::google::protobuf::MessageLite /* @@pr
 
   // nested types ----------------------------------------------------
 
+  typedef GeluLayerParams_GeluMode GeluMode;
+  static const GeluMode EXACT =
+    GeluLayerParams_GeluMode_EXACT;
+  static const GeluMode TANH_APPROXIMATION =
+    GeluLayerParams_GeluMode_TANH_APPROXIMATION;
+  static const GeluMode SIGMOID_APPROXIMATION =
+    GeluLayerParams_GeluMode_SIGMOID_APPROXIMATION;
+  static inline bool GeluMode_IsValid(int value) {
+    return GeluLayerParams_GeluMode_IsValid(value);
+  }
+  static const GeluMode GeluMode_MIN =
+    GeluLayerParams_GeluMode_GeluMode_MIN;
+  static const GeluMode GeluMode_MAX =
+    GeluLayerParams_GeluMode_GeluMode_MAX;
+  static const int GeluMode_ARRAYSIZE =
+    GeluLayerParams_GeluMode_GeluMode_ARRAYSIZE;
+
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:CoreML.Specification.GeluActivationLayerParams)
+  // .CoreML.Specification.GeluLayerParams.GeluMode mode = 1;
+  void clear_mode();
+  static const int kModeFieldNumber = 1;
+  ::CoreML::Specification::GeluLayerParams_GeluMode mode() const;
+  void set_mode(::CoreML::Specification::GeluLayerParams_GeluMode value);
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.GeluLayerParams)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  int mode_;
   mutable int _cached_size_;
   friend struct protobuf_NeuralNetwork_2eproto::TableStruct;
 };
@@ -13890,7 +16782,7 @@ class RangeLayerParams : public ::google::protobuf::MessageLite /* @@protoc_inse
                &_RangeLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    127;
+    157;
 
   void Swap(RangeLayerParams* other);
 
@@ -13982,7 +16874,7 @@ class SlidingWindowsLayerParams : public ::google::protobuf::MessageLite /* @@pr
                &_SlidingWindowsLayerParams_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    128;
+    158;
 
   void Swap(SlidingWindowsLayerParams* other);
 
@@ -14080,7 +16972,7 @@ class NeuralNetworkClassifier : public ::google::protobuf::MessageLite /* @@prot
                &_NeuralNetworkClassifier_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    129;
+    159;
 
   void Swap(NeuralNetworkClassifier* other);
 
@@ -14248,7 +17140,7 @@ class NeuralNetworkRegressor : public ::google::protobuf::MessageLite /* @@proto
                &_NeuralNetworkRegressor_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    130;
+    160;
 
   void Swap(NeuralNetworkRegressor* other);
 
@@ -14369,7 +17261,7 @@ class NetworkUpdateParameters : public ::google::protobuf::MessageLite /* @@prot
                &_NetworkUpdateParameters_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    131;
+    161;
 
   void Swap(NetworkUpdateParameters* other);
 
@@ -14479,7 +17371,7 @@ class LossLayer : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
                &_LossLayer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    132;
+    162;
 
   void Swap(LossLayer* other);
 
@@ -14597,7 +17489,7 @@ class CrossEntropyLossLayer : public ::google::protobuf::MessageLite /* @@protoc
                &_CrossEntropyLossLayer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    133;
+    163;
 
   void Swap(CrossEntropyLossLayer* other);
 
@@ -14698,7 +17590,7 @@ class MSELossLayer : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_MSELossLayer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    134;
+    164;
 
   void Swap(MSELossLayer* other);
 
@@ -14805,7 +17697,7 @@ class Optimizer : public ::google::protobuf::MessageLite /* @@protoc_insertion_p
                &_Optimizer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    135;
+    165;
 
   void Swap(Optimizer* other);
 
@@ -14908,7 +17800,7 @@ class SGDOptimizer : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_SGDOptimizer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    136;
+    166;
 
   void Swap(SGDOptimizer* other);
 
@@ -15009,7 +17901,7 @@ class AdamOptimizer : public ::google::protobuf::MessageLite /* @@protoc_inserti
                &_AdamOptimizer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    137;
+    167;
 
   void Swap(AdamOptimizer* other);
 
@@ -19115,196 +22007,676 @@ inline void NeuralNetworkLayer::set_allocated_exp2(::CoreML::Specification::Exp2
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.exp2)
 }
 
-// .CoreML.Specification.SineLayerParams sine = 710;
-inline bool NeuralNetworkLayer::has_sine() const {
-  return layer_case() == kSine;
+// .CoreML.Specification.SinLayerParams sin = 710;
+inline bool NeuralNetworkLayer::has_sin() const {
+  return layer_case() == kSin;
 }
-inline void NeuralNetworkLayer::set_has_sine() {
-  _oneof_case_[0] = kSine;
+inline void NeuralNetworkLayer::set_has_sin() {
+  _oneof_case_[0] = kSin;
 }
-inline void NeuralNetworkLayer::clear_sine() {
-  if (has_sine()) {
-    delete layer_.sine_;
+inline void NeuralNetworkLayer::clear_sin() {
+  if (has_sin()) {
+    delete layer_.sin_;
     clear_has_layer();
   }
 }
-inline  const ::CoreML::Specification::SineLayerParams& NeuralNetworkLayer::sine() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.sine)
-  return has_sine()
-      ? *layer_.sine_
-      : ::CoreML::Specification::SineLayerParams::default_instance();
+inline  const ::CoreML::Specification::SinLayerParams& NeuralNetworkLayer::sin() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.sin)
+  return has_sin()
+      ? *layer_.sin_
+      : ::CoreML::Specification::SinLayerParams::default_instance();
 }
-inline ::CoreML::Specification::SineLayerParams* NeuralNetworkLayer::mutable_sine() {
-  if (!has_sine()) {
+inline ::CoreML::Specification::SinLayerParams* NeuralNetworkLayer::mutable_sin() {
+  if (!has_sin()) {
     clear_layer();
-    set_has_sine();
-    layer_.sine_ = new ::CoreML::Specification::SineLayerParams;
+    set_has_sin();
+    layer_.sin_ = new ::CoreML::Specification::SinLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.sine)
-  return layer_.sine_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.sin)
+  return layer_.sin_;
 }
-inline ::CoreML::Specification::SineLayerParams* NeuralNetworkLayer::release_sine() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.sine)
-  if (has_sine()) {
+inline ::CoreML::Specification::SinLayerParams* NeuralNetworkLayer::release_sin() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.sin)
+  if (has_sin()) {
     clear_has_layer();
-    ::CoreML::Specification::SineLayerParams* temp = layer_.sine_;
-    layer_.sine_ = NULL;
+    ::CoreML::Specification::SinLayerParams* temp = layer_.sin_;
+    layer_.sin_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void NeuralNetworkLayer::set_allocated_sine(::CoreML::Specification::SineLayerParams* sine) {
+inline void NeuralNetworkLayer::set_allocated_sin(::CoreML::Specification::SinLayerParams* sin) {
   clear_layer();
-  if (sine) {
-    set_has_sine();
-    layer_.sine_ = sine;
+  if (sin) {
+    set_has_sin();
+    layer_.sin_ = sin;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.sine)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.sin)
 }
 
-// .CoreML.Specification.CosineLayerParams cosine = 715;
-inline bool NeuralNetworkLayer::has_cosine() const {
-  return layer_case() == kCosine;
+// .CoreML.Specification.CosLayerParams cos = 715;
+inline bool NeuralNetworkLayer::has_cos() const {
+  return layer_case() == kCos;
 }
-inline void NeuralNetworkLayer::set_has_cosine() {
-  _oneof_case_[0] = kCosine;
+inline void NeuralNetworkLayer::set_has_cos() {
+  _oneof_case_[0] = kCos;
 }
-inline void NeuralNetworkLayer::clear_cosine() {
-  if (has_cosine()) {
-    delete layer_.cosine_;
+inline void NeuralNetworkLayer::clear_cos() {
+  if (has_cos()) {
+    delete layer_.cos_;
     clear_has_layer();
   }
 }
-inline  const ::CoreML::Specification::CosineLayerParams& NeuralNetworkLayer::cosine() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.cosine)
-  return has_cosine()
-      ? *layer_.cosine_
-      : ::CoreML::Specification::CosineLayerParams::default_instance();
+inline  const ::CoreML::Specification::CosLayerParams& NeuralNetworkLayer::cos() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.cos)
+  return has_cos()
+      ? *layer_.cos_
+      : ::CoreML::Specification::CosLayerParams::default_instance();
 }
-inline ::CoreML::Specification::CosineLayerParams* NeuralNetworkLayer::mutable_cosine() {
-  if (!has_cosine()) {
+inline ::CoreML::Specification::CosLayerParams* NeuralNetworkLayer::mutable_cos() {
+  if (!has_cos()) {
     clear_layer();
-    set_has_cosine();
-    layer_.cosine_ = new ::CoreML::Specification::CosineLayerParams;
+    set_has_cos();
+    layer_.cos_ = new ::CoreML::Specification::CosLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.cosine)
-  return layer_.cosine_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.cos)
+  return layer_.cos_;
 }
-inline ::CoreML::Specification::CosineLayerParams* NeuralNetworkLayer::release_cosine() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.cosine)
-  if (has_cosine()) {
+inline ::CoreML::Specification::CosLayerParams* NeuralNetworkLayer::release_cos() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.cos)
+  if (has_cos()) {
     clear_has_layer();
-    ::CoreML::Specification::CosineLayerParams* temp = layer_.cosine_;
-    layer_.cosine_ = NULL;
+    ::CoreML::Specification::CosLayerParams* temp = layer_.cos_;
+    layer_.cos_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void NeuralNetworkLayer::set_allocated_cosine(::CoreML::Specification::CosineLayerParams* cosine) {
+inline void NeuralNetworkLayer::set_allocated_cos(::CoreML::Specification::CosLayerParams* cos) {
   clear_layer();
-  if (cosine) {
-    set_has_cosine();
-    layer_.cosine_ = cosine;
+  if (cos) {
+    set_has_cos();
+    layer_.cos_ = cos;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.cosine)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.cos)
 }
 
-// .CoreML.Specification.ErfActivationLayerParams erfActivation = 790;
-inline bool NeuralNetworkLayer::has_erfactivation() const {
-  return layer_case() == kErfActivation;
+// .CoreML.Specification.TanLayerParams tan = 720;
+inline bool NeuralNetworkLayer::has_tan() const {
+  return layer_case() == kTan;
 }
-inline void NeuralNetworkLayer::set_has_erfactivation() {
-  _oneof_case_[0] = kErfActivation;
+inline void NeuralNetworkLayer::set_has_tan() {
+  _oneof_case_[0] = kTan;
 }
-inline void NeuralNetworkLayer::clear_erfactivation() {
-  if (has_erfactivation()) {
-    delete layer_.erfactivation_;
+inline void NeuralNetworkLayer::clear_tan() {
+  if (has_tan()) {
+    delete layer_.tan_;
     clear_has_layer();
   }
 }
-inline  const ::CoreML::Specification::ErfActivationLayerParams& NeuralNetworkLayer::erfactivation() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.erfActivation)
-  return has_erfactivation()
-      ? *layer_.erfactivation_
-      : ::CoreML::Specification::ErfActivationLayerParams::default_instance();
+inline  const ::CoreML::Specification::TanLayerParams& NeuralNetworkLayer::tan() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.tan)
+  return has_tan()
+      ? *layer_.tan_
+      : ::CoreML::Specification::TanLayerParams::default_instance();
 }
-inline ::CoreML::Specification::ErfActivationLayerParams* NeuralNetworkLayer::mutable_erfactivation() {
-  if (!has_erfactivation()) {
+inline ::CoreML::Specification::TanLayerParams* NeuralNetworkLayer::mutable_tan() {
+  if (!has_tan()) {
     clear_layer();
-    set_has_erfactivation();
-    layer_.erfactivation_ = new ::CoreML::Specification::ErfActivationLayerParams;
+    set_has_tan();
+    layer_.tan_ = new ::CoreML::Specification::TanLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.erfActivation)
-  return layer_.erfactivation_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.tan)
+  return layer_.tan_;
 }
-inline ::CoreML::Specification::ErfActivationLayerParams* NeuralNetworkLayer::release_erfactivation() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.erfActivation)
-  if (has_erfactivation()) {
+inline ::CoreML::Specification::TanLayerParams* NeuralNetworkLayer::release_tan() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.tan)
+  if (has_tan()) {
     clear_has_layer();
-    ::CoreML::Specification::ErfActivationLayerParams* temp = layer_.erfactivation_;
-    layer_.erfactivation_ = NULL;
+    ::CoreML::Specification::TanLayerParams* temp = layer_.tan_;
+    layer_.tan_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void NeuralNetworkLayer::set_allocated_erfactivation(::CoreML::Specification::ErfActivationLayerParams* erfactivation) {
+inline void NeuralNetworkLayer::set_allocated_tan(::CoreML::Specification::TanLayerParams* tan) {
   clear_layer();
-  if (erfactivation) {
-    set_has_erfactivation();
-    layer_.erfactivation_ = erfactivation;
+  if (tan) {
+    set_has_tan();
+    layer_.tan_ = tan;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.erfActivation)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.tan)
 }
 
-// .CoreML.Specification.GeluActivationLayerParams geluActivation = 795;
-inline bool NeuralNetworkLayer::has_geluactivation() const {
-  return layer_case() == kGeluActivation;
+// .CoreML.Specification.AsinLayerParams asin = 730;
+inline bool NeuralNetworkLayer::has_asin() const {
+  return layer_case() == kAsin;
 }
-inline void NeuralNetworkLayer::set_has_geluactivation() {
-  _oneof_case_[0] = kGeluActivation;
+inline void NeuralNetworkLayer::set_has_asin() {
+  _oneof_case_[0] = kAsin;
 }
-inline void NeuralNetworkLayer::clear_geluactivation() {
-  if (has_geluactivation()) {
-    delete layer_.geluactivation_;
+inline void NeuralNetworkLayer::clear_asin() {
+  if (has_asin()) {
+    delete layer_.asin_;
     clear_has_layer();
   }
 }
-inline  const ::CoreML::Specification::GeluActivationLayerParams& NeuralNetworkLayer::geluactivation() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.geluActivation)
-  return has_geluactivation()
-      ? *layer_.geluactivation_
-      : ::CoreML::Specification::GeluActivationLayerParams::default_instance();
+inline  const ::CoreML::Specification::AsinLayerParams& NeuralNetworkLayer::asin() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.asin)
+  return has_asin()
+      ? *layer_.asin_
+      : ::CoreML::Specification::AsinLayerParams::default_instance();
 }
-inline ::CoreML::Specification::GeluActivationLayerParams* NeuralNetworkLayer::mutable_geluactivation() {
-  if (!has_geluactivation()) {
+inline ::CoreML::Specification::AsinLayerParams* NeuralNetworkLayer::mutable_asin() {
+  if (!has_asin()) {
     clear_layer();
-    set_has_geluactivation();
-    layer_.geluactivation_ = new ::CoreML::Specification::GeluActivationLayerParams;
+    set_has_asin();
+    layer_.asin_ = new ::CoreML::Specification::AsinLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.geluActivation)
-  return layer_.geluactivation_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.asin)
+  return layer_.asin_;
 }
-inline ::CoreML::Specification::GeluActivationLayerParams* NeuralNetworkLayer::release_geluactivation() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.geluActivation)
-  if (has_geluactivation()) {
+inline ::CoreML::Specification::AsinLayerParams* NeuralNetworkLayer::release_asin() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.asin)
+  if (has_asin()) {
     clear_has_layer();
-    ::CoreML::Specification::GeluActivationLayerParams* temp = layer_.geluactivation_;
-    layer_.geluactivation_ = NULL;
+    ::CoreML::Specification::AsinLayerParams* temp = layer_.asin_;
+    layer_.asin_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void NeuralNetworkLayer::set_allocated_geluactivation(::CoreML::Specification::GeluActivationLayerParams* geluactivation) {
+inline void NeuralNetworkLayer::set_allocated_asin(::CoreML::Specification::AsinLayerParams* asin) {
   clear_layer();
-  if (geluactivation) {
-    set_has_geluactivation();
-    layer_.geluactivation_ = geluactivation;
+  if (asin) {
+    set_has_asin();
+    layer_.asin_ = asin;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.geluActivation)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.asin)
+}
+
+// .CoreML.Specification.AcosLayerParams acos = 735;
+inline bool NeuralNetworkLayer::has_acos() const {
+  return layer_case() == kAcos;
+}
+inline void NeuralNetworkLayer::set_has_acos() {
+  _oneof_case_[0] = kAcos;
+}
+inline void NeuralNetworkLayer::clear_acos() {
+  if (has_acos()) {
+    delete layer_.acos_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::AcosLayerParams& NeuralNetworkLayer::acos() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.acos)
+  return has_acos()
+      ? *layer_.acos_
+      : ::CoreML::Specification::AcosLayerParams::default_instance();
+}
+inline ::CoreML::Specification::AcosLayerParams* NeuralNetworkLayer::mutable_acos() {
+  if (!has_acos()) {
+    clear_layer();
+    set_has_acos();
+    layer_.acos_ = new ::CoreML::Specification::AcosLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.acos)
+  return layer_.acos_;
+}
+inline ::CoreML::Specification::AcosLayerParams* NeuralNetworkLayer::release_acos() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.acos)
+  if (has_acos()) {
+    clear_has_layer();
+    ::CoreML::Specification::AcosLayerParams* temp = layer_.acos_;
+    layer_.acos_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_acos(::CoreML::Specification::AcosLayerParams* acos) {
+  clear_layer();
+  if (acos) {
+    set_has_acos();
+    layer_.acos_ = acos;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.acos)
+}
+
+// .CoreML.Specification.AtanLayerParams atan = 740;
+inline bool NeuralNetworkLayer::has_atan() const {
+  return layer_case() == kAtan;
+}
+inline void NeuralNetworkLayer::set_has_atan() {
+  _oneof_case_[0] = kAtan;
+}
+inline void NeuralNetworkLayer::clear_atan() {
+  if (has_atan()) {
+    delete layer_.atan_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::AtanLayerParams& NeuralNetworkLayer::atan() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.atan)
+  return has_atan()
+      ? *layer_.atan_
+      : ::CoreML::Specification::AtanLayerParams::default_instance();
+}
+inline ::CoreML::Specification::AtanLayerParams* NeuralNetworkLayer::mutable_atan() {
+  if (!has_atan()) {
+    clear_layer();
+    set_has_atan();
+    layer_.atan_ = new ::CoreML::Specification::AtanLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.atan)
+  return layer_.atan_;
+}
+inline ::CoreML::Specification::AtanLayerParams* NeuralNetworkLayer::release_atan() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.atan)
+  if (has_atan()) {
+    clear_has_layer();
+    ::CoreML::Specification::AtanLayerParams* temp = layer_.atan_;
+    layer_.atan_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_atan(::CoreML::Specification::AtanLayerParams* atan) {
+  clear_layer();
+  if (atan) {
+    set_has_atan();
+    layer_.atan_ = atan;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.atan)
+}
+
+// .CoreML.Specification.SinhLayerParams sinh = 750;
+inline bool NeuralNetworkLayer::has_sinh() const {
+  return layer_case() == kSinh;
+}
+inline void NeuralNetworkLayer::set_has_sinh() {
+  _oneof_case_[0] = kSinh;
+}
+inline void NeuralNetworkLayer::clear_sinh() {
+  if (has_sinh()) {
+    delete layer_.sinh_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::SinhLayerParams& NeuralNetworkLayer::sinh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.sinh)
+  return has_sinh()
+      ? *layer_.sinh_
+      : ::CoreML::Specification::SinhLayerParams::default_instance();
+}
+inline ::CoreML::Specification::SinhLayerParams* NeuralNetworkLayer::mutable_sinh() {
+  if (!has_sinh()) {
+    clear_layer();
+    set_has_sinh();
+    layer_.sinh_ = new ::CoreML::Specification::SinhLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.sinh)
+  return layer_.sinh_;
+}
+inline ::CoreML::Specification::SinhLayerParams* NeuralNetworkLayer::release_sinh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.sinh)
+  if (has_sinh()) {
+    clear_has_layer();
+    ::CoreML::Specification::SinhLayerParams* temp = layer_.sinh_;
+    layer_.sinh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_sinh(::CoreML::Specification::SinhLayerParams* sinh) {
+  clear_layer();
+  if (sinh) {
+    set_has_sinh();
+    layer_.sinh_ = sinh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.sinh)
+}
+
+// .CoreML.Specification.CoshLayerParams cosh = 755;
+inline bool NeuralNetworkLayer::has_cosh() const {
+  return layer_case() == kCosh;
+}
+inline void NeuralNetworkLayer::set_has_cosh() {
+  _oneof_case_[0] = kCosh;
+}
+inline void NeuralNetworkLayer::clear_cosh() {
+  if (has_cosh()) {
+    delete layer_.cosh_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::CoshLayerParams& NeuralNetworkLayer::cosh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.cosh)
+  return has_cosh()
+      ? *layer_.cosh_
+      : ::CoreML::Specification::CoshLayerParams::default_instance();
+}
+inline ::CoreML::Specification::CoshLayerParams* NeuralNetworkLayer::mutable_cosh() {
+  if (!has_cosh()) {
+    clear_layer();
+    set_has_cosh();
+    layer_.cosh_ = new ::CoreML::Specification::CoshLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.cosh)
+  return layer_.cosh_;
+}
+inline ::CoreML::Specification::CoshLayerParams* NeuralNetworkLayer::release_cosh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.cosh)
+  if (has_cosh()) {
+    clear_has_layer();
+    ::CoreML::Specification::CoshLayerParams* temp = layer_.cosh_;
+    layer_.cosh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_cosh(::CoreML::Specification::CoshLayerParams* cosh) {
+  clear_layer();
+  if (cosh) {
+    set_has_cosh();
+    layer_.cosh_ = cosh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.cosh)
+}
+
+// .CoreML.Specification.TanhLayerParams tanh = 760;
+inline bool NeuralNetworkLayer::has_tanh() const {
+  return layer_case() == kTanh;
+}
+inline void NeuralNetworkLayer::set_has_tanh() {
+  _oneof_case_[0] = kTanh;
+}
+inline void NeuralNetworkLayer::clear_tanh() {
+  if (has_tanh()) {
+    delete layer_.tanh_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::TanhLayerParams& NeuralNetworkLayer::tanh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.tanh)
+  return has_tanh()
+      ? *layer_.tanh_
+      : ::CoreML::Specification::TanhLayerParams::default_instance();
+}
+inline ::CoreML::Specification::TanhLayerParams* NeuralNetworkLayer::mutable_tanh() {
+  if (!has_tanh()) {
+    clear_layer();
+    set_has_tanh();
+    layer_.tanh_ = new ::CoreML::Specification::TanhLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.tanh)
+  return layer_.tanh_;
+}
+inline ::CoreML::Specification::TanhLayerParams* NeuralNetworkLayer::release_tanh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.tanh)
+  if (has_tanh()) {
+    clear_has_layer();
+    ::CoreML::Specification::TanhLayerParams* temp = layer_.tanh_;
+    layer_.tanh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_tanh(::CoreML::Specification::TanhLayerParams* tanh) {
+  clear_layer();
+  if (tanh) {
+    set_has_tanh();
+    layer_.tanh_ = tanh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.tanh)
+}
+
+// .CoreML.Specification.AsinhLayerParams asinh = 770;
+inline bool NeuralNetworkLayer::has_asinh() const {
+  return layer_case() == kAsinh;
+}
+inline void NeuralNetworkLayer::set_has_asinh() {
+  _oneof_case_[0] = kAsinh;
+}
+inline void NeuralNetworkLayer::clear_asinh() {
+  if (has_asinh()) {
+    delete layer_.asinh_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::AsinhLayerParams& NeuralNetworkLayer::asinh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.asinh)
+  return has_asinh()
+      ? *layer_.asinh_
+      : ::CoreML::Specification::AsinhLayerParams::default_instance();
+}
+inline ::CoreML::Specification::AsinhLayerParams* NeuralNetworkLayer::mutable_asinh() {
+  if (!has_asinh()) {
+    clear_layer();
+    set_has_asinh();
+    layer_.asinh_ = new ::CoreML::Specification::AsinhLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.asinh)
+  return layer_.asinh_;
+}
+inline ::CoreML::Specification::AsinhLayerParams* NeuralNetworkLayer::release_asinh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.asinh)
+  if (has_asinh()) {
+    clear_has_layer();
+    ::CoreML::Specification::AsinhLayerParams* temp = layer_.asinh_;
+    layer_.asinh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_asinh(::CoreML::Specification::AsinhLayerParams* asinh) {
+  clear_layer();
+  if (asinh) {
+    set_has_asinh();
+    layer_.asinh_ = asinh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.asinh)
+}
+
+// .CoreML.Specification.AcoshLayerParams acosh = 775;
+inline bool NeuralNetworkLayer::has_acosh() const {
+  return layer_case() == kAcosh;
+}
+inline void NeuralNetworkLayer::set_has_acosh() {
+  _oneof_case_[0] = kAcosh;
+}
+inline void NeuralNetworkLayer::clear_acosh() {
+  if (has_acosh()) {
+    delete layer_.acosh_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::AcoshLayerParams& NeuralNetworkLayer::acosh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.acosh)
+  return has_acosh()
+      ? *layer_.acosh_
+      : ::CoreML::Specification::AcoshLayerParams::default_instance();
+}
+inline ::CoreML::Specification::AcoshLayerParams* NeuralNetworkLayer::mutable_acosh() {
+  if (!has_acosh()) {
+    clear_layer();
+    set_has_acosh();
+    layer_.acosh_ = new ::CoreML::Specification::AcoshLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.acosh)
+  return layer_.acosh_;
+}
+inline ::CoreML::Specification::AcoshLayerParams* NeuralNetworkLayer::release_acosh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.acosh)
+  if (has_acosh()) {
+    clear_has_layer();
+    ::CoreML::Specification::AcoshLayerParams* temp = layer_.acosh_;
+    layer_.acosh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_acosh(::CoreML::Specification::AcoshLayerParams* acosh) {
+  clear_layer();
+  if (acosh) {
+    set_has_acosh();
+    layer_.acosh_ = acosh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.acosh)
+}
+
+// .CoreML.Specification.AtanhLayerParams atanh = 780;
+inline bool NeuralNetworkLayer::has_atanh() const {
+  return layer_case() == kAtanh;
+}
+inline void NeuralNetworkLayer::set_has_atanh() {
+  _oneof_case_[0] = kAtanh;
+}
+inline void NeuralNetworkLayer::clear_atanh() {
+  if (has_atanh()) {
+    delete layer_.atanh_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::AtanhLayerParams& NeuralNetworkLayer::atanh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.atanh)
+  return has_atanh()
+      ? *layer_.atanh_
+      : ::CoreML::Specification::AtanhLayerParams::default_instance();
+}
+inline ::CoreML::Specification::AtanhLayerParams* NeuralNetworkLayer::mutable_atanh() {
+  if (!has_atanh()) {
+    clear_layer();
+    set_has_atanh();
+    layer_.atanh_ = new ::CoreML::Specification::AtanhLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.atanh)
+  return layer_.atanh_;
+}
+inline ::CoreML::Specification::AtanhLayerParams* NeuralNetworkLayer::release_atanh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.atanh)
+  if (has_atanh()) {
+    clear_has_layer();
+    ::CoreML::Specification::AtanhLayerParams* temp = layer_.atanh_;
+    layer_.atanh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_atanh(::CoreML::Specification::AtanhLayerParams* atanh) {
+  clear_layer();
+  if (atanh) {
+    set_has_atanh();
+    layer_.atanh_ = atanh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.atanh)
+}
+
+// .CoreML.Specification.ErfLayerParams erf = 790;
+inline bool NeuralNetworkLayer::has_erf() const {
+  return layer_case() == kErf;
+}
+inline void NeuralNetworkLayer::set_has_erf() {
+  _oneof_case_[0] = kErf;
+}
+inline void NeuralNetworkLayer::clear_erf() {
+  if (has_erf()) {
+    delete layer_.erf_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::ErfLayerParams& NeuralNetworkLayer::erf() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.erf)
+  return has_erf()
+      ? *layer_.erf_
+      : ::CoreML::Specification::ErfLayerParams::default_instance();
+}
+inline ::CoreML::Specification::ErfLayerParams* NeuralNetworkLayer::mutable_erf() {
+  if (!has_erf()) {
+    clear_layer();
+    set_has_erf();
+    layer_.erf_ = new ::CoreML::Specification::ErfLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.erf)
+  return layer_.erf_;
+}
+inline ::CoreML::Specification::ErfLayerParams* NeuralNetworkLayer::release_erf() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.erf)
+  if (has_erf()) {
+    clear_has_layer();
+    ::CoreML::Specification::ErfLayerParams* temp = layer_.erf_;
+    layer_.erf_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_erf(::CoreML::Specification::ErfLayerParams* erf) {
+  clear_layer();
+  if (erf) {
+    set_has_erf();
+    layer_.erf_ = erf;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.erf)
+}
+
+// .CoreML.Specification.GeluLayerParams gelu = 795;
+inline bool NeuralNetworkLayer::has_gelu() const {
+  return layer_case() == kGelu;
+}
+inline void NeuralNetworkLayer::set_has_gelu() {
+  _oneof_case_[0] = kGelu;
+}
+inline void NeuralNetworkLayer::clear_gelu() {
+  if (has_gelu()) {
+    delete layer_.gelu_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::GeluLayerParams& NeuralNetworkLayer::gelu() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.gelu)
+  return has_gelu()
+      ? *layer_.gelu_
+      : ::CoreML::Specification::GeluLayerParams::default_instance();
+}
+inline ::CoreML::Specification::GeluLayerParams* NeuralNetworkLayer::mutable_gelu() {
+  if (!has_gelu()) {
+    clear_layer();
+    set_has_gelu();
+    layer_.gelu_ = new ::CoreML::Specification::GeluLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.gelu)
+  return layer_.gelu_;
+}
+inline ::CoreML::Specification::GeluLayerParams* NeuralNetworkLayer::release_gelu() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.gelu)
+  if (has_gelu()) {
+    clear_has_layer();
+    ::CoreML::Specification::GeluLayerParams* temp = layer_.gelu_;
+    layer_.gelu_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_gelu(::CoreML::Specification::GeluLayerParams* gelu) {
+  clear_layer();
+  if (gelu) {
+    set_has_gelu();
+    layer_.gelu_ = gelu;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.gelu)
 }
 
 // .CoreML.Specification.EqualLayerParams equal = 815;
@@ -19451,6 +22823,54 @@ inline void NeuralNetworkLayer::set_allocated_lessthan(::CoreML::Specification::
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.lessThan)
 }
 
+// .CoreML.Specification.LessEqualLayerParams lessEqual = 827;
+inline bool NeuralNetworkLayer::has_lessequal() const {
+  return layer_case() == kLessEqual;
+}
+inline void NeuralNetworkLayer::set_has_lessequal() {
+  _oneof_case_[0] = kLessEqual;
+}
+inline void NeuralNetworkLayer::clear_lessequal() {
+  if (has_lessequal()) {
+    delete layer_.lessequal_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::LessEqualLayerParams& NeuralNetworkLayer::lessequal() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.lessEqual)
+  return has_lessequal()
+      ? *layer_.lessequal_
+      : ::CoreML::Specification::LessEqualLayerParams::default_instance();
+}
+inline ::CoreML::Specification::LessEqualLayerParams* NeuralNetworkLayer::mutable_lessequal() {
+  if (!has_lessequal()) {
+    clear_layer();
+    set_has_lessequal();
+    layer_.lessequal_ = new ::CoreML::Specification::LessEqualLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.lessEqual)
+  return layer_.lessequal_;
+}
+inline ::CoreML::Specification::LessEqualLayerParams* NeuralNetworkLayer::release_lessequal() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.lessEqual)
+  if (has_lessequal()) {
+    clear_has_layer();
+    ::CoreML::Specification::LessEqualLayerParams* temp = layer_.lessequal_;
+    layer_.lessequal_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_lessequal(::CoreML::Specification::LessEqualLayerParams* lessequal) {
+  clear_layer();
+  if (lessequal) {
+    set_has_lessequal();
+    layer_.lessequal_ = lessequal;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.lessEqual)
+}
+
 // .CoreML.Specification.GreaterThanLayerParams greaterThan = 830;
 inline bool NeuralNetworkLayer::has_greaterthan() const {
   return layer_case() == kGreaterThan;
@@ -19497,6 +22917,54 @@ inline void NeuralNetworkLayer::set_allocated_greaterthan(::CoreML::Specificatio
     layer_.greaterthan_ = greaterthan;
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.greaterThan)
+}
+
+// .CoreML.Specification.GreaterEqualLayerParams greaterEqual = 832;
+inline bool NeuralNetworkLayer::has_greaterequal() const {
+  return layer_case() == kGreaterEqual;
+}
+inline void NeuralNetworkLayer::set_has_greaterequal() {
+  _oneof_case_[0] = kGreaterEqual;
+}
+inline void NeuralNetworkLayer::clear_greaterequal() {
+  if (has_greaterequal()) {
+    delete layer_.greaterequal_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::GreaterEqualLayerParams& NeuralNetworkLayer::greaterequal() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.greaterEqual)
+  return has_greaterequal()
+      ? *layer_.greaterequal_
+      : ::CoreML::Specification::GreaterEqualLayerParams::default_instance();
+}
+inline ::CoreML::Specification::GreaterEqualLayerParams* NeuralNetworkLayer::mutable_greaterequal() {
+  if (!has_greaterequal()) {
+    clear_layer();
+    set_has_greaterequal();
+    layer_.greaterequal_ = new ::CoreML::Specification::GreaterEqualLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.greaterEqual)
+  return layer_.greaterequal_;
+}
+inline ::CoreML::Specification::GreaterEqualLayerParams* NeuralNetworkLayer::release_greaterequal() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.greaterEqual)
+  if (has_greaterequal()) {
+    clear_has_layer();
+    ::CoreML::Specification::GreaterEqualLayerParams* temp = layer_.greaterequal_;
+    layer_.greaterequal_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_greaterequal(::CoreML::Specification::GreaterEqualLayerParams* greaterequal) {
+  clear_layer();
+  if (greaterequal) {
+    set_has_greaterequal();
+    layer_.greaterequal_ = greaterequal;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.greaterEqual)
 }
 
 // .CoreML.Specification.LogicalOrLayerParams logicalOr = 840;
@@ -19691,6 +23159,102 @@ inline void NeuralNetworkLayer::set_allocated_logicaland(::CoreML::Specification
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.logicalAnd)
 }
 
+// .CoreML.Specification.MinBroadcastableLayerParams minBroadcastable = 870;
+inline bool NeuralNetworkLayer::has_minbroadcastable() const {
+  return layer_case() == kMinBroadcastable;
+}
+inline void NeuralNetworkLayer::set_has_minbroadcastable() {
+  _oneof_case_[0] = kMinBroadcastable;
+}
+inline void NeuralNetworkLayer::clear_minbroadcastable() {
+  if (has_minbroadcastable()) {
+    delete layer_.minbroadcastable_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::MinBroadcastableLayerParams& NeuralNetworkLayer::minbroadcastable() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.minBroadcastable)
+  return has_minbroadcastable()
+      ? *layer_.minbroadcastable_
+      : ::CoreML::Specification::MinBroadcastableLayerParams::default_instance();
+}
+inline ::CoreML::Specification::MinBroadcastableLayerParams* NeuralNetworkLayer::mutable_minbroadcastable() {
+  if (!has_minbroadcastable()) {
+    clear_layer();
+    set_has_minbroadcastable();
+    layer_.minbroadcastable_ = new ::CoreML::Specification::MinBroadcastableLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.minBroadcastable)
+  return layer_.minbroadcastable_;
+}
+inline ::CoreML::Specification::MinBroadcastableLayerParams* NeuralNetworkLayer::release_minbroadcastable() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.minBroadcastable)
+  if (has_minbroadcastable()) {
+    clear_has_layer();
+    ::CoreML::Specification::MinBroadcastableLayerParams* temp = layer_.minbroadcastable_;
+    layer_.minbroadcastable_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_minbroadcastable(::CoreML::Specification::MinBroadcastableLayerParams* minbroadcastable) {
+  clear_layer();
+  if (minbroadcastable) {
+    set_has_minbroadcastable();
+    layer_.minbroadcastable_ = minbroadcastable;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.minBroadcastable)
+}
+
+// .CoreML.Specification.MaxBroadcastableLayerParams maxBroadcastable = 875;
+inline bool NeuralNetworkLayer::has_maxbroadcastable() const {
+  return layer_case() == kMaxBroadcastable;
+}
+inline void NeuralNetworkLayer::set_has_maxbroadcastable() {
+  _oneof_case_[0] = kMaxBroadcastable;
+}
+inline void NeuralNetworkLayer::clear_maxbroadcastable() {
+  if (has_maxbroadcastable()) {
+    delete layer_.maxbroadcastable_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::MaxBroadcastableLayerParams& NeuralNetworkLayer::maxbroadcastable() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.maxBroadcastable)
+  return has_maxbroadcastable()
+      ? *layer_.maxbroadcastable_
+      : ::CoreML::Specification::MaxBroadcastableLayerParams::default_instance();
+}
+inline ::CoreML::Specification::MaxBroadcastableLayerParams* NeuralNetworkLayer::mutable_maxbroadcastable() {
+  if (!has_maxbroadcastable()) {
+    clear_layer();
+    set_has_maxbroadcastable();
+    layer_.maxbroadcastable_ = new ::CoreML::Specification::MaxBroadcastableLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.maxBroadcastable)
+  return layer_.maxbroadcastable_;
+}
+inline ::CoreML::Specification::MaxBroadcastableLayerParams* NeuralNetworkLayer::release_maxbroadcastable() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.maxBroadcastable)
+  if (has_maxbroadcastable()) {
+    clear_has_layer();
+    ::CoreML::Specification::MaxBroadcastableLayerParams* temp = layer_.maxbroadcastable_;
+    layer_.maxbroadcastable_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_maxbroadcastable(::CoreML::Specification::MaxBroadcastableLayerParams* maxbroadcastable) {
+  clear_layer();
+  if (maxbroadcastable) {
+    set_has_maxbroadcastable();
+    layer_.maxbroadcastable_ = maxbroadcastable;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.maxBroadcastable)
+}
+
 // .CoreML.Specification.AddBroadcastableLayerParams addBroadcastable = 880;
 inline bool NeuralNetworkLayer::has_addbroadcastable() const {
   return layer_case() == kAddBroadcastable;
@@ -19833,6 +23397,54 @@ inline void NeuralNetworkLayer::set_allocated_dividebroadcastable(::CoreML::Spec
     layer_.dividebroadcastable_ = dividebroadcastable;
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.divideBroadcastable)
+}
+
+// .CoreML.Specification.FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
+inline bool NeuralNetworkLayer::has_floordivbroadcastable() const {
+  return layer_case() == kFloorDivBroadcastable;
+}
+inline void NeuralNetworkLayer::set_has_floordivbroadcastable() {
+  _oneof_case_[0] = kFloorDivBroadcastable;
+}
+inline void NeuralNetworkLayer::clear_floordivbroadcastable() {
+  if (has_floordivbroadcastable()) {
+    delete layer_.floordivbroadcastable_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::FloorDivBroadcastableLayerParams& NeuralNetworkLayer::floordivbroadcastable() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable)
+  return has_floordivbroadcastable()
+      ? *layer_.floordivbroadcastable_
+      : ::CoreML::Specification::FloorDivBroadcastableLayerParams::default_instance();
+}
+inline ::CoreML::Specification::FloorDivBroadcastableLayerParams* NeuralNetworkLayer::mutable_floordivbroadcastable() {
+  if (!has_floordivbroadcastable()) {
+    clear_layer();
+    set_has_floordivbroadcastable();
+    layer_.floordivbroadcastable_ = new ::CoreML::Specification::FloorDivBroadcastableLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable)
+  return layer_.floordivbroadcastable_;
+}
+inline ::CoreML::Specification::FloorDivBroadcastableLayerParams* NeuralNetworkLayer::release_floordivbroadcastable() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable)
+  if (has_floordivbroadcastable()) {
+    clear_has_layer();
+    ::CoreML::Specification::FloorDivBroadcastableLayerParams* temp = layer_.floordivbroadcastable_;
+    layer_.floordivbroadcastable_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_floordivbroadcastable(::CoreML::Specification::FloorDivBroadcastableLayerParams* floordivbroadcastable) {
+  clear_layer();
+  if (floordivbroadcastable) {
+    set_has_floordivbroadcastable();
+    layer_.floordivbroadcastable_ = floordivbroadcastable;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable)
 }
 
 // .CoreML.Specification.MultiplyBroadcastableLayerParams multiplyBroadcastable = 900;
@@ -20171,6 +23783,54 @@ inline void NeuralNetworkLayer::set_allocated_softmaxnd(::CoreML::Specification:
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.softmaxND)
 }
 
+// .CoreML.Specification.ReverseLayerParams reverse = 960;
+inline bool NeuralNetworkLayer::has_reverse() const {
+  return layer_case() == kReverse;
+}
+inline void NeuralNetworkLayer::set_has_reverse() {
+  _oneof_case_[0] = kReverse;
+}
+inline void NeuralNetworkLayer::clear_reverse() {
+  if (has_reverse()) {
+    delete layer_.reverse_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::ReverseLayerParams& NeuralNetworkLayer::reverse() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.reverse)
+  return has_reverse()
+      ? *layer_.reverse_
+      : ::CoreML::Specification::ReverseLayerParams::default_instance();
+}
+inline ::CoreML::Specification::ReverseLayerParams* NeuralNetworkLayer::mutable_reverse() {
+  if (!has_reverse()) {
+    clear_layer();
+    set_has_reverse();
+    layer_.reverse_ = new ::CoreML::Specification::ReverseLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.reverse)
+  return layer_.reverse_;
+}
+inline ::CoreML::Specification::ReverseLayerParams* NeuralNetworkLayer::release_reverse() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.reverse)
+  if (has_reverse()) {
+    clear_has_layer();
+    ::CoreML::Specification::ReverseLayerParams* temp = layer_.reverse_;
+    layer_.reverse_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_reverse(::CoreML::Specification::ReverseLayerParams* reverse) {
+  clear_layer();
+  if (reverse) {
+    set_has_reverse();
+    layer_.reverse_ = reverse;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.reverse)
+}
+
 // .CoreML.Specification.SplitNDLayerParams splitND = 975;
 inline bool NeuralNetworkLayer::has_splitnd() const {
   return layer_case() == kSplitND;
@@ -20267,52 +23927,52 @@ inline void NeuralNetworkLayer::set_allocated_concatnd(::CoreML::Specification::
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.concatND)
 }
 
-// .CoreML.Specification.TransposeNDLayerParams transposeND = 985;
-inline bool NeuralNetworkLayer::has_transposend() const {
-  return layer_case() == kTransposeND;
+// .CoreML.Specification.TransposeLayerParams transpose = 985;
+inline bool NeuralNetworkLayer::has_transpose() const {
+  return layer_case() == kTranspose;
 }
-inline void NeuralNetworkLayer::set_has_transposend() {
-  _oneof_case_[0] = kTransposeND;
+inline void NeuralNetworkLayer::set_has_transpose() {
+  _oneof_case_[0] = kTranspose;
 }
-inline void NeuralNetworkLayer::clear_transposend() {
-  if (has_transposend()) {
-    delete layer_.transposend_;
+inline void NeuralNetworkLayer::clear_transpose() {
+  if (has_transpose()) {
+    delete layer_.transpose_;
     clear_has_layer();
   }
 }
-inline  const ::CoreML::Specification::TransposeNDLayerParams& NeuralNetworkLayer::transposend() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.transposeND)
-  return has_transposend()
-      ? *layer_.transposend_
-      : ::CoreML::Specification::TransposeNDLayerParams::default_instance();
+inline  const ::CoreML::Specification::TransposeLayerParams& NeuralNetworkLayer::transpose() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.transpose)
+  return has_transpose()
+      ? *layer_.transpose_
+      : ::CoreML::Specification::TransposeLayerParams::default_instance();
 }
-inline ::CoreML::Specification::TransposeNDLayerParams* NeuralNetworkLayer::mutable_transposend() {
-  if (!has_transposend()) {
+inline ::CoreML::Specification::TransposeLayerParams* NeuralNetworkLayer::mutable_transpose() {
+  if (!has_transpose()) {
     clear_layer();
-    set_has_transposend();
-    layer_.transposend_ = new ::CoreML::Specification::TransposeNDLayerParams;
+    set_has_transpose();
+    layer_.transpose_ = new ::CoreML::Specification::TransposeLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.transposeND)
-  return layer_.transposend_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.transpose)
+  return layer_.transpose_;
 }
-inline ::CoreML::Specification::TransposeNDLayerParams* NeuralNetworkLayer::release_transposend() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.transposeND)
-  if (has_transposend()) {
+inline ::CoreML::Specification::TransposeLayerParams* NeuralNetworkLayer::release_transpose() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.transpose)
+  if (has_transpose()) {
     clear_has_layer();
-    ::CoreML::Specification::TransposeNDLayerParams* temp = layer_.transposend_;
-    layer_.transposend_ = NULL;
+    ::CoreML::Specification::TransposeLayerParams* temp = layer_.transpose_;
+    layer_.transpose_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void NeuralNetworkLayer::set_allocated_transposend(::CoreML::Specification::TransposeNDLayerParams* transposend) {
+inline void NeuralNetworkLayer::set_allocated_transpose(::CoreML::Specification::TransposeLayerParams* transpose) {
   clear_layer();
-  if (transposend) {
-    set_has_transposend();
-    layer_.transposend_ = transposend;
+  if (transpose) {
+    set_has_transpose();
+    layer_.transpose_ = transpose;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.transposeND)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.transpose)
 }
 
 // .CoreML.Specification.SliceNDLayerParams sliceND = 995;
@@ -20459,7 +24119,7 @@ inline void NeuralNetworkLayer::set_allocated_embeddingnd(::CoreML::Specificatio
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.embeddingND)
 }
 
-// .CoreML.Specification.BatchedMatMulParams batchedMatmul = 1045;
+// .CoreML.Specification.BatchedMatMulLayerParams batchedMatmul = 1045;
 inline bool NeuralNetworkLayer::has_batchedmatmul() const {
   return layer_case() == kBatchedMatmul;
 }
@@ -20472,33 +24132,33 @@ inline void NeuralNetworkLayer::clear_batchedmatmul() {
     clear_has_layer();
   }
 }
-inline  const ::CoreML::Specification::BatchedMatMulParams& NeuralNetworkLayer::batchedmatmul() const {
+inline  const ::CoreML::Specification::BatchedMatMulLayerParams& NeuralNetworkLayer::batchedmatmul() const {
   // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.batchedMatmul)
   return has_batchedmatmul()
       ? *layer_.batchedmatmul_
-      : ::CoreML::Specification::BatchedMatMulParams::default_instance();
+      : ::CoreML::Specification::BatchedMatMulLayerParams::default_instance();
 }
-inline ::CoreML::Specification::BatchedMatMulParams* NeuralNetworkLayer::mutable_batchedmatmul() {
+inline ::CoreML::Specification::BatchedMatMulLayerParams* NeuralNetworkLayer::mutable_batchedmatmul() {
   if (!has_batchedmatmul()) {
     clear_layer();
     set_has_batchedmatmul();
-    layer_.batchedmatmul_ = new ::CoreML::Specification::BatchedMatMulParams;
+    layer_.batchedmatmul_ = new ::CoreML::Specification::BatchedMatMulLayerParams;
   }
   // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.batchedMatmul)
   return layer_.batchedmatmul_;
 }
-inline ::CoreML::Specification::BatchedMatMulParams* NeuralNetworkLayer::release_batchedmatmul() {
+inline ::CoreML::Specification::BatchedMatMulLayerParams* NeuralNetworkLayer::release_batchedmatmul() {
   // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.batchedMatmul)
   if (has_batchedmatmul()) {
     clear_has_layer();
-    ::CoreML::Specification::BatchedMatMulParams* temp = layer_.batchedmatmul_;
+    ::CoreML::Specification::BatchedMatMulLayerParams* temp = layer_.batchedmatmul_;
     layer_.batchedmatmul_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void NeuralNetworkLayer::set_allocated_batchedmatmul(::CoreML::Specification::BatchedMatMulParams* batchedmatmul) {
+inline void NeuralNetworkLayer::set_allocated_batchedmatmul(::CoreML::Specification::BatchedMatMulLayerParams* batchedmatmul) {
   clear_layer();
   if (batchedmatmul) {
     set_has_batchedmatmul();
@@ -20987,6 +24647,198 @@ inline void NeuralNetworkLayer::set_allocated_expanddims(::CoreML::Specification
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.expandDims)
 }
 
+// .CoreML.Specification.FlattenTo2DLayerParams flattenTo2D = 1130;
+inline bool NeuralNetworkLayer::has_flattento2d() const {
+  return layer_case() == kFlattenTo2D;
+}
+inline void NeuralNetworkLayer::set_has_flattento2d() {
+  _oneof_case_[0] = kFlattenTo2D;
+}
+inline void NeuralNetworkLayer::clear_flattento2d() {
+  if (has_flattento2d()) {
+    delete layer_.flattento2d_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::FlattenTo2DLayerParams& NeuralNetworkLayer::flattento2d() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.flattenTo2D)
+  return has_flattento2d()
+      ? *layer_.flattento2d_
+      : ::CoreML::Specification::FlattenTo2DLayerParams::default_instance();
+}
+inline ::CoreML::Specification::FlattenTo2DLayerParams* NeuralNetworkLayer::mutable_flattento2d() {
+  if (!has_flattento2d()) {
+    clear_layer();
+    set_has_flattento2d();
+    layer_.flattento2d_ = new ::CoreML::Specification::FlattenTo2DLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.flattenTo2D)
+  return layer_.flattento2d_;
+}
+inline ::CoreML::Specification::FlattenTo2DLayerParams* NeuralNetworkLayer::release_flattento2d() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.flattenTo2D)
+  if (has_flattento2d()) {
+    clear_has_layer();
+    ::CoreML::Specification::FlattenTo2DLayerParams* temp = layer_.flattento2d_;
+    layer_.flattento2d_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_flattento2d(::CoreML::Specification::FlattenTo2DLayerParams* flattento2d) {
+  clear_layer();
+  if (flattento2d) {
+    set_has_flattento2d();
+    layer_.flattento2d_ = flattento2d;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.flattenTo2D)
+}
+
+// .CoreML.Specification.ReshapeLikeLayerParams reshapeLike = 1135;
+inline bool NeuralNetworkLayer::has_reshapelike() const {
+  return layer_case() == kReshapeLike;
+}
+inline void NeuralNetworkLayer::set_has_reshapelike() {
+  _oneof_case_[0] = kReshapeLike;
+}
+inline void NeuralNetworkLayer::clear_reshapelike() {
+  if (has_reshapelike()) {
+    delete layer_.reshapelike_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::ReshapeLikeLayerParams& NeuralNetworkLayer::reshapelike() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.reshapeLike)
+  return has_reshapelike()
+      ? *layer_.reshapelike_
+      : ::CoreML::Specification::ReshapeLikeLayerParams::default_instance();
+}
+inline ::CoreML::Specification::ReshapeLikeLayerParams* NeuralNetworkLayer::mutable_reshapelike() {
+  if (!has_reshapelike()) {
+    clear_layer();
+    set_has_reshapelike();
+    layer_.reshapelike_ = new ::CoreML::Specification::ReshapeLikeLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.reshapeLike)
+  return layer_.reshapelike_;
+}
+inline ::CoreML::Specification::ReshapeLikeLayerParams* NeuralNetworkLayer::release_reshapelike() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.reshapeLike)
+  if (has_reshapelike()) {
+    clear_has_layer();
+    ::CoreML::Specification::ReshapeLikeLayerParams* temp = layer_.reshapelike_;
+    layer_.reshapelike_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_reshapelike(::CoreML::Specification::ReshapeLikeLayerParams* reshapelike) {
+  clear_layer();
+  if (reshapelike) {
+    set_has_reshapelike();
+    layer_.reshapelike_ = reshapelike;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.reshapeLike)
+}
+
+// .CoreML.Specification.ReshapeStaticLayerParams reshapeStatic = 1140;
+inline bool NeuralNetworkLayer::has_reshapestatic() const {
+  return layer_case() == kReshapeStatic;
+}
+inline void NeuralNetworkLayer::set_has_reshapestatic() {
+  _oneof_case_[0] = kReshapeStatic;
+}
+inline void NeuralNetworkLayer::clear_reshapestatic() {
+  if (has_reshapestatic()) {
+    delete layer_.reshapestatic_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::ReshapeStaticLayerParams& NeuralNetworkLayer::reshapestatic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.reshapeStatic)
+  return has_reshapestatic()
+      ? *layer_.reshapestatic_
+      : ::CoreML::Specification::ReshapeStaticLayerParams::default_instance();
+}
+inline ::CoreML::Specification::ReshapeStaticLayerParams* NeuralNetworkLayer::mutable_reshapestatic() {
+  if (!has_reshapestatic()) {
+    clear_layer();
+    set_has_reshapestatic();
+    layer_.reshapestatic_ = new ::CoreML::Specification::ReshapeStaticLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.reshapeStatic)
+  return layer_.reshapestatic_;
+}
+inline ::CoreML::Specification::ReshapeStaticLayerParams* NeuralNetworkLayer::release_reshapestatic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.reshapeStatic)
+  if (has_reshapestatic()) {
+    clear_has_layer();
+    ::CoreML::Specification::ReshapeStaticLayerParams* temp = layer_.reshapestatic_;
+    layer_.reshapestatic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_reshapestatic(::CoreML::Specification::ReshapeStaticLayerParams* reshapestatic) {
+  clear_layer();
+  if (reshapestatic) {
+    set_has_reshapestatic();
+    layer_.reshapestatic_ = reshapestatic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.reshapeStatic)
+}
+
+// .CoreML.Specification.ReshapeDynamicLayerParams reshapeDynamic = 1145;
+inline bool NeuralNetworkLayer::has_reshapedynamic() const {
+  return layer_case() == kReshapeDynamic;
+}
+inline void NeuralNetworkLayer::set_has_reshapedynamic() {
+  _oneof_case_[0] = kReshapeDynamic;
+}
+inline void NeuralNetworkLayer::clear_reshapedynamic() {
+  if (has_reshapedynamic()) {
+    delete layer_.reshapedynamic_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::ReshapeDynamicLayerParams& NeuralNetworkLayer::reshapedynamic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.reshapeDynamic)
+  return has_reshapedynamic()
+      ? *layer_.reshapedynamic_
+      : ::CoreML::Specification::ReshapeDynamicLayerParams::default_instance();
+}
+inline ::CoreML::Specification::ReshapeDynamicLayerParams* NeuralNetworkLayer::mutable_reshapedynamic() {
+  if (!has_reshapedynamic()) {
+    clear_layer();
+    set_has_reshapedynamic();
+    layer_.reshapedynamic_ = new ::CoreML::Specification::ReshapeDynamicLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.reshapeDynamic)
+  return layer_.reshapedynamic_;
+}
+inline ::CoreML::Specification::ReshapeDynamicLayerParams* NeuralNetworkLayer::release_reshapedynamic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.reshapeDynamic)
+  if (has_reshapedynamic()) {
+    clear_has_layer();
+    ::CoreML::Specification::ReshapeDynamicLayerParams* temp = layer_.reshapedynamic_;
+    layer_.reshapedynamic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_reshapedynamic(::CoreML::Specification::ReshapeDynamicLayerParams* reshapedynamic) {
+  clear_layer();
+  if (reshapedynamic) {
+    set_has_reshapedynamic();
+    layer_.reshapedynamic_ = reshapedynamic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.reshapeDynamic)
+}
+
 // .CoreML.Specification.RankPreservingReshapeLayerParams rankPreservingReshape = 1150;
 inline bool NeuralNetworkLayer::has_rankpreservingreshape() const {
   return layer_case() == kRankPreservingReshape;
@@ -21033,6 +24885,486 @@ inline void NeuralNetworkLayer::set_allocated_rankpreservingreshape(::CoreML::Sp
     layer_.rankpreservingreshape_ = rankpreservingreshape;
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.rankPreservingReshape)
+}
+
+// .CoreML.Specification.RandomNormalLikeLayerParams randomNormalLike = 1170;
+inline bool NeuralNetworkLayer::has_randomnormallike() const {
+  return layer_case() == kRandomNormalLike;
+}
+inline void NeuralNetworkLayer::set_has_randomnormallike() {
+  _oneof_case_[0] = kRandomNormalLike;
+}
+inline void NeuralNetworkLayer::clear_randomnormallike() {
+  if (has_randomnormallike()) {
+    delete layer_.randomnormallike_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomNormalLikeLayerParams& NeuralNetworkLayer::randomnormallike() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomNormalLike)
+  return has_randomnormallike()
+      ? *layer_.randomnormallike_
+      : ::CoreML::Specification::RandomNormalLikeLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomNormalLikeLayerParams* NeuralNetworkLayer::mutable_randomnormallike() {
+  if (!has_randomnormallike()) {
+    clear_layer();
+    set_has_randomnormallike();
+    layer_.randomnormallike_ = new ::CoreML::Specification::RandomNormalLikeLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomNormalLike)
+  return layer_.randomnormallike_;
+}
+inline ::CoreML::Specification::RandomNormalLikeLayerParams* NeuralNetworkLayer::release_randomnormallike() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomNormalLike)
+  if (has_randomnormallike()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomNormalLikeLayerParams* temp = layer_.randomnormallike_;
+    layer_.randomnormallike_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randomnormallike(::CoreML::Specification::RandomNormalLikeLayerParams* randomnormallike) {
+  clear_layer();
+  if (randomnormallike) {
+    set_has_randomnormallike();
+    layer_.randomnormallike_ = randomnormallike;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomNormalLike)
+}
+
+// .CoreML.Specification.RandomNormalStaticLayerParams randomNormalStatic = 1175;
+inline bool NeuralNetworkLayer::has_randomnormalstatic() const {
+  return layer_case() == kRandomNormalStatic;
+}
+inline void NeuralNetworkLayer::set_has_randomnormalstatic() {
+  _oneof_case_[0] = kRandomNormalStatic;
+}
+inline void NeuralNetworkLayer::clear_randomnormalstatic() {
+  if (has_randomnormalstatic()) {
+    delete layer_.randomnormalstatic_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomNormalStaticLayerParams& NeuralNetworkLayer::randomnormalstatic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomNormalStatic)
+  return has_randomnormalstatic()
+      ? *layer_.randomnormalstatic_
+      : ::CoreML::Specification::RandomNormalStaticLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomNormalStaticLayerParams* NeuralNetworkLayer::mutable_randomnormalstatic() {
+  if (!has_randomnormalstatic()) {
+    clear_layer();
+    set_has_randomnormalstatic();
+    layer_.randomnormalstatic_ = new ::CoreML::Specification::RandomNormalStaticLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomNormalStatic)
+  return layer_.randomnormalstatic_;
+}
+inline ::CoreML::Specification::RandomNormalStaticLayerParams* NeuralNetworkLayer::release_randomnormalstatic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomNormalStatic)
+  if (has_randomnormalstatic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomNormalStaticLayerParams* temp = layer_.randomnormalstatic_;
+    layer_.randomnormalstatic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randomnormalstatic(::CoreML::Specification::RandomNormalStaticLayerParams* randomnormalstatic) {
+  clear_layer();
+  if (randomnormalstatic) {
+    set_has_randomnormalstatic();
+    layer_.randomnormalstatic_ = randomnormalstatic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomNormalStatic)
+}
+
+// .CoreML.Specification.RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
+inline bool NeuralNetworkLayer::has_randomnormaldynamic() const {
+  return layer_case() == kRandomNormalDynamic;
+}
+inline void NeuralNetworkLayer::set_has_randomnormaldynamic() {
+  _oneof_case_[0] = kRandomNormalDynamic;
+}
+inline void NeuralNetworkLayer::clear_randomnormaldynamic() {
+  if (has_randomnormaldynamic()) {
+    delete layer_.randomnormaldynamic_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomNormalDynamicLayerParams& NeuralNetworkLayer::randomnormaldynamic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic)
+  return has_randomnormaldynamic()
+      ? *layer_.randomnormaldynamic_
+      : ::CoreML::Specification::RandomNormalDynamicLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomNormalDynamicLayerParams* NeuralNetworkLayer::mutable_randomnormaldynamic() {
+  if (!has_randomnormaldynamic()) {
+    clear_layer();
+    set_has_randomnormaldynamic();
+    layer_.randomnormaldynamic_ = new ::CoreML::Specification::RandomNormalDynamicLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic)
+  return layer_.randomnormaldynamic_;
+}
+inline ::CoreML::Specification::RandomNormalDynamicLayerParams* NeuralNetworkLayer::release_randomnormaldynamic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic)
+  if (has_randomnormaldynamic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomNormalDynamicLayerParams* temp = layer_.randomnormaldynamic_;
+    layer_.randomnormaldynamic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randomnormaldynamic(::CoreML::Specification::RandomNormalDynamicLayerParams* randomnormaldynamic) {
+  clear_layer();
+  if (randomnormaldynamic) {
+    set_has_randomnormaldynamic();
+    layer_.randomnormaldynamic_ = randomnormaldynamic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic)
+}
+
+// .CoreML.Specification.RandomUniformLikeLayerParams randomUniformLike = 1190;
+inline bool NeuralNetworkLayer::has_randomuniformlike() const {
+  return layer_case() == kRandomUniformLike;
+}
+inline void NeuralNetworkLayer::set_has_randomuniformlike() {
+  _oneof_case_[0] = kRandomUniformLike;
+}
+inline void NeuralNetworkLayer::clear_randomuniformlike() {
+  if (has_randomuniformlike()) {
+    delete layer_.randomuniformlike_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomUniformLikeLayerParams& NeuralNetworkLayer::randomuniformlike() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomUniformLike)
+  return has_randomuniformlike()
+      ? *layer_.randomuniformlike_
+      : ::CoreML::Specification::RandomUniformLikeLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomUniformLikeLayerParams* NeuralNetworkLayer::mutable_randomuniformlike() {
+  if (!has_randomuniformlike()) {
+    clear_layer();
+    set_has_randomuniformlike();
+    layer_.randomuniformlike_ = new ::CoreML::Specification::RandomUniformLikeLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomUniformLike)
+  return layer_.randomuniformlike_;
+}
+inline ::CoreML::Specification::RandomUniformLikeLayerParams* NeuralNetworkLayer::release_randomuniformlike() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomUniformLike)
+  if (has_randomuniformlike()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomUniformLikeLayerParams* temp = layer_.randomuniformlike_;
+    layer_.randomuniformlike_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randomuniformlike(::CoreML::Specification::RandomUniformLikeLayerParams* randomuniformlike) {
+  clear_layer();
+  if (randomuniformlike) {
+    set_has_randomuniformlike();
+    layer_.randomuniformlike_ = randomuniformlike;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomUniformLike)
+}
+
+// .CoreML.Specification.RandomUniformStaticLayerParams randomUniformStatic = 1195;
+inline bool NeuralNetworkLayer::has_randomuniformstatic() const {
+  return layer_case() == kRandomUniformStatic;
+}
+inline void NeuralNetworkLayer::set_has_randomuniformstatic() {
+  _oneof_case_[0] = kRandomUniformStatic;
+}
+inline void NeuralNetworkLayer::clear_randomuniformstatic() {
+  if (has_randomuniformstatic()) {
+    delete layer_.randomuniformstatic_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomUniformStaticLayerParams& NeuralNetworkLayer::randomuniformstatic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomUniformStatic)
+  return has_randomuniformstatic()
+      ? *layer_.randomuniformstatic_
+      : ::CoreML::Specification::RandomUniformStaticLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomUniformStaticLayerParams* NeuralNetworkLayer::mutable_randomuniformstatic() {
+  if (!has_randomuniformstatic()) {
+    clear_layer();
+    set_has_randomuniformstatic();
+    layer_.randomuniformstatic_ = new ::CoreML::Specification::RandomUniformStaticLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomUniformStatic)
+  return layer_.randomuniformstatic_;
+}
+inline ::CoreML::Specification::RandomUniformStaticLayerParams* NeuralNetworkLayer::release_randomuniformstatic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomUniformStatic)
+  if (has_randomuniformstatic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomUniformStaticLayerParams* temp = layer_.randomuniformstatic_;
+    layer_.randomuniformstatic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randomuniformstatic(::CoreML::Specification::RandomUniformStaticLayerParams* randomuniformstatic) {
+  clear_layer();
+  if (randomuniformstatic) {
+    set_has_randomuniformstatic();
+    layer_.randomuniformstatic_ = randomuniformstatic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomUniformStatic)
+}
+
+// .CoreML.Specification.RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
+inline bool NeuralNetworkLayer::has_randomuniformdynamic() const {
+  return layer_case() == kRandomUniformDynamic;
+}
+inline void NeuralNetworkLayer::set_has_randomuniformdynamic() {
+  _oneof_case_[0] = kRandomUniformDynamic;
+}
+inline void NeuralNetworkLayer::clear_randomuniformdynamic() {
+  if (has_randomuniformdynamic()) {
+    delete layer_.randomuniformdynamic_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomUniformDynamicLayerParams& NeuralNetworkLayer::randomuniformdynamic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic)
+  return has_randomuniformdynamic()
+      ? *layer_.randomuniformdynamic_
+      : ::CoreML::Specification::RandomUniformDynamicLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomUniformDynamicLayerParams* NeuralNetworkLayer::mutable_randomuniformdynamic() {
+  if (!has_randomuniformdynamic()) {
+    clear_layer();
+    set_has_randomuniformdynamic();
+    layer_.randomuniformdynamic_ = new ::CoreML::Specification::RandomUniformDynamicLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic)
+  return layer_.randomuniformdynamic_;
+}
+inline ::CoreML::Specification::RandomUniformDynamicLayerParams* NeuralNetworkLayer::release_randomuniformdynamic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic)
+  if (has_randomuniformdynamic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomUniformDynamicLayerParams* temp = layer_.randomuniformdynamic_;
+    layer_.randomuniformdynamic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randomuniformdynamic(::CoreML::Specification::RandomUniformDynamicLayerParams* randomuniformdynamic) {
+  clear_layer();
+  if (randomuniformdynamic) {
+    set_has_randomuniformdynamic();
+    layer_.randomuniformdynamic_ = randomuniformdynamic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic)
+}
+
+// .CoreML.Specification.RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
+inline bool NeuralNetworkLayer::has_randombernoullilike() const {
+  return layer_case() == kRandomBernoulliLike;
+}
+inline void NeuralNetworkLayer::set_has_randombernoullilike() {
+  _oneof_case_[0] = kRandomBernoulliLike;
+}
+inline void NeuralNetworkLayer::clear_randombernoullilike() {
+  if (has_randombernoullilike()) {
+    delete layer_.randombernoullilike_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomBernoulliLikeLayerParams& NeuralNetworkLayer::randombernoullilike() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike)
+  return has_randombernoullilike()
+      ? *layer_.randombernoullilike_
+      : ::CoreML::Specification::RandomBernoulliLikeLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomBernoulliLikeLayerParams* NeuralNetworkLayer::mutable_randombernoullilike() {
+  if (!has_randombernoullilike()) {
+    clear_layer();
+    set_has_randombernoullilike();
+    layer_.randombernoullilike_ = new ::CoreML::Specification::RandomBernoulliLikeLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike)
+  return layer_.randombernoullilike_;
+}
+inline ::CoreML::Specification::RandomBernoulliLikeLayerParams* NeuralNetworkLayer::release_randombernoullilike() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike)
+  if (has_randombernoullilike()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomBernoulliLikeLayerParams* temp = layer_.randombernoullilike_;
+    layer_.randombernoullilike_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randombernoullilike(::CoreML::Specification::RandomBernoulliLikeLayerParams* randombernoullilike) {
+  clear_layer();
+  if (randombernoullilike) {
+    set_has_randombernoullilike();
+    layer_.randombernoullilike_ = randombernoullilike;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike)
+}
+
+// .CoreML.Specification.RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
+inline bool NeuralNetworkLayer::has_randombernoullistatic() const {
+  return layer_case() == kRandomBernoulliStatic;
+}
+inline void NeuralNetworkLayer::set_has_randombernoullistatic() {
+  _oneof_case_[0] = kRandomBernoulliStatic;
+}
+inline void NeuralNetworkLayer::clear_randombernoullistatic() {
+  if (has_randombernoullistatic()) {
+    delete layer_.randombernoullistatic_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomBernoulliStaticLayerParams& NeuralNetworkLayer::randombernoullistatic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic)
+  return has_randombernoullistatic()
+      ? *layer_.randombernoullistatic_
+      : ::CoreML::Specification::RandomBernoulliStaticLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomBernoulliStaticLayerParams* NeuralNetworkLayer::mutable_randombernoullistatic() {
+  if (!has_randombernoullistatic()) {
+    clear_layer();
+    set_has_randombernoullistatic();
+    layer_.randombernoullistatic_ = new ::CoreML::Specification::RandomBernoulliStaticLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic)
+  return layer_.randombernoullistatic_;
+}
+inline ::CoreML::Specification::RandomBernoulliStaticLayerParams* NeuralNetworkLayer::release_randombernoullistatic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic)
+  if (has_randombernoullistatic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomBernoulliStaticLayerParams* temp = layer_.randombernoullistatic_;
+    layer_.randombernoullistatic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randombernoullistatic(::CoreML::Specification::RandomBernoulliStaticLayerParams* randombernoullistatic) {
+  clear_layer();
+  if (randombernoullistatic) {
+    set_has_randombernoullistatic();
+    layer_.randombernoullistatic_ = randombernoullistatic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic)
+}
+
+// .CoreML.Specification.RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
+inline bool NeuralNetworkLayer::has_randombernoullidynamic() const {
+  return layer_case() == kRandomBernoulliDynamic;
+}
+inline void NeuralNetworkLayer::set_has_randombernoullidynamic() {
+  _oneof_case_[0] = kRandomBernoulliDynamic;
+}
+inline void NeuralNetworkLayer::clear_randombernoullidynamic() {
+  if (has_randombernoullidynamic()) {
+    delete layer_.randombernoullidynamic_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::RandomBernoulliDynamicLayerParams& NeuralNetworkLayer::randombernoullidynamic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic)
+  return has_randombernoullidynamic()
+      ? *layer_.randombernoullidynamic_
+      : ::CoreML::Specification::RandomBernoulliDynamicLayerParams::default_instance();
+}
+inline ::CoreML::Specification::RandomBernoulliDynamicLayerParams* NeuralNetworkLayer::mutable_randombernoullidynamic() {
+  if (!has_randombernoullidynamic()) {
+    clear_layer();
+    set_has_randombernoullidynamic();
+    layer_.randombernoullidynamic_ = new ::CoreML::Specification::RandomBernoulliDynamicLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic)
+  return layer_.randombernoullidynamic_;
+}
+inline ::CoreML::Specification::RandomBernoulliDynamicLayerParams* NeuralNetworkLayer::release_randombernoullidynamic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic)
+  if (has_randombernoullidynamic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomBernoulliDynamicLayerParams* temp = layer_.randombernoullidynamic_;
+    layer_.randombernoullidynamic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_randombernoullidynamic(::CoreML::Specification::RandomBernoulliDynamicLayerParams* randombernoullidynamic) {
+  clear_layer();
+  if (randombernoullidynamic) {
+    set_has_randombernoullidynamic();
+    layer_.randombernoullidynamic_ = randombernoullidynamic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic)
+}
+
+// .CoreML.Specification.MatrixBandPartLayerParams matrixBandPart = 1315;
+inline bool NeuralNetworkLayer::has_matrixbandpart() const {
+  return layer_case() == kMatrixBandPart;
+}
+inline void NeuralNetworkLayer::set_has_matrixbandpart() {
+  _oneof_case_[0] = kMatrixBandPart;
+}
+inline void NeuralNetworkLayer::clear_matrixbandpart() {
+  if (has_matrixbandpart()) {
+    delete layer_.matrixbandpart_;
+    clear_has_layer();
+  }
+}
+inline  const ::CoreML::Specification::MatrixBandPartLayerParams& NeuralNetworkLayer::matrixbandpart() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.matrixBandPart)
+  return has_matrixbandpart()
+      ? *layer_.matrixbandpart_
+      : ::CoreML::Specification::MatrixBandPartLayerParams::default_instance();
+}
+inline ::CoreML::Specification::MatrixBandPartLayerParams* NeuralNetworkLayer::mutable_matrixbandpart() {
+  if (!has_matrixbandpart()) {
+    clear_layer();
+    set_has_matrixbandpart();
+    layer_.matrixbandpart_ = new ::CoreML::Specification::MatrixBandPartLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.matrixBandPart)
+  return layer_.matrixbandpart_;
+}
+inline ::CoreML::Specification::MatrixBandPartLayerParams* NeuralNetworkLayer::release_matrixbandpart() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.matrixBandPart)
+  if (has_matrixbandpart()) {
+    clear_has_layer();
+    ::CoreML::Specification::MatrixBandPartLayerParams* temp = layer_.matrixbandpart_;
+    layer_.matrixbandpart_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void NeuralNetworkLayer::set_allocated_matrixbandpart(::CoreML::Specification::MatrixBandPartLayerParams* matrixbandpart) {
+  clear_layer();
+  if (matrixbandpart) {
+    set_has_matrixbandpart();
+    layer_.matrixbandpart_ = matrixbandpart;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.matrixBandPart)
 }
 
 // .CoreML.Specification.LowerTriangularLayerParams lowerTriangular = 1320;
@@ -21131,52 +25463,52 @@ inline void NeuralNetworkLayer::set_allocated_uppertriangular(::CoreML::Specific
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.upperTriangular)
 }
 
-// .CoreML.Specification.WhereLayerParams where = 1330;
-inline bool NeuralNetworkLayer::has_where() const {
-  return layer_case() == kWhere;
+// .CoreML.Specification.WhereBroadcastableLayerParams whereBroadcastable = 1330;
+inline bool NeuralNetworkLayer::has_wherebroadcastable() const {
+  return layer_case() == kWhereBroadcastable;
 }
-inline void NeuralNetworkLayer::set_has_where() {
-  _oneof_case_[0] = kWhere;
+inline void NeuralNetworkLayer::set_has_wherebroadcastable() {
+  _oneof_case_[0] = kWhereBroadcastable;
 }
-inline void NeuralNetworkLayer::clear_where() {
-  if (has_where()) {
-    delete layer_.where_;
+inline void NeuralNetworkLayer::clear_wherebroadcastable() {
+  if (has_wherebroadcastable()) {
+    delete layer_.wherebroadcastable_;
     clear_has_layer();
   }
 }
-inline  const ::CoreML::Specification::WhereLayerParams& NeuralNetworkLayer::where() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.where)
-  return has_where()
-      ? *layer_.where_
-      : ::CoreML::Specification::WhereLayerParams::default_instance();
+inline  const ::CoreML::Specification::WhereBroadcastableLayerParams& NeuralNetworkLayer::wherebroadcastable() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.whereBroadcastable)
+  return has_wherebroadcastable()
+      ? *layer_.wherebroadcastable_
+      : ::CoreML::Specification::WhereBroadcastableLayerParams::default_instance();
 }
-inline ::CoreML::Specification::WhereLayerParams* NeuralNetworkLayer::mutable_where() {
-  if (!has_where()) {
+inline ::CoreML::Specification::WhereBroadcastableLayerParams* NeuralNetworkLayer::mutable_wherebroadcastable() {
+  if (!has_wherebroadcastable()) {
     clear_layer();
-    set_has_where();
-    layer_.where_ = new ::CoreML::Specification::WhereLayerParams;
+    set_has_wherebroadcastable();
+    layer_.wherebroadcastable_ = new ::CoreML::Specification::WhereBroadcastableLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.where)
-  return layer_.where_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.whereBroadcastable)
+  return layer_.wherebroadcastable_;
 }
-inline ::CoreML::Specification::WhereLayerParams* NeuralNetworkLayer::release_where() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.where)
-  if (has_where()) {
+inline ::CoreML::Specification::WhereBroadcastableLayerParams* NeuralNetworkLayer::release_wherebroadcastable() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.whereBroadcastable)
+  if (has_wherebroadcastable()) {
     clear_has_layer();
-    ::CoreML::Specification::WhereLayerParams* temp = layer_.where_;
-    layer_.where_ = NULL;
+    ::CoreML::Specification::WhereBroadcastableLayerParams* temp = layer_.wherebroadcastable_;
+    layer_.wherebroadcastable_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void NeuralNetworkLayer::set_allocated_where(::CoreML::Specification::WhereLayerParams* where) {
+inline void NeuralNetworkLayer::set_allocated_wherebroadcastable(::CoreML::Specification::WhereBroadcastableLayerParams* wherebroadcastable) {
   clear_layer();
-  if (where) {
-    set_has_where();
-    layer_.where_ = where;
+  if (wherebroadcastable) {
+    set_has_wherebroadcastable();
+    layer_.wherebroadcastable_ = wherebroadcastable;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.where)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.whereBroadcastable)
 }
 
 inline bool NeuralNetworkLayer::has_layer() const {
@@ -21435,20 +25767,6 @@ inline void LoopLayerParams::set_allocated_bodynetwork(::CoreML::Specification::
 
 // GreaterThanLayerParams
 
-// bool useNonStrictInequality = 1;
-inline void GreaterThanLayerParams::clear_usenonstrictinequality() {
-  usenonstrictinequality_ = false;
-}
-inline bool GreaterThanLayerParams::usenonstrictinequality() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.GreaterThanLayerParams.useNonStrictInequality)
-  return usenonstrictinequality_;
-}
-inline void GreaterThanLayerParams::set_usenonstrictinequality(bool value) {
-  
-  usenonstrictinequality_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.GreaterThanLayerParams.useNonStrictInequality)
-}
-
 // float alpha = 2;
 inline void GreaterThanLayerParams::clear_alpha() {
   alpha_ = 0;
@@ -21465,21 +25783,25 @@ inline void GreaterThanLayerParams::set_alpha(float value) {
 
 // -------------------------------------------------------------------
 
-// LessThanLayerParams
+// GreaterEqualLayerParams
 
-// bool useNonStrictInequality = 1;
-inline void LessThanLayerParams::clear_usenonstrictinequality() {
-  usenonstrictinequality_ = false;
+// float alpha = 2;
+inline void GreaterEqualLayerParams::clear_alpha() {
+  alpha_ = 0;
 }
-inline bool LessThanLayerParams::usenonstrictinequality() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.LessThanLayerParams.useNonStrictInequality)
-  return usenonstrictinequality_;
+inline float GreaterEqualLayerParams::alpha() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.GreaterEqualLayerParams.alpha)
+  return alpha_;
 }
-inline void LessThanLayerParams::set_usenonstrictinequality(bool value) {
+inline void GreaterEqualLayerParams::set_alpha(float value) {
   
-  usenonstrictinequality_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.LessThanLayerParams.useNonStrictInequality)
+  alpha_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.GreaterEqualLayerParams.alpha)
 }
+
+// -------------------------------------------------------------------
+
+// LessThanLayerParams
 
 // float alpha = 2;
 inline void LessThanLayerParams::clear_alpha() {
@@ -21493,6 +25815,24 @@ inline void LessThanLayerParams::set_alpha(float value) {
   
   alpha_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.LessThanLayerParams.alpha)
+}
+
+// -------------------------------------------------------------------
+
+// LessEqualLayerParams
+
+// float alpha = 2;
+inline void LessEqualLayerParams::clear_alpha() {
+  alpha_ = 0;
+}
+inline float LessEqualLayerParams::alpha() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.LessEqualLayerParams.alpha)
+  return alpha_;
+}
+inline void LessEqualLayerParams::set_alpha(float value) {
+  
+  alpha_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.LessEqualLayerParams.alpha)
 }
 
 // -------------------------------------------------------------------
@@ -26863,141 +31203,141 @@ inline void CustomLayerParams::set_allocated_description(::std::string* descript
 
 // -------------------------------------------------------------------
 
-// TransposeNDLayerParams
+// TransposeLayerParams
 
 // repeated uint64 axes = 1;
-inline int TransposeNDLayerParams::axes_size() const {
+inline int TransposeLayerParams::axes_size() const {
   return axes_.size();
 }
-inline void TransposeNDLayerParams::clear_axes() {
+inline void TransposeLayerParams::clear_axes() {
   axes_.Clear();
 }
-inline ::google::protobuf::uint64 TransposeNDLayerParams::axes(int index) const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.TransposeNDLayerParams.axes)
+inline ::google::protobuf::uint64 TransposeLayerParams::axes(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.TransposeLayerParams.axes)
   return axes_.Get(index);
 }
-inline void TransposeNDLayerParams::set_axes(int index, ::google::protobuf::uint64 value) {
+inline void TransposeLayerParams::set_axes(int index, ::google::protobuf::uint64 value) {
   axes_.Set(index, value);
-  // @@protoc_insertion_point(field_set:CoreML.Specification.TransposeNDLayerParams.axes)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.TransposeLayerParams.axes)
 }
-inline void TransposeNDLayerParams::add_axes(::google::protobuf::uint64 value) {
+inline void TransposeLayerParams::add_axes(::google::protobuf::uint64 value) {
   axes_.Add(value);
-  // @@protoc_insertion_point(field_add:CoreML.Specification.TransposeNDLayerParams.axes)
+  // @@protoc_insertion_point(field_add:CoreML.Specification.TransposeLayerParams.axes)
 }
 inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
-TransposeNDLayerParams::axes() const {
-  // @@protoc_insertion_point(field_list:CoreML.Specification.TransposeNDLayerParams.axes)
+TransposeLayerParams::axes() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.TransposeLayerParams.axes)
   return axes_;
 }
 inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
-TransposeNDLayerParams::mutable_axes() {
-  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.TransposeNDLayerParams.axes)
+TransposeLayerParams::mutable_axes() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.TransposeLayerParams.axes)
   return &axes_;
 }
 
 // -------------------------------------------------------------------
 
-// BatchedMatMulParams
+// BatchedMatMulLayerParams
 
 // bool transposeA = 1;
-inline void BatchedMatMulParams::clear_transposea() {
+inline void BatchedMatMulLayerParams::clear_transposea() {
   transposea_ = false;
 }
-inline bool BatchedMatMulParams::transposea() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.transposeA)
+inline bool BatchedMatMulLayerParams::transposea() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.transposeA)
   return transposea_;
 }
-inline void BatchedMatMulParams::set_transposea(bool value) {
+inline void BatchedMatMulLayerParams::set_transposea(bool value) {
   
   transposea_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.transposeA)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.transposeA)
 }
 
 // bool transposeB = 2;
-inline void BatchedMatMulParams::clear_transposeb() {
+inline void BatchedMatMulLayerParams::clear_transposeb() {
   transposeb_ = false;
 }
-inline bool BatchedMatMulParams::transposeb() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.transposeB)
+inline bool BatchedMatMulLayerParams::transposeb() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.transposeB)
   return transposeb_;
 }
-inline void BatchedMatMulParams::set_transposeb(bool value) {
+inline void BatchedMatMulLayerParams::set_transposeb(bool value) {
   
   transposeb_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.transposeB)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.transposeB)
 }
 
 // uint64 weightMatrixFirstDimension = 5;
-inline void BatchedMatMulParams::clear_weightmatrixfirstdimension() {
+inline void BatchedMatMulLayerParams::clear_weightmatrixfirstdimension() {
   weightmatrixfirstdimension_ = GOOGLE_ULONGLONG(0);
 }
-inline ::google::protobuf::uint64 BatchedMatMulParams::weightmatrixfirstdimension() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.weightMatrixFirstDimension)
+inline ::google::protobuf::uint64 BatchedMatMulLayerParams::weightmatrixfirstdimension() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.weightMatrixFirstDimension)
   return weightmatrixfirstdimension_;
 }
-inline void BatchedMatMulParams::set_weightmatrixfirstdimension(::google::protobuf::uint64 value) {
+inline void BatchedMatMulLayerParams::set_weightmatrixfirstdimension(::google::protobuf::uint64 value) {
   
   weightmatrixfirstdimension_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.weightMatrixFirstDimension)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.weightMatrixFirstDimension)
 }
 
 // uint64 weightMatrixSecondDimension = 6;
-inline void BatchedMatMulParams::clear_weightmatrixseconddimension() {
+inline void BatchedMatMulLayerParams::clear_weightmatrixseconddimension() {
   weightmatrixseconddimension_ = GOOGLE_ULONGLONG(0);
 }
-inline ::google::protobuf::uint64 BatchedMatMulParams::weightmatrixseconddimension() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.weightMatrixSecondDimension)
+inline ::google::protobuf::uint64 BatchedMatMulLayerParams::weightmatrixseconddimension() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.weightMatrixSecondDimension)
   return weightmatrixseconddimension_;
 }
-inline void BatchedMatMulParams::set_weightmatrixseconddimension(::google::protobuf::uint64 value) {
+inline void BatchedMatMulLayerParams::set_weightmatrixseconddimension(::google::protobuf::uint64 value) {
   
   weightmatrixseconddimension_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.weightMatrixSecondDimension)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.weightMatrixSecondDimension)
 }
 
 // bool hasBias = 7;
-inline void BatchedMatMulParams::clear_hasbias() {
+inline void BatchedMatMulLayerParams::clear_hasbias() {
   hasbias_ = false;
 }
-inline bool BatchedMatMulParams::hasbias() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.hasBias)
+inline bool BatchedMatMulLayerParams::hasbias() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.hasBias)
   return hasbias_;
 }
-inline void BatchedMatMulParams::set_hasbias(bool value) {
+inline void BatchedMatMulLayerParams::set_hasbias(bool value) {
   
   hasbias_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.hasBias)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.hasBias)
 }
 
 // .CoreML.Specification.WeightParams weights = 8;
-inline bool BatchedMatMulParams::has_weights() const {
+inline bool BatchedMatMulLayerParams::has_weights() const {
   return this != internal_default_instance() && weights_ != NULL;
 }
-inline void BatchedMatMulParams::clear_weights() {
+inline void BatchedMatMulLayerParams::clear_weights() {
   if (GetArenaNoVirtual() == NULL && weights_ != NULL) delete weights_;
   weights_ = NULL;
 }
-inline const ::CoreML::Specification::WeightParams& BatchedMatMulParams::weights() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.weights)
+inline const ::CoreML::Specification::WeightParams& BatchedMatMulLayerParams::weights() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.weights)
   return weights_ != NULL ? *weights_
                          : *::CoreML::Specification::WeightParams::internal_default_instance();
 }
-inline ::CoreML::Specification::WeightParams* BatchedMatMulParams::mutable_weights() {
+inline ::CoreML::Specification::WeightParams* BatchedMatMulLayerParams::mutable_weights() {
   
   if (weights_ == NULL) {
     weights_ = new ::CoreML::Specification::WeightParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.BatchedMatMulParams.weights)
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.BatchedMatMulLayerParams.weights)
   return weights_;
 }
-inline ::CoreML::Specification::WeightParams* BatchedMatMulParams::release_weights() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.BatchedMatMulParams.weights)
+inline ::CoreML::Specification::WeightParams* BatchedMatMulLayerParams::release_weights() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.BatchedMatMulLayerParams.weights)
   
   ::CoreML::Specification::WeightParams* temp = weights_;
   weights_ = NULL;
   return temp;
 }
-inline void BatchedMatMulParams::set_allocated_weights(::CoreML::Specification::WeightParams* weights) {
+inline void BatchedMatMulLayerParams::set_allocated_weights(::CoreML::Specification::WeightParams* weights) {
   delete weights_;
   weights_ = weights;
   if (weights) {
@@ -27005,38 +31345,38 @@ inline void BatchedMatMulParams::set_allocated_weights(::CoreML::Specification::
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.BatchedMatMulParams.weights)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.BatchedMatMulLayerParams.weights)
 }
 
 // .CoreML.Specification.WeightParams bias = 9;
-inline bool BatchedMatMulParams::has_bias() const {
+inline bool BatchedMatMulLayerParams::has_bias() const {
   return this != internal_default_instance() && bias_ != NULL;
 }
-inline void BatchedMatMulParams::clear_bias() {
+inline void BatchedMatMulLayerParams::clear_bias() {
   if (GetArenaNoVirtual() == NULL && bias_ != NULL) delete bias_;
   bias_ = NULL;
 }
-inline const ::CoreML::Specification::WeightParams& BatchedMatMulParams::bias() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.bias)
+inline const ::CoreML::Specification::WeightParams& BatchedMatMulLayerParams::bias() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.bias)
   return bias_ != NULL ? *bias_
                          : *::CoreML::Specification::WeightParams::internal_default_instance();
 }
-inline ::CoreML::Specification::WeightParams* BatchedMatMulParams::mutable_bias() {
+inline ::CoreML::Specification::WeightParams* BatchedMatMulLayerParams::mutable_bias() {
   
   if (bias_ == NULL) {
     bias_ = new ::CoreML::Specification::WeightParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.BatchedMatMulParams.bias)
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.BatchedMatMulLayerParams.bias)
   return bias_;
 }
-inline ::CoreML::Specification::WeightParams* BatchedMatMulParams::release_bias() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.BatchedMatMulParams.bias)
+inline ::CoreML::Specification::WeightParams* BatchedMatMulLayerParams::release_bias() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.BatchedMatMulLayerParams.bias)
   
   ::CoreML::Specification::WeightParams* temp = bias_;
   bias_ = NULL;
   return temp;
 }
-inline void BatchedMatMulParams::set_allocated_bias(::CoreML::Specification::WeightParams* bias) {
+inline void BatchedMatMulLayerParams::set_allocated_bias(::CoreML::Specification::WeightParams* bias) {
   delete bias_;
   bias_ = bias;
   if (bias) {
@@ -27044,7 +31384,7 @@ inline void BatchedMatMulParams::set_allocated_bias(::CoreML::Specification::Wei
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.BatchedMatMulParams.bias)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.BatchedMatMulLayerParams.bias)
 }
 
 // -------------------------------------------------------------------
@@ -27081,6 +31421,40 @@ inline void SoftmaxNDLayerParams::set_axis(::google::protobuf::int64 value) {
   
   axis_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.SoftmaxNDLayerParams.axis)
+}
+
+// -------------------------------------------------------------------
+
+// ReverseLayerParams
+
+// repeated bool reverseDim = 1;
+inline int ReverseLayerParams::reversedim_size() const {
+  return reversedim_.size();
+}
+inline void ReverseLayerParams::clear_reversedim() {
+  reversedim_.Clear();
+}
+inline bool ReverseLayerParams::reversedim(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.ReverseLayerParams.reverseDim)
+  return reversedim_.Get(index);
+}
+inline void ReverseLayerParams::set_reversedim(int index, bool value) {
+  reversedim_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.ReverseLayerParams.reverseDim)
+}
+inline void ReverseLayerParams::add_reversedim(bool value) {
+  reversedim_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.ReverseLayerParams.reverseDim)
+}
+inline const ::google::protobuf::RepeatedField< bool >&
+ReverseLayerParams::reversedim() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.ReverseLayerParams.reverseDim)
+  return reversedim_;
+}
+inline ::google::protobuf::RepeatedField< bool >*
+ReverseLayerParams::mutable_reversedim() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.ReverseLayerParams.reverseDim)
+  return &reversedim_;
 }
 
 // -------------------------------------------------------------------
@@ -27242,15 +31616,55 @@ inline void FillDynamicLayerParams::set_value(float value) {
 
 // -------------------------------------------------------------------
 
-// WhereLayerParams
+// WhereBroadcastableLayerParams
 
 // -------------------------------------------------------------------
 
-// SineLayerParams
+// SinLayerParams
 
 // -------------------------------------------------------------------
 
-// CosineLayerParams
+// CosLayerParams
+
+// -------------------------------------------------------------------
+
+// TanLayerParams
+
+// -------------------------------------------------------------------
+
+// AsinLayerParams
+
+// -------------------------------------------------------------------
+
+// AcosLayerParams
+
+// -------------------------------------------------------------------
+
+// AtanLayerParams
+
+// -------------------------------------------------------------------
+
+// SinhLayerParams
+
+// -------------------------------------------------------------------
+
+// CoshLayerParams
+
+// -------------------------------------------------------------------
+
+// TanhLayerParams
+
+// -------------------------------------------------------------------
+
+// AsinhLayerParams
+
+// -------------------------------------------------------------------
+
+// AcoshLayerParams
+
+// -------------------------------------------------------------------
+
+// AtanhLayerParams
 
 // -------------------------------------------------------------------
 
@@ -27262,11 +31676,71 @@ inline void FillDynamicLayerParams::set_value(float value) {
 
 // -------------------------------------------------------------------
 
+// MatrixBandPartLayerParams
+
+// int64 numLower = 1;
+inline void MatrixBandPartLayerParams::clear_numlower() {
+  numlower_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 MatrixBandPartLayerParams::numlower() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.MatrixBandPartLayerParams.numLower)
+  return numlower_;
+}
+inline void MatrixBandPartLayerParams::set_numlower(::google::protobuf::int64 value) {
+  
+  numlower_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.MatrixBandPartLayerParams.numLower)
+}
+
+// int64 numUpper = 2;
+inline void MatrixBandPartLayerParams::clear_numupper() {
+  numupper_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 MatrixBandPartLayerParams::numupper() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.MatrixBandPartLayerParams.numUpper)
+  return numupper_;
+}
+inline void MatrixBandPartLayerParams::set_numupper(::google::protobuf::int64 value) {
+  
+  numupper_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.MatrixBandPartLayerParams.numUpper)
+}
+
+// -------------------------------------------------------------------
+
 // UpperTriangularLayerParams
+
+// int64 k = 1;
+inline void UpperTriangularLayerParams::clear_k() {
+  k_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 UpperTriangularLayerParams::k() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.UpperTriangularLayerParams.k)
+  return k_;
+}
+inline void UpperTriangularLayerParams::set_k(::google::protobuf::int64 value) {
+  
+  k_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.UpperTriangularLayerParams.k)
+}
 
 // -------------------------------------------------------------------
 
 // LowerTriangularLayerParams
+
+// int64 k = 1;
+inline void LowerTriangularLayerParams::clear_k() {
+  k_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 LowerTriangularLayerParams::k() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.LowerTriangularLayerParams.k)
+  return k_;
+}
+inline void LowerTriangularLayerParams::set_k(::google::protobuf::int64 value) {
+  
+  k_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.LowerTriangularLayerParams.k)
+}
 
 // -------------------------------------------------------------------
 
@@ -27313,6 +31787,18 @@ BroadcastToStaticLayerParams::mutable_targetshape() {
 // -------------------------------------------------------------------
 
 // AddBroadcastableLayerParams
+
+// -------------------------------------------------------------------
+
+// MaxBroadcastableLayerParams
+
+// -------------------------------------------------------------------
+
+// MinBroadcastableLayerParams
+
+// -------------------------------------------------------------------
+
+// FloorDivBroadcastableLayerParams
 
 // -------------------------------------------------------------------
 
@@ -27402,6 +31888,468 @@ RankPreservingReshapeLayerParams::mutable_targetshape() {
 
 // -------------------------------------------------------------------
 
+// RandomNormalLikeLayerParams
+
+// int64 seed = 1;
+inline void RandomNormalLikeLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomNormalLikeLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalLikeLayerParams.seed)
+  return seed_;
+}
+inline void RandomNormalLikeLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalLikeLayerParams.seed)
+}
+
+// float mean = 2;
+inline void RandomNormalLikeLayerParams::clear_mean() {
+  mean_ = 0;
+}
+inline float RandomNormalLikeLayerParams::mean() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalLikeLayerParams.mean)
+  return mean_;
+}
+inline void RandomNormalLikeLayerParams::set_mean(float value) {
+  
+  mean_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalLikeLayerParams.mean)
+}
+
+// float stdDev = 3;
+inline void RandomNormalLikeLayerParams::clear_stddev() {
+  stddev_ = 0;
+}
+inline float RandomNormalLikeLayerParams::stddev() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalLikeLayerParams.stdDev)
+  return stddev_;
+}
+inline void RandomNormalLikeLayerParams::set_stddev(float value) {
+  
+  stddev_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalLikeLayerParams.stdDev)
+}
+
+// -------------------------------------------------------------------
+
+// RandomNormalStaticLayerParams
+
+// int64 seed = 1;
+inline void RandomNormalStaticLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomNormalStaticLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalStaticLayerParams.seed)
+  return seed_;
+}
+inline void RandomNormalStaticLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalStaticLayerParams.seed)
+}
+
+// float mean = 2;
+inline void RandomNormalStaticLayerParams::clear_mean() {
+  mean_ = 0;
+}
+inline float RandomNormalStaticLayerParams::mean() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalStaticLayerParams.mean)
+  return mean_;
+}
+inline void RandomNormalStaticLayerParams::set_mean(float value) {
+  
+  mean_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalStaticLayerParams.mean)
+}
+
+// float stdDev = 3;
+inline void RandomNormalStaticLayerParams::clear_stddev() {
+  stddev_ = 0;
+}
+inline float RandomNormalStaticLayerParams::stddev() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalStaticLayerParams.stdDev)
+  return stddev_;
+}
+inline void RandomNormalStaticLayerParams::set_stddev(float value) {
+  
+  stddev_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalStaticLayerParams.stdDev)
+}
+
+// repeated uint64 outputShape = 4;
+inline int RandomNormalStaticLayerParams::outputshape_size() const {
+  return outputshape_.size();
+}
+inline void RandomNormalStaticLayerParams::clear_outputshape() {
+  outputshape_.Clear();
+}
+inline ::google::protobuf::uint64 RandomNormalStaticLayerParams::outputshape(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+  return outputshape_.Get(index);
+}
+inline void RandomNormalStaticLayerParams::set_outputshape(int index, ::google::protobuf::uint64 value) {
+  outputshape_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+}
+inline void RandomNormalStaticLayerParams::add_outputshape(::google::protobuf::uint64 value) {
+  outputshape_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+RandomNormalStaticLayerParams::outputshape() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+  return outputshape_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+RandomNormalStaticLayerParams::mutable_outputshape() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+  return &outputshape_;
+}
+
+// -------------------------------------------------------------------
+
+// RandomNormalDynamicLayerParams
+
+// int64 seed = 1;
+inline void RandomNormalDynamicLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomNormalDynamicLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalDynamicLayerParams.seed)
+  return seed_;
+}
+inline void RandomNormalDynamicLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalDynamicLayerParams.seed)
+}
+
+// float mean = 2;
+inline void RandomNormalDynamicLayerParams::clear_mean() {
+  mean_ = 0;
+}
+inline float RandomNormalDynamicLayerParams::mean() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalDynamicLayerParams.mean)
+  return mean_;
+}
+inline void RandomNormalDynamicLayerParams::set_mean(float value) {
+  
+  mean_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalDynamicLayerParams.mean)
+}
+
+// float stdDev = 3;
+inline void RandomNormalDynamicLayerParams::clear_stddev() {
+  stddev_ = 0;
+}
+inline float RandomNormalDynamicLayerParams::stddev() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalDynamicLayerParams.stdDev)
+  return stddev_;
+}
+inline void RandomNormalDynamicLayerParams::set_stddev(float value) {
+  
+  stddev_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalDynamicLayerParams.stdDev)
+}
+
+// -------------------------------------------------------------------
+
+// RandomUniformLikeLayerParams
+
+// int64 seed = 1;
+inline void RandomUniformLikeLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomUniformLikeLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformLikeLayerParams.seed)
+  return seed_;
+}
+inline void RandomUniformLikeLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformLikeLayerParams.seed)
+}
+
+// float minVal = 2;
+inline void RandomUniformLikeLayerParams::clear_minval() {
+  minval_ = 0;
+}
+inline float RandomUniformLikeLayerParams::minval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformLikeLayerParams.minVal)
+  return minval_;
+}
+inline void RandomUniformLikeLayerParams::set_minval(float value) {
+  
+  minval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformLikeLayerParams.minVal)
+}
+
+// float maxVal = 3;
+inline void RandomUniformLikeLayerParams::clear_maxval() {
+  maxval_ = 0;
+}
+inline float RandomUniformLikeLayerParams::maxval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformLikeLayerParams.maxVal)
+  return maxval_;
+}
+inline void RandomUniformLikeLayerParams::set_maxval(float value) {
+  
+  maxval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformLikeLayerParams.maxVal)
+}
+
+// -------------------------------------------------------------------
+
+// RandomUniformStaticLayerParams
+
+// int64 seed = 1;
+inline void RandomUniformStaticLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomUniformStaticLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformStaticLayerParams.seed)
+  return seed_;
+}
+inline void RandomUniformStaticLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformStaticLayerParams.seed)
+}
+
+// float minVal = 2;
+inline void RandomUniformStaticLayerParams::clear_minval() {
+  minval_ = 0;
+}
+inline float RandomUniformStaticLayerParams::minval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformStaticLayerParams.minVal)
+  return minval_;
+}
+inline void RandomUniformStaticLayerParams::set_minval(float value) {
+  
+  minval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformStaticLayerParams.minVal)
+}
+
+// float maxVal = 3;
+inline void RandomUniformStaticLayerParams::clear_maxval() {
+  maxval_ = 0;
+}
+inline float RandomUniformStaticLayerParams::maxval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformStaticLayerParams.maxVal)
+  return maxval_;
+}
+inline void RandomUniformStaticLayerParams::set_maxval(float value) {
+  
+  maxval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformStaticLayerParams.maxVal)
+}
+
+// repeated uint64 outputShape = 4;
+inline int RandomUniformStaticLayerParams::outputshape_size() const {
+  return outputshape_.size();
+}
+inline void RandomUniformStaticLayerParams::clear_outputshape() {
+  outputshape_.Clear();
+}
+inline ::google::protobuf::uint64 RandomUniformStaticLayerParams::outputshape(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+  return outputshape_.Get(index);
+}
+inline void RandomUniformStaticLayerParams::set_outputshape(int index, ::google::protobuf::uint64 value) {
+  outputshape_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+}
+inline void RandomUniformStaticLayerParams::add_outputshape(::google::protobuf::uint64 value) {
+  outputshape_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+RandomUniformStaticLayerParams::outputshape() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+  return outputshape_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+RandomUniformStaticLayerParams::mutable_outputshape() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+  return &outputshape_;
+}
+
+// -------------------------------------------------------------------
+
+// RandomUniformDynamicLayerParams
+
+// int64 seed = 1;
+inline void RandomUniformDynamicLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomUniformDynamicLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformDynamicLayerParams.seed)
+  return seed_;
+}
+inline void RandomUniformDynamicLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformDynamicLayerParams.seed)
+}
+
+// float minVal = 2;
+inline void RandomUniformDynamicLayerParams::clear_minval() {
+  minval_ = 0;
+}
+inline float RandomUniformDynamicLayerParams::minval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformDynamicLayerParams.minVal)
+  return minval_;
+}
+inline void RandomUniformDynamicLayerParams::set_minval(float value) {
+  
+  minval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformDynamicLayerParams.minVal)
+}
+
+// float maxVal = 3;
+inline void RandomUniformDynamicLayerParams::clear_maxval() {
+  maxval_ = 0;
+}
+inline float RandomUniformDynamicLayerParams::maxval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformDynamicLayerParams.maxVal)
+  return maxval_;
+}
+inline void RandomUniformDynamicLayerParams::set_maxval(float value) {
+  
+  maxval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformDynamicLayerParams.maxVal)
+}
+
+// -------------------------------------------------------------------
+
+// RandomBernoulliLikeLayerParams
+
+// int64 seed = 1;
+inline void RandomBernoulliLikeLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomBernoulliLikeLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliLikeLayerParams.seed)
+  return seed_;
+}
+inline void RandomBernoulliLikeLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliLikeLayerParams.seed)
+}
+
+// float prob = 2;
+inline void RandomBernoulliLikeLayerParams::clear_prob() {
+  prob_ = 0;
+}
+inline float RandomBernoulliLikeLayerParams::prob() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliLikeLayerParams.prob)
+  return prob_;
+}
+inline void RandomBernoulliLikeLayerParams::set_prob(float value) {
+  
+  prob_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliLikeLayerParams.prob)
+}
+
+// -------------------------------------------------------------------
+
+// RandomBernoulliStaticLayerParams
+
+// int64 seed = 1;
+inline void RandomBernoulliStaticLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomBernoulliStaticLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliStaticLayerParams.seed)
+  return seed_;
+}
+inline void RandomBernoulliStaticLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliStaticLayerParams.seed)
+}
+
+// float prob = 2;
+inline void RandomBernoulliStaticLayerParams::clear_prob() {
+  prob_ = 0;
+}
+inline float RandomBernoulliStaticLayerParams::prob() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliStaticLayerParams.prob)
+  return prob_;
+}
+inline void RandomBernoulliStaticLayerParams::set_prob(float value) {
+  
+  prob_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliStaticLayerParams.prob)
+}
+
+// repeated uint64 outputShape = 3;
+inline int RandomBernoulliStaticLayerParams::outputshape_size() const {
+  return outputshape_.size();
+}
+inline void RandomBernoulliStaticLayerParams::clear_outputshape() {
+  outputshape_.Clear();
+}
+inline ::google::protobuf::uint64 RandomBernoulliStaticLayerParams::outputshape(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+  return outputshape_.Get(index);
+}
+inline void RandomBernoulliStaticLayerParams::set_outputshape(int index, ::google::protobuf::uint64 value) {
+  outputshape_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+}
+inline void RandomBernoulliStaticLayerParams::add_outputshape(::google::protobuf::uint64 value) {
+  outputshape_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+RandomBernoulliStaticLayerParams::outputshape() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+  return outputshape_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+RandomBernoulliStaticLayerParams::mutable_outputshape() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+  return &outputshape_;
+}
+
+// -------------------------------------------------------------------
+
+// RandomBernoulliDynamicLayerParams
+
+// int64 seed = 1;
+inline void RandomBernoulliDynamicLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 RandomBernoulliDynamicLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliDynamicLayerParams.seed)
+  return seed_;
+}
+inline void RandomBernoulliDynamicLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliDynamicLayerParams.seed)
+}
+
+// float prob = 2;
+inline void RandomBernoulliDynamicLayerParams::clear_prob() {
+  prob_ = 0;
+}
+inline float RandomBernoulliDynamicLayerParams::prob() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliDynamicLayerParams.prob)
+  return prob_;
+}
+inline void RandomBernoulliDynamicLayerParams::set_prob(float value) {
+  
+  prob_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliDynamicLayerParams.prob)
+}
+
+// -------------------------------------------------------------------
+
 // ExpandDimsLayerParams
 
 // repeated int64 axes = 1;
@@ -27433,6 +32381,66 @@ ExpandDimsLayerParams::mutable_axes() {
   // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.ExpandDimsLayerParams.axes)
   return &axes_;
 }
+
+// -------------------------------------------------------------------
+
+// FlattenTo2DLayerParams
+
+// int64 axis = 1;
+inline void FlattenTo2DLayerParams::clear_axis() {
+  axis_ = GOOGLE_LONGLONG(0);
+}
+inline ::google::protobuf::int64 FlattenTo2DLayerParams::axis() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.FlattenTo2DLayerParams.axis)
+  return axis_;
+}
+inline void FlattenTo2DLayerParams::set_axis(::google::protobuf::int64 value) {
+  
+  axis_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.FlattenTo2DLayerParams.axis)
+}
+
+// -------------------------------------------------------------------
+
+// ReshapeStaticLayerParams
+
+// repeated int64 targetShape = 1;
+inline int ReshapeStaticLayerParams::targetshape_size() const {
+  return targetshape_.size();
+}
+inline void ReshapeStaticLayerParams::clear_targetshape() {
+  targetshape_.Clear();
+}
+inline ::google::protobuf::int64 ReshapeStaticLayerParams::targetshape(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+  return targetshape_.Get(index);
+}
+inline void ReshapeStaticLayerParams::set_targetshape(int index, ::google::protobuf::int64 value) {
+  targetshape_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+}
+inline void ReshapeStaticLayerParams::add_targetshape(::google::protobuf::int64 value) {
+  targetshape_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int64 >&
+ReshapeStaticLayerParams::targetshape() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+  return targetshape_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int64 >*
+ReshapeStaticLayerParams::mutable_targetshape() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+  return &targetshape_;
+}
+
+// -------------------------------------------------------------------
+
+// ReshapeLikeLayerParams
+
+// -------------------------------------------------------------------
+
+// ReshapeDynamicLayerParams
 
 // -------------------------------------------------------------------
 
@@ -27764,11 +32772,25 @@ TileLayerParams::mutable_reps() {
 
 // -------------------------------------------------------------------
 
-// ErfActivationLayerParams
+// ErfLayerParams
 
 // -------------------------------------------------------------------
 
-// GeluActivationLayerParams
+// GeluLayerParams
+
+// .CoreML.Specification.GeluLayerParams.GeluMode mode = 1;
+inline void GeluLayerParams::clear_mode() {
+  mode_ = 0;
+}
+inline ::CoreML::Specification::GeluLayerParams_GeluMode GeluLayerParams::mode() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.GeluLayerParams.mode)
+  return static_cast< ::CoreML::Specification::GeluLayerParams_GeluMode >(mode_);
+}
+inline void GeluLayerParams::set_mode(::CoreML::Specification::GeluLayerParams_GeluMode value) {
+  
+  mode_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.GeluLayerParams.mode)
+}
 
 // -------------------------------------------------------------------
 
@@ -29480,6 +34502,66 @@ inline void AdamOptimizer::set_allocated_eps(::CoreML::Specification::DoublePara
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -29503,6 +34585,7 @@ template <> struct is_proto_enum< ::CoreML::Specification::ReorganizeDataLayerPa
 template <> struct is_proto_enum< ::CoreML::Specification::SliceLayerParams_SliceAxis> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::CoreML::Specification::ReduceLayerParams_ReduceOperation> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::CoreML::Specification::ReduceLayerParams_ReduceAxis> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::CoreML::Specification::GeluLayerParams_GeluMode> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::CoreML::Specification::NeuralNetworkMultiArrayShapeMapping> : ::google::protobuf::internal::true_type {};
 template <> struct is_proto_enum< ::CoreML::Specification::NeuralNetworkImageShapeMapping> : ::google::protobuf::internal::true_type {};
 

@@ -488,7 +488,7 @@ message NeuralNetworkLayer {
         // Custom (user-implemented) Layer
         CustomLayerParams custom = 500;
 
-// Following layers are available only after CoreML Specification version >= 3 (iOS >= 13, macOS >= 10.15)
+        // Following layers are available only after CoreML Specification version >= 3 (iOS >= 13, macOS >= 10.15)
 
         // Control Flow related Layers
         CopyLayerParams copy = 600;
@@ -513,31 +513,32 @@ message NeuralNetworkLayer {
 
 		Exp2LayerParams exp2 = 700;
 
-        SineLayerParams sine = 710; // [RENAME] SinLayerParams sin = 710;
-        CosineLayerParams cosine = 715; // [RENAME] CosLayerParams cos = 715;
-//[ADD] TanLayerParams tan = 720;
+        SinLayerParams sin = 710;
+        CosLayerParams cos = 715;
+        TanLayerParams tan = 720;
 
-//[ADD] AsinLayerParams asin = 730;
-//[ADD] AcosLayerParams acos = 735;
-//[ADD] AtanLayerParams atan = 740;
+        AsinLayerParams asin = 730;
+        AcosLayerParams acos = 735;
+        AtanLayerParams atan = 740;
 
-//[ADD] SinhLayerParams sinh = 750;
-//[ADD] CoshLayerParams cosh = 755;
-//[ADD] TanhLayerParams tanh = 760;
+        SinhLayerParams sinh = 750;
+        CoshLayerParams cosh = 755;
+        TanhLayerParams tanh = 760;
 
-//[ADD] AsinhLayerParams asinh = 770;
-//[ADD] AcoshLayerParams acosh = 775;
-//[ADD] AtanhLayerParams atanh = 780;
+        AsinhLayerParams asinh = 770;
+        AcoshLayerParams acosh = 775;
+        AtanhLayerParams atanh = 780;
 
-        ErfActivationLayerParams erfActivation = 790; // [RENAME] ErfLayerParams erf = 790;
-        GeluActivationLayerParams geluActivation = 795; // [RENAME] GeluLayerParams gelu = 795; + Add approximate mode
-
+        ErfLayerParams erf = 790;
+        GeluLayerParams gelu = 795;
 
         // Elementwise Binary with Broadcasting Support
         EqualLayerParams equal = 815;
         NotEqualLayerParams notEqual = 820;
         LessThanLayerParams lessThan = 825;
+        LessEqualLayerParams lessEqual = 827;
         GreaterThanLayerParams greaterThan = 830;
+        GreaterEqualLayerParams greaterEqual = 832;
 
         LogicalOrLayerParams logicalOr = 840;
         LogicalXorLayerParams logicalXor = 845;
@@ -545,32 +546,32 @@ message NeuralNetworkLayer {
         LogicalAndLayerParams logicalAnd = 855;
 
 //[ADD] ModBroadcastableLayerParams modBroadcastable = 865;
-//[ADD] MinBroadcastableLayerParams minBroadcastable = 870;
-//[ADD] MaxBroadcastableLayerParams maxBroadcastable = 875;
+        MinBroadcastableLayerParams minBroadcastable = 870;
+        MaxBroadcastableLayerParams maxBroadcastable = 875;
         AddBroadcastableLayerParams addBroadcastable = 880;
         PowBroadcastableLayerParams powBroadcastable = 885;
         DivideBroadcastableLayerParams divideBroadcastable = 890;
-//[ADD] FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
+        FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
         MultiplyBroadcastableLayerParams multiplyBroadcastable = 900;
         SubtractBroadcastableLayerParams subtractBroadcastable = 905;
 
 
         // Tensor Manipulations
 //[ADD] PadLayerParams pad = 915;
-        TileLayerParams tile = 920;
+        TileLayerParams tile = 920; // [Bug] Doesn't work on rank 5
         StackNDLayerParams stackND = 925; // [RENAME] StackLayerParams stack = 925;
         GatherLayerParams gather = 930;
-        ScatterLayerParams scatter = 935;
+        ScatterLayerParams scatter = 935; // [Improve]
 //[ADD] GatherNDLayerParams gatherND = 940;
 //[ADD] ScatterNDLayerParams scatterND = 945;
         SoftmaxNDLayerParams softmaxND = 950;
 
-//[ADD] ReverseLayerParams reverse = 960;
+        ReverseLayerParams reverse = 960;
 //[ADD] ReverseSeqLayerParams reverseSeq = 965;
 
         SplitNDLayerParams splitND = 975;
         ConcatNDLayerParams concatND = 980;
-        TransposeNDLayerParams transposeND = 985; // [RENAME] TransposeLayerParams transpose = 985;
+        TransposeLayerParams transpose = 985;
 
         SliceNDLayerParams sliceND = 995; // [RENAME] SliceStaticLayerParams sliceStatic = 995;
 //[ADD] SliceDynamicLayerParams sliceDynamic = 1000;
@@ -582,7 +583,7 @@ message NeuralNetworkLayer {
 
 //[ADD] Conv3DLayerParams conv3D = 1035;
         EmbeddingNDLayerParams embeddingND = 1040;
-        BatchedMatMulParams batchedMatmul = 1045; // [RENAME] BatchedMatMulLayerParams batchedMatmul = 1045;
+        BatchedMatMulLayerParams batchedMatmul = 1045;
 
 
         // Tensor Allocation / Reshape sort of operations
@@ -599,25 +600,24 @@ message NeuralNetworkLayer {
 
         SqueezeLayerParams squeeze = 1120; // [To do] Remove rank dependency
         ExpandDimsLayerParams expandDims = 1125; //[To do] Remove rank dependency
-//[ADD] FlattenTo2DLayerParams flattenTo2D = 1130;
-//[ADD] ReshapeLikeLayerParams reshapeLike = 1135;
-//[ADD] ReshapeStaticLayerParams reshapeStatic = 1140;
-//[ADD] ReshapeDynamicLayerParams reshapeDynamic = 1145;
-        RankPreservingReshapeLayerParams rankPreservingReshape = 1150; //[To do] Remove rank dependency
-
+        FlattenTo2DLayerParams flattenTo2D = 1130;
+        ReshapeLikeLayerParams reshapeLike = 1135;
+        ReshapeStaticLayerParams reshapeStatic = 1140;
+        ReshapeDynamicLayerParams reshapeDynamic = 1145;
+        RankPreservingReshapeLayerParams rankPreservingReshape = 1150; //[To do] Remove rank dependency & Enable rank preserving flag in compiler
 
         // Random Distributions
-//[ADD] RandomNormalLikeLayerParams randomNormalLike = 1170;
-//[ADD] RandomNormalStaticLayerParams randomNormalStatic = 1175;
-//[ADD] RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
+        RandomNormalLikeLayerParams randomNormalLike = 1170;
+        RandomNormalStaticLayerParams randomNormalStatic = 1175;
+        RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
 
-//[ADD] RandomUniformLikeLayerParams randomUniformLike = 1190;
-//[ADD] RandomUniformStaticLayerParams randomUniformStatic = 1195;
-//[ADD] RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
+        RandomUniformLikeLayerParams randomUniformLike = 1190;
+        RandomUniformStaticLayerParams randomUniformStatic = 1195;
+        RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
 
-//[ADD] RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
-//[ADD] RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
-//[ADD] RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
+        RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
+        RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
+        RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
 
 //[ADD] CategoricalDistributionLayerParams categoricalDistribution = 1230;
 
@@ -634,10 +634,10 @@ message NeuralNetworkLayer {
 //[ADD] ReduceLogSumExpLayerParams reduceLogSumExp = 1295;
 
         // Masking / Selection Layers
-//[ADD] MatrixBandPartLayerParams matrixBandPart = 1315;
+        MatrixBandPartLayerParams matrixBandPart = 1315;
         LowerTriangularLayerParams lowerTriangular = 1320;
         UpperTriangularLayerParams upperTriangular = 1325;
-        WhereLayerParams where = 1330;     // [RENAME] WhereBroadcastableLayerParams whereBroadcastable = 1330;
+        WhereBroadcastableLayerParams whereBroadcastable = 1330;
 
         // Normalization Layers
 //[ADD] LpNormalizationLayerParams lpNormalization = 1350;
@@ -802,14 +802,36 @@ message CopyLayerParams {
  */
 message GreaterThanLayerParams {
     /**
-     * If true, greater than equal operation is used instead
+     * Compare to the scalar value provided here if there is 1 input
      */
-    bool useNonStrictInequality = 1;
+    float alpha = 2;
+}
+
+/**
+ * GreaterEqual Layer
+ *
+ * Either 1 or 2 inputs.
+ * Produces 1 output.
+ * Perform elementwise greater equal operation.
+ *
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = x1 >= x2
+ *          or
+ *      y = x1 >= alpha, if only one input is provided
+ *
+ * Broadcasting is supported.
+ *
+ */
+message GreaterEqualLayerParams {
     /**
      * Compare to the scalar value provided here if there is 1 input
      */
     float alpha = 2;
 }
+
 
 /**
  * LessThan Layer
@@ -831,9 +853,30 @@ message GreaterThanLayerParams {
  */
 message LessThanLayerParams {
     /**
-     * If true, less than equal operation is used instead
+     * Compare to the scalar value provided here if there is 1 input
      */
-    bool useNonStrictInequality = 1;
+    float alpha = 2;
+}
+
+/**
+ * LessEqual Layer
+ *
+ * Either 1 or 2 inputs.
+ * Produces 1 output.
+ * Perform elementwise less equal operation.
+ *
+ * Output is 1.0f if the condition is true otherwise 0.0f.
+ *
+ * .. code::
+ *
+ *      y = x1 <= x2
+ *          or
+ *      y = x1 <= alpha, if only one input is provided
+ *
+ * Broadcasting is supported.
+ *
+ */
+message LessEqualLayerParams {
     /**
      * Compare to the scalar value provided here if there is 1 input
      */
@@ -2335,7 +2378,7 @@ message ReshapeLayerParams {
 
 /**
  * A layer that rearranges the dimensions and data of an input.
- * For generic transpose/permute operation see TransposeNDLayer.
+ * For generic transpose/permute operation see TransposeLayer.
  *
  * .. code::
  *
@@ -3206,7 +3249,7 @@ message CustomLayerParams {
  *
  * .. code::
  *
- *      y = TransposeNDLayer(x)
+ *      y = TransposeLayer(x)
  *
  * Requires 1 input and produces 1 output.
  *
@@ -3222,7 +3265,7 @@ message CustomLayerParams {
  *   then the output has shape ``[9,7,8,6]``
  */
 
-message TransposeNDLayerParams{
+message TransposeLayerParams{
     /**
      * Length of "axes" should match the rank of input & output tensor
      * "axes" should be a permutation of "[0,1,2,...,N-1]" where N is the rank.
@@ -3266,7 +3309,7 @@ message TransposeNDLayerParams{
  *             - if "a" is rank 3 (B1, B2, X1) --> (B1 * B2, X1). Output shape will be (B1, B2, X2)
  *             - etc
  */
-message BatchedMatMulParams{
+message BatchedMatMulLayerParams{
     /**
      * If transposeA is true, it transposes the left matrix on the fly before matrix multiplication.
      * (is ignored when there is one input)
@@ -3350,6 +3393,17 @@ message SoftmaxNDLayerParams{
      * Dimension on which the softmax would be performed. Supports negative values of the parameter 'axis'.
      */
     int64 axis = 1;
+}
+
+
+ // To do: Work on documentation: <rdar://problem/45858275>
+
+message ReverseLayerParams {
+    /**
+     * Reverses each dimension of the input tensor for which corresponding reverseDim is set to True.
+     * Requires len(reverseDim) == rank(inputTensor)
+     */
+    repeated bool reverseDim = 1;
 }
 
 /**
@@ -3449,27 +3503,18 @@ message FillDynamicLayerParams{
 /**
  * // To do: Work on documentation: <rdar://problem/45858275>
  *
- * A layer that replaces the masked data with a fill value.
- * All the entries where mask value == 1 gets replaced with the fill value.
- * All the entries where mask value == 0 remains unchanged.
  *
  * .. code::
  *
- *      y = WhereLayer(x)
+ *      y = WhereBroadcastableLayer(x)
  *
  * Requires 3 inputs and produces 1 output.
  *
- * Input
- *     - input tensor: An N-dimensional tensor
- *     - mask: An N-dimensional tensor with the same shape as input tensor
- *     - fill value: A scalar
- * Output
- *     An N-dimesnional tensor with the same shape as input tensor.
  *
  * // To do: Include examples
  *
  */
-message WhereLayerParams{
+message WhereBroadcastableLayerParams{
 
 }
 
@@ -3481,7 +3526,7 @@ message WhereLayerParams{
  *
  * .. code::
  *
- *      y = SineLayer(x)
+ *      y = SinLayer(x)
  *
  * Requires 1 input and produces 1 output.
  *
@@ -3494,7 +3539,7 @@ message WhereLayerParams{
  * // To do: Include examples
  *
  */
-message SineLayerParams{
+message SinLayerParams{
 
 }
 
@@ -3506,7 +3551,7 @@ message SineLayerParams{
  *
  * .. code::
  *
- *      y = CosineLayer(x)
+ *      y = CosLayer(x)
  *
  * Requires 1 input and produces 1 output.
  *
@@ -3519,10 +3564,259 @@ message SineLayerParams{
  * // To do: Include examples
  *
  */
-message CosineLayerParams{
+message CosLayerParams{
 
 }
 
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric cosine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = TanLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message TanLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric sine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = AsinLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message AsinLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric cosine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = AcosLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message AcosLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric cosine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = AtanLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message AtanLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric sine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = SinhLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message SinhLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric cosine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = CoshLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message CoshLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric cosine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = TanhLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message TanhLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric sine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = AsinhLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message AsinhLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric cosine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = AcoshLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message AcoshLayerParams{
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ * A layer that computes elementwise trigonometric cosine function.
+ *
+ *
+ * .. code::
+ *
+ *      y = AtanhLayer(x)
+ *
+ * Requires 1 input and produces 1 output.
+ *
+ * Input
+ *     An N-dimensional tensor
+ *
+ * Output
+ *     An N-dimesnional tensor with the same shape as input tensor.
+ *
+ * // To do: Include examples
+ *
+ */
+message AtanhLayerParams{
+
+}
 /**
  * // To do: Work on documentation: <rdar://problem/45858275>
  *
@@ -3574,12 +3868,26 @@ message Exp2LayerParams{
 
 }
 
+/**
+ * To do: Work on documentation: <rdar://problem/45858275>
+ * Parameters for matrix_band_part layer
+ * band(m, n) = (num_lower < 0 || (m-n) <= num_lower) && (num_upper < 0 || (n-m) <= num_upper).
+ * output[i, j, k, ..., m, n] = band(m, n) * input[i, j, k, ..., m, n]
+ */
+message MatrixBandPartLayerParams{
+
+    int64 numLower = 1;
+    int64 numUpper = 2;
+}
+
 message UpperTriangularLayerParams{
 
+    int64 k = 1; // Diagonal below which to zero elements. k = 0 (the default) is the main diagonal, k < 0 is below it and k > 0 is above
 }
 
 message LowerTriangularLayerParams{
 
+    int64 k = 1; // Diagonal above which to zero elements. k = 0 (the default) is the main diagonal, k < 0 is below it and k > 0 is above
 }
 
 /**
@@ -3658,6 +3966,18 @@ message BroadcastToDynamicLayerParams{
  *
  */
 message AddBroadcastableLayerParams{
+
+}
+
+message MaxBroadcastableLayerParams{
+
+}
+
+message MinBroadcastableLayerParams{
+
+}
+
+message FloorDivBroadcastableLayerParams{
 
 }
 
@@ -3806,6 +4126,180 @@ message RankPreservingReshapeLayerParams {
 }
 
 /**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random normal values.
+ *
+ * Input:
+ *     seed: seed used for the normal distribution.
+ *     mean: mean of the normal distribution.
+ *     stdDev: standard deviation of the normal distribution.
+ *
+ * Output:
+ */
+message RandomNormalLikeLayerParams {
+
+    int64 seed = 1;
+    float mean = 2;
+    float stdDev = 3;
+
+}
+
+/**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random normal values.
+ *
+ * Input:
+ *     seed: seed used for the normal distribution.
+ *     mean: mean of the normal distribution.
+ *     stdDev: standard deviation of the normal distribution.
+ *     outputShape: shape of the ouput tensor.
+ *
+ * Output:
+ */
+message RandomNormalStaticLayerParams {
+
+    int64 seed = 1;
+    float mean = 2;
+    float stdDev = 3;
+    repeated uint64 outputShape = 4;
+
+}
+
+/**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random normal values.
+ *
+ * Input:
+ *     seed: seed used for the normal distribution.
+ *     mean: mean of the normal distribution.
+ *     stdDev: standard deviation of the normal distribution.
+ *
+ * Output:
+ */
+message RandomNormalDynamicLayerParams {
+
+    int64 seed = 1;
+    float mean = 2;
+    float stdDev = 3;
+
+}
+
+/**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random uniform values.
+ *
+ * Input:
+ *     seed: seed used for the uniform distribution.
+ *     minVal: lower bound on the range of random values for the uniform distribution.
+ *     maxVal: upper bound on the range of random values for the uniform distribution.
+ *
+ * Output:
+ *
+ */
+message RandomUniformLikeLayerParams {
+
+    int64 seed = 1;
+    float minVal = 2;
+    float maxVal = 3;
+
+}
+
+/**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random uniform values.
+ *
+ * Input:
+ *     seed: seed used for the uniform distribution.
+ *     minVal: lower bound on the range of random values for the uniform distribution.
+ *     maxVal: upper bound on the range of random values for the uniform distribution.
+ *     outputShape: shape of the ouput tensor.
+ *
+ * Output:
+ *
+ */
+message RandomUniformStaticLayerParams {
+
+    int64 seed = 1;
+    float minVal = 2;
+    float maxVal = 3;
+    repeated uint64 outputShape = 4;
+
+}
+
+/**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random uniform values.
+ *
+ * Input:
+ *     seed: seed used for the uniform distribution.
+ *     minVal: lower bound on the range of random values for the uniform distribution.
+ *     maxVal: upper bound on the range of random values for the uniform distribution.
+ *
+ * Output:
+ *
+ */
+message RandomUniformDynamicLayerParams {
+
+    int64 seed = 1;
+    float minVal = 2;
+    float maxVal = 3;
+
+}
+
+/**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random Bernoulli distribution.
+ *
+ * Input:
+ *     prob: probability of a 1 event.
+ *
+ * Output:
+ *
+ */
+message RandomBernoulliLikeLayerParams {
+
+    int64 seed = 1;
+    float prob = 2;
+
+}
+
+/**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random Bernoulli distribution.
+ *
+ * Input:
+ *     prob: probability of a 1 event.
+ *     outputShape: shape of the ouput tensor.
+ *
+ * Output:
+ *
+ */
+message RandomBernoulliStaticLayerParams {
+
+    int64 seed = 1;
+    float prob = 2;
+    repeated uint64 outputShape = 3;
+
+}
+
+/**
+ * TODO: work on documentation: <rdar://problem/45858275>
+ * A tensor of the specified shape filled with random Bernoulli distribution.
+ *
+ * Input:
+ *     prob: probability of a 1 event.
+ *
+ * Output:
+ *
+ */
+message RandomBernoulliDynamicLayerParams {
+
+    int64 seed = 1;
+    float prob = 2;
+
+}
+
+/**
  * Increase the rank of the input tensor by adding unit dimensions.
  *
  * Requires 1 input and produces 1 output.
@@ -3831,6 +4325,41 @@ message ExpandDimsLayerParams {
      * Negative indexing is supported.
      */
     repeated int64 axes = 1;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ * Please refer: https://github.com/onnx/onnx/blob/master/docs/Operators.md#flatten
+ *
+ */
+message FlattenTo2DLayerParams {
+
+    int64 axis = 1;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ */
+message ReshapeStaticLayerParams {
+
+    repeated int64 targetShape = 1;
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ */
+message ReshapeLikeLayerParams {
+
+}
+
+/**
+ * // To do: Work on documentation: <rdar://problem/45858275>
+ *
+ */
+message ReshapeDynamicLayerParams {
+
 }
 
 /**
@@ -3903,7 +4432,7 @@ message FloorLayerParams{
  * Parameter minVal: the minimum threshold.
  * Parameter maxVal: the maximum threshold.
  *
- * output =  min(max(input[0], input[1]), input[2])
+ * output =  min(max(input, minVal), maxVal)
  */
 message ClipLayerParams{
 
@@ -3955,7 +4484,7 @@ message GetShapeLayerParams {
  *
  * Requires 1 input and produces 1 output.
  */
-message ErfActivationLayerParams {
+message ErfLayerParams {
 
 }
 
@@ -3966,8 +4495,15 @@ message ErfActivationLayerParams {
  *
  * Requires 1 input and produces 1 output.
  */
-message GeluActivationLayerParams {
+message GeluLayerParams {
 
+    enum GeluMode {
+        EXACT = 0;
+        TANH_APPROXIMATION = 1;
+        SIGMOID_APPROXIMATION = 2;
+    }
+
+    GeluMode mode = 1; /// mode of Gelu operation.
 }
 
 /**

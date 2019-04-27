@@ -11,6 +11,7 @@
 #include "../src/Model.hpp"
 #include "../src/NeuralNetwork/NeuralNetworkShapes.hpp"
 #include "ParameterTests.hpp"
+#include "ModelCreationUtils.hpp"
 
 #include "framework/TestUtils.hpp"
 
@@ -699,3 +700,304 @@ int testMissingEpochsParameter() {
     ML_ASSERT_BAD(res);
     return 0;
 }
+
+int testNonUpdatablePipelineWithNonUpdatableModels() {
+    
+    Specification::Model spec;
+    Result res;
+    TensorAttributes tensorAttributesA = { "A", 3 };
+    TensorAttributes tensorAttributesB = { "B", 1 };
+    TensorAttributes tensorAttributesC = { "C", 1 };
+    TensorAttributes tensorAttributesD = { "D", 3 };
+    
+    auto pipeline = buildEmptyPipelineModelWithStringOutput(spec, false, &tensorAttributesA, "E");
+    
+    auto m1 = pipeline->add_models();
+    auto m2 = pipeline->add_models();
+    auto m3 = pipeline->add_models();
+    auto m4 = pipeline->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m1, false, &tensorAttributesA, &tensorAttributesB);
+    (void)buildBasicNeuralNetworkModel(*m2, false, &tensorAttributesB, &tensorAttributesC);
+    (void)buildBasicNeuralNetworkModel(*m3, false, &tensorAttributesC, &tensorAttributesD);
+    (void)buildBasicNearestNeighborClassifier(*m4, false, &tensorAttributesD, "E");
+    
+    res = Model::validate(*m1);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m2);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m3);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m4);
+    ML_ASSERT_GOOD(res);
+    
+    // expect validation to pass!
+    res = Model::validate(spec);
+    ML_ASSERT_GOOD(res);
+    
+    return 0;
+}
+
+int testNonUpdatablePipelineWithOneUpdatableModel() {
+    
+    Specification::Model spec;
+    Result res;
+    TensorAttributes tensorAttributesA = { "A", 3 };
+    TensorAttributes tensorAttributesB = { "B", 1 };
+    TensorAttributes tensorAttributesC = { "C", 1 };
+    TensorAttributes tensorAttributesD = { "D", 3 };
+    
+    auto pipeline = buildEmptyPipelineModelWithStringOutput(spec, false, &tensorAttributesA, "E");
+    
+    auto m1 = pipeline->add_models();
+    auto m2 = pipeline->add_models();
+    auto m3 = pipeline->add_models();
+    auto m4 = pipeline->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m1, false, &tensorAttributesA, &tensorAttributesB);
+    (void)buildBasicNeuralNetworkModel(*m2, false, &tensorAttributesB, &tensorAttributesC);
+    (void)buildBasicNeuralNetworkModel(*m3, false, &tensorAttributesC, &tensorAttributesD);
+    (void)buildBasicNearestNeighborClassifier(*m4, true, &tensorAttributesD, "E");
+    
+    res = Model::validate(*m1);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m2);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m3);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m4);
+    ML_ASSERT_GOOD(res);
+    
+    // expect validation to fail due to presence of uptable model in non-updatable pipeline.
+    res = Model::validate(spec);
+    ML_ASSERT_BAD(res);
+    
+    return 0;
+}
+
+int testNonUpdatablePipelineWithOneUpdatableModelInsidePipelineHierarchy() {
+    
+    Specification::Model spec;
+    Result res;
+    TensorAttributes tensorAttributesA = { "A", 3 };
+    TensorAttributes tensorAttributesB = { "B", 1 };
+    TensorAttributes tensorAttributesC = { "C", 1 };
+    TensorAttributes tensorAttributesD = { "D", 3 };
+    
+    auto pipeline1 = buildEmptyPipelineModelWithStringOutput(spec, false, &tensorAttributesA, "E");
+    
+    auto m1 = pipeline1->add_models();
+    auto m2 = pipeline1->add_models();
+    auto m3 = pipeline1->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m1, false, &tensorAttributesA, &tensorAttributesB);
+    auto pipeline2 = buildEmptyPipelineModel(*m2, false, &tensorAttributesB, &tensorAttributesD);
+    (void)buildBasicNearestNeighborClassifier(*m3, false, &tensorAttributesD, "E");
+    
+    auto m4 = pipeline2->add_models();
+    auto m5 = pipeline2->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m4, false, &tensorAttributesB, &tensorAttributesC);
+    (void)buildBasicNeuralNetworkModel(*m5, true, &tensorAttributesC, &tensorAttributesD);
+    addCrossEntropyLossAndSGDOptimizer(*m5, "D");
+    
+    res = Model::validate(*m1);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m2);
+    ML_ASSERT_BAD(res);
+    
+    res = Model::validate(*m3);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m4);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m5);
+    ML_ASSERT_GOOD(res);
+    
+    // expect validation to fail due to presence of uptable model in non-updatable pipeline.
+    res = Model::validate(spec);
+    ML_ASSERT_BAD(res);
+    
+    return 0;
+}
+
+int testUpdatablePipelineWithNonUpdatableModels() {
+    
+    Specification::Model spec;
+    Result res;
+    TensorAttributes tensorAttributesA = { "A", 3 };
+    TensorAttributes tensorAttributesB = { "B", 1 };
+    TensorAttributes tensorAttributesC = { "C", 1 };
+    TensorAttributes tensorAttributesD = { "D", 3 };
+    
+    auto pipeline = buildEmptyPipelineModelWithStringOutput(spec, true, &tensorAttributesA, "E");
+    
+    auto m1 = pipeline->add_models();
+    auto m2 = pipeline->add_models();
+    auto m3 = pipeline->add_models();
+    auto m4 = pipeline->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m1, false, &tensorAttributesA, &tensorAttributesB);
+    (void)buildBasicNeuralNetworkModel(*m2, false, &tensorAttributesB, &tensorAttributesC);
+    (void)buildBasicNeuralNetworkModel(*m3, false, &tensorAttributesC, &tensorAttributesD);
+    (void)buildBasicNearestNeighborClassifier(*m4, false, &tensorAttributesD, "E");
+    
+    res = Model::validate(*m1);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m2);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m3);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m4);
+    ML_ASSERT_GOOD(res);
+    
+    // expect validation to fail due to missing updatable model in pipeline.
+    res = Model::validate(spec);
+    ML_ASSERT_BAD(res);
+    
+    return 0;
+}
+
+int testUpdatablePipelineWithMultipleUpdatableModels() {
+    
+    Specification::Model spec;
+    Result res;
+    TensorAttributes tensorAttributesA = { "A", 3 };
+    TensorAttributes tensorAttributesB = { "B", 1 };
+    TensorAttributes tensorAttributesC = { "C", 1 };
+    TensorAttributes tensorAttributesD = { "D", 3 };
+    
+    auto pipeline = buildEmptyPipelineModelWithStringOutput(spec, true, &tensorAttributesA, "E");
+    
+    auto m1 = pipeline->add_models();
+    auto m2 = pipeline->add_models();
+    auto m3 = pipeline->add_models();
+    auto m4 = pipeline->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m1, true, &tensorAttributesA, &tensorAttributesB);
+    addCrossEntropyLossAndSGDOptimizer(*m1, "B");
+    
+    (void)buildBasicNeuralNetworkModel(*m2, false, &tensorAttributesB, &tensorAttributesC);
+    
+    (void)buildBasicNeuralNetworkModel(*m3, true, &tensorAttributesC, &tensorAttributesD);
+    addCrossEntropyLossAndSGDOptimizer(*m3, "D");
+    
+    (void)buildBasicNearestNeighborClassifier(*m4, false, &tensorAttributesD, "E");
+    
+    res = Model::validate(*m1);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m2);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m3);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m4);
+    ML_ASSERT_GOOD(res);
+    
+    // expect validation to fail due to multiple updatable models in the pipeline.
+    res = Model::validate(spec);
+    ML_ASSERT_BAD(res);
+    
+    return 0;
+}
+
+int testUpdatablePipelineWithOneUpdatableModel() {
+    
+    Specification::Model spec;
+    Result res;
+    TensorAttributes tensorAttributesA = { "A", 3 };
+    TensorAttributes tensorAttributesB = { "B", 1 };
+    TensorAttributes tensorAttributesC = { "C", 1 };
+    TensorAttributes tensorAttributesD = { "D", 3 };
+    
+    auto pipeline = buildEmptyPipelineModelWithStringOutput(spec, true, &tensorAttributesA, "E");
+    
+    auto m1 = pipeline->add_models();
+    auto m2 = pipeline->add_models();
+    auto m3 = pipeline->add_models();
+    auto m4 = pipeline->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m1, false, &tensorAttributesA, &tensorAttributesB);
+    (void)buildBasicNeuralNetworkModel(*m2, false, &tensorAttributesB, &tensorAttributesC);
+    (void)buildBasicNeuralNetworkModel(*m3, false, &tensorAttributesC, &tensorAttributesD);
+    (void)buildBasicNearestNeighborClassifier(*m4, true, &tensorAttributesD, "E");
+    
+    res = Model::validate(*m1);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m2);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m3);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m4);
+    ML_ASSERT_GOOD(res);
+    
+    // expect validation to pass!
+    res = Model::validate(spec);
+    ML_ASSERT_GOOD(res);
+    
+    return 0;
+}
+
+int testUpdatablePipelineWithOneUpdatableModelInsidePipelineHierarchy() {
+    
+    Specification::Model spec;
+    Result res;
+    TensorAttributes tensorAttributesA = { "A", 3 };
+    TensorAttributes tensorAttributesB = { "B", 1 };
+    TensorAttributes tensorAttributesC = { "C", 1 };
+    TensorAttributes tensorAttributesD = { "D", 3 };
+    
+    auto pipeline1 = buildEmptyPipelineModelWithStringOutput(spec, true, &tensorAttributesA, "E");
+    
+    auto m1 = pipeline1->add_models();
+    auto m2 = pipeline1->add_models();
+    auto m3 = pipeline1->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m1, false, &tensorAttributesA, &tensorAttributesB);
+    (void)buildBasicNeuralNetworkModel(*m2, false, &tensorAttributesB, &tensorAttributesC);
+    auto pipeline2 = buildEmptyPipelineModelWithStringOutput(*m3, true, &tensorAttributesC, "E");
+    
+    auto m4 = pipeline2->add_models();
+    auto m5 = pipeline2->add_models();
+    
+    (void)buildBasicNeuralNetworkModel(*m4, false, &tensorAttributesC, &tensorAttributesD);
+    (void)buildBasicNearestNeighborClassifier(*m5, true, &tensorAttributesD, "E");
+    
+    res = Model::validate(*m1);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m2);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m3);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m4);
+    ML_ASSERT_GOOD(res);
+    
+    res = Model::validate(*m5);
+    ML_ASSERT_GOOD(res);
+    
+    // expect validation to pass!
+    res = Model::validate(spec);
+    ML_ASSERT_GOOD(res);
+    
+    return 0;
+}
+

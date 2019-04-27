@@ -114,7 +114,7 @@ void TableStruct::InitDefaultsImpl() {
   ::CoreML::Specification::protobuf_FeatureVectorizer_2eproto::InitDefaults();
   ::CoreML::Specification::protobuf_GLMRegressor_2eproto::InitDefaults();
   ::CoreML::Specification::protobuf_GLMClassifier_2eproto::InitDefaults();
-  ::CoreML::Specification::protobuf_KNearestNeighborsClassifier_2eproto::InitDefaults();
+  ::CoreML::Specification::protobuf_NearestNeighbors_2eproto::InitDefaults();
   ::CoreML::Specification::protobuf_Identity_2eproto::InitDefaults();
   ::CoreML::Specification::protobuf_Imputer_2eproto::InitDefaults();
   ::CoreML::Specification::protobuf_NeuralNetwork_2eproto::InitDefaults();
@@ -167,7 +167,7 @@ void AddDescriptorsImpl() {
   ::CoreML::Specification::protobuf_FeatureVectorizer_2eproto::AddDescriptors();
   ::CoreML::Specification::protobuf_GLMRegressor_2eproto::AddDescriptors();
   ::CoreML::Specification::protobuf_GLMClassifier_2eproto::AddDescriptors();
-  ::CoreML::Specification::protobuf_KNearestNeighborsClassifier_2eproto::AddDescriptors();
+  ::CoreML::Specification::protobuf_NearestNeighbors_2eproto::AddDescriptors();
   ::CoreML::Specification::protobuf_Identity_2eproto::AddDescriptors();
   ::CoreML::Specification::protobuf_Imputer_2eproto::AddDescriptors();
   ::CoreML::Specification::protobuf_NeuralNetwork_2eproto::AddDescriptors();

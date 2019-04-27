@@ -14,8 +14,6 @@
 
 using namespace CoreML;
 
-Specification::NeuralNetwork* buildBasicUpdatableNeuralNetworkModel(Specification::Model& m);
-
 void addLearningRate(Specification::NeuralNetwork *nn, Specification::Optimizer::OptimizerTypeCase optimizerType, double defaultValue, double minValue, double maxValue);
 
 void addMiniBatchSize(Specification::NeuralNetwork *nn, Specification::Optimizer::OptimizerTypeCase optimizerType, int64_t defaultValue, int64_t minValue, int64_t maxValue, std::set<int64_t> allowedValues = std::set<int64_t>());

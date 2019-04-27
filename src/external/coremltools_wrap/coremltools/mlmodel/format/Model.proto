@@ -65,7 +65,7 @@ import public "FeatureTypes.proto";
 import public "FeatureVectorizer.proto";
 import public "GLMRegressor.proto";
 import public "GLMClassifier.proto";
-import public "KNearestNeighborsClassifier.proto";
+import public "NearestNeighbors.proto";
 import public "Identity.proto";
 import public "Imputer.proto";
 import public "NeuralNetwork.proto";

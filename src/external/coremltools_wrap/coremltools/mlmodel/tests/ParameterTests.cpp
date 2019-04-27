@@ -10,6 +10,7 @@
 #include "../src/Format.hpp"
 #include "../src/Model.hpp"
 #include "ParameterTests.hpp"
+#include "ModelCreationUtils.hpp"
 
 #include "framework/TestUtils.hpp"
 
@@ -17,43 +18,6 @@
 #pragma clang diagnostic ignored "-Wsign-conversion"
 
 using namespace CoreML;
-
-Specification::NeuralNetwork* buildBasicUpdatableNeuralNetworkModel(Specification::Model& m) {
-    
-    auto *topIn = m.mutable_description()->add_input();
-    topIn->set_name("A");
-    topIn->mutable_type()->mutable_multiarraytype();
-    auto *shape = topIn->mutable_type()->mutable_multiarraytype();
-    shape->set_datatype(Specification::ArrayFeatureType_ArrayDataType_FLOAT32);
-    shape->add_shape(1);
-    shape->add_shape(1);
-    shape->add_shape(1);
-    
-    auto *out = m.mutable_description()->add_output();
-    out->set_name("B");
-    auto *type_out = out->mutable_type()->mutable_multiarraytype();
-    type_out->set_datatype(Specification::ArrayFeatureType_ArrayDataType_FLOAT32);
-    
-    m.set_isupdatable(true);
-    m.set_specificationversion(MLMODEL_SPECIFICATION_VERSION_IOS13);
-    
-    auto *nn = m.mutable_neuralnetwork();
-    auto *l1 = nn->add_layers();
-    l1->set_name("inner_layer");
-    l1->add_input("A");
-    l1->add_output("B");
-    l1->set_isupdatable(true);
-    Specification::InnerProductLayerParams *innerProductParams = l1->mutable_innerproduct();
-    innerProductParams->set_inputchannels(1);
-    innerProductParams->set_outputchannels(1);
-    innerProductParams->mutable_weights()->add_floatvalue(1.0);
-    innerProductParams->mutable_weights()->set_isupdatable(true);
-    innerProductParams->set_hasbias(true);
-    innerProductParams->mutable_bias()->add_floatvalue(1.0);
-    innerProductParams->mutable_bias()->set_isupdatable(true);
-    
-    return nn;
-}
 
 void addLearningRate(Specification::NeuralNetwork *nn, Specification::Optimizer::OptimizerTypeCase optimizerType, double defaultValue, double minValue,  double maxValue) {
     

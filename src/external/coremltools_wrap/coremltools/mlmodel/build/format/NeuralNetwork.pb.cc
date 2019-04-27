@@ -122,21 +122,36 @@ class NeuralNetworkLayerDefaultTypeInternal : public ::google::protobuf::interna
   const ::CoreML::Specification::CeilLayerParams* ceil_;
   const ::CoreML::Specification::FloorLayerParams* floor_;
   const ::CoreML::Specification::Exp2LayerParams* exp2_;
-  const ::CoreML::Specification::SineLayerParams* sine_;
-  const ::CoreML::Specification::CosineLayerParams* cosine_;
-  const ::CoreML::Specification::ErfActivationLayerParams* erfactivation_;
-  const ::CoreML::Specification::GeluActivationLayerParams* geluactivation_;
+  const ::CoreML::Specification::SinLayerParams* sin_;
+  const ::CoreML::Specification::CosLayerParams* cos_;
+  const ::CoreML::Specification::TanLayerParams* tan_;
+  const ::CoreML::Specification::AsinLayerParams* asin_;
+  const ::CoreML::Specification::AcosLayerParams* acos_;
+  const ::CoreML::Specification::AtanLayerParams* atan_;
+  const ::CoreML::Specification::SinhLayerParams* sinh_;
+  const ::CoreML::Specification::CoshLayerParams* cosh_;
+  const ::CoreML::Specification::TanhLayerParams* tanh_;
+  const ::CoreML::Specification::AsinhLayerParams* asinh_;
+  const ::CoreML::Specification::AcoshLayerParams* acosh_;
+  const ::CoreML::Specification::AtanhLayerParams* atanh_;
+  const ::CoreML::Specification::ErfLayerParams* erf_;
+  const ::CoreML::Specification::GeluLayerParams* gelu_;
   const ::CoreML::Specification::EqualLayerParams* equal_;
   const ::CoreML::Specification::NotEqualLayerParams* notequal_;
   const ::CoreML::Specification::LessThanLayerParams* lessthan_;
+  const ::CoreML::Specification::LessEqualLayerParams* lessequal_;
   const ::CoreML::Specification::GreaterThanLayerParams* greaterthan_;
+  const ::CoreML::Specification::GreaterEqualLayerParams* greaterequal_;
   const ::CoreML::Specification::LogicalOrLayerParams* logicalor_;
   const ::CoreML::Specification::LogicalXorLayerParams* logicalxor_;
   const ::CoreML::Specification::LogicalNotLayerParams* logicalnot_;
   const ::CoreML::Specification::LogicalAndLayerParams* logicaland_;
+  const ::CoreML::Specification::MinBroadcastableLayerParams* minbroadcastable_;
+  const ::CoreML::Specification::MaxBroadcastableLayerParams* maxbroadcastable_;
   const ::CoreML::Specification::AddBroadcastableLayerParams* addbroadcastable_;
   const ::CoreML::Specification::PowBroadcastableLayerParams* powbroadcastable_;
   const ::CoreML::Specification::DivideBroadcastableLayerParams* dividebroadcastable_;
+  const ::CoreML::Specification::FloorDivBroadcastableLayerParams* floordivbroadcastable_;
   const ::CoreML::Specification::MultiplyBroadcastableLayerParams* multiplybroadcastable_;
   const ::CoreML::Specification::SubtractBroadcastableLayerParams* subtractbroadcastable_;
   const ::CoreML::Specification::TileLayerParams* tile_;
@@ -144,13 +159,14 @@ class NeuralNetworkLayerDefaultTypeInternal : public ::google::protobuf::interna
   const ::CoreML::Specification::GatherLayerParams* gather_;
   const ::CoreML::Specification::ScatterLayerParams* scatter_;
   const ::CoreML::Specification::SoftmaxNDLayerParams* softmaxnd_;
+  const ::CoreML::Specification::ReverseLayerParams* reverse_;
   const ::CoreML::Specification::SplitNDLayerParams* splitnd_;
   const ::CoreML::Specification::ConcatNDLayerParams* concatnd_;
-  const ::CoreML::Specification::TransposeNDLayerParams* transposend_;
+  const ::CoreML::Specification::TransposeLayerParams* transpose_;
   const ::CoreML::Specification::SliceNDLayerParams* slicend_;
   const ::CoreML::Specification::SlidingWindowsLayerParams* slidingwindows_;
   const ::CoreML::Specification::EmbeddingNDLayerParams* embeddingnd_;
-  const ::CoreML::Specification::BatchedMatMulParams* batchedmatmul_;
+  const ::CoreML::Specification::BatchedMatMulLayerParams* batchedmatmul_;
   const ::CoreML::Specification::GetShapeLayerParams* getshape_;
   const ::CoreML::Specification::LoadConstantNDLayerParams* loadconstantnd_;
   const ::CoreML::Specification::FillLikeLayerParams* filllike_;
@@ -161,10 +177,24 @@ class NeuralNetworkLayerDefaultTypeInternal : public ::google::protobuf::interna
   const ::CoreML::Specification::BroadcastToDynamicLayerParams* broadcasttodynamic_;
   const ::CoreML::Specification::SqueezeLayerParams* squeeze_;
   const ::CoreML::Specification::ExpandDimsLayerParams* expanddims_;
+  const ::CoreML::Specification::FlattenTo2DLayerParams* flattento2d_;
+  const ::CoreML::Specification::ReshapeLikeLayerParams* reshapelike_;
+  const ::CoreML::Specification::ReshapeStaticLayerParams* reshapestatic_;
+  const ::CoreML::Specification::ReshapeDynamicLayerParams* reshapedynamic_;
   const ::CoreML::Specification::RankPreservingReshapeLayerParams* rankpreservingreshape_;
+  const ::CoreML::Specification::RandomNormalLikeLayerParams* randomnormallike_;
+  const ::CoreML::Specification::RandomNormalStaticLayerParams* randomnormalstatic_;
+  const ::CoreML::Specification::RandomNormalDynamicLayerParams* randomnormaldynamic_;
+  const ::CoreML::Specification::RandomUniformLikeLayerParams* randomuniformlike_;
+  const ::CoreML::Specification::RandomUniformStaticLayerParams* randomuniformstatic_;
+  const ::CoreML::Specification::RandomUniformDynamicLayerParams* randomuniformdynamic_;
+  const ::CoreML::Specification::RandomBernoulliLikeLayerParams* randombernoullilike_;
+  const ::CoreML::Specification::RandomBernoulliStaticLayerParams* randombernoullistatic_;
+  const ::CoreML::Specification::RandomBernoulliDynamicLayerParams* randombernoullidynamic_;
+  const ::CoreML::Specification::MatrixBandPartLayerParams* matrixbandpart_;
   const ::CoreML::Specification::LowerTriangularLayerParams* lowertriangular_;
   const ::CoreML::Specification::UpperTriangularLayerParams* uppertriangular_;
-  const ::CoreML::Specification::WhereLayerParams* where_;
+  const ::CoreML::Specification::WhereBroadcastableLayerParams* wherebroadcastable_;
 } _NeuralNetworkLayer_default_instance_;
 class BranchLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<BranchLayerParams> {
 } _BranchLayerParams_default_instance_;
@@ -178,8 +208,12 @@ class CopyLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::
 } _CopyLayerParams_default_instance_;
 class GreaterThanLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<GreaterThanLayerParams> {
 } _GreaterThanLayerParams_default_instance_;
+class GreaterEqualLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<GreaterEqualLayerParams> {
+} _GreaterEqualLayerParams_default_instance_;
 class LessThanLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LessThanLayerParams> {
 } _LessThanLayerParams_default_instance_;
+class LessEqualLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LessEqualLayerParams> {
+} _LessEqualLayerParams_default_instance_;
 class EqualLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<EqualLayerParams> {
 } _EqualLayerParams_default_instance_;
 class NotEqualLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<NotEqualLayerParams> {
@@ -326,14 +360,16 @@ class CustomLayerParams_ParametersEntryDefaultTypeInternal : public ::google::pr
 } _CustomLayerParams_ParametersEntry_default_instance_;
 class CustomLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<CustomLayerParams> {
 } _CustomLayerParams_default_instance_;
-class TransposeNDLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TransposeNDLayerParams> {
-} _TransposeNDLayerParams_default_instance_;
-class BatchedMatMulParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<BatchedMatMulParams> {
-} _BatchedMatMulParams_default_instance_;
+class TransposeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TransposeLayerParams> {
+} _TransposeLayerParams_default_instance_;
+class BatchedMatMulLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<BatchedMatMulLayerParams> {
+} _BatchedMatMulLayerParams_default_instance_;
 class ConcatNDLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ConcatNDLayerParams> {
 } _ConcatNDLayerParams_default_instance_;
 class SoftmaxNDLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<SoftmaxNDLayerParams> {
 } _SoftmaxNDLayerParams_default_instance_;
+class ReverseLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ReverseLayerParams> {
+} _ReverseLayerParams_default_instance_;
 class LoadConstantNDLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LoadConstantNDLayerParams> {
 } _LoadConstantNDLayerParams_default_instance_;
 class FillLikeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FillLikeLayerParams> {
@@ -342,16 +378,38 @@ class FillStaticLayerParamsDefaultTypeInternal : public ::google::protobuf::inte
 } _FillStaticLayerParams_default_instance_;
 class FillDynamicLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FillDynamicLayerParams> {
 } _FillDynamicLayerParams_default_instance_;
-class WhereLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<WhereLayerParams> {
-} _WhereLayerParams_default_instance_;
-class SineLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<SineLayerParams> {
-} _SineLayerParams_default_instance_;
-class CosineLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<CosineLayerParams> {
-} _CosineLayerParams_default_instance_;
+class WhereBroadcastableLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<WhereBroadcastableLayerParams> {
+} _WhereBroadcastableLayerParams_default_instance_;
+class SinLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<SinLayerParams> {
+} _SinLayerParams_default_instance_;
+class CosLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<CosLayerParams> {
+} _CosLayerParams_default_instance_;
+class TanLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TanLayerParams> {
+} _TanLayerParams_default_instance_;
+class AsinLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<AsinLayerParams> {
+} _AsinLayerParams_default_instance_;
+class AcosLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<AcosLayerParams> {
+} _AcosLayerParams_default_instance_;
+class AtanLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<AtanLayerParams> {
+} _AtanLayerParams_default_instance_;
+class SinhLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<SinhLayerParams> {
+} _SinhLayerParams_default_instance_;
+class CoshLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<CoshLayerParams> {
+} _CoshLayerParams_default_instance_;
+class TanhLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TanhLayerParams> {
+} _TanhLayerParams_default_instance_;
+class AsinhLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<AsinhLayerParams> {
+} _AsinhLayerParams_default_instance_;
+class AcoshLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<AcoshLayerParams> {
+} _AcoshLayerParams_default_instance_;
+class AtanhLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<AtanhLayerParams> {
+} _AtanhLayerParams_default_instance_;
 class PowBroadcastableLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<PowBroadcastableLayerParams> {
 } _PowBroadcastableLayerParams_default_instance_;
 class Exp2LayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Exp2LayerParams> {
 } _Exp2LayerParams_default_instance_;
+class MatrixBandPartLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<MatrixBandPartLayerParams> {
+} _MatrixBandPartLayerParams_default_instance_;
 class UpperTriangularLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<UpperTriangularLayerParams> {
 } _UpperTriangularLayerParams_default_instance_;
 class LowerTriangularLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<LowerTriangularLayerParams> {
@@ -364,6 +422,12 @@ class BroadcastToDynamicLayerParamsDefaultTypeInternal : public ::google::protob
 } _BroadcastToDynamicLayerParams_default_instance_;
 class AddBroadcastableLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<AddBroadcastableLayerParams> {
 } _AddBroadcastableLayerParams_default_instance_;
+class MaxBroadcastableLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<MaxBroadcastableLayerParams> {
+} _MaxBroadcastableLayerParams_default_instance_;
+class MinBroadcastableLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<MinBroadcastableLayerParams> {
+} _MinBroadcastableLayerParams_default_instance_;
+class FloorDivBroadcastableLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FloorDivBroadcastableLayerParams> {
+} _FloorDivBroadcastableLayerParams_default_instance_;
 class SubtractBroadcastableLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<SubtractBroadcastableLayerParams> {
 } _SubtractBroadcastableLayerParams_default_instance_;
 class MultiplyBroadcastableLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<MultiplyBroadcastableLayerParams> {
@@ -378,8 +442,34 @@ class StackNDLayerParamsDefaultTypeInternal : public ::google::protobuf::interna
 } _StackNDLayerParams_default_instance_;
 class RankPreservingReshapeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RankPreservingReshapeLayerParams> {
 } _RankPreservingReshapeLayerParams_default_instance_;
+class RandomNormalLikeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomNormalLikeLayerParams> {
+} _RandomNormalLikeLayerParams_default_instance_;
+class RandomNormalStaticLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomNormalStaticLayerParams> {
+} _RandomNormalStaticLayerParams_default_instance_;
+class RandomNormalDynamicLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomNormalDynamicLayerParams> {
+} _RandomNormalDynamicLayerParams_default_instance_;
+class RandomUniformLikeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomUniformLikeLayerParams> {
+} _RandomUniformLikeLayerParams_default_instance_;
+class RandomUniformStaticLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomUniformStaticLayerParams> {
+} _RandomUniformStaticLayerParams_default_instance_;
+class RandomUniformDynamicLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomUniformDynamicLayerParams> {
+} _RandomUniformDynamicLayerParams_default_instance_;
+class RandomBernoulliLikeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomBernoulliLikeLayerParams> {
+} _RandomBernoulliLikeLayerParams_default_instance_;
+class RandomBernoulliStaticLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomBernoulliStaticLayerParams> {
+} _RandomBernoulliStaticLayerParams_default_instance_;
+class RandomBernoulliDynamicLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RandomBernoulliDynamicLayerParams> {
+} _RandomBernoulliDynamicLayerParams_default_instance_;
 class ExpandDimsLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ExpandDimsLayerParams> {
 } _ExpandDimsLayerParams_default_instance_;
+class FlattenTo2DLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FlattenTo2DLayerParams> {
+} _FlattenTo2DLayerParams_default_instance_;
+class ReshapeStaticLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ReshapeStaticLayerParams> {
+} _ReshapeStaticLayerParams_default_instance_;
+class ReshapeLikeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ReshapeLikeLayerParams> {
+} _ReshapeLikeLayerParams_default_instance_;
+class ReshapeDynamicLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ReshapeDynamicLayerParams> {
+} _ReshapeDynamicLayerParams_default_instance_;
 class SqueezeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<SqueezeLayerParams> {
 } _SqueezeLayerParams_default_instance_;
 class SplitNDLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<SplitNDLayerParams> {
@@ -396,10 +486,10 @@ class TileLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::
 } _TileLayerParams_default_instance_;
 class GetShapeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<GetShapeLayerParams> {
 } _GetShapeLayerParams_default_instance_;
-class ErfActivationLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ErfActivationLayerParams> {
-} _ErfActivationLayerParams_default_instance_;
-class GeluActivationLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<GeluActivationLayerParams> {
-} _GeluActivationLayerParams_default_instance_;
+class ErfLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ErfLayerParams> {
+} _ErfLayerParams_default_instance_;
+class GeluLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<GeluLayerParams> {
+} _GeluLayerParams_default_instance_;
 class RangeLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RangeLayerParams> {
 } _RangeLayerParams_default_instance_;
 class SlidingWindowsLayerParamsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<SlidingWindowsLayerParams> {
@@ -583,6 +673,36 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
 };
 
 
@@ -613,7 +733,9 @@ void TableStruct::Shutdown() {
   _LoopContinueLayerParams_default_instance_.Shutdown();
   _CopyLayerParams_default_instance_.Shutdown();
   _GreaterThanLayerParams_default_instance_.Shutdown();
+  _GreaterEqualLayerParams_default_instance_.Shutdown();
   _LessThanLayerParams_default_instance_.Shutdown();
+  _LessEqualLayerParams_default_instance_.Shutdown();
   _EqualLayerParams_default_instance_.Shutdown();
   _NotEqualLayerParams_default_instance_.Shutdown();
   _LogicalAndLayerParams_default_instance_.Shutdown();
@@ -676,25 +798,40 @@ void TableStruct::Shutdown() {
   _BiDirectionalLSTMLayerParams_default_instance_.Shutdown();
   _CustomLayerParams_CustomLayerParamValue_default_instance_.Shutdown();
   _CustomLayerParams_default_instance_.Shutdown();
-  _TransposeNDLayerParams_default_instance_.Shutdown();
-  _BatchedMatMulParams_default_instance_.Shutdown();
+  _TransposeLayerParams_default_instance_.Shutdown();
+  _BatchedMatMulLayerParams_default_instance_.Shutdown();
   _ConcatNDLayerParams_default_instance_.Shutdown();
   _SoftmaxNDLayerParams_default_instance_.Shutdown();
+  _ReverseLayerParams_default_instance_.Shutdown();
   _LoadConstantNDLayerParams_default_instance_.Shutdown();
   _FillLikeLayerParams_default_instance_.Shutdown();
   _FillStaticLayerParams_default_instance_.Shutdown();
   _FillDynamicLayerParams_default_instance_.Shutdown();
-  _WhereLayerParams_default_instance_.Shutdown();
-  _SineLayerParams_default_instance_.Shutdown();
-  _CosineLayerParams_default_instance_.Shutdown();
+  _WhereBroadcastableLayerParams_default_instance_.Shutdown();
+  _SinLayerParams_default_instance_.Shutdown();
+  _CosLayerParams_default_instance_.Shutdown();
+  _TanLayerParams_default_instance_.Shutdown();
+  _AsinLayerParams_default_instance_.Shutdown();
+  _AcosLayerParams_default_instance_.Shutdown();
+  _AtanLayerParams_default_instance_.Shutdown();
+  _SinhLayerParams_default_instance_.Shutdown();
+  _CoshLayerParams_default_instance_.Shutdown();
+  _TanhLayerParams_default_instance_.Shutdown();
+  _AsinhLayerParams_default_instance_.Shutdown();
+  _AcoshLayerParams_default_instance_.Shutdown();
+  _AtanhLayerParams_default_instance_.Shutdown();
   _PowBroadcastableLayerParams_default_instance_.Shutdown();
   _Exp2LayerParams_default_instance_.Shutdown();
+  _MatrixBandPartLayerParams_default_instance_.Shutdown();
   _UpperTriangularLayerParams_default_instance_.Shutdown();
   _LowerTriangularLayerParams_default_instance_.Shutdown();
   _BroadcastToLikeLayerParams_default_instance_.Shutdown();
   _BroadcastToStaticLayerParams_default_instance_.Shutdown();
   _BroadcastToDynamicLayerParams_default_instance_.Shutdown();
   _AddBroadcastableLayerParams_default_instance_.Shutdown();
+  _MaxBroadcastableLayerParams_default_instance_.Shutdown();
+  _MinBroadcastableLayerParams_default_instance_.Shutdown();
+  _FloorDivBroadcastableLayerParams_default_instance_.Shutdown();
   _SubtractBroadcastableLayerParams_default_instance_.Shutdown();
   _MultiplyBroadcastableLayerParams_default_instance_.Shutdown();
   _DivideBroadcastableLayerParams_default_instance_.Shutdown();
@@ -702,7 +839,20 @@ void TableStruct::Shutdown() {
   _ScatterLayerParams_default_instance_.Shutdown();
   _StackNDLayerParams_default_instance_.Shutdown();
   _RankPreservingReshapeLayerParams_default_instance_.Shutdown();
+  _RandomNormalLikeLayerParams_default_instance_.Shutdown();
+  _RandomNormalStaticLayerParams_default_instance_.Shutdown();
+  _RandomNormalDynamicLayerParams_default_instance_.Shutdown();
+  _RandomUniformLikeLayerParams_default_instance_.Shutdown();
+  _RandomUniformStaticLayerParams_default_instance_.Shutdown();
+  _RandomUniformDynamicLayerParams_default_instance_.Shutdown();
+  _RandomBernoulliLikeLayerParams_default_instance_.Shutdown();
+  _RandomBernoulliStaticLayerParams_default_instance_.Shutdown();
+  _RandomBernoulliDynamicLayerParams_default_instance_.Shutdown();
   _ExpandDimsLayerParams_default_instance_.Shutdown();
+  _FlattenTo2DLayerParams_default_instance_.Shutdown();
+  _ReshapeStaticLayerParams_default_instance_.Shutdown();
+  _ReshapeLikeLayerParams_default_instance_.Shutdown();
+  _ReshapeDynamicLayerParams_default_instance_.Shutdown();
   _SqueezeLayerParams_default_instance_.Shutdown();
   _SplitNDLayerParams_default_instance_.Shutdown();
   _CeilLayerParams_default_instance_.Shutdown();
@@ -711,8 +861,8 @@ void TableStruct::Shutdown() {
   _SliceNDLayerParams_default_instance_.Shutdown();
   _TileLayerParams_default_instance_.Shutdown();
   _GetShapeLayerParams_default_instance_.Shutdown();
-  _ErfActivationLayerParams_default_instance_.Shutdown();
-  _GeluActivationLayerParams_default_instance_.Shutdown();
+  _ErfLayerParams_default_instance_.Shutdown();
+  _GeluLayerParams_default_instance_.Shutdown();
   _RangeLayerParams_default_instance_.Shutdown();
   _SlidingWindowsLayerParams_default_instance_.Shutdown();
   _NeuralNetworkClassifier_default_instance_.Shutdown();
@@ -758,7 +908,9 @@ void TableStruct::InitDefaultsImpl() {
   _LoopContinueLayerParams_default_instance_.DefaultConstruct();
   _CopyLayerParams_default_instance_.DefaultConstruct();
   _GreaterThanLayerParams_default_instance_.DefaultConstruct();
+  _GreaterEqualLayerParams_default_instance_.DefaultConstruct();
   _LessThanLayerParams_default_instance_.DefaultConstruct();
+  _LessEqualLayerParams_default_instance_.DefaultConstruct();
   _EqualLayerParams_default_instance_.DefaultConstruct();
   _NotEqualLayerParams_default_instance_.DefaultConstruct();
   _LogicalAndLayerParams_default_instance_.DefaultConstruct();
@@ -822,25 +974,40 @@ void TableStruct::InitDefaultsImpl() {
   _CustomLayerParams_CustomLayerParamValue_default_instance_.DefaultConstruct();
   _CustomLayerParams_ParametersEntry_default_instance_.DefaultConstruct();
   _CustomLayerParams_default_instance_.DefaultConstruct();
-  _TransposeNDLayerParams_default_instance_.DefaultConstruct();
-  _BatchedMatMulParams_default_instance_.DefaultConstruct();
+  _TransposeLayerParams_default_instance_.DefaultConstruct();
+  _BatchedMatMulLayerParams_default_instance_.DefaultConstruct();
   _ConcatNDLayerParams_default_instance_.DefaultConstruct();
   _SoftmaxNDLayerParams_default_instance_.DefaultConstruct();
+  _ReverseLayerParams_default_instance_.DefaultConstruct();
   _LoadConstantNDLayerParams_default_instance_.DefaultConstruct();
   _FillLikeLayerParams_default_instance_.DefaultConstruct();
   _FillStaticLayerParams_default_instance_.DefaultConstruct();
   _FillDynamicLayerParams_default_instance_.DefaultConstruct();
-  _WhereLayerParams_default_instance_.DefaultConstruct();
-  _SineLayerParams_default_instance_.DefaultConstruct();
-  _CosineLayerParams_default_instance_.DefaultConstruct();
+  _WhereBroadcastableLayerParams_default_instance_.DefaultConstruct();
+  _SinLayerParams_default_instance_.DefaultConstruct();
+  _CosLayerParams_default_instance_.DefaultConstruct();
+  _TanLayerParams_default_instance_.DefaultConstruct();
+  _AsinLayerParams_default_instance_.DefaultConstruct();
+  _AcosLayerParams_default_instance_.DefaultConstruct();
+  _AtanLayerParams_default_instance_.DefaultConstruct();
+  _SinhLayerParams_default_instance_.DefaultConstruct();
+  _CoshLayerParams_default_instance_.DefaultConstruct();
+  _TanhLayerParams_default_instance_.DefaultConstruct();
+  _AsinhLayerParams_default_instance_.DefaultConstruct();
+  _AcoshLayerParams_default_instance_.DefaultConstruct();
+  _AtanhLayerParams_default_instance_.DefaultConstruct();
   _PowBroadcastableLayerParams_default_instance_.DefaultConstruct();
   _Exp2LayerParams_default_instance_.DefaultConstruct();
+  _MatrixBandPartLayerParams_default_instance_.DefaultConstruct();
   _UpperTriangularLayerParams_default_instance_.DefaultConstruct();
   _LowerTriangularLayerParams_default_instance_.DefaultConstruct();
   _BroadcastToLikeLayerParams_default_instance_.DefaultConstruct();
   _BroadcastToStaticLayerParams_default_instance_.DefaultConstruct();
   _BroadcastToDynamicLayerParams_default_instance_.DefaultConstruct();
   _AddBroadcastableLayerParams_default_instance_.DefaultConstruct();
+  _MaxBroadcastableLayerParams_default_instance_.DefaultConstruct();
+  _MinBroadcastableLayerParams_default_instance_.DefaultConstruct();
+  _FloorDivBroadcastableLayerParams_default_instance_.DefaultConstruct();
   _SubtractBroadcastableLayerParams_default_instance_.DefaultConstruct();
   _MultiplyBroadcastableLayerParams_default_instance_.DefaultConstruct();
   _DivideBroadcastableLayerParams_default_instance_.DefaultConstruct();
@@ -848,7 +1015,20 @@ void TableStruct::InitDefaultsImpl() {
   _ScatterLayerParams_default_instance_.DefaultConstruct();
   _StackNDLayerParams_default_instance_.DefaultConstruct();
   _RankPreservingReshapeLayerParams_default_instance_.DefaultConstruct();
+  _RandomNormalLikeLayerParams_default_instance_.DefaultConstruct();
+  _RandomNormalStaticLayerParams_default_instance_.DefaultConstruct();
+  _RandomNormalDynamicLayerParams_default_instance_.DefaultConstruct();
+  _RandomUniformLikeLayerParams_default_instance_.DefaultConstruct();
+  _RandomUniformStaticLayerParams_default_instance_.DefaultConstruct();
+  _RandomUniformDynamicLayerParams_default_instance_.DefaultConstruct();
+  _RandomBernoulliLikeLayerParams_default_instance_.DefaultConstruct();
+  _RandomBernoulliStaticLayerParams_default_instance_.DefaultConstruct();
+  _RandomBernoulliDynamicLayerParams_default_instance_.DefaultConstruct();
   _ExpandDimsLayerParams_default_instance_.DefaultConstruct();
+  _FlattenTo2DLayerParams_default_instance_.DefaultConstruct();
+  _ReshapeStaticLayerParams_default_instance_.DefaultConstruct();
+  _ReshapeLikeLayerParams_default_instance_.DefaultConstruct();
+  _ReshapeDynamicLayerParams_default_instance_.DefaultConstruct();
   _SqueezeLayerParams_default_instance_.DefaultConstruct();
   _SplitNDLayerParams_default_instance_.DefaultConstruct();
   _CeilLayerParams_default_instance_.DefaultConstruct();
@@ -857,8 +1037,8 @@ void TableStruct::InitDefaultsImpl() {
   _SliceNDLayerParams_default_instance_.DefaultConstruct();
   _TileLayerParams_default_instance_.DefaultConstruct();
   _GetShapeLayerParams_default_instance_.DefaultConstruct();
-  _ErfActivationLayerParams_default_instance_.DefaultConstruct();
-  _GeluActivationLayerParams_default_instance_.DefaultConstruct();
+  _ErfLayerParams_default_instance_.DefaultConstruct();
+  _GeluLayerParams_default_instance_.DefaultConstruct();
   _RangeLayerParams_default_instance_.DefaultConstruct();
   _SlidingWindowsLayerParams_default_instance_.DefaultConstruct();
   _NeuralNetworkClassifier_default_instance_.DefaultConstruct();
@@ -996,9 +1176,9 @@ void TableStruct::InitDefaultsImpl() {
       ::CoreML::Specification::LSTMParams::internal_default_instance());
   _CustomLayerParams_ParametersEntry_default_instance_.get_mutable()->set_default_instance(_CustomLayerParams_ParametersEntry_default_instance_.get_mutable());
   _CustomLayerParams_ParametersEntry_default_instance_.get_mutable()->InitAsDefaultInstance();
-  _BatchedMatMulParams_default_instance_.get_mutable()->weights_ = const_cast< ::CoreML::Specification::WeightParams*>(
+  _BatchedMatMulLayerParams_default_instance_.get_mutable()->weights_ = const_cast< ::CoreML::Specification::WeightParams*>(
       ::CoreML::Specification::WeightParams::internal_default_instance());
-  _BatchedMatMulParams_default_instance_.get_mutable()->bias_ = const_cast< ::CoreML::Specification::WeightParams*>(
+  _BatchedMatMulLayerParams_default_instance_.get_mutable()->bias_ = const_cast< ::CoreML::Specification::WeightParams*>(
       ::CoreML::Specification::WeightParams::internal_default_instance());
   _LoadConstantNDLayerParams_default_instance_.get_mutable()->data_ = const_cast< ::CoreML::Specification::WeightParams*>(
       ::CoreML::Specification::WeightParams::internal_default_instance());
@@ -1303,6 +1483,25 @@ const ReduceLayerParams_ReduceAxis ReduceLayerParams::W;
 const ReduceLayerParams_ReduceAxis ReduceLayerParams::ReduceAxis_MIN;
 const ReduceLayerParams_ReduceAxis ReduceLayerParams::ReduceAxis_MAX;
 const int ReduceLayerParams::ReduceAxis_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+bool GeluLayerParams_GeluMode_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const GeluLayerParams_GeluMode GeluLayerParams::EXACT;
+const GeluLayerParams_GeluMode GeluLayerParams::TANH_APPROXIMATION;
+const GeluLayerParams_GeluMode GeluLayerParams::SIGMOID_APPROXIMATION;
+const GeluLayerParams_GeluMode GeluLayerParams::GeluMode_MIN;
+const GeluLayerParams_GeluMode GeluLayerParams::GeluMode_MAX;
+const int GeluLayerParams::GeluMode_ARRAYSIZE;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 bool NeuralNetworkMultiArrayShapeMapping_IsValid(int value) {
   switch (value) {
@@ -7040,21 +7239,36 @@ const int NeuralNetworkLayer::kClipFieldNumber;
 const int NeuralNetworkLayer::kCeilFieldNumber;
 const int NeuralNetworkLayer::kFloorFieldNumber;
 const int NeuralNetworkLayer::kExp2FieldNumber;
-const int NeuralNetworkLayer::kSineFieldNumber;
-const int NeuralNetworkLayer::kCosineFieldNumber;
-const int NeuralNetworkLayer::kErfActivationFieldNumber;
-const int NeuralNetworkLayer::kGeluActivationFieldNumber;
+const int NeuralNetworkLayer::kSinFieldNumber;
+const int NeuralNetworkLayer::kCosFieldNumber;
+const int NeuralNetworkLayer::kTanFieldNumber;
+const int NeuralNetworkLayer::kAsinFieldNumber;
+const int NeuralNetworkLayer::kAcosFieldNumber;
+const int NeuralNetworkLayer::kAtanFieldNumber;
+const int NeuralNetworkLayer::kSinhFieldNumber;
+const int NeuralNetworkLayer::kCoshFieldNumber;
+const int NeuralNetworkLayer::kTanhFieldNumber;
+const int NeuralNetworkLayer::kAsinhFieldNumber;
+const int NeuralNetworkLayer::kAcoshFieldNumber;
+const int NeuralNetworkLayer::kAtanhFieldNumber;
+const int NeuralNetworkLayer::kErfFieldNumber;
+const int NeuralNetworkLayer::kGeluFieldNumber;
 const int NeuralNetworkLayer::kEqualFieldNumber;
 const int NeuralNetworkLayer::kNotEqualFieldNumber;
 const int NeuralNetworkLayer::kLessThanFieldNumber;
+const int NeuralNetworkLayer::kLessEqualFieldNumber;
 const int NeuralNetworkLayer::kGreaterThanFieldNumber;
+const int NeuralNetworkLayer::kGreaterEqualFieldNumber;
 const int NeuralNetworkLayer::kLogicalOrFieldNumber;
 const int NeuralNetworkLayer::kLogicalXorFieldNumber;
 const int NeuralNetworkLayer::kLogicalNotFieldNumber;
 const int NeuralNetworkLayer::kLogicalAndFieldNumber;
+const int NeuralNetworkLayer::kMinBroadcastableFieldNumber;
+const int NeuralNetworkLayer::kMaxBroadcastableFieldNumber;
 const int NeuralNetworkLayer::kAddBroadcastableFieldNumber;
 const int NeuralNetworkLayer::kPowBroadcastableFieldNumber;
 const int NeuralNetworkLayer::kDivideBroadcastableFieldNumber;
+const int NeuralNetworkLayer::kFloorDivBroadcastableFieldNumber;
 const int NeuralNetworkLayer::kMultiplyBroadcastableFieldNumber;
 const int NeuralNetworkLayer::kSubtractBroadcastableFieldNumber;
 const int NeuralNetworkLayer::kTileFieldNumber;
@@ -7062,9 +7276,10 @@ const int NeuralNetworkLayer::kStackNDFieldNumber;
 const int NeuralNetworkLayer::kGatherFieldNumber;
 const int NeuralNetworkLayer::kScatterFieldNumber;
 const int NeuralNetworkLayer::kSoftmaxNDFieldNumber;
+const int NeuralNetworkLayer::kReverseFieldNumber;
 const int NeuralNetworkLayer::kSplitNDFieldNumber;
 const int NeuralNetworkLayer::kConcatNDFieldNumber;
-const int NeuralNetworkLayer::kTransposeNDFieldNumber;
+const int NeuralNetworkLayer::kTransposeFieldNumber;
 const int NeuralNetworkLayer::kSliceNDFieldNumber;
 const int NeuralNetworkLayer::kSlidingWindowsFieldNumber;
 const int NeuralNetworkLayer::kEmbeddingNDFieldNumber;
@@ -7079,10 +7294,24 @@ const int NeuralNetworkLayer::kBroadcastToStaticFieldNumber;
 const int NeuralNetworkLayer::kBroadcastToDynamicFieldNumber;
 const int NeuralNetworkLayer::kSqueezeFieldNumber;
 const int NeuralNetworkLayer::kExpandDimsFieldNumber;
+const int NeuralNetworkLayer::kFlattenTo2DFieldNumber;
+const int NeuralNetworkLayer::kReshapeLikeFieldNumber;
+const int NeuralNetworkLayer::kReshapeStaticFieldNumber;
+const int NeuralNetworkLayer::kReshapeDynamicFieldNumber;
 const int NeuralNetworkLayer::kRankPreservingReshapeFieldNumber;
+const int NeuralNetworkLayer::kRandomNormalLikeFieldNumber;
+const int NeuralNetworkLayer::kRandomNormalStaticFieldNumber;
+const int NeuralNetworkLayer::kRandomNormalDynamicFieldNumber;
+const int NeuralNetworkLayer::kRandomUniformLikeFieldNumber;
+const int NeuralNetworkLayer::kRandomUniformStaticFieldNumber;
+const int NeuralNetworkLayer::kRandomUniformDynamicFieldNumber;
+const int NeuralNetworkLayer::kRandomBernoulliLikeFieldNumber;
+const int NeuralNetworkLayer::kRandomBernoulliStaticFieldNumber;
+const int NeuralNetworkLayer::kRandomBernoulliDynamicFieldNumber;
+const int NeuralNetworkLayer::kMatrixBandPartFieldNumber;
 const int NeuralNetworkLayer::kLowerTriangularFieldNumber;
 const int NeuralNetworkLayer::kUpperTriangularFieldNumber;
-const int NeuralNetworkLayer::kWhereFieldNumber;
+const int NeuralNetworkLayer::kWhereBroadcastableFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 NeuralNetworkLayer::NeuralNetworkLayer()
@@ -7305,20 +7534,60 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
       mutable_exp2()->::CoreML::Specification::Exp2LayerParams::MergeFrom(from.exp2());
       break;
     }
-    case kSine: {
-      mutable_sine()->::CoreML::Specification::SineLayerParams::MergeFrom(from.sine());
+    case kSin: {
+      mutable_sin()->::CoreML::Specification::SinLayerParams::MergeFrom(from.sin());
       break;
     }
-    case kCosine: {
-      mutable_cosine()->::CoreML::Specification::CosineLayerParams::MergeFrom(from.cosine());
+    case kCos: {
+      mutable_cos()->::CoreML::Specification::CosLayerParams::MergeFrom(from.cos());
       break;
     }
-    case kErfActivation: {
-      mutable_erfactivation()->::CoreML::Specification::ErfActivationLayerParams::MergeFrom(from.erfactivation());
+    case kTan: {
+      mutable_tan()->::CoreML::Specification::TanLayerParams::MergeFrom(from.tan());
       break;
     }
-    case kGeluActivation: {
-      mutable_geluactivation()->::CoreML::Specification::GeluActivationLayerParams::MergeFrom(from.geluactivation());
+    case kAsin: {
+      mutable_asin()->::CoreML::Specification::AsinLayerParams::MergeFrom(from.asin());
+      break;
+    }
+    case kAcos: {
+      mutable_acos()->::CoreML::Specification::AcosLayerParams::MergeFrom(from.acos());
+      break;
+    }
+    case kAtan: {
+      mutable_atan()->::CoreML::Specification::AtanLayerParams::MergeFrom(from.atan());
+      break;
+    }
+    case kSinh: {
+      mutable_sinh()->::CoreML::Specification::SinhLayerParams::MergeFrom(from.sinh());
+      break;
+    }
+    case kCosh: {
+      mutable_cosh()->::CoreML::Specification::CoshLayerParams::MergeFrom(from.cosh());
+      break;
+    }
+    case kTanh: {
+      mutable_tanh()->::CoreML::Specification::TanhLayerParams::MergeFrom(from.tanh());
+      break;
+    }
+    case kAsinh: {
+      mutable_asinh()->::CoreML::Specification::AsinhLayerParams::MergeFrom(from.asinh());
+      break;
+    }
+    case kAcosh: {
+      mutable_acosh()->::CoreML::Specification::AcoshLayerParams::MergeFrom(from.acosh());
+      break;
+    }
+    case kAtanh: {
+      mutable_atanh()->::CoreML::Specification::AtanhLayerParams::MergeFrom(from.atanh());
+      break;
+    }
+    case kErf: {
+      mutable_erf()->::CoreML::Specification::ErfLayerParams::MergeFrom(from.erf());
+      break;
+    }
+    case kGelu: {
+      mutable_gelu()->::CoreML::Specification::GeluLayerParams::MergeFrom(from.gelu());
       break;
     }
     case kEqual: {
@@ -7333,8 +7602,16 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
       mutable_lessthan()->::CoreML::Specification::LessThanLayerParams::MergeFrom(from.lessthan());
       break;
     }
+    case kLessEqual: {
+      mutable_lessequal()->::CoreML::Specification::LessEqualLayerParams::MergeFrom(from.lessequal());
+      break;
+    }
     case kGreaterThan: {
       mutable_greaterthan()->::CoreML::Specification::GreaterThanLayerParams::MergeFrom(from.greaterthan());
+      break;
+    }
+    case kGreaterEqual: {
+      mutable_greaterequal()->::CoreML::Specification::GreaterEqualLayerParams::MergeFrom(from.greaterequal());
       break;
     }
     case kLogicalOr: {
@@ -7353,6 +7630,14 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
       mutable_logicaland()->::CoreML::Specification::LogicalAndLayerParams::MergeFrom(from.logicaland());
       break;
     }
+    case kMinBroadcastable: {
+      mutable_minbroadcastable()->::CoreML::Specification::MinBroadcastableLayerParams::MergeFrom(from.minbroadcastable());
+      break;
+    }
+    case kMaxBroadcastable: {
+      mutable_maxbroadcastable()->::CoreML::Specification::MaxBroadcastableLayerParams::MergeFrom(from.maxbroadcastable());
+      break;
+    }
     case kAddBroadcastable: {
       mutable_addbroadcastable()->::CoreML::Specification::AddBroadcastableLayerParams::MergeFrom(from.addbroadcastable());
       break;
@@ -7363,6 +7648,10 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
     }
     case kDivideBroadcastable: {
       mutable_dividebroadcastable()->::CoreML::Specification::DivideBroadcastableLayerParams::MergeFrom(from.dividebroadcastable());
+      break;
+    }
+    case kFloorDivBroadcastable: {
+      mutable_floordivbroadcastable()->::CoreML::Specification::FloorDivBroadcastableLayerParams::MergeFrom(from.floordivbroadcastable());
       break;
     }
     case kMultiplyBroadcastable: {
@@ -7393,6 +7682,10 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
       mutable_softmaxnd()->::CoreML::Specification::SoftmaxNDLayerParams::MergeFrom(from.softmaxnd());
       break;
     }
+    case kReverse: {
+      mutable_reverse()->::CoreML::Specification::ReverseLayerParams::MergeFrom(from.reverse());
+      break;
+    }
     case kSplitND: {
       mutable_splitnd()->::CoreML::Specification::SplitNDLayerParams::MergeFrom(from.splitnd());
       break;
@@ -7401,8 +7694,8 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
       mutable_concatnd()->::CoreML::Specification::ConcatNDLayerParams::MergeFrom(from.concatnd());
       break;
     }
-    case kTransposeND: {
-      mutable_transposend()->::CoreML::Specification::TransposeNDLayerParams::MergeFrom(from.transposend());
+    case kTranspose: {
+      mutable_transpose()->::CoreML::Specification::TransposeLayerParams::MergeFrom(from.transpose());
       break;
     }
     case kSliceND: {
@@ -7418,7 +7711,7 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
       break;
     }
     case kBatchedMatmul: {
-      mutable_batchedmatmul()->::CoreML::Specification::BatchedMatMulParams::MergeFrom(from.batchedmatmul());
+      mutable_batchedmatmul()->::CoreML::Specification::BatchedMatMulLayerParams::MergeFrom(from.batchedmatmul());
       break;
     }
     case kGetShape: {
@@ -7461,8 +7754,64 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
       mutable_expanddims()->::CoreML::Specification::ExpandDimsLayerParams::MergeFrom(from.expanddims());
       break;
     }
+    case kFlattenTo2D: {
+      mutable_flattento2d()->::CoreML::Specification::FlattenTo2DLayerParams::MergeFrom(from.flattento2d());
+      break;
+    }
+    case kReshapeLike: {
+      mutable_reshapelike()->::CoreML::Specification::ReshapeLikeLayerParams::MergeFrom(from.reshapelike());
+      break;
+    }
+    case kReshapeStatic: {
+      mutable_reshapestatic()->::CoreML::Specification::ReshapeStaticLayerParams::MergeFrom(from.reshapestatic());
+      break;
+    }
+    case kReshapeDynamic: {
+      mutable_reshapedynamic()->::CoreML::Specification::ReshapeDynamicLayerParams::MergeFrom(from.reshapedynamic());
+      break;
+    }
     case kRankPreservingReshape: {
       mutable_rankpreservingreshape()->::CoreML::Specification::RankPreservingReshapeLayerParams::MergeFrom(from.rankpreservingreshape());
+      break;
+    }
+    case kRandomNormalLike: {
+      mutable_randomnormallike()->::CoreML::Specification::RandomNormalLikeLayerParams::MergeFrom(from.randomnormallike());
+      break;
+    }
+    case kRandomNormalStatic: {
+      mutable_randomnormalstatic()->::CoreML::Specification::RandomNormalStaticLayerParams::MergeFrom(from.randomnormalstatic());
+      break;
+    }
+    case kRandomNormalDynamic: {
+      mutable_randomnormaldynamic()->::CoreML::Specification::RandomNormalDynamicLayerParams::MergeFrom(from.randomnormaldynamic());
+      break;
+    }
+    case kRandomUniformLike: {
+      mutable_randomuniformlike()->::CoreML::Specification::RandomUniformLikeLayerParams::MergeFrom(from.randomuniformlike());
+      break;
+    }
+    case kRandomUniformStatic: {
+      mutable_randomuniformstatic()->::CoreML::Specification::RandomUniformStaticLayerParams::MergeFrom(from.randomuniformstatic());
+      break;
+    }
+    case kRandomUniformDynamic: {
+      mutable_randomuniformdynamic()->::CoreML::Specification::RandomUniformDynamicLayerParams::MergeFrom(from.randomuniformdynamic());
+      break;
+    }
+    case kRandomBernoulliLike: {
+      mutable_randombernoullilike()->::CoreML::Specification::RandomBernoulliLikeLayerParams::MergeFrom(from.randombernoullilike());
+      break;
+    }
+    case kRandomBernoulliStatic: {
+      mutable_randombernoullistatic()->::CoreML::Specification::RandomBernoulliStaticLayerParams::MergeFrom(from.randombernoullistatic());
+      break;
+    }
+    case kRandomBernoulliDynamic: {
+      mutable_randombernoullidynamic()->::CoreML::Specification::RandomBernoulliDynamicLayerParams::MergeFrom(from.randombernoullidynamic());
+      break;
+    }
+    case kMatrixBandPart: {
+      mutable_matrixbandpart()->::CoreML::Specification::MatrixBandPartLayerParams::MergeFrom(from.matrixbandpart());
       break;
     }
     case kLowerTriangular: {
@@ -7473,8 +7822,8 @@ NeuralNetworkLayer::NeuralNetworkLayer(const NeuralNetworkLayer& from)
       mutable_uppertriangular()->::CoreML::Specification::UpperTriangularLayerParams::MergeFrom(from.uppertriangular());
       break;
     }
-    case kWhere: {
-      mutable_where()->::CoreML::Specification::WhereLayerParams::MergeFrom(from.where());
+    case kWhereBroadcastable: {
+      mutable_wherebroadcastable()->::CoreML::Specification::WhereBroadcastableLayerParams::MergeFrom(from.wherebroadcastable());
       break;
     }
     case LAYER_NOT_SET: {
@@ -7720,20 +8069,60 @@ void NeuralNetworkLayer::clear_layer() {
       delete layer_.exp2_;
       break;
     }
-    case kSine: {
-      delete layer_.sine_;
+    case kSin: {
+      delete layer_.sin_;
       break;
     }
-    case kCosine: {
-      delete layer_.cosine_;
+    case kCos: {
+      delete layer_.cos_;
       break;
     }
-    case kErfActivation: {
-      delete layer_.erfactivation_;
+    case kTan: {
+      delete layer_.tan_;
       break;
     }
-    case kGeluActivation: {
-      delete layer_.geluactivation_;
+    case kAsin: {
+      delete layer_.asin_;
+      break;
+    }
+    case kAcos: {
+      delete layer_.acos_;
+      break;
+    }
+    case kAtan: {
+      delete layer_.atan_;
+      break;
+    }
+    case kSinh: {
+      delete layer_.sinh_;
+      break;
+    }
+    case kCosh: {
+      delete layer_.cosh_;
+      break;
+    }
+    case kTanh: {
+      delete layer_.tanh_;
+      break;
+    }
+    case kAsinh: {
+      delete layer_.asinh_;
+      break;
+    }
+    case kAcosh: {
+      delete layer_.acosh_;
+      break;
+    }
+    case kAtanh: {
+      delete layer_.atanh_;
+      break;
+    }
+    case kErf: {
+      delete layer_.erf_;
+      break;
+    }
+    case kGelu: {
+      delete layer_.gelu_;
       break;
     }
     case kEqual: {
@@ -7748,8 +8137,16 @@ void NeuralNetworkLayer::clear_layer() {
       delete layer_.lessthan_;
       break;
     }
+    case kLessEqual: {
+      delete layer_.lessequal_;
+      break;
+    }
     case kGreaterThan: {
       delete layer_.greaterthan_;
+      break;
+    }
+    case kGreaterEqual: {
+      delete layer_.greaterequal_;
       break;
     }
     case kLogicalOr: {
@@ -7768,6 +8165,14 @@ void NeuralNetworkLayer::clear_layer() {
       delete layer_.logicaland_;
       break;
     }
+    case kMinBroadcastable: {
+      delete layer_.minbroadcastable_;
+      break;
+    }
+    case kMaxBroadcastable: {
+      delete layer_.maxbroadcastable_;
+      break;
+    }
     case kAddBroadcastable: {
       delete layer_.addbroadcastable_;
       break;
@@ -7778,6 +8183,10 @@ void NeuralNetworkLayer::clear_layer() {
     }
     case kDivideBroadcastable: {
       delete layer_.dividebroadcastable_;
+      break;
+    }
+    case kFloorDivBroadcastable: {
+      delete layer_.floordivbroadcastable_;
       break;
     }
     case kMultiplyBroadcastable: {
@@ -7808,6 +8217,10 @@ void NeuralNetworkLayer::clear_layer() {
       delete layer_.softmaxnd_;
       break;
     }
+    case kReverse: {
+      delete layer_.reverse_;
+      break;
+    }
     case kSplitND: {
       delete layer_.splitnd_;
       break;
@@ -7816,8 +8229,8 @@ void NeuralNetworkLayer::clear_layer() {
       delete layer_.concatnd_;
       break;
     }
-    case kTransposeND: {
-      delete layer_.transposend_;
+    case kTranspose: {
+      delete layer_.transpose_;
       break;
     }
     case kSliceND: {
@@ -7876,8 +8289,64 @@ void NeuralNetworkLayer::clear_layer() {
       delete layer_.expanddims_;
       break;
     }
+    case kFlattenTo2D: {
+      delete layer_.flattento2d_;
+      break;
+    }
+    case kReshapeLike: {
+      delete layer_.reshapelike_;
+      break;
+    }
+    case kReshapeStatic: {
+      delete layer_.reshapestatic_;
+      break;
+    }
+    case kReshapeDynamic: {
+      delete layer_.reshapedynamic_;
+      break;
+    }
     case kRankPreservingReshape: {
       delete layer_.rankpreservingreshape_;
+      break;
+    }
+    case kRandomNormalLike: {
+      delete layer_.randomnormallike_;
+      break;
+    }
+    case kRandomNormalStatic: {
+      delete layer_.randomnormalstatic_;
+      break;
+    }
+    case kRandomNormalDynamic: {
+      delete layer_.randomnormaldynamic_;
+      break;
+    }
+    case kRandomUniformLike: {
+      delete layer_.randomuniformlike_;
+      break;
+    }
+    case kRandomUniformStatic: {
+      delete layer_.randomuniformstatic_;
+      break;
+    }
+    case kRandomUniformDynamic: {
+      delete layer_.randomuniformdynamic_;
+      break;
+    }
+    case kRandomBernoulliLike: {
+      delete layer_.randombernoullilike_;
+      break;
+    }
+    case kRandomBernoulliStatic: {
+      delete layer_.randombernoullistatic_;
+      break;
+    }
+    case kRandomBernoulliDynamic: {
+      delete layer_.randombernoullidynamic_;
+      break;
+    }
+    case kMatrixBandPart: {
+      delete layer_.matrixbandpart_;
       break;
     }
     case kLowerTriangular: {
@@ -7888,8 +8357,8 @@ void NeuralNetworkLayer::clear_layer() {
       delete layer_.uppertriangular_;
       break;
     }
-    case kWhere: {
-      delete layer_.where_;
+    case kWhereBroadcastable: {
+      delete layer_.wherebroadcastable_;
       break;
     }
     case LAYER_NOT_SET: {
@@ -8597,48 +9066,168 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
         break;
       }
 
-      // .CoreML.Specification.SineLayerParams sine = 710;
+      // .CoreML.Specification.SinLayerParams sin = 710;
       case 710: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(5682u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_sine()));
+               input, mutable_sin()));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .CoreML.Specification.CosineLayerParams cosine = 715;
+      // .CoreML.Specification.CosLayerParams cos = 715;
       case 715: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(5722u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_cosine()));
+               input, mutable_cos()));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .CoreML.Specification.ErfActivationLayerParams erfActivation = 790;
+      // .CoreML.Specification.TanLayerParams tan = 720;
+      case 720: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(5762u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_tan()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.AsinLayerParams asin = 730;
+      case 730: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(5842u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_asin()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.AcosLayerParams acos = 735;
+      case 735: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(5882u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_acos()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.AtanLayerParams atan = 740;
+      case 740: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(5922u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_atan()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.SinhLayerParams sinh = 750;
+      case 750: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6002u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_sinh()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.CoshLayerParams cosh = 755;
+      case 755: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6042u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_cosh()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.TanhLayerParams tanh = 760;
+      case 760: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6082u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_tanh()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.AsinhLayerParams asinh = 770;
+      case 770: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6162u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_asinh()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.AcoshLayerParams acosh = 775;
+      case 775: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6202u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_acosh()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.AtanhLayerParams atanh = 780;
+      case 780: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6242u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_atanh()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.ErfLayerParams erf = 790;
       case 790: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(6322u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_erfactivation()));
+               input, mutable_erf()));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // .CoreML.Specification.GeluActivationLayerParams geluActivation = 795;
+      // .CoreML.Specification.GeluLayerParams gelu = 795;
       case 795: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(6362u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_geluactivation()));
+               input, mutable_gelu()));
         } else {
           goto handle_unusual;
         }
@@ -8681,12 +9270,36 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
         break;
       }
 
+      // .CoreML.Specification.LessEqualLayerParams lessEqual = 827;
+      case 827: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6618u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_lessequal()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       // .CoreML.Specification.GreaterThanLayerParams greaterThan = 830;
       case 830: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(6642u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_greaterthan()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.GreaterEqualLayerParams greaterEqual = 832;
+      case 832: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6658u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_greaterequal()));
         } else {
           goto handle_unusual;
         }
@@ -8741,6 +9354,30 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
         break;
       }
 
+      // .CoreML.Specification.MinBroadcastableLayerParams minBroadcastable = 870;
+      case 870: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(6962u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_minbroadcastable()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.MaxBroadcastableLayerParams maxBroadcastable = 875;
+      case 875: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(7002u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_maxbroadcastable()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       // .CoreML.Specification.AddBroadcastableLayerParams addBroadcastable = 880;
       case 880: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
@@ -8771,6 +9408,18 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
             static_cast< ::google::protobuf::uint8>(7122u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_dividebroadcastable()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
+      case 895: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(7162u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_floordivbroadcastable()));
         } else {
           goto handle_unusual;
         }
@@ -8861,6 +9510,18 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
         break;
       }
 
+      // .CoreML.Specification.ReverseLayerParams reverse = 960;
+      case 960: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(7682u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_reverse()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       // .CoreML.Specification.SplitNDLayerParams splitND = 975;
       case 975: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
@@ -8885,12 +9546,12 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
         break;
       }
 
-      // .CoreML.Specification.TransposeNDLayerParams transposeND = 985;
+      // .CoreML.Specification.TransposeLayerParams transpose = 985;
       case 985: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(7882u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_transposend()));
+               input, mutable_transpose()));
         } else {
           goto handle_unusual;
         }
@@ -8933,7 +9594,7 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
         break;
       }
 
-      // .CoreML.Specification.BatchedMatMulParams batchedMatmul = 1045;
+      // .CoreML.Specification.BatchedMatMulLayerParams batchedMatmul = 1045;
       case 1045: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(8362u)) {
@@ -9065,12 +9726,180 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
         break;
       }
 
+      // .CoreML.Specification.FlattenTo2DLayerParams flattenTo2D = 1130;
+      case 1130: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9042u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_flattento2d()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.ReshapeLikeLayerParams reshapeLike = 1135;
+      case 1135: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9082u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_reshapelike()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.ReshapeStaticLayerParams reshapeStatic = 1140;
+      case 1140: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9122u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_reshapestatic()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.ReshapeDynamicLayerParams reshapeDynamic = 1145;
+      case 1145: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9162u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_reshapedynamic()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       // .CoreML.Specification.RankPreservingReshapeLayerParams rankPreservingReshape = 1150;
       case 1150: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(9202u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_rankpreservingreshape()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomNormalLikeLayerParams randomNormalLike = 1170;
+      case 1170: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9362u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randomnormallike()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomNormalStaticLayerParams randomNormalStatic = 1175;
+      case 1175: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9402u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randomnormalstatic()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
+      case 1180: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9442u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randomnormaldynamic()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomUniformLikeLayerParams randomUniformLike = 1190;
+      case 1190: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9522u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randomuniformlike()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomUniformStaticLayerParams randomUniformStatic = 1195;
+      case 1195: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9562u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randomuniformstatic()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
+      case 1200: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9602u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randomuniformdynamic()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
+      case 1210: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9682u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randombernoullilike()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
+      case 1215: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9722u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randombernoullistatic()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
+      case 1220: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9762u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_randombernoullidynamic()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .CoreML.Specification.MatrixBandPartLayerParams matrixBandPart = 1315;
+      case 1315: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10522u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_matrixbandpart()));
         } else {
           goto handle_unusual;
         }
@@ -9101,12 +9930,12 @@ bool NeuralNetworkLayer::MergePartialFromCodedStream(
         break;
       }
 
-      // .CoreML.Specification.WhereLayerParams where = 1330;
+      // .CoreML.Specification.WhereBroadcastableLayerParams whereBroadcastable = 1330;
       case 1330: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(10642u)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_where()));
+               input, mutable_wherebroadcastable()));
         } else {
           goto handle_unusual;
         }
@@ -9481,28 +10310,88 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
       700, *layer_.exp2_, output);
   }
 
-  // .CoreML.Specification.SineLayerParams sine = 710;
-  if (has_sine()) {
+  // .CoreML.Specification.SinLayerParams sin = 710;
+  if (has_sin()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      710, *layer_.sine_, output);
+      710, *layer_.sin_, output);
   }
 
-  // .CoreML.Specification.CosineLayerParams cosine = 715;
-  if (has_cosine()) {
+  // .CoreML.Specification.CosLayerParams cos = 715;
+  if (has_cos()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      715, *layer_.cosine_, output);
+      715, *layer_.cos_, output);
   }
 
-  // .CoreML.Specification.ErfActivationLayerParams erfActivation = 790;
-  if (has_erfactivation()) {
+  // .CoreML.Specification.TanLayerParams tan = 720;
+  if (has_tan()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      790, *layer_.erfactivation_, output);
+      720, *layer_.tan_, output);
   }
 
-  // .CoreML.Specification.GeluActivationLayerParams geluActivation = 795;
-  if (has_geluactivation()) {
+  // .CoreML.Specification.AsinLayerParams asin = 730;
+  if (has_asin()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      795, *layer_.geluactivation_, output);
+      730, *layer_.asin_, output);
+  }
+
+  // .CoreML.Specification.AcosLayerParams acos = 735;
+  if (has_acos()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      735, *layer_.acos_, output);
+  }
+
+  // .CoreML.Specification.AtanLayerParams atan = 740;
+  if (has_atan()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      740, *layer_.atan_, output);
+  }
+
+  // .CoreML.Specification.SinhLayerParams sinh = 750;
+  if (has_sinh()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      750, *layer_.sinh_, output);
+  }
+
+  // .CoreML.Specification.CoshLayerParams cosh = 755;
+  if (has_cosh()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      755, *layer_.cosh_, output);
+  }
+
+  // .CoreML.Specification.TanhLayerParams tanh = 760;
+  if (has_tanh()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      760, *layer_.tanh_, output);
+  }
+
+  // .CoreML.Specification.AsinhLayerParams asinh = 770;
+  if (has_asinh()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      770, *layer_.asinh_, output);
+  }
+
+  // .CoreML.Specification.AcoshLayerParams acosh = 775;
+  if (has_acosh()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      775, *layer_.acosh_, output);
+  }
+
+  // .CoreML.Specification.AtanhLayerParams atanh = 780;
+  if (has_atanh()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      780, *layer_.atanh_, output);
+  }
+
+  // .CoreML.Specification.ErfLayerParams erf = 790;
+  if (has_erf()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      790, *layer_.erf_, output);
+  }
+
+  // .CoreML.Specification.GeluLayerParams gelu = 795;
+  if (has_gelu()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      795, *layer_.gelu_, output);
   }
 
   // .CoreML.Specification.EqualLayerParams equal = 815;
@@ -9523,10 +10412,22 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
       825, *layer_.lessthan_, output);
   }
 
+  // .CoreML.Specification.LessEqualLayerParams lessEqual = 827;
+  if (has_lessequal()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      827, *layer_.lessequal_, output);
+  }
+
   // .CoreML.Specification.GreaterThanLayerParams greaterThan = 830;
   if (has_greaterthan()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       830, *layer_.greaterthan_, output);
+  }
+
+  // .CoreML.Specification.GreaterEqualLayerParams greaterEqual = 832;
+  if (has_greaterequal()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      832, *layer_.greaterequal_, output);
   }
 
   // .CoreML.Specification.LogicalOrLayerParams logicalOr = 840;
@@ -9553,6 +10454,18 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
       855, *layer_.logicaland_, output);
   }
 
+  // .CoreML.Specification.MinBroadcastableLayerParams minBroadcastable = 870;
+  if (has_minbroadcastable()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      870, *layer_.minbroadcastable_, output);
+  }
+
+  // .CoreML.Specification.MaxBroadcastableLayerParams maxBroadcastable = 875;
+  if (has_maxbroadcastable()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      875, *layer_.maxbroadcastable_, output);
+  }
+
   // .CoreML.Specification.AddBroadcastableLayerParams addBroadcastable = 880;
   if (has_addbroadcastable()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -9569,6 +10482,12 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
   if (has_dividebroadcastable()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       890, *layer_.dividebroadcastable_, output);
+  }
+
+  // .CoreML.Specification.FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
+  if (has_floordivbroadcastable()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      895, *layer_.floordivbroadcastable_, output);
   }
 
   // .CoreML.Specification.MultiplyBroadcastableLayerParams multiplyBroadcastable = 900;
@@ -9613,6 +10532,12 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
       950, *layer_.softmaxnd_, output);
   }
 
+  // .CoreML.Specification.ReverseLayerParams reverse = 960;
+  if (has_reverse()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      960, *layer_.reverse_, output);
+  }
+
   // .CoreML.Specification.SplitNDLayerParams splitND = 975;
   if (has_splitnd()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
@@ -9625,10 +10550,10 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
       980, *layer_.concatnd_, output);
   }
 
-  // .CoreML.Specification.TransposeNDLayerParams transposeND = 985;
-  if (has_transposend()) {
+  // .CoreML.Specification.TransposeLayerParams transpose = 985;
+  if (has_transpose()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      985, *layer_.transposend_, output);
+      985, *layer_.transpose_, output);
   }
 
   // .CoreML.Specification.SliceNDLayerParams sliceND = 995;
@@ -9649,7 +10574,7 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
       1040, *layer_.embeddingnd_, output);
   }
 
-  // .CoreML.Specification.BatchedMatMulParams batchedMatmul = 1045;
+  // .CoreML.Specification.BatchedMatMulLayerParams batchedMatmul = 1045;
   if (has_batchedmatmul()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       1045, *layer_.batchedmatmul_, output);
@@ -9715,10 +10640,94 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
       1125, *layer_.expanddims_, output);
   }
 
+  // .CoreML.Specification.FlattenTo2DLayerParams flattenTo2D = 1130;
+  if (has_flattento2d()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1130, *layer_.flattento2d_, output);
+  }
+
+  // .CoreML.Specification.ReshapeLikeLayerParams reshapeLike = 1135;
+  if (has_reshapelike()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1135, *layer_.reshapelike_, output);
+  }
+
+  // .CoreML.Specification.ReshapeStaticLayerParams reshapeStatic = 1140;
+  if (has_reshapestatic()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1140, *layer_.reshapestatic_, output);
+  }
+
+  // .CoreML.Specification.ReshapeDynamicLayerParams reshapeDynamic = 1145;
+  if (has_reshapedynamic()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1145, *layer_.reshapedynamic_, output);
+  }
+
   // .CoreML.Specification.RankPreservingReshapeLayerParams rankPreservingReshape = 1150;
   if (has_rankpreservingreshape()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
       1150, *layer_.rankpreservingreshape_, output);
+  }
+
+  // .CoreML.Specification.RandomNormalLikeLayerParams randomNormalLike = 1170;
+  if (has_randomnormallike()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1170, *layer_.randomnormallike_, output);
+  }
+
+  // .CoreML.Specification.RandomNormalStaticLayerParams randomNormalStatic = 1175;
+  if (has_randomnormalstatic()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1175, *layer_.randomnormalstatic_, output);
+  }
+
+  // .CoreML.Specification.RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
+  if (has_randomnormaldynamic()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1180, *layer_.randomnormaldynamic_, output);
+  }
+
+  // .CoreML.Specification.RandomUniformLikeLayerParams randomUniformLike = 1190;
+  if (has_randomuniformlike()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1190, *layer_.randomuniformlike_, output);
+  }
+
+  // .CoreML.Specification.RandomUniformStaticLayerParams randomUniformStatic = 1195;
+  if (has_randomuniformstatic()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1195, *layer_.randomuniformstatic_, output);
+  }
+
+  // .CoreML.Specification.RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
+  if (has_randomuniformdynamic()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1200, *layer_.randomuniformdynamic_, output);
+  }
+
+  // .CoreML.Specification.RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
+  if (has_randombernoullilike()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1210, *layer_.randombernoullilike_, output);
+  }
+
+  // .CoreML.Specification.RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
+  if (has_randombernoullistatic()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1215, *layer_.randombernoullistatic_, output);
+  }
+
+  // .CoreML.Specification.RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
+  if (has_randombernoullidynamic()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1220, *layer_.randombernoullidynamic_, output);
+  }
+
+  // .CoreML.Specification.MatrixBandPartLayerParams matrixBandPart = 1315;
+  if (has_matrixbandpart()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessage(
+      1315, *layer_.matrixbandpart_, output);
   }
 
   // .CoreML.Specification.LowerTriangularLayerParams lowerTriangular = 1320;
@@ -9733,10 +10742,10 @@ void NeuralNetworkLayer::SerializeWithCachedSizes(
       1325, *layer_.uppertriangular_, output);
   }
 
-  // .CoreML.Specification.WhereLayerParams where = 1330;
-  if (has_where()) {
+  // .CoreML.Specification.WhereBroadcastableLayerParams whereBroadcastable = 1330;
+  if (has_wherebroadcastable()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessage(
-      1330, *layer_.where_, output);
+      1330, *layer_.wherebroadcastable_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:CoreML.Specification.NeuralNetworkLayer)
@@ -10140,32 +11149,102 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
           *layer_.exp2_);
       break;
     }
-    // .CoreML.Specification.SineLayerParams sine = 710;
-    case kSine: {
+    // .CoreML.Specification.SinLayerParams sin = 710;
+    case kSin: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          *layer_.sine_);
+          *layer_.sin_);
       break;
     }
-    // .CoreML.Specification.CosineLayerParams cosine = 715;
-    case kCosine: {
+    // .CoreML.Specification.CosLayerParams cos = 715;
+    case kCos: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          *layer_.cosine_);
+          *layer_.cos_);
       break;
     }
-    // .CoreML.Specification.ErfActivationLayerParams erfActivation = 790;
-    case kErfActivation: {
+    // .CoreML.Specification.TanLayerParams tan = 720;
+    case kTan: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          *layer_.erfactivation_);
+          *layer_.tan_);
       break;
     }
-    // .CoreML.Specification.GeluActivationLayerParams geluActivation = 795;
-    case kGeluActivation: {
+    // .CoreML.Specification.AsinLayerParams asin = 730;
+    case kAsin: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          *layer_.geluactivation_);
+          *layer_.asin_);
+      break;
+    }
+    // .CoreML.Specification.AcosLayerParams acos = 735;
+    case kAcos: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.acos_);
+      break;
+    }
+    // .CoreML.Specification.AtanLayerParams atan = 740;
+    case kAtan: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.atan_);
+      break;
+    }
+    // .CoreML.Specification.SinhLayerParams sinh = 750;
+    case kSinh: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.sinh_);
+      break;
+    }
+    // .CoreML.Specification.CoshLayerParams cosh = 755;
+    case kCosh: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.cosh_);
+      break;
+    }
+    // .CoreML.Specification.TanhLayerParams tanh = 760;
+    case kTanh: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.tanh_);
+      break;
+    }
+    // .CoreML.Specification.AsinhLayerParams asinh = 770;
+    case kAsinh: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.asinh_);
+      break;
+    }
+    // .CoreML.Specification.AcoshLayerParams acosh = 775;
+    case kAcosh: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.acosh_);
+      break;
+    }
+    // .CoreML.Specification.AtanhLayerParams atanh = 780;
+    case kAtanh: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.atanh_);
+      break;
+    }
+    // .CoreML.Specification.ErfLayerParams erf = 790;
+    case kErf: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.erf_);
+      break;
+    }
+    // .CoreML.Specification.GeluLayerParams gelu = 795;
+    case kGelu: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.gelu_);
       break;
     }
     // .CoreML.Specification.EqualLayerParams equal = 815;
@@ -10189,11 +11268,25 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
           *layer_.lessthan_);
       break;
     }
+    // .CoreML.Specification.LessEqualLayerParams lessEqual = 827;
+    case kLessEqual: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.lessequal_);
+      break;
+    }
     // .CoreML.Specification.GreaterThanLayerParams greaterThan = 830;
     case kGreaterThan: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           *layer_.greaterthan_);
+      break;
+    }
+    // .CoreML.Specification.GreaterEqualLayerParams greaterEqual = 832;
+    case kGreaterEqual: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.greaterequal_);
       break;
     }
     // .CoreML.Specification.LogicalOrLayerParams logicalOr = 840;
@@ -10224,6 +11317,20 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
           *layer_.logicaland_);
       break;
     }
+    // .CoreML.Specification.MinBroadcastableLayerParams minBroadcastable = 870;
+    case kMinBroadcastable: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.minbroadcastable_);
+      break;
+    }
+    // .CoreML.Specification.MaxBroadcastableLayerParams maxBroadcastable = 875;
+    case kMaxBroadcastable: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.maxbroadcastable_);
+      break;
+    }
     // .CoreML.Specification.AddBroadcastableLayerParams addBroadcastable = 880;
     case kAddBroadcastable: {
       total_size += 2 +
@@ -10243,6 +11350,13 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           *layer_.dividebroadcastable_);
+      break;
+    }
+    // .CoreML.Specification.FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
+    case kFloorDivBroadcastable: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.floordivbroadcastable_);
       break;
     }
     // .CoreML.Specification.MultiplyBroadcastableLayerParams multiplyBroadcastable = 900;
@@ -10294,6 +11408,13 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
           *layer_.softmaxnd_);
       break;
     }
+    // .CoreML.Specification.ReverseLayerParams reverse = 960;
+    case kReverse: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.reverse_);
+      break;
+    }
     // .CoreML.Specification.SplitNDLayerParams splitND = 975;
     case kSplitND: {
       total_size += 2 +
@@ -10308,11 +11429,11 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
           *layer_.concatnd_);
       break;
     }
-    // .CoreML.Specification.TransposeNDLayerParams transposeND = 985;
-    case kTransposeND: {
+    // .CoreML.Specification.TransposeLayerParams transpose = 985;
+    case kTranspose: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          *layer_.transposend_);
+          *layer_.transpose_);
       break;
     }
     // .CoreML.Specification.SliceNDLayerParams sliceND = 995;
@@ -10336,7 +11457,7 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
           *layer_.embeddingnd_);
       break;
     }
-    // .CoreML.Specification.BatchedMatMulParams batchedMatmul = 1045;
+    // .CoreML.Specification.BatchedMatMulLayerParams batchedMatmul = 1045;
     case kBatchedMatmul: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -10413,11 +11534,109 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
           *layer_.expanddims_);
       break;
     }
+    // .CoreML.Specification.FlattenTo2DLayerParams flattenTo2D = 1130;
+    case kFlattenTo2D: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.flattento2d_);
+      break;
+    }
+    // .CoreML.Specification.ReshapeLikeLayerParams reshapeLike = 1135;
+    case kReshapeLike: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.reshapelike_);
+      break;
+    }
+    // .CoreML.Specification.ReshapeStaticLayerParams reshapeStatic = 1140;
+    case kReshapeStatic: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.reshapestatic_);
+      break;
+    }
+    // .CoreML.Specification.ReshapeDynamicLayerParams reshapeDynamic = 1145;
+    case kReshapeDynamic: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.reshapedynamic_);
+      break;
+    }
     // .CoreML.Specification.RankPreservingReshapeLayerParams rankPreservingReshape = 1150;
     case kRankPreservingReshape: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           *layer_.rankpreservingreshape_);
+      break;
+    }
+    // .CoreML.Specification.RandomNormalLikeLayerParams randomNormalLike = 1170;
+    case kRandomNormalLike: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randomnormallike_);
+      break;
+    }
+    // .CoreML.Specification.RandomNormalStaticLayerParams randomNormalStatic = 1175;
+    case kRandomNormalStatic: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randomnormalstatic_);
+      break;
+    }
+    // .CoreML.Specification.RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
+    case kRandomNormalDynamic: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randomnormaldynamic_);
+      break;
+    }
+    // .CoreML.Specification.RandomUniformLikeLayerParams randomUniformLike = 1190;
+    case kRandomUniformLike: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randomuniformlike_);
+      break;
+    }
+    // .CoreML.Specification.RandomUniformStaticLayerParams randomUniformStatic = 1195;
+    case kRandomUniformStatic: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randomuniformstatic_);
+      break;
+    }
+    // .CoreML.Specification.RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
+    case kRandomUniformDynamic: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randomuniformdynamic_);
+      break;
+    }
+    // .CoreML.Specification.RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
+    case kRandomBernoulliLike: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randombernoullilike_);
+      break;
+    }
+    // .CoreML.Specification.RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
+    case kRandomBernoulliStatic: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randombernoullistatic_);
+      break;
+    }
+    // .CoreML.Specification.RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
+    case kRandomBernoulliDynamic: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.randombernoullidynamic_);
+      break;
+    }
+    // .CoreML.Specification.MatrixBandPartLayerParams matrixBandPart = 1315;
+    case kMatrixBandPart: {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *layer_.matrixbandpart_);
       break;
     }
     // .CoreML.Specification.LowerTriangularLayerParams lowerTriangular = 1320;
@@ -10434,11 +11653,11 @@ size_t NeuralNetworkLayer::ByteSizeLong() const {
           *layer_.uppertriangular_);
       break;
     }
-    // .CoreML.Specification.WhereLayerParams where = 1330;
-    case kWhere: {
+    // .CoreML.Specification.WhereBroadcastableLayerParams whereBroadcastable = 1330;
+    case kWhereBroadcastable: {
       total_size += 2 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          *layer_.where_);
+          *layer_.wherebroadcastable_);
       break;
     }
     case LAYER_NOT_SET: {
@@ -10672,20 +11891,60 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
       mutable_exp2()->::CoreML::Specification::Exp2LayerParams::MergeFrom(from.exp2());
       break;
     }
-    case kSine: {
-      mutable_sine()->::CoreML::Specification::SineLayerParams::MergeFrom(from.sine());
+    case kSin: {
+      mutable_sin()->::CoreML::Specification::SinLayerParams::MergeFrom(from.sin());
       break;
     }
-    case kCosine: {
-      mutable_cosine()->::CoreML::Specification::CosineLayerParams::MergeFrom(from.cosine());
+    case kCos: {
+      mutable_cos()->::CoreML::Specification::CosLayerParams::MergeFrom(from.cos());
       break;
     }
-    case kErfActivation: {
-      mutable_erfactivation()->::CoreML::Specification::ErfActivationLayerParams::MergeFrom(from.erfactivation());
+    case kTan: {
+      mutable_tan()->::CoreML::Specification::TanLayerParams::MergeFrom(from.tan());
       break;
     }
-    case kGeluActivation: {
-      mutable_geluactivation()->::CoreML::Specification::GeluActivationLayerParams::MergeFrom(from.geluactivation());
+    case kAsin: {
+      mutable_asin()->::CoreML::Specification::AsinLayerParams::MergeFrom(from.asin());
+      break;
+    }
+    case kAcos: {
+      mutable_acos()->::CoreML::Specification::AcosLayerParams::MergeFrom(from.acos());
+      break;
+    }
+    case kAtan: {
+      mutable_atan()->::CoreML::Specification::AtanLayerParams::MergeFrom(from.atan());
+      break;
+    }
+    case kSinh: {
+      mutable_sinh()->::CoreML::Specification::SinhLayerParams::MergeFrom(from.sinh());
+      break;
+    }
+    case kCosh: {
+      mutable_cosh()->::CoreML::Specification::CoshLayerParams::MergeFrom(from.cosh());
+      break;
+    }
+    case kTanh: {
+      mutable_tanh()->::CoreML::Specification::TanhLayerParams::MergeFrom(from.tanh());
+      break;
+    }
+    case kAsinh: {
+      mutable_asinh()->::CoreML::Specification::AsinhLayerParams::MergeFrom(from.asinh());
+      break;
+    }
+    case kAcosh: {
+      mutable_acosh()->::CoreML::Specification::AcoshLayerParams::MergeFrom(from.acosh());
+      break;
+    }
+    case kAtanh: {
+      mutable_atanh()->::CoreML::Specification::AtanhLayerParams::MergeFrom(from.atanh());
+      break;
+    }
+    case kErf: {
+      mutable_erf()->::CoreML::Specification::ErfLayerParams::MergeFrom(from.erf());
+      break;
+    }
+    case kGelu: {
+      mutable_gelu()->::CoreML::Specification::GeluLayerParams::MergeFrom(from.gelu());
       break;
     }
     case kEqual: {
@@ -10700,8 +11959,16 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
       mutable_lessthan()->::CoreML::Specification::LessThanLayerParams::MergeFrom(from.lessthan());
       break;
     }
+    case kLessEqual: {
+      mutable_lessequal()->::CoreML::Specification::LessEqualLayerParams::MergeFrom(from.lessequal());
+      break;
+    }
     case kGreaterThan: {
       mutable_greaterthan()->::CoreML::Specification::GreaterThanLayerParams::MergeFrom(from.greaterthan());
+      break;
+    }
+    case kGreaterEqual: {
+      mutable_greaterequal()->::CoreML::Specification::GreaterEqualLayerParams::MergeFrom(from.greaterequal());
       break;
     }
     case kLogicalOr: {
@@ -10720,6 +11987,14 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
       mutable_logicaland()->::CoreML::Specification::LogicalAndLayerParams::MergeFrom(from.logicaland());
       break;
     }
+    case kMinBroadcastable: {
+      mutable_minbroadcastable()->::CoreML::Specification::MinBroadcastableLayerParams::MergeFrom(from.minbroadcastable());
+      break;
+    }
+    case kMaxBroadcastable: {
+      mutable_maxbroadcastable()->::CoreML::Specification::MaxBroadcastableLayerParams::MergeFrom(from.maxbroadcastable());
+      break;
+    }
     case kAddBroadcastable: {
       mutable_addbroadcastable()->::CoreML::Specification::AddBroadcastableLayerParams::MergeFrom(from.addbroadcastable());
       break;
@@ -10730,6 +12005,10 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
     }
     case kDivideBroadcastable: {
       mutable_dividebroadcastable()->::CoreML::Specification::DivideBroadcastableLayerParams::MergeFrom(from.dividebroadcastable());
+      break;
+    }
+    case kFloorDivBroadcastable: {
+      mutable_floordivbroadcastable()->::CoreML::Specification::FloorDivBroadcastableLayerParams::MergeFrom(from.floordivbroadcastable());
       break;
     }
     case kMultiplyBroadcastable: {
@@ -10760,6 +12039,10 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
       mutable_softmaxnd()->::CoreML::Specification::SoftmaxNDLayerParams::MergeFrom(from.softmaxnd());
       break;
     }
+    case kReverse: {
+      mutable_reverse()->::CoreML::Specification::ReverseLayerParams::MergeFrom(from.reverse());
+      break;
+    }
     case kSplitND: {
       mutable_splitnd()->::CoreML::Specification::SplitNDLayerParams::MergeFrom(from.splitnd());
       break;
@@ -10768,8 +12051,8 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
       mutable_concatnd()->::CoreML::Specification::ConcatNDLayerParams::MergeFrom(from.concatnd());
       break;
     }
-    case kTransposeND: {
-      mutable_transposend()->::CoreML::Specification::TransposeNDLayerParams::MergeFrom(from.transposend());
+    case kTranspose: {
+      mutable_transpose()->::CoreML::Specification::TransposeLayerParams::MergeFrom(from.transpose());
       break;
     }
     case kSliceND: {
@@ -10785,7 +12068,7 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
       break;
     }
     case kBatchedMatmul: {
-      mutable_batchedmatmul()->::CoreML::Specification::BatchedMatMulParams::MergeFrom(from.batchedmatmul());
+      mutable_batchedmatmul()->::CoreML::Specification::BatchedMatMulLayerParams::MergeFrom(from.batchedmatmul());
       break;
     }
     case kGetShape: {
@@ -10828,8 +12111,64 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
       mutable_expanddims()->::CoreML::Specification::ExpandDimsLayerParams::MergeFrom(from.expanddims());
       break;
     }
+    case kFlattenTo2D: {
+      mutable_flattento2d()->::CoreML::Specification::FlattenTo2DLayerParams::MergeFrom(from.flattento2d());
+      break;
+    }
+    case kReshapeLike: {
+      mutable_reshapelike()->::CoreML::Specification::ReshapeLikeLayerParams::MergeFrom(from.reshapelike());
+      break;
+    }
+    case kReshapeStatic: {
+      mutable_reshapestatic()->::CoreML::Specification::ReshapeStaticLayerParams::MergeFrom(from.reshapestatic());
+      break;
+    }
+    case kReshapeDynamic: {
+      mutable_reshapedynamic()->::CoreML::Specification::ReshapeDynamicLayerParams::MergeFrom(from.reshapedynamic());
+      break;
+    }
     case kRankPreservingReshape: {
       mutable_rankpreservingreshape()->::CoreML::Specification::RankPreservingReshapeLayerParams::MergeFrom(from.rankpreservingreshape());
+      break;
+    }
+    case kRandomNormalLike: {
+      mutable_randomnormallike()->::CoreML::Specification::RandomNormalLikeLayerParams::MergeFrom(from.randomnormallike());
+      break;
+    }
+    case kRandomNormalStatic: {
+      mutable_randomnormalstatic()->::CoreML::Specification::RandomNormalStaticLayerParams::MergeFrom(from.randomnormalstatic());
+      break;
+    }
+    case kRandomNormalDynamic: {
+      mutable_randomnormaldynamic()->::CoreML::Specification::RandomNormalDynamicLayerParams::MergeFrom(from.randomnormaldynamic());
+      break;
+    }
+    case kRandomUniformLike: {
+      mutable_randomuniformlike()->::CoreML::Specification::RandomUniformLikeLayerParams::MergeFrom(from.randomuniformlike());
+      break;
+    }
+    case kRandomUniformStatic: {
+      mutable_randomuniformstatic()->::CoreML::Specification::RandomUniformStaticLayerParams::MergeFrom(from.randomuniformstatic());
+      break;
+    }
+    case kRandomUniformDynamic: {
+      mutable_randomuniformdynamic()->::CoreML::Specification::RandomUniformDynamicLayerParams::MergeFrom(from.randomuniformdynamic());
+      break;
+    }
+    case kRandomBernoulliLike: {
+      mutable_randombernoullilike()->::CoreML::Specification::RandomBernoulliLikeLayerParams::MergeFrom(from.randombernoullilike());
+      break;
+    }
+    case kRandomBernoulliStatic: {
+      mutable_randombernoullistatic()->::CoreML::Specification::RandomBernoulliStaticLayerParams::MergeFrom(from.randombernoullistatic());
+      break;
+    }
+    case kRandomBernoulliDynamic: {
+      mutable_randombernoullidynamic()->::CoreML::Specification::RandomBernoulliDynamicLayerParams::MergeFrom(from.randombernoullidynamic());
+      break;
+    }
+    case kMatrixBandPart: {
+      mutable_matrixbandpart()->::CoreML::Specification::MatrixBandPartLayerParams::MergeFrom(from.matrixbandpart());
       break;
     }
     case kLowerTriangular: {
@@ -10840,8 +12179,8 @@ void NeuralNetworkLayer::MergeFrom(const NeuralNetworkLayer& from) {
       mutable_uppertriangular()->::CoreML::Specification::UpperTriangularLayerParams::MergeFrom(from.uppertriangular());
       break;
     }
-    case kWhere: {
-      mutable_where()->::CoreML::Specification::WhereLayerParams::MergeFrom(from.where());
+    case kWhereBroadcastable: {
+      mutable_wherebroadcastable()->::CoreML::Specification::WhereBroadcastableLayerParams::MergeFrom(from.wherebroadcastable());
       break;
     }
     case LAYER_NOT_SET: {
@@ -13501,196 +14840,676 @@ void NeuralNetworkLayer::set_allocated_exp2(::CoreML::Specification::Exp2LayerPa
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.exp2)
 }
 
-// .CoreML.Specification.SineLayerParams sine = 710;
-bool NeuralNetworkLayer::has_sine() const {
-  return layer_case() == kSine;
+// .CoreML.Specification.SinLayerParams sin = 710;
+bool NeuralNetworkLayer::has_sin() const {
+  return layer_case() == kSin;
 }
-void NeuralNetworkLayer::set_has_sine() {
-  _oneof_case_[0] = kSine;
+void NeuralNetworkLayer::set_has_sin() {
+  _oneof_case_[0] = kSin;
 }
-void NeuralNetworkLayer::clear_sine() {
-  if (has_sine()) {
-    delete layer_.sine_;
+void NeuralNetworkLayer::clear_sin() {
+  if (has_sin()) {
+    delete layer_.sin_;
     clear_has_layer();
   }
 }
- const ::CoreML::Specification::SineLayerParams& NeuralNetworkLayer::sine() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.sine)
-  return has_sine()
-      ? *layer_.sine_
-      : ::CoreML::Specification::SineLayerParams::default_instance();
+ const ::CoreML::Specification::SinLayerParams& NeuralNetworkLayer::sin() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.sin)
+  return has_sin()
+      ? *layer_.sin_
+      : ::CoreML::Specification::SinLayerParams::default_instance();
 }
-::CoreML::Specification::SineLayerParams* NeuralNetworkLayer::mutable_sine() {
-  if (!has_sine()) {
+::CoreML::Specification::SinLayerParams* NeuralNetworkLayer::mutable_sin() {
+  if (!has_sin()) {
     clear_layer();
-    set_has_sine();
-    layer_.sine_ = new ::CoreML::Specification::SineLayerParams;
+    set_has_sin();
+    layer_.sin_ = new ::CoreML::Specification::SinLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.sine)
-  return layer_.sine_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.sin)
+  return layer_.sin_;
 }
-::CoreML::Specification::SineLayerParams* NeuralNetworkLayer::release_sine() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.sine)
-  if (has_sine()) {
+::CoreML::Specification::SinLayerParams* NeuralNetworkLayer::release_sin() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.sin)
+  if (has_sin()) {
     clear_has_layer();
-    ::CoreML::Specification::SineLayerParams* temp = layer_.sine_;
-    layer_.sine_ = NULL;
+    ::CoreML::Specification::SinLayerParams* temp = layer_.sin_;
+    layer_.sin_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-void NeuralNetworkLayer::set_allocated_sine(::CoreML::Specification::SineLayerParams* sine) {
+void NeuralNetworkLayer::set_allocated_sin(::CoreML::Specification::SinLayerParams* sin) {
   clear_layer();
-  if (sine) {
-    set_has_sine();
-    layer_.sine_ = sine;
+  if (sin) {
+    set_has_sin();
+    layer_.sin_ = sin;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.sine)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.sin)
 }
 
-// .CoreML.Specification.CosineLayerParams cosine = 715;
-bool NeuralNetworkLayer::has_cosine() const {
-  return layer_case() == kCosine;
+// .CoreML.Specification.CosLayerParams cos = 715;
+bool NeuralNetworkLayer::has_cos() const {
+  return layer_case() == kCos;
 }
-void NeuralNetworkLayer::set_has_cosine() {
-  _oneof_case_[0] = kCosine;
+void NeuralNetworkLayer::set_has_cos() {
+  _oneof_case_[0] = kCos;
 }
-void NeuralNetworkLayer::clear_cosine() {
-  if (has_cosine()) {
-    delete layer_.cosine_;
+void NeuralNetworkLayer::clear_cos() {
+  if (has_cos()) {
+    delete layer_.cos_;
     clear_has_layer();
   }
 }
- const ::CoreML::Specification::CosineLayerParams& NeuralNetworkLayer::cosine() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.cosine)
-  return has_cosine()
-      ? *layer_.cosine_
-      : ::CoreML::Specification::CosineLayerParams::default_instance();
+ const ::CoreML::Specification::CosLayerParams& NeuralNetworkLayer::cos() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.cos)
+  return has_cos()
+      ? *layer_.cos_
+      : ::CoreML::Specification::CosLayerParams::default_instance();
 }
-::CoreML::Specification::CosineLayerParams* NeuralNetworkLayer::mutable_cosine() {
-  if (!has_cosine()) {
+::CoreML::Specification::CosLayerParams* NeuralNetworkLayer::mutable_cos() {
+  if (!has_cos()) {
     clear_layer();
-    set_has_cosine();
-    layer_.cosine_ = new ::CoreML::Specification::CosineLayerParams;
+    set_has_cos();
+    layer_.cos_ = new ::CoreML::Specification::CosLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.cosine)
-  return layer_.cosine_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.cos)
+  return layer_.cos_;
 }
-::CoreML::Specification::CosineLayerParams* NeuralNetworkLayer::release_cosine() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.cosine)
-  if (has_cosine()) {
+::CoreML::Specification::CosLayerParams* NeuralNetworkLayer::release_cos() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.cos)
+  if (has_cos()) {
     clear_has_layer();
-    ::CoreML::Specification::CosineLayerParams* temp = layer_.cosine_;
-    layer_.cosine_ = NULL;
+    ::CoreML::Specification::CosLayerParams* temp = layer_.cos_;
+    layer_.cos_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-void NeuralNetworkLayer::set_allocated_cosine(::CoreML::Specification::CosineLayerParams* cosine) {
+void NeuralNetworkLayer::set_allocated_cos(::CoreML::Specification::CosLayerParams* cos) {
   clear_layer();
-  if (cosine) {
-    set_has_cosine();
-    layer_.cosine_ = cosine;
+  if (cos) {
+    set_has_cos();
+    layer_.cos_ = cos;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.cosine)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.cos)
 }
 
-// .CoreML.Specification.ErfActivationLayerParams erfActivation = 790;
-bool NeuralNetworkLayer::has_erfactivation() const {
-  return layer_case() == kErfActivation;
+// .CoreML.Specification.TanLayerParams tan = 720;
+bool NeuralNetworkLayer::has_tan() const {
+  return layer_case() == kTan;
 }
-void NeuralNetworkLayer::set_has_erfactivation() {
-  _oneof_case_[0] = kErfActivation;
+void NeuralNetworkLayer::set_has_tan() {
+  _oneof_case_[0] = kTan;
 }
-void NeuralNetworkLayer::clear_erfactivation() {
-  if (has_erfactivation()) {
-    delete layer_.erfactivation_;
+void NeuralNetworkLayer::clear_tan() {
+  if (has_tan()) {
+    delete layer_.tan_;
     clear_has_layer();
   }
 }
- const ::CoreML::Specification::ErfActivationLayerParams& NeuralNetworkLayer::erfactivation() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.erfActivation)
-  return has_erfactivation()
-      ? *layer_.erfactivation_
-      : ::CoreML::Specification::ErfActivationLayerParams::default_instance();
+ const ::CoreML::Specification::TanLayerParams& NeuralNetworkLayer::tan() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.tan)
+  return has_tan()
+      ? *layer_.tan_
+      : ::CoreML::Specification::TanLayerParams::default_instance();
 }
-::CoreML::Specification::ErfActivationLayerParams* NeuralNetworkLayer::mutable_erfactivation() {
-  if (!has_erfactivation()) {
+::CoreML::Specification::TanLayerParams* NeuralNetworkLayer::mutable_tan() {
+  if (!has_tan()) {
     clear_layer();
-    set_has_erfactivation();
-    layer_.erfactivation_ = new ::CoreML::Specification::ErfActivationLayerParams;
+    set_has_tan();
+    layer_.tan_ = new ::CoreML::Specification::TanLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.erfActivation)
-  return layer_.erfactivation_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.tan)
+  return layer_.tan_;
 }
-::CoreML::Specification::ErfActivationLayerParams* NeuralNetworkLayer::release_erfactivation() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.erfActivation)
-  if (has_erfactivation()) {
+::CoreML::Specification::TanLayerParams* NeuralNetworkLayer::release_tan() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.tan)
+  if (has_tan()) {
     clear_has_layer();
-    ::CoreML::Specification::ErfActivationLayerParams* temp = layer_.erfactivation_;
-    layer_.erfactivation_ = NULL;
+    ::CoreML::Specification::TanLayerParams* temp = layer_.tan_;
+    layer_.tan_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-void NeuralNetworkLayer::set_allocated_erfactivation(::CoreML::Specification::ErfActivationLayerParams* erfactivation) {
+void NeuralNetworkLayer::set_allocated_tan(::CoreML::Specification::TanLayerParams* tan) {
   clear_layer();
-  if (erfactivation) {
-    set_has_erfactivation();
-    layer_.erfactivation_ = erfactivation;
+  if (tan) {
+    set_has_tan();
+    layer_.tan_ = tan;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.erfActivation)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.tan)
 }
 
-// .CoreML.Specification.GeluActivationLayerParams geluActivation = 795;
-bool NeuralNetworkLayer::has_geluactivation() const {
-  return layer_case() == kGeluActivation;
+// .CoreML.Specification.AsinLayerParams asin = 730;
+bool NeuralNetworkLayer::has_asin() const {
+  return layer_case() == kAsin;
 }
-void NeuralNetworkLayer::set_has_geluactivation() {
-  _oneof_case_[0] = kGeluActivation;
+void NeuralNetworkLayer::set_has_asin() {
+  _oneof_case_[0] = kAsin;
 }
-void NeuralNetworkLayer::clear_geluactivation() {
-  if (has_geluactivation()) {
-    delete layer_.geluactivation_;
+void NeuralNetworkLayer::clear_asin() {
+  if (has_asin()) {
+    delete layer_.asin_;
     clear_has_layer();
   }
 }
- const ::CoreML::Specification::GeluActivationLayerParams& NeuralNetworkLayer::geluactivation() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.geluActivation)
-  return has_geluactivation()
-      ? *layer_.geluactivation_
-      : ::CoreML::Specification::GeluActivationLayerParams::default_instance();
+ const ::CoreML::Specification::AsinLayerParams& NeuralNetworkLayer::asin() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.asin)
+  return has_asin()
+      ? *layer_.asin_
+      : ::CoreML::Specification::AsinLayerParams::default_instance();
 }
-::CoreML::Specification::GeluActivationLayerParams* NeuralNetworkLayer::mutable_geluactivation() {
-  if (!has_geluactivation()) {
+::CoreML::Specification::AsinLayerParams* NeuralNetworkLayer::mutable_asin() {
+  if (!has_asin()) {
     clear_layer();
-    set_has_geluactivation();
-    layer_.geluactivation_ = new ::CoreML::Specification::GeluActivationLayerParams;
+    set_has_asin();
+    layer_.asin_ = new ::CoreML::Specification::AsinLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.geluActivation)
-  return layer_.geluactivation_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.asin)
+  return layer_.asin_;
 }
-::CoreML::Specification::GeluActivationLayerParams* NeuralNetworkLayer::release_geluactivation() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.geluActivation)
-  if (has_geluactivation()) {
+::CoreML::Specification::AsinLayerParams* NeuralNetworkLayer::release_asin() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.asin)
+  if (has_asin()) {
     clear_has_layer();
-    ::CoreML::Specification::GeluActivationLayerParams* temp = layer_.geluactivation_;
-    layer_.geluactivation_ = NULL;
+    ::CoreML::Specification::AsinLayerParams* temp = layer_.asin_;
+    layer_.asin_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-void NeuralNetworkLayer::set_allocated_geluactivation(::CoreML::Specification::GeluActivationLayerParams* geluactivation) {
+void NeuralNetworkLayer::set_allocated_asin(::CoreML::Specification::AsinLayerParams* asin) {
   clear_layer();
-  if (geluactivation) {
-    set_has_geluactivation();
-    layer_.geluactivation_ = geluactivation;
+  if (asin) {
+    set_has_asin();
+    layer_.asin_ = asin;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.geluActivation)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.asin)
+}
+
+// .CoreML.Specification.AcosLayerParams acos = 735;
+bool NeuralNetworkLayer::has_acos() const {
+  return layer_case() == kAcos;
+}
+void NeuralNetworkLayer::set_has_acos() {
+  _oneof_case_[0] = kAcos;
+}
+void NeuralNetworkLayer::clear_acos() {
+  if (has_acos()) {
+    delete layer_.acos_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::AcosLayerParams& NeuralNetworkLayer::acos() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.acos)
+  return has_acos()
+      ? *layer_.acos_
+      : ::CoreML::Specification::AcosLayerParams::default_instance();
+}
+::CoreML::Specification::AcosLayerParams* NeuralNetworkLayer::mutable_acos() {
+  if (!has_acos()) {
+    clear_layer();
+    set_has_acos();
+    layer_.acos_ = new ::CoreML::Specification::AcosLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.acos)
+  return layer_.acos_;
+}
+::CoreML::Specification::AcosLayerParams* NeuralNetworkLayer::release_acos() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.acos)
+  if (has_acos()) {
+    clear_has_layer();
+    ::CoreML::Specification::AcosLayerParams* temp = layer_.acos_;
+    layer_.acos_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_acos(::CoreML::Specification::AcosLayerParams* acos) {
+  clear_layer();
+  if (acos) {
+    set_has_acos();
+    layer_.acos_ = acos;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.acos)
+}
+
+// .CoreML.Specification.AtanLayerParams atan = 740;
+bool NeuralNetworkLayer::has_atan() const {
+  return layer_case() == kAtan;
+}
+void NeuralNetworkLayer::set_has_atan() {
+  _oneof_case_[0] = kAtan;
+}
+void NeuralNetworkLayer::clear_atan() {
+  if (has_atan()) {
+    delete layer_.atan_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::AtanLayerParams& NeuralNetworkLayer::atan() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.atan)
+  return has_atan()
+      ? *layer_.atan_
+      : ::CoreML::Specification::AtanLayerParams::default_instance();
+}
+::CoreML::Specification::AtanLayerParams* NeuralNetworkLayer::mutable_atan() {
+  if (!has_atan()) {
+    clear_layer();
+    set_has_atan();
+    layer_.atan_ = new ::CoreML::Specification::AtanLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.atan)
+  return layer_.atan_;
+}
+::CoreML::Specification::AtanLayerParams* NeuralNetworkLayer::release_atan() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.atan)
+  if (has_atan()) {
+    clear_has_layer();
+    ::CoreML::Specification::AtanLayerParams* temp = layer_.atan_;
+    layer_.atan_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_atan(::CoreML::Specification::AtanLayerParams* atan) {
+  clear_layer();
+  if (atan) {
+    set_has_atan();
+    layer_.atan_ = atan;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.atan)
+}
+
+// .CoreML.Specification.SinhLayerParams sinh = 750;
+bool NeuralNetworkLayer::has_sinh() const {
+  return layer_case() == kSinh;
+}
+void NeuralNetworkLayer::set_has_sinh() {
+  _oneof_case_[0] = kSinh;
+}
+void NeuralNetworkLayer::clear_sinh() {
+  if (has_sinh()) {
+    delete layer_.sinh_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::SinhLayerParams& NeuralNetworkLayer::sinh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.sinh)
+  return has_sinh()
+      ? *layer_.sinh_
+      : ::CoreML::Specification::SinhLayerParams::default_instance();
+}
+::CoreML::Specification::SinhLayerParams* NeuralNetworkLayer::mutable_sinh() {
+  if (!has_sinh()) {
+    clear_layer();
+    set_has_sinh();
+    layer_.sinh_ = new ::CoreML::Specification::SinhLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.sinh)
+  return layer_.sinh_;
+}
+::CoreML::Specification::SinhLayerParams* NeuralNetworkLayer::release_sinh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.sinh)
+  if (has_sinh()) {
+    clear_has_layer();
+    ::CoreML::Specification::SinhLayerParams* temp = layer_.sinh_;
+    layer_.sinh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_sinh(::CoreML::Specification::SinhLayerParams* sinh) {
+  clear_layer();
+  if (sinh) {
+    set_has_sinh();
+    layer_.sinh_ = sinh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.sinh)
+}
+
+// .CoreML.Specification.CoshLayerParams cosh = 755;
+bool NeuralNetworkLayer::has_cosh() const {
+  return layer_case() == kCosh;
+}
+void NeuralNetworkLayer::set_has_cosh() {
+  _oneof_case_[0] = kCosh;
+}
+void NeuralNetworkLayer::clear_cosh() {
+  if (has_cosh()) {
+    delete layer_.cosh_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::CoshLayerParams& NeuralNetworkLayer::cosh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.cosh)
+  return has_cosh()
+      ? *layer_.cosh_
+      : ::CoreML::Specification::CoshLayerParams::default_instance();
+}
+::CoreML::Specification::CoshLayerParams* NeuralNetworkLayer::mutable_cosh() {
+  if (!has_cosh()) {
+    clear_layer();
+    set_has_cosh();
+    layer_.cosh_ = new ::CoreML::Specification::CoshLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.cosh)
+  return layer_.cosh_;
+}
+::CoreML::Specification::CoshLayerParams* NeuralNetworkLayer::release_cosh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.cosh)
+  if (has_cosh()) {
+    clear_has_layer();
+    ::CoreML::Specification::CoshLayerParams* temp = layer_.cosh_;
+    layer_.cosh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_cosh(::CoreML::Specification::CoshLayerParams* cosh) {
+  clear_layer();
+  if (cosh) {
+    set_has_cosh();
+    layer_.cosh_ = cosh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.cosh)
+}
+
+// .CoreML.Specification.TanhLayerParams tanh = 760;
+bool NeuralNetworkLayer::has_tanh() const {
+  return layer_case() == kTanh;
+}
+void NeuralNetworkLayer::set_has_tanh() {
+  _oneof_case_[0] = kTanh;
+}
+void NeuralNetworkLayer::clear_tanh() {
+  if (has_tanh()) {
+    delete layer_.tanh_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::TanhLayerParams& NeuralNetworkLayer::tanh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.tanh)
+  return has_tanh()
+      ? *layer_.tanh_
+      : ::CoreML::Specification::TanhLayerParams::default_instance();
+}
+::CoreML::Specification::TanhLayerParams* NeuralNetworkLayer::mutable_tanh() {
+  if (!has_tanh()) {
+    clear_layer();
+    set_has_tanh();
+    layer_.tanh_ = new ::CoreML::Specification::TanhLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.tanh)
+  return layer_.tanh_;
+}
+::CoreML::Specification::TanhLayerParams* NeuralNetworkLayer::release_tanh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.tanh)
+  if (has_tanh()) {
+    clear_has_layer();
+    ::CoreML::Specification::TanhLayerParams* temp = layer_.tanh_;
+    layer_.tanh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_tanh(::CoreML::Specification::TanhLayerParams* tanh) {
+  clear_layer();
+  if (tanh) {
+    set_has_tanh();
+    layer_.tanh_ = tanh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.tanh)
+}
+
+// .CoreML.Specification.AsinhLayerParams asinh = 770;
+bool NeuralNetworkLayer::has_asinh() const {
+  return layer_case() == kAsinh;
+}
+void NeuralNetworkLayer::set_has_asinh() {
+  _oneof_case_[0] = kAsinh;
+}
+void NeuralNetworkLayer::clear_asinh() {
+  if (has_asinh()) {
+    delete layer_.asinh_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::AsinhLayerParams& NeuralNetworkLayer::asinh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.asinh)
+  return has_asinh()
+      ? *layer_.asinh_
+      : ::CoreML::Specification::AsinhLayerParams::default_instance();
+}
+::CoreML::Specification::AsinhLayerParams* NeuralNetworkLayer::mutable_asinh() {
+  if (!has_asinh()) {
+    clear_layer();
+    set_has_asinh();
+    layer_.asinh_ = new ::CoreML::Specification::AsinhLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.asinh)
+  return layer_.asinh_;
+}
+::CoreML::Specification::AsinhLayerParams* NeuralNetworkLayer::release_asinh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.asinh)
+  if (has_asinh()) {
+    clear_has_layer();
+    ::CoreML::Specification::AsinhLayerParams* temp = layer_.asinh_;
+    layer_.asinh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_asinh(::CoreML::Specification::AsinhLayerParams* asinh) {
+  clear_layer();
+  if (asinh) {
+    set_has_asinh();
+    layer_.asinh_ = asinh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.asinh)
+}
+
+// .CoreML.Specification.AcoshLayerParams acosh = 775;
+bool NeuralNetworkLayer::has_acosh() const {
+  return layer_case() == kAcosh;
+}
+void NeuralNetworkLayer::set_has_acosh() {
+  _oneof_case_[0] = kAcosh;
+}
+void NeuralNetworkLayer::clear_acosh() {
+  if (has_acosh()) {
+    delete layer_.acosh_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::AcoshLayerParams& NeuralNetworkLayer::acosh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.acosh)
+  return has_acosh()
+      ? *layer_.acosh_
+      : ::CoreML::Specification::AcoshLayerParams::default_instance();
+}
+::CoreML::Specification::AcoshLayerParams* NeuralNetworkLayer::mutable_acosh() {
+  if (!has_acosh()) {
+    clear_layer();
+    set_has_acosh();
+    layer_.acosh_ = new ::CoreML::Specification::AcoshLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.acosh)
+  return layer_.acosh_;
+}
+::CoreML::Specification::AcoshLayerParams* NeuralNetworkLayer::release_acosh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.acosh)
+  if (has_acosh()) {
+    clear_has_layer();
+    ::CoreML::Specification::AcoshLayerParams* temp = layer_.acosh_;
+    layer_.acosh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_acosh(::CoreML::Specification::AcoshLayerParams* acosh) {
+  clear_layer();
+  if (acosh) {
+    set_has_acosh();
+    layer_.acosh_ = acosh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.acosh)
+}
+
+// .CoreML.Specification.AtanhLayerParams atanh = 780;
+bool NeuralNetworkLayer::has_atanh() const {
+  return layer_case() == kAtanh;
+}
+void NeuralNetworkLayer::set_has_atanh() {
+  _oneof_case_[0] = kAtanh;
+}
+void NeuralNetworkLayer::clear_atanh() {
+  if (has_atanh()) {
+    delete layer_.atanh_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::AtanhLayerParams& NeuralNetworkLayer::atanh() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.atanh)
+  return has_atanh()
+      ? *layer_.atanh_
+      : ::CoreML::Specification::AtanhLayerParams::default_instance();
+}
+::CoreML::Specification::AtanhLayerParams* NeuralNetworkLayer::mutable_atanh() {
+  if (!has_atanh()) {
+    clear_layer();
+    set_has_atanh();
+    layer_.atanh_ = new ::CoreML::Specification::AtanhLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.atanh)
+  return layer_.atanh_;
+}
+::CoreML::Specification::AtanhLayerParams* NeuralNetworkLayer::release_atanh() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.atanh)
+  if (has_atanh()) {
+    clear_has_layer();
+    ::CoreML::Specification::AtanhLayerParams* temp = layer_.atanh_;
+    layer_.atanh_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_atanh(::CoreML::Specification::AtanhLayerParams* atanh) {
+  clear_layer();
+  if (atanh) {
+    set_has_atanh();
+    layer_.atanh_ = atanh;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.atanh)
+}
+
+// .CoreML.Specification.ErfLayerParams erf = 790;
+bool NeuralNetworkLayer::has_erf() const {
+  return layer_case() == kErf;
+}
+void NeuralNetworkLayer::set_has_erf() {
+  _oneof_case_[0] = kErf;
+}
+void NeuralNetworkLayer::clear_erf() {
+  if (has_erf()) {
+    delete layer_.erf_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::ErfLayerParams& NeuralNetworkLayer::erf() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.erf)
+  return has_erf()
+      ? *layer_.erf_
+      : ::CoreML::Specification::ErfLayerParams::default_instance();
+}
+::CoreML::Specification::ErfLayerParams* NeuralNetworkLayer::mutable_erf() {
+  if (!has_erf()) {
+    clear_layer();
+    set_has_erf();
+    layer_.erf_ = new ::CoreML::Specification::ErfLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.erf)
+  return layer_.erf_;
+}
+::CoreML::Specification::ErfLayerParams* NeuralNetworkLayer::release_erf() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.erf)
+  if (has_erf()) {
+    clear_has_layer();
+    ::CoreML::Specification::ErfLayerParams* temp = layer_.erf_;
+    layer_.erf_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_erf(::CoreML::Specification::ErfLayerParams* erf) {
+  clear_layer();
+  if (erf) {
+    set_has_erf();
+    layer_.erf_ = erf;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.erf)
+}
+
+// .CoreML.Specification.GeluLayerParams gelu = 795;
+bool NeuralNetworkLayer::has_gelu() const {
+  return layer_case() == kGelu;
+}
+void NeuralNetworkLayer::set_has_gelu() {
+  _oneof_case_[0] = kGelu;
+}
+void NeuralNetworkLayer::clear_gelu() {
+  if (has_gelu()) {
+    delete layer_.gelu_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::GeluLayerParams& NeuralNetworkLayer::gelu() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.gelu)
+  return has_gelu()
+      ? *layer_.gelu_
+      : ::CoreML::Specification::GeluLayerParams::default_instance();
+}
+::CoreML::Specification::GeluLayerParams* NeuralNetworkLayer::mutable_gelu() {
+  if (!has_gelu()) {
+    clear_layer();
+    set_has_gelu();
+    layer_.gelu_ = new ::CoreML::Specification::GeluLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.gelu)
+  return layer_.gelu_;
+}
+::CoreML::Specification::GeluLayerParams* NeuralNetworkLayer::release_gelu() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.gelu)
+  if (has_gelu()) {
+    clear_has_layer();
+    ::CoreML::Specification::GeluLayerParams* temp = layer_.gelu_;
+    layer_.gelu_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_gelu(::CoreML::Specification::GeluLayerParams* gelu) {
+  clear_layer();
+  if (gelu) {
+    set_has_gelu();
+    layer_.gelu_ = gelu;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.gelu)
 }
 
 // .CoreML.Specification.EqualLayerParams equal = 815;
@@ -13837,6 +15656,54 @@ void NeuralNetworkLayer::set_allocated_lessthan(::CoreML::Specification::LessTha
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.lessThan)
 }
 
+// .CoreML.Specification.LessEqualLayerParams lessEqual = 827;
+bool NeuralNetworkLayer::has_lessequal() const {
+  return layer_case() == kLessEqual;
+}
+void NeuralNetworkLayer::set_has_lessequal() {
+  _oneof_case_[0] = kLessEqual;
+}
+void NeuralNetworkLayer::clear_lessequal() {
+  if (has_lessequal()) {
+    delete layer_.lessequal_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::LessEqualLayerParams& NeuralNetworkLayer::lessequal() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.lessEqual)
+  return has_lessequal()
+      ? *layer_.lessequal_
+      : ::CoreML::Specification::LessEqualLayerParams::default_instance();
+}
+::CoreML::Specification::LessEqualLayerParams* NeuralNetworkLayer::mutable_lessequal() {
+  if (!has_lessequal()) {
+    clear_layer();
+    set_has_lessequal();
+    layer_.lessequal_ = new ::CoreML::Specification::LessEqualLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.lessEqual)
+  return layer_.lessequal_;
+}
+::CoreML::Specification::LessEqualLayerParams* NeuralNetworkLayer::release_lessequal() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.lessEqual)
+  if (has_lessequal()) {
+    clear_has_layer();
+    ::CoreML::Specification::LessEqualLayerParams* temp = layer_.lessequal_;
+    layer_.lessequal_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_lessequal(::CoreML::Specification::LessEqualLayerParams* lessequal) {
+  clear_layer();
+  if (lessequal) {
+    set_has_lessequal();
+    layer_.lessequal_ = lessequal;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.lessEqual)
+}
+
 // .CoreML.Specification.GreaterThanLayerParams greaterThan = 830;
 bool NeuralNetworkLayer::has_greaterthan() const {
   return layer_case() == kGreaterThan;
@@ -13883,6 +15750,54 @@ void NeuralNetworkLayer::set_allocated_greaterthan(::CoreML::Specification::Grea
     layer_.greaterthan_ = greaterthan;
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.greaterThan)
+}
+
+// .CoreML.Specification.GreaterEqualLayerParams greaterEqual = 832;
+bool NeuralNetworkLayer::has_greaterequal() const {
+  return layer_case() == kGreaterEqual;
+}
+void NeuralNetworkLayer::set_has_greaterequal() {
+  _oneof_case_[0] = kGreaterEqual;
+}
+void NeuralNetworkLayer::clear_greaterequal() {
+  if (has_greaterequal()) {
+    delete layer_.greaterequal_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::GreaterEqualLayerParams& NeuralNetworkLayer::greaterequal() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.greaterEqual)
+  return has_greaterequal()
+      ? *layer_.greaterequal_
+      : ::CoreML::Specification::GreaterEqualLayerParams::default_instance();
+}
+::CoreML::Specification::GreaterEqualLayerParams* NeuralNetworkLayer::mutable_greaterequal() {
+  if (!has_greaterequal()) {
+    clear_layer();
+    set_has_greaterequal();
+    layer_.greaterequal_ = new ::CoreML::Specification::GreaterEqualLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.greaterEqual)
+  return layer_.greaterequal_;
+}
+::CoreML::Specification::GreaterEqualLayerParams* NeuralNetworkLayer::release_greaterequal() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.greaterEqual)
+  if (has_greaterequal()) {
+    clear_has_layer();
+    ::CoreML::Specification::GreaterEqualLayerParams* temp = layer_.greaterequal_;
+    layer_.greaterequal_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_greaterequal(::CoreML::Specification::GreaterEqualLayerParams* greaterequal) {
+  clear_layer();
+  if (greaterequal) {
+    set_has_greaterequal();
+    layer_.greaterequal_ = greaterequal;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.greaterEqual)
 }
 
 // .CoreML.Specification.LogicalOrLayerParams logicalOr = 840;
@@ -14077,6 +15992,102 @@ void NeuralNetworkLayer::set_allocated_logicaland(::CoreML::Specification::Logic
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.logicalAnd)
 }
 
+// .CoreML.Specification.MinBroadcastableLayerParams minBroadcastable = 870;
+bool NeuralNetworkLayer::has_minbroadcastable() const {
+  return layer_case() == kMinBroadcastable;
+}
+void NeuralNetworkLayer::set_has_minbroadcastable() {
+  _oneof_case_[0] = kMinBroadcastable;
+}
+void NeuralNetworkLayer::clear_minbroadcastable() {
+  if (has_minbroadcastable()) {
+    delete layer_.minbroadcastable_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::MinBroadcastableLayerParams& NeuralNetworkLayer::minbroadcastable() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.minBroadcastable)
+  return has_minbroadcastable()
+      ? *layer_.minbroadcastable_
+      : ::CoreML::Specification::MinBroadcastableLayerParams::default_instance();
+}
+::CoreML::Specification::MinBroadcastableLayerParams* NeuralNetworkLayer::mutable_minbroadcastable() {
+  if (!has_minbroadcastable()) {
+    clear_layer();
+    set_has_minbroadcastable();
+    layer_.minbroadcastable_ = new ::CoreML::Specification::MinBroadcastableLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.minBroadcastable)
+  return layer_.minbroadcastable_;
+}
+::CoreML::Specification::MinBroadcastableLayerParams* NeuralNetworkLayer::release_minbroadcastable() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.minBroadcastable)
+  if (has_minbroadcastable()) {
+    clear_has_layer();
+    ::CoreML::Specification::MinBroadcastableLayerParams* temp = layer_.minbroadcastable_;
+    layer_.minbroadcastable_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_minbroadcastable(::CoreML::Specification::MinBroadcastableLayerParams* minbroadcastable) {
+  clear_layer();
+  if (minbroadcastable) {
+    set_has_minbroadcastable();
+    layer_.minbroadcastable_ = minbroadcastable;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.minBroadcastable)
+}
+
+// .CoreML.Specification.MaxBroadcastableLayerParams maxBroadcastable = 875;
+bool NeuralNetworkLayer::has_maxbroadcastable() const {
+  return layer_case() == kMaxBroadcastable;
+}
+void NeuralNetworkLayer::set_has_maxbroadcastable() {
+  _oneof_case_[0] = kMaxBroadcastable;
+}
+void NeuralNetworkLayer::clear_maxbroadcastable() {
+  if (has_maxbroadcastable()) {
+    delete layer_.maxbroadcastable_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::MaxBroadcastableLayerParams& NeuralNetworkLayer::maxbroadcastable() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.maxBroadcastable)
+  return has_maxbroadcastable()
+      ? *layer_.maxbroadcastable_
+      : ::CoreML::Specification::MaxBroadcastableLayerParams::default_instance();
+}
+::CoreML::Specification::MaxBroadcastableLayerParams* NeuralNetworkLayer::mutable_maxbroadcastable() {
+  if (!has_maxbroadcastable()) {
+    clear_layer();
+    set_has_maxbroadcastable();
+    layer_.maxbroadcastable_ = new ::CoreML::Specification::MaxBroadcastableLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.maxBroadcastable)
+  return layer_.maxbroadcastable_;
+}
+::CoreML::Specification::MaxBroadcastableLayerParams* NeuralNetworkLayer::release_maxbroadcastable() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.maxBroadcastable)
+  if (has_maxbroadcastable()) {
+    clear_has_layer();
+    ::CoreML::Specification::MaxBroadcastableLayerParams* temp = layer_.maxbroadcastable_;
+    layer_.maxbroadcastable_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_maxbroadcastable(::CoreML::Specification::MaxBroadcastableLayerParams* maxbroadcastable) {
+  clear_layer();
+  if (maxbroadcastable) {
+    set_has_maxbroadcastable();
+    layer_.maxbroadcastable_ = maxbroadcastable;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.maxBroadcastable)
+}
+
 // .CoreML.Specification.AddBroadcastableLayerParams addBroadcastable = 880;
 bool NeuralNetworkLayer::has_addbroadcastable() const {
   return layer_case() == kAddBroadcastable;
@@ -14219,6 +16230,54 @@ void NeuralNetworkLayer::set_allocated_dividebroadcastable(::CoreML::Specificati
     layer_.dividebroadcastable_ = dividebroadcastable;
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.divideBroadcastable)
+}
+
+// .CoreML.Specification.FloorDivBroadcastableLayerParams floorDivBroadcastable = 895;
+bool NeuralNetworkLayer::has_floordivbroadcastable() const {
+  return layer_case() == kFloorDivBroadcastable;
+}
+void NeuralNetworkLayer::set_has_floordivbroadcastable() {
+  _oneof_case_[0] = kFloorDivBroadcastable;
+}
+void NeuralNetworkLayer::clear_floordivbroadcastable() {
+  if (has_floordivbroadcastable()) {
+    delete layer_.floordivbroadcastable_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::FloorDivBroadcastableLayerParams& NeuralNetworkLayer::floordivbroadcastable() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable)
+  return has_floordivbroadcastable()
+      ? *layer_.floordivbroadcastable_
+      : ::CoreML::Specification::FloorDivBroadcastableLayerParams::default_instance();
+}
+::CoreML::Specification::FloorDivBroadcastableLayerParams* NeuralNetworkLayer::mutable_floordivbroadcastable() {
+  if (!has_floordivbroadcastable()) {
+    clear_layer();
+    set_has_floordivbroadcastable();
+    layer_.floordivbroadcastable_ = new ::CoreML::Specification::FloorDivBroadcastableLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable)
+  return layer_.floordivbroadcastable_;
+}
+::CoreML::Specification::FloorDivBroadcastableLayerParams* NeuralNetworkLayer::release_floordivbroadcastable() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable)
+  if (has_floordivbroadcastable()) {
+    clear_has_layer();
+    ::CoreML::Specification::FloorDivBroadcastableLayerParams* temp = layer_.floordivbroadcastable_;
+    layer_.floordivbroadcastable_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_floordivbroadcastable(::CoreML::Specification::FloorDivBroadcastableLayerParams* floordivbroadcastable) {
+  clear_layer();
+  if (floordivbroadcastable) {
+    set_has_floordivbroadcastable();
+    layer_.floordivbroadcastable_ = floordivbroadcastable;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.floorDivBroadcastable)
 }
 
 // .CoreML.Specification.MultiplyBroadcastableLayerParams multiplyBroadcastable = 900;
@@ -14557,6 +16616,54 @@ void NeuralNetworkLayer::set_allocated_softmaxnd(::CoreML::Specification::Softma
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.softmaxND)
 }
 
+// .CoreML.Specification.ReverseLayerParams reverse = 960;
+bool NeuralNetworkLayer::has_reverse() const {
+  return layer_case() == kReverse;
+}
+void NeuralNetworkLayer::set_has_reverse() {
+  _oneof_case_[0] = kReverse;
+}
+void NeuralNetworkLayer::clear_reverse() {
+  if (has_reverse()) {
+    delete layer_.reverse_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::ReverseLayerParams& NeuralNetworkLayer::reverse() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.reverse)
+  return has_reverse()
+      ? *layer_.reverse_
+      : ::CoreML::Specification::ReverseLayerParams::default_instance();
+}
+::CoreML::Specification::ReverseLayerParams* NeuralNetworkLayer::mutable_reverse() {
+  if (!has_reverse()) {
+    clear_layer();
+    set_has_reverse();
+    layer_.reverse_ = new ::CoreML::Specification::ReverseLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.reverse)
+  return layer_.reverse_;
+}
+::CoreML::Specification::ReverseLayerParams* NeuralNetworkLayer::release_reverse() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.reverse)
+  if (has_reverse()) {
+    clear_has_layer();
+    ::CoreML::Specification::ReverseLayerParams* temp = layer_.reverse_;
+    layer_.reverse_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_reverse(::CoreML::Specification::ReverseLayerParams* reverse) {
+  clear_layer();
+  if (reverse) {
+    set_has_reverse();
+    layer_.reverse_ = reverse;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.reverse)
+}
+
 // .CoreML.Specification.SplitNDLayerParams splitND = 975;
 bool NeuralNetworkLayer::has_splitnd() const {
   return layer_case() == kSplitND;
@@ -14653,52 +16760,52 @@ void NeuralNetworkLayer::set_allocated_concatnd(::CoreML::Specification::ConcatN
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.concatND)
 }
 
-// .CoreML.Specification.TransposeNDLayerParams transposeND = 985;
-bool NeuralNetworkLayer::has_transposend() const {
-  return layer_case() == kTransposeND;
+// .CoreML.Specification.TransposeLayerParams transpose = 985;
+bool NeuralNetworkLayer::has_transpose() const {
+  return layer_case() == kTranspose;
 }
-void NeuralNetworkLayer::set_has_transposend() {
-  _oneof_case_[0] = kTransposeND;
+void NeuralNetworkLayer::set_has_transpose() {
+  _oneof_case_[0] = kTranspose;
 }
-void NeuralNetworkLayer::clear_transposend() {
-  if (has_transposend()) {
-    delete layer_.transposend_;
+void NeuralNetworkLayer::clear_transpose() {
+  if (has_transpose()) {
+    delete layer_.transpose_;
     clear_has_layer();
   }
 }
- const ::CoreML::Specification::TransposeNDLayerParams& NeuralNetworkLayer::transposend() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.transposeND)
-  return has_transposend()
-      ? *layer_.transposend_
-      : ::CoreML::Specification::TransposeNDLayerParams::default_instance();
+ const ::CoreML::Specification::TransposeLayerParams& NeuralNetworkLayer::transpose() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.transpose)
+  return has_transpose()
+      ? *layer_.transpose_
+      : ::CoreML::Specification::TransposeLayerParams::default_instance();
 }
-::CoreML::Specification::TransposeNDLayerParams* NeuralNetworkLayer::mutable_transposend() {
-  if (!has_transposend()) {
+::CoreML::Specification::TransposeLayerParams* NeuralNetworkLayer::mutable_transpose() {
+  if (!has_transpose()) {
     clear_layer();
-    set_has_transposend();
-    layer_.transposend_ = new ::CoreML::Specification::TransposeNDLayerParams;
+    set_has_transpose();
+    layer_.transpose_ = new ::CoreML::Specification::TransposeLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.transposeND)
-  return layer_.transposend_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.transpose)
+  return layer_.transpose_;
 }
-::CoreML::Specification::TransposeNDLayerParams* NeuralNetworkLayer::release_transposend() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.transposeND)
-  if (has_transposend()) {
+::CoreML::Specification::TransposeLayerParams* NeuralNetworkLayer::release_transpose() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.transpose)
+  if (has_transpose()) {
     clear_has_layer();
-    ::CoreML::Specification::TransposeNDLayerParams* temp = layer_.transposend_;
-    layer_.transposend_ = NULL;
+    ::CoreML::Specification::TransposeLayerParams* temp = layer_.transpose_;
+    layer_.transpose_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-void NeuralNetworkLayer::set_allocated_transposend(::CoreML::Specification::TransposeNDLayerParams* transposend) {
+void NeuralNetworkLayer::set_allocated_transpose(::CoreML::Specification::TransposeLayerParams* transpose) {
   clear_layer();
-  if (transposend) {
-    set_has_transposend();
-    layer_.transposend_ = transposend;
+  if (transpose) {
+    set_has_transpose();
+    layer_.transpose_ = transpose;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.transposeND)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.transpose)
 }
 
 // .CoreML.Specification.SliceNDLayerParams sliceND = 995;
@@ -14845,7 +16952,7 @@ void NeuralNetworkLayer::set_allocated_embeddingnd(::CoreML::Specification::Embe
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.embeddingND)
 }
 
-// .CoreML.Specification.BatchedMatMulParams batchedMatmul = 1045;
+// .CoreML.Specification.BatchedMatMulLayerParams batchedMatmul = 1045;
 bool NeuralNetworkLayer::has_batchedmatmul() const {
   return layer_case() == kBatchedMatmul;
 }
@@ -14858,33 +16965,33 @@ void NeuralNetworkLayer::clear_batchedmatmul() {
     clear_has_layer();
   }
 }
- const ::CoreML::Specification::BatchedMatMulParams& NeuralNetworkLayer::batchedmatmul() const {
+ const ::CoreML::Specification::BatchedMatMulLayerParams& NeuralNetworkLayer::batchedmatmul() const {
   // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.batchedMatmul)
   return has_batchedmatmul()
       ? *layer_.batchedmatmul_
-      : ::CoreML::Specification::BatchedMatMulParams::default_instance();
+      : ::CoreML::Specification::BatchedMatMulLayerParams::default_instance();
 }
-::CoreML::Specification::BatchedMatMulParams* NeuralNetworkLayer::mutable_batchedmatmul() {
+::CoreML::Specification::BatchedMatMulLayerParams* NeuralNetworkLayer::mutable_batchedmatmul() {
   if (!has_batchedmatmul()) {
     clear_layer();
     set_has_batchedmatmul();
-    layer_.batchedmatmul_ = new ::CoreML::Specification::BatchedMatMulParams;
+    layer_.batchedmatmul_ = new ::CoreML::Specification::BatchedMatMulLayerParams;
   }
   // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.batchedMatmul)
   return layer_.batchedmatmul_;
 }
-::CoreML::Specification::BatchedMatMulParams* NeuralNetworkLayer::release_batchedmatmul() {
+::CoreML::Specification::BatchedMatMulLayerParams* NeuralNetworkLayer::release_batchedmatmul() {
   // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.batchedMatmul)
   if (has_batchedmatmul()) {
     clear_has_layer();
-    ::CoreML::Specification::BatchedMatMulParams* temp = layer_.batchedmatmul_;
+    ::CoreML::Specification::BatchedMatMulLayerParams* temp = layer_.batchedmatmul_;
     layer_.batchedmatmul_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-void NeuralNetworkLayer::set_allocated_batchedmatmul(::CoreML::Specification::BatchedMatMulParams* batchedmatmul) {
+void NeuralNetworkLayer::set_allocated_batchedmatmul(::CoreML::Specification::BatchedMatMulLayerParams* batchedmatmul) {
   clear_layer();
   if (batchedmatmul) {
     set_has_batchedmatmul();
@@ -15373,6 +17480,198 @@ void NeuralNetworkLayer::set_allocated_expanddims(::CoreML::Specification::Expan
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.expandDims)
 }
 
+// .CoreML.Specification.FlattenTo2DLayerParams flattenTo2D = 1130;
+bool NeuralNetworkLayer::has_flattento2d() const {
+  return layer_case() == kFlattenTo2D;
+}
+void NeuralNetworkLayer::set_has_flattento2d() {
+  _oneof_case_[0] = kFlattenTo2D;
+}
+void NeuralNetworkLayer::clear_flattento2d() {
+  if (has_flattento2d()) {
+    delete layer_.flattento2d_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::FlattenTo2DLayerParams& NeuralNetworkLayer::flattento2d() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.flattenTo2D)
+  return has_flattento2d()
+      ? *layer_.flattento2d_
+      : ::CoreML::Specification::FlattenTo2DLayerParams::default_instance();
+}
+::CoreML::Specification::FlattenTo2DLayerParams* NeuralNetworkLayer::mutable_flattento2d() {
+  if (!has_flattento2d()) {
+    clear_layer();
+    set_has_flattento2d();
+    layer_.flattento2d_ = new ::CoreML::Specification::FlattenTo2DLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.flattenTo2D)
+  return layer_.flattento2d_;
+}
+::CoreML::Specification::FlattenTo2DLayerParams* NeuralNetworkLayer::release_flattento2d() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.flattenTo2D)
+  if (has_flattento2d()) {
+    clear_has_layer();
+    ::CoreML::Specification::FlattenTo2DLayerParams* temp = layer_.flattento2d_;
+    layer_.flattento2d_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_flattento2d(::CoreML::Specification::FlattenTo2DLayerParams* flattento2d) {
+  clear_layer();
+  if (flattento2d) {
+    set_has_flattento2d();
+    layer_.flattento2d_ = flattento2d;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.flattenTo2D)
+}
+
+// .CoreML.Specification.ReshapeLikeLayerParams reshapeLike = 1135;
+bool NeuralNetworkLayer::has_reshapelike() const {
+  return layer_case() == kReshapeLike;
+}
+void NeuralNetworkLayer::set_has_reshapelike() {
+  _oneof_case_[0] = kReshapeLike;
+}
+void NeuralNetworkLayer::clear_reshapelike() {
+  if (has_reshapelike()) {
+    delete layer_.reshapelike_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::ReshapeLikeLayerParams& NeuralNetworkLayer::reshapelike() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.reshapeLike)
+  return has_reshapelike()
+      ? *layer_.reshapelike_
+      : ::CoreML::Specification::ReshapeLikeLayerParams::default_instance();
+}
+::CoreML::Specification::ReshapeLikeLayerParams* NeuralNetworkLayer::mutable_reshapelike() {
+  if (!has_reshapelike()) {
+    clear_layer();
+    set_has_reshapelike();
+    layer_.reshapelike_ = new ::CoreML::Specification::ReshapeLikeLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.reshapeLike)
+  return layer_.reshapelike_;
+}
+::CoreML::Specification::ReshapeLikeLayerParams* NeuralNetworkLayer::release_reshapelike() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.reshapeLike)
+  if (has_reshapelike()) {
+    clear_has_layer();
+    ::CoreML::Specification::ReshapeLikeLayerParams* temp = layer_.reshapelike_;
+    layer_.reshapelike_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_reshapelike(::CoreML::Specification::ReshapeLikeLayerParams* reshapelike) {
+  clear_layer();
+  if (reshapelike) {
+    set_has_reshapelike();
+    layer_.reshapelike_ = reshapelike;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.reshapeLike)
+}
+
+// .CoreML.Specification.ReshapeStaticLayerParams reshapeStatic = 1140;
+bool NeuralNetworkLayer::has_reshapestatic() const {
+  return layer_case() == kReshapeStatic;
+}
+void NeuralNetworkLayer::set_has_reshapestatic() {
+  _oneof_case_[0] = kReshapeStatic;
+}
+void NeuralNetworkLayer::clear_reshapestatic() {
+  if (has_reshapestatic()) {
+    delete layer_.reshapestatic_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::ReshapeStaticLayerParams& NeuralNetworkLayer::reshapestatic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.reshapeStatic)
+  return has_reshapestatic()
+      ? *layer_.reshapestatic_
+      : ::CoreML::Specification::ReshapeStaticLayerParams::default_instance();
+}
+::CoreML::Specification::ReshapeStaticLayerParams* NeuralNetworkLayer::mutable_reshapestatic() {
+  if (!has_reshapestatic()) {
+    clear_layer();
+    set_has_reshapestatic();
+    layer_.reshapestatic_ = new ::CoreML::Specification::ReshapeStaticLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.reshapeStatic)
+  return layer_.reshapestatic_;
+}
+::CoreML::Specification::ReshapeStaticLayerParams* NeuralNetworkLayer::release_reshapestatic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.reshapeStatic)
+  if (has_reshapestatic()) {
+    clear_has_layer();
+    ::CoreML::Specification::ReshapeStaticLayerParams* temp = layer_.reshapestatic_;
+    layer_.reshapestatic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_reshapestatic(::CoreML::Specification::ReshapeStaticLayerParams* reshapestatic) {
+  clear_layer();
+  if (reshapestatic) {
+    set_has_reshapestatic();
+    layer_.reshapestatic_ = reshapestatic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.reshapeStatic)
+}
+
+// .CoreML.Specification.ReshapeDynamicLayerParams reshapeDynamic = 1145;
+bool NeuralNetworkLayer::has_reshapedynamic() const {
+  return layer_case() == kReshapeDynamic;
+}
+void NeuralNetworkLayer::set_has_reshapedynamic() {
+  _oneof_case_[0] = kReshapeDynamic;
+}
+void NeuralNetworkLayer::clear_reshapedynamic() {
+  if (has_reshapedynamic()) {
+    delete layer_.reshapedynamic_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::ReshapeDynamicLayerParams& NeuralNetworkLayer::reshapedynamic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.reshapeDynamic)
+  return has_reshapedynamic()
+      ? *layer_.reshapedynamic_
+      : ::CoreML::Specification::ReshapeDynamicLayerParams::default_instance();
+}
+::CoreML::Specification::ReshapeDynamicLayerParams* NeuralNetworkLayer::mutable_reshapedynamic() {
+  if (!has_reshapedynamic()) {
+    clear_layer();
+    set_has_reshapedynamic();
+    layer_.reshapedynamic_ = new ::CoreML::Specification::ReshapeDynamicLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.reshapeDynamic)
+  return layer_.reshapedynamic_;
+}
+::CoreML::Specification::ReshapeDynamicLayerParams* NeuralNetworkLayer::release_reshapedynamic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.reshapeDynamic)
+  if (has_reshapedynamic()) {
+    clear_has_layer();
+    ::CoreML::Specification::ReshapeDynamicLayerParams* temp = layer_.reshapedynamic_;
+    layer_.reshapedynamic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_reshapedynamic(::CoreML::Specification::ReshapeDynamicLayerParams* reshapedynamic) {
+  clear_layer();
+  if (reshapedynamic) {
+    set_has_reshapedynamic();
+    layer_.reshapedynamic_ = reshapedynamic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.reshapeDynamic)
+}
+
 // .CoreML.Specification.RankPreservingReshapeLayerParams rankPreservingReshape = 1150;
 bool NeuralNetworkLayer::has_rankpreservingreshape() const {
   return layer_case() == kRankPreservingReshape;
@@ -15419,6 +17718,486 @@ void NeuralNetworkLayer::set_allocated_rankpreservingreshape(::CoreML::Specifica
     layer_.rankpreservingreshape_ = rankpreservingreshape;
   }
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.rankPreservingReshape)
+}
+
+// .CoreML.Specification.RandomNormalLikeLayerParams randomNormalLike = 1170;
+bool NeuralNetworkLayer::has_randomnormallike() const {
+  return layer_case() == kRandomNormalLike;
+}
+void NeuralNetworkLayer::set_has_randomnormallike() {
+  _oneof_case_[0] = kRandomNormalLike;
+}
+void NeuralNetworkLayer::clear_randomnormallike() {
+  if (has_randomnormallike()) {
+    delete layer_.randomnormallike_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomNormalLikeLayerParams& NeuralNetworkLayer::randomnormallike() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomNormalLike)
+  return has_randomnormallike()
+      ? *layer_.randomnormallike_
+      : ::CoreML::Specification::RandomNormalLikeLayerParams::default_instance();
+}
+::CoreML::Specification::RandomNormalLikeLayerParams* NeuralNetworkLayer::mutable_randomnormallike() {
+  if (!has_randomnormallike()) {
+    clear_layer();
+    set_has_randomnormallike();
+    layer_.randomnormallike_ = new ::CoreML::Specification::RandomNormalLikeLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomNormalLike)
+  return layer_.randomnormallike_;
+}
+::CoreML::Specification::RandomNormalLikeLayerParams* NeuralNetworkLayer::release_randomnormallike() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomNormalLike)
+  if (has_randomnormallike()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomNormalLikeLayerParams* temp = layer_.randomnormallike_;
+    layer_.randomnormallike_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randomnormallike(::CoreML::Specification::RandomNormalLikeLayerParams* randomnormallike) {
+  clear_layer();
+  if (randomnormallike) {
+    set_has_randomnormallike();
+    layer_.randomnormallike_ = randomnormallike;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomNormalLike)
+}
+
+// .CoreML.Specification.RandomNormalStaticLayerParams randomNormalStatic = 1175;
+bool NeuralNetworkLayer::has_randomnormalstatic() const {
+  return layer_case() == kRandomNormalStatic;
+}
+void NeuralNetworkLayer::set_has_randomnormalstatic() {
+  _oneof_case_[0] = kRandomNormalStatic;
+}
+void NeuralNetworkLayer::clear_randomnormalstatic() {
+  if (has_randomnormalstatic()) {
+    delete layer_.randomnormalstatic_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomNormalStaticLayerParams& NeuralNetworkLayer::randomnormalstatic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomNormalStatic)
+  return has_randomnormalstatic()
+      ? *layer_.randomnormalstatic_
+      : ::CoreML::Specification::RandomNormalStaticLayerParams::default_instance();
+}
+::CoreML::Specification::RandomNormalStaticLayerParams* NeuralNetworkLayer::mutable_randomnormalstatic() {
+  if (!has_randomnormalstatic()) {
+    clear_layer();
+    set_has_randomnormalstatic();
+    layer_.randomnormalstatic_ = new ::CoreML::Specification::RandomNormalStaticLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomNormalStatic)
+  return layer_.randomnormalstatic_;
+}
+::CoreML::Specification::RandomNormalStaticLayerParams* NeuralNetworkLayer::release_randomnormalstatic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomNormalStatic)
+  if (has_randomnormalstatic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomNormalStaticLayerParams* temp = layer_.randomnormalstatic_;
+    layer_.randomnormalstatic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randomnormalstatic(::CoreML::Specification::RandomNormalStaticLayerParams* randomnormalstatic) {
+  clear_layer();
+  if (randomnormalstatic) {
+    set_has_randomnormalstatic();
+    layer_.randomnormalstatic_ = randomnormalstatic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomNormalStatic)
+}
+
+// .CoreML.Specification.RandomNormalDynamicLayerParams randomNormalDynamic = 1180;
+bool NeuralNetworkLayer::has_randomnormaldynamic() const {
+  return layer_case() == kRandomNormalDynamic;
+}
+void NeuralNetworkLayer::set_has_randomnormaldynamic() {
+  _oneof_case_[0] = kRandomNormalDynamic;
+}
+void NeuralNetworkLayer::clear_randomnormaldynamic() {
+  if (has_randomnormaldynamic()) {
+    delete layer_.randomnormaldynamic_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomNormalDynamicLayerParams& NeuralNetworkLayer::randomnormaldynamic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic)
+  return has_randomnormaldynamic()
+      ? *layer_.randomnormaldynamic_
+      : ::CoreML::Specification::RandomNormalDynamicLayerParams::default_instance();
+}
+::CoreML::Specification::RandomNormalDynamicLayerParams* NeuralNetworkLayer::mutable_randomnormaldynamic() {
+  if (!has_randomnormaldynamic()) {
+    clear_layer();
+    set_has_randomnormaldynamic();
+    layer_.randomnormaldynamic_ = new ::CoreML::Specification::RandomNormalDynamicLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic)
+  return layer_.randomnormaldynamic_;
+}
+::CoreML::Specification::RandomNormalDynamicLayerParams* NeuralNetworkLayer::release_randomnormaldynamic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic)
+  if (has_randomnormaldynamic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomNormalDynamicLayerParams* temp = layer_.randomnormaldynamic_;
+    layer_.randomnormaldynamic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randomnormaldynamic(::CoreML::Specification::RandomNormalDynamicLayerParams* randomnormaldynamic) {
+  clear_layer();
+  if (randomnormaldynamic) {
+    set_has_randomnormaldynamic();
+    layer_.randomnormaldynamic_ = randomnormaldynamic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomNormalDynamic)
+}
+
+// .CoreML.Specification.RandomUniformLikeLayerParams randomUniformLike = 1190;
+bool NeuralNetworkLayer::has_randomuniformlike() const {
+  return layer_case() == kRandomUniformLike;
+}
+void NeuralNetworkLayer::set_has_randomuniformlike() {
+  _oneof_case_[0] = kRandomUniformLike;
+}
+void NeuralNetworkLayer::clear_randomuniformlike() {
+  if (has_randomuniformlike()) {
+    delete layer_.randomuniformlike_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomUniformLikeLayerParams& NeuralNetworkLayer::randomuniformlike() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomUniformLike)
+  return has_randomuniformlike()
+      ? *layer_.randomuniformlike_
+      : ::CoreML::Specification::RandomUniformLikeLayerParams::default_instance();
+}
+::CoreML::Specification::RandomUniformLikeLayerParams* NeuralNetworkLayer::mutable_randomuniformlike() {
+  if (!has_randomuniformlike()) {
+    clear_layer();
+    set_has_randomuniformlike();
+    layer_.randomuniformlike_ = new ::CoreML::Specification::RandomUniformLikeLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomUniformLike)
+  return layer_.randomuniformlike_;
+}
+::CoreML::Specification::RandomUniformLikeLayerParams* NeuralNetworkLayer::release_randomuniformlike() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomUniformLike)
+  if (has_randomuniformlike()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomUniformLikeLayerParams* temp = layer_.randomuniformlike_;
+    layer_.randomuniformlike_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randomuniformlike(::CoreML::Specification::RandomUniformLikeLayerParams* randomuniformlike) {
+  clear_layer();
+  if (randomuniformlike) {
+    set_has_randomuniformlike();
+    layer_.randomuniformlike_ = randomuniformlike;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomUniformLike)
+}
+
+// .CoreML.Specification.RandomUniformStaticLayerParams randomUniformStatic = 1195;
+bool NeuralNetworkLayer::has_randomuniformstatic() const {
+  return layer_case() == kRandomUniformStatic;
+}
+void NeuralNetworkLayer::set_has_randomuniformstatic() {
+  _oneof_case_[0] = kRandomUniformStatic;
+}
+void NeuralNetworkLayer::clear_randomuniformstatic() {
+  if (has_randomuniformstatic()) {
+    delete layer_.randomuniformstatic_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomUniformStaticLayerParams& NeuralNetworkLayer::randomuniformstatic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomUniformStatic)
+  return has_randomuniformstatic()
+      ? *layer_.randomuniformstatic_
+      : ::CoreML::Specification::RandomUniformStaticLayerParams::default_instance();
+}
+::CoreML::Specification::RandomUniformStaticLayerParams* NeuralNetworkLayer::mutable_randomuniformstatic() {
+  if (!has_randomuniformstatic()) {
+    clear_layer();
+    set_has_randomuniformstatic();
+    layer_.randomuniformstatic_ = new ::CoreML::Specification::RandomUniformStaticLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomUniformStatic)
+  return layer_.randomuniformstatic_;
+}
+::CoreML::Specification::RandomUniformStaticLayerParams* NeuralNetworkLayer::release_randomuniformstatic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomUniformStatic)
+  if (has_randomuniformstatic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomUniformStaticLayerParams* temp = layer_.randomuniformstatic_;
+    layer_.randomuniformstatic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randomuniformstatic(::CoreML::Specification::RandomUniformStaticLayerParams* randomuniformstatic) {
+  clear_layer();
+  if (randomuniformstatic) {
+    set_has_randomuniformstatic();
+    layer_.randomuniformstatic_ = randomuniformstatic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomUniformStatic)
+}
+
+// .CoreML.Specification.RandomUniformDynamicLayerParams randomUniformDynamic = 1200;
+bool NeuralNetworkLayer::has_randomuniformdynamic() const {
+  return layer_case() == kRandomUniformDynamic;
+}
+void NeuralNetworkLayer::set_has_randomuniformdynamic() {
+  _oneof_case_[0] = kRandomUniformDynamic;
+}
+void NeuralNetworkLayer::clear_randomuniformdynamic() {
+  if (has_randomuniformdynamic()) {
+    delete layer_.randomuniformdynamic_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomUniformDynamicLayerParams& NeuralNetworkLayer::randomuniformdynamic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic)
+  return has_randomuniformdynamic()
+      ? *layer_.randomuniformdynamic_
+      : ::CoreML::Specification::RandomUniformDynamicLayerParams::default_instance();
+}
+::CoreML::Specification::RandomUniformDynamicLayerParams* NeuralNetworkLayer::mutable_randomuniformdynamic() {
+  if (!has_randomuniformdynamic()) {
+    clear_layer();
+    set_has_randomuniformdynamic();
+    layer_.randomuniformdynamic_ = new ::CoreML::Specification::RandomUniformDynamicLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic)
+  return layer_.randomuniformdynamic_;
+}
+::CoreML::Specification::RandomUniformDynamicLayerParams* NeuralNetworkLayer::release_randomuniformdynamic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic)
+  if (has_randomuniformdynamic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomUniformDynamicLayerParams* temp = layer_.randomuniformdynamic_;
+    layer_.randomuniformdynamic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randomuniformdynamic(::CoreML::Specification::RandomUniformDynamicLayerParams* randomuniformdynamic) {
+  clear_layer();
+  if (randomuniformdynamic) {
+    set_has_randomuniformdynamic();
+    layer_.randomuniformdynamic_ = randomuniformdynamic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomUniformDynamic)
+}
+
+// .CoreML.Specification.RandomBernoulliLikeLayerParams randomBernoulliLike = 1210;
+bool NeuralNetworkLayer::has_randombernoullilike() const {
+  return layer_case() == kRandomBernoulliLike;
+}
+void NeuralNetworkLayer::set_has_randombernoullilike() {
+  _oneof_case_[0] = kRandomBernoulliLike;
+}
+void NeuralNetworkLayer::clear_randombernoullilike() {
+  if (has_randombernoullilike()) {
+    delete layer_.randombernoullilike_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomBernoulliLikeLayerParams& NeuralNetworkLayer::randombernoullilike() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike)
+  return has_randombernoullilike()
+      ? *layer_.randombernoullilike_
+      : ::CoreML::Specification::RandomBernoulliLikeLayerParams::default_instance();
+}
+::CoreML::Specification::RandomBernoulliLikeLayerParams* NeuralNetworkLayer::mutable_randombernoullilike() {
+  if (!has_randombernoullilike()) {
+    clear_layer();
+    set_has_randombernoullilike();
+    layer_.randombernoullilike_ = new ::CoreML::Specification::RandomBernoulliLikeLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike)
+  return layer_.randombernoullilike_;
+}
+::CoreML::Specification::RandomBernoulliLikeLayerParams* NeuralNetworkLayer::release_randombernoullilike() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike)
+  if (has_randombernoullilike()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomBernoulliLikeLayerParams* temp = layer_.randombernoullilike_;
+    layer_.randombernoullilike_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randombernoullilike(::CoreML::Specification::RandomBernoulliLikeLayerParams* randombernoullilike) {
+  clear_layer();
+  if (randombernoullilike) {
+    set_has_randombernoullilike();
+    layer_.randombernoullilike_ = randombernoullilike;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomBernoulliLike)
+}
+
+// .CoreML.Specification.RandomBernoulliStaticLayerParams randomBernoulliStatic = 1215;
+bool NeuralNetworkLayer::has_randombernoullistatic() const {
+  return layer_case() == kRandomBernoulliStatic;
+}
+void NeuralNetworkLayer::set_has_randombernoullistatic() {
+  _oneof_case_[0] = kRandomBernoulliStatic;
+}
+void NeuralNetworkLayer::clear_randombernoullistatic() {
+  if (has_randombernoullistatic()) {
+    delete layer_.randombernoullistatic_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomBernoulliStaticLayerParams& NeuralNetworkLayer::randombernoullistatic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic)
+  return has_randombernoullistatic()
+      ? *layer_.randombernoullistatic_
+      : ::CoreML::Specification::RandomBernoulliStaticLayerParams::default_instance();
+}
+::CoreML::Specification::RandomBernoulliStaticLayerParams* NeuralNetworkLayer::mutable_randombernoullistatic() {
+  if (!has_randombernoullistatic()) {
+    clear_layer();
+    set_has_randombernoullistatic();
+    layer_.randombernoullistatic_ = new ::CoreML::Specification::RandomBernoulliStaticLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic)
+  return layer_.randombernoullistatic_;
+}
+::CoreML::Specification::RandomBernoulliStaticLayerParams* NeuralNetworkLayer::release_randombernoullistatic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic)
+  if (has_randombernoullistatic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomBernoulliStaticLayerParams* temp = layer_.randombernoullistatic_;
+    layer_.randombernoullistatic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randombernoullistatic(::CoreML::Specification::RandomBernoulliStaticLayerParams* randombernoullistatic) {
+  clear_layer();
+  if (randombernoullistatic) {
+    set_has_randombernoullistatic();
+    layer_.randombernoullistatic_ = randombernoullistatic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomBernoulliStatic)
+}
+
+// .CoreML.Specification.RandomBernoulliDynamicLayerParams randomBernoulliDynamic = 1220;
+bool NeuralNetworkLayer::has_randombernoullidynamic() const {
+  return layer_case() == kRandomBernoulliDynamic;
+}
+void NeuralNetworkLayer::set_has_randombernoullidynamic() {
+  _oneof_case_[0] = kRandomBernoulliDynamic;
+}
+void NeuralNetworkLayer::clear_randombernoullidynamic() {
+  if (has_randombernoullidynamic()) {
+    delete layer_.randombernoullidynamic_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::RandomBernoulliDynamicLayerParams& NeuralNetworkLayer::randombernoullidynamic() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic)
+  return has_randombernoullidynamic()
+      ? *layer_.randombernoullidynamic_
+      : ::CoreML::Specification::RandomBernoulliDynamicLayerParams::default_instance();
+}
+::CoreML::Specification::RandomBernoulliDynamicLayerParams* NeuralNetworkLayer::mutable_randombernoullidynamic() {
+  if (!has_randombernoullidynamic()) {
+    clear_layer();
+    set_has_randombernoullidynamic();
+    layer_.randombernoullidynamic_ = new ::CoreML::Specification::RandomBernoulliDynamicLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic)
+  return layer_.randombernoullidynamic_;
+}
+::CoreML::Specification::RandomBernoulliDynamicLayerParams* NeuralNetworkLayer::release_randombernoullidynamic() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic)
+  if (has_randombernoullidynamic()) {
+    clear_has_layer();
+    ::CoreML::Specification::RandomBernoulliDynamicLayerParams* temp = layer_.randombernoullidynamic_;
+    layer_.randombernoullidynamic_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_randombernoullidynamic(::CoreML::Specification::RandomBernoulliDynamicLayerParams* randombernoullidynamic) {
+  clear_layer();
+  if (randombernoullidynamic) {
+    set_has_randombernoullidynamic();
+    layer_.randombernoullidynamic_ = randombernoullidynamic;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.randomBernoulliDynamic)
+}
+
+// .CoreML.Specification.MatrixBandPartLayerParams matrixBandPart = 1315;
+bool NeuralNetworkLayer::has_matrixbandpart() const {
+  return layer_case() == kMatrixBandPart;
+}
+void NeuralNetworkLayer::set_has_matrixbandpart() {
+  _oneof_case_[0] = kMatrixBandPart;
+}
+void NeuralNetworkLayer::clear_matrixbandpart() {
+  if (has_matrixbandpart()) {
+    delete layer_.matrixbandpart_;
+    clear_has_layer();
+  }
+}
+ const ::CoreML::Specification::MatrixBandPartLayerParams& NeuralNetworkLayer::matrixbandpart() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.matrixBandPart)
+  return has_matrixbandpart()
+      ? *layer_.matrixbandpart_
+      : ::CoreML::Specification::MatrixBandPartLayerParams::default_instance();
+}
+::CoreML::Specification::MatrixBandPartLayerParams* NeuralNetworkLayer::mutable_matrixbandpart() {
+  if (!has_matrixbandpart()) {
+    clear_layer();
+    set_has_matrixbandpart();
+    layer_.matrixbandpart_ = new ::CoreML::Specification::MatrixBandPartLayerParams;
+  }
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.matrixBandPart)
+  return layer_.matrixbandpart_;
+}
+::CoreML::Specification::MatrixBandPartLayerParams* NeuralNetworkLayer::release_matrixbandpart() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.matrixBandPart)
+  if (has_matrixbandpart()) {
+    clear_has_layer();
+    ::CoreML::Specification::MatrixBandPartLayerParams* temp = layer_.matrixbandpart_;
+    layer_.matrixbandpart_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void NeuralNetworkLayer::set_allocated_matrixbandpart(::CoreML::Specification::MatrixBandPartLayerParams* matrixbandpart) {
+  clear_layer();
+  if (matrixbandpart) {
+    set_has_matrixbandpart();
+    layer_.matrixbandpart_ = matrixbandpart;
+  }
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.matrixBandPart)
 }
 
 // .CoreML.Specification.LowerTriangularLayerParams lowerTriangular = 1320;
@@ -15517,52 +18296,52 @@ void NeuralNetworkLayer::set_allocated_uppertriangular(::CoreML::Specification::
   // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.upperTriangular)
 }
 
-// .CoreML.Specification.WhereLayerParams where = 1330;
-bool NeuralNetworkLayer::has_where() const {
-  return layer_case() == kWhere;
+// .CoreML.Specification.WhereBroadcastableLayerParams whereBroadcastable = 1330;
+bool NeuralNetworkLayer::has_wherebroadcastable() const {
+  return layer_case() == kWhereBroadcastable;
 }
-void NeuralNetworkLayer::set_has_where() {
-  _oneof_case_[0] = kWhere;
+void NeuralNetworkLayer::set_has_wherebroadcastable() {
+  _oneof_case_[0] = kWhereBroadcastable;
 }
-void NeuralNetworkLayer::clear_where() {
-  if (has_where()) {
-    delete layer_.where_;
+void NeuralNetworkLayer::clear_wherebroadcastable() {
+  if (has_wherebroadcastable()) {
+    delete layer_.wherebroadcastable_;
     clear_has_layer();
   }
 }
- const ::CoreML::Specification::WhereLayerParams& NeuralNetworkLayer::where() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.where)
-  return has_where()
-      ? *layer_.where_
-      : ::CoreML::Specification::WhereLayerParams::default_instance();
+ const ::CoreML::Specification::WhereBroadcastableLayerParams& NeuralNetworkLayer::wherebroadcastable() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.NeuralNetworkLayer.whereBroadcastable)
+  return has_wherebroadcastable()
+      ? *layer_.wherebroadcastable_
+      : ::CoreML::Specification::WhereBroadcastableLayerParams::default_instance();
 }
-::CoreML::Specification::WhereLayerParams* NeuralNetworkLayer::mutable_where() {
-  if (!has_where()) {
+::CoreML::Specification::WhereBroadcastableLayerParams* NeuralNetworkLayer::mutable_wherebroadcastable() {
+  if (!has_wherebroadcastable()) {
     clear_layer();
-    set_has_where();
-    layer_.where_ = new ::CoreML::Specification::WhereLayerParams;
+    set_has_wherebroadcastable();
+    layer_.wherebroadcastable_ = new ::CoreML::Specification::WhereBroadcastableLayerParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.where)
-  return layer_.where_;
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.NeuralNetworkLayer.whereBroadcastable)
+  return layer_.wherebroadcastable_;
 }
-::CoreML::Specification::WhereLayerParams* NeuralNetworkLayer::release_where() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.where)
-  if (has_where()) {
+::CoreML::Specification::WhereBroadcastableLayerParams* NeuralNetworkLayer::release_wherebroadcastable() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.NeuralNetworkLayer.whereBroadcastable)
+  if (has_wherebroadcastable()) {
     clear_has_layer();
-    ::CoreML::Specification::WhereLayerParams* temp = layer_.where_;
-    layer_.where_ = NULL;
+    ::CoreML::Specification::WhereBroadcastableLayerParams* temp = layer_.wherebroadcastable_;
+    layer_.wherebroadcastable_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-void NeuralNetworkLayer::set_allocated_where(::CoreML::Specification::WhereLayerParams* where) {
+void NeuralNetworkLayer::set_allocated_wherebroadcastable(::CoreML::Specification::WhereBroadcastableLayerParams* wherebroadcastable) {
   clear_layer();
-  if (where) {
-    set_has_where();
-    layer_.where_ = where;
+  if (wherebroadcastable) {
+    set_has_wherebroadcastable();
+    layer_.wherebroadcastable_ = wherebroadcastable;
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.where)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.NeuralNetworkLayer.whereBroadcastable)
 }
 
 bool NeuralNetworkLayer::has_layer() const {
@@ -16778,7 +19557,6 @@ void CopyLayerParams::InternalSwap(CopyLayerParams* other) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int GreaterThanLayerParams::kUseNonStrictInequalityFieldNumber;
 const int GreaterThanLayerParams::kAlphaFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -16795,15 +19573,12 @@ GreaterThanLayerParams::GreaterThanLayerParams(const GreaterThanLayerParams& fro
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&usenonstrictinequality_, &from.usenonstrictinequality_,
-    reinterpret_cast<char*>(&alpha_) -
-    reinterpret_cast<char*>(&usenonstrictinequality_) + sizeof(alpha_));
+  alpha_ = from.alpha_;
   // @@protoc_insertion_point(copy_constructor:CoreML.Specification.GreaterThanLayerParams)
 }
 
 void GreaterThanLayerParams::SharedCtor() {
-  ::memset(&usenonstrictinequality_, 0, reinterpret_cast<char*>(&alpha_) -
-    reinterpret_cast<char*>(&usenonstrictinequality_) + sizeof(alpha_));
+  alpha_ = 0;
   _cached_size_ = 0;
 }
 
@@ -16835,8 +19610,7 @@ GreaterThanLayerParams* GreaterThanLayerParams::New(::google::protobuf::Arena* a
 
 void GreaterThanLayerParams::Clear() {
 // @@protoc_insertion_point(message_clear_start:CoreML.Specification.GreaterThanLayerParams)
-  ::memset(&usenonstrictinequality_, 0, reinterpret_cast<char*>(&alpha_) -
-    reinterpret_cast<char*>(&usenonstrictinequality_) + sizeof(alpha_));
+  alpha_ = 0;
 }
 
 bool GreaterThanLayerParams::MergePartialFromCodedStream(
@@ -16849,20 +19623,6 @@ bool GreaterThanLayerParams::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // bool useNonStrictInequality = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &usenonstrictinequality_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
       // float alpha = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
@@ -16904,11 +19664,6 @@ void GreaterThanLayerParams::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool useNonStrictInequality = 1;
-  if (this->usenonstrictinequality() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->usenonstrictinequality(), output);
-  }
-
   // float alpha = 2;
   if (this->alpha() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->alpha(), output);
@@ -16920,11 +19675,6 @@ void GreaterThanLayerParams::SerializeWithCachedSizes(
 size_t GreaterThanLayerParams::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.GreaterThanLayerParams)
   size_t total_size = 0;
-
-  // bool useNonStrictInequality = 1;
-  if (this->usenonstrictinequality() != 0) {
-    total_size += 1 + 1;
-  }
 
   // float alpha = 2;
   if (this->alpha() != 0) {
@@ -16950,9 +19700,6 @@ void GreaterThanLayerParams::MergeFrom(const GreaterThanLayerParams& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.usenonstrictinequality() != 0) {
-    set_usenonstrictinequality(from.usenonstrictinequality());
-  }
   if (from.alpha() != 0) {
     set_alpha(from.alpha());
   }
@@ -16974,7 +19721,6 @@ void GreaterThanLayerParams::Swap(GreaterThanLayerParams* other) {
   InternalSwap(other);
 }
 void GreaterThanLayerParams::InternalSwap(GreaterThanLayerParams* other) {
-  std::swap(usenonstrictinequality_, other->usenonstrictinequality_);
   std::swap(alpha_, other->alpha_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -16985,20 +19731,6 @@ void GreaterThanLayerParams::InternalSwap(GreaterThanLayerParams* other) {
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // GreaterThanLayerParams
-
-// bool useNonStrictInequality = 1;
-void GreaterThanLayerParams::clear_usenonstrictinequality() {
-  usenonstrictinequality_ = false;
-}
-bool GreaterThanLayerParams::usenonstrictinequality() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.GreaterThanLayerParams.useNonStrictInequality)
-  return usenonstrictinequality_;
-}
-void GreaterThanLayerParams::set_usenonstrictinequality(bool value) {
-  
-  usenonstrictinequality_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.GreaterThanLayerParams.useNonStrictInequality)
-}
 
 // float alpha = 2;
 void GreaterThanLayerParams::clear_alpha() {
@@ -17019,7 +19751,200 @@ void GreaterThanLayerParams::set_alpha(float value) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int LessThanLayerParams::kUseNonStrictInequalityFieldNumber;
+const int GreaterEqualLayerParams::kAlphaFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+GreaterEqualLayerParams::GreaterEqualLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.GreaterEqualLayerParams)
+}
+GreaterEqualLayerParams::GreaterEqualLayerParams(const GreaterEqualLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  alpha_ = from.alpha_;
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.GreaterEqualLayerParams)
+}
+
+void GreaterEqualLayerParams::SharedCtor() {
+  alpha_ = 0;
+  _cached_size_ = 0;
+}
+
+GreaterEqualLayerParams::~GreaterEqualLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.GreaterEqualLayerParams)
+  SharedDtor();
+}
+
+void GreaterEqualLayerParams::SharedDtor() {
+}
+
+void GreaterEqualLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const GreaterEqualLayerParams& GreaterEqualLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+GreaterEqualLayerParams* GreaterEqualLayerParams::New(::google::protobuf::Arena* arena) const {
+  GreaterEqualLayerParams* n = new GreaterEqualLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void GreaterEqualLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.GreaterEqualLayerParams)
+  alpha_ = 0;
+}
+
+bool GreaterEqualLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.GreaterEqualLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // float alpha = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &alpha_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.GreaterEqualLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.GreaterEqualLayerParams)
+  return false;
+#undef DO_
+}
+
+void GreaterEqualLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.GreaterEqualLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // float alpha = 2;
+  if (this->alpha() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->alpha(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.GreaterEqualLayerParams)
+}
+
+size_t GreaterEqualLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.GreaterEqualLayerParams)
+  size_t total_size = 0;
+
+  // float alpha = 2;
+  if (this->alpha() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void GreaterEqualLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const GreaterEqualLayerParams*>(&from));
+}
+
+void GreaterEqualLayerParams::MergeFrom(const GreaterEqualLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.GreaterEqualLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.alpha() != 0) {
+    set_alpha(from.alpha());
+  }
+}
+
+void GreaterEqualLayerParams::CopyFrom(const GreaterEqualLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.GreaterEqualLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GreaterEqualLayerParams::IsInitialized() const {
+  return true;
+}
+
+void GreaterEqualLayerParams::Swap(GreaterEqualLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void GreaterEqualLayerParams::InternalSwap(GreaterEqualLayerParams* other) {
+  std::swap(alpha_, other->alpha_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string GreaterEqualLayerParams::GetTypeName() const {
+  return "CoreML.Specification.GreaterEqualLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// GreaterEqualLayerParams
+
+// float alpha = 2;
+void GreaterEqualLayerParams::clear_alpha() {
+  alpha_ = 0;
+}
+float GreaterEqualLayerParams::alpha() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.GreaterEqualLayerParams.alpha)
+  return alpha_;
+}
+void GreaterEqualLayerParams::set_alpha(float value) {
+  
+  alpha_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.GreaterEqualLayerParams.alpha)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int LessThanLayerParams::kAlphaFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -17036,15 +19961,12 @@ LessThanLayerParams::LessThanLayerParams(const LessThanLayerParams& from)
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&usenonstrictinequality_, &from.usenonstrictinequality_,
-    reinterpret_cast<char*>(&alpha_) -
-    reinterpret_cast<char*>(&usenonstrictinequality_) + sizeof(alpha_));
+  alpha_ = from.alpha_;
   // @@protoc_insertion_point(copy_constructor:CoreML.Specification.LessThanLayerParams)
 }
 
 void LessThanLayerParams::SharedCtor() {
-  ::memset(&usenonstrictinequality_, 0, reinterpret_cast<char*>(&alpha_) -
-    reinterpret_cast<char*>(&usenonstrictinequality_) + sizeof(alpha_));
+  alpha_ = 0;
   _cached_size_ = 0;
 }
 
@@ -17076,8 +19998,7 @@ LessThanLayerParams* LessThanLayerParams::New(::google::protobuf::Arena* arena) 
 
 void LessThanLayerParams::Clear() {
 // @@protoc_insertion_point(message_clear_start:CoreML.Specification.LessThanLayerParams)
-  ::memset(&usenonstrictinequality_, 0, reinterpret_cast<char*>(&alpha_) -
-    reinterpret_cast<char*>(&usenonstrictinequality_) + sizeof(alpha_));
+  alpha_ = 0;
 }
 
 bool LessThanLayerParams::MergePartialFromCodedStream(
@@ -17090,20 +20011,6 @@ bool LessThanLayerParams::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // bool useNonStrictInequality = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(8u)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &usenonstrictinequality_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
       // float alpha = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
@@ -17145,11 +20052,6 @@ void LessThanLayerParams::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool useNonStrictInequality = 1;
-  if (this->usenonstrictinequality() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->usenonstrictinequality(), output);
-  }
-
   // float alpha = 2;
   if (this->alpha() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->alpha(), output);
@@ -17161,11 +20063,6 @@ void LessThanLayerParams::SerializeWithCachedSizes(
 size_t LessThanLayerParams::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.LessThanLayerParams)
   size_t total_size = 0;
-
-  // bool useNonStrictInequality = 1;
-  if (this->usenonstrictinequality() != 0) {
-    total_size += 1 + 1;
-  }
 
   // float alpha = 2;
   if (this->alpha() != 0) {
@@ -17191,9 +20088,6 @@ void LessThanLayerParams::MergeFrom(const LessThanLayerParams& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.usenonstrictinequality() != 0) {
-    set_usenonstrictinequality(from.usenonstrictinequality());
-  }
   if (from.alpha() != 0) {
     set_alpha(from.alpha());
   }
@@ -17215,7 +20109,6 @@ void LessThanLayerParams::Swap(LessThanLayerParams* other) {
   InternalSwap(other);
 }
 void LessThanLayerParams::InternalSwap(LessThanLayerParams* other) {
-  std::swap(usenonstrictinequality_, other->usenonstrictinequality_);
   std::swap(alpha_, other->alpha_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -17226,20 +20119,6 @@ void LessThanLayerParams::InternalSwap(LessThanLayerParams* other) {
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // LessThanLayerParams
-
-// bool useNonStrictInequality = 1;
-void LessThanLayerParams::clear_usenonstrictinequality() {
-  usenonstrictinequality_ = false;
-}
-bool LessThanLayerParams::usenonstrictinequality() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.LessThanLayerParams.useNonStrictInequality)
-  return usenonstrictinequality_;
-}
-void LessThanLayerParams::set_usenonstrictinequality(bool value) {
-  
-  usenonstrictinequality_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.LessThanLayerParams.useNonStrictInequality)
-}
 
 // float alpha = 2;
 void LessThanLayerParams::clear_alpha() {
@@ -17253,6 +20132,200 @@ void LessThanLayerParams::set_alpha(float value) {
   
   alpha_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.LessThanLayerParams.alpha)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int LessEqualLayerParams::kAlphaFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+LessEqualLayerParams::LessEqualLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.LessEqualLayerParams)
+}
+LessEqualLayerParams::LessEqualLayerParams(const LessEqualLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  alpha_ = from.alpha_;
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.LessEqualLayerParams)
+}
+
+void LessEqualLayerParams::SharedCtor() {
+  alpha_ = 0;
+  _cached_size_ = 0;
+}
+
+LessEqualLayerParams::~LessEqualLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.LessEqualLayerParams)
+  SharedDtor();
+}
+
+void LessEqualLayerParams::SharedDtor() {
+}
+
+void LessEqualLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const LessEqualLayerParams& LessEqualLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+LessEqualLayerParams* LessEqualLayerParams::New(::google::protobuf::Arena* arena) const {
+  LessEqualLayerParams* n = new LessEqualLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void LessEqualLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.LessEqualLayerParams)
+  alpha_ = 0;
+}
+
+bool LessEqualLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.LessEqualLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // float alpha = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &alpha_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.LessEqualLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.LessEqualLayerParams)
+  return false;
+#undef DO_
+}
+
+void LessEqualLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.LessEqualLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // float alpha = 2;
+  if (this->alpha() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->alpha(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.LessEqualLayerParams)
+}
+
+size_t LessEqualLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.LessEqualLayerParams)
+  size_t total_size = 0;
+
+  // float alpha = 2;
+  if (this->alpha() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void LessEqualLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const LessEqualLayerParams*>(&from));
+}
+
+void LessEqualLayerParams::MergeFrom(const LessEqualLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.LessEqualLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.alpha() != 0) {
+    set_alpha(from.alpha());
+  }
+}
+
+void LessEqualLayerParams::CopyFrom(const LessEqualLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.LessEqualLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LessEqualLayerParams::IsInitialized() const {
+  return true;
+}
+
+void LessEqualLayerParams::Swap(LessEqualLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void LessEqualLayerParams::InternalSwap(LessEqualLayerParams* other) {
+  std::swap(alpha_, other->alpha_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string LessEqualLayerParams::GetTypeName() const {
+  return "CoreML.Specification.LessEqualLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// LessEqualLayerParams
+
+// float alpha = 2;
+void LessEqualLayerParams::clear_alpha() {
+  alpha_ = 0;
+}
+float LessEqualLayerParams::alpha() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.LessEqualLayerParams.alpha)
+  return alpha_;
+}
+void LessEqualLayerParams::set_alpha(float value) {
+  
+  alpha_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.LessEqualLayerParams.alpha)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -38810,66 +41883,66 @@ void CustomLayerParams::set_allocated_description(::std::string* description) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int TransposeNDLayerParams::kAxesFieldNumber;
+const int TransposeLayerParams::kAxesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-TransposeNDLayerParams::TransposeNDLayerParams()
+TransposeLayerParams::TransposeLayerParams()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_NeuralNetwork_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:CoreML.Specification.TransposeNDLayerParams)
+  // @@protoc_insertion_point(constructor:CoreML.Specification.TransposeLayerParams)
 }
-TransposeNDLayerParams::TransposeNDLayerParams(const TransposeNDLayerParams& from)
+TransposeLayerParams::TransposeLayerParams(const TransposeLayerParams& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       axes_(from.axes_),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.TransposeNDLayerParams)
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.TransposeLayerParams)
 }
 
-void TransposeNDLayerParams::SharedCtor() {
+void TransposeLayerParams::SharedCtor() {
   _cached_size_ = 0;
 }
 
-TransposeNDLayerParams::~TransposeNDLayerParams() {
-  // @@protoc_insertion_point(destructor:CoreML.Specification.TransposeNDLayerParams)
+TransposeLayerParams::~TransposeLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.TransposeLayerParams)
   SharedDtor();
 }
 
-void TransposeNDLayerParams::SharedDtor() {
+void TransposeLayerParams::SharedDtor() {
 }
 
-void TransposeNDLayerParams::SetCachedSize(int size) const {
+void TransposeLayerParams::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const TransposeNDLayerParams& TransposeNDLayerParams::default_instance() {
+const TransposeLayerParams& TransposeLayerParams::default_instance() {
   protobuf_NeuralNetwork_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-TransposeNDLayerParams* TransposeNDLayerParams::New(::google::protobuf::Arena* arena) const {
-  TransposeNDLayerParams* n = new TransposeNDLayerParams;
+TransposeLayerParams* TransposeLayerParams::New(::google::protobuf::Arena* arena) const {
+  TransposeLayerParams* n = new TransposeLayerParams;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void TransposeNDLayerParams::Clear() {
-// @@protoc_insertion_point(message_clear_start:CoreML.Specification.TransposeNDLayerParams)
+void TransposeLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.TransposeLayerParams)
   axes_.Clear();
 }
 
-bool TransposeNDLayerParams::MergePartialFromCodedStream(
+bool TransposeLayerParams::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:CoreML.Specification.TransposeNDLayerParams)
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.TransposeLayerParams)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -38906,17 +41979,17 @@ bool TransposeNDLayerParams::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:CoreML.Specification.TransposeNDLayerParams)
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.TransposeLayerParams)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:CoreML.Specification.TransposeNDLayerParams)
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.TransposeLayerParams)
   return false;
 #undef DO_
 }
 
-void TransposeNDLayerParams::SerializeWithCachedSizes(
+void TransposeLayerParams::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:CoreML.Specification.TransposeNDLayerParams)
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.TransposeLayerParams)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -38930,11 +42003,11 @@ void TransposeNDLayerParams::SerializeWithCachedSizes(
       this->axes(i), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:CoreML.Specification.TransposeNDLayerParams)
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.TransposeLayerParams)
 }
 
-size_t TransposeNDLayerParams::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.TransposeNDLayerParams)
+size_t TransposeLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.TransposeLayerParams)
   size_t total_size = 0;
 
   // repeated uint64 axes = 1;
@@ -38959,13 +42032,13 @@ size_t TransposeNDLayerParams::ByteSizeLong() const {
   return total_size;
 }
 
-void TransposeNDLayerParams::CheckTypeAndMergeFrom(
+void TransposeLayerParams::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const TransposeNDLayerParams*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const TransposeLayerParams*>(&from));
 }
 
-void TransposeNDLayerParams::MergeFrom(const TransposeNDLayerParams& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.TransposeNDLayerParams)
+void TransposeLayerParams::MergeFrom(const TransposeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.TransposeLayerParams)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -38974,60 +42047,60 @@ void TransposeNDLayerParams::MergeFrom(const TransposeNDLayerParams& from) {
   axes_.MergeFrom(from.axes_);
 }
 
-void TransposeNDLayerParams::CopyFrom(const TransposeNDLayerParams& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.TransposeNDLayerParams)
+void TransposeLayerParams::CopyFrom(const TransposeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.TransposeLayerParams)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool TransposeNDLayerParams::IsInitialized() const {
+bool TransposeLayerParams::IsInitialized() const {
   return true;
 }
 
-void TransposeNDLayerParams::Swap(TransposeNDLayerParams* other) {
+void TransposeLayerParams::Swap(TransposeLayerParams* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void TransposeNDLayerParams::InternalSwap(TransposeNDLayerParams* other) {
+void TransposeLayerParams::InternalSwap(TransposeLayerParams* other) {
   axes_.InternalSwap(&other->axes_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string TransposeNDLayerParams::GetTypeName() const {
-  return "CoreML.Specification.TransposeNDLayerParams";
+::std::string TransposeLayerParams::GetTypeName() const {
+  return "CoreML.Specification.TransposeLayerParams";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// TransposeNDLayerParams
+// TransposeLayerParams
 
 // repeated uint64 axes = 1;
-int TransposeNDLayerParams::axes_size() const {
+int TransposeLayerParams::axes_size() const {
   return axes_.size();
 }
-void TransposeNDLayerParams::clear_axes() {
+void TransposeLayerParams::clear_axes() {
   axes_.Clear();
 }
-::google::protobuf::uint64 TransposeNDLayerParams::axes(int index) const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.TransposeNDLayerParams.axes)
+::google::protobuf::uint64 TransposeLayerParams::axes(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.TransposeLayerParams.axes)
   return axes_.Get(index);
 }
-void TransposeNDLayerParams::set_axes(int index, ::google::protobuf::uint64 value) {
+void TransposeLayerParams::set_axes(int index, ::google::protobuf::uint64 value) {
   axes_.Set(index, value);
-  // @@protoc_insertion_point(field_set:CoreML.Specification.TransposeNDLayerParams.axes)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.TransposeLayerParams.axes)
 }
-void TransposeNDLayerParams::add_axes(::google::protobuf::uint64 value) {
+void TransposeLayerParams::add_axes(::google::protobuf::uint64 value) {
   axes_.Add(value);
-  // @@protoc_insertion_point(field_add:CoreML.Specification.TransposeNDLayerParams.axes)
+  // @@protoc_insertion_point(field_add:CoreML.Specification.TransposeLayerParams.axes)
 }
 const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
-TransposeNDLayerParams::axes() const {
-  // @@protoc_insertion_point(field_list:CoreML.Specification.TransposeNDLayerParams.axes)
+TransposeLayerParams::axes() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.TransposeLayerParams.axes)
   return axes_;
 }
 ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
-TransposeNDLayerParams::mutable_axes() {
-  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.TransposeNDLayerParams.axes)
+TransposeLayerParams::mutable_axes() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.TransposeLayerParams.axes)
   return &axes_;
 }
 
@@ -39036,24 +42109,24 @@ TransposeNDLayerParams::mutable_axes() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int BatchedMatMulParams::kTransposeAFieldNumber;
-const int BatchedMatMulParams::kTransposeBFieldNumber;
-const int BatchedMatMulParams::kWeightMatrixFirstDimensionFieldNumber;
-const int BatchedMatMulParams::kWeightMatrixSecondDimensionFieldNumber;
-const int BatchedMatMulParams::kHasBiasFieldNumber;
-const int BatchedMatMulParams::kWeightsFieldNumber;
-const int BatchedMatMulParams::kBiasFieldNumber;
+const int BatchedMatMulLayerParams::kTransposeAFieldNumber;
+const int BatchedMatMulLayerParams::kTransposeBFieldNumber;
+const int BatchedMatMulLayerParams::kWeightMatrixFirstDimensionFieldNumber;
+const int BatchedMatMulLayerParams::kWeightMatrixSecondDimensionFieldNumber;
+const int BatchedMatMulLayerParams::kHasBiasFieldNumber;
+const int BatchedMatMulLayerParams::kWeightsFieldNumber;
+const int BatchedMatMulLayerParams::kBiasFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-BatchedMatMulParams::BatchedMatMulParams()
+BatchedMatMulLayerParams::BatchedMatMulLayerParams()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_NeuralNetwork_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:CoreML.Specification.BatchedMatMulParams)
+  // @@protoc_insertion_point(constructor:CoreML.Specification.BatchedMatMulLayerParams)
 }
-BatchedMatMulParams::BatchedMatMulParams(const BatchedMatMulParams& from)
+BatchedMatMulLayerParams::BatchedMatMulLayerParams(const BatchedMatMulLayerParams& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
@@ -39071,21 +42144,21 @@ BatchedMatMulParams::BatchedMatMulParams(const BatchedMatMulParams& from)
   ::memcpy(&weightmatrixfirstdimension_, &from.weightmatrixfirstdimension_,
     reinterpret_cast<char*>(&hasbias_) -
     reinterpret_cast<char*>(&weightmatrixfirstdimension_) + sizeof(hasbias_));
-  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.BatchedMatMulParams)
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.BatchedMatMulLayerParams)
 }
 
-void BatchedMatMulParams::SharedCtor() {
+void BatchedMatMulLayerParams::SharedCtor() {
   ::memset(&weights_, 0, reinterpret_cast<char*>(&hasbias_) -
     reinterpret_cast<char*>(&weights_) + sizeof(hasbias_));
   _cached_size_ = 0;
 }
 
-BatchedMatMulParams::~BatchedMatMulParams() {
-  // @@protoc_insertion_point(destructor:CoreML.Specification.BatchedMatMulParams)
+BatchedMatMulLayerParams::~BatchedMatMulLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.BatchedMatMulLayerParams)
   SharedDtor();
 }
 
-void BatchedMatMulParams::SharedDtor() {
+void BatchedMatMulLayerParams::SharedDtor() {
   if (this != internal_default_instance()) {
     delete weights_;
   }
@@ -39094,26 +42167,26 @@ void BatchedMatMulParams::SharedDtor() {
   }
 }
 
-void BatchedMatMulParams::SetCachedSize(int size) const {
+void BatchedMatMulLayerParams::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const BatchedMatMulParams& BatchedMatMulParams::default_instance() {
+const BatchedMatMulLayerParams& BatchedMatMulLayerParams::default_instance() {
   protobuf_NeuralNetwork_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-BatchedMatMulParams* BatchedMatMulParams::New(::google::protobuf::Arena* arena) const {
-  BatchedMatMulParams* n = new BatchedMatMulParams;
+BatchedMatMulLayerParams* BatchedMatMulLayerParams::New(::google::protobuf::Arena* arena) const {
+  BatchedMatMulLayerParams* n = new BatchedMatMulLayerParams;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void BatchedMatMulParams::Clear() {
-// @@protoc_insertion_point(message_clear_start:CoreML.Specification.BatchedMatMulParams)
+void BatchedMatMulLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.BatchedMatMulLayerParams)
   if (GetArenaNoVirtual() == NULL && weights_ != NULL) {
     delete weights_;
   }
@@ -39126,11 +42199,11 @@ void BatchedMatMulParams::Clear() {
     reinterpret_cast<char*>(&weightmatrixfirstdimension_) + sizeof(hasbias_));
 }
 
-bool BatchedMatMulParams::MergePartialFromCodedStream(
+bool BatchedMatMulLayerParams::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:CoreML.Specification.BatchedMatMulParams)
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.BatchedMatMulLayerParams)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -39243,17 +42316,17 @@ bool BatchedMatMulParams::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:CoreML.Specification.BatchedMatMulParams)
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.BatchedMatMulLayerParams)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:CoreML.Specification.BatchedMatMulParams)
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.BatchedMatMulLayerParams)
   return false;
 #undef DO_
 }
 
-void BatchedMatMulParams::SerializeWithCachedSizes(
+void BatchedMatMulLayerParams::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:CoreML.Specification.BatchedMatMulParams)
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.BatchedMatMulLayerParams)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -39294,11 +42367,11 @@ void BatchedMatMulParams::SerializeWithCachedSizes(
       9, *this->bias_, output);
   }
 
-  // @@protoc_insertion_point(serialize_end:CoreML.Specification.BatchedMatMulParams)
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.BatchedMatMulLayerParams)
 }
 
-size_t BatchedMatMulParams::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.BatchedMatMulParams)
+size_t BatchedMatMulLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.BatchedMatMulLayerParams)
   size_t total_size = 0;
 
   // .CoreML.Specification.WeightParams weights = 8;
@@ -39351,13 +42424,13 @@ size_t BatchedMatMulParams::ByteSizeLong() const {
   return total_size;
 }
 
-void BatchedMatMulParams::CheckTypeAndMergeFrom(
+void BatchedMatMulLayerParams::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const BatchedMatMulParams*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const BatchedMatMulLayerParams*>(&from));
 }
 
-void BatchedMatMulParams::MergeFrom(const BatchedMatMulParams& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.BatchedMatMulParams)
+void BatchedMatMulLayerParams::MergeFrom(const BatchedMatMulLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.BatchedMatMulLayerParams)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -39386,22 +42459,22 @@ void BatchedMatMulParams::MergeFrom(const BatchedMatMulParams& from) {
   }
 }
 
-void BatchedMatMulParams::CopyFrom(const BatchedMatMulParams& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.BatchedMatMulParams)
+void BatchedMatMulLayerParams::CopyFrom(const BatchedMatMulLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.BatchedMatMulLayerParams)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool BatchedMatMulParams::IsInitialized() const {
+bool BatchedMatMulLayerParams::IsInitialized() const {
   return true;
 }
 
-void BatchedMatMulParams::Swap(BatchedMatMulParams* other) {
+void BatchedMatMulLayerParams::Swap(BatchedMatMulLayerParams* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void BatchedMatMulParams::InternalSwap(BatchedMatMulParams* other) {
+void BatchedMatMulLayerParams::InternalSwap(BatchedMatMulLayerParams* other) {
   std::swap(weights_, other->weights_);
   std::swap(bias_, other->bias_);
   std::swap(weightmatrixfirstdimension_, other->weightmatrixfirstdimension_);
@@ -39412,112 +42485,112 @@ void BatchedMatMulParams::InternalSwap(BatchedMatMulParams* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string BatchedMatMulParams::GetTypeName() const {
-  return "CoreML.Specification.BatchedMatMulParams";
+::std::string BatchedMatMulLayerParams::GetTypeName() const {
+  return "CoreML.Specification.BatchedMatMulLayerParams";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// BatchedMatMulParams
+// BatchedMatMulLayerParams
 
 // bool transposeA = 1;
-void BatchedMatMulParams::clear_transposea() {
+void BatchedMatMulLayerParams::clear_transposea() {
   transposea_ = false;
 }
-bool BatchedMatMulParams::transposea() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.transposeA)
+bool BatchedMatMulLayerParams::transposea() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.transposeA)
   return transposea_;
 }
-void BatchedMatMulParams::set_transposea(bool value) {
+void BatchedMatMulLayerParams::set_transposea(bool value) {
   
   transposea_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.transposeA)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.transposeA)
 }
 
 // bool transposeB = 2;
-void BatchedMatMulParams::clear_transposeb() {
+void BatchedMatMulLayerParams::clear_transposeb() {
   transposeb_ = false;
 }
-bool BatchedMatMulParams::transposeb() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.transposeB)
+bool BatchedMatMulLayerParams::transposeb() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.transposeB)
   return transposeb_;
 }
-void BatchedMatMulParams::set_transposeb(bool value) {
+void BatchedMatMulLayerParams::set_transposeb(bool value) {
   
   transposeb_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.transposeB)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.transposeB)
 }
 
 // uint64 weightMatrixFirstDimension = 5;
-void BatchedMatMulParams::clear_weightmatrixfirstdimension() {
+void BatchedMatMulLayerParams::clear_weightmatrixfirstdimension() {
   weightmatrixfirstdimension_ = GOOGLE_ULONGLONG(0);
 }
-::google::protobuf::uint64 BatchedMatMulParams::weightmatrixfirstdimension() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.weightMatrixFirstDimension)
+::google::protobuf::uint64 BatchedMatMulLayerParams::weightmatrixfirstdimension() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.weightMatrixFirstDimension)
   return weightmatrixfirstdimension_;
 }
-void BatchedMatMulParams::set_weightmatrixfirstdimension(::google::protobuf::uint64 value) {
+void BatchedMatMulLayerParams::set_weightmatrixfirstdimension(::google::protobuf::uint64 value) {
   
   weightmatrixfirstdimension_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.weightMatrixFirstDimension)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.weightMatrixFirstDimension)
 }
 
 // uint64 weightMatrixSecondDimension = 6;
-void BatchedMatMulParams::clear_weightmatrixseconddimension() {
+void BatchedMatMulLayerParams::clear_weightmatrixseconddimension() {
   weightmatrixseconddimension_ = GOOGLE_ULONGLONG(0);
 }
-::google::protobuf::uint64 BatchedMatMulParams::weightmatrixseconddimension() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.weightMatrixSecondDimension)
+::google::protobuf::uint64 BatchedMatMulLayerParams::weightmatrixseconddimension() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.weightMatrixSecondDimension)
   return weightmatrixseconddimension_;
 }
-void BatchedMatMulParams::set_weightmatrixseconddimension(::google::protobuf::uint64 value) {
+void BatchedMatMulLayerParams::set_weightmatrixseconddimension(::google::protobuf::uint64 value) {
   
   weightmatrixseconddimension_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.weightMatrixSecondDimension)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.weightMatrixSecondDimension)
 }
 
 // bool hasBias = 7;
-void BatchedMatMulParams::clear_hasbias() {
+void BatchedMatMulLayerParams::clear_hasbias() {
   hasbias_ = false;
 }
-bool BatchedMatMulParams::hasbias() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.hasBias)
+bool BatchedMatMulLayerParams::hasbias() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.hasBias)
   return hasbias_;
 }
-void BatchedMatMulParams::set_hasbias(bool value) {
+void BatchedMatMulLayerParams::set_hasbias(bool value) {
   
   hasbias_ = value;
-  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulParams.hasBias)
+  // @@protoc_insertion_point(field_set:CoreML.Specification.BatchedMatMulLayerParams.hasBias)
 }
 
 // .CoreML.Specification.WeightParams weights = 8;
-bool BatchedMatMulParams::has_weights() const {
+bool BatchedMatMulLayerParams::has_weights() const {
   return this != internal_default_instance() && weights_ != NULL;
 }
-void BatchedMatMulParams::clear_weights() {
+void BatchedMatMulLayerParams::clear_weights() {
   if (GetArenaNoVirtual() == NULL && weights_ != NULL) delete weights_;
   weights_ = NULL;
 }
-const ::CoreML::Specification::WeightParams& BatchedMatMulParams::weights() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.weights)
+const ::CoreML::Specification::WeightParams& BatchedMatMulLayerParams::weights() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.weights)
   return weights_ != NULL ? *weights_
                          : *::CoreML::Specification::WeightParams::internal_default_instance();
 }
-::CoreML::Specification::WeightParams* BatchedMatMulParams::mutable_weights() {
+::CoreML::Specification::WeightParams* BatchedMatMulLayerParams::mutable_weights() {
   
   if (weights_ == NULL) {
     weights_ = new ::CoreML::Specification::WeightParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.BatchedMatMulParams.weights)
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.BatchedMatMulLayerParams.weights)
   return weights_;
 }
-::CoreML::Specification::WeightParams* BatchedMatMulParams::release_weights() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.BatchedMatMulParams.weights)
+::CoreML::Specification::WeightParams* BatchedMatMulLayerParams::release_weights() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.BatchedMatMulLayerParams.weights)
   
   ::CoreML::Specification::WeightParams* temp = weights_;
   weights_ = NULL;
   return temp;
 }
-void BatchedMatMulParams::set_allocated_weights(::CoreML::Specification::WeightParams* weights) {
+void BatchedMatMulLayerParams::set_allocated_weights(::CoreML::Specification::WeightParams* weights) {
   delete weights_;
   weights_ = weights;
   if (weights) {
@@ -39525,38 +42598,38 @@ void BatchedMatMulParams::set_allocated_weights(::CoreML::Specification::WeightP
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.BatchedMatMulParams.weights)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.BatchedMatMulLayerParams.weights)
 }
 
 // .CoreML.Specification.WeightParams bias = 9;
-bool BatchedMatMulParams::has_bias() const {
+bool BatchedMatMulLayerParams::has_bias() const {
   return this != internal_default_instance() && bias_ != NULL;
 }
-void BatchedMatMulParams::clear_bias() {
+void BatchedMatMulLayerParams::clear_bias() {
   if (GetArenaNoVirtual() == NULL && bias_ != NULL) delete bias_;
   bias_ = NULL;
 }
-const ::CoreML::Specification::WeightParams& BatchedMatMulParams::bias() const {
-  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulParams.bias)
+const ::CoreML::Specification::WeightParams& BatchedMatMulLayerParams::bias() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.BatchedMatMulLayerParams.bias)
   return bias_ != NULL ? *bias_
                          : *::CoreML::Specification::WeightParams::internal_default_instance();
 }
-::CoreML::Specification::WeightParams* BatchedMatMulParams::mutable_bias() {
+::CoreML::Specification::WeightParams* BatchedMatMulLayerParams::mutable_bias() {
   
   if (bias_ == NULL) {
     bias_ = new ::CoreML::Specification::WeightParams;
   }
-  // @@protoc_insertion_point(field_mutable:CoreML.Specification.BatchedMatMulParams.bias)
+  // @@protoc_insertion_point(field_mutable:CoreML.Specification.BatchedMatMulLayerParams.bias)
   return bias_;
 }
-::CoreML::Specification::WeightParams* BatchedMatMulParams::release_bias() {
-  // @@protoc_insertion_point(field_release:CoreML.Specification.BatchedMatMulParams.bias)
+::CoreML::Specification::WeightParams* BatchedMatMulLayerParams::release_bias() {
+  // @@protoc_insertion_point(field_release:CoreML.Specification.BatchedMatMulLayerParams.bias)
   
   ::CoreML::Specification::WeightParams* temp = bias_;
   bias_ = NULL;
   return temp;
 }
-void BatchedMatMulParams::set_allocated_bias(::CoreML::Specification::WeightParams* bias) {
+void BatchedMatMulLayerParams::set_allocated_bias(::CoreML::Specification::WeightParams* bias) {
   delete bias_;
   bias_ = bias;
   if (bias) {
@@ -39564,7 +42637,7 @@ void BatchedMatMulParams::set_allocated_bias(::CoreML::Specification::WeightPara
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.BatchedMatMulParams.bias)
+  // @@protoc_insertion_point(field_set_allocated:CoreML.Specification.BatchedMatMulLayerParams.bias)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -39957,6 +43030,230 @@ void SoftmaxNDLayerParams::set_axis(::google::protobuf::int64 value) {
   
   axis_ = value;
   // @@protoc_insertion_point(field_set:CoreML.Specification.SoftmaxNDLayerParams.axis)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ReverseLayerParams::kReverseDimFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ReverseLayerParams::ReverseLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.ReverseLayerParams)
+}
+ReverseLayerParams::ReverseLayerParams(const ReverseLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      reversedim_(from.reversedim_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.ReverseLayerParams)
+}
+
+void ReverseLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+ReverseLayerParams::~ReverseLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.ReverseLayerParams)
+  SharedDtor();
+}
+
+void ReverseLayerParams::SharedDtor() {
+}
+
+void ReverseLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ReverseLayerParams& ReverseLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+ReverseLayerParams* ReverseLayerParams::New(::google::protobuf::Arena* arena) const {
+  ReverseLayerParams* n = new ReverseLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ReverseLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.ReverseLayerParams)
+  reversedim_.Clear();
+}
+
+bool ReverseLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.ReverseLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated bool reverseDim = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, this->mutable_reversedim())));
+        } else if (static_cast< ::google::protobuf::uint8>(tag) ==
+                   static_cast< ::google::protobuf::uint8>(8u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 1, 10u, input, this->mutable_reversedim())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.ReverseLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.ReverseLayerParams)
+  return false;
+#undef DO_
+}
+
+void ReverseLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.ReverseLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated bool reverseDim = 1;
+  if (this->reversedim_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(1, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(_reversedim_cached_byte_size_);
+    ::google::protobuf::internal::WireFormatLite::WriteBoolArray(
+      this->reversedim().data(), this->reversedim_size(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.ReverseLayerParams)
+}
+
+size_t ReverseLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.ReverseLayerParams)
+  size_t total_size = 0;
+
+  // repeated bool reverseDim = 1;
+  {
+    unsigned int count = this->reversedim_size();
+    size_t data_size = 1UL * count;
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _reversedim_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ReverseLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const ReverseLayerParams*>(&from));
+}
+
+void ReverseLayerParams::MergeFrom(const ReverseLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.ReverseLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  reversedim_.MergeFrom(from.reversedim_);
+}
+
+void ReverseLayerParams::CopyFrom(const ReverseLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.ReverseLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReverseLayerParams::IsInitialized() const {
+  return true;
+}
+
+void ReverseLayerParams::Swap(ReverseLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ReverseLayerParams::InternalSwap(ReverseLayerParams* other) {
+  reversedim_.InternalSwap(&other->reversedim_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string ReverseLayerParams::GetTypeName() const {
+  return "CoreML.Specification.ReverseLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ReverseLayerParams
+
+// repeated bool reverseDim = 1;
+int ReverseLayerParams::reversedim_size() const {
+  return reversedim_.size();
+}
+void ReverseLayerParams::clear_reversedim() {
+  reversedim_.Clear();
+}
+bool ReverseLayerParams::reversedim(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.ReverseLayerParams.reverseDim)
+  return reversedim_.Get(index);
+}
+void ReverseLayerParams::set_reversedim(int index, bool value) {
+  reversedim_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.ReverseLayerParams.reverseDim)
+}
+void ReverseLayerParams::add_reversedim(bool value) {
+  reversedim_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.ReverseLayerParams.reverseDim)
+}
+const ::google::protobuf::RepeatedField< bool >&
+ReverseLayerParams::reversedim() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.ReverseLayerParams.reverseDim)
+  return reversedim_;
+}
+::google::protobuf::RepeatedField< bool >*
+ReverseLayerParams::mutable_reversedim() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.ReverseLayerParams.reverseDim)
+  return &reversedim_;
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -40934,61 +44231,61 @@ void FillDynamicLayerParams::set_value(float value) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-WhereLayerParams::WhereLayerParams()
+WhereBroadcastableLayerParams::WhereBroadcastableLayerParams()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_NeuralNetwork_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:CoreML.Specification.WhereLayerParams)
+  // @@protoc_insertion_point(constructor:CoreML.Specification.WhereBroadcastableLayerParams)
 }
-WhereLayerParams::WhereLayerParams(const WhereLayerParams& from)
+WhereBroadcastableLayerParams::WhereBroadcastableLayerParams(const WhereBroadcastableLayerParams& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.WhereLayerParams)
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.WhereBroadcastableLayerParams)
 }
 
-void WhereLayerParams::SharedCtor() {
+void WhereBroadcastableLayerParams::SharedCtor() {
   _cached_size_ = 0;
 }
 
-WhereLayerParams::~WhereLayerParams() {
-  // @@protoc_insertion_point(destructor:CoreML.Specification.WhereLayerParams)
+WhereBroadcastableLayerParams::~WhereBroadcastableLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.WhereBroadcastableLayerParams)
   SharedDtor();
 }
 
-void WhereLayerParams::SharedDtor() {
+void WhereBroadcastableLayerParams::SharedDtor() {
 }
 
-void WhereLayerParams::SetCachedSize(int size) const {
+void WhereBroadcastableLayerParams::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const WhereLayerParams& WhereLayerParams::default_instance() {
+const WhereBroadcastableLayerParams& WhereBroadcastableLayerParams::default_instance() {
   protobuf_NeuralNetwork_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-WhereLayerParams* WhereLayerParams::New(::google::protobuf::Arena* arena) const {
-  WhereLayerParams* n = new WhereLayerParams;
+WhereBroadcastableLayerParams* WhereBroadcastableLayerParams::New(::google::protobuf::Arena* arena) const {
+  WhereBroadcastableLayerParams* n = new WhereBroadcastableLayerParams;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void WhereLayerParams::Clear() {
-// @@protoc_insertion_point(message_clear_start:CoreML.Specification.WhereLayerParams)
+void WhereBroadcastableLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.WhereBroadcastableLayerParams)
 }
 
-bool WhereLayerParams::MergePartialFromCodedStream(
+bool WhereBroadcastableLayerParams::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:CoreML.Specification.WhereLayerParams)
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.WhereBroadcastableLayerParams)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -41002,25 +44299,25 @@ bool WhereLayerParams::MergePartialFromCodedStream(
     DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
   }
 success:
-  // @@protoc_insertion_point(parse_success:CoreML.Specification.WhereLayerParams)
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.WhereBroadcastableLayerParams)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:CoreML.Specification.WhereLayerParams)
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.WhereBroadcastableLayerParams)
   return false;
 #undef DO_
 }
 
-void WhereLayerParams::SerializeWithCachedSizes(
+void WhereBroadcastableLayerParams::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:CoreML.Specification.WhereLayerParams)
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.WhereBroadcastableLayerParams)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // @@protoc_insertion_point(serialize_end:CoreML.Specification.WhereLayerParams)
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.WhereBroadcastableLayerParams)
 }
 
-size_t WhereLayerParams::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.WhereLayerParams)
+size_t WhereBroadcastableLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.WhereBroadcastableLayerParams)
   size_t total_size = 0;
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -41030,13 +44327,13 @@ size_t WhereLayerParams::ByteSizeLong() const {
   return total_size;
 }
 
-void WhereLayerParams::CheckTypeAndMergeFrom(
+void WhereBroadcastableLayerParams::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const WhereLayerParams*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const WhereBroadcastableLayerParams*>(&from));
 }
 
-void WhereLayerParams::MergeFrom(const WhereLayerParams& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.WhereLayerParams)
+void WhereBroadcastableLayerParams::MergeFrom(const WhereBroadcastableLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.WhereBroadcastableLayerParams)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -41044,31 +44341,31 @@ void WhereLayerParams::MergeFrom(const WhereLayerParams& from) {
 
 }
 
-void WhereLayerParams::CopyFrom(const WhereLayerParams& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.WhereLayerParams)
+void WhereBroadcastableLayerParams::CopyFrom(const WhereBroadcastableLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.WhereBroadcastableLayerParams)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool WhereLayerParams::IsInitialized() const {
+bool WhereBroadcastableLayerParams::IsInitialized() const {
   return true;
 }
 
-void WhereLayerParams::Swap(WhereLayerParams* other) {
+void WhereBroadcastableLayerParams::Swap(WhereBroadcastableLayerParams* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void WhereLayerParams::InternalSwap(WhereLayerParams* other) {
+void WhereBroadcastableLayerParams::InternalSwap(WhereBroadcastableLayerParams* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string WhereLayerParams::GetTypeName() const {
-  return "CoreML.Specification.WhereLayerParams";
+::std::string WhereBroadcastableLayerParams::GetTypeName() const {
+  return "CoreML.Specification.WhereBroadcastableLayerParams";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// WhereLayerParams
+// WhereBroadcastableLayerParams
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -41077,61 +44374,61 @@ void WhereLayerParams::InternalSwap(WhereLayerParams* other) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-SineLayerParams::SineLayerParams()
+SinLayerParams::SinLayerParams()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_NeuralNetwork_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:CoreML.Specification.SineLayerParams)
+  // @@protoc_insertion_point(constructor:CoreML.Specification.SinLayerParams)
 }
-SineLayerParams::SineLayerParams(const SineLayerParams& from)
+SinLayerParams::SinLayerParams(const SinLayerParams& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.SineLayerParams)
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.SinLayerParams)
 }
 
-void SineLayerParams::SharedCtor() {
+void SinLayerParams::SharedCtor() {
   _cached_size_ = 0;
 }
 
-SineLayerParams::~SineLayerParams() {
-  // @@protoc_insertion_point(destructor:CoreML.Specification.SineLayerParams)
+SinLayerParams::~SinLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.SinLayerParams)
   SharedDtor();
 }
 
-void SineLayerParams::SharedDtor() {
+void SinLayerParams::SharedDtor() {
 }
 
-void SineLayerParams::SetCachedSize(int size) const {
+void SinLayerParams::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const SineLayerParams& SineLayerParams::default_instance() {
+const SinLayerParams& SinLayerParams::default_instance() {
   protobuf_NeuralNetwork_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-SineLayerParams* SineLayerParams::New(::google::protobuf::Arena* arena) const {
-  SineLayerParams* n = new SineLayerParams;
+SinLayerParams* SinLayerParams::New(::google::protobuf::Arena* arena) const {
+  SinLayerParams* n = new SinLayerParams;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void SineLayerParams::Clear() {
-// @@protoc_insertion_point(message_clear_start:CoreML.Specification.SineLayerParams)
+void SinLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.SinLayerParams)
 }
 
-bool SineLayerParams::MergePartialFromCodedStream(
+bool SinLayerParams::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:CoreML.Specification.SineLayerParams)
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.SinLayerParams)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -41145,25 +44442,25 @@ bool SineLayerParams::MergePartialFromCodedStream(
     DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
   }
 success:
-  // @@protoc_insertion_point(parse_success:CoreML.Specification.SineLayerParams)
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.SinLayerParams)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:CoreML.Specification.SineLayerParams)
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.SinLayerParams)
   return false;
 #undef DO_
 }
 
-void SineLayerParams::SerializeWithCachedSizes(
+void SinLayerParams::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:CoreML.Specification.SineLayerParams)
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.SinLayerParams)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // @@protoc_insertion_point(serialize_end:CoreML.Specification.SineLayerParams)
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.SinLayerParams)
 }
 
-size_t SineLayerParams::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.SineLayerParams)
+size_t SinLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.SinLayerParams)
   size_t total_size = 0;
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -41173,13 +44470,13 @@ size_t SineLayerParams::ByteSizeLong() const {
   return total_size;
 }
 
-void SineLayerParams::CheckTypeAndMergeFrom(
+void SinLayerParams::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const SineLayerParams*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const SinLayerParams*>(&from));
 }
 
-void SineLayerParams::MergeFrom(const SineLayerParams& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.SineLayerParams)
+void SinLayerParams::MergeFrom(const SinLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.SinLayerParams)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -41187,31 +44484,31 @@ void SineLayerParams::MergeFrom(const SineLayerParams& from) {
 
 }
 
-void SineLayerParams::CopyFrom(const SineLayerParams& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.SineLayerParams)
+void SinLayerParams::CopyFrom(const SinLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.SinLayerParams)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool SineLayerParams::IsInitialized() const {
+bool SinLayerParams::IsInitialized() const {
   return true;
 }
 
-void SineLayerParams::Swap(SineLayerParams* other) {
+void SinLayerParams::Swap(SinLayerParams* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void SineLayerParams::InternalSwap(SineLayerParams* other) {
+void SinLayerParams::InternalSwap(SinLayerParams* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string SineLayerParams::GetTypeName() const {
-  return "CoreML.Specification.SineLayerParams";
+::std::string SinLayerParams::GetTypeName() const {
+  return "CoreML.Specification.SinLayerParams";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// SineLayerParams
+// SinLayerParams
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -41220,61 +44517,61 @@ void SineLayerParams::InternalSwap(SineLayerParams* other) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-CosineLayerParams::CosineLayerParams()
+CosLayerParams::CosLayerParams()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_NeuralNetwork_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:CoreML.Specification.CosineLayerParams)
+  // @@protoc_insertion_point(constructor:CoreML.Specification.CosLayerParams)
 }
-CosineLayerParams::CosineLayerParams(const CosineLayerParams& from)
+CosLayerParams::CosLayerParams(const CosLayerParams& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.CosineLayerParams)
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.CosLayerParams)
 }
 
-void CosineLayerParams::SharedCtor() {
+void CosLayerParams::SharedCtor() {
   _cached_size_ = 0;
 }
 
-CosineLayerParams::~CosineLayerParams() {
-  // @@protoc_insertion_point(destructor:CoreML.Specification.CosineLayerParams)
+CosLayerParams::~CosLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.CosLayerParams)
   SharedDtor();
 }
 
-void CosineLayerParams::SharedDtor() {
+void CosLayerParams::SharedDtor() {
 }
 
-void CosineLayerParams::SetCachedSize(int size) const {
+void CosLayerParams::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const CosineLayerParams& CosineLayerParams::default_instance() {
+const CosLayerParams& CosLayerParams::default_instance() {
   protobuf_NeuralNetwork_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-CosineLayerParams* CosineLayerParams::New(::google::protobuf::Arena* arena) const {
-  CosineLayerParams* n = new CosineLayerParams;
+CosLayerParams* CosLayerParams::New(::google::protobuf::Arena* arena) const {
+  CosLayerParams* n = new CosLayerParams;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void CosineLayerParams::Clear() {
-// @@protoc_insertion_point(message_clear_start:CoreML.Specification.CosineLayerParams)
+void CosLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.CosLayerParams)
 }
 
-bool CosineLayerParams::MergePartialFromCodedStream(
+bool CosLayerParams::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:CoreML.Specification.CosineLayerParams)
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.CosLayerParams)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -41288,25 +44585,25 @@ bool CosineLayerParams::MergePartialFromCodedStream(
     DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
   }
 success:
-  // @@protoc_insertion_point(parse_success:CoreML.Specification.CosineLayerParams)
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.CosLayerParams)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:CoreML.Specification.CosineLayerParams)
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.CosLayerParams)
   return false;
 #undef DO_
 }
 
-void CosineLayerParams::SerializeWithCachedSizes(
+void CosLayerParams::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:CoreML.Specification.CosineLayerParams)
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.CosLayerParams)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // @@protoc_insertion_point(serialize_end:CoreML.Specification.CosineLayerParams)
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.CosLayerParams)
 }
 
-size_t CosineLayerParams::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.CosineLayerParams)
+size_t CosLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.CosLayerParams)
   size_t total_size = 0;
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -41316,13 +44613,13 @@ size_t CosineLayerParams::ByteSizeLong() const {
   return total_size;
 }
 
-void CosineLayerParams::CheckTypeAndMergeFrom(
+void CosLayerParams::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const CosineLayerParams*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const CosLayerParams*>(&from));
 }
 
-void CosineLayerParams::MergeFrom(const CosineLayerParams& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.CosineLayerParams)
+void CosLayerParams::MergeFrom(const CosLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.CosLayerParams)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -41330,31 +44627,1461 @@ void CosineLayerParams::MergeFrom(const CosineLayerParams& from) {
 
 }
 
-void CosineLayerParams::CopyFrom(const CosineLayerParams& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.CosineLayerParams)
+void CosLayerParams::CopyFrom(const CosLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.CosLayerParams)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool CosineLayerParams::IsInitialized() const {
+bool CosLayerParams::IsInitialized() const {
   return true;
 }
 
-void CosineLayerParams::Swap(CosineLayerParams* other) {
+void CosLayerParams::Swap(CosLayerParams* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void CosineLayerParams::InternalSwap(CosineLayerParams* other) {
+void CosLayerParams::InternalSwap(CosLayerParams* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string CosineLayerParams::GetTypeName() const {
-  return "CoreML.Specification.CosineLayerParams";
+::std::string CosLayerParams::GetTypeName() const {
+  return "CoreML.Specification.CosLayerParams";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// CosineLayerParams
+// CosLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TanLayerParams::TanLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.TanLayerParams)
+}
+TanLayerParams::TanLayerParams(const TanLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.TanLayerParams)
+}
+
+void TanLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+TanLayerParams::~TanLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.TanLayerParams)
+  SharedDtor();
+}
+
+void TanLayerParams::SharedDtor() {
+}
+
+void TanLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TanLayerParams& TanLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+TanLayerParams* TanLayerParams::New(::google::protobuf::Arena* arena) const {
+  TanLayerParams* n = new TanLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TanLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.TanLayerParams)
+}
+
+bool TanLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.TanLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.TanLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.TanLayerParams)
+  return false;
+#undef DO_
+}
+
+void TanLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.TanLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.TanLayerParams)
+}
+
+size_t TanLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.TanLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TanLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TanLayerParams*>(&from));
+}
+
+void TanLayerParams::MergeFrom(const TanLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.TanLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void TanLayerParams::CopyFrom(const TanLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.TanLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TanLayerParams::IsInitialized() const {
+  return true;
+}
+
+void TanLayerParams::Swap(TanLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TanLayerParams::InternalSwap(TanLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TanLayerParams::GetTypeName() const {
+  return "CoreML.Specification.TanLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// TanLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AsinLayerParams::AsinLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.AsinLayerParams)
+}
+AsinLayerParams::AsinLayerParams(const AsinLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.AsinLayerParams)
+}
+
+void AsinLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+AsinLayerParams::~AsinLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.AsinLayerParams)
+  SharedDtor();
+}
+
+void AsinLayerParams::SharedDtor() {
+}
+
+void AsinLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const AsinLayerParams& AsinLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+AsinLayerParams* AsinLayerParams::New(::google::protobuf::Arena* arena) const {
+  AsinLayerParams* n = new AsinLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void AsinLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.AsinLayerParams)
+}
+
+bool AsinLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.AsinLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.AsinLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.AsinLayerParams)
+  return false;
+#undef DO_
+}
+
+void AsinLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.AsinLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.AsinLayerParams)
+}
+
+size_t AsinLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.AsinLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AsinLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const AsinLayerParams*>(&from));
+}
+
+void AsinLayerParams::MergeFrom(const AsinLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.AsinLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void AsinLayerParams::CopyFrom(const AsinLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.AsinLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AsinLayerParams::IsInitialized() const {
+  return true;
+}
+
+void AsinLayerParams::Swap(AsinLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AsinLayerParams::InternalSwap(AsinLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string AsinLayerParams::GetTypeName() const {
+  return "CoreML.Specification.AsinLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// AsinLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AcosLayerParams::AcosLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.AcosLayerParams)
+}
+AcosLayerParams::AcosLayerParams(const AcosLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.AcosLayerParams)
+}
+
+void AcosLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+AcosLayerParams::~AcosLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.AcosLayerParams)
+  SharedDtor();
+}
+
+void AcosLayerParams::SharedDtor() {
+}
+
+void AcosLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const AcosLayerParams& AcosLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+AcosLayerParams* AcosLayerParams::New(::google::protobuf::Arena* arena) const {
+  AcosLayerParams* n = new AcosLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void AcosLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.AcosLayerParams)
+}
+
+bool AcosLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.AcosLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.AcosLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.AcosLayerParams)
+  return false;
+#undef DO_
+}
+
+void AcosLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.AcosLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.AcosLayerParams)
+}
+
+size_t AcosLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.AcosLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AcosLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const AcosLayerParams*>(&from));
+}
+
+void AcosLayerParams::MergeFrom(const AcosLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.AcosLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void AcosLayerParams::CopyFrom(const AcosLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.AcosLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AcosLayerParams::IsInitialized() const {
+  return true;
+}
+
+void AcosLayerParams::Swap(AcosLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AcosLayerParams::InternalSwap(AcosLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string AcosLayerParams::GetTypeName() const {
+  return "CoreML.Specification.AcosLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// AcosLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AtanLayerParams::AtanLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.AtanLayerParams)
+}
+AtanLayerParams::AtanLayerParams(const AtanLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.AtanLayerParams)
+}
+
+void AtanLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+AtanLayerParams::~AtanLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.AtanLayerParams)
+  SharedDtor();
+}
+
+void AtanLayerParams::SharedDtor() {
+}
+
+void AtanLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const AtanLayerParams& AtanLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+AtanLayerParams* AtanLayerParams::New(::google::protobuf::Arena* arena) const {
+  AtanLayerParams* n = new AtanLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void AtanLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.AtanLayerParams)
+}
+
+bool AtanLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.AtanLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.AtanLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.AtanLayerParams)
+  return false;
+#undef DO_
+}
+
+void AtanLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.AtanLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.AtanLayerParams)
+}
+
+size_t AtanLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.AtanLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AtanLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const AtanLayerParams*>(&from));
+}
+
+void AtanLayerParams::MergeFrom(const AtanLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.AtanLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void AtanLayerParams::CopyFrom(const AtanLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.AtanLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AtanLayerParams::IsInitialized() const {
+  return true;
+}
+
+void AtanLayerParams::Swap(AtanLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AtanLayerParams::InternalSwap(AtanLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string AtanLayerParams::GetTypeName() const {
+  return "CoreML.Specification.AtanLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// AtanLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+SinhLayerParams::SinhLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.SinhLayerParams)
+}
+SinhLayerParams::SinhLayerParams(const SinhLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.SinhLayerParams)
+}
+
+void SinhLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+SinhLayerParams::~SinhLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.SinhLayerParams)
+  SharedDtor();
+}
+
+void SinhLayerParams::SharedDtor() {
+}
+
+void SinhLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const SinhLayerParams& SinhLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+SinhLayerParams* SinhLayerParams::New(::google::protobuf::Arena* arena) const {
+  SinhLayerParams* n = new SinhLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void SinhLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.SinhLayerParams)
+}
+
+bool SinhLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.SinhLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.SinhLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.SinhLayerParams)
+  return false;
+#undef DO_
+}
+
+void SinhLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.SinhLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.SinhLayerParams)
+}
+
+size_t SinhLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.SinhLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void SinhLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const SinhLayerParams*>(&from));
+}
+
+void SinhLayerParams::MergeFrom(const SinhLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.SinhLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void SinhLayerParams::CopyFrom(const SinhLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.SinhLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SinhLayerParams::IsInitialized() const {
+  return true;
+}
+
+void SinhLayerParams::Swap(SinhLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void SinhLayerParams::InternalSwap(SinhLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string SinhLayerParams::GetTypeName() const {
+  return "CoreML.Specification.SinhLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// SinhLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+CoshLayerParams::CoshLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.CoshLayerParams)
+}
+CoshLayerParams::CoshLayerParams(const CoshLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.CoshLayerParams)
+}
+
+void CoshLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+CoshLayerParams::~CoshLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.CoshLayerParams)
+  SharedDtor();
+}
+
+void CoshLayerParams::SharedDtor() {
+}
+
+void CoshLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const CoshLayerParams& CoshLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+CoshLayerParams* CoshLayerParams::New(::google::protobuf::Arena* arena) const {
+  CoshLayerParams* n = new CoshLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void CoshLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.CoshLayerParams)
+}
+
+bool CoshLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.CoshLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.CoshLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.CoshLayerParams)
+  return false;
+#undef DO_
+}
+
+void CoshLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.CoshLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.CoshLayerParams)
+}
+
+size_t CoshLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.CoshLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void CoshLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const CoshLayerParams*>(&from));
+}
+
+void CoshLayerParams::MergeFrom(const CoshLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.CoshLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void CoshLayerParams::CopyFrom(const CoshLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.CoshLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CoshLayerParams::IsInitialized() const {
+  return true;
+}
+
+void CoshLayerParams::Swap(CoshLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void CoshLayerParams::InternalSwap(CoshLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string CoshLayerParams::GetTypeName() const {
+  return "CoreML.Specification.CoshLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// CoshLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TanhLayerParams::TanhLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.TanhLayerParams)
+}
+TanhLayerParams::TanhLayerParams(const TanhLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.TanhLayerParams)
+}
+
+void TanhLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+TanhLayerParams::~TanhLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.TanhLayerParams)
+  SharedDtor();
+}
+
+void TanhLayerParams::SharedDtor() {
+}
+
+void TanhLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const TanhLayerParams& TanhLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+TanhLayerParams* TanhLayerParams::New(::google::protobuf::Arena* arena) const {
+  TanhLayerParams* n = new TanhLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TanhLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.TanhLayerParams)
+}
+
+bool TanhLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.TanhLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.TanhLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.TanhLayerParams)
+  return false;
+#undef DO_
+}
+
+void TanhLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.TanhLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.TanhLayerParams)
+}
+
+size_t TanhLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.TanhLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TanhLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const TanhLayerParams*>(&from));
+}
+
+void TanhLayerParams::MergeFrom(const TanhLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.TanhLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void TanhLayerParams::CopyFrom(const TanhLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.TanhLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TanhLayerParams::IsInitialized() const {
+  return true;
+}
+
+void TanhLayerParams::Swap(TanhLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TanhLayerParams::InternalSwap(TanhLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string TanhLayerParams::GetTypeName() const {
+  return "CoreML.Specification.TanhLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// TanhLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AsinhLayerParams::AsinhLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.AsinhLayerParams)
+}
+AsinhLayerParams::AsinhLayerParams(const AsinhLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.AsinhLayerParams)
+}
+
+void AsinhLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+AsinhLayerParams::~AsinhLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.AsinhLayerParams)
+  SharedDtor();
+}
+
+void AsinhLayerParams::SharedDtor() {
+}
+
+void AsinhLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const AsinhLayerParams& AsinhLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+AsinhLayerParams* AsinhLayerParams::New(::google::protobuf::Arena* arena) const {
+  AsinhLayerParams* n = new AsinhLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void AsinhLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.AsinhLayerParams)
+}
+
+bool AsinhLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.AsinhLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.AsinhLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.AsinhLayerParams)
+  return false;
+#undef DO_
+}
+
+void AsinhLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.AsinhLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.AsinhLayerParams)
+}
+
+size_t AsinhLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.AsinhLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AsinhLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const AsinhLayerParams*>(&from));
+}
+
+void AsinhLayerParams::MergeFrom(const AsinhLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.AsinhLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void AsinhLayerParams::CopyFrom(const AsinhLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.AsinhLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AsinhLayerParams::IsInitialized() const {
+  return true;
+}
+
+void AsinhLayerParams::Swap(AsinhLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AsinhLayerParams::InternalSwap(AsinhLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string AsinhLayerParams::GetTypeName() const {
+  return "CoreML.Specification.AsinhLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// AsinhLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AcoshLayerParams::AcoshLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.AcoshLayerParams)
+}
+AcoshLayerParams::AcoshLayerParams(const AcoshLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.AcoshLayerParams)
+}
+
+void AcoshLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+AcoshLayerParams::~AcoshLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.AcoshLayerParams)
+  SharedDtor();
+}
+
+void AcoshLayerParams::SharedDtor() {
+}
+
+void AcoshLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const AcoshLayerParams& AcoshLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+AcoshLayerParams* AcoshLayerParams::New(::google::protobuf::Arena* arena) const {
+  AcoshLayerParams* n = new AcoshLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void AcoshLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.AcoshLayerParams)
+}
+
+bool AcoshLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.AcoshLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.AcoshLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.AcoshLayerParams)
+  return false;
+#undef DO_
+}
+
+void AcoshLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.AcoshLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.AcoshLayerParams)
+}
+
+size_t AcoshLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.AcoshLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AcoshLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const AcoshLayerParams*>(&from));
+}
+
+void AcoshLayerParams::MergeFrom(const AcoshLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.AcoshLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void AcoshLayerParams::CopyFrom(const AcoshLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.AcoshLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AcoshLayerParams::IsInitialized() const {
+  return true;
+}
+
+void AcoshLayerParams::Swap(AcoshLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AcoshLayerParams::InternalSwap(AcoshLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string AcoshLayerParams::GetTypeName() const {
+  return "CoreML.Specification.AcoshLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// AcoshLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+AtanhLayerParams::AtanhLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.AtanhLayerParams)
+}
+AtanhLayerParams::AtanhLayerParams(const AtanhLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.AtanhLayerParams)
+}
+
+void AtanhLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+AtanhLayerParams::~AtanhLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.AtanhLayerParams)
+  SharedDtor();
+}
+
+void AtanhLayerParams::SharedDtor() {
+}
+
+void AtanhLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const AtanhLayerParams& AtanhLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+AtanhLayerParams* AtanhLayerParams::New(::google::protobuf::Arena* arena) const {
+  AtanhLayerParams* n = new AtanhLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void AtanhLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.AtanhLayerParams)
+}
+
+bool AtanhLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.AtanhLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.AtanhLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.AtanhLayerParams)
+  return false;
+#undef DO_
+}
+
+void AtanhLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.AtanhLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.AtanhLayerParams)
+}
+
+size_t AtanhLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.AtanhLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void AtanhLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const AtanhLayerParams*>(&from));
+}
+
+void AtanhLayerParams::MergeFrom(const AtanhLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.AtanhLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void AtanhLayerParams::CopyFrom(const AtanhLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.AtanhLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool AtanhLayerParams::IsInitialized() const {
+  return true;
+}
+
+void AtanhLayerParams::Swap(AtanhLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void AtanhLayerParams::InternalSwap(AtanhLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string AtanhLayerParams::GetTypeName() const {
+  return "CoreML.Specification.AtanhLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// AtanhLayerParams
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -41647,6 +46374,252 @@ void Exp2LayerParams::InternalSwap(Exp2LayerParams* other) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int MatrixBandPartLayerParams::kNumLowerFieldNumber;
+const int MatrixBandPartLayerParams::kNumUpperFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+MatrixBandPartLayerParams::MatrixBandPartLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.MatrixBandPartLayerParams)
+}
+MatrixBandPartLayerParams::MatrixBandPartLayerParams(const MatrixBandPartLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&numlower_, &from.numlower_,
+    reinterpret_cast<char*>(&numupper_) -
+    reinterpret_cast<char*>(&numlower_) + sizeof(numupper_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.MatrixBandPartLayerParams)
+}
+
+void MatrixBandPartLayerParams::SharedCtor() {
+  ::memset(&numlower_, 0, reinterpret_cast<char*>(&numupper_) -
+    reinterpret_cast<char*>(&numlower_) + sizeof(numupper_));
+  _cached_size_ = 0;
+}
+
+MatrixBandPartLayerParams::~MatrixBandPartLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.MatrixBandPartLayerParams)
+  SharedDtor();
+}
+
+void MatrixBandPartLayerParams::SharedDtor() {
+}
+
+void MatrixBandPartLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const MatrixBandPartLayerParams& MatrixBandPartLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+MatrixBandPartLayerParams* MatrixBandPartLayerParams::New(::google::protobuf::Arena* arena) const {
+  MatrixBandPartLayerParams* n = new MatrixBandPartLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void MatrixBandPartLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.MatrixBandPartLayerParams)
+  ::memset(&numlower_, 0, reinterpret_cast<char*>(&numupper_) -
+    reinterpret_cast<char*>(&numlower_) + sizeof(numupper_));
+}
+
+bool MatrixBandPartLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.MatrixBandPartLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 numLower = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &numlower_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int64 numUpper = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &numupper_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.MatrixBandPartLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.MatrixBandPartLayerParams)
+  return false;
+#undef DO_
+}
+
+void MatrixBandPartLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.MatrixBandPartLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 numLower = 1;
+  if (this->numlower() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->numlower(), output);
+  }
+
+  // int64 numUpper = 2;
+  if (this->numupper() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(2, this->numupper(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.MatrixBandPartLayerParams)
+}
+
+size_t MatrixBandPartLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.MatrixBandPartLayerParams)
+  size_t total_size = 0;
+
+  // int64 numLower = 1;
+  if (this->numlower() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->numlower());
+  }
+
+  // int64 numUpper = 2;
+  if (this->numupper() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->numupper());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void MatrixBandPartLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const MatrixBandPartLayerParams*>(&from));
+}
+
+void MatrixBandPartLayerParams::MergeFrom(const MatrixBandPartLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.MatrixBandPartLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.numlower() != 0) {
+    set_numlower(from.numlower());
+  }
+  if (from.numupper() != 0) {
+    set_numupper(from.numupper());
+  }
+}
+
+void MatrixBandPartLayerParams::CopyFrom(const MatrixBandPartLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.MatrixBandPartLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MatrixBandPartLayerParams::IsInitialized() const {
+  return true;
+}
+
+void MatrixBandPartLayerParams::Swap(MatrixBandPartLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void MatrixBandPartLayerParams::InternalSwap(MatrixBandPartLayerParams* other) {
+  std::swap(numlower_, other->numlower_);
+  std::swap(numupper_, other->numupper_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string MatrixBandPartLayerParams::GetTypeName() const {
+  return "CoreML.Specification.MatrixBandPartLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// MatrixBandPartLayerParams
+
+// int64 numLower = 1;
+void MatrixBandPartLayerParams::clear_numlower() {
+  numlower_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 MatrixBandPartLayerParams::numlower() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.MatrixBandPartLayerParams.numLower)
+  return numlower_;
+}
+void MatrixBandPartLayerParams::set_numlower(::google::protobuf::int64 value) {
+  
+  numlower_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.MatrixBandPartLayerParams.numLower)
+}
+
+// int64 numUpper = 2;
+void MatrixBandPartLayerParams::clear_numupper() {
+  numupper_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 MatrixBandPartLayerParams::numupper() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.MatrixBandPartLayerParams.numUpper)
+  return numupper_;
+}
+void MatrixBandPartLayerParams::set_numupper(::google::protobuf::int64 value) {
+  
+  numupper_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.MatrixBandPartLayerParams.numUpper)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int UpperTriangularLayerParams::kKFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 UpperTriangularLayerParams::UpperTriangularLayerParams()
@@ -41662,10 +46635,12 @@ UpperTriangularLayerParams::UpperTriangularLayerParams(const UpperTriangularLaye
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  k_ = from.k_;
   // @@protoc_insertion_point(copy_constructor:CoreML.Specification.UpperTriangularLayerParams)
 }
 
 void UpperTriangularLayerParams::SharedCtor() {
+  k_ = GOOGLE_LONGLONG(0);
   _cached_size_ = 0;
 }
 
@@ -41697,6 +46672,7 @@ UpperTriangularLayerParams* UpperTriangularLayerParams::New(::google::protobuf::
 
 void UpperTriangularLayerParams::Clear() {
 // @@protoc_insertion_point(message_clear_start:CoreML.Specification.UpperTriangularLayerParams)
+  k_ = GOOGLE_LONGLONG(0);
 }
 
 bool UpperTriangularLayerParams::MergePartialFromCodedStream(
@@ -41708,13 +46684,32 @@ bool UpperTriangularLayerParams::MergePartialFromCodedStream(
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
-  handle_unusual:
-    if (tag == 0 ||
-        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-      goto success;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 k = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &k_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
     }
-    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
   }
 success:
   // @@protoc_insertion_point(parse_success:CoreML.Specification.UpperTriangularLayerParams)
@@ -41731,12 +46726,24 @@ void UpperTriangularLayerParams::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  // int64 k = 1;
+  if (this->k() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->k(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:CoreML.Specification.UpperTriangularLayerParams)
 }
 
 size_t UpperTriangularLayerParams::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.UpperTriangularLayerParams)
   size_t total_size = 0;
+
+  // int64 k = 1;
+  if (this->k() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->k());
+  }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -41757,6 +46764,9 @@ void UpperTriangularLayerParams::MergeFrom(const UpperTriangularLayerParams& fro
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.k() != 0) {
+    set_k(from.k());
+  }
 }
 
 void UpperTriangularLayerParams::CopyFrom(const UpperTriangularLayerParams& from) {
@@ -41775,6 +46785,7 @@ void UpperTriangularLayerParams::Swap(UpperTriangularLayerParams* other) {
   InternalSwap(other);
 }
 void UpperTriangularLayerParams::InternalSwap(UpperTriangularLayerParams* other) {
+  std::swap(k_, other->k_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -41785,11 +46796,26 @@ void UpperTriangularLayerParams::InternalSwap(UpperTriangularLayerParams* other)
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // UpperTriangularLayerParams
 
+// int64 k = 1;
+void UpperTriangularLayerParams::clear_k() {
+  k_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 UpperTriangularLayerParams::k() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.UpperTriangularLayerParams.k)
+  return k_;
+}
+void UpperTriangularLayerParams::set_k(::google::protobuf::int64 value) {
+  
+  k_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.UpperTriangularLayerParams.k)
+}
+
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int LowerTriangularLayerParams::kKFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 LowerTriangularLayerParams::LowerTriangularLayerParams()
@@ -41805,10 +46831,12 @@ LowerTriangularLayerParams::LowerTriangularLayerParams(const LowerTriangularLaye
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  k_ = from.k_;
   // @@protoc_insertion_point(copy_constructor:CoreML.Specification.LowerTriangularLayerParams)
 }
 
 void LowerTriangularLayerParams::SharedCtor() {
+  k_ = GOOGLE_LONGLONG(0);
   _cached_size_ = 0;
 }
 
@@ -41840,6 +46868,7 @@ LowerTriangularLayerParams* LowerTriangularLayerParams::New(::google::protobuf::
 
 void LowerTriangularLayerParams::Clear() {
 // @@protoc_insertion_point(message_clear_start:CoreML.Specification.LowerTriangularLayerParams)
+  k_ = GOOGLE_LONGLONG(0);
 }
 
 bool LowerTriangularLayerParams::MergePartialFromCodedStream(
@@ -41851,13 +46880,32 @@ bool LowerTriangularLayerParams::MergePartialFromCodedStream(
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
-  handle_unusual:
-    if (tag == 0 ||
-        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-      goto success;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 k = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &k_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
     }
-    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
   }
 success:
   // @@protoc_insertion_point(parse_success:CoreML.Specification.LowerTriangularLayerParams)
@@ -41874,12 +46922,24 @@ void LowerTriangularLayerParams::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  // int64 k = 1;
+  if (this->k() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->k(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:CoreML.Specification.LowerTriangularLayerParams)
 }
 
 size_t LowerTriangularLayerParams::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.LowerTriangularLayerParams)
   size_t total_size = 0;
+
+  // int64 k = 1;
+  if (this->k() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->k());
+  }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -41900,6 +46960,9 @@ void LowerTriangularLayerParams::MergeFrom(const LowerTriangularLayerParams& fro
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.k() != 0) {
+    set_k(from.k());
+  }
 }
 
 void LowerTriangularLayerParams::CopyFrom(const LowerTriangularLayerParams& from) {
@@ -41918,6 +46981,7 @@ void LowerTriangularLayerParams::Swap(LowerTriangularLayerParams* other) {
   InternalSwap(other);
 }
 void LowerTriangularLayerParams::InternalSwap(LowerTriangularLayerParams* other) {
+  std::swap(k_, other->k_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
@@ -41927,6 +46991,20 @@ void LowerTriangularLayerParams::InternalSwap(LowerTriangularLayerParams* other)
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // LowerTriangularLayerParams
+
+// int64 k = 1;
+void LowerTriangularLayerParams::clear_k() {
+  k_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 LowerTriangularLayerParams::k() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.LowerTriangularLayerParams.k)
+  return k_;
+}
+void LowerTriangularLayerParams::set_k(::google::protobuf::int64 value) {
+  
+  k_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.LowerTriangularLayerParams.k)
+}
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -42582,6 +47660,435 @@ void AddBroadcastableLayerParams::InternalSwap(AddBroadcastableLayerParams* othe
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // AddBroadcastableLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+MaxBroadcastableLayerParams::MaxBroadcastableLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.MaxBroadcastableLayerParams)
+}
+MaxBroadcastableLayerParams::MaxBroadcastableLayerParams(const MaxBroadcastableLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.MaxBroadcastableLayerParams)
+}
+
+void MaxBroadcastableLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+MaxBroadcastableLayerParams::~MaxBroadcastableLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.MaxBroadcastableLayerParams)
+  SharedDtor();
+}
+
+void MaxBroadcastableLayerParams::SharedDtor() {
+}
+
+void MaxBroadcastableLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const MaxBroadcastableLayerParams& MaxBroadcastableLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+MaxBroadcastableLayerParams* MaxBroadcastableLayerParams::New(::google::protobuf::Arena* arena) const {
+  MaxBroadcastableLayerParams* n = new MaxBroadcastableLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void MaxBroadcastableLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.MaxBroadcastableLayerParams)
+}
+
+bool MaxBroadcastableLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.MaxBroadcastableLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.MaxBroadcastableLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.MaxBroadcastableLayerParams)
+  return false;
+#undef DO_
+}
+
+void MaxBroadcastableLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.MaxBroadcastableLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.MaxBroadcastableLayerParams)
+}
+
+size_t MaxBroadcastableLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.MaxBroadcastableLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void MaxBroadcastableLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const MaxBroadcastableLayerParams*>(&from));
+}
+
+void MaxBroadcastableLayerParams::MergeFrom(const MaxBroadcastableLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.MaxBroadcastableLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void MaxBroadcastableLayerParams::CopyFrom(const MaxBroadcastableLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.MaxBroadcastableLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MaxBroadcastableLayerParams::IsInitialized() const {
+  return true;
+}
+
+void MaxBroadcastableLayerParams::Swap(MaxBroadcastableLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void MaxBroadcastableLayerParams::InternalSwap(MaxBroadcastableLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string MaxBroadcastableLayerParams::GetTypeName() const {
+  return "CoreML.Specification.MaxBroadcastableLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// MaxBroadcastableLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+MinBroadcastableLayerParams::MinBroadcastableLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.MinBroadcastableLayerParams)
+}
+MinBroadcastableLayerParams::MinBroadcastableLayerParams(const MinBroadcastableLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.MinBroadcastableLayerParams)
+}
+
+void MinBroadcastableLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+MinBroadcastableLayerParams::~MinBroadcastableLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.MinBroadcastableLayerParams)
+  SharedDtor();
+}
+
+void MinBroadcastableLayerParams::SharedDtor() {
+}
+
+void MinBroadcastableLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const MinBroadcastableLayerParams& MinBroadcastableLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+MinBroadcastableLayerParams* MinBroadcastableLayerParams::New(::google::protobuf::Arena* arena) const {
+  MinBroadcastableLayerParams* n = new MinBroadcastableLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void MinBroadcastableLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.MinBroadcastableLayerParams)
+}
+
+bool MinBroadcastableLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.MinBroadcastableLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.MinBroadcastableLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.MinBroadcastableLayerParams)
+  return false;
+#undef DO_
+}
+
+void MinBroadcastableLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.MinBroadcastableLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.MinBroadcastableLayerParams)
+}
+
+size_t MinBroadcastableLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.MinBroadcastableLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void MinBroadcastableLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const MinBroadcastableLayerParams*>(&from));
+}
+
+void MinBroadcastableLayerParams::MergeFrom(const MinBroadcastableLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.MinBroadcastableLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void MinBroadcastableLayerParams::CopyFrom(const MinBroadcastableLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.MinBroadcastableLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MinBroadcastableLayerParams::IsInitialized() const {
+  return true;
+}
+
+void MinBroadcastableLayerParams::Swap(MinBroadcastableLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void MinBroadcastableLayerParams::InternalSwap(MinBroadcastableLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string MinBroadcastableLayerParams::GetTypeName() const {
+  return "CoreML.Specification.MinBroadcastableLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// MinBroadcastableLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+FloorDivBroadcastableLayerParams::FloorDivBroadcastableLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.FloorDivBroadcastableLayerParams)
+}
+FloorDivBroadcastableLayerParams::FloorDivBroadcastableLayerParams(const FloorDivBroadcastableLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.FloorDivBroadcastableLayerParams)
+}
+
+void FloorDivBroadcastableLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+FloorDivBroadcastableLayerParams::~FloorDivBroadcastableLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  SharedDtor();
+}
+
+void FloorDivBroadcastableLayerParams::SharedDtor() {
+}
+
+void FloorDivBroadcastableLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const FloorDivBroadcastableLayerParams& FloorDivBroadcastableLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+FloorDivBroadcastableLayerParams* FloorDivBroadcastableLayerParams::New(::google::protobuf::Arena* arena) const {
+  FloorDivBroadcastableLayerParams* n = new FloorDivBroadcastableLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void FloorDivBroadcastableLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.FloorDivBroadcastableLayerParams)
+}
+
+bool FloorDivBroadcastableLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  return false;
+#undef DO_
+}
+
+void FloorDivBroadcastableLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.FloorDivBroadcastableLayerParams)
+}
+
+size_t FloorDivBroadcastableLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FloorDivBroadcastableLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const FloorDivBroadcastableLayerParams*>(&from));
+}
+
+void FloorDivBroadcastableLayerParams::MergeFrom(const FloorDivBroadcastableLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void FloorDivBroadcastableLayerParams::CopyFrom(const FloorDivBroadcastableLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.FloorDivBroadcastableLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FloorDivBroadcastableLayerParams::IsInitialized() const {
+  return true;
+}
+
+void FloorDivBroadcastableLayerParams::Swap(FloorDivBroadcastableLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void FloorDivBroadcastableLayerParams::InternalSwap(FloorDivBroadcastableLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string FloorDivBroadcastableLayerParams::GetTypeName() const {
+  return "CoreML.Specification.FloorDivBroadcastableLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// FloorDivBroadcastableLayerParams
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -43778,6 +49285,2685 @@ RankPreservingReshapeLayerParams::mutable_targetshape() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomNormalLikeLayerParams::kSeedFieldNumber;
+const int RandomNormalLikeLayerParams::kMeanFieldNumber;
+const int RandomNormalLikeLayerParams::kStdDevFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomNormalLikeLayerParams::RandomNormalLikeLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomNormalLikeLayerParams)
+}
+RandomNormalLikeLayerParams::RandomNormalLikeLayerParams(const RandomNormalLikeLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomNormalLikeLayerParams)
+}
+
+void RandomNormalLikeLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+  _cached_size_ = 0;
+}
+
+RandomNormalLikeLayerParams::~RandomNormalLikeLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomNormalLikeLayerParams)
+  SharedDtor();
+}
+
+void RandomNormalLikeLayerParams::SharedDtor() {
+}
+
+void RandomNormalLikeLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomNormalLikeLayerParams& RandomNormalLikeLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomNormalLikeLayerParams* RandomNormalLikeLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomNormalLikeLayerParams* n = new RandomNormalLikeLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomNormalLikeLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomNormalLikeLayerParams)
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+}
+
+bool RandomNormalLikeLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomNormalLikeLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float mean = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &mean_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float stdDev = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(29u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &stddev_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomNormalLikeLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomNormalLikeLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomNormalLikeLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomNormalLikeLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float mean = 2;
+  if (this->mean() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->mean(), output);
+  }
+
+  // float stdDev = 3;
+  if (this->stddev() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->stddev(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomNormalLikeLayerParams)
+}
+
+size_t RandomNormalLikeLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomNormalLikeLayerParams)
+  size_t total_size = 0;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float mean = 2;
+  if (this->mean() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float stdDev = 3;
+  if (this->stddev() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomNormalLikeLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomNormalLikeLayerParams*>(&from));
+}
+
+void RandomNormalLikeLayerParams::MergeFrom(const RandomNormalLikeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomNormalLikeLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.mean() != 0) {
+    set_mean(from.mean());
+  }
+  if (from.stddev() != 0) {
+    set_stddev(from.stddev());
+  }
+}
+
+void RandomNormalLikeLayerParams::CopyFrom(const RandomNormalLikeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomNormalLikeLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomNormalLikeLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomNormalLikeLayerParams::Swap(RandomNormalLikeLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomNormalLikeLayerParams::InternalSwap(RandomNormalLikeLayerParams* other) {
+  std::swap(seed_, other->seed_);
+  std::swap(mean_, other->mean_);
+  std::swap(stddev_, other->stddev_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomNormalLikeLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomNormalLikeLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomNormalLikeLayerParams
+
+// int64 seed = 1;
+void RandomNormalLikeLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomNormalLikeLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalLikeLayerParams.seed)
+  return seed_;
+}
+void RandomNormalLikeLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalLikeLayerParams.seed)
+}
+
+// float mean = 2;
+void RandomNormalLikeLayerParams::clear_mean() {
+  mean_ = 0;
+}
+float RandomNormalLikeLayerParams::mean() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalLikeLayerParams.mean)
+  return mean_;
+}
+void RandomNormalLikeLayerParams::set_mean(float value) {
+  
+  mean_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalLikeLayerParams.mean)
+}
+
+// float stdDev = 3;
+void RandomNormalLikeLayerParams::clear_stddev() {
+  stddev_ = 0;
+}
+float RandomNormalLikeLayerParams::stddev() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalLikeLayerParams.stdDev)
+  return stddev_;
+}
+void RandomNormalLikeLayerParams::set_stddev(float value) {
+  
+  stddev_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalLikeLayerParams.stdDev)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomNormalStaticLayerParams::kSeedFieldNumber;
+const int RandomNormalStaticLayerParams::kMeanFieldNumber;
+const int RandomNormalStaticLayerParams::kStdDevFieldNumber;
+const int RandomNormalStaticLayerParams::kOutputShapeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomNormalStaticLayerParams::RandomNormalStaticLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomNormalStaticLayerParams)
+}
+RandomNormalStaticLayerParams::RandomNormalStaticLayerParams(const RandomNormalStaticLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      outputshape_(from.outputshape_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomNormalStaticLayerParams)
+}
+
+void RandomNormalStaticLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+  _cached_size_ = 0;
+}
+
+RandomNormalStaticLayerParams::~RandomNormalStaticLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomNormalStaticLayerParams)
+  SharedDtor();
+}
+
+void RandomNormalStaticLayerParams::SharedDtor() {
+}
+
+void RandomNormalStaticLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomNormalStaticLayerParams& RandomNormalStaticLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomNormalStaticLayerParams* RandomNormalStaticLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomNormalStaticLayerParams* n = new RandomNormalStaticLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomNormalStaticLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomNormalStaticLayerParams)
+  outputshape_.Clear();
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+}
+
+bool RandomNormalStaticLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomNormalStaticLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float mean = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &mean_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float stdDev = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(29u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &stddev_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint64 outputShape = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_outputshape())));
+        } else if (static_cast< ::google::protobuf::uint8>(tag) ==
+                   static_cast< ::google::protobuf::uint8>(32u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 1, 34u, input, this->mutable_outputshape())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomNormalStaticLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomNormalStaticLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomNormalStaticLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomNormalStaticLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float mean = 2;
+  if (this->mean() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->mean(), output);
+  }
+
+  // float stdDev = 3;
+  if (this->stddev() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->stddev(), output);
+  }
+
+  // repeated uint64 outputShape = 4;
+  if (this->outputshape_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(4, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(_outputshape_cached_byte_size_);
+  }
+  for (int i = 0, n = this->outputshape_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64NoTag(
+      this->outputshape(i), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomNormalStaticLayerParams)
+}
+
+size_t RandomNormalStaticLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomNormalStaticLayerParams)
+  size_t total_size = 0;
+
+  // repeated uint64 outputShape = 4;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt64Size(this->outputshape_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _outputshape_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float mean = 2;
+  if (this->mean() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float stdDev = 3;
+  if (this->stddev() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomNormalStaticLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomNormalStaticLayerParams*>(&from));
+}
+
+void RandomNormalStaticLayerParams::MergeFrom(const RandomNormalStaticLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomNormalStaticLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  outputshape_.MergeFrom(from.outputshape_);
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.mean() != 0) {
+    set_mean(from.mean());
+  }
+  if (from.stddev() != 0) {
+    set_stddev(from.stddev());
+  }
+}
+
+void RandomNormalStaticLayerParams::CopyFrom(const RandomNormalStaticLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomNormalStaticLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomNormalStaticLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomNormalStaticLayerParams::Swap(RandomNormalStaticLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomNormalStaticLayerParams::InternalSwap(RandomNormalStaticLayerParams* other) {
+  outputshape_.InternalSwap(&other->outputshape_);
+  std::swap(seed_, other->seed_);
+  std::swap(mean_, other->mean_);
+  std::swap(stddev_, other->stddev_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomNormalStaticLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomNormalStaticLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomNormalStaticLayerParams
+
+// int64 seed = 1;
+void RandomNormalStaticLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomNormalStaticLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalStaticLayerParams.seed)
+  return seed_;
+}
+void RandomNormalStaticLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalStaticLayerParams.seed)
+}
+
+// float mean = 2;
+void RandomNormalStaticLayerParams::clear_mean() {
+  mean_ = 0;
+}
+float RandomNormalStaticLayerParams::mean() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalStaticLayerParams.mean)
+  return mean_;
+}
+void RandomNormalStaticLayerParams::set_mean(float value) {
+  
+  mean_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalStaticLayerParams.mean)
+}
+
+// float stdDev = 3;
+void RandomNormalStaticLayerParams::clear_stddev() {
+  stddev_ = 0;
+}
+float RandomNormalStaticLayerParams::stddev() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalStaticLayerParams.stdDev)
+  return stddev_;
+}
+void RandomNormalStaticLayerParams::set_stddev(float value) {
+  
+  stddev_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalStaticLayerParams.stdDev)
+}
+
+// repeated uint64 outputShape = 4;
+int RandomNormalStaticLayerParams::outputshape_size() const {
+  return outputshape_.size();
+}
+void RandomNormalStaticLayerParams::clear_outputshape() {
+  outputshape_.Clear();
+}
+::google::protobuf::uint64 RandomNormalStaticLayerParams::outputshape(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+  return outputshape_.Get(index);
+}
+void RandomNormalStaticLayerParams::set_outputshape(int index, ::google::protobuf::uint64 value) {
+  outputshape_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+}
+void RandomNormalStaticLayerParams::add_outputshape(::google::protobuf::uint64 value) {
+  outputshape_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+}
+const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+RandomNormalStaticLayerParams::outputshape() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+  return outputshape_;
+}
+::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+RandomNormalStaticLayerParams::mutable_outputshape() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.RandomNormalStaticLayerParams.outputShape)
+  return &outputshape_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomNormalDynamicLayerParams::kSeedFieldNumber;
+const int RandomNormalDynamicLayerParams::kMeanFieldNumber;
+const int RandomNormalDynamicLayerParams::kStdDevFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomNormalDynamicLayerParams::RandomNormalDynamicLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomNormalDynamicLayerParams)
+}
+RandomNormalDynamicLayerParams::RandomNormalDynamicLayerParams(const RandomNormalDynamicLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomNormalDynamicLayerParams)
+}
+
+void RandomNormalDynamicLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+  _cached_size_ = 0;
+}
+
+RandomNormalDynamicLayerParams::~RandomNormalDynamicLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomNormalDynamicLayerParams)
+  SharedDtor();
+}
+
+void RandomNormalDynamicLayerParams::SharedDtor() {
+}
+
+void RandomNormalDynamicLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomNormalDynamicLayerParams& RandomNormalDynamicLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomNormalDynamicLayerParams* RandomNormalDynamicLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomNormalDynamicLayerParams* n = new RandomNormalDynamicLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomNormalDynamicLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomNormalDynamicLayerParams)
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&stddev_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(stddev_));
+}
+
+bool RandomNormalDynamicLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomNormalDynamicLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float mean = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &mean_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float stdDev = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(29u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &stddev_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomNormalDynamicLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomNormalDynamicLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomNormalDynamicLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomNormalDynamicLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float mean = 2;
+  if (this->mean() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->mean(), output);
+  }
+
+  // float stdDev = 3;
+  if (this->stddev() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->stddev(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomNormalDynamicLayerParams)
+}
+
+size_t RandomNormalDynamicLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomNormalDynamicLayerParams)
+  size_t total_size = 0;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float mean = 2;
+  if (this->mean() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float stdDev = 3;
+  if (this->stddev() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomNormalDynamicLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomNormalDynamicLayerParams*>(&from));
+}
+
+void RandomNormalDynamicLayerParams::MergeFrom(const RandomNormalDynamicLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomNormalDynamicLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.mean() != 0) {
+    set_mean(from.mean());
+  }
+  if (from.stddev() != 0) {
+    set_stddev(from.stddev());
+  }
+}
+
+void RandomNormalDynamicLayerParams::CopyFrom(const RandomNormalDynamicLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomNormalDynamicLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomNormalDynamicLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomNormalDynamicLayerParams::Swap(RandomNormalDynamicLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomNormalDynamicLayerParams::InternalSwap(RandomNormalDynamicLayerParams* other) {
+  std::swap(seed_, other->seed_);
+  std::swap(mean_, other->mean_);
+  std::swap(stddev_, other->stddev_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomNormalDynamicLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomNormalDynamicLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomNormalDynamicLayerParams
+
+// int64 seed = 1;
+void RandomNormalDynamicLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomNormalDynamicLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalDynamicLayerParams.seed)
+  return seed_;
+}
+void RandomNormalDynamicLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalDynamicLayerParams.seed)
+}
+
+// float mean = 2;
+void RandomNormalDynamicLayerParams::clear_mean() {
+  mean_ = 0;
+}
+float RandomNormalDynamicLayerParams::mean() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalDynamicLayerParams.mean)
+  return mean_;
+}
+void RandomNormalDynamicLayerParams::set_mean(float value) {
+  
+  mean_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalDynamicLayerParams.mean)
+}
+
+// float stdDev = 3;
+void RandomNormalDynamicLayerParams::clear_stddev() {
+  stddev_ = 0;
+}
+float RandomNormalDynamicLayerParams::stddev() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomNormalDynamicLayerParams.stdDev)
+  return stddev_;
+}
+void RandomNormalDynamicLayerParams::set_stddev(float value) {
+  
+  stddev_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomNormalDynamicLayerParams.stdDev)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomUniformLikeLayerParams::kSeedFieldNumber;
+const int RandomUniformLikeLayerParams::kMinValFieldNumber;
+const int RandomUniformLikeLayerParams::kMaxValFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomUniformLikeLayerParams::RandomUniformLikeLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomUniformLikeLayerParams)
+}
+RandomUniformLikeLayerParams::RandomUniformLikeLayerParams(const RandomUniformLikeLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomUniformLikeLayerParams)
+}
+
+void RandomUniformLikeLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+  _cached_size_ = 0;
+}
+
+RandomUniformLikeLayerParams::~RandomUniformLikeLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomUniformLikeLayerParams)
+  SharedDtor();
+}
+
+void RandomUniformLikeLayerParams::SharedDtor() {
+}
+
+void RandomUniformLikeLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomUniformLikeLayerParams& RandomUniformLikeLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomUniformLikeLayerParams* RandomUniformLikeLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomUniformLikeLayerParams* n = new RandomUniformLikeLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomUniformLikeLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomUniformLikeLayerParams)
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+}
+
+bool RandomUniformLikeLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomUniformLikeLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float minVal = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &minval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float maxVal = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(29u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &maxval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomUniformLikeLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomUniformLikeLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomUniformLikeLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomUniformLikeLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float minVal = 2;
+  if (this->minval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->minval(), output);
+  }
+
+  // float maxVal = 3;
+  if (this->maxval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->maxval(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomUniformLikeLayerParams)
+}
+
+size_t RandomUniformLikeLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomUniformLikeLayerParams)
+  size_t total_size = 0;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float minVal = 2;
+  if (this->minval() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float maxVal = 3;
+  if (this->maxval() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomUniformLikeLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomUniformLikeLayerParams*>(&from));
+}
+
+void RandomUniformLikeLayerParams::MergeFrom(const RandomUniformLikeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomUniformLikeLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.minval() != 0) {
+    set_minval(from.minval());
+  }
+  if (from.maxval() != 0) {
+    set_maxval(from.maxval());
+  }
+}
+
+void RandomUniformLikeLayerParams::CopyFrom(const RandomUniformLikeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomUniformLikeLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomUniformLikeLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomUniformLikeLayerParams::Swap(RandomUniformLikeLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomUniformLikeLayerParams::InternalSwap(RandomUniformLikeLayerParams* other) {
+  std::swap(seed_, other->seed_);
+  std::swap(minval_, other->minval_);
+  std::swap(maxval_, other->maxval_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomUniformLikeLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomUniformLikeLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomUniformLikeLayerParams
+
+// int64 seed = 1;
+void RandomUniformLikeLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomUniformLikeLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformLikeLayerParams.seed)
+  return seed_;
+}
+void RandomUniformLikeLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformLikeLayerParams.seed)
+}
+
+// float minVal = 2;
+void RandomUniformLikeLayerParams::clear_minval() {
+  minval_ = 0;
+}
+float RandomUniformLikeLayerParams::minval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformLikeLayerParams.minVal)
+  return minval_;
+}
+void RandomUniformLikeLayerParams::set_minval(float value) {
+  
+  minval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformLikeLayerParams.minVal)
+}
+
+// float maxVal = 3;
+void RandomUniformLikeLayerParams::clear_maxval() {
+  maxval_ = 0;
+}
+float RandomUniformLikeLayerParams::maxval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformLikeLayerParams.maxVal)
+  return maxval_;
+}
+void RandomUniformLikeLayerParams::set_maxval(float value) {
+  
+  maxval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformLikeLayerParams.maxVal)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomUniformStaticLayerParams::kSeedFieldNumber;
+const int RandomUniformStaticLayerParams::kMinValFieldNumber;
+const int RandomUniformStaticLayerParams::kMaxValFieldNumber;
+const int RandomUniformStaticLayerParams::kOutputShapeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomUniformStaticLayerParams::RandomUniformStaticLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomUniformStaticLayerParams)
+}
+RandomUniformStaticLayerParams::RandomUniformStaticLayerParams(const RandomUniformStaticLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      outputshape_(from.outputshape_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomUniformStaticLayerParams)
+}
+
+void RandomUniformStaticLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+  _cached_size_ = 0;
+}
+
+RandomUniformStaticLayerParams::~RandomUniformStaticLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomUniformStaticLayerParams)
+  SharedDtor();
+}
+
+void RandomUniformStaticLayerParams::SharedDtor() {
+}
+
+void RandomUniformStaticLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomUniformStaticLayerParams& RandomUniformStaticLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomUniformStaticLayerParams* RandomUniformStaticLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomUniformStaticLayerParams* n = new RandomUniformStaticLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomUniformStaticLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomUniformStaticLayerParams)
+  outputshape_.Clear();
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+}
+
+bool RandomUniformStaticLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomUniformStaticLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float minVal = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &minval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float maxVal = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(29u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &maxval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint64 outputShape = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(34u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_outputshape())));
+        } else if (static_cast< ::google::protobuf::uint8>(tag) ==
+                   static_cast< ::google::protobuf::uint8>(32u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 1, 34u, input, this->mutable_outputshape())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomUniformStaticLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomUniformStaticLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomUniformStaticLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomUniformStaticLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float minVal = 2;
+  if (this->minval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->minval(), output);
+  }
+
+  // float maxVal = 3;
+  if (this->maxval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->maxval(), output);
+  }
+
+  // repeated uint64 outputShape = 4;
+  if (this->outputshape_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(4, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(_outputshape_cached_byte_size_);
+  }
+  for (int i = 0, n = this->outputshape_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64NoTag(
+      this->outputshape(i), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomUniformStaticLayerParams)
+}
+
+size_t RandomUniformStaticLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomUniformStaticLayerParams)
+  size_t total_size = 0;
+
+  // repeated uint64 outputShape = 4;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt64Size(this->outputshape_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _outputshape_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float minVal = 2;
+  if (this->minval() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float maxVal = 3;
+  if (this->maxval() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomUniformStaticLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomUniformStaticLayerParams*>(&from));
+}
+
+void RandomUniformStaticLayerParams::MergeFrom(const RandomUniformStaticLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomUniformStaticLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  outputshape_.MergeFrom(from.outputshape_);
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.minval() != 0) {
+    set_minval(from.minval());
+  }
+  if (from.maxval() != 0) {
+    set_maxval(from.maxval());
+  }
+}
+
+void RandomUniformStaticLayerParams::CopyFrom(const RandomUniformStaticLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomUniformStaticLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomUniformStaticLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomUniformStaticLayerParams::Swap(RandomUniformStaticLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomUniformStaticLayerParams::InternalSwap(RandomUniformStaticLayerParams* other) {
+  outputshape_.InternalSwap(&other->outputshape_);
+  std::swap(seed_, other->seed_);
+  std::swap(minval_, other->minval_);
+  std::swap(maxval_, other->maxval_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomUniformStaticLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomUniformStaticLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomUniformStaticLayerParams
+
+// int64 seed = 1;
+void RandomUniformStaticLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomUniformStaticLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformStaticLayerParams.seed)
+  return seed_;
+}
+void RandomUniformStaticLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformStaticLayerParams.seed)
+}
+
+// float minVal = 2;
+void RandomUniformStaticLayerParams::clear_minval() {
+  minval_ = 0;
+}
+float RandomUniformStaticLayerParams::minval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformStaticLayerParams.minVal)
+  return minval_;
+}
+void RandomUniformStaticLayerParams::set_minval(float value) {
+  
+  minval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformStaticLayerParams.minVal)
+}
+
+// float maxVal = 3;
+void RandomUniformStaticLayerParams::clear_maxval() {
+  maxval_ = 0;
+}
+float RandomUniformStaticLayerParams::maxval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformStaticLayerParams.maxVal)
+  return maxval_;
+}
+void RandomUniformStaticLayerParams::set_maxval(float value) {
+  
+  maxval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformStaticLayerParams.maxVal)
+}
+
+// repeated uint64 outputShape = 4;
+int RandomUniformStaticLayerParams::outputshape_size() const {
+  return outputshape_.size();
+}
+void RandomUniformStaticLayerParams::clear_outputshape() {
+  outputshape_.Clear();
+}
+::google::protobuf::uint64 RandomUniformStaticLayerParams::outputshape(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+  return outputshape_.Get(index);
+}
+void RandomUniformStaticLayerParams::set_outputshape(int index, ::google::protobuf::uint64 value) {
+  outputshape_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+}
+void RandomUniformStaticLayerParams::add_outputshape(::google::protobuf::uint64 value) {
+  outputshape_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+}
+const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+RandomUniformStaticLayerParams::outputshape() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+  return outputshape_;
+}
+::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+RandomUniformStaticLayerParams::mutable_outputshape() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.RandomUniformStaticLayerParams.outputShape)
+  return &outputshape_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomUniformDynamicLayerParams::kSeedFieldNumber;
+const int RandomUniformDynamicLayerParams::kMinValFieldNumber;
+const int RandomUniformDynamicLayerParams::kMaxValFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomUniformDynamicLayerParams::RandomUniformDynamicLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomUniformDynamicLayerParams)
+}
+RandomUniformDynamicLayerParams::RandomUniformDynamicLayerParams(const RandomUniformDynamicLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomUniformDynamicLayerParams)
+}
+
+void RandomUniformDynamicLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+  _cached_size_ = 0;
+}
+
+RandomUniformDynamicLayerParams::~RandomUniformDynamicLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomUniformDynamicLayerParams)
+  SharedDtor();
+}
+
+void RandomUniformDynamicLayerParams::SharedDtor() {
+}
+
+void RandomUniformDynamicLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomUniformDynamicLayerParams& RandomUniformDynamicLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomUniformDynamicLayerParams* RandomUniformDynamicLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomUniformDynamicLayerParams* n = new RandomUniformDynamicLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomUniformDynamicLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomUniformDynamicLayerParams)
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&maxval_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(maxval_));
+}
+
+bool RandomUniformDynamicLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomUniformDynamicLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float minVal = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &minval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float maxVal = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(29u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &maxval_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomUniformDynamicLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomUniformDynamicLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomUniformDynamicLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomUniformDynamicLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float minVal = 2;
+  if (this->minval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->minval(), output);
+  }
+
+  // float maxVal = 3;
+  if (this->maxval() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(3, this->maxval(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomUniformDynamicLayerParams)
+}
+
+size_t RandomUniformDynamicLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomUniformDynamicLayerParams)
+  size_t total_size = 0;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float minVal = 2;
+  if (this->minval() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // float maxVal = 3;
+  if (this->maxval() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomUniformDynamicLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomUniformDynamicLayerParams*>(&from));
+}
+
+void RandomUniformDynamicLayerParams::MergeFrom(const RandomUniformDynamicLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomUniformDynamicLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.minval() != 0) {
+    set_minval(from.minval());
+  }
+  if (from.maxval() != 0) {
+    set_maxval(from.maxval());
+  }
+}
+
+void RandomUniformDynamicLayerParams::CopyFrom(const RandomUniformDynamicLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomUniformDynamicLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomUniformDynamicLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomUniformDynamicLayerParams::Swap(RandomUniformDynamicLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomUniformDynamicLayerParams::InternalSwap(RandomUniformDynamicLayerParams* other) {
+  std::swap(seed_, other->seed_);
+  std::swap(minval_, other->minval_);
+  std::swap(maxval_, other->maxval_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomUniformDynamicLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomUniformDynamicLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomUniformDynamicLayerParams
+
+// int64 seed = 1;
+void RandomUniformDynamicLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomUniformDynamicLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformDynamicLayerParams.seed)
+  return seed_;
+}
+void RandomUniformDynamicLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformDynamicLayerParams.seed)
+}
+
+// float minVal = 2;
+void RandomUniformDynamicLayerParams::clear_minval() {
+  minval_ = 0;
+}
+float RandomUniformDynamicLayerParams::minval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformDynamicLayerParams.minVal)
+  return minval_;
+}
+void RandomUniformDynamicLayerParams::set_minval(float value) {
+  
+  minval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformDynamicLayerParams.minVal)
+}
+
+// float maxVal = 3;
+void RandomUniformDynamicLayerParams::clear_maxval() {
+  maxval_ = 0;
+}
+float RandomUniformDynamicLayerParams::maxval() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomUniformDynamicLayerParams.maxVal)
+  return maxval_;
+}
+void RandomUniformDynamicLayerParams::set_maxval(float value) {
+  
+  maxval_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomUniformDynamicLayerParams.maxVal)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomBernoulliLikeLayerParams::kSeedFieldNumber;
+const int RandomBernoulliLikeLayerParams::kProbFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomBernoulliLikeLayerParams::RandomBernoulliLikeLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomBernoulliLikeLayerParams)
+}
+RandomBernoulliLikeLayerParams::RandomBernoulliLikeLayerParams(const RandomBernoulliLikeLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomBernoulliLikeLayerParams)
+}
+
+void RandomBernoulliLikeLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+  _cached_size_ = 0;
+}
+
+RandomBernoulliLikeLayerParams::~RandomBernoulliLikeLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  SharedDtor();
+}
+
+void RandomBernoulliLikeLayerParams::SharedDtor() {
+}
+
+void RandomBernoulliLikeLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomBernoulliLikeLayerParams& RandomBernoulliLikeLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomBernoulliLikeLayerParams* RandomBernoulliLikeLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomBernoulliLikeLayerParams* n = new RandomBernoulliLikeLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomBernoulliLikeLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+}
+
+bool RandomBernoulliLikeLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float prob = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &prob_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomBernoulliLikeLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float prob = 2;
+  if (this->prob() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->prob(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomBernoulliLikeLayerParams)
+}
+
+size_t RandomBernoulliLikeLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  size_t total_size = 0;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float prob = 2;
+  if (this->prob() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomBernoulliLikeLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomBernoulliLikeLayerParams*>(&from));
+}
+
+void RandomBernoulliLikeLayerParams::MergeFrom(const RandomBernoulliLikeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.prob() != 0) {
+    set_prob(from.prob());
+  }
+}
+
+void RandomBernoulliLikeLayerParams::CopyFrom(const RandomBernoulliLikeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomBernoulliLikeLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomBernoulliLikeLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomBernoulliLikeLayerParams::Swap(RandomBernoulliLikeLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomBernoulliLikeLayerParams::InternalSwap(RandomBernoulliLikeLayerParams* other) {
+  std::swap(seed_, other->seed_);
+  std::swap(prob_, other->prob_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomBernoulliLikeLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomBernoulliLikeLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomBernoulliLikeLayerParams
+
+// int64 seed = 1;
+void RandomBernoulliLikeLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomBernoulliLikeLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliLikeLayerParams.seed)
+  return seed_;
+}
+void RandomBernoulliLikeLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliLikeLayerParams.seed)
+}
+
+// float prob = 2;
+void RandomBernoulliLikeLayerParams::clear_prob() {
+  prob_ = 0;
+}
+float RandomBernoulliLikeLayerParams::prob() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliLikeLayerParams.prob)
+  return prob_;
+}
+void RandomBernoulliLikeLayerParams::set_prob(float value) {
+  
+  prob_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliLikeLayerParams.prob)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomBernoulliStaticLayerParams::kSeedFieldNumber;
+const int RandomBernoulliStaticLayerParams::kProbFieldNumber;
+const int RandomBernoulliStaticLayerParams::kOutputShapeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomBernoulliStaticLayerParams::RandomBernoulliStaticLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomBernoulliStaticLayerParams)
+}
+RandomBernoulliStaticLayerParams::RandomBernoulliStaticLayerParams(const RandomBernoulliStaticLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      outputshape_(from.outputshape_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomBernoulliStaticLayerParams)
+}
+
+void RandomBernoulliStaticLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+  _cached_size_ = 0;
+}
+
+RandomBernoulliStaticLayerParams::~RandomBernoulliStaticLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  SharedDtor();
+}
+
+void RandomBernoulliStaticLayerParams::SharedDtor() {
+}
+
+void RandomBernoulliStaticLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomBernoulliStaticLayerParams& RandomBernoulliStaticLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomBernoulliStaticLayerParams* RandomBernoulliStaticLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomBernoulliStaticLayerParams* n = new RandomBernoulliStaticLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomBernoulliStaticLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  outputshape_.Clear();
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+}
+
+bool RandomBernoulliStaticLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float prob = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &prob_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated uint64 outputShape = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, this->mutable_outputshape())));
+        } else if (static_cast< ::google::protobuf::uint8>(tag) ==
+                   static_cast< ::google::protobuf::uint8>(24u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 1, 26u, input, this->mutable_outputshape())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomBernoulliStaticLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float prob = 2;
+  if (this->prob() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->prob(), output);
+  }
+
+  // repeated uint64 outputShape = 3;
+  if (this->outputshape_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(3, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(_outputshape_cached_byte_size_);
+  }
+  for (int i = 0, n = this->outputshape_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64NoTag(
+      this->outputshape(i), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomBernoulliStaticLayerParams)
+}
+
+size_t RandomBernoulliStaticLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  size_t total_size = 0;
+
+  // repeated uint64 outputShape = 3;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      UInt64Size(this->outputshape_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _outputshape_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float prob = 2;
+  if (this->prob() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomBernoulliStaticLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomBernoulliStaticLayerParams*>(&from));
+}
+
+void RandomBernoulliStaticLayerParams::MergeFrom(const RandomBernoulliStaticLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  outputshape_.MergeFrom(from.outputshape_);
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.prob() != 0) {
+    set_prob(from.prob());
+  }
+}
+
+void RandomBernoulliStaticLayerParams::CopyFrom(const RandomBernoulliStaticLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomBernoulliStaticLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomBernoulliStaticLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomBernoulliStaticLayerParams::Swap(RandomBernoulliStaticLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomBernoulliStaticLayerParams::InternalSwap(RandomBernoulliStaticLayerParams* other) {
+  outputshape_.InternalSwap(&other->outputshape_);
+  std::swap(seed_, other->seed_);
+  std::swap(prob_, other->prob_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomBernoulliStaticLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomBernoulliStaticLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomBernoulliStaticLayerParams
+
+// int64 seed = 1;
+void RandomBernoulliStaticLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomBernoulliStaticLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliStaticLayerParams.seed)
+  return seed_;
+}
+void RandomBernoulliStaticLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliStaticLayerParams.seed)
+}
+
+// float prob = 2;
+void RandomBernoulliStaticLayerParams::clear_prob() {
+  prob_ = 0;
+}
+float RandomBernoulliStaticLayerParams::prob() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliStaticLayerParams.prob)
+  return prob_;
+}
+void RandomBernoulliStaticLayerParams::set_prob(float value) {
+  
+  prob_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliStaticLayerParams.prob)
+}
+
+// repeated uint64 outputShape = 3;
+int RandomBernoulliStaticLayerParams::outputshape_size() const {
+  return outputshape_.size();
+}
+void RandomBernoulliStaticLayerParams::clear_outputshape() {
+  outputshape_.Clear();
+}
+::google::protobuf::uint64 RandomBernoulliStaticLayerParams::outputshape(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+  return outputshape_.Get(index);
+}
+void RandomBernoulliStaticLayerParams::set_outputshape(int index, ::google::protobuf::uint64 value) {
+  outputshape_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+}
+void RandomBernoulliStaticLayerParams::add_outputshape(::google::protobuf::uint64 value) {
+  outputshape_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+}
+const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+RandomBernoulliStaticLayerParams::outputshape() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+  return outputshape_;
+}
+::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+RandomBernoulliStaticLayerParams::mutable_outputshape() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.RandomBernoulliStaticLayerParams.outputShape)
+  return &outputshape_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RandomBernoulliDynamicLayerParams::kSeedFieldNumber;
+const int RandomBernoulliDynamicLayerParams::kProbFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RandomBernoulliDynamicLayerParams::RandomBernoulliDynamicLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+}
+RandomBernoulliDynamicLayerParams::RandomBernoulliDynamicLayerParams(const RandomBernoulliDynamicLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&seed_, &from.seed_,
+    reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+}
+
+void RandomBernoulliDynamicLayerParams::SharedCtor() {
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+  _cached_size_ = 0;
+}
+
+RandomBernoulliDynamicLayerParams::~RandomBernoulliDynamicLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  SharedDtor();
+}
+
+void RandomBernoulliDynamicLayerParams::SharedDtor() {
+}
+
+void RandomBernoulliDynamicLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const RandomBernoulliDynamicLayerParams& RandomBernoulliDynamicLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+RandomBernoulliDynamicLayerParams* RandomBernoulliDynamicLayerParams::New(::google::protobuf::Arena* arena) const {
+  RandomBernoulliDynamicLayerParams* n = new RandomBernoulliDynamicLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void RandomBernoulliDynamicLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  ::memset(&seed_, 0, reinterpret_cast<char*>(&prob_) -
+    reinterpret_cast<char*>(&seed_) + sizeof(prob_));
+}
+
+bool RandomBernoulliDynamicLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 seed = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &seed_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float prob = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &prob_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  return false;
+#undef DO_
+}
+
+void RandomBernoulliDynamicLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->seed(), output);
+  }
+
+  // float prob = 2;
+  if (this->prob() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->prob(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+}
+
+size_t RandomBernoulliDynamicLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  size_t total_size = 0;
+
+  // int64 seed = 1;
+  if (this->seed() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->seed());
+  }
+
+  // float prob = 2;
+  if (this->prob() != 0) {
+    total_size += 1 + 4;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RandomBernoulliDynamicLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const RandomBernoulliDynamicLayerParams*>(&from));
+}
+
+void RandomBernoulliDynamicLayerParams::MergeFrom(const RandomBernoulliDynamicLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.seed() != 0) {
+    set_seed(from.seed());
+  }
+  if (from.prob() != 0) {
+    set_prob(from.prob());
+  }
+}
+
+void RandomBernoulliDynamicLayerParams::CopyFrom(const RandomBernoulliDynamicLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.RandomBernoulliDynamicLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RandomBernoulliDynamicLayerParams::IsInitialized() const {
+  return true;
+}
+
+void RandomBernoulliDynamicLayerParams::Swap(RandomBernoulliDynamicLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RandomBernoulliDynamicLayerParams::InternalSwap(RandomBernoulliDynamicLayerParams* other) {
+  std::swap(seed_, other->seed_);
+  std::swap(prob_, other->prob_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string RandomBernoulliDynamicLayerParams::GetTypeName() const {
+  return "CoreML.Specification.RandomBernoulliDynamicLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// RandomBernoulliDynamicLayerParams
+
+// int64 seed = 1;
+void RandomBernoulliDynamicLayerParams::clear_seed() {
+  seed_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 RandomBernoulliDynamicLayerParams::seed() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliDynamicLayerParams.seed)
+  return seed_;
+}
+void RandomBernoulliDynamicLayerParams::set_seed(::google::protobuf::int64 value) {
+  
+  seed_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliDynamicLayerParams.seed)
+}
+
+// float prob = 2;
+void RandomBernoulliDynamicLayerParams::clear_prob() {
+  prob_ = 0;
+}
+float RandomBernoulliDynamicLayerParams::prob() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.RandomBernoulliDynamicLayerParams.prob)
+  return prob_;
+}
+void RandomBernoulliDynamicLayerParams::set_prob(float value) {
+  
+  prob_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.RandomBernoulliDynamicLayerParams.prob)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ExpandDimsLayerParams::kAxesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -43998,6 +52184,714 @@ ExpandDimsLayerParams::mutable_axes() {
   // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.ExpandDimsLayerParams.axes)
   return &axes_;
 }
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int FlattenTo2DLayerParams::kAxisFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+FlattenTo2DLayerParams::FlattenTo2DLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.FlattenTo2DLayerParams)
+}
+FlattenTo2DLayerParams::FlattenTo2DLayerParams(const FlattenTo2DLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  axis_ = from.axis_;
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.FlattenTo2DLayerParams)
+}
+
+void FlattenTo2DLayerParams::SharedCtor() {
+  axis_ = GOOGLE_LONGLONG(0);
+  _cached_size_ = 0;
+}
+
+FlattenTo2DLayerParams::~FlattenTo2DLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.FlattenTo2DLayerParams)
+  SharedDtor();
+}
+
+void FlattenTo2DLayerParams::SharedDtor() {
+}
+
+void FlattenTo2DLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const FlattenTo2DLayerParams& FlattenTo2DLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+FlattenTo2DLayerParams* FlattenTo2DLayerParams::New(::google::protobuf::Arena* arena) const {
+  FlattenTo2DLayerParams* n = new FlattenTo2DLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void FlattenTo2DLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.FlattenTo2DLayerParams)
+  axis_ = GOOGLE_LONGLONG(0);
+}
+
+bool FlattenTo2DLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.FlattenTo2DLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // int64 axis = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, &axis_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.FlattenTo2DLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.FlattenTo2DLayerParams)
+  return false;
+#undef DO_
+}
+
+void FlattenTo2DLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.FlattenTo2DLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 axis = 1;
+  if (this->axis() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64(1, this->axis(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.FlattenTo2DLayerParams)
+}
+
+size_t FlattenTo2DLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.FlattenTo2DLayerParams)
+  size_t total_size = 0;
+
+  // int64 axis = 1;
+  if (this->axis() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int64Size(
+        this->axis());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FlattenTo2DLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const FlattenTo2DLayerParams*>(&from));
+}
+
+void FlattenTo2DLayerParams::MergeFrom(const FlattenTo2DLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.FlattenTo2DLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.axis() != 0) {
+    set_axis(from.axis());
+  }
+}
+
+void FlattenTo2DLayerParams::CopyFrom(const FlattenTo2DLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.FlattenTo2DLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FlattenTo2DLayerParams::IsInitialized() const {
+  return true;
+}
+
+void FlattenTo2DLayerParams::Swap(FlattenTo2DLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void FlattenTo2DLayerParams::InternalSwap(FlattenTo2DLayerParams* other) {
+  std::swap(axis_, other->axis_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string FlattenTo2DLayerParams::GetTypeName() const {
+  return "CoreML.Specification.FlattenTo2DLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// FlattenTo2DLayerParams
+
+// int64 axis = 1;
+void FlattenTo2DLayerParams::clear_axis() {
+  axis_ = GOOGLE_LONGLONG(0);
+}
+::google::protobuf::int64 FlattenTo2DLayerParams::axis() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.FlattenTo2DLayerParams.axis)
+  return axis_;
+}
+void FlattenTo2DLayerParams::set_axis(::google::protobuf::int64 value) {
+  
+  axis_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.FlattenTo2DLayerParams.axis)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ReshapeStaticLayerParams::kTargetShapeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ReshapeStaticLayerParams::ReshapeStaticLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.ReshapeStaticLayerParams)
+}
+ReshapeStaticLayerParams::ReshapeStaticLayerParams(const ReshapeStaticLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      targetshape_(from.targetshape_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.ReshapeStaticLayerParams)
+}
+
+void ReshapeStaticLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+ReshapeStaticLayerParams::~ReshapeStaticLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.ReshapeStaticLayerParams)
+  SharedDtor();
+}
+
+void ReshapeStaticLayerParams::SharedDtor() {
+}
+
+void ReshapeStaticLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ReshapeStaticLayerParams& ReshapeStaticLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+ReshapeStaticLayerParams* ReshapeStaticLayerParams::New(::google::protobuf::Arena* arena) const {
+  ReshapeStaticLayerParams* n = new ReshapeStaticLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ReshapeStaticLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.ReshapeStaticLayerParams)
+  targetshape_.Clear();
+}
+
+bool ReshapeStaticLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.ReshapeStaticLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated int64 targetShape = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 input, this->mutable_targetshape())));
+        } else if (static_cast< ::google::protobuf::uint8>(tag) ==
+                   static_cast< ::google::protobuf::uint8>(8u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   ::google::protobuf::int64, ::google::protobuf::internal::WireFormatLite::TYPE_INT64>(
+                 1, 10u, input, this->mutable_targetshape())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.ReshapeStaticLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.ReshapeStaticLayerParams)
+  return false;
+#undef DO_
+}
+
+void ReshapeStaticLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.ReshapeStaticLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated int64 targetShape = 1;
+  if (this->targetshape_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(1, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(_targetshape_cached_byte_size_);
+  }
+  for (int i = 0, n = this->targetshape_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt64NoTag(
+      this->targetshape(i), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.ReshapeStaticLayerParams)
+}
+
+size_t ReshapeStaticLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.ReshapeStaticLayerParams)
+  size_t total_size = 0;
+
+  // repeated int64 targetShape = 1;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      Int64Size(this->targetshape_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _targetshape_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ReshapeStaticLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const ReshapeStaticLayerParams*>(&from));
+}
+
+void ReshapeStaticLayerParams::MergeFrom(const ReshapeStaticLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.ReshapeStaticLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  targetshape_.MergeFrom(from.targetshape_);
+}
+
+void ReshapeStaticLayerParams::CopyFrom(const ReshapeStaticLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.ReshapeStaticLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReshapeStaticLayerParams::IsInitialized() const {
+  return true;
+}
+
+void ReshapeStaticLayerParams::Swap(ReshapeStaticLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ReshapeStaticLayerParams::InternalSwap(ReshapeStaticLayerParams* other) {
+  targetshape_.InternalSwap(&other->targetshape_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string ReshapeStaticLayerParams::GetTypeName() const {
+  return "CoreML.Specification.ReshapeStaticLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ReshapeStaticLayerParams
+
+// repeated int64 targetShape = 1;
+int ReshapeStaticLayerParams::targetshape_size() const {
+  return targetshape_.size();
+}
+void ReshapeStaticLayerParams::clear_targetshape() {
+  targetshape_.Clear();
+}
+::google::protobuf::int64 ReshapeStaticLayerParams::targetshape(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+  return targetshape_.Get(index);
+}
+void ReshapeStaticLayerParams::set_targetshape(int index, ::google::protobuf::int64 value) {
+  targetshape_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+}
+void ReshapeStaticLayerParams::add_targetshape(::google::protobuf::int64 value) {
+  targetshape_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+}
+const ::google::protobuf::RepeatedField< ::google::protobuf::int64 >&
+ReshapeStaticLayerParams::targetshape() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+  return targetshape_;
+}
+::google::protobuf::RepeatedField< ::google::protobuf::int64 >*
+ReshapeStaticLayerParams::mutable_targetshape() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.ReshapeStaticLayerParams.targetShape)
+  return &targetshape_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ReshapeLikeLayerParams::ReshapeLikeLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.ReshapeLikeLayerParams)
+}
+ReshapeLikeLayerParams::ReshapeLikeLayerParams(const ReshapeLikeLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.ReshapeLikeLayerParams)
+}
+
+void ReshapeLikeLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+ReshapeLikeLayerParams::~ReshapeLikeLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.ReshapeLikeLayerParams)
+  SharedDtor();
+}
+
+void ReshapeLikeLayerParams::SharedDtor() {
+}
+
+void ReshapeLikeLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ReshapeLikeLayerParams& ReshapeLikeLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+ReshapeLikeLayerParams* ReshapeLikeLayerParams::New(::google::protobuf::Arena* arena) const {
+  ReshapeLikeLayerParams* n = new ReshapeLikeLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ReshapeLikeLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.ReshapeLikeLayerParams)
+}
+
+bool ReshapeLikeLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.ReshapeLikeLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.ReshapeLikeLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.ReshapeLikeLayerParams)
+  return false;
+#undef DO_
+}
+
+void ReshapeLikeLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.ReshapeLikeLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.ReshapeLikeLayerParams)
+}
+
+size_t ReshapeLikeLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.ReshapeLikeLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ReshapeLikeLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const ReshapeLikeLayerParams*>(&from));
+}
+
+void ReshapeLikeLayerParams::MergeFrom(const ReshapeLikeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.ReshapeLikeLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void ReshapeLikeLayerParams::CopyFrom(const ReshapeLikeLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.ReshapeLikeLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReshapeLikeLayerParams::IsInitialized() const {
+  return true;
+}
+
+void ReshapeLikeLayerParams::Swap(ReshapeLikeLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ReshapeLikeLayerParams::InternalSwap(ReshapeLikeLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string ReshapeLikeLayerParams::GetTypeName() const {
+  return "CoreML.Specification.ReshapeLikeLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ReshapeLikeLayerParams
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ReshapeDynamicLayerParams::ReshapeDynamicLayerParams()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_NeuralNetwork_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.ReshapeDynamicLayerParams)
+}
+ReshapeDynamicLayerParams::ReshapeDynamicLayerParams(const ReshapeDynamicLayerParams& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.ReshapeDynamicLayerParams)
+}
+
+void ReshapeDynamicLayerParams::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+ReshapeDynamicLayerParams::~ReshapeDynamicLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.ReshapeDynamicLayerParams)
+  SharedDtor();
+}
+
+void ReshapeDynamicLayerParams::SharedDtor() {
+}
+
+void ReshapeDynamicLayerParams::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ReshapeDynamicLayerParams& ReshapeDynamicLayerParams::default_instance() {
+  protobuf_NeuralNetwork_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+ReshapeDynamicLayerParams* ReshapeDynamicLayerParams::New(::google::protobuf::Arena* arena) const {
+  ReshapeDynamicLayerParams* n = new ReshapeDynamicLayerParams;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ReshapeDynamicLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.ReshapeDynamicLayerParams)
+}
+
+bool ReshapeDynamicLayerParams::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.ReshapeDynamicLayerParams)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.ReshapeDynamicLayerParams)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.ReshapeDynamicLayerParams)
+  return false;
+#undef DO_
+}
+
+void ReshapeDynamicLayerParams::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.ReshapeDynamicLayerParams)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.ReshapeDynamicLayerParams)
+}
+
+size_t ReshapeDynamicLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.ReshapeDynamicLayerParams)
+  size_t total_size = 0;
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ReshapeDynamicLayerParams::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const ReshapeDynamicLayerParams*>(&from));
+}
+
+void ReshapeDynamicLayerParams::MergeFrom(const ReshapeDynamicLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.ReshapeDynamicLayerParams)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void ReshapeDynamicLayerParams::CopyFrom(const ReshapeDynamicLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.ReshapeDynamicLayerParams)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReshapeDynamicLayerParams::IsInitialized() const {
+  return true;
+}
+
+void ReshapeDynamicLayerParams::Swap(ReshapeDynamicLayerParams* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ReshapeDynamicLayerParams::InternalSwap(ReshapeDynamicLayerParams* other) {
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string ReshapeDynamicLayerParams::GetTypeName() const {
+  return "CoreML.Specification.ReshapeDynamicLayerParams";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ReshapeDynamicLayerParams
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
@@ -45985,61 +54879,61 @@ void GetShapeLayerParams::InternalSwap(GetShapeLayerParams* other) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-ErfActivationLayerParams::ErfActivationLayerParams()
+ErfLayerParams::ErfLayerParams()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_NeuralNetwork_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:CoreML.Specification.ErfActivationLayerParams)
+  // @@protoc_insertion_point(constructor:CoreML.Specification.ErfLayerParams)
 }
-ErfActivationLayerParams::ErfActivationLayerParams(const ErfActivationLayerParams& from)
+ErfLayerParams::ErfLayerParams(const ErfLayerParams& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.ErfActivationLayerParams)
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.ErfLayerParams)
 }
 
-void ErfActivationLayerParams::SharedCtor() {
+void ErfLayerParams::SharedCtor() {
   _cached_size_ = 0;
 }
 
-ErfActivationLayerParams::~ErfActivationLayerParams() {
-  // @@protoc_insertion_point(destructor:CoreML.Specification.ErfActivationLayerParams)
+ErfLayerParams::~ErfLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.ErfLayerParams)
   SharedDtor();
 }
 
-void ErfActivationLayerParams::SharedDtor() {
+void ErfLayerParams::SharedDtor() {
 }
 
-void ErfActivationLayerParams::SetCachedSize(int size) const {
+void ErfLayerParams::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ErfActivationLayerParams& ErfActivationLayerParams::default_instance() {
+const ErfLayerParams& ErfLayerParams::default_instance() {
   protobuf_NeuralNetwork_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-ErfActivationLayerParams* ErfActivationLayerParams::New(::google::protobuf::Arena* arena) const {
-  ErfActivationLayerParams* n = new ErfActivationLayerParams;
+ErfLayerParams* ErfLayerParams::New(::google::protobuf::Arena* arena) const {
+  ErfLayerParams* n = new ErfLayerParams;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void ErfActivationLayerParams::Clear() {
-// @@protoc_insertion_point(message_clear_start:CoreML.Specification.ErfActivationLayerParams)
+void ErfLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.ErfLayerParams)
 }
 
-bool ErfActivationLayerParams::MergePartialFromCodedStream(
+bool ErfLayerParams::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:CoreML.Specification.ErfActivationLayerParams)
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.ErfLayerParams)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -46053,25 +54947,25 @@ bool ErfActivationLayerParams::MergePartialFromCodedStream(
     DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
   }
 success:
-  // @@protoc_insertion_point(parse_success:CoreML.Specification.ErfActivationLayerParams)
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.ErfLayerParams)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:CoreML.Specification.ErfActivationLayerParams)
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.ErfLayerParams)
   return false;
 #undef DO_
 }
 
-void ErfActivationLayerParams::SerializeWithCachedSizes(
+void ErfLayerParams::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:CoreML.Specification.ErfActivationLayerParams)
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.ErfLayerParams)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // @@protoc_insertion_point(serialize_end:CoreML.Specification.ErfActivationLayerParams)
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.ErfLayerParams)
 }
 
-size_t ErfActivationLayerParams::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.ErfActivationLayerParams)
+size_t ErfLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.ErfLayerParams)
   size_t total_size = 0;
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -46081,13 +54975,13 @@ size_t ErfActivationLayerParams::ByteSizeLong() const {
   return total_size;
 }
 
-void ErfActivationLayerParams::CheckTypeAndMergeFrom(
+void ErfLayerParams::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const ErfActivationLayerParams*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const ErfLayerParams*>(&from));
 }
 
-void ErfActivationLayerParams::MergeFrom(const ErfActivationLayerParams& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.ErfActivationLayerParams)
+void ErfLayerParams::MergeFrom(const ErfLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.ErfLayerParams)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -46095,127 +54989,163 @@ void ErfActivationLayerParams::MergeFrom(const ErfActivationLayerParams& from) {
 
 }
 
-void ErfActivationLayerParams::CopyFrom(const ErfActivationLayerParams& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.ErfActivationLayerParams)
+void ErfLayerParams::CopyFrom(const ErfLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.ErfLayerParams)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool ErfActivationLayerParams::IsInitialized() const {
+bool ErfLayerParams::IsInitialized() const {
   return true;
 }
 
-void ErfActivationLayerParams::Swap(ErfActivationLayerParams* other) {
+void ErfLayerParams::Swap(ErfLayerParams* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void ErfActivationLayerParams::InternalSwap(ErfActivationLayerParams* other) {
+void ErfLayerParams::InternalSwap(ErfLayerParams* other) {
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string ErfActivationLayerParams::GetTypeName() const {
-  return "CoreML.Specification.ErfActivationLayerParams";
+::std::string ErfLayerParams::GetTypeName() const {
+  return "CoreML.Specification.ErfLayerParams";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// ErfActivationLayerParams
+// ErfLayerParams
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int GeluLayerParams::kModeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-GeluActivationLayerParams::GeluActivationLayerParams()
+GeluLayerParams::GeluLayerParams()
   : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
   if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
     protobuf_NeuralNetwork_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:CoreML.Specification.GeluActivationLayerParams)
+  // @@protoc_insertion_point(constructor:CoreML.Specification.GeluLayerParams)
 }
-GeluActivationLayerParams::GeluActivationLayerParams(const GeluActivationLayerParams& from)
+GeluLayerParams::GeluLayerParams(const GeluLayerParams& from)
   : ::google::protobuf::MessageLite(),
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.GeluActivationLayerParams)
+  mode_ = from.mode_;
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.GeluLayerParams)
 }
 
-void GeluActivationLayerParams::SharedCtor() {
+void GeluLayerParams::SharedCtor() {
+  mode_ = 0;
   _cached_size_ = 0;
 }
 
-GeluActivationLayerParams::~GeluActivationLayerParams() {
-  // @@protoc_insertion_point(destructor:CoreML.Specification.GeluActivationLayerParams)
+GeluLayerParams::~GeluLayerParams() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.GeluLayerParams)
   SharedDtor();
 }
 
-void GeluActivationLayerParams::SharedDtor() {
+void GeluLayerParams::SharedDtor() {
 }
 
-void GeluActivationLayerParams::SetCachedSize(int size) const {
+void GeluLayerParams::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const GeluActivationLayerParams& GeluActivationLayerParams::default_instance() {
+const GeluLayerParams& GeluLayerParams::default_instance() {
   protobuf_NeuralNetwork_2eproto::InitDefaults();
   return *internal_default_instance();
 }
 
-GeluActivationLayerParams* GeluActivationLayerParams::New(::google::protobuf::Arena* arena) const {
-  GeluActivationLayerParams* n = new GeluActivationLayerParams;
+GeluLayerParams* GeluLayerParams::New(::google::protobuf::Arena* arena) const {
+  GeluLayerParams* n = new GeluLayerParams;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void GeluActivationLayerParams::Clear() {
-// @@protoc_insertion_point(message_clear_start:CoreML.Specification.GeluActivationLayerParams)
+void GeluLayerParams::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.GeluLayerParams)
+  mode_ = 0;
 }
 
-bool GeluActivationLayerParams::MergePartialFromCodedStream(
+bool GeluLayerParams::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:CoreML.Specification.GeluActivationLayerParams)
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.GeluLayerParams)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
-  handle_unusual:
-    if (tag == 0 ||
-        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-      goto success;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // .CoreML.Specification.GeluLayerParams.GeluMode mode = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_mode(static_cast< ::CoreML::Specification::GeluLayerParams_GeluMode >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
     }
-    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
   }
 success:
-  // @@protoc_insertion_point(parse_success:CoreML.Specification.GeluActivationLayerParams)
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.GeluLayerParams)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:CoreML.Specification.GeluActivationLayerParams)
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.GeluLayerParams)
   return false;
 #undef DO_
 }
 
-void GeluActivationLayerParams::SerializeWithCachedSizes(
+void GeluLayerParams::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:CoreML.Specification.GeluActivationLayerParams)
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.GeluLayerParams)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // @@protoc_insertion_point(serialize_end:CoreML.Specification.GeluActivationLayerParams)
+  // .CoreML.Specification.GeluLayerParams.GeluMode mode = 1;
+  if (this->mode() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->mode(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.GeluLayerParams)
 }
 
-size_t GeluActivationLayerParams::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.GeluActivationLayerParams)
+size_t GeluLayerParams::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.GeluLayerParams)
   size_t total_size = 0;
+
+  // .CoreML.Specification.GeluLayerParams.GeluMode mode = 1;
+  if (this->mode() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->mode());
+  }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -46224,45 +55154,63 @@ size_t GeluActivationLayerParams::ByteSizeLong() const {
   return total_size;
 }
 
-void GeluActivationLayerParams::CheckTypeAndMergeFrom(
+void GeluLayerParams::CheckTypeAndMergeFrom(
     const ::google::protobuf::MessageLite& from) {
-  MergeFrom(*::google::protobuf::down_cast<const GeluActivationLayerParams*>(&from));
+  MergeFrom(*::google::protobuf::down_cast<const GeluLayerParams*>(&from));
 }
 
-void GeluActivationLayerParams::MergeFrom(const GeluActivationLayerParams& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.GeluActivationLayerParams)
+void GeluLayerParams::MergeFrom(const GeluLayerParams& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.GeluLayerParams)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.mode() != 0) {
+    set_mode(from.mode());
+  }
 }
 
-void GeluActivationLayerParams::CopyFrom(const GeluActivationLayerParams& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.GeluActivationLayerParams)
+void GeluLayerParams::CopyFrom(const GeluLayerParams& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.GeluLayerParams)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool GeluActivationLayerParams::IsInitialized() const {
+bool GeluLayerParams::IsInitialized() const {
   return true;
 }
 
-void GeluActivationLayerParams::Swap(GeluActivationLayerParams* other) {
+void GeluLayerParams::Swap(GeluLayerParams* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void GeluActivationLayerParams::InternalSwap(GeluActivationLayerParams* other) {
+void GeluLayerParams::InternalSwap(GeluLayerParams* other) {
+  std::swap(mode_, other->mode_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::std::string GeluActivationLayerParams::GetTypeName() const {
-  return "CoreML.Specification.GeluActivationLayerParams";
+::std::string GeluLayerParams::GetTypeName() const {
+  return "CoreML.Specification.GeluLayerParams";
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// GeluActivationLayerParams
+// GeluLayerParams
+
+// .CoreML.Specification.GeluLayerParams.GeluMode mode = 1;
+void GeluLayerParams::clear_mode() {
+  mode_ = 0;
+}
+::CoreML::Specification::GeluLayerParams_GeluMode GeluLayerParams::mode() const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.GeluLayerParams.mode)
+  return static_cast< ::CoreML::Specification::GeluLayerParams_GeluMode >(mode_);
+}
+void GeluLayerParams::set_mode(::CoreML::Specification::GeluLayerParams_GeluMode value) {
+  
+  mode_ = value;
+  // @@protoc_insertion_point(field_set:CoreML.Specification.GeluLayerParams.mode)
+}
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 

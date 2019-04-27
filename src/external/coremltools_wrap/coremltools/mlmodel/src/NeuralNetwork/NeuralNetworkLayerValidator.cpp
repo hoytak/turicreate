@@ -1829,8 +1829,8 @@ Result NeuralNetworkSpecValidator::validateBranchLayer(const Specification::Neur
     return r;
 }
 
-//    TransposeND Layer         To do: Update validator for newly added brick layers: rdar://problem/45861295
-Result NeuralNetworkSpecValidator::validateTransposeNDLayer(const Specification::NeuralNetworkLayer& layer) {
+//    Transpose Layer         To do: Update validator for newly added brick layers: rdar://problem/45861295
+Result NeuralNetworkSpecValidator::validateTransposeLayer(const Specification::NeuralNetworkLayer& layer) {
     Result r;
     r = validateInputCount(layer, 1, 1);
     if (r.good()) {
@@ -1916,6 +1916,16 @@ Result NeuralNetworkSpecValidator::validateSoftmaxNDLayer(const Specification::N
     return r;
 }
 
+//    To do: Update validator for newly added brick layers: rdar://problem/45861295
+Result NeuralNetworkSpecValidator::validateReverseLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
 Result NeuralNetworkSpecValidator::validateBooleanElementwiseLayer(const Specification::NeuralNetworkLayer& layer) {
     Result r;
     if (layer.layer_case() == CoreML::Specification::NeuralNetworkLayer::kLogicalNot) {
@@ -1972,6 +1982,35 @@ Result NeuralNetworkSpecValidator::validateFillDynamicLayer(const Specification:
     return r;
 }
 
+//    To do: Update validator for newly added brick layers: rdar://problem/45861295
+Result NeuralNetworkSpecValidator::validateReshapeLikeLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 2, 2);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+//    To do: Update validator for newly added brick layers: rdar://problem/45861295
+Result NeuralNetworkSpecValidator::validateReshapeStaticLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+//    To do: Update validator for newly added brick layers: rdar://problem/45861295
+Result NeuralNetworkSpecValidator::validateReshapeDynamicLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 2, 2);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
 
 //    To do: Update validator for newly added brick layers: rdar://problem/45861295
 Result NeuralNetworkSpecValidator::validateWhereLayer(const Specification::NeuralNetworkLayer& layer) {
@@ -1984,17 +2023,7 @@ Result NeuralNetworkSpecValidator::validateWhereLayer(const Specification::Neura
 }
 
 //    To do: Update validator for newly added brick layers: rdar://problem/45861295
-Result NeuralNetworkSpecValidator::validateSineLayer(const Specification::NeuralNetworkLayer& layer) {
-    Result r;
-    r = validateInputCount(layer, 1, 1);
-    if (r.good()) {
-        r = validateOutputCount(layer, 1, 1);
-    }
-    return r;
-}
-
-//    To do: Update validator for newly added brick layers: rdar://problem/45861295
-Result NeuralNetworkSpecValidator::validateCosineLayer(const Specification::NeuralNetworkLayer& layer) {
+Result NeuralNetworkSpecValidator::validateTrigonometryLayer(const Specification::NeuralNetworkLayer& layer) {
     Result r;
     r = validateInputCount(layer, 1, 1);
     if (r.good()) {
@@ -2035,6 +2064,16 @@ Result NeuralNetworkSpecValidator::validateUpperTriangularLayer(const Specificat
 
 //    To do: Update validator for newly added brick layers: rdar://problem/45861295
 Result NeuralNetworkSpecValidator::validateLowerTriangularLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+//    To do: Update validator for newly added brick layers: rdar://problem/45861295
+Result NeuralNetworkSpecValidator::validateMatrixBandPartLayer(const Specification::NeuralNetworkLayer& layer) {
     Result r;
     r = validateInputCount(layer, 1, 1);
     if (r.good()) {
@@ -2125,6 +2164,41 @@ Result NeuralNetworkSpecValidator::validateDivideBroadcastableLayer(const Specif
     return r;
 }
 
+Result NeuralNetworkSpecValidator::validateMaxBroadcastableLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 2, 2);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+        if (!r.good()) {
+            return r;
+        }
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateMinBroadcastableLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 2, 2);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+        if (!r.good()) {
+            return r;
+        }
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateFloorDivBroadcastableLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 2, 2);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+        if (!r.good()) {
+            return r;
+        }
+    }
+    return r;
+}
 //    To do: Update validator for newly added brick layers: rdar://problem/45861295
 Result NeuralNetworkSpecValidator::validateGatherLayer(const Specification::NeuralNetworkLayer& layer) {
     Result r;
@@ -2401,7 +2475,7 @@ Result NeuralNetworkSpecValidator::validateRankPreservingReshapeLayer(const Spec
     if (!r.good()) {
         return r;
     }
-    
+
     int input_rank = static_cast<int>(layer.inputtensor(0).rank());
     int output_rank = static_cast<int>(layer.outputtensor(0).rank());
     int shape_length = layer.rankpreservingreshape().targetshape_size();
@@ -2413,6 +2487,16 @@ Result NeuralNetworkSpecValidator::validateRankPreservingReshapeLayer(const Spec
         std::string err = "RankPreservingReshape Layer '" + std::string(layer.name()) + "': input rank must be same as the length of the target shape property.";
         return Result(ResultType::INVALID_MODEL_PARAMETERS, err);
     }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateFlattenTo2DLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+
     return r;
 }
 
@@ -2556,6 +2640,87 @@ Result NeuralNetworkSpecValidator::validateGetShapeLayer(const Specification::Ne
     if (!(r = validateInputCount(layer, 1, 1)).good()) return r;
     if (!(r = validateOutputCount(layer, 1, 1)).good()) return r;
     return Result();
+}
+
+Result NeuralNetworkSpecValidator::validateRandomNormalLikeLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateRandomNormalStaticLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 0, 0);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateRandomNormalDynamicLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateRandomUniformLikeLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateRandomUniformStaticLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 0, 0);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateRandomUniformDynamicLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateRandomBernoulliLikeLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateRandomBernoulliStaticLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 0, 0);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
+}
+
+Result NeuralNetworkSpecValidator::validateRandomBernoulliDynamicLayer(const Specification::NeuralNetworkLayer& layer) {
+    Result r;
+    r = validateInputCount(layer, 1, 1);
+    if (r.good()) {
+        r = validateOutputCount(layer, 1, 1);
+    }
+    return r;
 }
 
 Result NeuralNetworkSpecValidator::validateFailUnknownType(const Specification::NeuralNetworkLayer& layer) {

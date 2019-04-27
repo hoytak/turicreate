@@ -2284,7 +2284,7 @@ int testValidTransposeND() {
     layer->add_output("probs");
     layer->add_inputtensor()->set_rank(2);
     layer->add_outputtensor()->set_rank(2);
-    auto* params = layer->mutable_transposend();
+    auto* params = layer->mutable_transpose();
     params->add_axes(1);
     params->add_axes(0);
     Result res = validate<MLModelType_neuralNetwork>(m1);
@@ -3077,7 +3077,7 @@ int testInvalidIOS13LayerOldRank() {
     l->set_name("erf");
     l->add_input("A");
     l->add_output("B");
-    l->mutable_erfactivation();
+    l->mutable_erf();
     
     Result res = validate<MLModelType_neuralNetwork>(m);
     ML_ASSERT_BAD(res);

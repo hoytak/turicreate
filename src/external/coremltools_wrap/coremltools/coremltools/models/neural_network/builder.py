@@ -3128,7 +3128,7 @@ class NeuralNetworkBuilder(object):
                 if input_.name in green_bias: scaler.greenBias = green_bias[input_.name]
                 if input_.name in gray_bias: scaler.grayBias = gray_bias[input_.name]                    
 
-    def add_transposeND(self, name, axes, input_name, output_name, rank=None, input_shape=None, output_shape=None):
+    def add_transpose(self, name, axes, input_name, output_name):
         """Add a N-D Transpose layer with axes as a parameter
         
         Parameters
@@ -3144,37 +3144,21 @@ class NeuralNetworkBuilder(object):
         
         output_name: str
             The output blob name of this layer.
-        
-        rank: int | optional
-            The rank of an input and output tensor.
-            
-        input_shape: [int] | optional
-            The list containing shape of the input tensor. It may contain -1 for unknown dimensions if rank <= 5.
-            For rank > 5, exact shape must be known at compile time.
-            
-        output_shape: [int] | optional
-            The list containing shape of the output tensor. It may contain -1 for unknown dimensions if rank <= 5.
-            For rank > 5, exact shape must be known at compile time.
             
         See Also
         --------
         add_permute, add_reshape
         """
-        ranks = None if rank is None else [rank]
-        input_shapes = None if input_shape is None else [input_shape]
-        output_shapes = None if output_shape is None else [output_shape]
 
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=ranks,
-                                             output_shapes=output_shapes)
-        spec_layer.transposeND.axes.extend(axes)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+
+        rank = len(axes)
+        axes = [rank + axis if axis < 0 else axis for axis in axes]
+        spec_layer.transpose.axes.extend(axes)
 
         return spec_layer
 
     def add_batchedMatMul(self, name, input_names, output_name, transposeA=False, transposeB=False,
-                          input_ranks=None, output_rank=None, input_shapes=None, output_shape=None,
                           weight_matrix_rows = 0, weight_matrix_columns = 0,
                           W = None, bias = None,
                           is_quantized_weight=False,
@@ -3182,8 +3166,7 @@ class NeuralNetworkBuilder(object):
                           nbits=8,
                           quant_scale=None,
                           quant_bias=None,
-                          quant_lut=None
-                          ):
+                          quant_lut=None):
         """Add a N-D Batched Matrix Multiplication layer with numpy like broadcasting.
         Please refer to the specification (NeuralNetwork.proto) for more details.
 
@@ -3197,18 +3180,6 @@ class NeuralNetworkBuilder(object):
 
         output_name: str
             The output blob name of this layer.
-
-        input_ranks: [int] | optional
-            The list containing ranks of input tensors.
-
-        output_rank: int | optional
-            The rank of output blob of this layer.
-
-        input_shapes: [[int]] | optional
-            The list containing shapes of input tensors.
-
-        output_shape: [int]   | optional
-            The shape of the output tensor.
 
         weight_matrix_rows: int | optional
             must be equal to the last dimension of the input.
@@ -3249,14 +3220,7 @@ class NeuralNetworkBuilder(object):
         add_inner_product
         """
 
-        output_ranks = None if output_rank is None else [output_rank]
-        output_shapes = None if output_shape is None else [output_shape]
-
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
 
         spec_layer_params = spec_layer.batchedMatmul
         spec_layer_params.transposeA = transposeA
@@ -3308,18 +3272,11 @@ class NeuralNetworkBuilder(object):
 
         return spec_layer
 
-    def add_softmaxND(self, name, input_name, output_name, axis, rank=None, shape=None):
+    def add_softmaxND(self, name, input_name, output_name, axis):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        ranks = None if rank is None else [rank]
-        shapes = None if shape is None else [shape]
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=ranks,
-                                             input_shapes=shapes,
-                                             output_ranks=ranks,
-                                             output_shapes=shapes)
-
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.softmaxND
         spec_layer_params.axis = axis
         return spec_layer
@@ -3414,7 +3371,7 @@ class NeuralNetworkBuilder(object):
         spec_layer_params.axes.extend(axes)
         return spec_layer
 
-    def add_erfActivation(self, name, input_name, output_name):
+    def add_erf(self, name, input_name, output_name):
         """
         Add a layer that corresponds to the erf function (gaussian error function)
 
@@ -3428,10 +3385,10 @@ class NeuralNetworkBuilder(object):
             The output blob name of this layer.
         """
         spec_layer = self._add_generic_layer(name, [input_name], [output_name])
-        spec_layer.erfActivation.MergeFromString(b'')
+        spec_layer.erf.MergeFromString(b'')
         return spec_layer
 
-    def add_geluActivation(self, name, input_name, output_name):
+    def add_gelu(self, name, input_name, output_name, mode = 'EXACT'):
         """
         Add a layer that corresponds to gaussian error linear unit activation, which is:
         0.5 * x * (1 + erf(x/sqrt(2)))
@@ -3446,189 +3403,261 @@ class NeuralNetworkBuilder(object):
             The output blob name of this layer.
         """
         spec_layer = self._add_generic_layer(name, [input_name], [output_name])
-        spec_layer.geluActivation.MergeFromString(b'')
+        spec_layer_params = spec_layer.gelu
+
+        if mode == 'EXACT':
+            spec_layer_params.mode = _NeuralNetwork_pb2.GeluLayerParams.GeluMode.Value('EXACT')
+        elif mode == 'TANH_APPROXIMATION':
+            spec_layer_params.mode = _NeuralNetwork_pb2.GeluLayerParams.GeluMode.Value('TANH_APPROXIMATION')
+        elif mode == 'SIGMOID_APPROXIMATION':
+            spec_layer_params.mode = _NeuralNetwork_pb2.GeluLayerParams.GeluMode.Value('SIGMOID_APPROXIMATION')
+        else:
+            raise ValueError("Unspported Gelu mode %s" % mode)
         return spec_layer
 
-    def add_fill(self, name, input_names, output_name, rank=None, shape=None):
-        """
-        To do: Work on documentation: <rdar://problem/45858275>
-        Take two inputs, data and scalar.
-        Fill data with scalar.
-        """
-        input_ranks = None if rank is None else [rank, 1]
-        input_shapes = None if shape is None else [shape, [1]]
-        output_ranks = None if rank is None else [rank]
-        output_shapes = None if shape is None else [shape]
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
-
-        spec_layer.fill.MergeFromString(b'')
-        return spec_layer
-
-    def add_broadcastTo(self, name, input_name, output_name, target_shape, input_rank=None, input_shape=None):
+    def add_fillLike(self, name, input_name, output_name, value=0.):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        input_ranks = None if input_rank is None else [input_rank]
-        input_shapes = None if input_shape is None else [input_shape]
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=[len(target_shape)],
-                                             output_shapes=[target_shape])
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.fillLike
+        spec_layer_params.value = value
+        return spec_layer
 
-        spec_layer_params = spec_layer.broadcastTo
+    def add_fillStatic(self, name, output_name, target_shape, value=0.):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [], [output_name])
+        spec_layer_params = spec_layer.fillStatic
+        spec_layer_params.value = value
         spec_layer_params.targetShape.extend(target_shape)
         return spec_layer
 
-    def add_sine(self, name, input_name, output_name, rank=None, shape=None):
+    def add_fillDynamic(self, name, input_name, output_name, value=0.):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        ranks = None if rank is None else [rank]
-        shapes = None if shape is None else [shape]
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=ranks,
-                                             input_shapes=shapes,
-                                             output_ranks=ranks,
-                                             output_shapes=shapes)
-
-        spec_layer.sine.MergeFromString(b'')
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.fillDynamic
+        spec_layer_params.value = value
         return spec_layer
 
-    def add_cosine(self, name, input_name, output_name, rank=None, shape=None):
+    def add_broadcastToLike(self, name, input_name, output_name):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        ranks = None if rank is None else [rank]
-        shapes = None if shape is None else [shape]
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=ranks,
-                                             input_shapes=shapes,
-                                             output_ranks=ranks,
-                                             output_shapes=shapes)
-
-        spec_layer.cosine.MergeFromString(b'')
+        spec_layer = self._add_generic_layer(name, input_name, [output_name])
+        spec_layer.broadcastToLike.MergeFromString(b'')
         return spec_layer
 
-    def add_exp(self, name, input_name, output_name, withBase2 ,rank=None, shape=None):
+    def add_broadcastToStatic(self, name, input_name, output_name, target_shape):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        ranks = None if rank is None else [rank]
-        shapes = None if shape is None else [shape]
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=ranks,
-                                             input_shapes=shapes,
-                                             output_ranks=ranks,
-                                             output_shapes=shapes)
-
-        spec_layer.exp.withBaseAs2 = withBase2
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.broadcastToStatic
+        spec_layer_params.targetShape.extend(target_shape)
         return spec_layer
 
-    def add_addBroadcastable(self, name, input_names, output_name,
-                             input_ranks=None, output_rank=None,
-                             input_shapes=None, output_shape=None):
+    def add_broadcastToDynamic(self, name, input_name, output_name):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        output_ranks = None if output_rank is None else [output_rank]
-        output_shapes = None if output_shape is None else [output_shape]
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
+        spec_layer = self._add_generic_layer(name, input_name, [output_name])
+        spec_layer.broadcastToDynamic.MergeFromString(b'')
+        return spec_layer
+
+    def add_sin(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.sin.MergeFromString(b'')
+        return spec_layer
+
+    def add_cos(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.cos.MergeFromString(b'')
+        return spec_layer
+
+    def add_tan(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.tan.MergeFromString(b'')
+        return spec_layer
+
+    def add_asin(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.asin.MergeFromString(b'')
+        return spec_layer
+
+    def add_acos(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.acos.MergeFromString(b'')
+        return spec_layer
+
+    def add_atan(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.atan.MergeFromString(b'')
+        return spec_layer
+
+    def add_sinh(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.sinh.MergeFromString(b'')
+        return spec_layer
+
+    def add_cosh(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.cosh.MergeFromString(b'')
+        return spec_layer
+
+    def add_tanh(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.tanh.MergeFromString(b'')
+        return spec_layer
+
+    def add_asinh(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.asinh.MergeFromString(b'')
+        return spec_layer
+
+    def add_acosh(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.acosh.MergeFromString(b'')
+        return spec_layer
+
+    def add_atanh(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.atanh.MergeFromString(b'')
+        return spec_layer
+
+    def add_exp2(self, name, input_name, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer.exp2.MergeFromString(b'')
+        return spec_layer
+
+    def add_addBroadcastable(self, name, input_names, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
         spec_layer.addBroadcastable.MergeFromString(b'')
         return spec_layer
 
-    def add_multiplyBroadcastable(self, name, input_names, output_name,
-                                  input_ranks=None, output_rank=None,
-                                  input_shapes=None, output_shape=None):
+    def add_multiplyBroadcastable(self, name, input_names, output_name):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        output_ranks = None if output_rank is None else [output_rank]
-        output_shapes = None if output_shape is None else [output_shape]
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
 
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
         spec_layer.multiplyBroadcastable.MergeFromString(b'')
         return spec_layer
 
-    def add_divideBroadcastable(self, name, input_names, output_name,
-                                input_ranks=None, output_rank=None,
-                                input_shapes=None, output_shape=None):
+    def add_divideBroadcastable(self, name, input_names, output_name):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        output_ranks = None if output_rank is None else [output_rank]
-        output_shapes = None if output_shape is None else [output_shape]
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
 
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
         spec_layer.divideBroadcastable.MergeFromString(b'')
         return spec_layer
 
-    def add_subtractBroadcastable(self, name, input_names, output_name,
-                                  input_ranks=None, output_rank=None,
-                                  input_shapes=None, output_shape=None):
+    def add_subtractBroadcastable(self, name, input_names, output_name):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        output_ranks = None if output_rank is None else [output_rank]
-        output_shapes = None if output_shape is None else [output_shape]
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
 
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
         spec_layer.subtractBroadcastable.MergeFromString(b'')
         return spec_layer
 
-    def add_gather(self, name, input_names, output_name, axis,
-                   input_ranks=None, output_rank=None,
-                   input_shapes=None, output_shape=None):
+    def add_maxBroadcastable(self, name, input_names, output_name):
+        """
+            To do: Work on documentation: <rdar://problem/45858275>
+            """
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.maxBroadcastable.MergeFromString(b'')
+        return spec_layer
+
+    def add_minBroadcastable(self, name, input_names, output_name):
+        """
+            To do: Work on documentation: <rdar://problem/45858275>
+            """
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.minBroadcastable.MergeFromString(b'')
+        return spec_layer
+
+    def add_floorDivBroadcastable(self, name, input_names, output_name):
+        """
+            To do: Work on documentation: <rdar://problem/45858275>
+            """
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.floorDivBroadcastable.MergeFromString(b'')
+        return spec_layer
+    
+    def add_powBroadcastable(self, name, input_names, output_name):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        output_ranks = None if output_rank is None else [output_rank]
-        output_shapes = None if output_shape is None else [output_shape]
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.powBroadcastable.MergeFromString(b'')
+        return spec_layer
+        
+    def add_gather(self, name, input_names, output_name, axis):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
 
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
         spec_layer.gather.axis = axis
         return spec_layer
 
-    def add_stackND(self, name, input_names, output_name, axis,
-                    input_rank=None, input_shape=None, output_shape=None):
+    def add_stackND(self, name, input_names, output_name, axis):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        num_inputs = len(input_names)
-        input_ranks = None if input_rank is None else [input_rank] * num_inputs
-        input_shapes = None if input_shape is None else [input_shape] * num_inputs
-        output_ranks = None if input_rank is None else [input_rank + 1]
-        output_shapes = None if output_shape is None else [output_shape]
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
 
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
         spec_layer.stackND.axis = axis
         return spec_layer
 
@@ -3648,70 +3677,50 @@ class NeuralNetworkBuilder(object):
         spec_layer.floor.MergeFromString(b'')
         return spec_layer
 
-    def add_clip(self, name, input_names, output_name, rank = None, shape=None):
+    def add_clip(self, name, input_names, output_name, min_value, max_value):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        input_ranks = None if rank is None else [rank, 1, 1]
-        input_shapes = None if shape is None else [shape, [1], [1]]
-        output_ranks = None if rank is None else [rank]
-        output_shapes = None if shape is None else [shape]
-
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
-
+        spec_layer = self._add_generic_layer(name, [input_names], [output_name])
         spec_layer.clip.MergeFromString(b'')
+        spec_params = spec_layer.clip
+
+        spec_params.minVal = float(min_value)
+        spec_params.maxVal = float(max_value)
+
         return spec_layer
 
-    def add_splitND(self, name, input_name, output_names, axis, num_splits, split_sizes=[],
-                    rank=None, input_shape=None, output_shapes=None):
+    def add_splitND(self, name, input_name, output_names, axis, num_splits=2, split_sizes=[]):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        num_outputs = len(output_names)
-        input_ranks = None if rank is None else [rank]
-        input_shapes = None if input_shape is None else [input_shape]
-        output_ranks = None if rank is None else [rank] * num_outputs
-        spec_layer = self._add_generic_layer(name, [input_name], output_names,
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
+
+        spec_layer = self._add_generic_layer(name, [input_name], output_names)
 
         spec_layer_params = spec_layer.splitND
         spec_layer_params.axis = axis
-        spec_layer_params.numSplits = num_splits
         if list(split_sizes):
-            assert len(split_sizes) == num_splits
             spec_layer_params.splitSizes.extend(split_sizes)
+            spec_layer_params.numSplits = len(split_sizes)
+        else:
+            spec_layer_params.numSplits = num_splits
+
+        assert len(output_names) == spec_layer_params.numSplits
         return spec_layer
 
-    def add_sliceND(self, name, input_name, output_name, begin_ids, end_ids, begin_masks, end_masks, strides,
-                    rank=None, input_shape=None, output_shape=None):
+    def add_sliceND(self, name, input_name, output_name, begin_ids, end_ids, begin_masks, end_masks, strides):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        ranks = None if rank is None else [rank]
-        input_shapes = None if input_shape is None else [input_shape]
-        output_shapes = None if output_shape is None else [output_shape]
 
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=ranks,
-                                             output_shapes=output_shapes)
+        rank = len(begin_ids)
+        assert len(begin_masks) == rank
+        assert len(end_ids)     == rank
+        assert len(end_masks)   == rank
+        assert len(strides)     == rank
 
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
         spec_layer_params = spec_layer.sliceND
-
-        if rank:
-            assert len(begin_ids)   == rank
-            assert len(begin_masks) == rank
-            assert len(end_ids)     == rank
-            assert len(end_masks)   == rank
-            assert len(strides)     == rank
 
         spec_layer_params.beginIds.extend(begin_ids)
         spec_layer_params.endIds.extend(end_ids)
@@ -3754,47 +3763,20 @@ class NeuralNetworkBuilder(object):
             raise ValueError("Dimensions of 'shape' do not match the size of the provided constant")
         return spec_layer
 
-    def add_powBroadcastable(self, name, input_names, output_name,
-                             input_ranks=None, output_rank=None,
-                             input_shapes=None, output_shape=None):
+
+
+    def add_tile(self, name, input_name, output_name, reps):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        output_ranks = None if output_rank is None else [output_rank]
-        output_shapes = None if output_shape is None else [output_shape]
-
-        spec_layer = self._add_generic_layer(name, input_names, [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
-
-        spec_layer.powBroadcastable.MergeFromString(b'')
-        return spec_layer
-
-    def add_tile(self, name, input_name, output_name, reps,
-                 rank=None, input_shape=None, output_shape=None):
-        """
-        To do: Work on documentation: <rdar://problem/45858275>
-        """
-        ranks = None if rank is None else [rank]
-        input_shapes = None if input_shape is None else [input_shape]
-        output_shapes = None if output_shape is None else [output_shape]
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=ranks,
-                                             output_shapes=output_shapes)
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
 
         spec_layer_params = spec_layer.tile
-        if rank:
-            assert len(reps) == rank
-
         assert all([i > 0 for i in reps])
         spec_layer_params.reps.extend(reps)
         return spec_layer
 
-    def add_range(self, name, output_name, input_names=None, params=[0,1,1]):
+    def add_range(self, name, output_name, input_names=None, end=1, start=0, step=1):
         """
         Add range layer. The layer has either three inputs or no input and three parameters.
         Similar to numpy's arange function.
@@ -3818,14 +3800,14 @@ class NeuralNetworkBuilder(object):
         spec_params = spec_layer.range
 
         if input_names is None or len(input_names) == 0:
-            if len(params) != 3:
-                raise ValueError("Range layer: When no inputs are provided, params [start, end, step] must be provided")
-            start, end, step = params
-            spec_params.startValue = float(start)
             spec_params.endValue = float(end)
+            spec_params.startValue = float(start)
             spec_params.stepSizeValue = float(step)
-        elif len(input_names) != 3:
-            raise ValueError("Range layer: Requires either 0 or 3 inputs (start, end, step)")
+        elif len(input_names) == 1:
+            spec_params.startValue = float(start)
+            spec_params.stepSizeValue = float(step)
+        elif len(input_names) == 2:
+            spec_params.stepSizeValue = float(step)
 
         return spec_layer
 
@@ -3898,18 +3880,29 @@ class NeuralNetworkBuilder(object):
         if isinstance(input_names, str):
             input_names = [input_names]
         spec_layer = self._add_generic_layer(name, input_names, [output_name])
-        spec_layer.greaterThan.useNonStrictInequality = use_greater_than_equal
-        if len(input_names) == 1:
-            spec_layer.greaterThan.alpha = alpha
+        if use_greater_than_equal:
+            spec_layer.greaterEqual.MergeFromString(b'')
+            if len(input_names) == 1:
+                spec_layer.greaterEqual.alpha = alpha
+        else:
+            spec_layer.greaterThan.MergeFromString(b'')
+            if len(input_names) == 1:
+                spec_layer.greaterThan.alpha = alpha
+
         return spec_layer
 
     def add_less_than(self, name, input_names, output_name, use_less_than_equal=False, alpha=0):
         if isinstance(input_names, str):
             input_names = [input_names]
         spec_layer = self._add_generic_layer(name, input_names, [output_name])
-        spec_layer.lessThan.useNonStrictInequality = use_less_than_equal
-        if len(input_names) == 1:
-            spec_layer.lessThan.alpha = alpha
+        if use_less_than_equal:
+            spec_layer.lessEqual.MergeFromString(b'')
+            if len(input_names) == 1:
+                spec_layer.lessEqual.alpha = alpha
+        else:
+            spec_layer.lessThan.MergeFromString(b'')
+            if len(input_names) == 1:
+                spec_layer.lessThan.alpha = alpha
         return spec_layer
 
     def add_equal(self, name, input_names, output_name, alpha=0):
@@ -3952,23 +3945,213 @@ class NeuralNetworkBuilder(object):
 
         return spec_layer
 
-    def add_sliding_windows(self, name, input_name, output_name, axis, window_size, step, input_rank=None, input_shape=None, output_shape=None):
+    def add_sliding_windows(self, name, input_name, output_name, axis, window_size, step):
         """
         To do: Work on documentation: <rdar://problem/45858275>
         """
-        input_ranks = None if input_rank is None else [input_rank]
-        output_ranks = None if input_rank is None else [input_rank + 1]
-        input_shapes = None if input_shape is None else [input_shape]
-        output_shapes = None if output_shape is None else [output_shape]
-        spec_layer = self._add_generic_layer(name, [input_name], [output_name],
-                                             input_ranks=input_ranks,
-                                             input_shapes=input_shapes,
-                                             output_ranks=output_ranks,
-                                             output_shapes=output_shapes)
+
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
 
         spec_layer_params = spec_layer.slidingWindows
         spec_layer_params.axis = axis
         spec_layer_params.windowSize = window_size
         spec_layer_params.step = step
+
+        return spec_layer
+
+    def add_lower_triangular(self, name, input_name, output_name, k=0):
+        """
+            To do: Work on documentation: <rdar://problem/45858275>
+            """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.lowerTriangular
+        spec_layer_params.k = k
+        return spec_layer
+
+    def add_upper_triangular(self, name, input_name, output_name, k=0):
+        """
+            To do: Work on documentation: <rdar://problem/45858275>
+            """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.upperTriangular
+        spec_layer_params.k = k
+        return spec_layer
+
+    def add_whereBroadcastable(self, name, input_names, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.whereBroadcastable.MergeFromString(b'')
+        return spec_layer
+
+    def add_reverse(self, name, input_name, output_name, reverse_dim = [1]):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.reverse
+        spec_layer_params.reverseDim.extend(map(bool,reverse_dim))
+        return spec_layer
+
+    def add_matrix_band_part(self, name, input_name, output_name, num_lower = -1, num_upper = -1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.matrixBandPart
+        spec_layer_params.numLower = num_lower
+        spec_layer_params.numUpper = num_upper
+        return spec_layer
+
+    def add_flatten_to_2d(self, name, input_name, output_name, axis = 1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.flattenTo2D
+        spec_layer_params.axis = axis
+        return spec_layer
+
+    def add_reshape_like(self, name, input_names, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.reshapeLike.MergeFromString(b'')
+        return spec_layer
+
+    def add_reshape_static(self, name, input_name, output_name, target_shape):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.reshapeStatic
+        spec_layer_params.targetShape.extend(target_shape)
+        return spec_layer
+
+    def add_reshape_dynamic(self, name, input_names, output_name):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer.reshapeDynamic.MergeFromString(b'')
+        return spec_layer
+
+    def add_random_normal_like(self, name, input_name, output_name, mean=0., stddev=0., seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.randomNormalLike
+
+        spec_layer_params.mean = mean
+        spec_layer_params.stdDev = stddev
+        spec_layer_params.seed = seed
+
+        return spec_layer
+
+    def add_random_normal_static(self, name, output_name, output_shape, mean=0., stddev=0., seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [], [output_name])
+        spec_layer_params = spec_layer.randomNormalStatic
+
+        spec_layer_params.outputShape.extend(output_shape)
+        spec_layer_params.mean = mean
+        spec_layer_params.stdDev = stddev
+        spec_layer_params.seed = seed
+
+        return spec_layer
+
+    def add_random_normal_dynamic(self, name, input_names, output_name, mean=0., stddev=0., seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer_params = spec_layer.randomNormalDynamic
+
+        spec_layer_params.mean = mean
+        spec_layer_params.stdDev = stddev
+        spec_layer_params.seed = seed
+
+        return spec_layer
+
+    def add_random_uniform_like(self, name, input_name, output_name, minval=0., maxval=1., seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.randomUniformLike
+
+        spec_layer_params.minVal = minval
+        spec_layer_params.maxVal = maxval
+        spec_layer_params.seed = seed
+
+        return spec_layer
+
+    def add_random_uniform_static(self, name, output_name, output_shape, minval=0., maxval=1., seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [], [output_name])
+        spec_layer_params = spec_layer.randomUniformStatic
+
+        spec_layer_params.outputShape.extend(output_shape)
+        spec_layer_params.minVal = minval
+        spec_layer_params.maxVal = maxval
+        spec_layer_params.seed = seed
+
+        return spec_layer
+
+    def add_random_uniform_dynamic(self, name, input_names, output_name, minval=0., maxval=1., seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer_params = spec_layer.randomUniformDynamic
+
+        spec_layer_params.minVal = minval
+        spec_layer_params.maxVal = maxval
+        spec_layer_params.seed = seed
+
+        return spec_layer
+
+    def add_random_bernoulli_like(self, name, input_name, output_name, prob=0.5, seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [input_name], [output_name])
+        spec_layer_params = spec_layer.randomBernoulliLike
+
+        spec_layer_params.prob = prob
+        spec_layer_params.seed = seed
+
+        return spec_layer
+
+    def add_random_bernoulli_static(self, name, output_name, output_shape, prob=0.5, seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, [], [output_name])
+        spec_layer_params = spec_layer.randomBernoulliStatic
+
+        spec_layer_params.outputShape.extend(output_shape)
+        spec_layer_params.prob = prob
+        spec_layer_params.seed = seed
+
+        return spec_layer
+
+    def add_random_bernoulli_dynamic(self, name, input_names, output_name, prob=0.5, seed=-1):
+        """
+        To do: Work on documentation: <rdar://problem/45858275>
+        """
+        spec_layer = self._add_generic_layer(name, input_names, [output_name])
+        spec_layer_params = spec_layer.randomBernoulliDynamic
+
+        spec_layer_params.prob = prob
+        spec_layer_params.seed = seed
 
         return spec_layer

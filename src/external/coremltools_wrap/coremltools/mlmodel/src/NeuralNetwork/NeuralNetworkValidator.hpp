@@ -97,13 +97,13 @@ namespace CoreML {
         Result validateResizeBilinearLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateCropResizeLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateBranchLayer(const Specification::NeuralNetworkLayer& layer);
-        Result validateTransposeNDLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateTransposeLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateCopyLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateSoftmaxNDLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateReverseLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateConcatNDLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateBatchedMatmulLayer(const Specification::NeuralNetworkLayer& layer);
-        Result validateSineLayer(const Specification::NeuralNetworkLayer& layer);
-        Result validateCosineLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateTrigonometryLayer(const Specification::NeuralNetworkLayer& layer);
         Result validatePowBroadcastableLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateExp2Layer(const Specification::NeuralNetworkLayer& layer);
         Result validateFillLikeLayer(const Specification::NeuralNetworkLayer& layer);
@@ -112,11 +112,16 @@ namespace CoreML {
         Result validateWhereLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateUpperTriangularLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateLowerTriangularLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateMatrixBandPartLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateBooleanElementwiseLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateLoopLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateLoopContinueBreakLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateRankPreservingReshapeLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateExpandDimsLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateFlattenTo2DLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateReshapeLikeLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateReshapeStaticLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateReshapeDynamicLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateSqueezeLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateActivationLayers(const Specification::NeuralNetworkLayer& layer);
         Result validateBroadcastToLikeLayer(const Specification::NeuralNetworkLayer& layer);
@@ -126,6 +131,9 @@ namespace CoreML {
         Result validateSubtractBroadcastableLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateMultiplyBroadcastableLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateDivideBroadcastableLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateMaxBroadcastableLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateMinBroadcastableLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateFloorDivBroadcastableLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateGatherLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateScatterLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateStackNDLayer(const Specification::NeuralNetworkLayer& layer);
@@ -140,6 +148,16 @@ namespace CoreML {
         Result validateGetShapeLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateEmbeddingNDLayer(const Specification::NeuralNetworkLayer& layer);
         Result validateSlidingWindowsLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomNormalLikeLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomNormalStaticLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomNormalDynamicLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomUniformLikeLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomUniformStaticLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomUniformDynamicLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomBernoulliLikeLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomBernoulliStaticLayer(const Specification::NeuralNetworkLayer& layer);
+        Result validateRandomBernoulliDynamicLayer(const Specification::NeuralNetworkLayer& layer);
+
         Result validateFailUnknownType(const Specification::NeuralNetworkLayer& layer);
     };
 }

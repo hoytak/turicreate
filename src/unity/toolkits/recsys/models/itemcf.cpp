@@ -29,6 +29,7 @@
 #include <table_printer/table_printer.hpp>
 #include <unity/toolkits/coreml_export/mlmodel_include.hpp>
 #include <util/try_finally.hpp>
+#include <mlmodel/src/transforms/ItemSimilarityRecommender.hpp>
 
 namespace turi { namespace recsys {
 
@@ -794,7 +795,68 @@ sframe recsys_itemcf::get_similar_items(
   #pragma clang diagnostic ignored "-Wswitch"
 #endif
 
-std::shared_ptr<coreml::MLModelWrapper> recsys_itemcf::export_to_coreml(const std::string& filename) {
+std::shared_ptr<coreml::MLModelWrapper> recsys_itemcf::export_to_coreml(const std::string& filename, bool native_coreml) {
+
+if(native_coreml) {
+
+  auto isr = std::make_shared<CoreML::ItemSimilarityRecommender>(std::string(
+        "Item Similarity Recommender Model.")); 
+
+  // Set this so that the input is a dictionary.
+  isr->setItemDataInputFeatureName("items", true);
+  isr->setNumRecommendationsInputFeatureName("k");
+  isr->setRecommendedItemIdOutputName("recommendations");
+  isr->setRecommendedItemScoreOutputName("scores");
+  isr->setItemRestrictionInputFeatureName("restrict");
+  isr->setItemExclusionInputFeatureName("exclude");
+
+  if(metadata->column_type(ITEM_COLUMN_INDEX) == flex_type_enum::INTEGER) {
+    auto indexer = metadata->indexer(ITEM_COLUMN_INDEX);
+    std::vector<int64_t> items(indexer->indexed_column_size());
+
+    for(size_t i = 0; i < items.size(); ++i) { 
+      items[i] = indexer->map_index_to_value(i).to<int64_t>();
+    }
+    isr->setItemIntegerList(items);
+  } else if(metadata->column_type(ITEM_COLUMN_INDEX) == flex_type_enum::STRING) {
+    auto indexer = metadata->indexer(ITEM_COLUMN_INDEX);
+    std::vector<std::string> items(indexer->indexed_column_size());
+
+    for(size_t i = 0; i < items.size(); ++i) { 
+      items[i] = indexer->map_index_to_value(i).to<std::string>();
+    }
+    isr->setItemStringList(items);
+  } else {
+    log_and_throw("Recommender export to CoreML only supported for integer or string items.");
+  }
+
+  // Get all the similar items there. 
+  std::vector<std::pair<size_t, flexible_type> > items; 
+  size_t n_items = metadata->column_size(ITEM_COLUMN_INDEX); 
+
+  for(size_t it_id = 0; it_id < n_items; ++it_id) { 
+    item_sim->get_similar_items(items, it_id, n_items);
+
+
+    // TODO: fill in the intermediate shift values for the pearson coefficient.
+    for(const auto& p : items) { 
+       isr->addItemItemInteraction(it_id, p.first, p.second.to<double>());
+    }
+  }
+
+  isr->finish(); 
+
+  
+  if (filename != "") {
+    CoreML::Result r = isr->save(filename);
+    if (!r.good()) {
+      log_and_throw(r.message());
+    }
+  }
+
+  return std::make_shared<coreml::MLModelWrapper>(isr);  
+
+} else { 
 
   std::shared_ptr<CoreML::Model> coreml_model = std::make_shared<CoreML::Model>(
       std::string("Item Similarity Recommender Model exported from Turi Create ") + __UNITY_VERSION__);
@@ -916,6 +978,8 @@ std::shared_ptr<coreml::MLModelWrapper> recsys_itemcf::export_to_coreml(const st
 
   return std::make_shared<coreml::MLModelWrapper>(coreml_model);
 
+
+}
 }
 
 #if defined(__GNUC__)

@@ -115,8 +115,8 @@ Result NeuralNetworkSpecValidator::validateLayer(const Specification::NeuralNetw
             return validateResizeBilinearLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kCropResize:
             return validateCropResizeLayer(layer);
-        case Specification::NeuralNetworkLayer::LayerCase::kTransposeND:
-            return validateTransposeNDLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kTranspose:
+            return validateTransposeLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kBranch:
             return validateBranchLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kCopy:
@@ -127,27 +127,42 @@ Result NeuralNetworkSpecValidator::validateLayer(const Specification::NeuralNetw
             return validateConcatNDLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kSoftmaxND:
             return validateSoftmaxNDLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kReverse:
+            return validateReverseLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kFillLike:
             return validateFillLikeLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kFillStatic:
             return validateFillStaticLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kFillDynamic:
             return validateFillDynamicLayer(layer);
-        case Specification::NeuralNetworkLayer::LayerCase::kWhere:
+        case Specification::NeuralNetworkLayer::LayerCase::kWhereBroadcastable:
             return validateWhereLayer(layer);
-        case Specification::NeuralNetworkLayer::LayerCase::kSine:
-            return validateSineLayer(layer);
-        case Specification::NeuralNetworkLayer::LayerCase::kCosine:
-            return validateCosineLayer(layer);
-        case Specification::NeuralNetworkLayer::LayerCase::kPowBroadcastable:
-            return validatePowBroadcastableLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kSin:
+        case Specification::NeuralNetworkLayer::LayerCase::kCos:
+        case Specification::NeuralNetworkLayer::LayerCase::kTan:
+        case Specification::NeuralNetworkLayer::LayerCase::kAsin:
+        case Specification::NeuralNetworkLayer::LayerCase::kAcos:
+        case Specification::NeuralNetworkLayer::LayerCase::kAtan:
+        case Specification::NeuralNetworkLayer::LayerCase::kSinh:
+        case Specification::NeuralNetworkLayer::LayerCase::kCosh:
+        case Specification::NeuralNetworkLayer::LayerCase::kTanh:
+        case Specification::NeuralNetworkLayer::LayerCase::kAsinh:
+        case Specification::NeuralNetworkLayer::LayerCase::kAcosh:
+        case Specification::NeuralNetworkLayer::LayerCase::kAtanh:
+            return validateTrigonometryLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kExp2:
             return validateExp2Layer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kMatrixBandPart:
+            return validateMatrixBandPartLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kUpperTriangular:
             return validateUpperTriangularLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kLowerTriangular:
             return validateLowerTriangularLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kPowBroadcastable:
+            return validatePowBroadcastableLayer(layer);
         case CoreML::Specification::NeuralNetworkLayer::kGreaterThan:
+        case CoreML::Specification::NeuralNetworkLayer::kGreaterEqual:
+        case CoreML::Specification::NeuralNetworkLayer::kLessEqual:
         case CoreML::Specification::NeuralNetworkLayer::kLessThan:
         case CoreML::Specification::NeuralNetworkLayer::kEqual:
         case CoreML::Specification::NeuralNetworkLayer::kNotEqual:
@@ -161,13 +176,21 @@ Result NeuralNetworkSpecValidator::validateLayer(const Specification::NeuralNetw
         case CoreML::Specification::NeuralNetworkLayer::kLoopContinue:
         case CoreML::Specification::NeuralNetworkLayer::kLoopBreak:
             return validateLoopContinueBreakLayer(layer);
-        case CoreML::Specification::NeuralNetworkLayer::kErfActivation:
-        case CoreML::Specification::NeuralNetworkLayer::kGeluActivation:
+        case CoreML::Specification::NeuralNetworkLayer::kErf:
+        case CoreML::Specification::NeuralNetworkLayer::kGelu:
             return validateActivationLayers(layer);
         case CoreML::Specification::NeuralNetworkLayer::kRankPreservingReshape:
             return validateRankPreservingReshapeLayer(layer);
         case CoreML::Specification::NeuralNetworkLayer::kExpandDims:
             return validateExpandDimsLayer(layer);
+        case CoreML::Specification::NeuralNetworkLayer::kFlattenTo2D:
+            return validateFlattenTo2DLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kReshapeLike:
+            return validateReshapeLikeLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kReshapeStatic:
+            return validateReshapeStaticLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kReshapeDynamic:
+            return validateReshapeDynamicLayer(layer);
         case CoreML::Specification::NeuralNetworkLayer::kSqueeze:
             return validateSqueezeLayer(layer);
         case CoreML::Specification::NeuralNetworkLayer::kBroadcastToLike:
@@ -184,6 +207,12 @@ Result NeuralNetworkSpecValidator::validateLayer(const Specification::NeuralNetw
             return validateMultiplyBroadcastableLayer(layer);
         case CoreML::Specification::NeuralNetworkLayer::kDivideBroadcastable:
             return validateDivideBroadcastableLayer(layer);
+        case CoreML::Specification::NeuralNetworkLayer::kMaxBroadcastable:
+            return validateMaxBroadcastableLayer(layer);
+        case CoreML::Specification::NeuralNetworkLayer::kMinBroadcastable:
+            return validateMinBroadcastableLayer(layer);
+        case CoreML::Specification::NeuralNetworkLayer::kFloorDivBroadcastable:
+            return validateFloorDivBroadcastableLayer(layer);
         case CoreML::Specification::NeuralNetworkLayer::kGather:
             return validateGatherLayer(layer);
         case CoreML::Specification::NeuralNetworkLayer::kScatter:
@@ -212,6 +241,24 @@ Result NeuralNetworkSpecValidator::validateLayer(const Specification::NeuralNetw
             return validateEmbeddingNDLayer(layer);
         case Specification::NeuralNetworkLayer::LayerCase::kSlidingWindows:
             return validateSlidingWindowsLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomNormalLike:
+            return validateRandomNormalLikeLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomNormalStatic:
+            return validateRandomNormalStaticLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomNormalDynamic:
+            return validateRandomNormalDynamicLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomUniformLike:
+            return validateRandomUniformLikeLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomUniformStatic:
+            return validateRandomUniformStaticLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomUniformDynamic:
+            return validateRandomUniformDynamicLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomBernoulliLike:
+            return validateRandomBernoulliLikeLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomBernoulliStatic:
+            return validateRandomBernoulliStaticLayer(layer);
+        case Specification::NeuralNetworkLayer::LayerCase::kRandomBernoulliDynamic:
+            return validateRandomBernoulliDynamicLayer(layer);
         default:
             return validateFailUnknownType(layer);
     }

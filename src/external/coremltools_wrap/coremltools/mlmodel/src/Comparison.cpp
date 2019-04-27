@@ -693,19 +693,27 @@ namespace CoreML {
         
         bool operator==(const KNearestNeighborsClassifier& a,
                         const KNearestNeighborsClassifier& b) {
-            if (a.dimensionality() != b.dimensionality()) {
+            auto aIndex = a.nearestneighborsindex();
+            auto bIndex = b.nearestneighborsindex();
+            if (aIndex.numberofdimensions() != bIndex.numberofdimensions()) {
                 return false;
             }
-            if (a.floatsamples_size() != b.floatsamples_size()) {
+            if (aIndex.floatsamples_size() != bIndex.floatsamples_size()) {
                 return false;
             }
-            for (int i = 0; i < a.floatsamples_size(); i++) {
-                if (a.floatsamples(i).vector_size() != b.floatsamples(i).vector_size()) {
+            for (int i = 0; i < aIndex.floatsamples_size(); i++) {
+                if (aIndex.floatsamples(i).vector_size() != bIndex.floatsamples(i).vector_size()) {
                     return false;
                 }
-                if (a.floatsamples(i).vector() != b.floatsamples(i).vector()) {
+                if (aIndex.floatsamples(i).vector() != bIndex.floatsamples(i).vector()) {
                     return false;
                 }
+            }
+            if (aIndex.IndexType_case() != bIndex.IndexType_case()) {
+                return false;
+            }
+            if (aIndex.DistanceFunction_case() != bIndex.DistanceFunction_case()) {
+                return false;
             }
             if (a.k() != b.k()) {
                 return false;
@@ -720,6 +728,9 @@ namespace CoreML {
                     return a.stringclasslabels() == b.stringclasslabels();
                 case KNearestNeighborsClassifier::CLASSLABELS_NOT_SET:
                     return true;
+            }
+            if (a.WeightingScheme_case() != b.WeightingScheme_case()) {
+                return false;
             }
         }
         

@@ -41,6 +41,8 @@ add_library(mlmodel_test
     tests/KNNValidatorTests.cpp
     tests/UpdatableModelValidatorTests.cpp
     tests/ParameterTests.cpp
+    tests/ModelCreationUtils.cpp
+    tests/SoundAnalysisPreprocessingValidatorTests.cpp
 )
 
 set_property(TARGET mlmodel_test
@@ -76,7 +78,7 @@ add_library(mlmodel
     build/format/GLMRegressor.pb.cc
     build/format/Identity.pb.cc
     build/format/Imputer.pb.cc
-    build/format/KNearestNeighborsClassifier.pb.cc
+    build/format/NearestNeighbors.pb.cc
     build/format/Model.pb.cc
     build/format/NeuralNetwork.pb.cc
     build/format/NonMaximumSuppression.pb.cc
@@ -126,6 +128,7 @@ add_library(mlmodel
     src/ItemSimilarityRecommenderValidator.cpp
     src/ItemSimilarityRecommenderCommon.cpp
     src/TreeEnsembleCommon.cpp
+    src/SoundAnalysisPreprocessingValidator.cpp
 
     src/transforms/LinearModel.cpp
     src/transforms/Pipeline.cpp
@@ -181,7 +184,7 @@ add_custom_target(protosrc
         format/GLMRegressor.proto
         format/Identity.proto
         format/Imputer.proto
-        format/KNearestNeighborsClassifier.proto
+        format/NearestNeighbors.proto
         format/Model.proto
         format/NeuralNetwork.proto
         format/NonMaximumSuppression.proto
@@ -195,5 +198,6 @@ add_custom_target(protosrc
         format/WordTagger.proto
         format/Parameters.proto
         format/ItemSimilarityRecommender.proto
+        format/SoundAnalysisPreprocessing.proto
 )
 

@@ -470,6 +470,9 @@ namespace CoreML {
             case Specification::Model::kNeuralNetworkRegressor:
             case Specification::Model::kNeuralNetworkClassifier:
             case Specification::Model::kKNearestNeighborsClassifier:
+            case Specification::Model::kPipeline:
+            case Specification::Model::kPipelineRegressor:
+            case Specification::Model::kPipelineClassifier:
                 return r;
             default: {
                 std::string err;

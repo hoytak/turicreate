@@ -57,6 +57,13 @@ message Int64Vector {
 }
 
 /**
+ * A vector of floating point numbers.
+ */
+message FloatVector {
+    repeated float vector = 1;
+}
+
+/**
  * A vector of double-precision floating point numbers.
  */
 message DoubleVector {

@@ -447,8 +447,10 @@ public:
 
   REGISTER_NAMED_CLASS_MEMBER_FUNCTION("export_to_coreml",
                                        recsys_model_base::export_to_coreml,
-                                       "filename");
-
+                                       "filename", "native_coreml");
+  register_defaults("export_to_coreml",
+                    {{"native_coreml", true}});
+ 
   REGISTER_NAMED_CLASS_MEMBER_FUNCTION(
       "precision_recall_by_user", recsys_model_base::api_precision_recall_by_user,
       "indexed_validation_data", "recommend_output", "cutoffs");

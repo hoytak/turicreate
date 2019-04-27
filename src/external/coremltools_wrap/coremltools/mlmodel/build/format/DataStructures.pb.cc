@@ -36,6 +36,8 @@ class StringVectorDefaultTypeInternal : public ::google::protobuf::internal::Exp
 } _StringVector_default_instance_;
 class Int64VectorDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Int64Vector> {
 } _Int64Vector_default_instance_;
+class FloatVectorDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<FloatVector> {
+} _FloatVector_default_instance_;
 class DoubleVectorDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<DoubleVector> {
 } _DoubleVector_default_instance_;
 class Int64RangeDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Int64Range> {
@@ -72,6 +74,7 @@ PROTOBUF_CONSTEXPR_VAR ::google::protobuf::internal::ParseTable const
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
   { NULL, NULL, 0, -1, -1, false },
+  { NULL, NULL, 0, -1, -1, false },
 };
 
 
@@ -82,6 +85,7 @@ void TableStruct::Shutdown() {
   _Int64ToDoubleMap_default_instance_.Shutdown();
   _StringVector_default_instance_.Shutdown();
   _Int64Vector_default_instance_.Shutdown();
+  _FloatVector_default_instance_.Shutdown();
   _DoubleVector_default_instance_.Shutdown();
   _Int64Range_default_instance_.Shutdown();
   _Int64Set_default_instance_.Shutdown();
@@ -103,6 +107,7 @@ void TableStruct::InitDefaultsImpl() {
   _Int64ToDoubleMap_default_instance_.DefaultConstruct();
   _StringVector_default_instance_.DefaultConstruct();
   _Int64Vector_default_instance_.DefaultConstruct();
+  _FloatVector_default_instance_.DefaultConstruct();
   _DoubleVector_default_instance_.DefaultConstruct();
   _Int64Range_default_instance_.DefaultConstruct();
   _Int64Set_default_instance_.DefaultConstruct();
@@ -1655,6 +1660,230 @@ Int64Vector::vector() const {
 ::google::protobuf::RepeatedField< ::google::protobuf::int64 >*
 Int64Vector::mutable_vector() {
   // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.Int64Vector.vector)
+  return &vector_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int FloatVector::kVectorFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+FloatVector::FloatVector()
+  : ::google::protobuf::MessageLite(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_DataStructures_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:CoreML.Specification.FloatVector)
+}
+FloatVector::FloatVector(const FloatVector& from)
+  : ::google::protobuf::MessageLite(),
+      _internal_metadata_(NULL),
+      vector_(from.vector_),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:CoreML.Specification.FloatVector)
+}
+
+void FloatVector::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+FloatVector::~FloatVector() {
+  // @@protoc_insertion_point(destructor:CoreML.Specification.FloatVector)
+  SharedDtor();
+}
+
+void FloatVector::SharedDtor() {
+}
+
+void FloatVector::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const FloatVector& FloatVector::default_instance() {
+  protobuf_DataStructures_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+FloatVector* FloatVector::New(::google::protobuf::Arena* arena) const {
+  FloatVector* n = new FloatVector;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void FloatVector::Clear() {
+// @@protoc_insertion_point(message_clear_start:CoreML.Specification.FloatVector)
+  vector_.Clear();
+}
+
+bool FloatVector::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:CoreML.Specification.FloatVector)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated float vector = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, this->mutable_vector())));
+        } else if (static_cast< ::google::protobuf::uint8>(tag) ==
+                   static_cast< ::google::protobuf::uint8>(13u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 1, 10u, input, this->mutable_vector())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:CoreML.Specification.FloatVector)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:CoreML.Specification.FloatVector)
+  return false;
+#undef DO_
+}
+
+void FloatVector::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:CoreML.Specification.FloatVector)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated float vector = 1;
+  if (this->vector_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(1, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
+    output->WriteVarint32(_vector_cached_byte_size_);
+    ::google::protobuf::internal::WireFormatLite::WriteFloatArray(
+      this->vector().data(), this->vector_size(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:CoreML.Specification.FloatVector)
+}
+
+size_t FloatVector::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:CoreML.Specification.FloatVector)
+  size_t total_size = 0;
+
+  // repeated float vector = 1;
+  {
+    unsigned int count = this->vector_size();
+    size_t data_size = 4UL * count;
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
+    }
+    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _vector_cached_byte_size_ = cached_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void FloatVector::CheckTypeAndMergeFrom(
+    const ::google::protobuf::MessageLite& from) {
+  MergeFrom(*::google::protobuf::down_cast<const FloatVector*>(&from));
+}
+
+void FloatVector::MergeFrom(const FloatVector& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:CoreML.Specification.FloatVector)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  vector_.MergeFrom(from.vector_);
+}
+
+void FloatVector::CopyFrom(const FloatVector& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:CoreML.Specification.FloatVector)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool FloatVector::IsInitialized() const {
+  return true;
+}
+
+void FloatVector::Swap(FloatVector* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void FloatVector::InternalSwap(FloatVector* other) {
+  vector_.InternalSwap(&other->vector_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::std::string FloatVector::GetTypeName() const {
+  return "CoreML.Specification.FloatVector";
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// FloatVector
+
+// repeated float vector = 1;
+int FloatVector::vector_size() const {
+  return vector_.size();
+}
+void FloatVector::clear_vector() {
+  vector_.Clear();
+}
+float FloatVector::vector(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.FloatVector.vector)
+  return vector_.Get(index);
+}
+void FloatVector::set_vector(int index, float value) {
+  vector_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.FloatVector.vector)
+}
+void FloatVector::add_vector(float value) {
+  vector_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.FloatVector.vector)
+}
+const ::google::protobuf::RepeatedField< float >&
+FloatVector::vector() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.FloatVector.vector)
+  return vector_;
+}
+::google::protobuf::RepeatedField< float >*
+FloatVector::mutable_vector() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.FloatVector.vector)
   return &vector_;
 }
 

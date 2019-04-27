@@ -61,6 +61,9 @@ extern DoubleVectorDefaultTypeInternal _DoubleVector_default_instance_;
 class FeatureType;
 class FeatureTypeDefaultTypeInternal;
 extern FeatureTypeDefaultTypeInternal _FeatureType_default_instance_;
+class FloatVector;
+class FloatVectorDefaultTypeInternal;
+extern FloatVectorDefaultTypeInternal _FloatVector_default_instance_;
 class ImageFeatureType;
 class ImageFeatureTypeDefaultTypeInternal;
 extern ImageFeatureTypeDefaultTypeInternal _ImageFeatureType_default_instance_;
@@ -714,6 +717,91 @@ class Int64Vector : public ::google::protobuf::MessageLite /* @@protoc_insertion
 };
 // -------------------------------------------------------------------
 
+class FloatVector : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.FloatVector) */ {
+ public:
+  FloatVector();
+  virtual ~FloatVector();
+
+  FloatVector(const FloatVector& from);
+
+  inline FloatVector& operator=(const FloatVector& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const FloatVector& default_instance();
+
+  static inline const FloatVector* internal_default_instance() {
+    return reinterpret_cast<const FloatVector*>(
+               &_FloatVector_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    10;
+
+  void Swap(FloatVector* other);
+
+  // implements Message ----------------------------------------------
+
+  inline FloatVector* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  FloatVector* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CheckTypeAndMergeFrom(const ::google::protobuf::MessageLite& from)
+    PROTOBUF_FINAL;
+  void CopyFrom(const FloatVector& from);
+  void MergeFrom(const FloatVector& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  void DiscardUnknownFields();
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(FloatVector* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::std::string GetTypeName() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated float vector = 1;
+  int vector_size() const;
+  void clear_vector();
+  static const int kVectorFieldNumber = 1;
+  float vector(int index) const;
+  void set_vector(int index, float value);
+  void add_vector(float value);
+  const ::google::protobuf::RepeatedField< float >&
+      vector() const;
+  ::google::protobuf::RepeatedField< float >*
+      mutable_vector();
+
+  // @@protoc_insertion_point(class_scope:CoreML.Specification.FloatVector)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::google::protobuf::RepeatedField< float > vector_;
+  mutable int _vector_cached_byte_size_;
+  mutable int _cached_size_;
+  friend struct protobuf_DataStructures_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class DoubleVector : public ::google::protobuf::MessageLite /* @@protoc_insertion_point(class_definition:CoreML.Specification.DoubleVector) */ {
  public:
   DoubleVector();
@@ -733,7 +821,7 @@ class DoubleVector : public ::google::protobuf::MessageLite /* @@protoc_insertio
                &_DoubleVector_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    11;
 
   void Swap(DoubleVector* other);
 
@@ -818,7 +906,7 @@ class Int64Range : public ::google::protobuf::MessageLite /* @@protoc_insertion_
                &_Int64Range_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    12;
 
   void Swap(Int64Range* other);
 
@@ -903,7 +991,7 @@ class Int64Set : public ::google::protobuf::MessageLite /* @@protoc_insertion_po
                &_Int64Set_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    13;
 
   void Swap(Int64Set* other);
 
@@ -988,7 +1076,7 @@ class DoubleRange : public ::google::protobuf::MessageLite /* @@protoc_insertion
                &_DoubleRange_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    14;
 
   void Swap(DoubleRange* other);
 
@@ -1261,6 +1349,40 @@ Int64Vector::mutable_vector() {
 
 // -------------------------------------------------------------------
 
+// FloatVector
+
+// repeated float vector = 1;
+inline int FloatVector::vector_size() const {
+  return vector_.size();
+}
+inline void FloatVector::clear_vector() {
+  vector_.Clear();
+}
+inline float FloatVector::vector(int index) const {
+  // @@protoc_insertion_point(field_get:CoreML.Specification.FloatVector.vector)
+  return vector_.Get(index);
+}
+inline void FloatVector::set_vector(int index, float value) {
+  vector_.Set(index, value);
+  // @@protoc_insertion_point(field_set:CoreML.Specification.FloatVector.vector)
+}
+inline void FloatVector::add_vector(float value) {
+  vector_.Add(value);
+  // @@protoc_insertion_point(field_add:CoreML.Specification.FloatVector.vector)
+}
+inline const ::google::protobuf::RepeatedField< float >&
+FloatVector::vector() const {
+  // @@protoc_insertion_point(field_list:CoreML.Specification.FloatVector.vector)
+  return vector_;
+}
+inline ::google::protobuf::RepeatedField< float >*
+FloatVector::mutable_vector() {
+  // @@protoc_insertion_point(field_mutable_list:CoreML.Specification.FloatVector.vector)
+  return &vector_;
+}
+
+// -------------------------------------------------------------------
+
 // DoubleVector
 
 // repeated double vector = 1;
@@ -1392,6 +1514,8 @@ inline void DoubleRange::set_maxvalue(double value) {
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

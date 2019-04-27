@@ -5,7 +5,7 @@
 
 from .spec_inspection_utils import *
 
-def print_network_spec(mlmodel_spec, interface_only=False):
+def print_network_spec_parameter_info_style(mlmodel_spec, interface_only=False):
     """ Print the network information summary.
     Args:
     mlmodel_spec : the mlmodel spec
@@ -17,7 +17,7 @@ def print_network_spec(mlmodel_spec, interface_only=False):
     for i in inputs:
         name, description = i
         print('  {} {}'.format(name, description))
-    
+
     print('Outputs:')
     for o in outputs:
         name, description = o
@@ -40,3 +40,60 @@ def print_network_spec(mlmodel_spec, interface_only=False):
 
     print('\n')
 
+def print_network_spec_coding_style(mlmodel_spec, interface_only=False):
+    """
+    Args:
+    mlmodel_spec : the mlmodel spec
+    interface_only : Shows only the input and output of the network
+    """
+
+    inputs = [(blob.name, get_feature_description_summary(blob)) for blob in mlmodel_spec.description.input]
+    outputs = [(blob.name, get_feature_description_summary(blob)) for blob in mlmodel_spec.description.output]
+
+    input_names = []
+    print('Inputs:')
+    for i in inputs:
+        name, description = i
+        print('  {} {}'.format(name, description))
+        input_names.append(name)
+
+    output_names = []
+    print('Outputs:')
+    for o in outputs:
+        name, description = o
+        print('  {} {}'.format(name, description))
+        output_names.append(name)
+
+    if interface_only:
+        return
+
+    nn_spec = None
+
+    if mlmodel_spec.HasField('neuralNetwork'):
+        nn_spec = mlmodel_spec.neuralNetwork
+    elif mlmodel_spec.HasField('neuralNetworkClassifier'):
+        nn_spec = mlmodel_spec.neuralNetworkClassifier
+    elif mlmodel_spec.HasField('neuralNetworkRegressor'):
+        nn_spec = mlmodel_spec.neuralNetworkRegressor
+
+    if nn_spec is None:
+        print('\n(This MLModel is not a neural network model)')
+        return
+
+    print('\n')
+    summarize_neural_network_spec_code_style(nn_spec, input_names=input_names, output_names=output_names)
+
+
+def print_network_spec(mlmodel_spec, interface_only=False, style=''):
+
+    """ Print the network information summary.
+    Args:
+    mlmodel_spec : the mlmodel spec
+    interface_only : Shows only the input and output of the network
+    style : str. Either 'coding' or default, which prints information on parameters of layers.
+    """
+
+    if style == 'coding':
+        print_network_spec_coding_style(mlmodel_spec, interface_only=interface_only)
+    else:
+        print_network_spec_parameter_info_style(mlmodel_spec, interface_only=interface_only)

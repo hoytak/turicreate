@@ -12,37 +12,8 @@ from coremltools.proto import Model_pb2
 from coremltools.models.utils import rename_feature, save_spec, macos_version
 from coremltools.models import MLModel
 from coremltools.models.neural_network import NeuralNetworkBuilder
+from coremltools.models.pipeline import PipelineRegressor, PipelineClassifier
 import pytest
-
-
-def create_base_builder():
-    input_features = [('data', datatypes.Array(3))]
-    output_features = [('output', None)]
-    
-    builder = NeuralNetworkBuilder(input_features, output_features, disable_rank5_shape_mapping=True)
-
-    W1 = _np.random.uniform(-0.5, 0.5, (3,3))
-    W2 = _np.random.uniform(-0.5, 0.5, (3,3))
-    builder.add_inner_product(name = 'ip1',
-                              W = W1,
-                              b = None,
-                              input_channels = 3,
-                              output_channels = 3,
-                              has_bias = False,
-                              input_name = 'data',
-                              output_name = 'hidden')
-    builder.add_inner_product(name = 'ip2',
-                            W = W2,
-                            b = None,
-                            input_channels = 3,
-                            output_channels = 3,
-                            has_bias = False,
-                            input_name = 'hidden',
-                            output_name = 'output')
-                                  
-    builder.make_updatable(['ip1', 'ip2']) # or a dict for weightParams
-    return builder
-
 
 class MLModelUpdatableTest(unittest.TestCase):
 
@@ -55,9 +26,38 @@ class MLModelUpdatableTest(unittest.TestCase):
         if os.path.exists(self.model_dir):
             shutil.rmtree(self.model_dir)
 
+    def create_base_builder(self):
+        self.input_features = [('input', datatypes.Array(3))]
+        self.output_features = [('output', None)]
+        self.output_names = ["output"]
+
+        builder = NeuralNetworkBuilder(self.input_features, self.output_features, disable_rank5_shape_mapping=True)
+
+        W1 = _np.random.uniform(-0.5, 0.5, (3, 3))
+        W2 = _np.random.uniform(-0.5, 0.5, (3, 3))
+        builder.add_inner_product(name='ip1',
+                                  W=W1,
+                                  b=None,
+                                  input_channels=3,
+                                  output_channels=3,
+                                  has_bias=False,
+                                  input_name='input',
+                                  output_name='hidden')
+        builder.add_inner_product(name='ip2',
+                                  W=W2,
+                                  b=None,
+                                  input_channels=3,
+                                  output_channels=3,
+                                  has_bias=False,
+                                  input_name='hidden',
+                                  output_name='output')
+
+        builder.make_updatable(['ip1', 'ip2'])  # or a dict for weightParams
+        return builder
+
     def test_updatable_model_creation_ce_sgd(self):
 
-        builder = create_base_builder()
+        builder = self.create_base_builder()
 
         builder.make_updatable(['ip1', 'ip2']) # or a dict for weightParams
 
@@ -111,7 +111,7 @@ class MLModelUpdatableTest(unittest.TestCase):
 
     def test_updatable_model_creation_ce_adam(self):
 
-        builder = create_base_builder()
+        builder = self.create_base_builder()
 
         builder.make_updatable(['ip1', 'ip2']) # or a dict for weightParams
 
@@ -174,7 +174,8 @@ class MLModelUpdatableTest(unittest.TestCase):
         self.assertTrue(spec.neuralNetwork.updateParams.epochs.set.values[3] == 40)
 
     def test_updatable_model_creation_mse_sgd(self):
-        builder = create_base_builder()
+
+        builder = self.create_base_builder()
 
         builder.make_updatable(['ip1', 'ip2'])  # or a dict for weightParams
 
@@ -232,7 +233,7 @@ class MLModelUpdatableTest(unittest.TestCase):
 
     def test_updatable_model_creation_mse_adam(self):
 
-        builder = create_base_builder()
+        builder = self.create_base_builder()
 
         builder.make_updatable(['ip1', 'ip2']) # or a dict for weightParams
 
@@ -292,3 +293,59 @@ class MLModelUpdatableTest(unittest.TestCase):
         self.assertTrue(spec.neuralNetwork.updateParams.epochs.set.values[1] == 20)
         self.assertTrue(spec.neuralNetwork.updateParams.epochs.set.values[2] == 30)
         self.assertTrue(spec.neuralNetwork.updateParams.epochs.set.values[3] == 40)
+
+    def test_pipeline_regressor_make_updatable(self):
+        builder = self.create_base_builder()
+        builder.spec.isUpdatable = False
+
+        # fails due to missing sub-models
+        p_regressor = PipelineRegressor(self.input_features, self.output_names)
+        with self.assertRaises(ValueError):
+            p_regressor.make_updatable()
+        self.assertEqual(p_regressor.spec.isUpdatable, False)
+
+        # fails due to sub-model being not updatable
+        p_regressor.add_model(builder.spec)
+        with self.assertRaises(ValueError):
+            p_regressor.make_updatable()
+        self.assertEqual(p_regressor.spec.isUpdatable, False)
+
+        builder.spec.isUpdatable = True
+        p_regressor.add_model(builder.spec)
+
+        self.assertEqual(p_regressor.spec.isUpdatable, False)
+        p_regressor.make_updatable();
+        self.assertEqual(p_regressor.spec.isUpdatable, True)
+
+        # fails since once updatable does not allow adding new models
+        with self.assertRaises(ValueError):
+            p_regressor.add_model(builder.spec)
+        self.assertEqual(p_regressor.spec.isUpdatable, True)
+
+    def test_pipeline_classifier_make_updatable(self):
+        builder = self.create_base_builder()
+        builder.spec.isUpdatable = False
+
+        # fails due to missing sub-models
+        p_classifier = PipelineClassifier(self.input_features, self.output_names)
+        with self.assertRaises(ValueError):
+            p_classifier.make_updatable()
+        self.assertEqual(p_classifier.spec.isUpdatable, False)
+
+        # fails due to sub-model being not updatable
+        p_classifier.add_model(builder.spec)
+        with self.assertRaises(ValueError):
+            p_classifier.make_updatable()
+        self.assertEqual(p_classifier.spec.isUpdatable, False)
+
+        builder.spec.isUpdatable = True
+        p_classifier.add_model(builder.spec)
+
+        self.assertEqual(p_classifier.spec.isUpdatable, False)
+        p_classifier.make_updatable();
+        self.assertEqual(p_classifier.spec.isUpdatable, True)
+
+        # fails since once updatable does not allow adding new models
+        with self.assertRaises(ValueError):
+            p_classifier.add_model(builder.spec)
+        self.assertEqual(p_classifier.spec.isUpdatable, True)

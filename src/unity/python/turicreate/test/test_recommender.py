@@ -92,7 +92,7 @@ class RecommenderTestBase(unittest.TestCase):
         m.export_coreml(temp_file_path)
         if _mac_ver() >= (10,14):
             coremlmodel = _coremltools.models.MLModel(temp_file_path)
-            predictions_coreml = coremlmodel.predict({'interactions': interactions, 'k': 5})
+            predictions_coreml = coremlmodel.predict({'items': interactions, 'k': 5})
 
             # compare them
             self.assertEqual(predictions_tc_dict, _coreml_to_tc(predictions_coreml))

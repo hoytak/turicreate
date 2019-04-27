@@ -56,11 +56,15 @@ namespace CoreML { namespace KNNValidatorTests {
 
         std::vector<std::vector<float>> points = {point0, point1, point2, point0b, point1b, point2b};
         size_t pointCount = 6;
+
+        auto *nnIndex = nnModel->mutable_nearestneighborsindex();
+        nnIndex->set_numberofdimensions(4);
+
         for (size_t i = 0; i < pointCount; i++) {
-            nnModel->add_floatsamples();
+            nnIndex->add_floatsamples();
             float *sample = ((std::vector<float>)points[i]).data();
             for (int j = 0; j < 4; j++) {
-                nnModel->mutable_floatsamples((int)i)->add_vector(sample[j]);
+                nnIndex->mutable_floatsamples((int)i)->add_vector(sample[j]);
             }
         }
 
@@ -101,10 +105,9 @@ int testKNNValidatorNoPoints() {
 
     auto *nnModel = m1.mutable_knearestneighborsclassifier();
     nnModel->set_k(3);
-    nnModel->set_dimensionality(4);
 
     KNNValidatorTests::addStringLabels(nnModel);
-    
+
     Result res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
     ML_ASSERT_BAD(res);
 
@@ -119,7 +122,6 @@ int testKNNValidatorNoK() {
     KNNValidatorTests::generateInterface(m1);
 
     auto *nnModel = m1.mutable_knearestneighborsclassifier();
-    nnModel->set_dimensionality(4);
 
     KNNValidatorTests::addDataPoints(nnModel);
     KNNValidatorTests::addStringLabels(nnModel);
@@ -143,6 +145,9 @@ int testKNNValidatorNoDimension() {
     KNNValidatorTests::addDataPoints(nnModel);
     KNNValidatorTests::addStringLabels(nnModel);
 
+    auto *nnIndex = nnModel->mutable_nearestneighborsindex();
+    nnIndex->set_numberofdimensions(0);
+
     Result res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
     ML_ASSERT_BAD(res);
     return 0;
@@ -157,7 +162,6 @@ int testKNNValidatorNoLabels() {
 
     auto *nnModel = m1.mutable_knearestneighborsclassifier();
     nnModel->set_k(3);
-    nnModel->set_dimensionality(4);
 
     KNNValidatorTests::addDataPoints(nnModel);
 
@@ -176,7 +180,6 @@ int testKNNValidatorWrongNumberOfLabels() {
 
     auto *nnModel = m1.mutable_knearestneighborsclassifier();
     nnModel->set_k(3);
-    nnModel->set_dimensionality(4);
 
     KNNValidatorTests::addDataPoints(nnModel);
     KNNValidatorTests::addStringLabels(nnModel);
@@ -189,6 +192,128 @@ int testKNNValidatorWrongNumberOfLabels() {
 
 }
 
+int testKNNValidatorNoIndex() {
+
+    Specification::Model m1;
+
+    KNNValidatorTests::generateInterface(m1);
+
+    auto *knnClassifier = m1.mutable_knearestneighborsclassifier();
+    knnClassifier->set_k(3);
+
+    KNNValidatorTests::addDataPoints(knnClassifier);
+    KNNValidatorTests::addStringLabels(knnClassifier);
+
+    Result res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
+    ML_ASSERT_BAD(res);
+
+    return 0;
+
+}
+
+int testKNNValidatorLinearIndex() {
+
+    Specification::Model m1;
+
+    KNNValidatorTests::generateInterface(m1);
+
+    auto *knnClassifier = m1.mutable_knearestneighborsclassifier();
+    knnClassifier->set_k(3);
+    knnClassifier->mutable_uniformweighting();
+
+    auto *nnIndex = knnClassifier->mutable_nearestneighborsindex();
+    nnIndex->mutable_linearindex();
+    nnIndex->mutable_squaredeuclideandistance();
+
+    KNNValidatorTests::addDataPoints(knnClassifier);
+    KNNValidatorTests::addStringLabels(knnClassifier);
+
+    Result res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
+    ML_ASSERT_GOOD(res);
+
+    return 0;
+
+}
+
+int testKNNValidatorSingleKdTreeIndex() {
+
+    Specification::Model m1;
+
+    KNNValidatorTests::generateInterface(m1);
+
+    auto *knnClassifier = m1.mutable_knearestneighborsclassifier();
+    knnClassifier->set_k(3);
+    knnClassifier->mutable_uniformweighting();
+    
+    auto *nnIndex = knnClassifier->mutable_nearestneighborsindex();
+    auto *kdTree = nnIndex->mutable_singlekdtreeindex();
+    nnIndex->mutable_squaredeuclideandistance();
+
+    KNNValidatorTests::addDataPoints(knnClassifier);
+    KNNValidatorTests::addStringLabels(knnClassifier);
+
+    // leaf size = 0 = bad.  We're requiring the user to specify a leaf size.
+    Result res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
+    ML_ASSERT_BAD(res);
+
+    // leafSize < 0 = bad
+    kdTree->set_leafsize(-1);
+    res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
+    ML_ASSERT_BAD(res);
+
+    // leafSize > 0 = good
+    kdTree->set_leafsize(30);
+    res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
+    ML_ASSERT_GOOD(res);
+
+    return 0;
+}
+
+int testKNNValidatorNoWeightingScheme() {
+
+    Specification::Model m1;
+
+    KNNValidatorTests::generateInterface(m1);
+
+    auto *knnClassifier = m1.mutable_knearestneighborsclassifier();
+    knnClassifier->set_k(3);
+
+    auto *nnIndex = knnClassifier->mutable_nearestneighborsindex();
+    nnIndex->mutable_linearindex();
+    nnIndex->mutable_squaredeuclideandistance();
+
+    KNNValidatorTests::addDataPoints(knnClassifier);
+    KNNValidatorTests::addStringLabels(knnClassifier);
+
+    Result res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
+    ML_ASSERT_BAD(res);
+
+    return 0;
+
+}
+
+int testKNNValidatorNoDistanceFunction() {
+
+    Specification::Model m1;
+
+    KNNValidatorTests::generateInterface(m1);
+
+    auto *knnClassifier = m1.mutable_knearestneighborsclassifier();
+    knnClassifier->set_k(3);
+    knnClassifier->mutable_uniformweighting();
+
+    auto *nnIndex = knnClassifier->mutable_nearestneighborsindex();
+    nnIndex->mutable_linearindex();
+
+    KNNValidatorTests::addDataPoints(knnClassifier);
+    KNNValidatorTests::addStringLabels(knnClassifier);
+
+    Result res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
+    ML_ASSERT_BAD(res);
+
+    return 0;
+
+}
 
 int testKNNValidatorGood() {
 
@@ -196,18 +321,21 @@ int testKNNValidatorGood() {
 
     KNNValidatorTests::generateInterface(m1);
 
-    auto *nnModel = m1.mutable_knearestneighborsclassifier();
-    nnModel->set_k(3);
-    nnModel->set_dimensionality(4);
+    auto *knnClassifier = m1.mutable_knearestneighborsclassifier();
+    knnClassifier->set_k(3);
+    knnClassifier->mutable_uniformweighting();
 
-    KNNValidatorTests::addDataPoints(nnModel);
-    KNNValidatorTests::addStringLabels(nnModel);
+    auto *nnIndex = knnClassifier->mutable_nearestneighborsindex();
+    nnIndex->mutable_squaredeuclideandistance();
+    auto *kdTree = nnIndex->mutable_singlekdtreeindex();
+    kdTree->set_leafsize(30);
+
+    KNNValidatorTests::addDataPoints(knnClassifier);
+    KNNValidatorTests::addStringLabels(knnClassifier);
 
     Result res = validate<MLModelType_kNearestNeighborsClassifier>(m1);
     ML_ASSERT_GOOD(res);
 
     return 0;
 
-
 }
-

@@ -58,6 +58,10 @@ class Pipeline(object):
         # Save the spec as a member variable.
         self.spec = spec
 
+    def _validate_updatable_pipeline_on_add_model(self, spec):
+        if spec.isUpdatable:
+            raise ValueError("New sub-models cannot be added after the pipeline has been marked as updatable")
+
     def add_model(self, spec):
         """
         Add a protobuf spec or :py:class:`models.MLModel` instance to the pipeline. 
@@ -71,12 +75,33 @@ class Pipeline(object):
             A protobuf spec or MLModel instance containing a model.
         """
 
+        self._validate_updatable_pipeline_on_add_model(self.spec)
+
         if isinstance(spec, _model.MLModel):
             spec = spec._spec
 
         pipeline = self.spec.pipeline
         step_spec = pipeline.models.add()
         step_spec.CopyFrom(spec)
+
+    def _validate_sub_models_and_make_updatable(self, pipeline, spec):
+
+        num_models = len(pipeline.models)
+        if num_models < 1:
+            raise ValueError("Pipeline does not seem to have any models. It should be marked as updatable only after adding all sub-models.")
+
+        for model in pipeline.models[:-1]:
+            if model.isUpdatable:
+                raise ValueError("Only the last model can be updatable in an updatable pipeline.")
+
+        last_model = pipeline.models[num_models - 1]
+        if not last_model.isUpdatable:
+            raise ValueError("A pipeline can be made updatable only if the last model is updatable.")
+
+        spec.isUpdatable = True
+
+    def make_updatable(self):
+        self._validate_sub_models_and_make_updatable(self.spec.pipeline, self.spec)
 
 class PipelineRegressor(Pipeline):
     """ 
@@ -131,12 +156,17 @@ class PipelineRegressor(Pipeline):
             A protobuf spec or MLModel instance containing a model.
         """
 
+        super(PipelineRegressor, self)._validate_updatable_pipeline_on_add_model(self.spec)
+
         if isinstance(spec, _model.MLModel):
             spec = spec._spec
 
         pipeline = self.spec.pipelineRegressor.pipeline
         step_spec = pipeline.models.add()
         step_spec.CopyFrom(spec)
+
+    def make_updatable(self):
+        super(PipelineRegressor, self)._validate_sub_models_and_make_updatable(self.spec.pipelineRegressor.pipeline, self.spec)
 
 class PipelineClassifier(Pipeline):
     """ 
@@ -199,8 +229,14 @@ class PipelineClassifier(Pipeline):
         spec: [MLModel, Model_pb2]
             A protobuf spec or MLModel instance containing a model.
         """
+
+        super(PipelineClassifier, self)._validate_updatable_pipeline_on_add_model(self.spec)
+
         if isinstance(spec, _model.MLModel):
             spec = spec._spec
         pipeline = self.spec.pipelineClassifier.pipeline
         step_spec = pipeline.models.add()
         step_spec.CopyFrom(spec)
+
+    def make_updatable(self):
+        super(PipelineClassifier, self)._validate_sub_models_and_make_updatable(self.spec.pipelineClassifier.pipeline, self.spec)
