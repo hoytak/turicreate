@@ -438,7 +438,6 @@ EXPORT tc_sframe* tc_sframe_read_csv(const char* url,
     }
   }
 
-  std::cout << "column_type_hints = " << column_type_hints << std::endl; 
   ret->value.construct_from_csvs(url, config, column_type_hints);
 
   return ret;
