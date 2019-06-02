@@ -34,7 +34,7 @@ namespace CoreML {
             py::object convertArrayValueToPython(MLMultiArray *value);
             py::object convertDictionaryValueToPython(NSDictionary<NSObject *,NSNumber *> * value);
             py::object convertImageValueToPython(CVPixelBufferRef value);
-
+            py::object convertSequenceValueToPython(MLSequence *seq);
             py::dict shapeConstraintToPyDict(const ShapeConstraint& constraint);
 
         }

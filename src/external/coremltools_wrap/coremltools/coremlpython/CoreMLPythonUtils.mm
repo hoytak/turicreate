@@ -528,7 +528,7 @@ py::object Utils::convertImageValueToPython(CVPixelBufferRef value) {
     return img;
 }
 
-py::object Utils::convertValueToPython(MLSequence *seq) {
+py::object Utils::convertSequenceValueToPython(MLSequence *seq) {
     
     if (seq == nil) {
         return py::none();

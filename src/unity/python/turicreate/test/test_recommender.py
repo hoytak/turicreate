@@ -61,7 +61,7 @@ model_names = ['popularity_recommender',
                'ranking_factorization_recommender_no_target']
 
 def _coreml_to_tc(preds):
-    return {'rank': preds['recommendations'], 'score': preds['probabilities']}
+    return {'rank': preds['recommendations'], 'score': preds['scores']}
 
 class RecommenderTestBase(unittest.TestCase):
     def _test_coreml_export(self, m, item_ids, ratings = None):
@@ -75,7 +75,7 @@ class RecommenderTestBase(unittest.TestCase):
             interactions = {item_ids[i]: ratings[i] for i in range(len(item_ids))}
         else:
             predictions_tc = m.recommend_from_interactions(item_ids, k=5)
-            interactions = {item_ids[i]: -1 for i in range(len(item_ids))}
+            interactions = {item_ids[i]: 1 for i in range(len(item_ids))}
 
         # convert TC SFrame into same dict structure as CoreML will return
         predictions_tc_dict = dict()
@@ -92,10 +92,13 @@ class RecommenderTestBase(unittest.TestCase):
         m.export_coreml(temp_file_path)
         if _mac_ver() >= (10,14):
             coremlmodel = _coremltools.models.MLModel(temp_file_path)
-            predictions_coreml = coremlmodel.predict({'items': interactions, 'k': 5})
+            predictions_coreml = _coreml_to_tc(coremlmodel.predict({'items': interactions, 'k': 5}))
 
             # compare them
-            self.assertEqual(predictions_tc_dict, _coreml_to_tc(predictions_coreml))
+            
+            for k, v in predictions_tc_dict['score'].items():
+                self.assertAlmostEqual(v, predictions_coreml['score'][k])
+        
         os.unlink(temp_file_path)
 
     def _get_trained_model(self, model_name, data,
@@ -256,7 +259,7 @@ class RecommenderTestBase(unittest.TestCase):
             else:
                 ratings = None
 
-            if test_export_to_coreml:
+            if test_export_to_coreml and "pearson" not in model_name: 
                 self._test_coreml_export(m, some_items, ratings)
 
         return m
