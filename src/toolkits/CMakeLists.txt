@@ -1,2 +1,26 @@
+project(unity_toolkits)
 
-subdirs(image_deep_feature_extractor)
+subdirs(ml_model
+        activity_classification
+        drawing_classifier
+        coreml_export
+        sparse_similarity
+        factorization
+        graph_analytics
+        sgd
+        clustering
+        ml_data_2
+        recsys
+        util 
+        evaluation
+        supervised_learning
+        nearest_neighbors
+        pattern_mining
+        feature_engineering
+        text
+        image
+        neural_net
+        object_detection
+        object_detection/one_shot_object_detection
+        prototype
+)
