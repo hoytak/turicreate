@@ -5,8 +5,10 @@
 namespace turi { 
 
     // Forward declarations of classes
-
-
+    class flexible_type;
+    class gl_sframe;
+    class gl_sarray;
+    class gl_sgraph;
 }
 
 #endif
