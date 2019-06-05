@@ -1,5 +1,5 @@
 import os
-from os.path import join, split, relpath, normpath, abspath
+from os.path import join, split, relpath, normpath, abspath, exists
 import re
 
 
@@ -21,8 +21,10 @@ def do_subdir(d):
     base, name = split(d)
     
     macro_name = "TURI_%s_HPP_" % re.sub("[^a-zA-Z]", "_", d).upper()
+    forward_macro_name = "TURI_%s_FORWARD_HPP_" % re.sub("[^a-zA-Z]", "_", d).upper()
 
     out_file = join(d, name + ".hpp")
+    forward_out_file = join(d, name + "_forward.hpp")
  
     data = []
 
@@ -32,19 +34,37 @@ def do_subdir(d):
 
     for dirpath, dirnames, filenames in os.walk(d):
 
-        hd = normpath(join(d, dirpath))
-
         for f in filenames:
             if f.endswith(".hpp"):
-                data.append("#include <%s/%s>" % (hd, f))
+                data.append("#include <%s/%s>" % (dirpath, f))
 
     
     data.append("")
-    data.append("#endif")
+    data.append("#endif\n")
 
-    open(out_file, "w").write("\n".join(data))
+    if not exists(out_file):
+        open(out_file, "w").write("\n".join(data))
 
-    print("Wrote out file %s." % out_file)
+        print("Wrote out file %s." % out_file)
+    else:
+        print("Skipping file %s." % out_file)
+
+    if not exists(forward_out_file):
+        open(forward_out_file, "w").write(
+"""
+#ifndef %s
+#define %s
+
+namespace turi { 
+
+    // Forward declarations of classes
+
+
+}
+
+#endif
+""" % (forward_macro_name, forward_macro_name))
+
 
 if __name__ == "__main__":
 
