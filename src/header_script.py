@@ -14,7 +14,7 @@ copyright = """
 """
 
 
-def do_subdir(d):
+def do_subdir(d, put_in_root):
 
     d = relpath(abspath(d), root_dir)
 
@@ -23,8 +23,13 @@ def do_subdir(d):
     macro_name = "TURI_%s_HPP_" % re.sub("[^a-zA-Z]", "_", d).upper()
     forward_macro_name = "TURI_%s_FORWARD_HPP_" % re.sub("[^a-zA-Z]", "_", d).upper()
 
-    out_file = join(d, name + ".hpp")
-    forward_out_file = join(d, name + "_forward.hpp")
+    if put_in_root:
+        out_file = join(d, name + ".hpp")
+        forward_out_file = join(d, name + "_forward.hpp")
+    else:
+        out_file = join(split(d)[0], name + ".hpp")
+        forward_out_file = join(split(d)[0], name + "_forward.hpp")
+
  
     data = []
 
@@ -35,7 +40,7 @@ def do_subdir(d):
     for dirpath, dirnames, filenames in os.walk(d):
 
         for f in filenames:
-            if f.endswith(".hpp"):
+            if f.endswith(".hpp") or f.endswith(".h"):
                 data.append("#include <%s/%s>" % (dirpath, f))
 
     
@@ -69,23 +74,31 @@ namespace turi {
 if __name__ == "__main__":
 
     def is_header_dir(d):
+        if d in ["core", "python", "core/ml", "core/generics", "external"]:
+            return False, None
+        
+        if re.match("^external/[a-z_]+$", d):
+            return True, False
+
         if re.match("^core/[a-z_]+$", d):
-            return True
-        if d in ["core", "python"]:
-            return False
+            return True, True
+        
+        if re.match("^core/ml/[a-z_]+$", d):
+            return True, False
 
         if re.match("^[a-z_]+$", d):
-            return True
+            return True, True
 
-        return False
+        return False, None
 
 
     paths = (relpath(d, root_dir) for d, dl, fl in os.walk(root_dir))
 
     for p in paths:
-        if is_header_dir(p):
+        t, use_root_dir = is_header_dir(p)
+        if t:
             print(p)
-            do_subdir(p)
+            do_subdir(p, use_root_dir)
 
 
 
