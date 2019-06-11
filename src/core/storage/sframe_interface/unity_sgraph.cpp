@@ -14,8 +14,8 @@
 #include <core/unity/variant.hpp>
 #include <core/storage/sgraph_data/sgraph_io.hpp>
 #include <core/storage/sgraph_data/sgraph_triple_apply.hpp>
-#include <parallel/lambda_omp.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <boost/range/adaptors.hpp>
 #include <functional>
 

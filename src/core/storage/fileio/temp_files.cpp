@@ -21,7 +21,7 @@
 #include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <core/logging/logger.hpp>
 #include <core/logging/assertions.hpp>
 #include <core/storage/fileio/fileio_constants.hpp>

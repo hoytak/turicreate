@@ -7,7 +7,7 @@
 #define TURI_SGRAPH_HILBERT_PARALLE_FOR_HPP
 #include <utility>
 #include <functional>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/storage/sgraph_data/hilbert_curve.hpp>
 #include <core/storage/sgraph_data/sgraph_constants.hpp>
 #include <core/util/blocking_queue.hpp>

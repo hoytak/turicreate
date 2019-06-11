@@ -6,7 +6,7 @@
 #include <core/storage/sgraph_data/sgraph_fast_triple_apply.hpp>
 #include <core/storage/sgraph_data/sgraph_constants.hpp>
 #include <core/storage/sgraph_data/hilbert_parallel_for.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/util/cityhash_tc.hpp>
 
 namespace turi {

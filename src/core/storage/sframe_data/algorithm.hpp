@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <type_traits>
 #include <iterator>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/random/random.hpp>
 #include <core/storage/sframe_data/siterable.hpp>
 #include <core/storage/sframe_data/swriter_base.hpp>

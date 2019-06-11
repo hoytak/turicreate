@@ -7,7 +7,7 @@
 #define _CANVAS_STREAMING_TRANSFORMATION
 
 #include <core/data/flexible_type/flexible_type.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 namespace turi {
 namespace visualization {

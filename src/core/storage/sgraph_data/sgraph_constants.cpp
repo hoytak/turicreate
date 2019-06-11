@@ -6,7 +6,7 @@
 #include <core/storage/sgraph_data/sgraph_constants.hpp>
 #include <core/util/bitops.hpp>
 #include <core/globals/globals.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include "export.hpp"
 
 namespace turi {

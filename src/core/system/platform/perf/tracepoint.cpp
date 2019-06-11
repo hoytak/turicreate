@@ -7,7 +7,7 @@
 #include <string>
 #include <core/logging/assertions.hpp>
 #include <perf/tracepoint.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <boost/unordered_map.hpp>
 
 

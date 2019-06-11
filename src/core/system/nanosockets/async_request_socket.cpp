@@ -4,7 +4,7 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 #include <cassert>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/logging/logger.hpp>
 #include <core/system/nanosockets/print_zmq_error.hpp>
 #include <core/system/nanosockets/socket_errors.hpp>

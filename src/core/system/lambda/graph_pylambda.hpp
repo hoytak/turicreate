@@ -8,7 +8,7 @@
 #include <core/system/lambda/graph_lambda_interface.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>
 #include <vector>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <atomic>
 
 namespace turi {

@@ -11,9 +11,9 @@
 #include <Eigen/SparseCore>
 #include <core/storage/sframe_data/sframe.hpp>
 #include <core/data/sframe/gl_sarray.hpp>
-#include <parallel/atomic.hpp>
-#include <parallel/pthread_tools.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>
 #include <core/generics/symmetric_2d_array.hpp>
 #include <core/globals/globals.hpp>

@@ -9,7 +9,7 @@
 #include <vector>
 #include <set>
 #include <boost/function.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/system/nanosockets/zmq_msg_vector.hpp>
 #include <core/export.hpp>
 namespace turi {

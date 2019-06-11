@@ -10,7 +10,7 @@
 #include "vega_data.hpp"
 #include "vega_spec.hpp"
 
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <visualization/unity/batch_size.hpp>
 #include <visualization/unity/transformation.hpp>
 

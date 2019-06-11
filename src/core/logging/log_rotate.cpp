@@ -8,7 +8,7 @@
 #include <core/logging/logger.hpp>
 #include <timer/timer.hpp>
 #include <core/logging/log_rotate.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <boost/filesystem.hpp>
 
 namespace fs = boost::filesystem;

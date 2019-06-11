@@ -7,7 +7,7 @@
 #define TURI_THREAD_POOL_HPP
 
 #include <boost/bind.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/util/blocking_queue.hpp>
 
 namespace turi {

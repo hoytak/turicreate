@@ -5,7 +5,7 @@
  */
 #ifndef SAFE_CIRCULAR_CHAR_BUFFER_HPP
 #define SAFE_CIRCULAR_CHAR_BUFFER_HPP
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/logging/assertions.hpp>
 
 namespace turi {

@@ -3,7 +3,7 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/storage/query_engine/execution/subplan_executor.hpp>
 #include <core/storage/query_engine/execution/execution_node.hpp>
 #include <core/storage/query_engine/operators/operator_properties.hpp> 

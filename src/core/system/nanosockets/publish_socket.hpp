@@ -9,7 +9,7 @@
 #include <vector>
 #include <set>
 #include <core/system/nanosockets/zmq_msg_vector.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <core/export.hpp>
 
 namespace turi {

@@ -10,7 +10,7 @@
 #include <boost/random.hpp>
 #include <boost/integer_traits.hpp>
 
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/logging/assertions.hpp>
 #include <timer/timer.hpp>
 

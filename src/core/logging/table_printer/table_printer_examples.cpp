@@ -6,7 +6,7 @@
 #include <core/logging/table_printer/table_printer.hpp>
 #include <timer/timer.hpp>
 #include <core/random/random.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 using namespace turi;
 

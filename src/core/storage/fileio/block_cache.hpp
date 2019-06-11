@@ -7,7 +7,7 @@
 #define TURI_FILEIO_BLOCK_CACHE_HPP
 #include <cstdint>
 #include <core/util/lru.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 
 namespace turi {
 class general_ifstream;

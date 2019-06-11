@@ -9,7 +9,7 @@
 #include <core/data/flexible_type/flexible_type.hpp>
 #include <type_traits>
 #include <atomic>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 
 namespace turi {
 

@@ -5,8 +5,8 @@
  */
 #include <string>
 #include <vector>
-#include <parallel/lambda_omp.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/data/sframe/gl_sarray.hpp>
 #include <core/data/sframe/gl_sframe.hpp>
 #include <core/unity/image_util.hpp>

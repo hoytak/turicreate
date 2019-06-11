@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <mutex>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <boost/bind.hpp>
 #include <core/logging/logger.hpp>
 #include <core/system/nanosockets/socket_errors.hpp>

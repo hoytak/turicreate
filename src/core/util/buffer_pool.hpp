@@ -8,7 +8,7 @@
 #include <vector>
 #include <memory>
 #include <stack>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 
 namespace turi {
 

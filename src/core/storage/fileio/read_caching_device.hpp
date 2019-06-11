@@ -8,7 +8,7 @@
 #include <core/logging/logger.hpp>
 #include <core/storage/fileio/block_cache.hpp>
 #include <core/storage/fileio/sanitize_url.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <core/util/basic_types.hpp>
 #include <mutex>
 #include <map>

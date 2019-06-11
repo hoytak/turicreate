@@ -8,7 +8,7 @@
 
 #include <core/storage/sframe_data/sarray.hpp>
 #include <vector>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/util/try_finally.hpp>
 #include <core/util/dense_bitset.hpp>
 #include <toolkits/sparse_similarity/similarities.hpp>

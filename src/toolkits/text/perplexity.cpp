@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iostream>
 #include <cmath>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/storage/sframe_interface/unity_sarray.hpp>
 #include <core/unity/flex_dict_view.hpp>
 #include <toolkits/text/topic_model.hpp>

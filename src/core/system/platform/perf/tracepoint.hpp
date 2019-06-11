@@ -10,8 +10,8 @@
 #include <string>
 #include <timer/timer.hpp>
 #include <core/util/branch_hints.hpp>
-#include <parallel/atomic.hpp>
-#include <parallel/atomic_ops.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic_ops.hpp>
 
 /**
  * \defgroup perfmonitoring Intrusive Performance Monitoring

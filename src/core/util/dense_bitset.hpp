@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <core/logging/logger.hpp>
 #include <core/storage/serialization/serialization_includes.hpp>
-#include <parallel/atomic_ops.hpp>
+#include <core/system/platform/parallel/atomic_ops.hpp>
 #include <core/util/bitops.hpp>
 
 namespace turi {

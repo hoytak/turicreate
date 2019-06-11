@@ -10,7 +10,7 @@
 
 #include <core/data/sframe/gl_sframe.hpp>
 #include <core/util/try_finally.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 #include <core/data/sframe/gl_sframe.hpp>
 #include <core/data/sframe/gl_sarray.hpp>

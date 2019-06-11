@@ -8,9 +8,9 @@
 
 #include <core/util/bitops.hpp>
 #include <core/util/cityhash_tc.hpp>
-#include <parallel/pthread_tools.hpp>
-#include <parallel/atomic.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <sparsehash/dense_hash_set>
 
 namespace turi {

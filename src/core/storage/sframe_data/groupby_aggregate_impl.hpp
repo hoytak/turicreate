@@ -13,7 +13,7 @@
 #include <unordered_set>
 #include <core/storage/sframe_data/sframe.hpp>
 #include <core/util/cityhash_tc.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <core/storage/sframe_data/group_aggregate_value.hpp>
 #include <core/generics/hopscotch_map.hpp>
 

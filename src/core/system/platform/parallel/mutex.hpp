@@ -6,7 +6,7 @@
 #ifndef TURI_MUTEX_HPP
 #define TURI_MUTEX_HPP
 
-#include <parallel/pthread_h.h>
+#include <core/system/platform/parallel/pthread_h.h>
 #include <core/logging/assertions.hpp>
 #include <mutex>
 

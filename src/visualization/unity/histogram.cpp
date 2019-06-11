@@ -5,7 +5,7 @@
  */
 #include "histogram.hpp"
 
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 #include <string>
 #include <cmath>

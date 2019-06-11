@@ -45,7 +45,7 @@
 #include <system_error>
 #endif
 #include <functional>
-#include <parallel/pthread_h.h>
+#include <core/system/platform/parallel/pthread_h.h>
 #include <timer/timer.hpp>
 #include <core/logging/fail_method.hpp>
 #include <core/logging/backtrace.hpp>

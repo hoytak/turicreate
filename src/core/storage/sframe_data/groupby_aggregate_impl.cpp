@@ -7,7 +7,7 @@
 #include <queue>
 #include <core/storage/sframe_data/groupby_aggregate_impl.hpp>
 #include <core/storage/sframe_data/sarray_reader_buffer.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/util/cityhash_tc.hpp>
 #include <core/storage/sframe_data/groupby_aggregate.hpp>
 

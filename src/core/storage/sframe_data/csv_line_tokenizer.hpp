@@ -11,7 +11,7 @@
 #include <functional>
 #include <memory>
 #include <core/data/flexible_type/flexible_type.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <iostream>
 
 namespace turi {

@@ -7,7 +7,7 @@ extern "C" {
 #include <lz4/lz4.h>
 }
 #include <algorithm>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <core/storage/sframe_data/sarray_v2_block_manager.hpp>
 #include <core/storage/sframe_data/sarray_index_file.hpp>

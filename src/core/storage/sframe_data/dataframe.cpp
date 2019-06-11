@@ -7,7 +7,7 @@
 #include <map>
 #include <core/storage/sframe_data/dataframe.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/tokenizer.hpp>

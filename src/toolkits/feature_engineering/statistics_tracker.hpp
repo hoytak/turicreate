@@ -12,7 +12,7 @@
 #include <core/util/bitops.hpp>
 #include <core/storage/serialization/serialization_includes.hpp>
 #include <core/generics/hopscotch_map.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/export.hpp>
 
 namespace turi {

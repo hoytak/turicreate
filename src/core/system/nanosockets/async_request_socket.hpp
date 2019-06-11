@@ -7,8 +7,8 @@
 #define NANOSOCKETS_SOCKETS_ASYNC_REQUEST_SOCKET_HPP
 #include <string>
 #include <vector>
-#include <parallel/mutex.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/system/nanosockets/zmq_msg_vector.hpp>
 #include <core/export.hpp>
 namespace turi {

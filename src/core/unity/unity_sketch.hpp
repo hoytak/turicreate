@@ -14,7 +14,7 @@
 #include <ml/sketches/countsketch.hpp>
 #include <ml/sketches/quantile_sketch.hpp>
 #include <ml/sketches/streaming_quantile_sketch.hpp>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/logging/logger.hpp>
 namespace turi {
 

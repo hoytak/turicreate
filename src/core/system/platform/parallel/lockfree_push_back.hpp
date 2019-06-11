@@ -5,7 +5,7 @@
  */
 #ifndef TURI_PARALLEL_LOCKFREE_PUSHBACK_HPP
 #define TURI_PARALLEL_LOCKFREE_PUSHBACK_HPP
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 
 namespace turi {
 

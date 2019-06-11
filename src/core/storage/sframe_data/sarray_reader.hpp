@@ -11,7 +11,7 @@
 #include <functional>
 #include <core/logging/assertions.hpp>
 #include <core/storage/serialization/iarchive.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/storage/sframe_data/siterable.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>
 #include <core/storage/sframe_data/sarray_file_format_v2.hpp>

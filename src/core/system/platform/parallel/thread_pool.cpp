@@ -4,9 +4,9 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 #include <mutex>
-#include <parallel/thread_pool.hpp>
+#include <core/system/platform/parallel/thread_pool.hpp>
 #include <core/logging/assertions.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/system/platform/config/apple_config.hpp>
 
 namespace turi {

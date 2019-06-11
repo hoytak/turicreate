@@ -20,8 +20,8 @@
 #include <core/util/file_line_count_estimator.hpp>
 #include <core/util/cityhash_tc.hpp>
 #include <core/util/hash_value.hpp>
-#include <parallel/atomic.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/storage/sframe_interface/unity_sarray_binary_operations.hpp>
 #include <core/storage/sframe_data/csv_line_tokenizer.hpp>
 #include <core/storage/sframe_data/parallel_csv_parser.hpp>

@@ -6,7 +6,7 @@
 #ifndef TURI_SFRAME_GROUPBY_HPP
 #define TURI_SFRAME_GROUPBY_HPP
 
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include<memory>
 #include<vector>
 #include<core/storage/sframe_data/sarray.hpp>

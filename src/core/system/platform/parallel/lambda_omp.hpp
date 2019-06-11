@@ -9,7 +9,7 @@
 #include <utility>
 #include <functional>
 #include <type_traits>
-#include <parallel/thread_pool.hpp>
+#include <core/system/platform/parallel/thread_pool.hpp>
 namespace turi {
 
 /**

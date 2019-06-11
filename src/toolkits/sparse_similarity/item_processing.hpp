@@ -8,9 +8,9 @@
 
 #include <toolkits/sparse_similarity/similarities.hpp>
 #include <toolkits/sparse_similarity/utilities.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/util/dense_bitset.hpp>
-#include <parallel/atomic_ops.hpp>
+#include <core/system/platform/parallel/atomic_ops.hpp>
 #include <core/logging/table_printer/table_printer.hpp>
 #include <core/storage/sframe_data/sarray.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>

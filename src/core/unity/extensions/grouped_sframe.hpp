@@ -10,7 +10,7 @@
 #include <core/data/sframe/gl_sframe.hpp>
 #include <core/model_server/model_base/model_base.hpp>
 #include <core/export.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 namespace turi {
 std::vector<turi::toolkit_class_specification> get_toolkit_class_registration();

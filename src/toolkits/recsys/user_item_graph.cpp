@@ -7,7 +7,7 @@
 #include <toolkits/ml_data_2/ml_data.hpp>
 #include <toolkits/ml_data_2/ml_data_iterators.hpp>
 #include <algorithm>
-#include <parallel/pthread_tools.hpp> 
+#include <core/system/platform/parallel/pthread_tools.hpp> 
 #include <perf/memory_info.hpp>
 
 namespace turi { namespace recsys {

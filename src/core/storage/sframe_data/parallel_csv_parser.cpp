@@ -8,12 +8,12 @@
 #include <vector>
 #include <map>
 #include <set>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <core/logging/logger.hpp>
 #include <timer/timer.hpp>
-#include <parallel/thread_pool.hpp>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/thread_pool.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>
 #include <core/storage/sframe_data/sframe.hpp>
 #include <core/storage/sframe_data/parallel_csv_parser.hpp>

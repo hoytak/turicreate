@@ -10,7 +10,7 @@
 #include <core/logging/assertions.hpp>
 #include <core/storage/serialization/serialization_includes.hpp>
 #include <toolkits/ml_data_2/ml_data_column_modes.hpp>
-#include <parallel/pthread_tools.hpp> 
+#include <core/system/platform/parallel/pthread_tools.hpp> 
 #include <boost/thread/lock_algorithms.hpp>
 #include <mutex>
 

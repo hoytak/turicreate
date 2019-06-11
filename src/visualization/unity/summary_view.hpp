@@ -2,7 +2,7 @@
 #define _TC_SUMMARY_VIEW
 
 #include <core/data/flexible_type/flexible_type.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 #include "transformation.hpp"
 

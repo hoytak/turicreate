@@ -14,8 +14,8 @@
 #include <core/storage/sframe_data/output_iterator.hpp>
 #include <core/storage/serialization/iarchive.hpp>
 #include <core/storage/serialization/oarchive.hpp>
-#include <parallel/pthread_tools.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/storage/sframe_data/swriter_base.hpp>
 #include <core/storage/sframe_data/sarray_file_format_v2.hpp>
 #include <core/storage/sframe_data/sarray_index_file.hpp>

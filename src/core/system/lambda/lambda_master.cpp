@@ -5,7 +5,7 @@
  */
 #include <core/system/lambda/lambda_master.hpp>
 #include <core/system/lambda/lambda_utils.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/storage/fileio/temp_files.hpp>
 #include <algorithm>
 #include <core/system/lambda/lambda_constants.hpp>

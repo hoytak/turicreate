@@ -11,8 +11,8 @@
 #include <core/logging/assertions.hpp>
 #include <core/util/md5.hpp>
 #include <core/util/cityhash_tc.hpp>
-#include <parallel/pthread_tools.hpp>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <mutex>
 namespace turi {
 constexpr size_t block_cache::KEY_LOCK_SIZE;

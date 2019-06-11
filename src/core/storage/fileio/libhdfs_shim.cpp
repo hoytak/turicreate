@@ -11,7 +11,7 @@
 #include <string>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
-#include <parallel/execute_task_in_native_thread.hpp>
+#include <core/system/platform/parallel/execute_task_in_native_thread.hpp>
 #include <type_traits>
 #include <process/process.hpp>
 #ifdef HAS_HADOOP

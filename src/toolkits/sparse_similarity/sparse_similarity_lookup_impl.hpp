@@ -21,7 +21,7 @@
 #include <core/util/cityhash_tc.hpp>
 #include <core/util/dense_bitset.hpp>
 #include <core/util/sys_util.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 
 namespace turi { namespace sparse_sim {
 

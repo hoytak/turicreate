@@ -7,7 +7,7 @@
 #define TURI_SFRAME_TESTING_UTILS_H_
 
 #include <core/storage/sframe_data/sframe.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <vector>
 #include <string>
 #include <locale>

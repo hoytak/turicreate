@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <vector>
 #include <core/logging/assertions.hpp>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/generics/lock_free_internal.hpp>
 #include <core/util/branch_hints.hpp>
 

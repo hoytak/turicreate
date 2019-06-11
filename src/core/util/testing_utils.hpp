@@ -6,7 +6,7 @@
 #ifndef TURI_GENERAL_TESTING_UTILS_H_
 #define TURI_GENERAL_TESTING_UTILS_H_
 
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/util/cityhash_tc.hpp>
 #include <core/util/try_finally.hpp> 
 #include <core/random/random.hpp> 
@@ -15,7 +15,7 @@
 #include <string>
 #include <locale>
 
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <sys/types.h>
 #include <unistd.h>
 #include <boost/filesystem.hpp>

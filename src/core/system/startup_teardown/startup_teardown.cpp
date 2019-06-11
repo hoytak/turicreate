@@ -23,7 +23,7 @@
 #include <core/storage/fileio/fixed_size_cache_manager.hpp>
 #include <core/storage/fileio/temp_files.hpp>
 #include <core/storage/fileio/block_cache.hpp>
-#include <parallel/thread_pool.hpp>
+#include <core/system/platform/parallel/thread_pool.hpp>
 #include <core/logging/logger.hpp>
 #include <core/logging/log_rotate.hpp>
 #ifdef TC_HAS_PYTHON

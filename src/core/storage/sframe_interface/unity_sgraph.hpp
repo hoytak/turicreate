@@ -11,7 +11,7 @@
 #include <core/storage/sgraph_data/sgraph_constants.hpp>
 #include <core/storage/sframe_data/dataframe.hpp>
 #include <memory>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 
 namespace turi {
 

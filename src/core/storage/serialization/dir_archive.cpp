@@ -20,7 +20,7 @@
 #include <core/storage/fileio/s3_api.hpp>
 #include <core/storage/serialization/dir_archive.hpp>
 #include <core/random/random.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 namespace turi {
 

@@ -8,7 +8,7 @@
 #include <core/system/lambda/lambda_interface.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>
 #include <core/system/lambda/python_callbacks.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <string>
 
 namespace turi {

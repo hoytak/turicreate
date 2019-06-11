@@ -8,7 +8,7 @@
 #include <map>
 #include <memory>
 #include <chrono>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/logging/logger.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/locks.hpp>

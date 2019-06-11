@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iostream>
 #include <cmath>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/storage/sframe_interface/unity_sarray.hpp>
 #include <core/unity/flex_dict_view.hpp>
 #include <core/unity/variant_deep_serialize.hpp>
@@ -24,7 +24,7 @@
 #include <core/logging/table_printer/table_printer.hpp>
 #include <timer/timer.hpp>
 #include <Eigen/Core>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 
 namespace turi {
 namespace text {

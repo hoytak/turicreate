@@ -9,8 +9,8 @@
 #include <vector>
 #include <fstream>
 #include <tuple>
-#include <parallel/pthread_tools.hpp>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/storage/fileio/general_fstream.hpp>
 #include <core/storage/sframe_data/sarray_index_file.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>

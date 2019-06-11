@@ -4,7 +4,7 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 #include <core/system/lambda/graph_pylambda_master.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/system/lambda/lambda_constants.hpp>
 #include <core/system/lambda/lambda_master.hpp>
 

@@ -8,8 +8,8 @@
 
 #include <vector>
 #include <core/logging/assertions.hpp>
-#include <parallel/atomic.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 namespace turi { namespace sparse_sim {
 

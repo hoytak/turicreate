@@ -12,7 +12,7 @@
 #include <core/data/flexible_type/flexible_type_base_types.hpp>
 #include <Eigen/Core>
 #include <core/storage/sframe_data/sframe.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 
 namespace turi {
 

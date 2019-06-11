@@ -6,8 +6,8 @@
 #include <functional>
 #include <algorithm>
 #include <core/util/dense_bitset.hpp>
-#include <parallel/thread_pool.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/thread_pool.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/random/random.hpp>
 #include <core/storage/sframe_data/sarray.hpp>
 #include <core/storage/sframe_data/sframe.hpp>

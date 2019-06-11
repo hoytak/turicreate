@@ -13,7 +13,7 @@
 #include <core/model_server/unity_server_options.hpp>
 #include <core/model_server/unity_server_init.hpp>
 #include <core/model_server/unity_server_control.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <mutex>
 
 namespace turi {

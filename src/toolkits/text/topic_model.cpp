@@ -6,7 +6,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iostream>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/storage/sframe_interface/unity_sarray.hpp>
 #include <core/storage/sframe_data/sframe_iterators.hpp>
 #include <toolkits/util/sframe_utils.hpp>

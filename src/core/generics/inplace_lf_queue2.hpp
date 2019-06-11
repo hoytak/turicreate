@@ -7,8 +7,8 @@
 #define TURI_INPLACE_LOCKFREE_QUEUE2_HPP
 #include <stdint.h>
 #include <cstring>
-#include <parallel/atomic.hpp>
-#include <parallel/atomic_ops.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic_ops.hpp>
 #include <utility>
 namespace turi {
 

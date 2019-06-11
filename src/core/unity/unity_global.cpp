@@ -16,7 +16,7 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/searching/boyer_moore.hpp>
 #include <boost/filesystem/path.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 #include <core/storage/fileio/temp_files.hpp>
 #include <core/storage/fileio/fs_utils.hpp>
 #ifdef TC_HAS_PYTHON

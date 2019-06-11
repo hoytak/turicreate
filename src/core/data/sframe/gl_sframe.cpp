@@ -7,7 +7,7 @@
 #include <deque>
 #include <iomanip>
 #include <boost/algorithm/string.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/data/sframe/gl_sarray.hpp>
 #include <core/data/sframe/gl_sframe.hpp>
 #include <core/storage/sframe_interface/unity_sframe.hpp>

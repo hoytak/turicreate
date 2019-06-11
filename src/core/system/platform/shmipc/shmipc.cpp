@@ -4,7 +4,7 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 #include <thread>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/logging/logger.hpp>
 #include <core/logging/assertions.hpp>
 #include <shmipc/shmipc.hpp>

@@ -9,7 +9,7 @@
 #include <memory>
 #include <typeinfo>
 #include <map>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <core/logging/logger.hpp>
 #include <core/random/random.hpp>

@@ -8,9 +8,9 @@
 
 #include <vector>
 #include <string>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 #include <unordered_map>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/storage/fileio/temp_files.hpp>
 #include <core/storage/fileio/general_fstream_sink.hpp>
 #include <core/storage/fileio/fileio_constants.hpp>

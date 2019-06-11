@@ -13,8 +13,8 @@
 #include <core/storage/sframe_data/algorithm.hpp>
 #include <core/storage/sframe_data/groupby_aggregate.hpp>
 #include <core/storage/sframe_data/groupby_aggregate_operators.hpp>
-#include <parallel/atomic.hpp>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <core/logging/table_printer/table_printer.hpp>
 #include <core/export.hpp>
 

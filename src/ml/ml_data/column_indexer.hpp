@@ -13,7 +13,7 @@
 #include <ml/ml_data/ml_data_column_modes.hpp>
 #include <core/storage/serialization/serialization_includes.hpp>
 #include <core/generics/hopscotch_map.hpp>
-#include <parallel/pthread_tools.hpp>
+#include <core/system/platform/parallel/pthread_tools.hpp>
 
 namespace turi { 
 

@@ -9,7 +9,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
-#include <parallel/pthread_h.h>
+#include <core/system/platform/parallel/pthread_h.h>
 #include <core/logging/backtrace.hpp>
 #include <core/export.hpp>
 

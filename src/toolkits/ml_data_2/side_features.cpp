@@ -7,7 +7,7 @@
 #include <toolkits/ml_data_2/side_features.hpp>
 #include <toolkits/ml_data_2/sframe_index_mapping.hpp>
 #include <toolkits/ml_data_2/data_storage/ml_data_row_translation.hpp>
-#include <parallel/atomic.hpp>
+#include <core/system/platform/parallel/atomic.hpp>
 #include <core/unity/flex_dict_view.hpp>
 #include <core/unity/variant.hpp>
 #include <core/unity/variant_deep_serialize.hpp>

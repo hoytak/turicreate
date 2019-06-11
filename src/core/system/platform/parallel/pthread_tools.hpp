@@ -8,7 +8,7 @@
 
 
 #include <cstdlib>
-#include <parallel/pthread_h.h>
+#include <core/system/platform/parallel/pthread_h.h>
 #include <semaphore.h>
 #include <sched.h>
 #include <signal.h>
@@ -19,7 +19,7 @@
 #include <iostream>
 #include <boost/function.hpp>
 #include <core/logging/assertions.hpp>
-#include <parallel/atomic_ops.hpp>
+#include <core/system/platform/parallel/atomic_ops.hpp>
 #include <core/util/branch_hints.hpp>
 #include <boost/unordered_map.hpp>
 #undef _POSIX_SPIN_LOCKS
@@ -29,7 +29,7 @@
 typedef long suseconds_t;
 #endif
 
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <core/util/any.hpp>
 
 

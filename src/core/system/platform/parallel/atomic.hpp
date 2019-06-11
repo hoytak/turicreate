@@ -10,7 +10,7 @@
 #include <type_traits>
 
 #include <core/storage/serialization/serialization_includes.hpp>
-#include <parallel/atomic_ops.hpp>
+#include <core/system/platform/parallel/atomic_ops.hpp>
 
 namespace turi {
 namespace turi_impl {

@@ -6,7 +6,7 @@
 #include <future>
 #include <thread>
 #include <unordered_set>
-#include <parallel/mutex.hpp>
+#include <core/system/platform/parallel/mutex.hpp>
 #include <core/unity/unity_sketch.hpp>
 #include <core/storage/sframe_interface/unity_sarray.hpp>
 #include <core/unity/flex_dict_view.hpp>
@@ -15,7 +15,7 @@
 #include <ml/sketches/quantile_sketch.hpp>
 #include <ml/sketches/space_saving_flextype.hpp>
 #include <ml/sketches/streaming_quantile_sketch.hpp>
-#include <parallel/lambda_omp.hpp>
+#include <core/system/platform/parallel/lambda_omp.hpp>
 
 namespace turi {
 
