@@ -4,7 +4,7 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 #include <core/logging/table_printer/table_printer.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <core/random/random.hpp>
 #include <core/system/platform/parallel/lambda_omp.hpp>
 

@@ -8,7 +8,7 @@
 #include <sys/time.h>
 #include <boost/bind.hpp>
 #include <core/system/platform/parallel/pthread_tools.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 
 std::ostream&  operator<<(std::ostream& out, const turi::timer& t) {
   return out << t.current_time();

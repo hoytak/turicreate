@@ -46,7 +46,7 @@
 #endif
 #include <functional>
 #include <core/system/platform/parallel/pthread_h.h>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <core/logging/fail_method.hpp>
 #include <core/logging/backtrace.hpp>
 #include <core/logging/error.hpp>

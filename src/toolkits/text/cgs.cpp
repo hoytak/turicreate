@@ -21,7 +21,7 @@
 
 #include <core/logging/assertions.hpp>
 #include <core/logging/table_printer/table_printer.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <Eigen/Core>
 #include <core/system/platform/parallel/atomic.hpp>
 

@@ -14,7 +14,7 @@
 #include <toolkits/text/topic_model.hpp>
 #include <toolkits/text/cgs.hpp>
 #include <core/logging/assertions.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <toolkits/ml_data_2/ml_data.hpp>
 #include <toolkits/ml_data_2/ml_data_iterators.hpp>
 #include <toolkits/ml_data_2/sframe_index_mapping.hpp>

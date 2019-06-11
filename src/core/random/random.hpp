@@ -15,7 +15,7 @@
 #include <algorithm>
 
 #include <boost/random.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <core/system/platform/parallel/pthread_tools.hpp>
 
 namespace turi {

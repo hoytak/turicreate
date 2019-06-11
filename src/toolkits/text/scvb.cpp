@@ -12,7 +12,7 @@
 #include <toolkits/text/topic_model.hpp>
 #include <toolkits/text/scvb.hpp>
 #include <core/logging/assertions.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <Eigen/Core>
 
 namespace turi {

@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <core/util/branch_hints.hpp>
 #include <core/system/platform/parallel/atomic.hpp>
 #include <core/system/platform/parallel/atomic_ops.hpp>

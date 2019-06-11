@@ -22,7 +22,7 @@
 #include <toolkits/text/cgs.hpp>
 #include <toolkits/text/alias.hpp>
 #include <toolkits/text/perplexity.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <core/export.hpp>
 namespace turi {
 namespace text {

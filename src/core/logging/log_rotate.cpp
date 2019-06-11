@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <unistd.h>
 #include <core/logging/logger.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <core/logging/log_rotate.hpp>
 #include <core/system/platform/parallel/pthread_tools.hpp>
 #include <boost/filesystem.hpp>

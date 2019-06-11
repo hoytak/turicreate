@@ -31,7 +31,7 @@ namespace turi {
    * For example:
    * 
    * \code
-   * #include <timer/timer.hpp>
+   * #include <core/system/platform/timer//timer.hpp>
    *
    *
    * turi::timer timer;

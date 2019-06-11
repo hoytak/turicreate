@@ -11,7 +11,7 @@
 #include <core/system/platform/parallel/mutex.hpp>
 #include <boost/algorithm/string.hpp>
 #include <core/logging/logger.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 #include <core/system/platform/parallel/thread_pool.hpp>
 #include <core/system/platform/parallel/atomic.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>

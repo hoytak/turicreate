@@ -12,7 +12,7 @@
 
 #include <core/system/platform/parallel/pthread_tools.hpp>
 #include <core/logging/assertions.hpp>
-#include <timer/timer.hpp>
+#include <core/system/platform/timer//timer.hpp>
 
 #include <core/random/random.hpp>
 
