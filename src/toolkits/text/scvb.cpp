@@ -7,11 +7,11 @@
 #include <algorithm>
 #include <iostream>
 #include <parallel/pthread_tools.hpp>
-#include <unity/lib/unity_sarray.hpp>
-#include <unity/lib/flex_dict_view.hpp>
-#include <unity/toolkits/text/topic_model.hpp>
-#include <unity/toolkits/text/scvb.hpp>
-#include <logger/assertions.hpp>
+#include <core/storage/sframe_interface/unity_sarray.hpp>
+#include <core/unity/flex_dict_view.hpp>
+#include <toolkits/text/topic_model.hpp>
+#include <toolkits/text/scvb.hpp>
+#include <core/logging/assertions.hpp>
 #include <timer/timer.hpp>
 #include <Eigen/Core>
 

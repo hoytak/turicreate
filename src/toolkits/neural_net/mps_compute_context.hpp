@@ -9,8 +9,8 @@
 
 #include <memory>
 
-#include <unity/toolkits/neural_net/compute_context.hpp>
-#include <unity/toolkits/neural_net/mps_command_queue.hpp>
+#include <toolkits/neural_net/compute_context.hpp>
+#include <toolkits/neural_net/mps_command_queue.hpp>
 
 namespace turi {
 namespace neural_net {

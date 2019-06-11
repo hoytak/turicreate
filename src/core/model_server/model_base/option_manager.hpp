@@ -10,7 +10,7 @@
 #include <vector> 
 #include <map>
 
-#include <unity/lib/extensions/option_info.hpp>
+#include <core/model_server/model_base/option_info.hpp>
 
 namespace turi {
 

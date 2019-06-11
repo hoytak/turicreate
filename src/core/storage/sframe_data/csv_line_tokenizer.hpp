@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <functional>
 #include <memory>
-#include <flexible_type/flexible_type.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
 #include <parallel/mutex.hpp>
 #include <iostream>
 

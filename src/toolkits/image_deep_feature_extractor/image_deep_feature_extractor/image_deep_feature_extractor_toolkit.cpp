@@ -3,11 +3,11 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#include <toolkits/image_deep_feature_extractor/image_deep_feature_extractor_toolkit.hpp>
+#include <toolkits/image_deep_feature_extractor/image_deep_feature_extractor/image_deep_feature_extractor_toolkit.hpp>
 
-#include <toolkits/image_deep_feature_extractor/mlmodel_image_feature_extractor.hpp>
-#include <unity/lib/gl_sarray.hpp>
-#include <unity/lib/gl_sframe.hpp>
+#include <toolkits/image_deep_feature_extractor/image_deep_feature_extractor/mlmodel_image_feature_extractor.hpp>
+#include <core/data/sframe/gl_sarray.hpp>
+#include <core/data/sframe/gl_sframe.hpp>
 
 namespace turi {
 namespace image_deep_feature_extractor {

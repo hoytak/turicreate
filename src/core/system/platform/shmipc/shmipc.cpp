@@ -5,8 +5,8 @@
  */
 #include <thread>
 #include <parallel/atomic.hpp>
-#include <logger/logger.hpp>
-#include <logger/assertions.hpp>
+#include <core/logging/logger.hpp>
+#include <core/logging/assertions.hpp>
 #include <shmipc/shmipc.hpp>
 #include <shmipc/shmipc_garbage_collect.hpp>
 #include <process/process_util.hpp>

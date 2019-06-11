@@ -8,8 +8,8 @@
 
 #include <vector>
 
-#include <unity/lib/toolkit_function_specification.hpp>
-#include <unity/lib/variant.hpp>
+#include <core/unity/toolkit_function_specification.hpp>
+#include <core/unity/variant.hpp>
 
 namespace turi {
 namespace kmeans {

@@ -7,7 +7,7 @@
 #define TURI_MUTEX_HPP
 
 #include <parallel/pthread_h.h>
-#include <logger/assertions.hpp>
+#include <core/logging/assertions.hpp>
 #include <mutex>
 
 namespace turi {

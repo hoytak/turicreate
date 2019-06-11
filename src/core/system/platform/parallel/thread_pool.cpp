@@ -5,9 +5,9 @@
  */
 #include <mutex>
 #include <parallel/thread_pool.hpp>
-#include <logger/assertions.hpp>
+#include <core/logging/assertions.hpp>
 #include <parallel/pthread_tools.hpp>
-#include <platform/config/apple_config.hpp>
+#include <core/system/platform/config/apple_config.hpp>
 
 namespace turi {
 

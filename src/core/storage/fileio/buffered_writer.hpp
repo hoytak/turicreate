@@ -5,7 +5,7 @@
  */
 #include<vector>
 #include<parallel/mutex.hpp>
-#include<sframe/sframe_constants.hpp>
+#include<core/storage/sframe_data/sframe_constants.hpp>
 
 namespace turi {
 /**

@@ -10,20 +10,20 @@
 #include <set>
 #include <parallel/mutex.hpp>
 #include <boost/algorithm/string.hpp>
-#include <logger/logger.hpp>
+#include <core/logging/logger.hpp>
 #include <timer/timer.hpp>
 #include <parallel/thread_pool.hpp>
 #include <parallel/atomic.hpp>
-#include <flexible_type/flexible_type.hpp>
-#include <sframe/sframe.hpp>
-#include <sframe/parallel_csv_parser.hpp>
-#include <sframe/csv_line_tokenizer.hpp>
-#include <fileio/general_fstream.hpp>
-#include <fileio/sanitize_url.hpp>
-#include <fileio/fs_utils.hpp>
-#include <cppipc/server/cancel_ops.hpp>
-#include <sframe/sframe_constants.hpp>
-#include <util/dense_bitset.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <core/storage/sframe_data/sframe.hpp>
+#include <core/storage/sframe_data/parallel_csv_parser.hpp>
+#include <core/storage/sframe_data/csv_line_tokenizer.hpp>
+#include <core/storage/fileio/general_fstream.hpp>
+#include <core/storage/fileio/sanitize_url.hpp>
+#include <core/storage/fileio/fs_utils.hpp>
+#include <core/system/cppipc/server/cancel_ops.hpp>
+#include <core/storage/sframe_data/sframe_constants.hpp>
+#include <core/util/dense_bitset.hpp>
 
 namespace turi {
 

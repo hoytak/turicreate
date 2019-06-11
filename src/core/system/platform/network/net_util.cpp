@@ -18,7 +18,7 @@
 #include <iphlpapi.h>
 #endif
 
-#include <logger/assertions.hpp>
+#include <core/logging/assertions.hpp>
 #include <network/net_util.hpp>
 #include "export.hpp"
 

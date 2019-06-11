@@ -6,7 +6,7 @@
 #include "class_registrations.hpp"
 #include "data_preparation.hpp"
 
-#include <unity/lib/toolkit_function_macros.hpp>
+#include <core/unity/toolkit_function_macros.hpp>
 
 namespace turi {
 namespace drawing_classifier {

@@ -7,13 +7,13 @@
 #include <vector>
 #include <parallel/lambda_omp.hpp>
 #include <parallel/pthread_tools.hpp>
-#include <unity/lib/gl_sarray.hpp>
-#include <unity/lib/gl_sframe.hpp>
-#include <unity/lib/image_util.hpp>
-#include <unity/lib/toolkit_function_macros.hpp>
-#include <sframe/sframe_config.hpp>
-#include <image/image_type.hpp>
-#include <image/io.hpp>
+#include <core/data/sframe/gl_sarray.hpp>
+#include <core/data/sframe/gl_sframe.hpp>
+#include <core/unity/image_util.hpp>
+#include <core/unity/toolkit_function_macros.hpp>
+#include <core/storage/sframe_data/sframe_config.hpp>
+#include <core/data/image/image_type.hpp>
+#include <core/data/image/io.hpp>
 #include "additional_sframe_utilities.hpp"
 using namespace turi;
 

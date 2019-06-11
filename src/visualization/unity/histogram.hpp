@@ -6,13 +6,13 @@
 #ifndef __TC_HISTOGRAM
 #define __TC_HISTOGRAM
 
-#include <sframe/groupby_aggregate_operators.hpp>
-#include <unity/lib/visualization/batch_size.hpp>
-#include <unity/lib/visualization/escape.hpp>
-#include <unity/lib/visualization/histogram.hpp>
-#include <unity/lib/visualization/plot.hpp>
-#include <unity/lib/visualization/vega_spec.hpp>
-#include <unity/lib/gl_sarray.hpp>
+#include <core/storage/sframe_data/groupby_aggregate_operators.hpp>
+#include <visualization/unity/batch_size.hpp>
+#include <visualization/unity/escape.hpp>
+#include <visualization/unity/histogram.hpp>
+#include <visualization/unity/plot.hpp>
+#include <visualization/unity/vega_spec.hpp>
+#include <core/data/sframe/gl_sarray.hpp>
 
 #include "transformation.hpp"
 

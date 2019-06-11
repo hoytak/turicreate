@@ -9,11 +9,11 @@
 #include <string>
 #include <vector>
 
-#include <sframe/sarray.hpp>
-#include <sframe/sframe.hpp>
-#include <unity/lib/gl_sarray.hpp>
-#include <unity/lib/gl_sframe.hpp>
-#include <unity/toolkits/evaluation/evaluation_constants.hpp>
+#include <core/storage/sframe_data/sarray.hpp>
+#include <core/storage/sframe_data/sframe.hpp>
+#include <core/data/sframe/gl_sarray.hpp>
+#include <core/data/sframe/gl_sframe.hpp>
+#include <toolkits/evaluation/evaluation_constants.hpp>
 #include <unity/toolkits/evaluation/evaluation_interface-inl.hpp>
 
 namespace turi {

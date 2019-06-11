@@ -5,7 +5,7 @@
  */
 #include <cmath>
 #include <cstddef>
-#include <globals/globals.hpp>
+#include <core/globals/globals.hpp>
 #include "export.hpp"
 
 namespace turi {

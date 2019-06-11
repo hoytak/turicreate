@@ -8,10 +8,10 @@
 
 #include <functional>
 #include <string>
-#include <sframe/sarray.hpp>
-#include <flexible_type/flexible_type_base_types.hpp>
+#include <core/storage/sframe_data/sarray.hpp>
+#include <core/data/flexible_type/flexible_type_base_types.hpp>
 #include <Eigen/Core>
-#include <sframe/sframe.hpp>
+#include <core/storage/sframe_data/sframe.hpp>
 #include <parallel/pthread_tools.hpp>
 
 namespace turi {

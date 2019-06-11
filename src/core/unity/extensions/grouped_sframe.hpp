@@ -6,10 +6,10 @@
 #ifndef TURI_GROUPED_SFRAME_HPP
 #define TURI_GROUPED_SFRAME_HPP
 
-#include <unity/lib/toolkit_class_macros.hpp>
-#include <unity/lib/gl_sframe.hpp>
-#include <unity/lib/extensions/model_base.hpp>
-#include <export.hpp>
+#include <core/unity/toolkit_class_macros.hpp>
+#include <core/data/sframe/gl_sframe.hpp>
+#include <core/model_server/model_base/model_base.hpp>
+#include <core/export.hpp>
 #include <parallel/lambda_omp.hpp>
 
 namespace turi {

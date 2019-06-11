@@ -6,8 +6,8 @@
 
 #include <parallel/pthread_tools.hpp>
 #include <boost/bind.hpp>
-#include <util/any.hpp>
-#include <util/sys_util.hpp>
+#include <core/util/any.hpp>
+#include <core/util/sys_util.hpp>
 
 #ifdef _WIN32
 #include <cross_platform/windows_wrapper.hpp>

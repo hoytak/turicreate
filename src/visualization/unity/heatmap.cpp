@@ -11,8 +11,8 @@
 #include "vega_spec.hpp"
 
 #include <parallel/lambda_omp.hpp>
-#include <unity/lib/visualization/batch_size.hpp>
-#include <unity/lib/visualization/transformation.hpp>
+#include <visualization/unity/batch_size.hpp>
+#include <visualization/unity/transformation.hpp>
 
 #include <cmath>
 #include <thread>

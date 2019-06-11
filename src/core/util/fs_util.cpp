@@ -14,9 +14,9 @@
 #include <sstream>
 #include <string>
 
-#include <fileio/fileio_constants.hpp>
-#include <logger/assertions.hpp>
-#include <util/fs_util.hpp>
+#include <core/storage/fileio/fileio_constants.hpp>
+#include <core/logging/assertions.hpp>
+#include <core/util/fs_util.hpp>
 
 bool is_hidden(const std::string path) {
   if (path.length() && path[0] == '.') {

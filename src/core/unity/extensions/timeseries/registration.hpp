@@ -6,12 +6,12 @@
 #ifndef TIMESERIES_REGISTRATIONS_H_
 #define TIMESERIES_REGISTRATIONS_H_
 
-#include <unity/lib/toolkit_class_macros.hpp>
-#include <unity/lib/toolkit_class_specification.hpp>
-#include <unity/lib/toolkit_function_specification.hpp>
+#include <core/unity/toolkit_class_macros.hpp>
+#include <core/unity/toolkit_class_specification.hpp>
+#include <core/unity/toolkit_function_specification.hpp>
 
-#include <unity/extensions/timeseries/grouped_timeseries.hpp>
-#include <unity/extensions/timeseries/timeseries.hpp>
+#include <core/unity/extensions/timeseries/grouped_timeseries.hpp>
+#include <core/unity/extensions/timeseries/timeseries.hpp>
 
 namespace turi {
 namespace timeseries {

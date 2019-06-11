@@ -6,7 +6,7 @@
 #ifndef TURI_FILEIO_BLOCK_CACHE_HPP
 #define TURI_FILEIO_BLOCK_CACHE_HPP
 #include <cstdint>
-#include <util/lru.hpp>
+#include <core/util/lru.hpp>
 #include <parallel/mutex.hpp>
 
 namespace turi {

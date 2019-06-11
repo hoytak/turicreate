@@ -5,9 +5,9 @@
  */
 #include <cstddef>
 #include <unistd.h>
-#include <logger/logger.hpp>
+#include <core/logging/logger.hpp>
 #include <timer/timer.hpp>
-#include <logger/log_rotate.hpp>
+#include <core/logging/log_rotate.hpp>
 #include <parallel/pthread_tools.hpp>
 #include <boost/filesystem.hpp>
 

@@ -12,11 +12,11 @@
 #include <string>
 #include <map>
 #include <memory>
-#include <unity/toolkits/factorization/loss_model_profiles.hpp>
-#include <serialization/serialization_includes.hpp>
-#include <flexible_type/flexible_type.hpp>
-#include <unity/lib/variant.hpp>
-#include <unity/lib/variant_deep_serialize.hpp>
+#include <toolkits/factorization/loss_model_profiles.hpp>
+#include <core/storage/serialization/serialization_includes.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <core/unity/variant.hpp>
+#include <core/unity/variant_deep_serialize.hpp>
 
 
 namespace turi {

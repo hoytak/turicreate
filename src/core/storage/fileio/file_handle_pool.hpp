@@ -9,7 +9,7 @@
 #include <string>
 #include <atomic>
 #include <parallel/mutex.hpp>
-#include <fileio/file_ownership_handle.hpp>
+#include <core/storage/fileio/file_ownership_handle.hpp>
 namespace turi {
 namespace fileio {
 /**

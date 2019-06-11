@@ -12,9 +12,9 @@
 #include "vega_spec.hpp"
 
 #include <parallel/lambda_omp.hpp>
-#include <unity/lib/visualization/escape.hpp>
-#include <unity/lib/visualization/plot.hpp>
-#include <unity/lib/visualization/transformation.hpp>
+#include <visualization/unity/escape.hpp>
+#include <visualization/unity/plot.hpp>
+#include <visualization/unity/transformation.hpp>
 
 #include <cmath>
 #include <thread>

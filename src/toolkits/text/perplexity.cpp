@@ -8,12 +8,12 @@
 #include <iostream>
 #include <cmath>
 #include <parallel/pthread_tools.hpp>
-#include <unity/lib/unity_sarray.hpp>
-#include <unity/lib/flex_dict_view.hpp>
-#include <unity/toolkits/text/topic_model.hpp>
-#include <logger/assertions.hpp>
-#include <unity/toolkits/util/indexed_sframe_tools.hpp>
-#include <ml_data/ml_data.hpp>
+#include <core/storage/sframe_interface/unity_sarray.hpp>
+#include <core/unity/flex_dict_view.hpp>
+#include <toolkits/text/topic_model.hpp>
+#include <core/logging/assertions.hpp>
+#include <toolkits/util/indexed_sframe_tools.hpp>
+#include <ml/ml_data/ml_data.hpp>
 
 namespace turi {
 namespace text {

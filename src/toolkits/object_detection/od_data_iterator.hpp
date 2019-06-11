@@ -11,9 +11,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include <unity/lib/gl_sframe.hpp>
-#include <unity/toolkits/neural_net/float_array.hpp>
-#include <unity/toolkits/neural_net/image_augmentation.hpp>
+#include <core/data/sframe/gl_sframe.hpp>
+#include <toolkits/neural_net/float_array.hpp>
+#include <toolkits/neural_net/image_augmentation.hpp>
 
 namespace turi {
 namespace object_detection {

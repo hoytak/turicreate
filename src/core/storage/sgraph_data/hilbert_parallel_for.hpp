@@ -8,9 +8,9 @@
 #include <utility>
 #include <functional>
 #include <parallel/lambda_omp.hpp>
-#include <sgraph/hilbert_curve.hpp>
-#include <sgraph/sgraph_constants.hpp>
-#include <util/blocking_queue.hpp>
+#include <core/storage/sgraph_data/hilbert_curve.hpp>
+#include <core/storage/sgraph_data/sgraph_constants.hpp>
+#include <core/util/blocking_queue.hpp>
 
 namespace turi {
 

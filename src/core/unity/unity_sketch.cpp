@@ -7,14 +7,14 @@
 #include <thread>
 #include <unordered_set>
 #include <parallel/mutex.hpp>
-#include <unity/lib/unity_sketch.hpp>
-#include <unity/lib/unity_sarray.hpp>
-#include <unity/lib/flex_dict_view.hpp>
-#include <sketches/hyperloglog.hpp>
-#include <sketches/countsketch.hpp>
-#include <sketches/quantile_sketch.hpp>
-#include <sketches/space_saving_flextype.hpp>
-#include <sketches/streaming_quantile_sketch.hpp>
+#include <core/unity/unity_sketch.hpp>
+#include <core/storage/sframe_interface/unity_sarray.hpp>
+#include <core/unity/flex_dict_view.hpp>
+#include <ml/sketches/hyperloglog.hpp>
+#include <ml/sketches/countsketch.hpp>
+#include <ml/sketches/quantile_sketch.hpp>
+#include <ml/sketches/space_saving_flextype.hpp>
+#include <ml/sketches/streaming_quantile_sketch.hpp>
 #include <parallel/lambda_omp.hpp>
 
 namespace turi {

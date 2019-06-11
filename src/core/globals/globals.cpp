@@ -6,9 +6,9 @@
 #include <cstdlib>
 #include <boost/variant.hpp>
 #include <boost/filesystem.hpp>
-#include <logger/logger.hpp>
-#include <flexible_type/flexible_type.hpp>
-#include <globals/globals.hpp>
+#include <core/logging/logger.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <core/globals/globals.hpp>
 #include "export.hpp"
 
 namespace turi {

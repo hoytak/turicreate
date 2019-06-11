@@ -3,6 +3,6 @@
 
 #include <core/logging/logger.hpp>
 #include <core/logging/assertions.hpp>
-#include <core/logging/table_printer/table_printer.hpp>
+#include <core/logging/core/logging/table_printer/table_printer.hpp>
 
 #endif

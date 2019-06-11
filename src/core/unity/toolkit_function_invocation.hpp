@@ -7,8 +7,8 @@
 #define TURI_UNITY_TOOLKIT_INVOCATION_HPP
 #include <string>
 #include <functional>
-#include <unity/lib/variant.hpp>
-#include <unity/lib/toolkit_class_registry.hpp>
+#include <core/unity/variant.hpp>
+#include <core/unity/toolkit_class_registry.hpp>
 namespace turi {
 
 /**

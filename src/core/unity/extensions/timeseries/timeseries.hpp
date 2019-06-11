@@ -12,15 +12,15 @@
 #include <iostream>
 #include <cassert>
 #include <math.h>
-#include <logger/logger.hpp>
-#include <flexible_type/flexible_type.hpp>
-#include <sframe/group_aggregate_value.hpp>
-#include <unity/lib/toolkit_class_macros.hpp>
-#include <unity/lib/gl_sarray.hpp>
-#include <unity/lib/gl_sframe.hpp>
-#include <unity/lib/extensions/model_base.hpp>
-#include <unity/extensions/timeseries/grouped_timeseries.hpp>
-#include <unity/extensions/timeseries/interpolate_value.hpp>
+#include <core/logging/logger.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <core/storage/sframe_data/group_aggregate_value.hpp>
+#include <core/unity/toolkit_class_macros.hpp>
+#include <core/data/sframe/gl_sarray.hpp>
+#include <core/data/sframe/gl_sframe.hpp>
+#include <core/model_server/model_base/model_base.hpp>
+#include <core/unity/extensions/timeseries/grouped_timeseries.hpp>
+#include <core/unity/extensions/timeseries/interpolate_value.hpp>
 
 
 namespace turi {

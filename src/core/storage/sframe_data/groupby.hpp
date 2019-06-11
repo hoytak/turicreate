@@ -9,8 +9,8 @@
 #include <parallel/mutex.hpp>
 #include<memory>
 #include<vector>
-#include<sframe/sarray.hpp>
-#include<sframe/sframe.hpp>
+#include<core/storage/sframe_data/sarray.hpp>
+#include<core/storage/sframe_data/sframe.hpp>
 
 namespace turi {
 

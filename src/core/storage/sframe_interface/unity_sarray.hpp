@@ -8,9 +8,9 @@
 
 #include <vector>
 #include <memory>
-#include <flexible_type/flexible_type.hpp>
-#include <unity/lib/api/unity_sarray_interface.hpp>
-#include <unity/lib/visualization/plot.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <core/unity/api/unity_sarray_interface.hpp>
+#include <visualization/unity/plot.hpp>
 
 namespace turi {
 

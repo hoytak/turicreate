@@ -6,7 +6,7 @@
 #ifndef TURI_PROTOTYPE_REGISTRATIONS_H_
 #define TURI_PROTOTYPE_REGISTRATIONS_H_
 
-#include <unity/lib/toolkit_class_macros.hpp>
+#include <core/unity/toolkit_class_macros.hpp>
 
 namespace turi {
 namespace prototype {

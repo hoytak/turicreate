@@ -12,7 +12,7 @@
 // ML-Data Utils
 
 // Toolkits
-#include <unity/toolkits/nearest_neighbors/nearest_neighbors.hpp>
+#include <toolkits/nearest_neighbors/nearest_neighbors.hpp>
 
 namespace turi {
 namespace nearest_neighbors {

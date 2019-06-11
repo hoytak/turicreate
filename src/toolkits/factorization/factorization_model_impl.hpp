@@ -12,16 +12,16 @@
 #include <string>
 #include <map>
 #include <algorithm>
-#include <util/branch_hints.hpp>
-#include <unity/lib/variant_deep_serialize.hpp>
-#include <flexible_type/flexible_type.hpp>
-#include <unity/toolkits/ml_data_2/ml_data.hpp>
-#include <serialization/serialization_includes.hpp>
-#include <unity/toolkits/ml_data_2/ml_data_iterators.hpp>
-#include <unity/toolkits/factorization/factorization_model.hpp>
-#include <unity/toolkits/factorization/factors_to_sframe.hpp>
-#include <unity/toolkits/recsys/recsys_model_base.hpp>
-#include <util/fast_top_k.hpp>
+#include <core/util/branch_hints.hpp>
+#include <core/unity/variant_deep_serialize.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <toolkits/ml_data_2/ml_data.hpp>
+#include <core/storage/serialization/serialization_includes.hpp>
+#include <toolkits/ml_data_2/ml_data_iterators.hpp>
+#include <toolkits/factorization/factorization_model.hpp>
+#include <toolkits/factorization/factors_to_sframe.hpp>
+#include <toolkits/recsys/recsys_model_base.hpp>
+#include <core/util/fast_top_k.hpp>
 
 namespace turi { namespace factorization {
 

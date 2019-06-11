@@ -1,26 +1,20 @@
-project(unity_toolkits)
+project(TuriCreate_toolkits)
 
-subdirs(ml_model
-        activity_classification
-        drawing_classifier
-        coreml_export
-        sparse_similarity
-        factorization
-        graph_analytics
-        sgd
-        clustering
-        ml_data_2
-        recsys
-        util 
-        evaluation
-        supervised_learning
-        nearest_neighbors
-        pattern_mining
-        feature_engineering
-        text
-        image
-        neural_net
-        object_detection
-        object_detection/one_shot_object_detection
-        prototype
-)
+# If this variable is specified, then we pull the coremltools
+#from that repo to compile in.It should just work here.
+file(GLOB_RECURSE _toolkits_src_files
+  RELATIVE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  CONFIGURE_DEPENDS
+  LIST_DIRECTORIES false
+  *.cpp
+  )
+
+make_library(toolkits
+  OBJECT
+  SOURCES
+    ${_toolkits_src_files}
+  EXTERNAL_VISIBILITY
+  )
+
+

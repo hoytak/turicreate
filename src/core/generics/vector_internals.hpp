@@ -14,8 +14,8 @@
 #include <exception>
 #include <type_traits>
 #include <initializer_list>
-#include <logger/assertions.hpp>
-#include <util/basic_types.hpp>
+#include <core/logging/assertions.hpp>
+#include <core/util/basic_types.hpp>
 #include <utility>
 
 #ifdef NDEBUG

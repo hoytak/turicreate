@@ -4,9 +4,9 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 // libhdfs shim library
-#include <globals/global_constants.hpp>
-#include <logger/logger.hpp>
-#include <logger/assertions.hpp>
+#include <core/globals/global_constants.hpp>
+#include <core/logging/logger.hpp>
+#include <core/logging/assertions.hpp>
 #include <vector>
 #include <string>
 #include <boost/filesystem.hpp>
@@ -19,7 +19,7 @@
 #include <dlfcn.h>
 #else
 #include <cross_platform/windows_wrapper.hpp>
-#include <util/syserr_reporting.hpp>
+#include <core/util/syserr_reporting.hpp>
 #endif
 extern  "C" {
 #include <hdfs.h>

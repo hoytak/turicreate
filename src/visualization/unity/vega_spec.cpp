@@ -3,11 +3,11 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#include <unity/lib/visualization/escape.hpp>
-#include <unity/lib/visualization/vega_spec.hpp>
+#include <visualization/unity/escape.hpp>
+#include <visualization/unity/vega_spec.hpp>
 
 #include <capi/TuriCreate.h>
-#include <logger/assertions.hpp>
+#include <core/logging/assertions.hpp>
 
 // generated include files for vega spec JSON
 #include <unity/lib/visualization/vega_spec/boxes_and_whiskers.h>

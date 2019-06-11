@@ -1,8 +1,8 @@
 #include "summary_view.hpp"
 
-#include <unity/lib/visualization/escape.hpp>
-#include <unity/lib/visualization/vega_data.hpp>
-#include <unity/lib/visualization/vega_spec.hpp>
+#include <visualization/unity/escape.hpp>
+#include <visualization/unity/vega_data.hpp>
+#include <visualization/unity/vega_spec.hpp>
 #include <math.h>
 
 using namespace turi;

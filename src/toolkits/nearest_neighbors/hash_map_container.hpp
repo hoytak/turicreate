@@ -7,7 +7,7 @@
 #define TURI_HASH_MAP_CONTAINER_H_
 
 #include <parallel/pthread_tools.hpp>
-#include <util/cityhash_tc.hpp>
+#include <core/util/cityhash_tc.hpp>
 
 namespace turi {
 

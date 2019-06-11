@@ -5,10 +5,10 @@
  */
 #ifndef TURI_UNITY_TOOLKIT_FUNCTION_MACROS_HPP
 #define TURI_UNITY_TOOLKIT_FUNCTION_MACROS_HPP
-#include <unity/lib/toolkit_util.hpp>
-#include <unity/lib/toolkit_function_specification.hpp>
-#include <unity/lib/toolkit_function_wrapper_impl.hpp>
-#include <unity/lib/toolkit_class_wrapper_impl.hpp>
+#include <core/unity/toolkit_util.hpp>
+#include <core/unity/toolkit_function_specification.hpp>
+#include <core/unity/toolkit_function_wrapper_impl.hpp>
+#include <core/unity/toolkit_class_wrapper_impl.hpp>
 
 
 /**************************************************************************/

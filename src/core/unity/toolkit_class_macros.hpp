@@ -6,12 +6,12 @@
 #ifndef TURI_UNITY_TOOLKIT_CLASS_MACROS_HPP
 #define TURI_UNITY_TOOLKIT_CLASS_MACROS_HPP
 #include <string>
-#include <unity/lib/toolkit_util.hpp>
-#include <unity/lib/toolkit_function_specification.hpp>
-#include <unity/lib/toolkit_class_specification.hpp>
-#include <unity/lib/toolkit_function_wrapper_impl.hpp>
-#include <unity/lib/toolkit_class_wrapper_impl.hpp>
-#include <unity/lib/extensions/model_base.hpp>
+#include <core/unity/toolkit_util.hpp>
+#include <core/unity/toolkit_function_specification.hpp>
+#include <core/unity/toolkit_class_specification.hpp>
+#include <core/unity/toolkit_function_wrapper_impl.hpp>
+#include <core/unity/toolkit_class_wrapper_impl.hpp>
+#include <core/model_server/model_base/model_base.hpp>
 
 /** 
  * \defgroup group_gl_class_ffi Class Extension Interface

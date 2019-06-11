@@ -9,9 +9,9 @@
 #include <map>
 #include <vector>
 #include <boost/variant.hpp>
-#include <flexible_type/flexible_type.hpp>
-#include <sframe/dataframe.hpp>
-#include <serialization/serialization_includes.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <core/storage/sframe_data/dataframe.hpp>
+#include <core/storage/serialization/serialization_includes.hpp>
 
 namespace turi {
 class model_base;
@@ -284,7 +284,7 @@ inline bool variant_is<boost::recursive_wrapper<function_closure_info> >(const v
 }
 
 
-#include <unity/lib/variant_converter.hpp>
+#include <core/unity/variant_converter.hpp>
 
 namespace turi {
 /**
@@ -319,5 +319,5 @@ inline typename std::decay<T>::type variant_get_value(const variant_type& v) {
 }
 
 } // namespace turi
-#include <unity/lib/api/function_closure_info.hpp>
+#include <core/unity/api/function_closure_info.hpp>
 #endif

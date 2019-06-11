@@ -7,8 +7,8 @@
 #define TURI_TOOLKIT_FUNCTION_SPECIFICATION_HPP
 #include <string>
 #include <functional>
-#include <unity/lib/toolkit_function_response.hpp>
-#include <unity/lib/toolkit_function_invocation.hpp>
+#include <core/unity/toolkit_function_response.hpp>
+#include <core/unity/toolkit_function_invocation.hpp>
 namespace turi {
 
 

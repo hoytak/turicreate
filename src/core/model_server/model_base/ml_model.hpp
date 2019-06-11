@@ -6,16 +6,16 @@
 #ifndef TURI_UNITY_ML_MODEL_HPP
 #define TURI_UNITY_ML_MODEL_HPP
 
-#include <unity/lib/variant.hpp>
-#include <unity/lib/unity_base_types.hpp>
-#include <unity/lib/toolkit_util.hpp>
-#include <unity/lib/toolkit_function_specification.hpp>
-#include <unity/lib/toolkit_class_macros.hpp>
+#include <core/unity/variant.hpp>
+#include <core/unity/unity_base_types.hpp>
+#include <core/unity/toolkit_util.hpp>
+#include <core/unity/toolkit_function_specification.hpp>
+#include <core/unity/toolkit_class_macros.hpp>
 
-#include <unity/lib/extensions/model_base.hpp>
-#include <unity/lib/extensions/option_manager.hpp>
+#include <core/model_server/model_base/model_base.hpp>
+#include <core/model_server/model_base/option_manager.hpp>
 
-#include <export.hpp>
+#include <core/export.hpp>
 
 namespace turi {
 

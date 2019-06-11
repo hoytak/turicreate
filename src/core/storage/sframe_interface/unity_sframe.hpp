@@ -9,11 +9,11 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <unity/lib/api/unity_sframe_interface.hpp>
-#include <unity/lib/unity_sarray.hpp>
-#include <sframe/group_aggregate_value.hpp>
-#include <sframe/sframe_rows.hpp>
-#include <unity/lib/visualization/plot.hpp>
+#include <core/unity/api/unity_sframe_interface.hpp>
+#include <core/storage/sframe_interface/unity_sarray.hpp>
+#include <core/storage/sframe_data/group_aggregate_value.hpp>
+#include <core/storage/sframe_data/sframe_rows.hpp>
+#include <visualization/unity/plot.hpp>
 
 namespace turi {
 

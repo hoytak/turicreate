@@ -6,8 +6,8 @@
 #ifndef TURI_UNITY_ITEM_SIMILARITY_LOOKUP_H_
 #define TURI_UNITY_ITEM_SIMILARITY_LOOKUP_H_
 
-#include <flexible_type/flexible_type.hpp>
-#include <unity/lib/extensions/option_manager.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <core/model_server/model_base/option_manager.hpp>
 
 namespace turi {
 

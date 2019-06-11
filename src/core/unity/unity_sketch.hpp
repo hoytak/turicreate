@@ -7,15 +7,15 @@
 #include <limits>
 #include <future>
 #include <unordered_set>
-#include <flexible_type/flexible_type.hpp>
-#include <unity/lib/api/unity_sketch_interface.hpp>
-#include <sframe/sarray.hpp>
-#include <sketches/hyperloglog.hpp>
-#include <sketches/countsketch.hpp>
-#include <sketches/quantile_sketch.hpp>
-#include <sketches/streaming_quantile_sketch.hpp>
+#include <core/data/flexible_type/flexible_type.hpp>
+#include <core/unity/api/unity_sketch_interface.hpp>
+#include <core/storage/sframe_data/sarray.hpp>
+#include <ml/sketches/hyperloglog.hpp>
+#include <ml/sketches/countsketch.hpp>
+#include <ml/sketches/quantile_sketch.hpp>
+#include <ml/sketches/streaming_quantile_sketch.hpp>
 #include <parallel/atomic.hpp>
-#include <logger/logger.hpp>
+#include <core/logging/logger.hpp>
 namespace turi {
 
 // forward declarations

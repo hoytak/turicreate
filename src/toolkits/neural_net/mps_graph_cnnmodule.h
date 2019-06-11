@@ -11,9 +11,9 @@
 #import <Metal/Metal.h>
 #import <MetalPerformanceShaders/MetalPerformanceShaders.h>
 
-#include <unity/toolkits/neural_net/float_array.hpp>
-#include <unity/toolkits/neural_net/model_backend.hpp>
-#include <unity/toolkits/neural_net/mps_command_queue.hpp>
+#include <toolkits/neural_net/float_array.hpp>
+#include <toolkits/neural_net/model_backend.hpp>
+#include <toolkits/neural_net/mps_command_queue.hpp>
 
 #import "mps_utils.h"
 #import "mps_graph_networks.h"

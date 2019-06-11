@@ -2,15 +2,15 @@
 #include <memory>
 
 #include "plot.hpp"
-#include <unity/lib/visualization/dark_mode.hpp>
-#include <unity/lib/visualization/process_wrapper.hpp>
-#include <unity/lib/visualization/thread.hpp>
-#include <unity/lib/visualization/transformation.hpp>
-#include <unity/lib/visualization/vega_data.hpp>
-#include <unity/lib/visualization/vega_spec.hpp>
-#include <unity/lib/visualization/histogram.hpp>
-#include <unity/lib/visualization/item_frequency.hpp>
-#include <unity/lib/visualization/summary_view.hpp>
+#include <visualization/unity/dark_mode.hpp>
+#include <visualization/unity/process_wrapper.hpp>
+#include <visualization/unity/thread.hpp>
+#include <visualization/unity/transformation.hpp>
+#include <visualization/unity/vega_data.hpp>
+#include <visualization/unity/vega_spec.hpp>
+#include <visualization/unity/histogram.hpp>
+#include <visualization/unity/item_frequency.hpp>
+#include <visualization/unity/summary_view.hpp>
 #include <unity/lib/visualization/vega_spec/config.h>
 #include <sstream>
 

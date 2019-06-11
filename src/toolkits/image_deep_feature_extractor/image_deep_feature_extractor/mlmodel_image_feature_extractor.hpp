@@ -6,7 +6,7 @@
 #ifndef MLMODEL_IMAGE_FEATURE_EXTRACTOR_HPP
 #define MLMODEL_IMAGE_FEATURE_EXTRACTOR_HPP
 
-#include <toolkits/image_deep_feature_extractor/image_feature_extractor.hpp>
+#include <toolkits/image_deep_feature_extractor/image_deep_feature_extractor/image_feature_extractor.hpp>
 
 #include <memory>
 #include <string>

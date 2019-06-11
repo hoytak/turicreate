@@ -7,7 +7,7 @@
 #define TURI_SPARSE_SIM_SLICED_MATRIX_UTILITIES_H
 
 #include <vector>
-#include <logger/assertions.hpp>
+#include <core/logging/assertions.hpp>
 #include <parallel/atomic.hpp>
 #include <parallel/lambda_omp.hpp>
 

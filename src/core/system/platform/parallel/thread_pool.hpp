@@ -8,7 +8,7 @@
 
 #include <boost/bind.hpp>
 #include <parallel/pthread_tools.hpp>
-#include <util/blocking_queue.hpp>
+#include <core/util/blocking_queue.hpp>
 
 namespace turi {
 

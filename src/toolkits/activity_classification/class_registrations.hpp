@@ -8,8 +8,8 @@
 
 #include <vector>
 
-#include <unity/lib/toolkit_class_specification.hpp>
-#include <unity/lib/toolkit_function_specification.hpp>
+#include <core/unity/toolkit_class_specification.hpp>
+#include <core/unity/toolkit_function_specification.hpp>
 
 namespace turi {
 namespace activity_classification {

@@ -5,11 +5,11 @@
  */
 #ifndef TURI_UNITY_SGRAPH_HPP
 #define TURI_UNITY_SGRAPH_HPP
-#include <unity/lib/api/unity_graph_interface.hpp>
-#include <unity/lib/api/unity_sframe_interface.hpp>
-#include <unity/lib/sgraph_triple_apply_typedefs.hpp>
-#include <sgraph/sgraph_constants.hpp>
-#include <sframe/dataframe.hpp>
+#include <core/unity/api/unity_graph_interface.hpp>
+#include <core/unity/api/unity_sframe_interface.hpp>
+#include <core/unity/sgraph_triple_apply_typedefs.hpp>
+#include <core/storage/sgraph_data/sgraph_constants.hpp>
+#include <core/storage/sframe_data/dataframe.hpp>
 #include <memory>
 #include <parallel/mutex.hpp>
 

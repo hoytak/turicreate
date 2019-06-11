@@ -11,8 +11,8 @@
 #include <ostream>
 #include <vector>
 
-#include <image/image_type.hpp>
-#include <unity/toolkits/neural_net/float_array.hpp>
+#include <core/data/image/image_type.hpp>
+#include <toolkits/neural_net/float_array.hpp>
 
 namespace turi {
 namespace neural_net {

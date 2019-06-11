@@ -5,16 +5,16 @@
  */
 #include <ctime>
 #include <parallel/pthread_tools.hpp>
-#include <unity/lib/gl_sarray.hpp>
-#include <unity/lib/gl_sframe.hpp>
-#include <unity/lib/unity_sarray.hpp>
-#include <sframe/sarray.hpp>
-#include <sframe/sarray_reader.hpp>
-#include <sframe/sarray_reader_buffer.hpp>
-#include <unity/lib/image_util.hpp>
-#include <sframe_query_engine/planning/planner.hpp>
-#include <unity/lib/visualization/histogram.hpp>
-#include <unity/lib/visualization/item_frequency.hpp>
+#include <core/data/sframe/gl_sarray.hpp>
+#include <core/data/sframe/gl_sframe.hpp>
+#include <core/storage/sframe_interface/unity_sarray.hpp>
+#include <core/storage/sframe_data/sarray.hpp>
+#include <core/storage/sframe_data/sarray_reader.hpp>
+#include <core/storage/sframe_data/sarray_reader_buffer.hpp>
+#include <core/unity/image_util.hpp>
+#include <core/storage/query_engine/planning/planner.hpp>
+#include <visualization/unity/histogram.hpp>
+#include <visualization/unity/item_frequency.hpp>
 
 namespace turi {
 

@@ -3,9 +3,9 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#include <unity/server/registration.hpp>
-#include <unity/server/unity_server_init.hpp>
-#include <unity/toolkits/recsys/models/itemcf.hpp>
+#include <core/model_server/registration.hpp>
+#include <core/model_server/unity_server_init.hpp>
+#include <toolkits/recsys/models/itemcf.hpp>
 
 namespace turi {
 

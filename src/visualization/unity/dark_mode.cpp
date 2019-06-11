@@ -1,4 +1,4 @@
-#include <unity/lib/visualization/dark_mode.hpp>
+#include <visualization/unity/dark_mode.hpp>
 
 #ifdef __APPLE__
 #import <CoreFoundation/CoreFoundation.h>
