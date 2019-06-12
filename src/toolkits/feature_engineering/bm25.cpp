@@ -136,7 +136,7 @@ flexible_type calc_avg_document_lengths(const gl_sarray& src){
  * \param[in] b - parameter to downweight scores of long documents
  *
  * For more information, see http://en.wikipedia.org/wiki/Okapi_BM25
- * and see src/unity/python/turicreate/toolkits/feature_engineering/_bm25.py
+ * and see src/python/turicreate/toolkits/feature_engineering/_bm25.py
  */
 double compute_bm25(const int term_frequency,
                     const size_t document_length,
