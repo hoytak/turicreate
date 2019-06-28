@@ -73,6 +73,18 @@ struct capi_struct_type_info {
     return ret;                                                               \
   }
 
+
+static inline _check_type(const struct_name* value, int position, const char* name, tc_error** error) {
+  if(value == nullptr) { 
+    if(null_value_allowed) { 
+      static const struct_name##_struct null_struct = make_struct(value); 
+    
+    error_null_value(#struct_name, name, int, error); 
+
+}
+
+
+
 typedef std::map<std::string, turi::aggregate::groupby_descriptor_type> groupby_aggregator_map_type;
 
 DECLARE_CAPI_WRAPPER_STRUCT(tc_error, std::string);
