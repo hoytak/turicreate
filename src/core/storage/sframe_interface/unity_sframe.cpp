@@ -2017,7 +2017,7 @@ void unity_sframe::explore(const std::string& path_to_client, const std::string&
       // It appears that GCC falsely assumes the payload part of the response 
       // variable may be uninitialized; this fixes that.
 #     pragma GCC diagnostic push
-#     pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#     pragma GCC diagnostic ignored "-Werror"
       
       auto sa = gl_sarray(std::vector<flexible_type>(1, input)).astype(flex_type_enum::DICT);
       flex_dict dict = sa[0].get<flex_dict>();
