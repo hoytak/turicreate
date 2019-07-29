@@ -415,6 +415,11 @@ std::shared_ptr<unity_sarray_base> unity_sframe::select_column(const std::string
 
   // Construct the project operator with the column index
   size_t column_index = _column_index_iter - _column_names.begin();
+  return select_column(column_index);
+}
+std::shared_ptr<unity_sarray_base> unity_sframe::select_column(size_t column_index) {
+  Dlog_func_entry();
+
   auto new_planner_node = op_project::make_planner_node(this->get_planner_node(), {column_index});
 
   std::shared_ptr<unity_sarray> ret(new unity_sarray());
@@ -426,36 +431,28 @@ std::shared_ptr<unity_sframe_base> unity_sframe::select_columns(
     const std::vector<std::string> &names) {
   Dlog_func_entry();
 
-  // Error checking
-  // Check if there is duplicate column names
-  std::set<std::string> name_set(names.begin(), names.end());
-  if (name_set.size() != names.size()) {
-    log_and_throw("There are duplicate column names in the name list");
+  return select_columns(_convert_column_names_to_indices(names));
+}
+
+std::shared_ptr<unity_sframe_base> unity_sframe::select_columns(
+    const std::vector<size_t>& indices) {
+  Dlog_func_entry();
+
+  std::vector<std::string> new_column_names(indices.size());
+
+  if(std::set<size_t>(indices.begin(), indices.end()).size() != indices.size()) {
+    log_and_throw("Duplicate columns selected.");
   }
 
-  // Check if column names are valid
-  auto this_column_names = this->column_names();
-  auto this_column_types = this->dtype();
-  std::vector<size_t> project_column_indices;
-  for (const auto& name: names) {
-    auto iter = std::find(this_column_names.begin(), this_column_names.end(), name);
-    if (iter == this_column_names.end()) {
-      log_and_throw("Column name " + name + " does not exist.");
+  for(size_t i = 0; i < indices.size(); ++i) {
+    if(i >= m_column_names.size()) {
+      std_log_and_throw(std::range_error, "Column index out of bounds.");
     }
-    project_column_indices.push_back(iter - this_column_names.begin());
-  }
-
-  if (names.empty()) {
-    return std::make_shared<unity_sframe>();
+    new_column_names[i] = m_column_names[i];
   }
 
   // Construct the project operator with the column index
-  auto new_planner_node = op_project::make_planner_node(this->get_planner_node(), {project_column_indices});
-  std::vector<std::string> new_column_names;
-  std::vector<flex_type_enum> new_column_types;
-  for (auto& i : project_column_indices) {
-    new_column_names.push_back(this_column_names[i]);
-  }
+  auto new_planner_node = op_project::make_planner_node(this->get_planner_node(), {indices});
 
   std::shared_ptr<unity_sframe> ret(new unity_sframe());
   ret->construct_from_planner_node(new_planner_node,
@@ -758,6 +755,20 @@ std::shared_ptr<unity_sframe_base> unity_sframe::flat_map(
 std::vector<flex_type_enum> unity_sframe::dtype() {
   Dlog_func_entry();
   return infer_planner_node_type(this->get_planner_node());
+}
+
+flex_type_enum unity_sframe::dtype(size_t column_index) {
+  Dlog_func_entry();
+
+  return std::static_pointer_cast<unity_sarray>(select_column(column_index))->dtype();
+}
+
+
+flex_type_enum unity_sframe::dtype(const std::string& column_name) {
+  Dlog_func_entry();
+
+  return dtype(column_index(column_name));
+
 }
 
 
@@ -1528,48 +1539,6 @@ unity_sframe::copy_range(size_t start, size_t step, size_t end) {
   return ret;
 }
 
-bool unity_sframe::_contains_nan(const flexible_type& cell) {
-  switch (cell.get_type()) {
-    case flex_type_enum::VECTOR:
-      for (auto cc : cell.get<flex_vec>()) {
-        if (std::isnan(cc)) {
-          return true;
-        }
-      }
-      break;
-    case flex_type_enum::LIST:
-      for (auto& cc : cell.get<flex_list>()) {
-        // recursive call
-        if (_contains_nan(cc)) {
-          return true;
-        }
-      }
-      break;
-    case flex_type_enum::DICT:
-      for (auto& cc : cell.get<flex_dict>()) {
-        // recursive call on key,val pair
-        if (_contains_nan(cc.first) || _contains_nan(cc.second)) {
-          return true;
-        }
-      }
-      break;
-    case flex_type_enum::ND_VECTOR: {
-      // enfore const to use no bound check operator[]
-      const auto& nd_arr = cell.get<flex_nd_vec>();
-      auto idx = flex_nd_vec::index_range_type(nd_arr.shape().size(), 0);
-      do {
-        if (std::isnan(nd_arr[nd_arr.fast_index(idx)]))
-          return true;
-      } while (nd_arr.increment_index(idx));
-      break;
-    }
-    default:
-      // non-container type case.
-      return cell.is_na();
-  }
-
-  return false;
-}
 
 std::list<std::shared_ptr<unity_sframe_base>> unity_sframe::drop_missing_values(
     const std::vector<std::string> &column_names, bool all, bool split, bool recursive) {
@@ -1580,59 +1549,102 @@ std::list<std::shared_ptr<unity_sframe_base>> unity_sframe::drop_missing_values(
     log_and_throw("Too many column names given.");
   }
 
-  // Filter function
-  std::vector<size_t> column_indices = _convert_column_names_to_indices(column_names);
+  // First see if we can do this on a single column:
+  std::shared_ptr<unity_sarray> filter_sarray;
 
-  std::function<flexible_type(const sframe_rows::row&)> filter_fn;
-  if (all) {
-    // for perf, I choose not to use std::function to wrap _contains_nan or is_nan
-    if (recursive) {
-      filter_fn =
-          [column_indices](const sframe_rows::row& row) -> flexible_type {
-        size_t num_missing_values = 0;
-        for (const auto& i : column_indices) {
-          if (_contains_nan(row[i])) {
-            ++num_missing_values;
-          }
-        }
-        return (num_missing_values != column_indices.size());
-      };
+  if(column_names.size() == 1) {
 
-    } else {
-      filter_fn =
-          [column_indices](const sframe_rows::row& row) -> flexible_type {
-        size_t num_missing_values = 0;
-        for (const auto& i : column_indices) {
-          if (row[i].is_na()) {
-            ++num_missing_values;
-          }
-        }
-        return (num_missing_values != column_indices.size());
-      };
-    }
+    auto src_array = std::static_pointer_cast<unity_sarray>(select_column(column_names[0]));
+    filter_sarray = std::static_pointer_cast<unity_sarray>(src_array->missing_mask(recursive, false));
+
   } else {
-    if (recursive) {
-      filter_fn =
-          [column_indices](const sframe_rows::row& row) -> flexible_type {
-        for (const auto& i : column_indices) {
-          if (_contains_nan(row[i])) return false;
-        }
-        return true;
-      };
-    } else {
-      filter_fn =
-          [column_indices](const sframe_rows::row& row) -> flexible_type {
-        for (const auto& i : column_indices) {
-          if (row[i].is_na()) return false;
-        }
-        return true;
-      };
-    }
-  }
-  auto filter_sarray = std::static_pointer_cast<unity_sarray>(
-    transform_lambda(filter_fn, flex_type_enum::INTEGER, 0));
 
-  auto ret = std::list<std::shared_ptr<unity_sframe_base>>();
+    std::vector<size_t> column_indices = _convert_column_names_to_indices(column_names);
+
+    // Separate out the columns that require contains_na, which is more expensive.
+    size_t n_recursive = 0, n_simple = column_indices.size();
+
+    if(recursive) {
+
+      // Partition the indices so that the first chunk don't need recursive types,
+      // and the indices later need recursive.  This would make the filter function
+      // more efficient.
+      auto part_it = std::partition(column_indices.begin(), column_indices.end(),
+          [&](size_t i) {
+        flex_type_enum src_dtype = dtype(column_indices[i]);
+
+        return !(src_dtype == flex_type_enum::VECTOR
+                  || src_dtype == flex_type_enum::LIST
+                  || src_dtype == flex_type_enum::DICT
+                  || src_dtype == flex_type_enum::ND_VECTOR);
+      });
+
+      n_simple = part_it - column_indices.begin();
+      n_recursive = column_indices.end() - part_it;
+    }
+
+    // Now, make a dedicated SFrame with the right columns.
+    auto src_sframe = std::static_pointer_cast<unity_sframe>(select_columns(column_indices));
+    std::function<flexible_type(const sframe_rows::row&)> filter_fn;
+
+    if(n_recursive == 0) {
+      if(all) {
+        filter_fn = [](const sframe_rows::row& row) -> flexible_type {
+          for(const flexible_type& v : row) {
+            if(!v.is_na()) {
+              return true;
+            }
+          }
+          return false;
+        };
+      } else {
+        filter_fn = [](const sframe_rows::row& row) -> flexible_type {
+          for(const flexible_type& v : row) {
+            if(v.is_na()) {
+              return false;
+            }
+          }
+          return true;
+        };
+      }
+    } else {
+      if(all) {
+        filter_fn = [=](const sframe_rows::row& row) -> flexible_type {
+
+          for (size_t i = 0; i < n_simple; ++i) {
+            if(!row[i].is_na()) {
+              return true;
+            }
+          }
+          for(size_t i = n_simple; i < row.size(); ++i) {
+            if(!row[i].contains_na()) {
+              return true;
+            }
+          }
+          return false;
+        };
+      } else {
+        filter_fn = [=](const sframe_rows::row& row) -> flexible_type {
+
+          for (size_t i = 0; i < n_simple; ++i) {
+            if(row[i].is_na()) {
+              return false;
+            }
+          }
+          for(size_t i = n_simple; i < row.size(); ++i) {
+            if(row[i].contains_na()) {
+              return false;
+            }
+          }
+          return true;
+        };
+      }
+    }
+
+    filter_sarray = std::static_pointer_cast<unity_sarray>(
+       src_sframe->transform_lambda(filter_fn, flex_type_enum::INTEGER, 0));
+  }
+
   if (split) {
     return logical_filter_split(filter_sarray);
   } else {
