@@ -431,7 +431,7 @@ std::shared_ptr<unity_sframe_base> unity_sframe::select_columns(
     const std::vector<std::string> &names) {
   Dlog_func_entry();
 
-  return select_columns(_convert_column_names_to_indices(names));
+  return select_columns(_convert_column_names_to_indices(names, false));
 }
 
 std::shared_ptr<unity_sframe_base> unity_sframe::select_columns(
@@ -1247,7 +1247,7 @@ unity_sframe::sort(const std::vector<std::string>& sort_keys,
     log_and_throw("sframe::sort, nothing to sort");
   }
 
-  std::vector<size_t> sort_indices = _convert_column_names_to_indices(sort_keys);
+  std::vector<size_t> sort_indices = _convert_column_names_to_indices(sort_keys, true);
   std::vector<bool> b_sort_ascending;
   for(auto sort_order: sort_ascending) {
     b_sort_ascending.push_back((bool)sort_order);
@@ -1423,7 +1423,7 @@ std::shared_ptr<unity_sframe_base> unity_sframe::stack(
   auto sframe_ptr = std::make_shared<sframe>();
   sframe_ptr->open_for_write(ret_column_names, ret_column_types,
                              "", SFRAME_DEFAULT_NUM_SEGMENTS);
-  size_t stack_col_idx = _convert_column_names_to_indices({stack_column_name})[0];
+  size_t stack_col_idx = column_index(stack_column_name);
 
   auto transform_callback = [&](size_t segment_id,
                                 const std::shared_ptr<sframe_rows>& data) {
@@ -1563,7 +1563,7 @@ std::list<std::shared_ptr<unity_sframe_base>> unity_sframe::drop_missing_values(
 
   } else {
 
-    std::vector<size_t> column_indices = _convert_column_names_to_indices(column_names);
+    std::vector<size_t> column_indices = _convert_column_names_to_indices(column_names, false);
 
     // Separate out the columns that require contains_na, which is more expensive.
     size_t n_recursive = 0, n_simple = column_indices.size();
@@ -1676,32 +1676,45 @@ dataframe_t unity_sframe::to_dataframe() {
  * Throw if column_names has duplication, or some column name does not exist.
  */
 std::vector<size_t> unity_sframe::_convert_column_names_to_indices(
-    const std::vector<std::string> &column_names) {
+    const std::vector<std::string>& column_names, bool complete_if_empty) {
 
-  std::unordered_set<size_t> dedup_set;
+  std::set<size_t> dedup_set;
   std::vector<size_t> column_indices;
 
-  auto this_column_names = this->column_names();
   if(column_names.size()) {
-    for(auto &i : column_names) {
+
+    column_indices.reserve(column_names.size());
+
+    for(const auto& name : column_names) {
       // Fine if this throws, it will just be propagated back with a fine message
-      auto iter = std::find(this_column_names.begin(), this_column_names.end(), i);
-      if (iter == this_column_names.end()) {
-        log_and_throw(std::string("Column ") + i + " does not exist");
+      auto iter = std::find(m_column_names.begin(), m_column_names.end(), name);
+
+      if (iter == m_column_names.end()) {
+        log_and_throw(std::string("Column ") + name + " does not exist");
       };
-      size_t index_to_add = iter - this_column_names.begin();
+      size_t index_to_add = iter - m_column_names.begin();
+
       if (dedup_set.count(index_to_add)) {
-        log_and_throw(std::string("Duplicate column names: ") + i);
+        log_and_throw(std::string("Duplicate column name: ") + name);
       }
+
       dedup_set.insert(index_to_add);
+
       column_indices.push_back(index_to_add);
+
     }
   } else {
-    // Add all columns
-    for(size_t i = 0; i < num_columns(); ++i) {
-      column_indices.push_back(i);
+    if(complete_if_empty) { 
+      // Add all columns
+      column_indices.reserve(num_columns());
+      for(size_t i = 0; i < num_columns(); ++i) {
+        column_indices.push_back(i);
+      }
+    } else { 
+      column_indices = {};
     }
   }
+
   return column_indices;
 }
 
