@@ -1586,7 +1586,7 @@ std::list<std::shared_ptr<unity_sframe_base>> unity_sframe::drop_missing_values(
   // First see if we can do this on a single column:
   std::shared_ptr<unity_sarray> filter_sarray;
 
-  } else if(column_names.size() == 1) {
+  if(column_names.size() == 1) {
 
     auto src_array = std::static_pointer_cast<unity_sarray>(select_column(column_names[0]));
     filter_sarray = std::static_pointer_cast<unity_sarray>(src_array->missing_mask(recursive, false));
