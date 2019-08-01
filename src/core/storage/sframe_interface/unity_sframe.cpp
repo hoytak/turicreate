@@ -1575,7 +1575,7 @@ unity_sframe::copy_range(size_t start, size_t step, size_t end) {
 
 
 std::list<std::shared_ptr<unity_sframe_base>> unity_sframe::drop_missing_values(
-    const std::vector<std::string> &column_names, bool all, bool split, bool recursive) {
+    const std::vector<std::string>& column_names, bool all, bool split, bool recursive) {
   log_func_entry();
 
   // Error checking
@@ -1586,15 +1586,22 @@ std::list<std::shared_ptr<unity_sframe_base>> unity_sframe::drop_missing_values(
   // First see if we can do this on a single column:
   std::shared_ptr<unity_sarray> filter_sarray;
 
-  if(column_names.size() == 1) {
+  } else if(column_names.size() == 1) {
 
     auto src_array = std::static_pointer_cast<unity_sarray>(select_column(column_names[0]));
     filter_sarray = std::static_pointer_cast<unity_sarray>(src_array->missing_mask(recursive, false));
 
   } else {
 
-    std::vector<size_t> column_indices = _convert_column_names_to_indices(column_names);
-    
+    std::vector<size_t> column_indices;
+       
+    if(column_names.empty()) { 
+      column_indices.resize(this->num_columns()); 
+      std::iota(column_indices.begin(), column_indices.end(), 0); 
+    } else { 
+      column_indices = _convert_column_names_to_indices(column_names);
+    }
+        
     // Separate out the columns that require contains_na, which is more expensive.
     size_t n_recursive = 0, n_simple = column_indices.size();
 
