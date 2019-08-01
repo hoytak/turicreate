@@ -628,7 +628,7 @@ class unity_sframe : public unity_sframe_base {
    *
    * Throw if column_names has duplication, or some column name does not exist.
    */
-  std::vector<size_t> _convert_column_names_to_indices(const std::vector<std::string>& column_names, bool complete_if_empty = false);
+  std::vector<size_t> _convert_column_names_to_indices(const std::vector<std::string>& column_names);
 
   /**
    * Generate a new column name

@@ -402,7 +402,7 @@ bool unity_sframe::contains_column(const std::string& name) {
   return sf->contains_column(name);
 }
 
-std::shared_ptr<unity_sarray_base> unity_sframe::select_column(const std::string &name) {
+std::shared_ptr<unity_sarray_base> unity_sframe::select_column(const std::string& name) {
   Dlog_func_entry();
 
   // Error checking
@@ -415,8 +415,13 @@ std::shared_ptr<unity_sarray_base> unity_sframe::select_column(const std::string
 
   // Construct the project operator with the column index
   size_t column_index = _column_index_iter - _column_names.begin();
-  return select_column(column_index);
+  auto ret = select_column(column_index);
+
+  DASSERT_EQ(std::static_pointer_cast<unity_sarray>(ret)->dtype(), dtype(name)); 
+
+  return ret; 
 }
+
 std::shared_ptr<unity_sarray_base> unity_sframe::select_column(size_t column_index) {
   Dlog_func_entry();
 
@@ -424,14 +429,30 @@ std::shared_ptr<unity_sarray_base> unity_sframe::select_column(size_t column_ind
 
   std::shared_ptr<unity_sarray> ret(new unity_sarray());
   ret->construct_from_planner_node(new_planner_node);
+
   return ret;
 }
 
 std::shared_ptr<unity_sframe_base> unity_sframe::select_columns(
-    const std::vector<std::string> &names) {
+    const std::vector<std::string>& names) {
   Dlog_func_entry();
 
-  return select_columns(_convert_column_names_to_indices(names, false));
+  auto ret = select_columns(_convert_column_names_to_indices(names));
+
+#ifndef NDEBUG
+  {
+    std::shared_ptr<unity_sframe> X = std::static_pointer_cast<unity_sframe>(ret);
+      
+    DASSERT_EQ(X->num_columns(), names.size());
+
+    for(size_t i = 0; i < names.size(); ++i) { 
+      DASSERT_EQ(names[i], X->column_name(i));
+      DASSERT_EQ(this->dtype(names[i]), X->dtype(i));
+    }
+  }
+#endif
+
+  return ret; 
 }
 
 std::shared_ptr<unity_sframe_base> unity_sframe::select_columns(
@@ -449,10 +470,11 @@ std::shared_ptr<unity_sframe_base> unity_sframe::select_columns(
   }
 
   for(size_t i = 0; i < indices.size(); ++i) {
-    if(i >= m_column_names.size()) {
+    size_t col_idx = indices[i]; 
+    if(col_idx >= m_column_names.size()) {
       std_log_and_throw(std::range_error, "Column index out of bounds.");
     }
-    new_column_names[i] = m_column_names[i];
+    new_column_names[i] = m_column_names[col_idx];
   }
 
   // Construct the project operator with the column index
@@ -1247,7 +1269,15 @@ unity_sframe::sort(const std::vector<std::string>& sort_keys,
     log_and_throw("sframe::sort, nothing to sort");
   }
 
-  std::vector<size_t> sort_indices = _convert_column_names_to_indices(sort_keys, true);
+  std::vector<size_t> sort_indices;
+ 
+  if(sort_keys.empty()) { 
+    sort_indices.resize(this->num_columns()); 
+    std::iota(sort_indices.begin(), sort_indices.end(), 0); 
+  } else { 
+    sort_indices = _convert_column_names_to_indices(sort_keys);
+  }
+
   std::vector<bool> b_sort_ascending;
   for(auto sort_order: sort_ascending) {
     b_sort_ascending.push_back((bool)sort_order);
@@ -1563,8 +1593,8 @@ std::list<std::shared_ptr<unity_sframe_base>> unity_sframe::drop_missing_values(
 
   } else {
 
-    std::vector<size_t> column_indices = _convert_column_names_to_indices(column_names, false);
-
+    std::vector<size_t> column_indices = _convert_column_names_to_indices(column_names);
+    
     // Separate out the columns that require contains_na, which is more expensive.
     size_t n_recursive = 0, n_simple = column_indices.size();
 
@@ -1676,7 +1706,7 @@ dataframe_t unity_sframe::to_dataframe() {
  * Throw if column_names has duplication, or some column name does not exist.
  */
 std::vector<size_t> unity_sframe::_convert_column_names_to_indices(
-    const std::vector<std::string>& column_names, bool complete_if_empty) {
+    const std::vector<std::string>& column_names) {
 
   std::set<size_t> dedup_set;
   std::vector<size_t> column_indices;
@@ -1704,16 +1734,18 @@ std::vector<size_t> unity_sframe::_convert_column_names_to_indices(
 
     }
   } else {
-    if(complete_if_empty) { 
-      // Add all columns
-      column_indices.reserve(num_columns());
-      for(size_t i = 0; i < num_columns(); ++i) {
-        column_indices.push_back(i);
-      }
-    } else { 
-      column_indices = {};
+    column_indices = {};
+  }
+
+#ifndef NDEBUG
+  {
+    DASSERT_EQ(column_indices.size(), column_names.size());
+    for(size_t i = 0; i < column_names.size(); ++i ) { 
+      DASSERT_EQ(column_names[i], this->column_name(column_indices[i]));
     }
   }
+#endif
+
 
   return column_indices;
 }
