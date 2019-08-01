@@ -438,6 +438,10 @@ std::shared_ptr<unity_sframe_base> unity_sframe::select_columns(
     const std::vector<size_t>& indices) {
   Dlog_func_entry();
 
+  if(indices.empty()) { 
+    return std::make_shared<unity_sframe>();
+  }
+
   std::vector<std::string> new_column_names(indices.size());
 
   if(std::set<size_t>(indices.begin(), indices.end()).size() != indices.size()) {
