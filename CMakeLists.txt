@@ -137,6 +137,9 @@ endif()
 #**************************************************************************/
 include_directories(SYSTEM
  ${CMAKE_SOURCE_DIR}/deps/local/include)
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/boost/boost_1_68_0/)
+
 
 link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib)
 
