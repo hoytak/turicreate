@@ -26,7 +26,7 @@ function print_help {
   echo "  --no-ccache "
   echo
   echo "  --with-capi (default)             Build C API."
-  echo "  --with-capi-framework             Build C API as macOS framework (macOS only)"
+  echo "  --with-capi-framework             Build C API as macOS framework (macOS + XCode builder only)"
   echo "  --no-capi                         Skip building the C API."
   echo
   echo "  --with-python (default)           Build python components."
@@ -43,11 +43,12 @@ function print_help {
   echo "  --arch=<architecture>             The target architecture.  "
   echo "                                    May be added multiple times." 
   echo 
-  echo "  --platform=<platform>             The platform targeted for (OSX only)."
-  echo
   echo "  --with-remotefs (default)         Include capabilities for remote file access."
   echo "  --no-remotefs                     Disable remote file access."
-  echo
+  echo 
+  echo "  --builder=<builder>               Generates build files for the given build system.  "
+  echo "                                    Possible values are make (default), xcode, or ninja."
+  echo 
   echo "  --yes                             Defaults to yes on a prompt"
   echo
   echo "  -D var=value                      Specify FLAGS definitions to be passed on to cmake."
@@ -127,6 +128,8 @@ release_opt_for_size=0
 debug_opt_for_size=0
 arch_list=""
 platform=""
+builder="make"
+
 
 
 ###############################################################################
@@ -165,6 +168,9 @@ while [ $# -gt 0 ]
     --no-remotefs)          with_remotefs=0;;
 
     --yes)                  default_yes=1;;
+
+    --builder=*)            builder=${1##--builder=} ;;
+    --builder)              builder=${2} ; shift ;;
 
     --help)                 print_help ;;
 
@@ -238,6 +244,7 @@ echo "System Information: "
 uname -v
 
 if [[ ! -e ${arch_list} ]] ; then 
+  arch_list="${arch_list##;}"
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_ARCH='${arch_list}'"
 fi
 
@@ -268,27 +275,27 @@ CMAKE=`./scripts/find_cmake.sh`
 set -e
 set -o pipefail
 
+case $builder in
+ xcode) CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -GXcode" ;;
+ make) ;;
+ ninja) ;; 
+ *) echo "Unrecognized builder $builder; valid options are make, ninja, and xcode." ; exit 1 ;;
+esac
+   
+DEBUG_DIR="$TURI_HOME/debug"
+RELEASE_DIR="$TURI_HOME/release"
 
-echo -e "\n\n\n======================= Debug =========================" \
-
-if [ ! -d $DEBUG_DIR ]; then
-    mkdir $DEBUG_DIR
-fi
-cd $DEBUG_DIR
-rm -f CMakeCache.txt
 build_cmd="$CMAKE \
     $GENERATOR \
-    -D CMAKE_BUILD_TYPE=Debug \
     -D CMAKE_C_COMPILER=$CCCMD \
     -D CMAKE_CXX_COMPILER=$CXXCMD \
-    $CMAKE_CONFIG_FLAGS
-    -DCMAKE_SYSTEM_NAME=Darwin
-    -GXcode
-    --build
-    -B _target
-    ../."
-echo $build_cmd
-eval $build_cmd
+    ${CMAKE_CONFIG_FLAGS}"
+
+echo "$build_cmd -D CMAKE_BUILD_TYPE=Debug -B ${DEBUG_DIR} ./"
+$build_cmd -D CMAKE_BUILD_TYPE=Debug -B ${DEBUG_DIR} ./
+echo "$build_cmd -D CMAKE_BUILD_TYPE=Release -B ${RELEASE_DIR} ./"
+$build_cmd -D CMAKE_BUILD_TYPE=Release -B ${RELEASE_DIR} ./
+
 cd $TURI_HOME
 
 exit 0 

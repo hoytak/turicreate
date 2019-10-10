@@ -21,7 +21,8 @@ include(CheckCXXCompilerFlag)
 # Get base stuff set up with the SDK.  Per CMake Documentation, this should be set 
 # before project() is called.
 
-if(APPLE) 
+if(APPLE)  
+  set(CMAKE_SYSTEM_NAME Darwin)
 
   if(NOT TC_BASE_SDK) 
     # Assume that we're building for macOSX
@@ -89,7 +90,7 @@ if(APPLE)
 
   # Set the build architectures
   if(TC_BUILD_ARCH)
-    set(CMAKE_OSX_ARCHITECTURES ${TC_BUILD_ARCH})
+    set(CMAKE_OSX_ARCHITECTURES "${TC_BUILD_ARCH}")
   endif()
 endif() 
 
