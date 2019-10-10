@@ -32,21 +32,25 @@ function print_help {
   echo "  --with-python (default)           Build python components."
   echo "  --no-python"
   echo
+  echo "  --virtualenv=VIRTUALENV_EXE       Path to virtualenv executable (otherwise looks in \$PATH)."
+  echo
   echo "  --with-visualization (default)    Build Turi Create visualization client."
   echo "  --no-visualization"
   echo
   echo "  --release-opt-for-size            Optimize for size."
   echo "  --debug-opt-for-size              Debug optimize for size."
-  echo "  --target-ios                      Build for iOS (macOS only)"
+  echo
+  echo "  --arch=<architecture>             The target architecture.  "
+  echo "                                    May be added multiple times." 
+  echo 
+  echo "  --platform=<platform>             The platform targeted for (OSX only)."
   echo
   echo "  --with-remotefs (default)         Include capabilities for remote file access."
   echo "  --no-remotefs                     Disable remote file access."
   echo
-  echo "  --virtualenv VIRTUALENV_EXE       Path to virtualenv executable (otherwise looks in \$PATH)."
-  echo
   echo "  --yes                             Defaults to yes on a prompt"
   echo
-  echo "  -D var=value                      Specify CFLAGS definitions to be passed on to cmake."
+  echo "  -D var=value                      Specify FLAGS definitions to be passed on to cmake."
   echo
   echo "Relevant environment variables: "
   echo
@@ -119,10 +123,11 @@ with_ios=0
 with_ccache=1
 with_visualization=1
 with_remotefs=1
-with_extra_opt_flags=1
-with_stack_display=0
 release_opt_for_size=0
 debug_opt_for_size=0
+arch_list=""
+platform=""
+
 
 ###############################################################################
 #
@@ -136,7 +141,12 @@ while [ $# -gt 0 ]
 
     --release-opt-for-size) release_opt_for_size=1;;
     --debug-opt-for-size)   debug_opt_for_size=1;;
-    --target-ios)           with_ios=1; with_python=0; with_capi=1; release_opt_for_size=1;;
+
+    --platform=*)           platform=${1##--platform=};;
+    --platform)             platform=${2}; shift;;
+
+    --arch=*)               arch_list="${arch_list};${1##--arch=}";;
+    --arch)                 arch_list="${arch_list};$2"; shift ;;
 
     --with-ccache)          with_ccache=1;;
     --no-ccache)            with_ccache=0;;
@@ -160,6 +170,7 @@ while [ $# -gt 0 ]
 
     -D)                     CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -D $2"; shift ;;
 
+    --virtualenv=*)         VIRTUALENV="${1##--virtualenv=}" ;;
     --virtualenv)           VIRTUALENV="$2"; shift ;;
     *) unknown_option $1 ;;
   esac
@@ -187,16 +198,15 @@ if [[ $with_python == 1 ]]; then
   install_python_toolchain
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_PYTHON=1"
 else
-  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS"
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_PYTHON=0"
 fi
 
-if [[ $release_opt_for_size == 1 ]]; then
-  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DRELEASE_OPT_FOR_SIZE=1"
-fi
+# Release Opt for size
+#
+CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DRELEASE_OPT_FOR_SIZE=${release_opt_for_size}"
 
-if [[ $debug_opt_for_size == 1 ]]; then
-  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DDEBUG_OPT_FOR_SIZE=1"
-fi
+# Debug Opt for size
+CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DDEBUG_OPT_FOR_SIZE=${debug_opt_for_size}"
 
 # Check what is needed with the remote_fs stuff
 if [[ $with_capi == 1 ]]; then
@@ -204,27 +214,15 @@ if [[ $with_capi == 1 ]]; then
   if [[ $with_capi_framework == 1 ]]; then
     CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_CAPI_FRAMEWORK=1"
   fi
-  if [[ $with_ios == 1 ]]; then
-    CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DARCH=arm64 -DTC_BUILD_IOS=1"
-  fi
 else
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_CAPI=0"
 fi
 
 # Do we need to build the visualization toolkit?
-if [[ $with_visualization == 1 ]]; then
-  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_VISUALIZATION_CLIENT=1"
-else
-  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_VISUALIZATION_CLIENT=0"
-fi
-
+CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_VISUALIZATION_CLIENT=${with_visualization}"
 
 # Tell CMake whether we need to build the remote FS stuff.
-if [[ $with_remotefs == 1 ]]; then
-  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_REMOTEFS=1"
-else 
-  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_REMOTEFS=0"
-fi
+CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_REMOTEFS=${with_remotefs}"
 
 
 ##################################################################3
@@ -238,6 +236,15 @@ export INCLUDE_PATH=${PWD}/deps/local/include:$LD_LIBRARY_PATH
 echo "======================= BUILD CONFIGURATION ========================"
 echo "System Information: "
 uname -v
+
+if [[ ! -e ${arch_list} ]] ; then 
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_ARCH='${arch_list}'"
+fi
+
+if [[ ! -e ${platform} ]] ; then 
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BASE_SDK=${platform}"
+fi
+
 
 echo "======================= FINDING COMPILERS ========================"
 
@@ -261,6 +268,31 @@ CMAKE=`./scripts/find_cmake.sh`
 set -e
 set -o pipefail
 
+
+echo -e "\n\n\n======================= Debug =========================" \
+
+if [ ! -d $DEBUG_DIR ]; then
+    mkdir $DEBUG_DIR
+fi
+cd $DEBUG_DIR
+rm -f CMakeCache.txt
+build_cmd="$CMAKE \
+    $GENERATOR \
+    -D CMAKE_BUILD_TYPE=Debug \
+    -D CMAKE_C_COMPILER=$CCCMD \
+    -D CMAKE_CXX_COMPILER=$CXXCMD \
+    $CMAKE_CONFIG_FLAGS
+    -DCMAKE_SYSTEM_NAME=Darwin
+    -GXcode
+    --build
+    -B _target
+    ../."
+echo $build_cmd
+eval $build_cmd
+cd $TURI_HOME
+
+exit 0 
+
 echo -e "\n\n\n======================= Release ========================" \
 
 if [ ! -d $RELEASE_DIR ]; then
@@ -279,21 +311,3 @@ echo $build_cmd
 eval $build_cmd
 cd $TURI_HOME
 
-
-echo -e "\n\n\n======================= Debug =========================" \
-
-if [ ! -d $DEBUG_DIR ]; then
-    mkdir $DEBUG_DIR
-fi
-cd $DEBUG_DIR
-rm -f CMakeCache.txt
-build_cmd="$CMAKE \
-    $GENERATOR \
-    -D CMAKE_BUILD_TYPE=Debug \
-    -D CMAKE_C_COMPILER=$CCCMD \
-    -D CMAKE_CXX_COMPILER=$CXXCMD \
-    $CMAKE_CONFIG_FLAGS
-    ../."
-echo $build_cmd
-eval $build_cmd
-cd $TURI_HOME

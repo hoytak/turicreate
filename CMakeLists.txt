@@ -1,11 +1,7 @@
-project(Turi)
-
 # We require a recent version of cmake and automatically
 # install a compatible version when using the cmake lists,
 # if one is not already present.
 cmake_minimum_required(VERSION 3.12.0)
-include(CheckCXXCompilerFlag)
-
 
 # Libraries linked via full path no longer produce linker search paths.
 cmake_policy(SET CMP0003 NEW)
@@ -17,107 +13,54 @@ cmake_policy(SET CMP0046 OLD)
 cmake_policy(SET CMP0042 NEW)
 cmake_policy(SET CMP0077 NEW)
 
-# Generate a compilation database for use with automated tools like IDE/editor
-# plugins. See http://clang.llvm.org/docs/JSONCompilationDatabase.html
-set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+include(CheckCXXCompilerFlag)
 
-# Determine where additional Turi specific cmake modules are
-# defined
-set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
-set(CMAKE_MODULE_PATH ${DEPS_CMAKE};${CMAKE_SOURCE_DIR}/cmake)
-set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
-set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+##################################################################################
+# Base configuration options (Called before project()  
+#
+# Get base stuff set up with the SDK.  Per CMake Documentation, this should be set 
+# before project() is called.
 
-if(TC_BUILD_PYTHON)
-  message("Building python libraries.")
+if(APPLE) 
 
-  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/)
-    message(FATAL, "Internal error: Python toolchain expected; not present.")
+  if(NOT TC_BASE_SDK) 
+    # Assume that we're building for macOSX
+    set(TC_BASE_SDK macosx)
   endif()
 
-  include(UseCython)
-  add_definitions(-DTC_HAS_PYTHON)
-  add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT)
-else()
-  message("Skipping python libraries.")
-endif()
+  if(${TC_BASE_SDK} MATCHES "iphoneos.*")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.0)
 
-set(TC_PLATFORM_APPLE false)
-set(TC_PLATFORM_LINUX false)
-set(TC_PLATFORM_WIN32 false)
+    if(${TC_BUILD_REMOTEFS})
+      message(ERROR, "RemoteFS must be disable for building iOS.")
+    endif()
 
-if (APPLE)
-  set(TC_PLATFORM_APPLE true)
-  add_definitions(-DTC_PLATFORM_APPLE)
-  find_library(ACCELERATE NAMES Accelerate)
-  find_library(APPKIT AppKit)
-  find_library(CORE_GRAPHICS CoreGraphics)
-  find_library(JAVASCRIPT_CORE JavaScriptCore)
-  find_library(FOUNDATION Foundation)
-  find_library(CORE_IMAGE NAMES CoreImage)
-  find_library(CORE_ML CoreML)
-  find_library(CORE_VIDEO CoreVideo)
-  find_library(METAL NAMES Metal)
-  find_library(METAL_PERFORMANCE_SHADERS NAMES MetalPerformanceShaders)
-elseif (WIN32)
-  set(TC_PLATFORM_WIN32 true)
-  add_definitions(-DTC_PLATFORM_WIN32)
-else()
-  set(TC_PLATFORM_LINUX true)
-  add_definitions(-DTC_PLATFORM_LINUX)
-endif()
-
-#**************************************************************************/
-#*                                                                        */
-#*                     Global Link and Include Flags                      */
-#*                                                                        */
-#**************************************************************************/
-include_directories(SYSTEM
- ${CMAKE_SOURCE_DIR}/deps/local/include)
-include_directories(SYSTEM
- ${CMAKE_SOURCE_DIR}/src/external/boost/boost_1_68_0/)
-include_directories(SYSTEM
- ${CMAKE_SOURCE_DIR}/src/external/libpng/libpng-1.6.37/)
-include_directories(SYSTEM
- ${CMAKE_SOURCE_DIR}/src/external/libjpeg/jpeg-8d/)
-
-
-link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib)
-
-if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib64)
-  link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib64)
-endif()
-
-#**************************************************************************
-#*                                                                        *
-#*                       Platform Specific Stuff                          *
-#*                                                                        *
-#**************************************************************************
-if(APPLE)
-  if(TC_BUILD_IOS)
-    SET(TC_BASE_SDK iphoneos)
-    SET(COMPILER_FLAGS "${COMPILER_FLAGS} -miphoneos-version-min=10.0 -Wno-c++11-narrowing")
+  elseif(${TC_BASE_SDK} MATCHES "macos.*")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)
   else()
-    SET(TC_BASE_SDK macosx)
-
-    # Modify COMPILER_FLAGS instead of setting CMAKE_OSX_DEPLOYMENT_TARGET so
-    # that this setting propagates to external dependencies.
-    SET(COMPILER_FLAGS "${COMPILER_FLAGS} -mmacosx-version-min=10.12")
+    message(FATAL, "Platform ${TC_BASE_SDK} not recognized.") 
   endif()
 
+  # Find and set the SDK path.
+  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} 
+    --show-sdk-path OUTPUT_VARIABLE TC_BASE_SDK_PATH RETURN_VALUE _xcrun_ret)
+
+  if(NOT ${_xcrun_ret} EQUAL 0)
+    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
+  endif()
+
+  # Set the base root.
+  SET(CMAKE_OSX_SYSROOT "${TC_BASE_SDK_PATH}")
+  
+  message("Using SDK ${CMAKE_OSX_SYSROOT}.")
+  
+  # Get the sdk version.
   EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-version OUTPUT_VARIABLE TC_BASE_SDK_VERSION RETURN_VALUE _xcrun_ret)
   if(NOT ${_xcrun_ret} EQUAL 0)
-    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
+    message(ERROR "xcrun command failed with return code ${_xcrun_ret}.")
   endif()
-
-  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-path OUTPUT_VARIABLE TC_BASE_SDK_PATH RETURN_VALUE _xcrun_ret)
-  if(NOT ${_xcrun_ret} EQUAL 0)
-    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
-  endif()
-
-  SET(CMAKE_OSX_SYSROOT "${TC_BASE_SDK_PATH}")
-  SET(COMPILER_FLAGS "${COMPILER_FLAGS} -isysroot ${TC_BASE_SDK_PATH}")
+  
+  # TODO: replace all these with in-build macros based on standard macros
 
   # Core ML is only present on macOS 10.13 or higher.
   # Logic reversed to get around what seems to be a CMake bug.
@@ -136,12 +79,82 @@ if(APPLE)
     set(HAS_MPS TRUE)
 
     # CoreML MLCustomModel requires macOS 10.14 or higher
-    set(HAS_MLCUSTOMMODEL TRUE)
+    add_definitions(-DHAS_MLCUSTOM_MODEL)
+    set(HAS_COREML_CUSTOM_MODEL TRUE)
   endif()
-
+ 
   if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.15)
     add_definitions(-DHAS_MACOS_10_15)
   endif()
+
+  # Set the build architectures
+  if(TC_BUILD_ARCH)
+    set(CMAKE_OSX_ARCHITECTURES ${TC_BUILD_ARCH})
+  endif()
+endif() 
+
+# Generate a compilation database for use with automated tools like IDE/editor
+# plugins. See http://clang.llvm.org/docs/JSONCompilationDatabase.html
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
+##################################################################################
+# Set the base configuration for a number of things.
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+
+project(Turi)
+enable_language(C)
+enable_language(CXX)
+
+
+
+
+# Determine where additional Turi specific cmake modules are
+# defined
+set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
+set(CMAKE_MODULE_PATH ${DEPS_CMAKE};${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
+set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
+
+if(TC_BUILD_PYTHON)
+  message("Building python libraries.")
+
+  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/)
+    message(FATAL, "Internal error: Python toolchain expected; not present.")
+  endif()
+
+  include(UseCython)
+  add_definitions(-DTC_HAS_PYTHON=1)
+  add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT=1)
+else()
+  message("Skipping python libraries.")
+endif()
+
+# Set up the 
+
+
+
+
+#**************************************************************************/
+#*                                                                        */
+#*                     Global Link and Include Flags                      */
+#*                                                                        */
+#**************************************************************************/
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/deps/local/include)
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/boost/boost_1_68_0/)
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/libpng/libpng-1.6.37/)
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/libjpeg/jpeg-8d/)
+
+link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib)
+
+if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib64)
+  link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib64)
 endif()
 
 
@@ -183,10 +196,6 @@ if (WIN32)
         ${MINGW_ROOT}/libgcc_s_seh-1.dll
         ${MINGW_ROOT}/libstdc++-6.dll
         ${MINGW_ROOT}/libeay32.dll)
-else()
-        if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib64/libgomp.so.1)
-                list(APPEND INSTALLATION_SYSTEM_BINARY_FILES ${CMAKE_SOURCE_DIR}/deps/local/lib64/libgomp.so.1)
-        endif()
 endif()
 
 
@@ -195,7 +204,6 @@ endif()
 #*                             Common Defines                             */
 #*                                                                        */
 #**************************************************************************/
-set(CMAKE_CXX_STANDARD 11)
 
 
 if(WIN32)
@@ -203,24 +211,8 @@ if(WIN32)
   add_definitions(-D_WIN32_WINNT=0x0600)
 endif()
 
-if(TC_BUILD_IOS)
-  add_definitions(-DTC_BUILD_IOS)
-
-  if(${TC_BUILD_REMOTEFS})
-    message(ERROR, "RemoteFS must be disable for building iOS.")
-  endif()
-
-endif()
-
 if(NOT ${TC_BUILD_REMOTEFS})
   add_definitions(-DTC_DISABLE_REMOTEFS)
-endif()
-
-if (${TC_EXTRA_OPTIMIZATION_FLAGS})
-  message("Enabling extra optimization flags.")
-  add_definitions(-DTC_EXTRA_OPTIMIZATION_FLAGS)
-else()
-  message("Disabling extra optimization flags.")
 endif()
 
 add_definitions(-DTC_BUILD_PATH_BASE="${CMAKE_SOURCE_DIR}")
@@ -229,6 +221,7 @@ add_definitions(-DCURL_STATICLIB)
 add_definitions(-DIN_TURI_SOURCE_TREE)
 add_definitions(-DFUSION_MAX_VECTOR_SIZE=20)
 add_definitions(-DBOOST_SPIRIT_THREAD_SAFE)
+
 # These determine the maximum number of arguments for extension functions
 add_definitions(-DBOOST_FUSION_INVOKE_MAX_ARITY=12)
 add_definitions(-DBOOST_FUSION_INVOKE_PROCEDURE_MAX_ARITY=12)
@@ -237,6 +230,19 @@ add_definitions(-DBOOST_FUSION_INVOKE_FUNCTION_OBJECT_MAX_ARITY=12)
 # Workaround for https://svn.boost.org/trac10/ticket/10443 in Boost 1.68.0
 add_definitions(-DBOOST_RESULT_OF_USE_TR1_WITH_DECLTYPE_FALLBACK)
 
+if (APPLE)
+  find_library(ACCELERATE NAMES Accelerate)
+  find_library(APPKIT AppKit)
+  find_library(CORE_GRAPHICS CoreGraphics)
+  find_library(JAVASCRIPT_CORE JavaScriptCore)
+  find_library(FOUNDATION Foundation)
+  find_library(CORE_IMAGE NAMES CoreImage)
+  find_library(CORE_ML CoreML)
+  find_library(CORE_VIDEO CoreVideo)
+  find_library(METAL NAMES Metal)
+  find_library(METAL_PERFORMANCE_SHADERS NAMES MetalPerformanceShaders)
+endif()
+
 #**************************************************************************/
 #*                                                                        */
 #*                          Apple Legal Defines                           */
@@ -244,14 +250,6 @@ add_definitions(-DBOOST_RESULT_OF_USE_TR1_WITH_DECLTYPE_FALLBACK)
 #**************************************************************************/
 add_definitions(-DEIGEN_MPL2_ONLY)
 
-#**************************************************************************/
-#*                                                                        */
-#*                      Force Disable OpenMP                              */
-#*                                                                        */
-#**************************************************************************/
-add_library(openmp INTERFACE)
-target_compile_definitions(openmp INTERFACE __NO_OPENMP__)
-message(WARNING "OpenMP Libraries were not found")
 
 #**************************************************************************/
 #*                                                                        */
@@ -282,6 +280,11 @@ if (CLANG)
     set(_cpp11_optional_flags "${_cpp11_optional_flags} -Wno-stdlibcxx-not-found")
   endif()
 
+  check_cxx_compiler_flag("-Wno-deprecated-declarations" __no_deprecated_declarations)
+  if(${__no_deprecated_declarations})
+    set(_cpp11_optional_flags "${_cpp11_optional_flags} -Wno-deprecated-declarations")
+  endif()
+
   check_cxx_compiler_flag("-Wno-deprecated-register" __no_deprecated_register)
   if(${__no_deprecated_register})
     set(_cpp11_optional_flags "${_cpp11_optional_flags} -Wno-deprecated-register")
@@ -309,7 +312,7 @@ if (CLANG)
     endif()
   endif()
 
-  set(CPP11_FLAGS "-Wno-enum-compare -Wno-conversion-null -Wno-constant-logical-operand -Wno-parentheses-equality -ftemplate-depth=900 ${_cpp11_optional_flags}")
+  set(CPP11_FLAGS "-Wno-enum-compare -Wno-conversion-null -Wno-constant-logical-operand -Wno-parentheses-equality -ftemplate-depth=900 ${_cpp11_optional_flags} -Wno-c++11-narrowing")
 
   set(WERROR_FLAGS "-Werror -Wall -Wsign-compare")
 else()
@@ -394,41 +397,6 @@ endif()
   # endif()
 
 
-
-if (MARCH)
-  set(ARCH_FLAG "-march=${MARCH}")
-elseif (ARCH)
-  set(ARCH_FLAG "-arch ${ARCH}")
-else()
-  check_cxx_compiler_flag(-march=nehalem HAS_MARCH_NEHALEM)
-  if(HAS_MARCH_NEHALEM)
-    # Old CPU archetecture; enables SSE up to 4.2 + popcnt + other instructions.
-    # Supported on GCC 4.9.x and above
-    set(MARCH "nehalem")
-  else()
-    # Old CPU archetecture; enables SSE up to 3
-    # Supported on at least GCC 4.8.x, maybe earlier
-    set(MARCH "core2")
-    check_cxx_compiler_flag(-msse4 HAS_M_SSE4)
-    if(HAS_M_SSE4)
-      set(MARCH "${MARCH} -msse4")
-    endif()
-    check_cxx_compiler_flag(-msse4.1 HAS_M_SSE4_1)
-    if(HAS_M_SSE4_1)
-      set(MARCH "${MARCH} -msse4.1")
-    endif()
-    check_cxx_compiler_flag(-msse4.2 HAS_M_SSE4_2)
-    if(HAS_M_SSE4_2)
-      set(MARCH "${MARCH} -msse4.2")
-    endif()
-  endif()
-  set(ARCH_FLAG "-march=${MARCH}")
-endif()
-
-# check if MTUNE is set
-if (NOT MTUNE)
-  set(MTUNE "-mtune=generic") # Reommended way of setting this for generic distributions
-endif()
 
 set(EXTRA_OPTIMIZATION_FLAGS "")
 set(DISABLE_WARNING_FLAGS "")
