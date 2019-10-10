@@ -20,6 +20,16 @@ ${libpng_src_dir}/pngwio.c
 ${libpng_src_dir}/pngwrite.c
 ${libpng_src_dir}/pngwtran.c
 ${libpng_src_dir}/pngwutil.c
+${libpng_src_dir}/arm/filter_neon.S
+${libpng_src_dir}/arm/filter_neon_intrinsics.c
+${libpng_src_dir}/arm/arm_init.c
+${libpng_src_dir}/arm/palette_neon_intrinsics.c
+${libpng_src_dir}/mips/mips_init.c
+${libpng_src_dir}/mips/filter_msa_intrinsics.c
+${libpng_src_dir}/intel/intel_init.c
+${libpng_src_dir}/intel/filter_sse2_intrinsics.c
+${libpng_src_dir}/powerpc/filter_vsx_intrinsics.c
+${libpng_src_dir}/powerpc/powerpc_init.c
 REQUIRES
   z
   )
