@@ -133,9 +133,6 @@ else()
   message("Skipping python libraries.")
 endif()
 
-# Set up the 
-
-
 
 
 #**************************************************************************/
@@ -581,7 +578,7 @@ include(eval)
 #
 # if DYNAMIC is true, a dynamic library is built.
 #
-# Boost, pthread is always added as a default dependency. OpenMP is added
+# Boost, pthread is always added as a default dependency. 
 # when possible.
 macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFINED OBJECT)
   # create the target
@@ -590,7 +587,7 @@ macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFI
   else()
     message(STATUS "Adding Executable: ${NAME}")
     # default dependencies
-    target_link_libraries(${NAME} boost pthread openmp)
+    target_link_libraries(${NAME} boost pthread)
   endif()
 
   set_property(TARGET ${NAME} PROPERTY IS_LIBRARY ${IS_LIBRARY})
@@ -673,7 +670,7 @@ endmacro()
 # All other targets which depends on this library (using the "requires" function)
 # will automatically include all recursive dependencies.
 #
-# Boost, pthread is always added as a default dependency. OpenMP is added
+# Boost, pthread is always added as a default dependency.
 # when possible.
 macro(make_library NAME)
   set(options SHARED EXTERNAL_VISIBILITY SHARED_ALL_DEFINED DEAD_STRIP OBJECT)
@@ -847,7 +844,7 @@ endmacro()
 # All other targets which depends on this library (using the "requires" function)
 # will automatically include all recursive dependencies.
 #
-# Boost, pthread is always added as a default dependency. OpenMP is added
+# Boost, pthread is always added as a default dependency.
 # when possible.
 function (make_executable NAME)
   set(one_value_args COMPILE_FLAGS OUTPUT_NAME)
