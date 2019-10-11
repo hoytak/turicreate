@@ -1,4 +1,4 @@
-project(ml_data_2_test)
+project(Turi)
 
 make_boost_test(basic_storage.cxx REQUIRES unity_shared_for_testing)
 make_boost_test(numerics.cxx REQUIRES unity_shared_for_testing)

@@ -1,4 +1,4 @@
-project(aws-sdk-cpp)
+project(Turi)
 
 make_library(aws-sdk-cpp
   OBJECT

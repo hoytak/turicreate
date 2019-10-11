@@ -1,4 +1,4 @@
-project(startup_teardown)
+project(Turi)
 
 make_library(startup_teardown OBJECT
   SOURCES

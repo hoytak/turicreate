@@ -1,4 +1,4 @@
-project(unity)
+project(Turi)
 
 subdirs(extensions
   lib)

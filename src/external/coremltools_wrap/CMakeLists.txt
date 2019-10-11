@@ -1,4 +1,4 @@
-project(TuriExternalDependencies)
+project(Turi)
 
 # Handle the coremltools dependencies.
 

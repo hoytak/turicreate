@@ -1,4 +1,4 @@
-project(TuriCreateObjC)
+project(Turi)
 
 if(APPLE AND HAS_MLCUSTOMMODEL)
 

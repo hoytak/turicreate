@@ -1,4 +1,4 @@
-project(unity)
+project(Turi)
 
 set(FORMAT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/format")
 set(BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/format/cpp")

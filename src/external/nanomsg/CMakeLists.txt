@@ -1,4 +1,4 @@
-project(nanomsg)
+project(Turi)
 
 set(NN_STATIC_LIB 1)
 set(NN_TESTS 0)

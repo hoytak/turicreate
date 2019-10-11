@@ -1,4 +1,4 @@
-project(unity_cython)
+project(Turi)
 
 set(CMAKE_C_FLAGS_DEBUG
   "${EXTERNAL_CMAKE_C_FLAGS_DEBUG}")
