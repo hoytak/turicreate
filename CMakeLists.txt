@@ -1052,14 +1052,9 @@ include_directories(SYSTEM src/external/nanomsg/nanomsg-1.0.0/src)
 # This is a collosal hack, but it allows the extension modules to 
 # add their own common objects. 
 
-set(_TC_COMMON_OBJECTS CACHE INTERNAL "")
-set(_TC_COMMON_REQUIREMENTS CACHE INTERNAL "")
-
-
-
 # Collate all the object targets shared among static and shared library targets
 # These are used by C API, unity_shared, etc.
-set(_TC_DEFAULT_SERVER_INITIALIZER CACHE INTERNAL
+set(_TC_DEFAULT_SERVER_INITIALIZER 
   "${CMAKE_SOURCE_DIR}/src/capi/default_server_initializer.cpp"
 )
 
@@ -1079,7 +1074,7 @@ endif()
 
 
 
-set(_TC_COMMON_OBJECTS CACHE INTERNAL 
+set(_TC_COMMON_OBJECTS
   "${_TC_COMMON_OBJECTS}"
   "$<TARGET_OBJECTS:capi>"
 
