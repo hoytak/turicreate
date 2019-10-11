@@ -12,7 +12,7 @@ cmake_policy(SET CMP0045 OLD)
 cmake_policy(SET CMP0046 OLD)
 cmake_policy(SET CMP0042 NEW)
 cmake_policy(SET CMP0077 NEW)
-
+    
 include(CheckCXXCompilerFlag)
 
 ##################################################################################
@@ -22,8 +22,6 @@ include(CheckCXXCompilerFlag)
 # before project() is called.
 
 if(APPLE)  
-  set(CMAKE_SYSTEM_NAME Darwin)
-
   if(NOT TC_BASE_SDK) 
     # Assume that we're building for macOSX
     set(TC_BASE_SDK macosx)
@@ -58,7 +56,7 @@ if(APPLE)
   # Get the sdk version.
   EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-version OUTPUT_VARIABLE TC_BASE_SDK_VERSION RETURN_VALUE _xcrun_ret)
   if(NOT ${_xcrun_ret} EQUAL 0)
-    message(ERROR "xcrun command failed with return code ${_xcrun_ret}.")
+    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
   endif()
   
   # TODO: replace all these with in-build macros based on standard macros
@@ -87,11 +85,6 @@ if(APPLE)
   if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.15)
     add_definitions(-DHAS_MACOS_10_15)
   endif()
-
-  # Set the build architectures
-  if(TC_BUILD_ARCH)
-    set(CMAKE_OSX_ARCHITECTURES "${TC_BUILD_ARCH}")
-  endif()
 endif() 
 
 # Generate a compilation database for use with automated tools like IDE/editor
@@ -108,9 +101,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 project(Turi)
 enable_language(C)
 enable_language(CXX)
-
-
-
 
 # Determine where additional Turi specific cmake modules are
 # defined
@@ -326,12 +316,6 @@ if(${__no_unknown_warning_option})
   add_compile_options(-Wno-unknown-warning-option)
 endif()
  
-if (${TC_STACK_DISPLAY})
-  set(DEBUG_INFO_FLAGS "-g3 -fno-omit-frame-pointer")
-else()
-  set(DEBUG_INFO_FLAGS "-g")
-endif()
-
 # Shared compiler flags used by all builds (debug, profile, release)
 # Allow COMPILER_FLAGS to be used as options from the ./configure without
 # forcing all the other options I want to add to be lost
