@@ -1049,6 +1049,21 @@ endif()
 include_directories(SYSTEM src/external/google)
 include_directories(SYSTEM src/external/nanomsg/nanomsg-1.0.0/src)
 
+# This is a collosal hack, but it allows the extension modules to 
+# add their own common objects. 
+
+set(_TC_COMMON_OBJECTS CACHE INTERNAL "")
+set(_TC_COMMON_REQUIREMENTS CACHE INTERNAL "")
+
+
+
+# Collate all the object targets shared among static and shared library targets
+# These are used by C API, unity_shared, etc.
+set(_TC_DEFAULT_SERVER_INITIALIZER CACHE INTERNAL
+  "${CMAKE_SOURCE_DIR}/src/capi/default_server_initializer.cpp"
+)
+
+
 if(EXISTS ${CMAKE_SOURCE_DIR}/extensions)
   include_directories(SYSTEM extensions)
   add_subdirectory(extensions)
@@ -1062,12 +1077,10 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/subtree)
   add_subdirectory(subtree)
 endif()
 
-# Collate all the object targets shared among static and shared library targets
-# These are used by C API, unity_shared, etc.
-set(_TC_DEFAULT_SERVER_INITIALIZER
-  "${CMAKE_SOURCE_DIR}/src/capi/default_server_initializer.cpp"
-)
-set(_TC_COMMON_OBJECTS
+
+
+set(_TC_COMMON_OBJECTS CACHE INTERNAL 
+  "${_TC_COMMON_OBJECTS}"
   "$<TARGET_OBJECTS:capi>"
 
   # Also list all dependencies (including transitive dependencies)
@@ -1155,52 +1168,7 @@ set(_TC_COMMON_REQUIREMENTS
   nanomsg
 )
 
-if(APPLE)
-  set(_TC_COMMON_OBJECTS
-    ${_TC_COMMON_OBJECTS}
-    "$<TARGET_OBJECTS:image_deep_feature_extractor>"
-    "$<TARGET_OBJECTS:platform_config>"
-  )
-  set(_TC_COMMON_REQUIREMENTS
-    ${_TC_COMMON_REQUIREMENTS}
-    ${CORE_ML}
-    ${CORE_VIDEO}
-    ${FOUNDATION}
-  )
-  if(NOT TC_BUILD_IOS)
-    set(_TC_COMMON_OBJECTS
-      ${_TC_COMMON_OBJECTS}
-      "$<TARGET_OBJECTS:vega_renderer>"
-    )
-    set(_TC_COMMON_REQUIREMENTS
-      ${_TC_COMMON_REQUIREMENTS}
-      ${APPKIT}
-      ${CORE_GRAPHICS}
-      ${JAVASCRIPT_CORE}
-    )
-    if(HAS_MPS)
-      set(_TC_COMMON_OBJECTS
-        ${_TC_COMMON_OBJECTS}
-        "$<TARGET_OBJECTS:tcmps>"
-      )
-      set(_TC_COMMON_REQUIREMENTS
-        ${_TC_COMMON_REQUIREMENTS}
-        ${ACCELERATE}
-        ${CORE_IMAGE}
-        ${METAL}
-        ${METAL_PERFORMANCE_SHADERS}
-      )
-    endif()
-  endif()
-endif()
-if(${TC_BUILD_REMOTEFS})
-  # object targets that should be included in all APPLE and non-APPLE
-  # platforms except for iOS
-  set(_TC_COMMON_OBJECTS
-    ${_TC_COMMON_OBJECTS}
-    "$<TARGET_OBJECTS:aws-sdk-cpp>"
-  )
-endif()
-
 add_subdirectory(src)
 add_subdirectory(test)
+
+
