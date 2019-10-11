@@ -256,13 +256,13 @@ echo "======================= BUILD CONFIGURATION ========================"
 echo "System Information: "
 uname -v
 
-if [[ ! -e ${arch_list} ]] ; then 
+if [[ ! -z ${arch_list} ]] ; then 
   arch_list="${arch_list##;}"
   echo "Using architectures: ${arch_list}"
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_ARCH='${arch_list}'"
 fi
 
-if [[ ! -e ${platform} ]] ; then 
+if [[ ! -z ${platform} ]] ; then 
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BASE_SDK=${platform}"
 fi
 
@@ -293,7 +293,7 @@ case $builder in
  xcode) 
    CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -GXcode -DCMAKE_SYSTEM_NAME=Darwin"
 
-   if [[ ! -e ${arch_list} ]] ; then 
+   if [[ ! -z ${arch_list} ]] ; then 
      CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_OSX_ARCHITECTURES='${arch_list}'"
    fi
    ;;
