@@ -95,20 +95,6 @@ macro(make_capi_library NAME)
       MACOSX_RPATH TRUE
     )
 
-    add_custom_command(TARGET ${NAME}
-    POST_BUILD
-      COMMAND "${__CAPI_SOURCE_DIR}/framework/process_framework.sh"
-      --name ${NAME}
-      --src-headers "${__CAPI_SOURCE_DIR}"
-      --framework "${CMAKE_CURRENT_BINARY_DIR}/${NAME}.framework"
-      --install-location "@rpath"
-      --create-tbd-file
-      ${ios_option}
-    BYPRODUCTS
-      "${CMAKE_CURRENT_BINARY_DIR}/${NAME}.framework/Versions/Current/Header/TuriCreate.h"
-      "${CMAKE_CURRENT_BINARY_DIR}/${NAME}.framework/Versions/Current/TuriCreate.tbd"
-    )
-
     add_dependencies(${NAME} "${__CAPI_SOURCE_DIR}/framework/process_framework.sh")
     add_dependencies(${NAME} "${__CAPI_SOURCE_DIR}/framework/Info.plist")
 
