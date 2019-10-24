@@ -1,3 +1,10 @@
+if(NOT ${TC_BUILD_VISUALIZATION_CLIENT})
+  make_empty_library(ex_node)
+  make_empty_library(node)
+  return()
+endif()
+
+
 set(EXTRA_CONFIGURE_FLAGS "")
 if(WIN32 AND ${MSYS_MAKEFILES})
   set(EXTRA_CONFIGURE_FLAGS --build=x86_64-w64-mingw32)

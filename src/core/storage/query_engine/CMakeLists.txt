@@ -1,4 +1,4 @@
-project(sframe_query_engine)
+project(Turi)
 
 make_library(sframe_query_engine OBJECT
    SOURCES

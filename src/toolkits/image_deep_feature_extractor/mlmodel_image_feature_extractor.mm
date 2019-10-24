@@ -18,7 +18,7 @@
 #import <CoreML/CoreML.h>
 #include <memory>
 
-#include <mlmodel/src/Format.hpp>
+#include <coremltools/mlmodel/src/Format.hpp>
 
 namespace turi {
 namespace image_deep_feature_extractor {

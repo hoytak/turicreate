@@ -15,8 +15,10 @@
 
 #include <model_server/lib/extensions/ml_model.hpp>
 
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
 #include <visualization/annotation/class_registrations.hpp>
 #include <visualization/server/show.hpp>
+#endif
 
 #include <toolkits/activity_classification/class_registrations.hpp>
 #include <toolkits/object_detection/class_registrations.hpp>
@@ -61,9 +63,11 @@ void register_functions(toolkit_function_registry& registry) {
   registry.register_toolkit_function(turi::supervised::get_toolkit_function_registration());
 
   registry.register_toolkit_function(image_util::get_toolkit_function_registration());
-  registry.register_toolkit_function(visualization::get_toolkit_function_registration());
 
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
+  registry.register_toolkit_function(visualization::get_toolkit_function_registration());
   registry.register_toolkit_function(turi::annotate::get_toolkit_function_registration());
+#endif
 
   // Register proprietary toolkits
   registry.register_toolkit_function(turi::kmeans::get_toolkit_function_registration(), "_kmeans");
@@ -152,9 +156,11 @@ void register_models(toolkit_class_registry& registry) {
   // Various prototypes
   registry.register_toolkit_class(turi::prototype::get_toolkit_class_registration());
 
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
+
   // Annotate Registration
   registry.register_toolkit_class(turi::annotate::get_toolkit_class_registration());
-
+#endif
 }
 
 }

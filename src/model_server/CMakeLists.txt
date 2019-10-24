@@ -1,4 +1,4 @@
-project(unity)
+project(Turi)
 
 subdirs(extensions
   lib)
@@ -55,14 +55,17 @@ make_library(unity_shared
   DEAD_STRIP
 )
 
-# same as unity_shared, but all symbols exported
-# uses add_library instead of make_library so dependencies' symbols can be exported.
-add_library(unity_shared_for_testing SHARED
-  ${unity_shared_deps}
-  ${_TC_DEFAULT_SERVER_INITIALIZER}
-  ${_TC_COMMON_OBJECTS}
+make_library(unity_shared_for_testing
+  SOURCES 
+    ${unity_shared_deps}
+    ${_TC_DEFAULT_SERVER_INITIALIZER}
+    ${_TC_COMMON_OBJECTS}
+  REQUIRES
+    ${_TC_COMMON_REQUIREMENTS}
+  SHARED 
+  SHARED_ALL_DEFINED 
+  EXTERNAL_VISIBILITY
 )
-target_link_libraries(unity_shared_for_testing ${_TC_COMMON_REQUIREMENTS})
 
 # Note: this is not actually a build or link time dependency, but both of these
 # targets are very expensive to link (in terms of RAM usage).

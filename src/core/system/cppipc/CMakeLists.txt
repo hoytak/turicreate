@@ -1,4 +1,4 @@
-project(cppipc)
+project(Turi)
 
 if(WIN32)
   SET(PLATFORM_SOURCES client/console_cancel_handler_win.cpp)

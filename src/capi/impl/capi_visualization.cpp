@@ -10,7 +10,10 @@
 #include <capi/impl/capi_wrapper_structs.hpp>
 #include <core/export.hpp>
 #include <core/data/flexible_type/flexible_type.hpp>
+
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
 #include <visualization/server/show.hpp>
+#endif
 
 static turi::flexible_type optional_str(const char *str) {
     if (str == nullptr) {
@@ -26,6 +29,7 @@ EXPORT tc_plot* tc_plot_create_1d(const tc_sarray* sa, const char* title,
                                   const char* y_axis_title,
                                   const tc_parameters*, tc_error** error) {
   ERROR_HANDLE_START();
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, sa, "sarray", NULL);
@@ -34,6 +38,9 @@ EXPORT tc_plot* tc_plot_create_1d(const tc_sarray* sa, const char* title,
       sa->value.plot(optional_str(title), optional_str(x_axis_title), optional_str(y_axis_title));
   return new_tc_plot(
       std::dynamic_pointer_cast<turi::visualization::Plot>(plot));
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 
   ERROR_HANDLE_END(error, NULL);
 }
@@ -43,6 +50,8 @@ EXPORT tc_plot* tc_plot_create_2d(const tc_sarray* sa_x, const tc_sarray* sa_y,
                                   const char* y_axis_title,
                                   const tc_parameters*, tc_error** error) {
   ERROR_HANDLE_START();
+
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, sa_x, "sarray_x", NULL);
@@ -53,7 +62,10 @@ EXPORT tc_plot* tc_plot_create_2d(const tc_sarray* sa_x, const tc_sarray* sa_y,
       optional_str(x_axis_title), optional_str(y_axis_title), optional_str(title));
   return new_tc_plot(
       std::dynamic_pointer_cast<turi::visualization::Plot>(plot));
-
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
+ 
   ERROR_HANDLE_END(error, NULL);
 }
 
@@ -61,6 +73,9 @@ EXPORT tc_plot* tc_plot_create_sframe_summary(const tc_sframe* sf,
                                               const tc_parameters* params,
                                               tc_error** error) {
   ERROR_HANDLE_START();
+
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
+
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, sf, "sframe", NULL);
@@ -69,18 +84,29 @@ EXPORT tc_plot* tc_plot_create_sframe_summary(const tc_sframe* sf,
   return new_tc_plot(
       std::dynamic_pointer_cast<turi::visualization::Plot>(plot));
 
-  ERROR_HANDLE_END(error, NULL);
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
+
+   ERROR_HANDLE_END(error, NULL);
 }
 
 EXPORT tc_plot* tc_plot_create_from_vega(const char* vega_spec,
                                   const tc_parameters* params,
                                   tc_error** error) {
   ERROR_HANDLE_START();
+
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
+
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, vega_spec, "vega_spec", NULL);
 
   return new_tc_plot(std::make_shared<turi::visualization::Plot>(vega_spec));
+
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 
   ERROR_HANDLE_END(error, NULL);
 }
@@ -90,12 +116,16 @@ EXPORT tc_flexible_type* tc_plot_get_vega_spec(const tc_plot* plot,
                                                const tc_parameters*,
                                                tc_error** error) {
   ERROR_HANDLE_START();
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, plot, "plot", NULL);
 
   std::string vega_spec = plot->value->get_spec(variation);
   return tc_ft_create_from_string(vega_spec.data(), vega_spec.size(), error);
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 
   ERROR_HANDLE_END(error, NULL);
 }
@@ -104,12 +134,16 @@ EXPORT tc_flexible_type* tc_plot_get_next_data(const tc_plot* plot,
                                                const tc_parameters*,
                                                tc_error** error) {
   ERROR_HANDLE_START();
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, plot, "plot", NULL);
 
   std::string vega_data = plot->value->get_next_data();
   return tc_ft_create_from_string(vega_data.data(), vega_data.size(), error);
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 
   ERROR_HANDLE_END(error, NULL);
 }
@@ -117,22 +151,31 @@ EXPORT tc_flexible_type* tc_plot_get_next_data(const tc_plot* plot,
 EXPORT bool tc_plot_finished_streaming(const tc_plot* plot,
                                        const tc_parameters*, tc_error** error) {
   ERROR_HANDLE_START();
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, plot, "plot", true);
   return plot->value->finished_streaming();
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 
   ERROR_HANDLE_END(error, true);
 }
 
 EXPORT tc_flexible_type* tc_plot_get_url(const tc_plot* plot, const tc_parameters* params, tc_error** error) {
   ERROR_HANDLE_START();
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, plot, "plot", NULL);
 
   std::string url = plot->value->get_url();
   return tc_ft_create_from_string(url.data(), url.size(), error);
+
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 
   ERROR_HANDLE_END(error, NULL);
 }
@@ -146,6 +189,8 @@ EXPORT void tc_plot_render_final_into_context(const tc_plot* plot,
                                               const tc_parameters *params,
                                               tc_error** error) {
   ERROR_HANDLE_START();
+
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, plot, "plot");
@@ -153,6 +198,10 @@ EXPORT void tc_plot_render_final_into_context(const tc_plot* plot,
   plot->value->materialize();
   bool result = plot->value->render(context, variation);
   ASSERT_TRUE(result);
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
+
   ERROR_HANDLE_END(error);
 }
 
@@ -162,11 +211,16 @@ EXPORT bool tc_plot_render_next_into_context(const tc_plot* plot,
                                              const tc_parameters *params,
                                              tc_error** error) {
   ERROR_HANDLE_START();
+
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, plot, "plot", true);
   CHECK_NOT_NULL(error, context, "context", true);
   return plot->value->render(context, variation);
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 
   ERROR_HANDLE_END(error, true);
 
@@ -177,11 +231,15 @@ EXPORT void tc_plot_render_vega_spec_into_context(const char * vega_spec,
                                                   const tc_parameters *params,
                                                   tc_error** error) {
   ERROR_HANDLE_START();
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
   turi::ensure_server_initialized();
 
   CHECK_NOT_NULL(error, vega_spec, "vega_spec");
   CHECK_NOT_NULL(error, context, "context");
   turi::visualization::Plot::render(vega_spec, context);
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 
   ERROR_HANDLE_END(error);
 }

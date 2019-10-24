@@ -1,11 +1,16 @@
-subdirs(capi
-core
-external
-deployment
-ml
-model_server
-toolkits
-visualization)
+
+subdirs(
+  external
+  capi
+  core
+  deployment
+  ml
+  model_server
+  toolkits)
+
+if(${TC_BUILD_VISULIZATION_CLIENT})
+  subdirs(visualization)
+endif()
 
 
 if(TC_BUILD_PYTHON)

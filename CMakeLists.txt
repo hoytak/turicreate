@@ -1,5 +1,3 @@
-project(Turi)
-
 # We require a recent version of cmake and automatically
 # install a compatible version when using the cmake lists,
 # if one is not already present.
@@ -13,166 +11,53 @@ cmake_policy(SET CMP0005 NEW)
 cmake_policy(SET CMP0045 OLD)
 cmake_policy(SET CMP0046 OLD)
 cmake_policy(SET CMP0042 NEW)
+cmake_policy(SET CMP0077 NEW)
+   
+##################################################################################
+# Base configuration options (Called before project()  
+#
+# Get base stuff set up with the SDK.  Per CMake Documentation, this should be set 
+# before project() is called.
 
-# Generate a compilation database for use with automated tools like IDE/editor
-# plugins. See http://clang.llvm.org/docs/JSONCompilationDatabase.html
-set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
-
-# Determine where additional Turi specific cmake modules are
-# defined
-set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
-set(CMAKE_MODULE_PATH ${DEPS_CMAKE};${CMAKE_SOURCE_DIR}/cmake)
-set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
-set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-if(TC_BUILD_PYTHON)
-  message("Building python libraries.")
-
-  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/)
-    message(FATAL, "Internal error: Python toolchain expected; not present.")
+if(APPLE)  
+  if(NOT TC_BASE_SDK) 
+    # Assume that we're building for macOSX
+    set(TC_BASE_SDK macosx)
   endif()
 
-  include(UseCython)
-  add_definitions(-DTC_HAS_PYTHON)
-  add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT)
-else()
-  message("Skipping python libraries.")
-endif()
+  if(${TC_BASE_SDK} MATCHES "iphoneos.*")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.0)
 
-set(TC_PLATFORM_APPLE false)
-set(TC_PLATFORM_LINUX false)
-set(TC_PLATFORM_WIN32 false)
+    if(${TC_BUILD_REMOTEFS})
+      message(ERROR, "RemoteFS must be disable for building iOS.")
+    endif()
 
-if (APPLE)
-  set(TC_PLATFORM_APPLE true)
-  add_definitions(-DTC_PLATFORM_APPLE)
-  find_library(ACCELERATE NAMES Accelerate)
-  find_library(APPKIT AppKit)
-  find_library(CORE_GRAPHICS CoreGraphics)
-  find_library(JAVASCRIPT_CORE JavaScriptCore)
-  find_library(FOUNDATION Foundation)
-  find_library(CORE_IMAGE NAMES CoreImage)
-  find_library(CORE_ML CoreML)
-  find_library(CORE_VIDEO CoreVideo)
-  find_library(METAL NAMES Metal)
-  find_library(METAL_PERFORMANCE_SHADERS NAMES MetalPerformanceShaders)
-elseif (WIN32)
-  set(TC_PLATFORM_WIN32 true)
-  add_definitions(-DTC_PLATFORM_WIN32)
-else()
-  set(TC_PLATFORM_LINUX true)
-  add_definitions(-DTC_PLATFORM_LINUX)
-endif()
-
-
-include(CheckLibraryExists)
-include(CheckFunctionExists)
-include(ExternalProject)
-include(CheckCXXSourceCompiles)
-include(CheckCXXCompilerFlag)
-
-if (${TC_HAS_LLVM})
-  find_package(LLVM REQUIRED PATHS ${TC_LLVM_PATH}/lib/cmake)
-
-  if (${LLVM_VERSION_MAJOR} EQUAL 6 AND ${LLVM_VERSION_MINOR} EQUAL 0)
-    message("Found LLVM.")
-    add_definitions(-DTC_HAS_LLVM)
-    FOREACH(DIR ${LLVM_INCLUDE_DIRS})
-      include_directories(SYSTEM ${DIR})
-    ENDFOREACH()
-    link_directories("${TC_LLVM_PATH}/lib")
+  elseif(${TC_BASE_SDK} MATCHES "macos.*")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)
   else()
-    message("Found LLVM, but only version 6.0 is currently supported; skipping.")
-    set(TC_HAS_LLVM false)
-  endif()
-else()
-  message("LLVM not provided; skipping.")
-  set(TC_HAS_LLVM false)
-endif()
-
-set(TC_HAS_LIBUNWIND false)
-set(TC_HAS_LIBUNWIND_STANDALONE false)
-
-if (TC_PLATFORM_APPLE)
-  if (TC_HAS_LLVM)
-    message("Using libunwind from LLVM.")
-    set(TC_HAS_LIBUNWIND true)
-    set(TC_HAS_LIBUNWIND_STANDALONE false)
-    add_definitions(-DTC_HAS_LIBUNWIND)
-  else()
-    set(TC_HAS_LIBUNWIND false)
-    set(TC_HAS_LIBUNWIND_STANDALONE false)
-  endif()
-elseif (TC_PLATFORM_LINUX)
-  find_library(TC_LIBUNWIND unwind)
-  if (${TC_LIBUNWIND} STREQUAL "TC_LIBUNWIND-NOTFOUND")
-    message("Did not find libunwind; skipping.")
-    set(TC_HAS_LIBUNWIND false)
-  else()
-    message("Found libunwind.")
-    set(TC_HAS_LIBUNWIND true)
-    set(TC_HAS_LIBUNWIND_STANDALONE true)
-    add_definitions(-DTC_HAS_LIBUNWIND)
-  endif()
-endif()
-
-if (${TC_STACK_DISPLAY})
-  if (${TC_HAS_LIBUNWIND} AND ${TC_HAS_LLVM})
-    message("Enabling display of annotated stack traces.")
-    add_definitions(-DTC_STACK_DISPLAY)
-  else()
-    set(TC_STACK_DISPLAY false)
-  endif()
-else()
-  message("Disabling display of annotated stack traces.")
-endif()
-
-
-
-#**************************************************************************/
-#*                                                                        */
-#*                     Global Link and Include Flags                      */
-#*                                                                        */
-#**************************************************************************/
-include_directories(SYSTEM
- ${CMAKE_SOURCE_DIR}/deps/local/include)
-
-link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib)
-
-if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib64)
-  link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib64)
-endif()
-
-#**************************************************************************
-#*                                                                        *
-#*                       Platform Specific Stuff                          *
-#*                                                                        *
-#**************************************************************************
-if(APPLE)
-  if(TC_BUILD_IOS)
-    SET(TC_BASE_SDK iphoneos)
-    SET(COMPILER_FLAGS "${COMPILER_FLAGS} -miphoneos-version-min=10.0 -Wno-c++11-narrowing")
-  else()
-    SET(TC_BASE_SDK macosx)
-
-    # Modify COMPILER_FLAGS instead of setting CMAKE_OSX_DEPLOYMENT_TARGET so
-    # that this setting propagates to external dependencies.
-    SET(COMPILER_FLAGS "${COMPILER_FLAGS} -mmacosx-version-min=10.12")
+    message(FATAL, "Platform ${TC_BASE_SDK} not recognized.") 
   endif()
 
+  # Find and set the SDK path.
+  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} 
+    --show-sdk-path OUTPUT_VARIABLE TC_BASE_SDK_PATH RETURN_VALUE _xcrun_ret)
+
+  if(NOT ${_xcrun_ret} EQUAL 0)
+    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
+  endif()
+
+  # Set the base root.
+  SET(CMAKE_OSX_SYSROOT "${TC_BASE_SDK_PATH}")
+  
+  message("Using SDK ${CMAKE_OSX_SYSROOT}.")
+  
+  # Get the sdk version.
   EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-version OUTPUT_VARIABLE TC_BASE_SDK_VERSION RETURN_VALUE _xcrun_ret)
   if(NOT ${_xcrun_ret} EQUAL 0)
     message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
   endif()
-
-  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-path OUTPUT_VARIABLE TC_BASE_SDK_PATH RETURN_VALUE _xcrun_ret)
-  if(NOT ${_xcrun_ret} EQUAL 0)
-    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
-  endif()
-
-  SET(CMAKE_OSX_SYSROOT "${TC_BASE_SDK_PATH}")
-  SET(COMPILER_FLAGS "${COMPILER_FLAGS} -isysroot ${TC_BASE_SDK_PATH}")
+  
+  # TODO: replace all these with in-build macros based on standard macros
 
   # Core ML is only present on macOS 10.13 or higher.
   # Logic reversed to get around what seems to be a CMake bug.
@@ -191,13 +76,69 @@ if(APPLE)
     set(HAS_MPS TRUE)
 
     # CoreML MLCustomModel requires macOS 10.14 or higher
-    set(HAS_MLCUSTOMMODEL TRUE)
+    add_definitions(-DHAS_MLCUSTOM_MODEL)
+    set(HAS_COREML_CUSTOM_MODEL TRUE)
   endif()
-
+ 
   if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.15)
     add_definitions(-DHAS_MACOS_10_15)
   endif()
+endif() 
+
+# Generate a compilation database for use with automated tools like IDE/editor
+# plugins. See http://clang.llvm.org/docs/JSONCompilationDatabase.html
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
+##################################################################################
+# Set the base configuration for a number of things.
+
+project(Turi)
+enable_language(C)
+enable_language(CXX)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED 1)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Determine where additional Turi specific cmake modules are
+# defined
+set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
+set(CMAKE_MODULE_PATH ${DEPS_CMAKE};${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
+set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
+
+if(TC_BUILD_PYTHON)
+  message("Building python libraries.")
+
+  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/)
+    message(FATAL_ERROR "Internal error: Python toolchain expected; not present.")
+  endif()
+
+  include(UseCython)
+  add_definitions(-DTC_HAS_PYTHON=1)
+  if(NOT TC_BUILD_VISUALIZATION_CLIENT) 
+    message(FATAL_ERROR "Visualization client required for python build.")
+  endif()
+
+else()
+  message("Skipping python libraries.")
 endif()
+
+if(TC_BUILD_VISUALIZATION_CLIENT) 
+  message("Building Visualization Client.")
+  add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT=1)
+else() 
+  message("Skipping Build of Visualization Client.")
+endif()
+
+
+
+#**************************************************************************/
+#*                                                                        */
+#*                     Global Link and Include Flags                      */
+#*                                                                        */
+#**************************************************************************/
 
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -238,10 +179,6 @@ if (WIN32)
         ${MINGW_ROOT}/libgcc_s_seh-1.dll
         ${MINGW_ROOT}/libstdc++-6.dll
         ${MINGW_ROOT}/libeay32.dll)
-else()
-        if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib64/libgomp.so.1)
-                list(APPEND INSTALLATION_SYSTEM_BINARY_FILES ${CMAKE_SOURCE_DIR}/deps/local/lib64/libgomp.so.1)
-        endif()
 endif()
 
 
@@ -250,7 +187,6 @@ endif()
 #*                             Common Defines                             */
 #*                                                                        */
 #**************************************************************************/
-set(CMAKE_CXX_STANDARD 11)
 
 
 if(WIN32)
@@ -271,19 +207,13 @@ if(NOT ${TC_BUILD_REMOTEFS})
   add_definitions(-DTC_DISABLE_REMOTEFS)
 endif()
 
-if (${TC_EXTRA_OPTIMIZATION_FLAGS})
-  message("Enabling extra optimization flags.")
-  add_definitions(-DTC_EXTRA_OPTIMIZATION_FLAGS)
-else()
-  message("Disabling extra optimization flags.")
-endif()
-
 add_definitions(-DTC_BUILD_PATH_BASE="${CMAKE_SOURCE_DIR}")
 
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DIN_TURI_SOURCE_TREE)
 add_definitions(-DFUSION_MAX_VECTOR_SIZE=20)
 add_definitions(-DBOOST_SPIRIT_THREAD_SAFE)
+
 # These determine the maximum number of arguments for extension functions
 add_definitions(-DBOOST_FUSION_INVOKE_MAX_ARITY=12)
 add_definitions(-DBOOST_FUSION_INVOKE_PROCEDURE_MAX_ARITY=12)
@@ -292,43 +222,22 @@ add_definitions(-DBOOST_FUSION_INVOKE_FUNCTION_OBJECT_MAX_ARITY=12)
 # Workaround for https://svn.boost.org/trac10/ticket/10443 in Boost 1.68.0
 add_definitions(-DBOOST_RESULT_OF_USE_TR1_WITH_DECLTYPE_FALLBACK)
 
-#**************************************************************************/
-#*                                                                        */
-#*                          Apple Legal Defines                           */
-#*                                                                        */
-#**************************************************************************/
+# Legal define for Eigen.
 add_definitions(-DEIGEN_MPL2_ONLY)
 
-#**************************************************************************/
-#*                                                                        */
-#*                      Force Disable OpenMP                              */
-
-if(NOT TC_COREMLTOOLS_DIR) 
-  set(TC_COREMLTOOLS_DIR ${CMAKE_SOURCE_DIR}/src/external/coremltools_wrap/coremltools/)
-else()
-  message("Using mlmodel interface in source directory ${TC_COREMLTOOLS_DIR}/mlmodel.")
+if (APPLE)
+  find_library(ACCELERATE NAMES Accelerate)
+  find_library(APPKIT AppKit)
+  find_library(CORE_GRAPHICS CoreGraphics)
+  find_library(JAVASCRIPT_CORE JavaScriptCore)
+  find_library(FOUNDATION Foundation)
+  find_library(CORE_IMAGE NAMES CoreImage)
+  find_library(CORE_ML CoreML)
+  find_library(CORE_VIDEO CoreVideo)
+  find_library(METAL NAMES Metal)
+  find_library(METAL_PERFORMANCE_SHADERS NAMES MetalPerformanceShaders)
 endif()
 
-include_directories(${TC_COREMLTOOLS_DIR})
-
-#*                                                                        */
-#**************************************************************************/
-add_library(openmp INTERFACE)
-target_compile_definitions(openmp INTERFACE __NO_OPENMP__)
-message(WARNING "OpenMP Libraries were not found")
-
-#**************************************************************************/
-#*                                                                        */
-#*                      coremltools                                       */
-#*                                                                        */
-#**************************************************************************/
-
-if(NOT TC_COREMLTOOLS_DIR)
-  set(TC_COREMLTOOLS_DIR ${CMAKE_SOURCE_DIR}/src/external/coremltools_wrap/coremltools/)
-endif()
-
-message("Using ${TC_COREMLTOOLS_DIR} for coremltools directory.")
-include_directories(${TC_COREMLTOOLS_DIR}/)
 
 
 #**************************************************************************/
@@ -337,77 +246,71 @@ include_directories(${TC_COREMLTOOLS_DIR}/)
 #*                                                                        */
 #**************************************************************************/
 
-if (CLANG)
+include(CompilerFlags)
 
-  set(_cpp11_optional_flags "")
+# Set some universal flags that we don't need to test for
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
 
-  check_cxx_compiler_flag("-Wno-stdlibcxx-not-found" __no_stdlibcxx_not_found)
-  if(${__no_stdlibcxx_not_found})
-    set(_cpp11_optional_flags "${_cpp11_optional_flags} -Wno-stdlibcxx-not-found")
-  endif()
+# Go through and add in all the relevant build flags as appropriate 
+check_and_set_compiler_flag(-ftemplate-depth=900 CXX)
+check_and_set_compiler_flag(-Wno-c++11-narrowing CXX)
+check_and_set_compiler_flag(-Wno-stdlibcxx-not-found CXX RESTRICT_CLANG)
 
-  check_cxx_compiler_flag("-Wno-deprecated-register" __no_deprecated_register)
-  if(${__no_deprecated_register})
-    set(_cpp11_optional_flags "${_cpp11_optional_flags} -Wno-deprecated-register")
-  endif()
+check_and_set_compiler_flag(-Wno-deprecated-declarations)
+check_and_set_compiler_flag(-Wno-deprecated-register)
+check_and_set_compiler_flag(-Qunused-arguments)
+check_and_set_compiler_flag(-Wno-mismatched-tags)
+check_and_set_compiler_flag(-Wno-enum-compare)
+check_and_set_compiler_flag(-Wno-conversion-null)
+check_and_set_compiler_flag(-Wno-constant-logical-operand)
+check_and_set_compiler_flag(-Wno-parentheses-equality)
+check_and_set_compiler_flag(-Wno-unknown-pragmas)
+check_and_set_compiler_flag(-Wno-unused-local-typedefs)
+check_and_set_compiler_flag(-Wno-attributes)
+check_and_set_compiler_flag(-Wno-unused-command-line-argument)
 
-  # clang on Linux gives unused argument warnings all over the place
-  # they look useful, but let's suppress them for now since there are tons
-  # (and with warning-as-error, they break the build)
-  check_cxx_compiler_flag("-Qunused-arguments" __qunused_arguments)
-  if(${__qunused_arguments})
-    add_compile_options(-Qunused-arguments)
-  endif()
-  
- 
-  # clang on Linux with libstdc++ from GCC 4.8.1 gives errors about class vs. struct hash.
-  # apparently it's defined as both in separate places in libstdc++
-  # and GCC 4.8.1 doesn't care, but clang does.
-  # Not sure how to tell whether we're using libstdc++ specifically, so for now,
-  # we'll just avoid this warning-as-error on non-Apple platforms entirely.
-  if(NOT APPLE)
-    check_cxx_compiler_flag("-Wno-mismatched-tags" __no_mismatched_tags)
-    if (${__no_mismatched_tags})
-      set(_cpp11_optional_flags "${_cpp11_optional_flags} -Wno-error=mismatched-tags")
-      set(_cpp11_optional_flags "${_cpp11_optional_flags} -Wno-mismatched-tags")
-    endif()
-  endif()
+check_and_set_compiler_flag(-fpeel-loops RELEASE)
+check_and_set_compiler_flag(-funswitch-loops RELEASE)
+check_and_set_compiler_flag(-ftracer RELEASE)
 
-  set(CPP11_FLAGS "-Wno-enum-compare -Wno-conversion-null -Wno-constant-logical-operand -Wno-parentheses-equality -ftemplate-depth=900 ${_cpp11_optional_flags}")
+# This flag needs to be set after all other warning flags, or it may give false 
+# positives.
+check_and_set_compiler_flag(-Wno-unknown-warning-option)
 
-  set(WERROR_FLAGS "-Werror -Wall -Wsign-compare")
+# Set the different optimization flags
+if(${DEBUG_OPT_FOR_SIZE})
+  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Os -g")
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Os -g")
 else()
-  # non-clang
-  set(CPP11_FLAGS "-Wno-enum-compare -Wno-conversion-null -ftemplate-depth=900 -Wno-unknown-pragmas")
-  set(WERROR_FLAGS "-Werror")
+  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -fno-inline -g")
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -fno-inline -g")
 endif()
 
-# same goes for unknown warning group (for #pragma clang or #pragma GCC warning suppression)
-# seems different clang distributions have quite different warning arguments
-check_cxx_compiler_flag("-Wno-unknown-warning-option" __no_unknown_warning_option)
-if(${__no_unknown_warning_option})
-  add_compile_options(-Wno-unknown-warning-option)
-endif()
- 
-if (${TC_STACK_DISPLAY})
-  set(DEBUG_INFO_FLAGS "-g3 -fno-omit-frame-pointer")
+if(${RELEASE_OPT_FOR_SIZE})
+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Os -DNDEBUG")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Os -DNDEBUG")
 else()
-  set(DEBUG_INFO_FLAGS "-g")
+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -DNDEBUG")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG")
 endif()
 
-# Shared compiler flags used by all builds (debug, profile, release)
-# Allow COMPILER_FLAGS to be used as options from the ./configure without
-# forcing all the other options I want to add to be lost
-set(C_REAL_COMPILER_FLAGS "-Wall ${DEBUG_INFO_FLAGS} ${COMPILER_FLAGS}")
-set(CPP_REAL_COMPILER_FLAGS "-Wall ${DEBUG_INFO_FLAGS} ${CPP11_FLAGS} ${COMPILER_FLAGS}")
+# Set up the 128 bit integer support; defines INT128_FLAGS
+include(FindInt128)
+Find_Int128_Types()
 
-if (CLANG)
-  # clang 9.0.0 and earlier will warn (error with -Werror) on unused -pthread during linking
-  # so adding only to compile options is what we need.
-  add_compile_options(-pthread)
-else()
-  set(C_REAL_COMPILER_FLAGS "${C_REAL_COMPILER_FLAGS} -pthread")
-  set(CPP_REAL_COMPILER_FLAGS "${CPP_REAL_COMPILER_FLAGS} -pthread")
+# Set up defines around a few compiler and language oddities that we have to understand.
+include(CompilerOddities)
+Set_Compiler_Specific_Flags()
+
+# Set up threads. 
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+find_package(Threads REQUIRED)
+if(CMAKE_USE_PTHREADS_INIT)
+  add_definitions(-DHAVE_PTHREAD)
 endif()
 
 # Disable address space randomization for OSX lion and above
@@ -459,180 +362,24 @@ endif()
 
 
 
-if (MARCH)
-  set(ARCH_FLAG "-march=${MARCH}")
-elseif (ARCH)
-  set(ARCH_FLAG "-arch ${ARCH}")
-else()
-  check_cxx_compiler_flag(-march=nehalem HAS_MARCH_NEHALEM)
-  if(HAS_MARCH_NEHALEM)
-    # Old CPU archetecture; enables SSE up to 4.2 + popcnt + other instructions.
-    # Supported on GCC 4.9.x and above
-    set(MARCH "nehalem")
-  else()
-    # Old CPU archetecture; enables SSE up to 3
-    # Supported on at least GCC 4.8.x, maybe earlier
-    set(MARCH "core2")
-    check_cxx_compiler_flag(-msse4 HAS_M_SSE4)
-    if(HAS_M_SSE4)
-      set(MARCH "${MARCH} -msse4")
-    endif()
-    check_cxx_compiler_flag(-msse4.1 HAS_M_SSE4_1)
-    if(HAS_M_SSE4_1)
-      set(MARCH "${MARCH} -msse4.1")
-    endif()
-    check_cxx_compiler_flag(-msse4.2 HAS_M_SSE4_2)
-    if(HAS_M_SSE4_2)
-      set(MARCH "${MARCH} -msse4.2")
-    endif()
-  endif()
-  set(ARCH_FLAG "-march=${MARCH}")
-endif()
-
-# check if MTUNE is set
-if (NOT MTUNE)
-  set(MTUNE "-mtune=generic") # Reommended way of setting this for generic distributions
-endif()
-
-set(EXTRA_OPTIMIZATION_FLAGS "")
-set(DISABLE_WARNING_FLAGS "")
-# If profiling mode is enabled then additional profiling flags are set for
-# the compiler
-if (COMPILE_PROFILING MATCHES 1)
-        set(PROFILING_FLAGS "-DUSE_EVENT_LOG -DUSE_TRACEPOINT")
-        set(EXTRA_OPTIMIZATION_FLAGS "${EXTRA_OPTIMIZATION_FLAGS} ${PROFILING_FLAGS}")
-endif()
-
-# Set up the 128 bit integer support; defines INT128_FLAGS
-include(FindInt128)
-Find_Int128_Types()
-
-
-#disable Wno-unused-local-typedefs if available
-check_cxx_compiler_flag(-Wno-unused-local-typedefs HAS_WNO_LOCAL_TYPEDEFS)
-if(HAS_WNO_LOCAL_TYPEDEFS)
-        set(DISABLE_WARNING_FLAGS "${DISABLE_WARNING_FLAGS} -Wno-unused-local-typedefs")
-endif()
-
-#disable gcc-only flags on clang (newer clang with XCode 5.1 errors on these)
-check_cxx_compiler_flag(-fpeel-loops HAS_FPEEL_LOOPS)
-if(HAS_FPEEL_LOOPS)
-        set(EXTRA_OPTIMIZATION_FLAGS "${EXTRA_OPTIMIZATION_FLAGS} -fpeel-loops")
-endif()
-check_cxx_compiler_flag(-funswitch-loops HAS_FUNSWITCH_LOOPS)
-if(HAS_FUNSWITCH_LOOPS)
-        set(EXTRA_OPTIMIZATION_FLAGS "${EXTRA_OPTIMIZATION_FLAGS} -funswitch-loops")
-endif()
-check_cxx_compiler_flag(-ftracer HAS_FTRACER)
-if(HAS_FTRACER)
-        set(EXTRA_OPTIMIZATION_FLAGS "${EXTRA_OPTIMIZATION_FLAGS} -ftracer")
-endif()
-
-
-
-if(${DEBUG_OPT_FOR_SIZE})
-  set(DEBUG_OPTIMIZATION_FLAGS "-Os")
-else()
-  set(DEBUG_OPTIMIZATION_FLAGS "-O0 -fno-inline")
-endif()
-
-if(${RELEASE_OPT_FOR_SIZE})
-  set(RELEASE_OPTIMIZATION_FLAGS "-Os -DNDEBUG")
-else()
-  set(RELEASE_OPTIMIZATION_FLAGS "-O3 -DNDEBUG")
-endif()
-
-if(WIN32)
-        # on windows due to some string table limitations + template
-        # insanities, on -O0 we run out of string table entries or something
-        # like that.
-        set(DEBUG_OPTIMIZATION_FLAGS -O2)
-endif()
-
-# Set the debug flags
-set(EXTERNAL_CMAKE_C_FLAGS_DEBUG
-  "${DEBUG_OPTIMIZATION_FLAGS} -Wno-attributes ${ARCH_FLAG} -Winit-self  ${PROFILING_FLAGS} ${C_REAL_COMPILER_FLAGS} -fno-inline ${ALTERNATE_LINKER} -DHAVE_PTHREAD=1"
-  CACHE STRING "compiler options" FORCE)
-set(CMAKE_C_FLAGS_DEBUG
-  "${EXTERNAL_CMAKE_C_FLAGS_DEBUG} ${WERROR_FLAGS} -Wuninitialized "
-  CACHE STRING "compiler options" FORCE)
-set(EXTERNAL_CMAKE_CXX_FLAGS_DEBUG
-  "${DEBUG_OPTIMIZATION_FLAGS} ${DISABLE_WARNING_FLAGS} -Wno-attributes ${ARCH_FLAG} -Winit-self ${PROFILING_FLAGS} ${CPP_REAL_COMPILER_FLAGS} ${INT128_FLAGS} ${ALTERNATE_LINKER} -fno-inline -DHAVE_PTHREAD=1"
-  CACHE STRING "compiler options" FORCE)
-set(CMAKE_CXX_FLAGS_DEBUG
-  "${EXTERNAL_CMAKE_CXX_FLAGS_DEBUG} ${WERROR_FLAGS} -Wuninitialized"
-  CACHE STRING "compiler options" FORCE)
-
-set(CMAKE_C_FLAGS_RELEASE
-  "${RELEASE_OPTIMIZATION_FLAGS} -Wno-attributes ${ARCH_FLAG} ${MTUNE} ${PROFILING_FLAGS} ${C_REAL_COMPILER_FLAGS} ${WERROR_FLAGS} -DNDEBUG ${ALTERNATE_LINKER} -DHAVE_PTHREAD=1"
-  CACHE STRING "compiler options" FORCE)
-set(CMAKE_CXX_FLAGS_RELEASE
-  "${RELEASE_OPTIMIZATION_FLAGS} ${EXTRA_OPTIMIZATION_FLAGS} ${DISABLE_WARNING_FLAGS} ${PROFILING_FLAGS} -Wno-attributes ${ARCH_FLAG} ${MTUNE} ${CPP_REAL_COMPILER_FLAGS} ${WERROR_FLAGS} ${INT128_FLAGS} ${ALTERNATE_LINKER} -DNDEBUG -DHAVE_PTHREAD=1"
-  CACHE STRING "compiler options" FORCE)
-
 #**************************************************************************/
 #*                                                                        */
-#*       Some C++ Implementation Oddities between libc++ and stdc++       */
+#*                      Report Final Flags                                */
 #*                                                                        */
 #**************************************************************************/
-set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
-check_cxx_source_compiles("#include <ios>
-                           #include <system_error>
-                           int main(int argc, char** argv) {
-                             throw std::ios_base::failure(\"hello\", std::error_code());
-                             }" COMPILER_HAS_IOS_BASE_FAILURE_WITH_ERROR_CODE)
+message("CMAKE_BUILD_TYPE= ${CMAKE_BUILD_TYPE}.")
 
-if(COMPILER_HAS_IOS_BASE_FAILURE_WITH_ERROR_CODE)
-  message(STATUS "Compiler supports ios_base::failure(str, error_code)")
-  add_definitions(-DCOMPILER_HAS_IOS_BASE_FAILURE_WITH_ERROR_CODE)
-else()
-  message(STATUS "Compiler does not support ios_base::failure(str, error_code)")
-endif()
-
-check_cxx_source_compiles("#include <ios>
-                           #include <system_error>
-
-                           class io_error : public std::ios_base::failure {
-                             public:   /* The noexcept here is different between C++ 17 and C++ 11. */
-                              const char *what() const noexcept { return \"\"; }
-                           };
-                           int main(int argc, char** argv) { return 0; }"
-                          COMPILER_HAS_NOEXCEPT_WHAT_ON_EXCEPTIONS)
-
-if(COMPILER_HAS_NOEXCEPT_WHAT_ON_EXCEPTIONS)
-  message(STATUS "Compiler supports noexcept on what() with ios_base::failure.")
-  add_definitions(-DCOMPILER_HAS_NOEXCEPT_WHAT_ON_EXCEPTIONS)
-else()
-  message(STATUS "Compiler uses throw() on what() with ios_base::failure.")
-endif()
-
-
-#**************************************************************************/
-#*                                                                        */
-#*                              Final Flags                               */
-#*                                                                        */
-#**************************************************************************/
-
-set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}" CACHE STRING "Build Type")
-if (CMAKE_BUILD_TYPE MATCHES "Release")
-  message(STATUS "Release build with C++ flags: " ${CMAKE_CXX_FLAGS_RELEASE})
-  message(STATUS "Release build with C flags: " ${CMAKE_C_FLAGS_RELEASE})
-elseif(CMAKE_BUILD_TYPE MATCHES "Debug")
-  message(STATUS "Debug build with C++ flags: " ${CMAKE_CXX_FLAGS_DEBUG})
-  message(STATUS "Debug build with C flags: " ${CMAKE_C_FLAGS_DEBUG})
+if (${CMAKE_BUILD_TYPE} MATCHES "Release")
+  message(STATUS "Release build with C++ flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
+  message(STATUS "Release build with C flags: ${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_RELEASE}")
+elseif(${CMAKE_BUILD_TYPE} MATCHES "Debug")
+  message(STATUS "Debug build with C++ flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
+  message(STATUS "Debug build with C flags: ${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}")
 else()
   message(FATAL_ERROR "Unknown build type: " ${CMAKE_BUILD_TYPE} "!. Rerun ./configure")
 endif()
 
 
-#**************************************************************************/
-#*                                                                        */
-#*         Definitions and options to support dependencies                */
-#*                                                                        */
-#**************************************************************************/
-add_compile_options(-Dgoogle=__tc_google)
-add_compile_options(-DCoreML=__tc_CoreML)
-add_compile_options(-DHAVE_PTHREAD=1)
 
 ##############################################################################
 ##############################################################################
@@ -676,7 +423,7 @@ include(eval)
 #
 # if DYNAMIC is true, a dynamic library is built.
 #
-# Boost, pthread is always added as a default dependency. OpenMP is added
+# Boost, pthread is always added as a default dependency. 
 # when possible.
 macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFINED OBJECT)
   # create the target
@@ -685,7 +432,7 @@ macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFI
   else()
     message(STATUS "Adding Executable: ${NAME}")
     # default dependencies
-    target_link_libraries(${NAME} boost pthread openmp)
+    target_link_libraries(${NAME} boost pthread)
   endif()
 
   set_property(TARGET ${NAME} PROPERTY IS_LIBRARY ${IS_LIBRARY})
@@ -722,8 +469,8 @@ macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFI
   else()
     target_link_libraries(${NAME} ${REQUIREMENTS})
   endif()
-  # make sure boost is always built
-  add_dependencies(${NAME} boost)
+  # make sure dependencies are always built first
+  add_dependencies(${NAME} external_dependencies)
 endmacro()
 
 
@@ -768,7 +515,7 @@ endmacro()
 # All other targets which depends on this library (using the "requires" function)
 # will automatically include all recursive dependencies.
 #
-# Boost, pthread is always added as a default dependency. OpenMP is added
+# Boost, pthread is always added as a default dependency.
 # when possible.
 macro(make_library NAME)
   set(options SHARED EXTERNAL_VISIBILITY SHARED_ALL_DEFINED DEAD_STRIP OBJECT)
@@ -858,57 +605,15 @@ endif()
 
 endmacro()
 
-# This is an external function
+# Creates an empty library to use as a dependency placeholder.  
+# 
 # Usage:
-#    make_empty_library(NAME target
-#                       REQUIRES libx liby
-#                       MAC_REQUIRES libz libzz
-#                       LINUX_REQUIRES libk libj
-#                       [OUTPUT_NAME xxxx])
-# Example:
+#    make_empty_library(NAME)
+# 
 #
-# make_empty_library(NAME graph
-#               REQUIRES
-#                 logger dl pthread z curl xml2 openssl
-#               MAC_REQUIRES
-#                 iconv
-#                 )
-# This generates an empty target with the provided target name, but all
-# other targets which require this target will inherit all REQUIRED
-# dependencies.
-#
-# NAME must be specified
-# REQUIRES lists all dependent libraries. These can be:
-#   - other libraries built by the the turicreate build system
-#   - builtin libraries
-#   - system libraries
-# MAC_REQUIRES lists all dependent libraries which are included only on Mac.
-# LINUX_REQUIRES lists all dependent libraries which are included only on Linux.
-#
-# All other targets which depends on this library (using the "requires" function)
 # will automatically include all recursive dependencies.
 macro(make_empty_library NAME)
-  set(one_value_args COMPILE_FLAGS)
-  set(multi_value_args REQUIRES MAC_REQUIRES LINUX_REQUIRES)
-  CMAKE_PARSE_ARGUMENTS(make_library "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
-  if (APPLE)
-    if (make_library_MAC_REQUIRES)
-      set(make_library_REQUIRES ${make_library_REQUIRES} ${make_library_MAC_REQUIRES})
-    endif()
-  else()
-    if (make_library_LINUX_REQUIRES)
-      set(make_library_REQUIRES ${make_library_REQUIRES} ${make_library_LINUX_REQUIRES})
-    endif()
-  endif()
-
-  if (NOT EXISTS ${CMAKE_SOURCE_DIR}/dummy.cpp)
-    file(WRITE ${CMAKE_SOURCE_DIR}/dummy.cpp "")
-  endif()
-  add_library(${NAME} STATIC ${CMAKE_SOURCE_DIR}/dummy.cpp)
-  make_target_impl("${NAME}" ""
-      "${make_library_REQUIRES}" TRUE FALSE FALSE FALSE)
-
-    set_target_properties(${NAME} PROPERTIES EMPTY_LIBRARY TRUE)
+  add_library(${NAME} INTERFACE)
 endmacro()
 
 # This is an external function
@@ -942,7 +647,7 @@ endmacro()
 # All other targets which depends on this library (using the "requires" function)
 # will automatically include all recursive dependencies.
 #
-# Boost, pthread is always added as a default dependency. OpenMP is added
+# Boost, pthread is always added as a default dependency.
 # when possible.
 function (make_executable NAME)
   set(one_value_args COMPILE_FLAGS OUTPUT_NAME)
@@ -1134,9 +839,6 @@ macro (make_copy_target NAME)
   set_property(TARGET ${NAME} PROPERTY COPY_FILES "${all_target_locations}")
 endmacro()
 
-include(SharedLibraryFromStatic)
-include(MergeStaticLibraries)
-
 add_custom_target(external_dependencies)
 
 include(ExternalProject)
@@ -1151,6 +853,23 @@ foreach(package ${packages})
         add_dependencies(external_dependencies ex_${depname})
 endforeach()
 
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/deps/local/include)
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/boost/boost_1_68_0/)
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/libpng/libpng-1.6.37/)
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/libjpeg/jpeg-8d/)
+include_directories(SYSTEM
+  ${CMAKE_SOURCE_DIR}/src/external/coremltools_wrap/)
+
+link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib)
+
+if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib64)
+  link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib64)
+endif()
+
 include_directories(src)
 include_directories(src/core/system/platform)
 include_directories(SYSTEM src/external)
@@ -1161,32 +880,24 @@ if(${TC_BUILD_REMOTEFS})
 endif()
 
 include_directories(SYSTEM src/external/google)
-
-if(EXISTS ${CMAKE_SOURCE_DIR}/extensions)
-  include_directories(SYSTEM extensions)
-  add_subdirectory(extensions)
-endif()
-
-# for build-time generated source code
-include_directories(SYSTEM ${CMAKE_BINARY_DIR}/src)
-
-if(EXISTS ${CMAKE_SOURCE_DIR}/subtree)
-  include_directories(SYSTEM subtree)
-  add_subdirectory(subtree)
-endif()
+include_directories(SYSTEM src/external/nanomsg/nanomsg-1.0.0/src)
 
 # Collate all the object targets shared among static and shared library targets
 # These are used by C API, unity_shared, etc.
-set(_TC_DEFAULT_SERVER_INITIALIZER
+set(_TC_DEFAULT_SERVER_INITIALIZER 
+
   "${CMAKE_SOURCE_DIR}/src/capi/default_server_initializer.cpp"
 )
 set(_TC_COMMON_OBJECTS
-  "$<TARGET_OBJECTS:capi>"
 
-  # Also list all dependencies (including transitive dependencies)
+  "$<TARGET_OBJECTS:z>"
+  "$<TARGET_OBJECTS:libbz2>"
+  "$<TARGET_OBJECTS:boost>"
 
   # External dependencies (built from src/external)
+  "$<TARGET_OBJECTS:libjpeg>"
   "$<TARGET_OBJECTS:libjson>"
+  "$<TARGET_OBJECTS:libpng>"
   "$<TARGET_OBJECTS:lz4>"
   "$<TARGET_OBJECTS:protobuf>"
   "$<TARGET_OBJECTS:uuid>"
@@ -1194,7 +905,6 @@ set(_TC_COMMON_OBJECTS
   "$<TARGET_OBJECTS:coremltools_mlmodel>"
 
   # Then our own source code
-  "$<TARGET_OBJECTS:annotation>"
   "$<TARGET_OBJECTS:cancel_serverside_ops>"
   "$<TARGET_OBJECTS:crash_handler>"
   "$<TARGET_OBJECTS:cppipc>"
@@ -1250,7 +960,6 @@ set(_TC_COMMON_OBJECTS
   "$<TARGET_OBJECTS:unity_text>"
   "$<TARGET_OBJECTS:unity_util>"
   "$<TARGET_OBJECTS:util>"
-  "$<TARGET_OBJECTS:visualization>"
 )
 
 # TODO we can remove the requirements from here when target_link_libraries
@@ -1258,15 +967,20 @@ set(_TC_COMMON_OBJECTS
 # See https://gitlab.kitware.com/cmake/cmake/issues/14778
 set(_TC_COMMON_REQUIREMENTS
   # External dependencies (from deps)
-  boost
-  bz2
   curl
-  eigen
-  libjpeg
-  libpng
+  libxml2
   openssl
   nanomsg
+  Threads::Threads
 )
+  
+if(TC_BUILD_VISUALIZATION_CLIENT) 
+  set(_TC_COMMON_OBJECTS
+    ${_TC_COMMON_OBJECTS}
+  "$<TARGET_OBJECTS:annotation>"
+  "$<TARGET_OBJECTS:visualization>")
+endif()
+
 
 if(APPLE)
   set(_TC_COMMON_OBJECTS
@@ -1281,11 +995,14 @@ if(APPLE)
     ${FOUNDATION}
   )
   if(NOT TC_BUILD_IOS)
-    set(_TC_COMMON_OBJECTS
-      ${_TC_COMMON_OBJECTS}
-      "$<TARGET_OBJECTS:vega_renderer>"
-    )
-    set(_TC_COMMON_REQUIREMENTS
+    if(TC_BUILD_VISUALIZATION_CLIENT)
+      set(_TC_COMMON_OBJECTS
+        ${_TC_COMMON_OBJECTS}
+        "$<TARGET_OBJECTS:vega_renderer>"
+      )
+    endif()
+
+    set(_TC_COMMON_REQUIREMENTS 
       ${_TC_COMMON_REQUIREMENTS}
       ${APPKIT}
       ${CORE_GRAPHICS}
@@ -1306,6 +1023,7 @@ if(APPLE)
     endif()
   endif()
 endif()
+
 if(${TC_BUILD_REMOTEFS})
   # object targets that should be included in all APPLE and non-APPLE
   # platforms except for iOS
@@ -1315,5 +1033,20 @@ if(${TC_BUILD_REMOTEFS})
   )
 endif()
 
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/extensions)
+  include_directories(SYSTEM extensions)
+  add_subdirectory(extensions)
+endif()
+
+# for build-time generated source code
+include_directories(SYSTEM ${CMAKE_BINARY_DIR}/src)
+
+if(EXISTS ${CMAKE_SOURCE_DIR}/subtree)
+  include_directories(SYSTEM subtree)
+  add_subdirectory(subtree)
+endif()
+
 add_subdirectory(src)
 add_subdirectory(test)
+

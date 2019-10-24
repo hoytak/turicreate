@@ -680,6 +680,9 @@ void gl_sarray::show(const std::string& path_to_client,
                      const flexible_type& title,
                      const flexible_type& xlabel,
                      const flexible_type& ylabel) const {
+
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
+
   using namespace turi;
   using namespace turi::visualization;
 
@@ -688,11 +691,16 @@ void gl_sarray::show(const std::string& path_to_client,
   if(plt != nullptr){
     plt->show(path_to_client);
   }
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 }
 
 std::shared_ptr<visualization::Plot> gl_sarray::plot(const flexible_type& title,
                                             const flexible_type& xlabel,
                                             const flexible_type& ylabel) const {
+#ifdef TC_BUILD_VISUALIZATION_CLIENT
+
   using namespace turi;
   using namespace turi::visualization;
 
@@ -712,6 +720,9 @@ std::shared_ptr<visualization::Plot> gl_sarray::plot(const flexible_type& title,
       log_and_throw(std::string("SArray.plot is currently not available for SArrays of type ") + flex_type_enum_to_name(this->dtype()));
       return nullptr;
   }
+#else
+  log_and_throw("This version was not built with visualization support.");
+#endif
 }
 
 gl_sarray gl_sarray::cumulative_aggregate(
