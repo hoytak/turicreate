@@ -112,24 +112,14 @@ if(TC_BUILD_PYTHON)
   message("Building python libraries.")
 
   if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/)
-    message(FATAL_ERROR "Internal error: Python toolchain expected; not present.")
+    message(FATAL, "Internal error: Python toolchain expected; not present.")
   endif()
 
   include(UseCython)
   add_definitions(-DTC_HAS_PYTHON=1)
-  if(NOT TC_BUILD_VISUALIZATION_CLIENT) 
-    message(FATAL_ERROR "Visualization client required for python build.")
-  endif()
-
+  add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT=1)
 else()
   message("Skipping python libraries.")
-endif()
-
-if(TC_BUILD_VISUALIZATION_CLIENT) 
-  message("Building Visualization Client.")
-  add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT=1)
-else() 
-  message("Skipping Build of Visualization Client.")
 endif()
 
 
@@ -452,10 +442,15 @@ include_directories(SYSTEM src/external/nanomsg/nanomsg-1.0.0/src)
 
 # Collate all the object targets shared among static and shared library targets
 # These are used by C API, unity_shared, etc.
-set(_TC_DEFAULT_SERVER_INITIALIZER 
 
-  "${CMAKE_SOURCE_DIR}/src/capi/default_server_initializer.cpp"
-)
+if(NOT _TC_DEFAULT_SERVER_INITIALIZER)
+  set(_TC_DEFAULT_SERVER_INITIALIZER 
+    "${CMAKE_SOURCE_DIR}/src/capi/default_server_initializer.cpp"
+  )
+endif()
+
+if(NOT TC_DISABLE_OBJECT_BUILDS)
+
 set(_TC_COMMON_OBJECTS
 
   "$<TARGET_OBJECTS:z>"
@@ -473,6 +468,7 @@ set(_TC_COMMON_OBJECTS
   "$<TARGET_OBJECTS:coremltools_mlmodel>"
 
   # Then our own source code
+  "$<TARGET_OBJECTS:annotation>"
   "$<TARGET_OBJECTS:cancel_serverside_ops>"
   "$<TARGET_OBJECTS:crash_handler>"
   "$<TARGET_OBJECTS:cppipc>"
@@ -528,6 +524,7 @@ set(_TC_COMMON_OBJECTS
   "$<TARGET_OBJECTS:unity_text>"
   "$<TARGET_OBJECTS:unity_util>"
   "$<TARGET_OBJECTS:util>"
+  "$<TARGET_OBJECTS:visualization>"
 )
 
 # TODO we can remove the requirements from here when target_link_libraries
@@ -542,16 +539,14 @@ set(_TC_COMMON_REQUIREMENTS
   Threads::Threads
 )
   
-if(TC_BUILD_VISUALIZATION_CLIENT) 
   set(_TC_COMMON_OBJECTS
     ${_TC_COMMON_OBJECTS}
   "$<TARGET_OBJECTS:annotation>"
   "$<TARGET_OBJECTS:visualization>")
-endif()
-
 
 if(APPLE)
   set(_TC_COMMON_OBJECTS
+
     ${_TC_COMMON_OBJECTS}
     "$<TARGET_OBJECTS:image_deep_feature_extractor>"
     "$<TARGET_OBJECTS:platform_config>"
@@ -563,13 +558,10 @@ if(APPLE)
     ${FOUNDATION}
   )
   if(NOT TC_BUILD_IOS)
-    if(TC_BUILD_VISUALIZATION_CLIENT)
-      set(_TC_COMMON_OBJECTS
-        ${_TC_COMMON_OBJECTS}
-        "$<TARGET_OBJECTS:vega_renderer>"
-      )
-    endif()
-
+    set(_TC_COMMON_OBJECTS
+      ${_TC_COMMON_OBJECTS}
+      "$<TARGET_OBJECTS:vega_renderer>"
+    )
     set(_TC_COMMON_REQUIREMENTS 
       ${_TC_COMMON_REQUIREMENTS}
       ${APPKIT}
@@ -600,6 +592,9 @@ if(${TC_BUILD_REMOTEFS})
     "$<TARGET_OBJECTS:aws-sdk-cpp>"
   )
 endif()
+
+endif() # End disable object builds
+
 
 
 if(EXISTS ${CMAKE_SOURCE_DIR}/extensions)

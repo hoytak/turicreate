@@ -65,6 +65,10 @@ function print_help {
   echo 
   echo "  --min-ios-version                 Override the minimum iOS version (default ${IOS_DEFAULT_MIN_VERSION})"
   echo "  --min-macos-version               Override the minimum MacOS version (default ${MACOS_DEFAULT_MIN_VERSION})"
+  ech
+  echo "  --codesign                        Enable code signing for OSX projects.  If enabled, the "
+  echo "                                    proper CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_**** parameters "
+  echo                                      denoting the signing variables should be passed in. 
   echo
   echo "  -D var=value                      Specify FLAGS definitions to be passed on to cmake."
   echo
@@ -148,6 +152,7 @@ target=""
 builder="make"
 min_ios_version=${IOS_DEFAULT_MIN_VERSION}
 min_macos_version=${MACOS_DEFAULT_MIN_VERSION}
+enable_codesign=0
 
 DEBUG_DIR="${TURI_HOME}/debug"
 RELEASE_DIR="$TURI_HOME/release"
@@ -204,6 +209,8 @@ while [ $# -gt 0 ]
 
     --builder=*)            builder=${1##--builder=} ;;
     --builder)              builder=${2} ; shift ;;
+
+    --codesign)             enable_codesign=1;;
 
     --help)                 print_help ;;
 
@@ -345,6 +352,21 @@ case $builder in
  *) echo "Unrecognized builder $builder; valid options are make, ninja, and xcode." ; exit 1 ;;
 esac
 
+if [[ ${enable_codesign} == 1 ]] ; then 
+
+  if [[ ! $builder == xcode ]] ; then 
+    echo "Code signing currently only supported with xcode builder."
+    exit 1
+  fi
+
+else
+  CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY= -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=0 -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM= "
+
+  # This also requires us to skip the code signing when trying to compile targets to check definitions.
+  CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
+
+  echo "Skipping code signing."
+fi
 
 #######################################################
 # Handle the case where the builder is not xcode but we still need to set the sdk root. 

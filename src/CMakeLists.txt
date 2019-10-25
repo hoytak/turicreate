@@ -6,11 +6,8 @@ subdirs(
   deployment
   ml
   model_server
-  toolkits)
-
-if(${TC_BUILD_VISULIZATION_CLIENT})
-  subdirs(visualization)
-endif()
+  toolkits
+  visualization)
 
 
 if(TC_BUILD_PYTHON)

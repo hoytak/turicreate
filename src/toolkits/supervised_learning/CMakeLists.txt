@@ -23,7 +23,6 @@ make_library(supervised_learning OBJECT
     unity_util
     unity_ml_model
     unity_coreml_model_export
-    minipsutil_static
     ml_data
     optimization
     xgboost

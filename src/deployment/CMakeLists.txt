@@ -1,6 +1,7 @@
 project(Turi)
 
-if(APPLE AND HAS_MLCUSTOMMODEL)
+if(APPLE AND HAS_COREML_CUSTOM_MODEL)
+  message(STATUS "Enabling Recommender and AudioPreprocessing targets.")
 
   make_library(Recommender
     SOURCES
@@ -54,5 +55,6 @@ if(APPLE AND HAS_MLCUSTOMMODEL)
       COMMENT "Stripping Objective-C AudioPreprocessing library"
     )
   endif()
-
+else()
+  message(STATUS "Skipping Recommender and AudioPreprocessing targets.")
 endif()

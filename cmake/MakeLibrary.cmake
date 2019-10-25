@@ -122,6 +122,10 @@ macro(make_library NAME)
     MESSAGE(FATAL_ERROR "make_library call with no sources")
   endif()
 
+  if(TC_DISABLE_OBJECT_BUILDS)
+    set(make_library_OBJECT 0)
+  endif()
+
   if (APPLE)
     if (make_library_MAC_REQUIRES)
       set(make_library_REQUIRES ${make_library_REQUIRES} ${make_library_MAC_REQUIRES})

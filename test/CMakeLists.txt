@@ -29,13 +29,10 @@ subdirs(
         table_printer
         network
         process
+        vega_renderer
         neural_net
         benchmark
 )
-
-if(${TC_BUILD_VISUALIZATION_CLIENT}) 
-  subdirs(vega_renderer)
-endif()
 
 if(${TC_BUILD_CAPI})
   message("Building C API Tests.")

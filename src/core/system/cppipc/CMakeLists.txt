@@ -20,7 +20,7 @@ make_library(cppipc
     server/comm_server.cpp
     ipc_object_base.cpp
   REQUIRES
-    nanosockets boost logger cancel_serverside_ops minipsutil_static
+    nanosockets boost logger cancel_serverside_ops
 )
 
 make_library(cancel_serverside_ops

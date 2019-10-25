@@ -173,8 +173,8 @@ build_dylib_ios_12:
     - source scripts/use_ccache.sh
     - ./configure --no-visualization --no-python --no-remotefs --release-opt-for-size --target=iphoneos --arch=arm64 --arch=armv8
     - cd release
-    - xcodebuild -j8 -project Turi.xcodeproj/ -target Recommender 
-    - xcodebuild -j8 -project Turi.xcodeproj/ -target AudioPreprocessing
+    - xcodebuild -j 8 -project Turi.xcodeproj/ -target Recommender -arch arm64 -arch arm64e only_active_arch=no
+    - xcodebuild -j 8 -project Turi.xcodeproj/ -target AudioPreprocessing -arch arm64 -arch arm64e only_active_arch=no
   artifacts:
     expire_in: 1 day
     paths:

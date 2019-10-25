@@ -35,8 +35,6 @@
 #include <core/storage/query_engine/operators/operator_properties.hpp>
 #include <core/system/exceptions/error_types.hpp>
 
-#ifdef TC_BUILD_VISUALIZATION_CLIENT
-
 #include <visualization/server/plot.hpp>
 #include <visualization/server/process_wrapper.hpp>
 #include <visualization/server/histogram.hpp>
@@ -47,8 +45,6 @@
 #include <visualization/server/thread.hpp>
 #include <visualization/server/summary_view.hpp>
 #include <visualization/server/table.hpp>
-
-#endif
 
 #include <model_server/lib/image_util.hpp>
 #include <ml/sketches/unity_sketch.hpp>
@@ -1817,8 +1813,6 @@ std::string unity_sframe::generate_next_column_name() {
 }
 
 void unity_sframe::show(const std::string& path_to_client) {
-#ifdef TC_BUILD_VISUALIZATION_CLIENT
-
   using namespace turi;
   using namespace turi::visualization;
 
@@ -1827,27 +1821,18 @@ void unity_sframe::show(const std::string& path_to_client) {
   if(plt != nullptr){
     plt->show(path_to_client);
   }
-
-#else
-  log_and_throw("This version was not built with visualization support.");
-#endif
 }
 
 std::shared_ptr<model_base> unity_sframe::plot(){
-#ifdef TC_BUILD_VISUALIZATION_CLIENT
   using namespace turi;
   using namespace turi::visualization;
 
   std::shared_ptr<unity_sframe_base> self = this->select_columns(this->column_names());
 
   return plot_columnwise_summary(self);
-#else
-  log_and_throw("This version was not built with visualization support.");
-#endif
 }
 
 void unity_sframe::explore(const std::string& path_to_client, const std::string& title) {
-#ifdef TC_BUILD_VISUALIZATION_CLIENT
   using namespace turi;
   using namespace turi::visualization;
 
@@ -1924,9 +1909,6 @@ void unity_sframe::explore(const std::string& path_to_client, const std::string&
       }
     }
   });
-#else
-  log_and_throw("This version was not built with visualization support.");
-#endif
 }
 
 } // namespace turi
