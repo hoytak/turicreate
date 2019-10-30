@@ -442,7 +442,6 @@ namespace CoreML {
                 break;
             case Specification::Model::kTreeEnsembleRegressor:
             case Specification::Model::kTreeEnsembleClassifier:
-            case Specification::Model::kItemSimilarityRecommender;
                 // allow arbitrary optional in tree inputs, just check outputs
                 break;
             case Specification::Model::kPipeline:
