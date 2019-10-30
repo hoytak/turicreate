@@ -137,7 +137,7 @@ typename = typename std::enable_if<sframe_impl::is_sarray_like<T>::value>::type>
 void copy_if(S&& input, T&& output,
              FilterFn filterfn,
              std::set<size_t> constraint_segments = std::set<size_t>(),
-             int random_seed=std::time(NULL)) {
+             size_t random_seed=std::time(NULL)) {
   log_func_entry();
   ASSERT_TRUE(input.is_opened_for_read());
   ASSERT_TRUE(output.is_opened_for_write());
@@ -212,7 +212,7 @@ void copy_transform_if(S&& input, T&& output,
              FilterFn filterfn,
              TransformFn transformfn,
              std::set<size_t> constraint_segments = std::set<size_t>(),
-             int random_seed=std::time(NULL)) {
+             size_t random_seed=std::time(NULL)) {
   log_func_entry();
   ASSERT_TRUE(input.is_opened_for_read());
   ASSERT_TRUE(output.is_opened_for_write());
@@ -292,7 +292,7 @@ typename = typename std::enable_if<sframe_impl::is_sarray_like<S>::value>::type,
 typename = typename std::enable_if<sframe_impl::is_sarray_like<T>::value>::type>
 void split(S&& input, T&& output1, T&& output2,
            FilterFn filterfn,
-           int random_seed=std::time(NULL)) {
+           size_t random_seed=std::time(NULL)) {
   log_func_entry();
   ASSERT_TRUE(input.is_opened_for_read());
   ASSERT_TRUE(output1.is_opened_for_write());

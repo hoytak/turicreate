@@ -114,7 +114,7 @@ std::string reset_color()
 
 
 void file_logger::_log(int lineloglevel,const char* file,const char* function,
-                       int line,const char* fmt, va_list ap ) {
+                       size_t line,const char* fmt, va_list ap ) {
   // if the logger level fits
   if (lineloglevel >= log_level){
     // get just the filename. this line found on a forum on line.
@@ -156,7 +156,7 @@ void file_logger::_log(int lineloglevel,const char* file,const char* function,
 
 
 void file_logger::_logbuf(int lineloglevel,const char* file,const char* function,
-                          int line,const char* buf, int len) {
+                          size_t line,const char* buf, size_t len) {
   // if the logger level fits
   if (lineloglevel >= log_level){
     // get just the filename. this line found on a forum on line.
@@ -205,7 +205,7 @@ void file_logger::_logbuf(int lineloglevel,const char* file,const char* function
   }
 }
 
-void file_logger::_lograw(int lineloglevel, const char* buf, int len) {
+void file_logger::_lograw(int lineloglevel, const char* buf, size_t len) {
   pthread_mutex_lock(&mut);
   if (fout.good()) {
     fout.write(buf,len);

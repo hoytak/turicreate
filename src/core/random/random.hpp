@@ -110,8 +110,13 @@ namespace turi {
 
       //! Seed the random number generator based on a number
       void seed(size_t number) {
+        uint32_t _seed = static_cast<uint32_t>(number);
+        if(size_t(_seed) != number) { 
+          _seed = static_cast<uint32_t>(std::hash<size_t>{}(number));
+        }
+
         mut.lock();
-        fast_discrete_rng.seed(number);
+        fast_discrete_rng.seed(_seed);
         real_rng.seed(fast_discrete_rng);
         discrete_rng.seed(fast_discrete_rng);
         mut.unlock();

@@ -121,6 +121,7 @@ check_and_set_compiler_flag(-Wno-c++11-narrowing CXX)
 check_and_set_compiler_flag(-Wno-stdlibcxx-not-found CXX RESTRICT_CLANG)
 
 check_and_set_compiler_flag(-Wno-deprecated-declarations)
+check_and_set_compiler_flag(-Wno-implicit-function-declaration)
 check_and_set_compiler_flag(-Wno-deprecated-register)
 check_and_set_compiler_flag(-Qunused-arguments)
 check_and_set_compiler_flag(-Wno-mismatched-tags)
