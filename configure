@@ -43,7 +43,7 @@ function print_help {
   echo "  --debug-opt-for-size              Debug optimize for size."
   echo
   echo "  --arch=<architecture>             The target architecture.  "
-  echo "                                    May be added multiple times." 
+  echo "                                    May be added multiple times.  First entry is used to determine compile-time features." 
   echo 
   echo "  --with-remotefs (default)         Include capabilities for remote file access."
   echo "  --no-remotefs                     Disable remote file access."
@@ -290,8 +290,8 @@ uname -v
 
 build_platform="$(uname -s)"
 case "${build_platform}" in
-    Darwin*)    build_platform=macosx;;
-    Linux*)     build_platform=linux;;
+    Darwin*)    build_platform=macosx; CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DCMAKE_SYSTEM_NAME=Darwin";;
+    Linux*)     build_platform=linux;CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DCMAKE_SYSTEM_NAME=Linux" ;;
     *)          ;;  
 esac
 
@@ -301,6 +301,11 @@ if [[ ! -z ${arch_list} ]] ; then
   arch_list="${arch_list##;}"
   echo "Using architectures: ${arch_list}"
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_ARCH='${arch_list}'"
+  
+  config_arch="${arch_list%%;*}"
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DCMAKE_CROSSCOMPILING=1 -DCMAKE_SYSTEM_PROCESSOR=${config_arch}"
+  echo "Targeting build configuration to run on ${config_arch}."
+
 fi
 
 if [[ -z ${target} ]] ; then 
@@ -339,11 +344,6 @@ case $builder in
    if [[ ! -z ${arch_list} ]] ; then 
      CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_OSX_ARCHITECTURES='${arch_list}'"
    fi
-
-   # CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_MACOSX_BUNDLE_GUI_IDENTIFIER=com.example -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY=\"iPhone Developer\" -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=\"testdev\""
-
-# set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")
-# set(CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "$ENV{XCODE_ATTRIBUTE_DEVELOPMENT_TEAM}")
 
    ;;
  make) ;; 
@@ -388,7 +388,7 @@ if [[ ${build_platform} == "macosx" ]] ; then
 
   # Set up minimum versions
   if [[ ${target} == iphoneos* ]] ; then 
-    CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${min_ios_version} -DTC_BUILD_IOS=1"
+    CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${min_ios_version}"
   elif [[ ${target} == macosx* ]] ; then 
     CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${min_macos_version}"
   else

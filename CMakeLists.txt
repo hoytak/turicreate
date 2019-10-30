@@ -13,77 +13,6 @@ cmake_policy(SET CMP0046 OLD)
 cmake_policy(SET CMP0042 NEW)
 cmake_policy(SET CMP0077 NEW)
    
-##################################################################################
-# Base configuration options (Called before project()  
-#
-# Get base stuff set up with the SDK.  Per CMake Documentation, this should be set 
-# before project() is called.
-
-if(APPLE)  
-  if(NOT TC_BASE_SDK) 
-    # Assume that we're building for macOSX
-    set(TC_BASE_SDK macosx)
-  endif()
-
-  if(${TC_BASE_SDK} MATCHES "iphoneos.*")
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.0)
-
-    if(${TC_BUILD_REMOTEFS})
-      message(ERROR, "RemoteFS must be disable for building iOS.")
-    endif()
-
-  elseif(${TC_BASE_SDK} MATCHES "macos.*")
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)
-  else()
-    message(FATAL, "Platform ${TC_BASE_SDK} not recognized.") 
-  endif()
-
-  # Find and set the SDK path.
-  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} 
-    --show-sdk-path OUTPUT_VARIABLE TC_BASE_SDK_PATH RETURN_VALUE _xcrun_ret)
-
-  if(NOT ${_xcrun_ret} EQUAL 0)
-    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
-  endif()
-
-  # Set the base root.
-  SET(CMAKE_OSX_SYSROOT "${TC_BASE_SDK_PATH}")
-  
-  message("Using SDK ${CMAKE_OSX_SYSROOT}.")
-  
-  # Get the sdk version.
-  EXEC_PROGRAM(xcrun ARGS --sdk ${TC_BASE_SDK} --show-sdk-version OUTPUT_VARIABLE TC_BASE_SDK_VERSION RETURN_VALUE _xcrun_ret)
-  if(NOT ${_xcrun_ret} EQUAL 0)
-    message(ERROR, "xcrun command failed with return code ${_xcrun_ret}.")
-  endif()
-  
-  # TODO: replace all these with in-build macros based on standard macros
-
-  # Core ML is only present on macOS 10.13 or higher.
-  # Logic reversed to get around what seems to be a CMake bug.
-  if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.13)
-    add_definitions(-DHAS_CORE_ML)
-    set(HAS_CORE_ML TRUE)
-  endif()
-
-  # Core ML only supports batch inference on macOS 10.14 or higher
-  # Logic reversed to get around what seems to be a CMake bug.
-  if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.14)
-    add_definitions(-DHAS_CORE_ML_BATCH_INFERENCE)
-
-    # GPU-accelerated training with MPS backend requires macOS 10.14 or higher
-    add_definitions(-DHAS_MPS)
-    set(HAS_MPS TRUE)
-
-    # CoreML MLCustomModel requires macOS 10.14 or higher
-    add_definitions(-DHAS_MLCUSTOM_MODEL)
-    set(HAS_COREML_CUSTOM_MODEL TRUE)
-  endif()
- 
-  if(NOT TC_BASE_SDK_VERSION VERSION_LESS 10.15)
-    add_definitions(-DHAS_MACOS_10_15)
-  endif()
-endif() 
 
 # Generate a compilation database for use with automated tools like IDE/editor
 # plugins. See http://clang.llvm.org/docs/JSONCompilationDatabase.html
@@ -101,83 +30,18 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED 1)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Determine where additional Turi specific cmake modules are
-# defined
-set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
-set(CMAKE_MODULE_PATH ${DEPS_CMAKE};${CMAKE_SOURCE_DIR}/cmake)
-set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
-set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
-
-if(TC_BUILD_PYTHON)
-  message("Building python libraries.")
-
-  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/)
-    message(FATAL, "Internal error: Python toolchain expected; not present.")
-  endif()
-
-  include(UseCython)
-  add_definitions(-DTC_HAS_PYTHON=1)
-  add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT=1)
-else()
-  message("Skipping python libraries.")
-endif()
-
-
 
 #**************************************************************************/
 #*                                                                        */
-#*                     Global Link and Include Flags                      */
+#*                     Global Link, Include and Define Flags              */
 #*                                                                        */
 #**************************************************************************/
 
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_SOURCE_DIR}/cmake")
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  set(CLANG false)
-elseif(WIN32)
-# for whatever reason on windows the compiler identification is an empty string
-  set(CLANG false)
-else()
-  set(CLANG true)
-endif()
-
-if(CMAKE_GENERATOR MATCHES "MinGW Makefiles")
-  SET(MINGW_MAKEFILES true)
-else()
-  SET(MINGW_MAKEFILES false)
-endif()
-
-if(CMAKE_GENERATOR MATCHES "MSYS Makefiles")
-  SET(MSYS_MAKEFILES true)
-else()
-  SET(MSYS_MAKEFILES false)
-endif()
-
-
-if(WIN32 AND MINGW)
-  SET(COMPILER_FLAGS "${COMPILER_FLAGS} -Wa,-mbig-obj")
-endif()
-
-set(MINGW_ROOT "/mingw64/bin")
-# Separate variable so that cython's CMakeLists.txt can use it too
-if (WIN32)
-        set(INSTALLATION_SYSTEM_BINARY_FILES
-        ${CMAKE_SOURCE_DIR}/deps/local/bin/libsodium-13.dll
-        ${MINGW_ROOT}/libiconv-2.dll
-        ${MINGW_ROOT}/libssh2-1.dll
-        ${MINGW_ROOT}/zlib1.dll
-        ${MINGW_ROOT}/libwinpthread-1.dll
-        ${MINGW_ROOT}/libgcc_s_seh-1.dll
-        ${MINGW_ROOT}/libstdc++-6.dll
-        ${MINGW_ROOT}/libeay32.dll)
-endif()
-
-
-#**************************************************************************/
-#*                                                                        */
-#*                             Common Defines                             */
-#*                                                                        */
-#**************************************************************************/
-
+# Configure the compiler
+include(SetupCompiler)
+SetupCompiler()
 
 if(WIN32)
   add_definitions(-DWINVER=0x0600)
@@ -197,8 +61,29 @@ if(NOT ${TC_BUILD_REMOTEFS})
   add_definitions(-DTC_DISABLE_REMOTEFS)
 endif()
 
-add_definitions(-DTC_BUILD_PATH_BASE="${CMAKE_SOURCE_DIR}")
+if(TC_BUILD_PYTHON)
+  message("Building python libraries.")
 
+  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/)
+    message(FATAL_ERROR "Internal error: Python toolchain expected; not present.")
+  endif()
+
+  include(UseCython)
+  add_definitions(-DTC_HAS_PYTHON=1)
+  add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT=1)
+else()
+  message("Skipping python libraries.")
+endif()
+
+# Determine where additional Turi specific cmake modules are
+# defined
+set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${DEPS_CMAKE}")
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
+set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
+
+# Add global defines
+add_definitions(-DTC_BUILD_PATH_BASE="${CMAKE_SOURCE_DIR}")
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DIN_TURI_SOURCE_TREE)
 add_definitions(-DFUSION_MAX_VECTOR_SIZE=20)
@@ -214,20 +99,6 @@ add_definitions(-DBOOST_RESULT_OF_USE_TR1_WITH_DECLTYPE_FALLBACK)
 
 # Legal define for Eigen.
 add_definitions(-DEIGEN_MPL2_ONLY)
-
-if (APPLE)
-  find_library(ACCELERATE NAMES Accelerate)
-  find_library(APPKIT AppKit)
-  find_library(CORE_GRAPHICS CoreGraphics)
-  find_library(JAVASCRIPT_CORE JavaScriptCore)
-  find_library(FOUNDATION Foundation)
-  find_library(CORE_IMAGE NAMES CoreImage)
-  find_library(CORE_ML CoreML)
-  find_library(CORE_VIDEO CoreVideo)
-  find_library(METAL NAMES Metal)
-  find_library(METAL_PERFORMANCE_SHADERS NAMES MetalPerformanceShaders)
-endif()
-
 
 
 #**************************************************************************/
@@ -302,6 +173,21 @@ find_package(Threads REQUIRED)
 if(CMAKE_USE_PTHREADS_INIT)
   add_definitions(-DHAVE_PTHREAD)
 endif()
+
+# Get framework dependencies.
+if (APPLE)
+  find_library(ACCELERATE NAMES Accelerate)
+  find_library(APPKIT AppKit)
+  find_library(CORE_GRAPHICS CoreGraphics)
+  find_library(JAVASCRIPT_CORE JavaScriptCore)
+  find_library(FOUNDATION Foundation)
+  find_library(CORE_IMAGE NAMES CoreImage)
+  find_library(CORE_ML CoreML)
+  find_library(CORE_VIDEO CoreVideo)
+  find_library(METAL NAMES Metal)
+  find_library(METAL_PERFORMANCE_SHADERS NAMES MetalPerformanceShaders)
+endif()
+
 
 # Disable address space randomization for OSX lion and above
 if (APPLE)

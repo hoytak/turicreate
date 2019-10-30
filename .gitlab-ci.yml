@@ -170,11 +170,10 @@ build_dylib_ios_12:
       - $TC_HAS_MACOS_RUNNERS == "1"
   stage: build
   script:
-    - source scripts/use_ccache.sh
-    - ./configure --no-visualization --no-python --no-remotefs --release-opt-for-size --target=iphoneos --arch=arm64 --arch=armv8
+    - ./configure --no-visualization --no-python --no-remotefs --release-opt-for-size --target=iphoneos --arch=arm64 --builder=xcode
     - cd release
-    - xcodebuild -j 8 -project Turi.xcodeproj/ -target Recommender -arch arm64 -arch arm64e only_active_arch=no
-    - xcodebuild -j 8 -project Turi.xcodeproj/ -target AudioPreprocessing -arch arm64 -arch arm64e only_active_arch=no
+    - xcodebuild -j 8 -project Turi.xcodeproj/ -target Recommender -arch arm64 only_active_arch=no
+    - xcodebuild -j 8 -project Turi.xcodeproj/ -target AudioPreprocessing -arch arm64 only_active_arch=no
   artifacts:
     expire_in: 1 day
     paths:
