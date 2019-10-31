@@ -28,6 +28,13 @@ namespace turi {
    */
   namespace random {
 
+    /** A function that returns a new random seed value every time it's called.
+     *
+     */ 
+    uint64_t pure_random_seed();
+
+
+
 
     ///////////////////////////////////////////////////////////////////////
     //// Underlying generator definition
