@@ -1,12 +1,38 @@
 project(Turi)
 
-set(NN_STATIC_LIB 1 CACHE BOOL "nanomsg static lib")
-set(NN_TESTS 0 CACHE BOOL "nanomsg tests.")
-set(NN_TOOLS 0 CACHE BOOL "nanomsg tools.")
-set(NN_ENABLE_DOC 0 CACHE BOOL "nanomsg docs.")
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/nanomsg-1.1.5/cmake")
+set(_nanomsg_dir nanomsg-1.1.5)
 
+if(NOT CMAKE_CROSSCOMPILING)
 
-subdirs(nanomsg-1.1.5)
+  set(NN_STATIC_LIB 1 CACHE BOOL "nanomsg static lib")
+  set(NN_TESTS 0 CACHE BOOL "nanomsg tests.")
+  set(NN_TOOLS 0 CACHE BOOL "nanomsg tools.")
+  set(NN_ENABLE_DOC 0 CACHE BOOL "nanomsg docs.")
+  set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/${_nanomsg_dir}/cmake")
 
+  add_subdirectory(${_nanomsg_dir})
+
+else()
+
+  add_definitions(-DHAVE_USLEEP)
+  add_definitions(-DNN_USE_OSX)
+  add_definitions(-DNN_USE_PIPE)
+  add_definitions(-DNN_USE_SOCKETPAIR)
+  add_definitions(-DNN_USE_POLL)
+  add_definitions(-DNN_USE_KQUEUE)
+  add_definitions(-DNN_HAVE_KQUEUE)
+  add_definitions(-DNN_HAVE_POLL)
+  add_definitions(-DNN_HAVE_MSG_CONTROL)
+  add_definitions(-DNN_USE_GCC_ATOMIC_BUILTINS)
+  add_definitions(-DNN_MAX_SOCKETS=512)
+  add_definitions(-DNN_STATIC_LIB)
+  add_definitions(-DNN_USE_SEMAPHORE_PTHREAD)
+
+  file(GLOB_RECURSE _nanomsg_src_files
+    CONFIGURE_DEPENDS
+    ${_nanomsg_dir}/src/*.c
+    ${_nanomsg_dir}/src/*.cpp)
+
+  make_library(nanomsg SOURCES ${_nanomsg_src_files})
+endif()
 

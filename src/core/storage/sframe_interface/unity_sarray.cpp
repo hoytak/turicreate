@@ -1767,7 +1767,7 @@ std::shared_ptr<unity_sarray_base> unity_sarray::tail(size_t nrows) {
 
 std::shared_ptr<unity_sarray_base> unity_sarray::make_uniform_boolean_array(size_t size,
                                                                             float percent,
-                                                                            int random_seed,
+                                                                            uint64_t random_seed,
                                                                             bool exact) {
   if (exact) {
     if (percent < 0.0) percent = 0.0;
@@ -1788,7 +1788,7 @@ std::shared_ptr<unity_sarray_base> unity_sarray::make_uniform_boolean_array(size
 
 std::shared_ptr<unity_sarray_base> unity_sarray::make_exact_uniform_boolean_array(size_t size,
                                                                           size_t num_trues,
-                                                                          int random_seed) {
+                                                                          uint64_t random_seed) {
   // all false and all true case.
   if (num_trues == 0) {
     auto ret = std::make_shared<unity_sarray>();
@@ -1838,7 +1838,7 @@ std::shared_ptr<unity_sarray_base> unity_sarray::make_exact_uniform_boolean_arra
 }
 
 std::shared_ptr<unity_sarray_base> unity_sarray::sample(float percent,
-                                                        int random_seed,
+                                                        uint64_t random_seed,
                                                         bool exact) {
   // create a sequential sarray
   auto seq = make_uniform_boolean_array(size(), percent, random_seed, exact);

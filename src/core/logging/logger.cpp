@@ -126,10 +126,10 @@ void file_logger::_log(int lineloglevel,const char* file,const char* function,
     // write the actual header (only show file in debug build)
 #ifndef NDEBUG
     int head_bytes_written = snprintf(str,1024, "%s%s(%s:%d): ",
-                                  messages[lineloglevel],file,function,line);
+                                  messages[lineloglevel],file,function,static_cast<int>(line));
 #else
     int head_bytes_written = snprintf(str,1024, "%s(%s:%d): ",
-                                  messages[lineloglevel],function,line);
+                                  messages[lineloglevel],function,static_cast<int>(line));
 #endif
     // write the actual logger
 
@@ -166,10 +166,10 @@ void file_logger::_logbuf(int lineloglevel,const char* file,const char* function
     // length of the 'head' of the string
 #ifndef NDEBUG
     size_t headerlen = snprintf(NULL,0,"%s%s(%s:%d): ",
-                                messages[lineloglevel],file,function,line);
+                                messages[lineloglevel],file,function,static_cast<int>(line));
 #else
     size_t headerlen = snprintf(NULL,0,"%s(%s:%d): ",
-                                messages[lineloglevel],function,line);
+                                messages[lineloglevel],function,static_cast<int>(line));
 #endif
 
     if (headerlen> 2047) {
@@ -181,10 +181,10 @@ void file_logger::_logbuf(int lineloglevel,const char* file,const char* function
 #ifndef NDEBUG
       // write the actual header
       int byteswritten = snprintf(str,2047,"%s%s(%s:%d): ",
-                                  messages[lineloglevel],file,function,line);
+                                  messages[lineloglevel],file,function,static_cast<int>(line));
 #else
       int byteswritten = snprintf(str,2047,"%s(%s:%d): ",
-                                  messages[lineloglevel],function,line);
+                                  messages[lineloglevel],function,static_cast<int>(line));
 #endif
 
       char final_str[byteswritten + len + strlen(newline) + 1];
