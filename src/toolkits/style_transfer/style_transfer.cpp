@@ -287,7 +287,7 @@ void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
   // Since we aren't training the style_images are irrelevant
   std::unique_ptr<data_iterator> data_iter =
       create_iterator(data, /* style_sframe */ {}, /* repeat */ false,
-                      /* training */ false, num_styles);
+                      /* training */ false, static_cast<int>(num_styles));
 
   std::unique_ptr<compute_context> ctx = create_compute_context();
   if (ctx == nullptr) {
@@ -392,7 +392,7 @@ void style_transfer::init_train(gl_sarray style, gl_sarray content,
   }
 
   m_training_data_iterator = create_iterator(content, style, /* repeat */ false,
-                                             /* training */ false, num_styles);
+                                             /* training */ false, static_cast<int>(num_styles));
 
   m_training_compute_context = create_compute_context();
   if (m_training_compute_context == nullptr) {

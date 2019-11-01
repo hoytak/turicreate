@@ -734,7 +734,7 @@ std::shared_ptr<unity_sframe_base> unity_sframe::flat_map(
     std::vector<std::string> column_names,
     std::vector<flex_type_enum> column_types,
     bool skip_undefined,
-    int seed) {
+    uint64_t seed) {
 #ifdef TC_HAS_PYTHON
   log_func_entry();
   DASSERT_EQ(column_names.size(), column_types.size());

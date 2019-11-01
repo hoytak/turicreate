@@ -447,7 +447,7 @@ class ndarray {
     }
 
     // compute the stride
-    int i = ret.m_shape.size() - 1;
+    size_t i = ret.m_shape.size() - 1;
     ret.m_stride[i] = 1;
     --i;
     for (;i >= 0; --i) {

@@ -53,7 +53,7 @@ flex_type_enum infer_type_of_list(const std::vector<flexible_type>& vec) {
 void check_vector_equal_size(const gl_sarray& in) {
   // Initialize.
   DASSERT_TRUE(in.dtype() == flex_type_enum::VECTOR);
-  size_t n_threads = thread::cpu_count();
+  size_t n_threads = thread::cpu_count();src/core/data/sframe/gl_sarray.cpp
   n_threads = std::max(n_threads, size_t(1));
   size_t m_size = in.size();
 
@@ -681,8 +681,6 @@ void gl_sarray::show(const std::string& path_to_client,
                      const flexible_type& xlabel,
                      const flexible_type& ylabel) const {
 
-#ifdef TC_BUILD_VISUALIZATION_CLIENT
-
   using namespace turi;
   using namespace turi::visualization;
 
@@ -691,16 +689,11 @@ void gl_sarray::show(const std::string& path_to_client,
   if(plt != nullptr){
     plt->show(path_to_client);
   }
-#else
-  log_and_throw("This version was not built with visualization support.");
-#endif
 }
 
 std::shared_ptr<visualization::Plot> gl_sarray::plot(const flexible_type& title,
                                             const flexible_type& xlabel,
                                             const flexible_type& ylabel) const {
-#ifdef TC_BUILD_VISUALIZATION_CLIENT
-
   using namespace turi;
   using namespace turi::visualization;
 
@@ -720,9 +713,6 @@ std::shared_ptr<visualization::Plot> gl_sarray::plot(const flexible_type& title,
       log_and_throw(std::string("SArray.plot is currently not available for SArrays of type ") + flex_type_enum_to_name(this->dtype()));
       return nullptr;
   }
-#else
-  log_and_throw("This version was not built with visualization support.");
-#endif
 }
 
 gl_sarray gl_sarray::cumulative_aggregate(
