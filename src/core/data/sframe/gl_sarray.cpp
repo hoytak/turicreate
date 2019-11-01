@@ -53,7 +53,7 @@ flex_type_enum infer_type_of_list(const std::vector<flexible_type>& vec) {
 void check_vector_equal_size(const gl_sarray& in) {
   // Initialize.
   DASSERT_TRUE(in.dtype() == flex_type_enum::VECTOR);
-  size_t n_threads = thread::cpu_count();src/core/data/sframe/gl_sarray.cpp
+  size_t n_threads = thread::cpu_count();
   n_threads = std::max(n_threads, size_t(1));
   size_t m_size = in.size();
 
