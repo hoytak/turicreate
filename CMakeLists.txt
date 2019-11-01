@@ -61,6 +61,15 @@ if(NOT ${TC_BUILD_REMOTEFS})
   add_definitions(-DTC_DISABLE_REMOTEFS)
 endif()
 
+# Determine where additional Turi specific cmake modules are
+# defined
+set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${DEPS_CMAKE}")
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
+set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
+
+# Test for python support.  Needs the path environment variable to be set to find
+# cython reliably
 if(TC_BUILD_PYTHON)
   message("Building python libraries.")
 
@@ -75,12 +84,6 @@ else()
   message("Skipping python libraries.")
 endif()
 
-# Determine where additional Turi specific cmake modules are
-# defined
-set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${DEPS_CMAKE}")
-set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
-set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
 
 # Add global defines
 add_definitions(-DTC_BUILD_PATH_BASE="${CMAKE_SOURCE_DIR}")

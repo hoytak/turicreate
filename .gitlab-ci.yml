@@ -152,15 +152,15 @@ build_dylib_macos_10_14:
       - $TC_HAS_MACOS_RUNNERS == "1"
   stage: build
   script:
-    - source scripts/use_ccache.sh
-    - ./configure --no-visualization --no-python --no-remotefs --release-opt-for-size
-    - cd release/src/deployment
-    - make -j8
+    - ./configure --no-visualization --no-python --no-remotefs --release-opt-for-size --with-capi --builder=xcode
+    - cd release
+    - xcodebuild -j 8 -project Turi.xcodeproj/ -target Recommender -quiet
+    - xcodebuild -j 8 -project Turi.xcodeproj/ -target AudioPreprocessing -quiet
   artifacts:
     expire_in: 1 day
     paths:
-      - release/src/deployment/libAudioPreprocessing.dylib
-      - release/src/deployment/libRecommender.dylib
+      - release/src/deployment/Release/libRecommender.dylib
+      - release/src/deployment/Release/libAudioPreprocessing.dylib
 
 build_dylib_ios_12:
   tags:
@@ -172,13 +172,13 @@ build_dylib_ios_12:
   script:
     - ./configure --no-visualization --no-python --no-remotefs --release-opt-for-size --target=iphoneos --arch=arm64 --with-capi --builder=xcode
     - cd release
-    - xcodebuild -j 8 -project Turi.xcodeproj/ -target Recommender -arch arm64 only_active_arch=no
-    - xcodebuild -j 8 -project Turi.xcodeproj/ -target AudioPreprocessing -arch arm64 only_active_arch=no
+    - xcodebuild -j 8 -project Turi.xcodeproj/ -target Recommender -arch arm64 only_active_arch=no -quiet
+    - xcodebuild -j 8 -project Turi.xcodeproj/ -target AudioPreprocessing -arch arm64 only_active_arch=no -quiet
   artifacts:
     expire_in: 1 day
     paths:
-      - release/src/deployment/libAudioPreprocessing.dylib
-      - release/src/deployment/libRecommender.dylib
+      - release/src/deployment/Release-iphoneos/libRecommender.dylib
+      - release/src/deployment/Release-iphoneos/libAudioPreprocessing.dylib
 
 test_cpp_linux:
   tags:
