@@ -190,10 +190,7 @@ if (APPLE)
 endif()
 
 
-# Disable address space randomization for OSX lion and above
 if (APPLE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Xlinker -no_pie")
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Xlinker -no_pie")
 # if mac, but not using clang, we should use the clang linker anyway since
 # the gcc linker seems to cause problems. Especially with -march=native
 #
