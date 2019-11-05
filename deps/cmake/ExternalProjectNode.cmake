@@ -1,4 +1,4 @@
-if(NOT APPLE OR NOT ${TC_BUILD_VISUALIZATION_CLIENT})
+if(APPLE OR NOT ${TC_BUILD_VISUALIZATION_CLIENT})
   make_empty_library(ex_node)
   make_empty_library(node)
   return()
