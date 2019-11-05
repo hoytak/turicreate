@@ -8,9 +8,9 @@ if(APPLE AND HAS_COREML_CUSTOM_MODEL)
       TuriCreateObjC.m
       recommender_initialization.cpp
       ${_TC_COMMON_OBJECTS}
+      $<TARGET_OBJECTS:capi>
     REQUIRES
       ${_TC_COMMON_REQUIREMENTS}
-      capi
     SHARED
     SHARED_ALL_DEFINED
     EXPORT_OSX_MAP_FILE "${CMAKE_CURRENT_SOURCE_DIR}/symbol_exports.ver"
@@ -20,10 +20,10 @@ if(APPLE AND HAS_COREML_CUSTOM_MODEL)
   make_library(AudioPreprocessing
     SOURCES
       AudioPreprocessing.m
+      $<TARGET_OBJECTS:capi>
     REQUIRES
       ${ACCELERATE}
       ${_TC_COMMON_REQUIREMENTS}
-      capi
     SHARED
     SHARED_ALL_DEFINED
     EXPORT_OSX_MAP_FILE ${CMAKE_CURRENT_SOURCE_DIR}/symbol_exports.ver
@@ -35,8 +35,8 @@ if(APPLE AND HAS_COREML_CUSTOM_MODEL)
     SOURCES
       AudioPreprocessing.m
       TuriCreateObjC.m
+      $<TARGET_OBJECTS:capi>
     REQUIRES
-      capi
       ${FOUNDATION}
       ${CORE_ML}
   )
