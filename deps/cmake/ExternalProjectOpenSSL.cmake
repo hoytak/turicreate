@@ -9,7 +9,7 @@ if(APPLE)
   # the ./Configure script
 ExternalProject_Add(ex_libssl
   PREFIX ${CMAKE_SOURCE_DIR}/deps/build/libssl
-  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2 
+  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2t 
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND env SDKROOT=${CMAKE_OSX_SYSROOT} CC="${CMAKE_C_COMPILER}" ./Configure darwin64-x86_64-cc no-idea no-mdc2 no-rc5 -fPIC --prefix=<INSTALL_DIR>
@@ -20,7 +20,7 @@ ExternalProject_Add(ex_libssl
 elseif(WIN32)
 ExternalProject_Add(ex_libssl
   PREFIX ${CMAKE_SOURCE_DIR}/deps/build/libssl
-  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2 
+  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2t 
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND ./Configure mingw64 no-idea no-mdc2 no-rc5 --prefix=<INSTALL_DIR>
@@ -30,7 +30,7 @@ ExternalProject_Add(ex_libssl
 else()
 ExternalProject_Add(ex_libssl
   PREFIX ${CMAKE_SOURCE_DIR}/deps/build/libssl
-  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2
+  URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2t
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND CC=${CMAKE_C_COMPILER} ./config no-idea no-mdc2 no-rc5 -fPIC --prefix=<INSTALL_DIR>
