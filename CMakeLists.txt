@@ -141,6 +141,9 @@ check_and_set_compiler_flag(-fpeel-loops RELEASE)
 check_and_set_compiler_flag(-funswitch-loops RELEASE)
 check_and_set_compiler_flag(-ftracer RELEASE)
 
+# Turn on ARC globally.
+check_and_set_compiler_flag(-fobjc-arc)
+
 # This flag needs to be set after all other warning flags, or it may give false 
 # positives.
 check_and_set_compiler_flag(-Wno-unknown-warning-option)

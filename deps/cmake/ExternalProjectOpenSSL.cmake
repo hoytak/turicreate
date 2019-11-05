@@ -12,7 +12,7 @@ ExternalProject_Add(ex_libssl
   URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2t 
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
-  CONFIGURE_COMMAND env SDKROOT=${CMAKE_OSX_SYSROOT} CC="${CMAKE_C_COMPILER}" ./Configure darwin64-x86_64-cc no-idea no-mdc2 no-rc5 -fPIC --prefix=<INSTALL_DIR>
+  CONFIGURE_COMMAND env SDKROOT=${CMAKE_OSX_SYSROOT} CC="${CMAKE_C_COMPILER}" ./Configure darwin64-x86_64-cc no-rc5 -fPIC --prefix=<INSTALL_DIR>
   BUILD_COMMAND bash -c "SDKROOT=${CMAKE_OSX_SYSROOT} make -j4"
   INSTALL_COMMAND bash -c "SDKROOT=${CMAKE_OSX_SYSROOT} make -j1 install && cp ./libcrypto.a <INSTALL_DIR>/ssl && cp ./libssl.a <INSTALL_DIR>/ssl"
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a
@@ -33,26 +33,18 @@ ExternalProject_Add(ex_libssl
   URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2t
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
-  CONFIGURE_COMMAND CC=${CMAKE_C_COMPILER} ./config no-idea no-mdc2 no-rc5 -fPIC --prefix=<INSTALL_DIR>
+  CONFIGURE_COMMAND CC=${CMAKE_C_COMPILER} ./config no-rc5 -fPIC --prefix=<INSTALL_DIR>
   BUILD_COMMAND make -j1
   INSTALL_COMMAND make -j1 install_sw
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a
   )
 endif()
 
-if(APPLE) 
-        add_library(libssla STATIC IMPORTED)
-        set_property(TARGET libssla PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a)
+add_library(libssla STATIC IMPORTED)
+set_property(TARGET libssla PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a)
 
-        add_library(libcryptoa STATIC IMPORTED)
-        set_property(TARGET libcryptoa PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a)
-else() # This needs to be adjusted for linux.
-        add_library(libssla STATIC IMPORTED)
-        set_property(TARGET libssla PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a)
-
-        add_library(libcryptoa STATIC IMPORTED)
-        set_property(TARGET libcryptoa PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a)
-endif()
+add_library(libcryptoa STATIC IMPORTED)
+set_property(TARGET libcryptoa PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a)
 
 add_library(openssl INTERFACE )
 target_link_libraries(openssl INTERFACE libssla libcryptoa)

@@ -20,6 +20,7 @@ if(APPLE AND HAS_COREML_CUSTOM_MODEL)
   make_library(AudioPreprocessing
     SOURCES
       AudioPreprocessing.mm
+      ${_TC_COMMON_OBJECTS}
       $<TARGET_OBJECTS:capi>
     REQUIRES
       ${ACCELERATE}
@@ -35,15 +36,13 @@ if(APPLE AND HAS_COREML_CUSTOM_MODEL)
     SOURCES
       AudioPreprocessing.mm
       TuriCreateObjC.mm
+      ${_TC_COMMON_OBJECTS}
       $<TARGET_OBJECTS:capi>
     REQUIRES
+      ${_TC_COMMON_REQUIREMENTS}
       ${FOUNDATION}
       ${CORE_ML}
   )
-
-  target_compile_options(objcapi PUBLIC "-fobjc-arc")
-  target_compile_options(Recommender PUBLIC "-fobjc-arc")
-  target_compile_options(AudioPreprocessing PUBLIC "-fobjc-arc")
 
   if (CMAKE_BUILD_TYPE STREQUAL "Release")
     add_custom_command(TARGET Recommender
