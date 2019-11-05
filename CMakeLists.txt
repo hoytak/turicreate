@@ -307,7 +307,9 @@ include_directories(SYSTEM
 include_directories(SYSTEM
  ${CMAKE_SOURCE_DIR}/src/external/libjpeg/jpeg-8d/)
 include_directories(SYSTEM
-  ${CMAKE_SOURCE_DIR}/src/external/coremltools_wrap/)
+ ${CMAKE_SOURCE_DIR}/src/external/zlib/zlib-1.2.11/)
+include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/coremltools_wrap/)
 
 link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib)
 
