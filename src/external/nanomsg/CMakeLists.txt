@@ -4,6 +4,8 @@ set(_nanomsg_dir nanomsg-1.1.5)
 
 if(NOT CMAKE_CROSSCOMPILING)
 
+  message("Building nanomsg using native build system.")
+
   set(NN_STATIC_LIB 1 CACHE BOOL "nanomsg static lib")
   set(NN_TESTS 0 CACHE BOOL "nanomsg tests.")
   set(NN_TOOLS 0 CACHE BOOL "nanomsg tools.")
@@ -13,6 +15,8 @@ if(NOT CMAKE_CROSSCOMPILING)
   add_subdirectory(${_nanomsg_dir})
 
 else()
+  
+  message("Building nanomsg using predefined cross-compilation.")
 
   add_definitions(-DHAVE_USLEEP)
   add_definitions(-DNN_USE_OSX)
