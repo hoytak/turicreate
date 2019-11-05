@@ -16,7 +16,10 @@ file(GLOB_RECURSE boost_src_files
   ${__boost_lib_dir}/iostreams/src/*.cpp
   ${__boost_lib_dir}/regex/src/*.cpp
   ${__boost_lib_dir}/test/src/*.cpp
-  ${__boost_lib_dir}/thread/src/*.cpp
+  ${__boost_lib_dir}/thread/src/future.cpp
+  ${__boost_lib_dir}/thread/src/tss_null.cpp
+  ${__boost_lib_dir}/thread/src/pthread/once_atomic.cpp
+  ${__boost_lib_dir}/thread/src/pthread/thread.cpp
 )
 
 list(FILTER boost_src_files EXCLUDE REGEX ".*/test/.*")

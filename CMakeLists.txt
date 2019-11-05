@@ -91,6 +91,7 @@ add_definitions(-DCURL_STATICLIB)
 add_definitions(-DIN_TURI_SOURCE_TREE)
 add_definitions(-DFUSION_MAX_VECTOR_SIZE=20)
 add_definitions(-DBOOST_SPIRIT_THREAD_SAFE)
+add_definitions(-DBOOST_THREAD_ONCE_ATOMIC)
 
 # These determine the maximum number of arguments for extension functions
 add_definitions(-DBOOST_FUSION_INVOKE_MAX_ARITY=12)
