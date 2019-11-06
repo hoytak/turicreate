@@ -331,9 +331,9 @@ void lsh_jaccard::fill_empty_bins(std::vector<int>& vec) const {
   int64_t chunk_size_i64 = truncate_check<int64_t>(chunk_size);
 
   // find the first non-empty bin for left rotating
-  size_t start_idx_left = 0;
+  int64_t start_idx_left = 0;
   // find the first non-empty bin for right rotating
-  size_t start_idx_right = num_projections - 1;
+  int64_t start_idx_right = num_projections - 1;
 
   while (vec[start_idx_left] == num_input_dimensions_i64 // if it is not updated since initialized
          && start_idx_left < num_projections_i64) {
@@ -346,7 +346,7 @@ void lsh_jaccard::fill_empty_bins(std::vector<int>& vec) const {
   }
 
   // no empty bins
-  if (start_idx_left == num_projections_i64 || start_idx_right == int(-1)) {
+  if (start_idx_left == num_projections_i64 || start_idx_right == -1) {
     return;
   }
 
