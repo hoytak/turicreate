@@ -351,10 +351,10 @@ void lsh_jaccard::fill_empty_bins(std::vector<int>& vec) const {
   }
 
   // OK. We get a non-empty bin, go back to update empty bins
-  int current_offset = vec[start_idx_left];
-  int num_straight_empty_bins = 0;
+  int64_t current_offset = vec[start_idx_left];
+  int64_t num_straight_empty_bins = 0;
 
-  for (size_t idx = start_idx_left + num_projections; idx != start_idx_left; --idx) {
+  for (int64_t idx = start_idx_left + num_projections; idx != start_idx_left; --idx) {
     if (vec[idx % num_projections] >= 2 * chunk_size_i64) { // empty
       num_straight_empty_bins += 1;
       // h_j = h_{j+t} + t * C, where t is distance to the nearest non-empty bin
@@ -371,7 +371,7 @@ void lsh_jaccard::fill_empty_bins(std::vector<int>& vec) const {
   current_offset = vec[start_idx_right];
   num_straight_empty_bins = 0;
 
-  for (size_t idx = start_idx_right; idx != start_idx_right + num_projections_i64; ++idx) {
+  for (int64_t idx = start_idx_right; idx != start_idx_right + num_projections_i64; ++idx) {
     if (vec[idx % num_projections] >= 2 * chunk_size_i64) {
       num_straight_empty_bins += 1;
       // h_j = h_{j+t} + t * C, where t is distance to the nearest non-empty bin
