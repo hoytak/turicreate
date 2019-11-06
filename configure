@@ -250,6 +250,9 @@ if [[ $with_python == 1 ]]; then
 
   install_python_toolchain
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_PYTHON=1"
+
+  # Activate the virtual environment
+  . ./deps/env/bin/activate
 else
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_PYTHON=0"
 fi
