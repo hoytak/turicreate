@@ -59,7 +59,7 @@ class operator_impl<planner_node_type::TRANSFORM_NODE> : public query_operator {
   }
   inline void execute(query_context& context) {
     CORO_BEGIN(execute)
-    if (m_random_seed != -1){
+    if (m_random_seed != size_t(-1)){
       random::get_source().seed(m_random_seed + thread::thread_id());
     }
     while(1) {
