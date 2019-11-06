@@ -20,7 +20,7 @@ ExternalProject_Add(ex_libxml2
   PREFIX ${CMAKE_SOURCE_DIR}/deps/build/libxml2
   URL ${CMAKE_SOURCE_DIR}/deps/src/libxml2-2.9.1/ 
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
-  CONFIGURE_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} "CFLAGS=-fPIC ${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG} -Wno-everything" "CPPFLAGS=-fPIC ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} -Wno-everything" <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --enable-shared=no --enable-static=yes --without-lzma --libdir=<INSTALL_DIR>/lib --with-python=./ ${EXTRA_CONFIGURE_FLAGS}
+  CONFIGURE_COMMAND bash -c "${__SDKCMD} CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CFLAGS=\"-fPIC -Wno-everything\" <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --enable-shared=no --enable-static=yes --without-lzma --libdir=<INSTALL_DIR>/lib --with-python=./ ${EXTRA_CONFIGURE_FLAGS}"
   BUILD_COMMAND cp <SOURCE_DIR>/testchar.c <SOURCE_DIR>/testapi.c && ${__SDKCMD} make
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libxml2.a
   )
