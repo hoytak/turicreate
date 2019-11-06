@@ -357,7 +357,9 @@ if [[ ${enable_codesign} == 1 ]] ; then
     exit 1
   fi
 
-else
+elif [[ ${builder} == xcode ]] ; then
+
+  # Deal with the code signing issues. 
   CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY= -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=0 -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM= "
 
   # This also requires us to skip the code signing when trying to compile targets to check definitions.
