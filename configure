@@ -293,8 +293,8 @@ uname -v
 
 build_platform="$(uname -s)"
 case "${build_platform}" in
-    Darwin*)    build_platform=macosx; CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DCMAKE_SYSTEM_NAME=Darwin";;
-    Linux*)     build_platform=linux;CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DCMAKE_SYSTEM_NAME=Linux" ;;
+    Darwin*)    build_platform=macosx;;
+    Linux*)     build_platform=linux;;
     *)          ;;  
 esac
 
@@ -304,11 +304,6 @@ if [[ ! -z ${arch_list} ]] ; then
   arch_list="${arch_list##;}"
   echo "Using architectures: ${arch_list}"
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_ARCH='${arch_list}'"
-  
-  config_arch="${arch_list%%;*}"
-  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DCMAKE_CROSSCOMPILING=1 -DCMAKE_SYSTEM_PROCESSOR=${config_arch}"
-  echo "Targeting build configuration to run on ${config_arch}."
-
 fi
 
 if [[ -z ${target} ]] ; then 
@@ -341,7 +336,7 @@ set -o pipefail
 
 case $builder in
  xcode) 
-   CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -GXcode -DCMAKE_SYSTEM_NAME=Darwin"
+   CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -GXcode"
    CMAKE_CONFIG_FLAGS="${CMAKE_CONFIG_FLAGS} -DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=1"
 
    if [[ ! -z ${arch_list} ]] ; then 
@@ -374,14 +369,27 @@ fi
 #######################################################
 # Handle the case where the builder is not xcode but we still need to set the sdk root. 
 
-if [[ ${build_platform} == "macosx" ]] && [[ ${builder} != "xcode" ]] && [[ ! ${target} != "macosx.*" ]] ; then 
-  # Cross-platform builds on macosx must use the xcode builder. 
-  echo "ERROR: cross-compilation on OSX requires the xcode build train using --builder=xcode." 
-  exit 1
+if [[ ${build_platform} == macosx ]] && [[ ${target} != macosx* ]] ; then 
+
+  if [[ ${builder} != xcode ]] ; then 
+    # Cross-platform builds on macosx must use the xcode builder. 
+    echo "ERROR: cross-compilation on OSX requires the xcode build train using --builder=xcode." 
+    exit 1
+  fi
+
+  # Turn on cross compilation
+
+  # Setting CMAKE_SYSTEM_NAME turns on cross-compilation (setting CMAKE_CROSSCOMPILING=1)
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DCMAKE_SYSTEM_NAME=Darwin"
+
+  # Target build architecture to be the first architecture given by the arch list.
+  config_arch="${arch_list%%;*}"
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DCMAKE_SYSTEM_PROCESSOR=${config_arch}"
+  echo "Targeting build configuration to run on ${config_arch}."
 fi
 
 
-if [[ ${build_platform} == "macosx" ]] ; then 
+if [[ ${build_platform} == macosx ]] ; then 
   SDKROOT=`xcrun --sdk ${target} --show-sdk-path || echo ""`
   if [[ -z ${SDKROOT} ]] ; then 
     echo "Cannot find valid SDK for target ${target}. (command xcrun --sdk ${target} --show-sdk-path)."
