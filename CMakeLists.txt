@@ -65,7 +65,7 @@ endif()
 # defined
 set(DEPS_CMAKE ${CMAKE_SOURCE_DIR}/deps/cmake)
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${DEPS_CMAKE}")
-set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/deps/local)
+set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/deps/local:${CMAKE_SOURCE_DIR}/deps/env/")
 set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/bin:$ENV{PATH}")
 
 # Test for python support.  Needs the path environment variable to be set to find
