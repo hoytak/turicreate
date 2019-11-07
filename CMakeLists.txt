@@ -319,10 +319,17 @@ include_directories(SYSTEM src/external/nanomsg/nanomsg-1.0.0/src)
 # Include all the external dependencies.
 include(ExternalProject)
 
-file(GLOB packages "${DEPS_CMAKE}/ExternalProject*.cmake")
+add_custom_target(external_dependencies)
 
+file(GLOB packages "${DEPS_CMAKE}/ExternalProject*.cmake")
 foreach(package ${packages})
-   include(${package})
+        get_filename_component(packagename "${package}" NAME_WE)
+        #package is of the form ExternalProjectXXX"
+        include(${package})
+        STRING(SUBSTRING "${packagename}" 15 -1 depname)
+        string(TOLOWER ${depname} depname)
+        set(package_${depname} requires_${depname} CACHE STRING "Package map")
+        add_dependencies(external_dependencies ex_${depname})
 endforeach()
 
 set(_TC_EXTERNAL_DEPENDENCIES openssl libxml2 curl node)

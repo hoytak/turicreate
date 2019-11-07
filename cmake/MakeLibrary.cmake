@@ -68,8 +68,8 @@ macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFI
   add_dependencies(${NAME} "${REQUIREMENTS}")
 
   # make sure dependencies are always built first
-  message(STATUS "${NAME} DEPENDS ON ${_TC_EXTERNAL_DEPENDENCIES} ${REQUIREMENTS}.")
   add_dependencies(${NAME} "${_TC_EXTERNAL_DEPENDENCIES}")
+  add_dependencies(${NAME} external_dependencies)
 endmacro()
 
 

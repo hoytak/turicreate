@@ -3,6 +3,8 @@ if(NOT ${TC_BUILD_REMOTEFS})
   return()
 endif()
 
+message(STATUS "Building Curl library.")
+
 if(APPLE)
   SET(EXTRA_CONFIGURE_FLAGS --with-darwinssl --without-ssl)
 elseif(WIN32)
