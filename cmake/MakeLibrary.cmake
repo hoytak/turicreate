@@ -64,7 +64,7 @@ macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFI
     target_link_libraries(${NAME} ${REQUIREMENTS})
   endif()
   # make sure dependencies are always built first
-  add_dependencies(${NAME} external_dependencies)
+  add_dependencies(${NAME} ${_TC_EXTERNAL_DEPENDENCIES})
 endmacro()
 
 

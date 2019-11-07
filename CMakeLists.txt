@@ -289,20 +289,6 @@ include(BuildUtilities)
 
 
 
-add_custom_target(external_dependencies)
-
-include(ExternalProject)
-file(GLOB packages "${DEPS_CMAKE}/ExternalProject*.cmake")
-foreach(package ${packages})
-        get_filename_component(packagename "${package}" NAME_WE)
-        #package is of the form ExternalProjectXXX"
-        include(${package})
-        STRING(SUBSTRING "${packagename}" 15 -1 depname)
-        string(TOLOWER ${depname} depname)
-        set(package_${depname} requires_${depname} CACHE STRING "Package map")
-        add_dependencies(external_dependencies ex_${depname})
-endforeach()
-
 include_directories(SYSTEM
  ${CMAKE_SOURCE_DIR}/deps/local/include)
 include_directories(SYSTEM
@@ -342,6 +328,8 @@ if(NOT _TC_DEFAULT_SERVER_INITIALIZER)
     "${CMAKE_SOURCE_DIR}/src/capi/default_server_initializer.cpp"
   )
 endif()
+
+set(_TC_EXTERNAL_DEPENDENCIES openssl libxml2 curl node)
 
 if(NOT TC_DISABLE_OBJECT_BUILDS)
 
@@ -427,9 +415,7 @@ set(_TC_COMMON_OBJECTS
 # See https://gitlab.kitware.com/cmake/cmake/issues/14778
 set(_TC_COMMON_REQUIREMENTS
   # External dependencies (from deps)
-  curl
-  libxml2
-  openssl
+  ${_TC_EXTERNAL_DEPENDENCIES}
   nanomsg
   Threads::Threads
 )

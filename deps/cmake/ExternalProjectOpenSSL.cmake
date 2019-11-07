@@ -15,10 +15,10 @@ ExternalProject_Add(ex_libssl
   URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2t 
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
-  CONFIGURE_COMMAND env SDKROOT=${CMAKE_OSX_SYSROOT} CC="${CMAKE_C_COMPILER}" CFLAGS="${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG} -Wno-everything" ./Configure darwin64-x86_64-cc no-rc5 -fPIC --prefix=<INSTALL_DIR>
+  CONFIGURE_COMMAND env SDKROOT=${CMAKE_OSX_SYSROOT} CC="${CMAKE_C_COMPILER}" ./Configure darwin64-x86_64-cc no-rc5 --prefix=<INSTALL_DIR> ${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG} -Wno-everything
   BUILD_COMMAND bash -c "SDKROOT=${CMAKE_OSX_SYSROOT} make -j1"
   INSTALL_COMMAND bash -c "SDKROOT=${CMAKE_OSX_SYSROOT} make -j1 install && cp ./libcrypto.a <INSTALL_DIR>/ssl && cp ./libssl.a <INSTALL_DIR>/ssl"
-  BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a
+  BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a 
   )
 elseif(WIN32)
 ExternalProject_Add(ex_libssl
@@ -36,7 +36,7 @@ ExternalProject_Add(ex_libssl
   URL ${CMAKE_SOURCE_DIR}/deps/src/openssl-1.0.2t
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   BUILD_IN_SOURCE 1
-  CONFIGURE_COMMAND env CC=${CMAKE_C_COMPILER} CFLAGS="${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG} -Wno-everything" ./config no-rc5 -fPIC --prefix=<INSTALL_DIR>
+  CONFIGURE_COMMAND env CC=${CMAKE_C_COMPILER} ./config no-rc5 --prefix=<INSTALL_DIR> ${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG} -Wno-everything
   BUILD_COMMAND make -j1
   INSTALL_COMMAND make -j1 install_sw
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libssl.a ${CMAKE_SOURCE_DIR}/deps/local/lib/libcrypto.a
