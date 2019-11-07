@@ -287,8 +287,6 @@ include(MakeExecutable)
 include(MakeTest)
 include(BuildUtilities)
 
-
-
 include_directories(SYSTEM
  ${CMAKE_SOURCE_DIR}/deps/local/include)
 include_directories(SYSTEM
@@ -303,10 +301,7 @@ include_directories(SYSTEM
  ${CMAKE_SOURCE_DIR}/src/external/coremltools_wrap/)
 
 link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib)
-
-if (EXISTS ${CMAKE_SOURCE_DIR}/deps/local/lib64)
-  link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib64)
-endif()
+link_directories(${CMAKE_SOURCE_DIR}/deps/local/lib64)
 
 include_directories(src)
 include_directories(src/core/system/platform)
@@ -320,6 +315,19 @@ endif()
 include_directories(SYSTEM src/external/google)
 include_directories(SYSTEM src/external/nanomsg/nanomsg-1.0.0/src)
 
+
+# Include all the external dependencies.
+include(ExternalProject)
+
+file(GLOB packages "${DEPS_CMAKE}/ExternalProject*.cmake")
+
+foreach(package ${packages})
+   include(${package})
+endforeach()
+
+set(_TC_EXTERNAL_DEPENDENCIES openssl libxml2 curl node)
+
+
 # Collate all the object targets shared among static and shared library targets
 # These are used by C API, unity_shared, etc.
 
@@ -329,7 +337,6 @@ if(NOT _TC_DEFAULT_SERVER_INITIALIZER)
   )
 endif()
 
-set(_TC_EXTERNAL_DEPENDENCIES openssl libxml2 curl node)
 
 if(NOT TC_DISABLE_OBJECT_BUILDS)
 
