@@ -78,6 +78,17 @@ if(TC_BUILD_PYTHON)
     message(FATAL_ERROR "Internal error: Python toolchain expected; not present.")
   endif()
 
+  # Get the proper versions of python. 
+  set(Python_FIND_VIRTUALENV ONLY)
+  find_package (Python COMPONENTS Interpreter Development)
+
+  if(NOT Python_FOUND) 
+    message(FATAL_ERROR "Python development components not found.")
+  endif()
+
+
+  include_directories(${Python_INCLUDE_DIRS})
+
   include(UseCython)
   add_definitions(-DTC_HAS_PYTHON=1)
   add_definitions(-DTC_BUILD_VISUALIZATION_CLIENT=1)
