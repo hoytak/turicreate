@@ -18,8 +18,8 @@ ExternalProject_Add(ex_node
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/deps/build/node-v10.15.3/
   INSTALL_DIR ${CMAKE_SOURCE_DIR}/deps/local
   CONFIGURE_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CFLAGS="-fPIC ${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG} -Wno-everything" CXXFLAGS="-fPIC ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} -Wno-everything" ./configure --prefix=${CMAKE_SOURCE_DIR}/deps/local --openssl-no-asm ${EXTRA_CONFIGURE_FLAGS} 
-  BUILD_COMMAND make -s -j4 || make 
-  INSTALL_COMMAND make install
+  BUILD_COMMAND make -s -j4 
+  INSTALL_COMMAND make -s install
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/bin/node
   BUILD_IN_SOURCE 1
 )
