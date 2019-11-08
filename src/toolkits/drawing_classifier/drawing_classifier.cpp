@@ -22,6 +22,7 @@
 #include <toolkits/supervised_learning/automatic_model_creation.hpp>
 #include <toolkits/util/training_utils.hpp>
 
+#include <toolkits/drawing_classifier/data_preparation.hpp>
 #include <toolkits/drawing_classifier/drawing_classifier.hpp>
 
 namespace turi {
@@ -69,9 +70,6 @@ void drawing_classifier::save_impl(oarchive& oarc) const {
 }
 
 void drawing_classifier::load_version(iarchive& iarc, size_t version) {
-  if (!nn_spec_)
-    log_and_throw(
-        "model spec is not initalized, please call `init_train` before loading model");
 
   // Load model attributes.
   variant_deep_load(state, iarc);
@@ -264,7 +262,10 @@ std::unique_ptr<data_iterator> drawing_classifier::create_iterator(
   }
 
   data_params.is_train = is_train;
-  data_params.target_column_name = read_state<flex_string>("target");
+  if (data.contains_column(read_state<flex_string>("target"))) {
+    data_params.target_column_name = read_state<flex_string>("target");
+  }
+
   const flex_list& features_values = read_state<flex_list>("features");
 
   /**
@@ -282,6 +283,11 @@ void drawing_classifier::init_training(
     std::string feature_column_name, variant_type validation_data,
     std::map<std::string, flexible_type> opts) {
 
+  // Convert stroke-based data, if needed
+  if (data[feature_column_name].dtype() != flex_type_enum::IMAGE) {
+    data = _drawing_classifier_prepare_data(data, feature_column_name);
+  }
+
   // Read user-specified options.
   init_options(opts);
 
@@ -297,6 +303,11 @@ void drawing_classifier::init_training(
 
   // Perform validation split if necessary.
   std::tie(training_data_, validation_data_) = init_data(data, validation_data);
+  if (validation_data_.size() > 0 
+    && validation_data_[feature_column_name].dtype() != flex_type_enum::IMAGE) {
+    validation_data_ = _drawing_classifier_prepare_data(
+      validation_data_, feature_column_name);
+  }
 
   // Begin printing progress.
   // TODO: Make progress printing optional.
@@ -543,6 +554,7 @@ void drawing_classifier::train(gl_sframe data, std::string target_column_name,
                                std::string feature_column_name,
                                variant_type validation_data,
                                std::map<std::string, flexible_type> opts) {
+
   // Instantiate the training dependencies: data iterator, compute context,
   // backend NN model.
 
@@ -638,8 +650,14 @@ gl_sframe drawing_classifier::perform_inference(data_iterator* data) const {
     result_batch.data_info = data->next_batch(batch_size);
 
     // Send the inputs to the model.
+    /** TODO: Figure out a better solution to having `num_samples` be a 
+     *  top-level input to the network. May be captured in the first
+     *  dimension of the input, or perhaps via a weight tensor.
+     */
     std::map<std::string, shared_float_array> results =
-        backend->predict({{"input", result_batch.data_info.drawings}});
+        backend->predict({{"input", result_batch.data_info.drawings},
+                          {"num_samples", shared_float_array::wrap(result_batch.data_info.num_samples)}
+                         });
 
     // Copy the (float) outputs to our (double) buffer and add to the SArray.
     result_batch.data_info.predictions = results.at("output");
@@ -655,9 +673,11 @@ gl_sframe drawing_classifier::perform_inference(data_iterator* data) const {
 gl_sarray drawing_classifier::predict(gl_sframe data, std::string output_type) {
   // by default, it should be "probability" if the value is
   // passed in through python client
-  if (output_type != "probability_vector" && output_type != "class") {
+  if (output_type != "probability"
+    && output_type != "probability_vector"
+    && output_type != "class") {
     log_and_throw(output_type + " is not a valid option for output_type.  " +
-                  "Expected one of: probability, rank");
+                  "Expected one of: probability, probability_vector, rank");
   }
 
   auto data_itr =
@@ -675,6 +695,16 @@ gl_sarray drawing_classifier::predict(gl_sframe data, std::string output_type) {
     };
 
     result = result.apply(max_prob_label, class_labels.front().get_type());
+
+  } else if (output_type == "probability") {
+    auto max_prob = [=](const flexible_type& ft) {
+      const flex_vec& prob_vec = ft.get<flex_vec>();
+      auto max_it = std::max_element(prob_vec.begin(), prob_vec.end());
+      return *max_it;
+    };
+
+    result = result.apply(max_prob, flex_type_enum::FLOAT);
+
   }
 
   return result;
@@ -691,7 +721,7 @@ gl_sframe drawing_classifier::predict_topk(gl_sframe data,
 
   // data inference
   std::unique_ptr<data_iterator> data_it =
-      create_iterator(data, /* is_train */ false, /* class lables */ {});
+      create_iterator(data, /* is_train */ false, /* class labels */ {});
 
   gl_sframe dc_predictions = perform_inference(data_it.get());
 
@@ -763,7 +793,7 @@ gl_sframe drawing_classifier::predict_topk(gl_sframe data,
 
   result.add_column(stacked_class["class"], "class");
   result.add_column(gl_sarray::from_sequence(0, stacked_class.size()),
-                    "row_id");
+                    "id");
 
   // stack the rank column,
   gl_sframe stacked_rank =
@@ -782,12 +812,11 @@ gl_sframe drawing_classifier::predict_topk(gl_sframe data,
 
 variant_map_type drawing_classifier::evaluate(gl_sframe data,
                                               std::string metric) {
-  // Perform prediction.
   gl_sarray predictions = predict(data, "probability_vector");
 
-  /* TODO: This is just for the skeleton. Rewrite. */
-  return evaluation::compute_classifier_metrics(data, "label", metric,
-                                                predictions, {{"classes", 2}});
+  return evaluation::compute_classifier_metrics(
+      data, read_state<flex_string>("target"), metric, predictions,
+      {{"classes", read_state<flex_list>("classes")}});
 }
 
 std::shared_ptr<coreml::MLModelWrapper> drawing_classifier::export_to_coreml(
@@ -818,7 +847,8 @@ std::shared_ptr<coreml::MLModelWrapper> drawing_classifier::export_to_coreml(
       {"target", read_state<flex_string>("target")},
       {"features", features_string},
       {"max_iterations", read_state<flex_int>("max_iterations")},
-      {"warm_start", read_state<flex_int>("warm_start")},
+      // TODO: Uncomment as part of #2524
+      // {"warm_start", read_state<flex_int>("warm_start")},
       {"type", "drawing_classifier"},
       {"version", 2},
   };
