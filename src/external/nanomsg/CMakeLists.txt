@@ -10,7 +10,11 @@ if(NOT CMAKE_CROSSCOMPILING)
   set(NN_TESTS 0 CACHE BOOL "nanomsg tests.")
   set(NN_TOOLS 0 CACHE BOOL "nanomsg tools.")
   set(NN_ENABLE_DOC 0 CACHE BOOL "nanomsg docs.")
-  set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/${_nanomsg_dir}/cmake")
+
+  # It doesn't seem that all Osx sdks compile correctly with GetAddrinfo_a
+  set(NN_ENABLE_GETADDRINFO_A 0 CACHE BOOL "Disable Getaddrinfo_a.")
+
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/${_nanomsg_dir}/cmake")
 
   add_subdirectory(${_nanomsg_dir})
 
