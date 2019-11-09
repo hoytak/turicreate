@@ -252,7 +252,8 @@ if [[ $with_python == 1 ]]; then
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_PYTHON=1"
 
   # Activate the virtual environment
-  . ./deps/env/bin/activate
+  source ./deps/env/bin/activate
+  export PYTHON_EXECUTABLE=$ROOT_DIR/$PYTHON_SCRIPTS/python
 else
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_PYTHON=0"
 fi

@@ -5,13 +5,17 @@
 # This file is a "template" file used by various FindPython modules.
 #
 
-cmake_policy (GET CMP0094 _${_PYTHON_PREFIX}_LOOKUP_POLICY)
+#cmake_policy (GET CMP0094 _${_PYTHON_PREFIX}_LOOKUP_POLICY)
+
+# Modified
+set(_${_PYTHON_PREFIX}_LOOKUP_POLICY OLD)
+
 
 cmake_policy (VERSION 3.7)
 
-if (_${_PYTHON_PREFIX}_LOOKUP_POLICY)
-  cmake_policy (SET CMP0094 ${_${_PYTHON_PREFIX}_LOOKUP_POLICY})
-endif()
+# if (_${_PYTHON_PREFIX}_LOOKUP_POLICY)
+#  cmake_policy (SET CMP0094 ${_${_PYTHON_PREFIX}_LOOKUP_POLICY})
+# endif()
 
 #
 # Initial configuration
