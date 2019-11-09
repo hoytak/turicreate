@@ -74,17 +74,44 @@ set(ENV{PATH} "${CMAKE_SOURCE_DIR}/deps/local/bin:${CMAKE_SOURCE_DIR}/deps/env/b
 if(TC_BUILD_PYTHON)
   message("Building python libraries.")
 
-  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/)
+  if(NOT EXISTS ${CMAKE_SOURCE_DIR}/deps/env/bin/python)
     message(FATAL_ERROR "Internal error: Python toolchain expected; not present.")
   endif()
 
+  # Set up the python directories manually. 
+
+  # Run python-config to find includes and linking libraries.
+  execute_process(COMMAND "${CMAKE_SOURCE_DIR}/deps/env/bin/python-config --includes"
+    OUTPUT_VARIABLE TC_PYTHON_INCLUDE_FLAGS)
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${TC_PYTHON_INCLUDE_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TC_PYTHON_INCLUDE_FLAGS}")
+
+
+
+
+
+
+
+
+  add_definitions( 
+  
+  # Set the cython executable 
+
+
+
+
+
   # Get the proper versions of python. 
+  set(Python_ROOT_DIR "${CMAKE_SOURCE_DIR}/deps/env/")
   set(Python_FIND_VIRTUALENV ONLY)
   find_package (Python COMPONENTS Interpreter Development)
 
   if(NOT Python_FOUND) 
     message(FATAL_ERROR "Python development components not found.")
   endif()
+
+  message(STATUS "Python include dirs: ${Python_INCLUDE_DIRS}.")
 
 
   include_directories(${Python_INCLUDE_DIRS})
