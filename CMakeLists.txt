@@ -80,7 +80,14 @@ if(TC_BUILD_PYTHON)
 
 
   # Get the proper versions of python. 
-  set(Python_FIND_VIRTUALENV ONLY)
+  # set(Python_FIND_VIRTUALENV ONLY)
+  # set(Python_EXECUTABLE ${CMAKE_SOURCE_DIR}/deps/env/bin/python)
+
+  execute_process(COMMAND "${CMAKE_SOURCE_DIR}/deps/env/bin/python-config --prefix"
+    OUTPUT_VARIABLE _python_root_dir)
+
+  set(Python_ROOT_DIR ${_python_root_dir})
+
   find_package (Python COMPONENTS Interpreter Development)
 
   if(NOT Python_FOUND) 
