@@ -79,10 +79,8 @@ if(TC_BUILD_PYTHON)
   endif()
 
 
-  # Get the proper versions of python. 
-  # set(Python_FIND_VIRTUALENV ONLY)
-  # set(Python_EXECUTABLE ${CMAKE_SOURCE_DIR}/deps/env/bin/python)
-
+  # Get the proper versions of python using the python-config info in the 
+  # virtualenv 
   execute_process(COMMAND "${CMAKE_SOURCE_DIR}/deps/env/bin/python-config --prefix"
     OUTPUT_VARIABLE _python_root_dir)
 
