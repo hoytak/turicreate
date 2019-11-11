@@ -343,7 +343,7 @@ foreach(package ${packages})
         add_dependencies(external_dependencies ex_${depname})
 endforeach()
 
-set(_TC_EXTERNAL_DEPENDENCIES openssl libxml2 curl node)
+set(_TC_EXTERNAL_DEPENDENCIES openssl libxml2 curl)
 
 
 # Collate all the object targets shared among static and shared library targets
