@@ -251,6 +251,8 @@ if [[ $with_python == 1 ]]; then
   install_python_toolchain
   CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_BUILD_PYTHON=1"
 
+  CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DPYTHON_EXECUTABLE:FILEPATH=${PWD}/deps/env/bin/python"
+
   # Activate the virtual environment
   source ./deps/env/bin/activate
   export PYTHON_EXECUTABLE=${PWD}/deps/env/bin/python
