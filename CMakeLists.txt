@@ -78,20 +78,7 @@ if(TC_BUILD_PYTHON)
     message(FATAL_ERROR "Internal error: Python toolchain expected; not present.")
   endif()
 
-  # This needs to be set to force FindPython to locate the python include libraries first. 
-  set(CMAKE_FIND_FRAMEWORK LAST)
-
-  # Get the proper versions of python using the python-config info in the 
-  # virtualenv 
-  execute_process(COMMAND ${CMAKE_SOURCE_DIR}/deps/env/bin/python-config --prefix
-    OUTPUT_VARIABLE _raw_python_root_dir)
-  
-
-  string(STRIP "${_raw_python_root_dir}" _python_root_dir)
-
-  message(STATUS "Using python found in ${_python_root_dir}.")
-
-  find_package (Python COMPONENTS Interpreter ROOT_DIR ${_python_root_dir})
+  find_package (Python COMPONENTS Interpreter Development)
 
   if(NOT Python_FOUND) 
     message(FATAL_ERROR "Python development components not found.")
