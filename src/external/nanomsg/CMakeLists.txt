@@ -2,7 +2,7 @@ project(Turi)
 
 set(_nanomsg_dir nanomsg-1.1.5)
 
-if(NOT CMAKE_CROSSCOMPILING)
+if(NOT APPLE)
 
   message("Building nanomsg using native build system.")
 
