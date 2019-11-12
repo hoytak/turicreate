@@ -256,7 +256,6 @@ if [[ $with_python == 1 ]]; then
 
 
   # Activate the virtual environment
-  source ./deps/env/bin/activate
   export PYTHON_EXECUTABLE=${PWD}/deps/env/bin/python
   export PATH=${PWD}/deps/env/bin:$PATH
 else
