@@ -19,7 +19,7 @@ build_wheel_debug_linux_python27:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
   script:
-    - apk add bash node
+    - apk add bash nodejs
     - bash scripts/make_wheel.sh --skip_test --skip_cpp_test --build_number=$CI_PIPELINE_ID --num_procs=4 --debug --docker-python2.7 --skip_doc
   artifacts:
     expire_in: 1 day

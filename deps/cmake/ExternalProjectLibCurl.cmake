@@ -26,6 +26,8 @@ ExternalProject_Add(ex_libcurl
   BUILD_BYPRODUCTS ${CMAKE_SOURCE_DIR}/deps/local/lib/libcurl.a ${CMAKE_SOURCE_DIR}/deps/local/include/curl/curl.h
   )
 
+add_dependencies(ex_libcurl ex_openssl)
+
 add_library(libcurla STATIC IMPORTED)
 set_property(TARGET libcurla PROPERTY IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/deps/local/lib/libcurl.a)
 
