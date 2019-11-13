@@ -1955,7 +1955,13 @@ class SFrame(object):
         Just make it match default behavior in Python 2.
         '''
         return id(self) // 16
-
+    
+    def __add__(self,other):
+        """
+        Return append one frames to other
+        """
+        self=self.append(other)
+        return self
 
     def __repr__(self):
         """
@@ -4538,7 +4544,7 @@ class SFrame(object):
         # If auto target is set, try to show inline in Jupyter Notebook
         try:
             if _target == 'auto' and \
-                get_ipython().__class__.__name__ == "ZMQInteractiveShell":
+                (get_ipython().__class__.__name__ == "ZMQInteractiveShell" or get_ipython().__class__.__name__ == "Shell"):
                 display_table_in_notebook(self, title)
                 return
         except NameError:
