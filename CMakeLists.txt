@@ -351,10 +351,6 @@ if(NOT TC_DISABLE_OBJECT_BUILDS)
 
 set(_TC_COMMON_OBJECTS
 
-  "$<TARGET_OBJECTS:z>"
-  "$<TARGET_OBJECTS:libbz2>"
-  "$<TARGET_OBJECTS:boost>"
-
   # External dependencies (built from src/external)
   "$<TARGET_OBJECTS:libjpeg>"
   "$<TARGET_OBJECTS:libjson>"
@@ -434,6 +430,9 @@ set(_TC_COMMON_REQUIREMENTS
   ${_TC_EXTERNAL_DEPENDENCIES}
   nanomsg
   Threads::Threads
+  boost
+  libbz2
+  z
 )
   
   set(_TC_COMMON_OBJECTS

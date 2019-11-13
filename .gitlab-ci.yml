@@ -211,7 +211,7 @@ build_cpp_linux_no_remotefs:
     - apt-get -y update
     - apt-get -y install cmake
     - ./configure --no-remotefs --no-python
-    - cd debug/test
+    - cd debug/src
     - bash -c -e "make -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access' "
   artifacts:
     expire_in: 1 day

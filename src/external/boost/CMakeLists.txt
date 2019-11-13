@@ -30,14 +30,26 @@ message("Boost libraries: ${boost_src_files}")
 
 
 make_library(boost
-  OBJECT
   SOURCES
   ${boost_src_files}
   REQUIRES
-  z libjpeg libpng)
+  libbz2 z libjpeg libpng)
 
 
 target_include_directories(boost SYSTEM PUBLIC ${__boost_src_dir})
 target_include_directories(boost PRIVATE
   ${__boost_lib_dir}/chrono/stopwatches/include)
+
+
+file(GLOB_RECURSE boost_test_src_files
+  CONFIGURE_DEPENDS
+  ${__boost_lib_dir}/test/src/*.cpp
+)
+
+make_library(boost_test
+  SOURCES
+  ${boost_test_src_files}
+  REQUIRES
+  z libjpeg libpng libbz2)
+
 

@@ -48,6 +48,8 @@ make_library(unity OBJECT
     perf
     eigen
     ${additional_unity_requirements}
+    libbz2
+    z
 )
 
 # Pull in all the libraries in the extensions directory.
@@ -80,6 +82,8 @@ make_library(unity_shared_for_testing
   REQUIRES
     ${_TC_COMMON_REQUIREMENTS}
     ${unity_shared_deps}
+    libbz2
+    z
   SHARED 
   SHARED_ALL_DEFINED 
   EXTERNAL_VISIBILITY
