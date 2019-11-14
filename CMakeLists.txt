@@ -432,6 +432,7 @@ set(_TC_COMMON_REQUIREMENTS
   ${_TC_EXTERNAL_DEPENDENCIES}
   nanomsg
   Threads::Threads
+  ${CMAKE_DLIBS}
   boost
   libbz2
   z
