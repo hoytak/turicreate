@@ -298,6 +298,8 @@ include_directories(SYSTEM
 include_directories(SYSTEM
  ${CMAKE_SOURCE_DIR}/src/external/libjpeg/jpeg-8d/)
 include_directories(SYSTEM
+ ${CMAKE_SOURCE_DIR}/src/external/bzip2/)
+include_directories(SYSTEM
  ${CMAKE_SOURCE_DIR}/src/external/zlib/zlib-1.2.11/)
 include_directories(SYSTEM
  ${CMAKE_SOURCE_DIR}/src/external/coremltools_wrap/)
