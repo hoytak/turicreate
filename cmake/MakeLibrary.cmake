@@ -66,6 +66,8 @@ macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFI
     
   # Ensure dependencies are tracked in order to make sure compilation order matters.
   add_dependencies(${NAME} "${REQUIREMENTS}")
+    
+  target_link_libraries(${NAME} PUBLIC ${_TC_COMMON_REQUIREMENTS})
 
   # make sure dependencies are always built first
   add_dependencies(${NAME} "${_TC_EXTERNAL_DEPENDENCIES}")
