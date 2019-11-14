@@ -251,7 +251,7 @@ flex_int estimate_max_iterations(flex_int num_styles, flex_int batch_size) {
   return static_cast<flex_int>(num_styles * 10000.0f / batch_size);
 }
 
-void check_style_index(int idx, int num_styles) {
+void check_style_index(int64_t idx, int64_t num_styles) {
   if ((idx < 0) || (idx >= num_styles))
     log_and_throw("Please choose a valid style index.");
 }
@@ -462,7 +462,8 @@ gl_sframe style_transfer::predict(variant_type data,
 
   gl_sarray content_images = convert_types_to_sarray(data);
 
-  std::vector<double> style_idx;
+  std::vector<flex_int> style_idx;
+
   auto style_idx_iter = opts.find("style_idx");
   if (style_idx_iter == opts.end()) {
     flex_int num_styles = read_state<flex_int>("num_styles");
@@ -473,22 +474,23 @@ gl_sframe style_transfer::predict(variant_type data,
     flexible_type flex_style_idx = style_idx_iter->second;
     switch (flex_style_idx.get_type()) {
       case flex_type_enum::INTEGER:
-        style_idx.push_back(flex_style_idx.get<flex_int>());
+        style_idx = {flex_style_idx.get<flex_int>()};
         break;
-      case flex_type_enum::VECTOR:
-        style_idx = std::move(flex_style_idx.get<flex_vec>());
-        if (style_idx.empty())
+      case flex_type_enum::VECTOR: {
+        const auto& v_ref = flex_style_idx.get<flex_vec>();
+        style_idx.assign(v_ref.begin(), v_ref.end());
+        if (style_idx.empty()) {
           log_and_throw("The `style` parameter can't be an empty list");
+        }
         break;
+      }
       case flex_type_enum::LIST: {
         const auto& list = flex_style_idx.get<flex_list>();
-        if (list.empty())
+        if (list.empty()) {
           log_and_throw("The `style` parameter can't be an empty list");
-        style_idx.resize(list.size());
-        std::transform(list.begin(), list.end(), style_idx.begin(),
-                       [](flexible_type val) {
-                         return static_cast<double>(val.get<flex_float>());
-                       });
+        }
+
+        style_idx.assign(list.begin(), list.end());
         break;
       }
       case flex_type_enum::UNDEFINED: {
@@ -509,7 +511,7 @@ gl_sframe style_transfer::predict(variant_type data,
 }
 
 void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
-                                     const std::vector<double>& style_idx) {
+                                     const std::vector<flex_int>& style_idx) {
   if (data.size() == 0) return;
 
   flex_int batch_size = read_state<flex_int>("batch_size");
@@ -536,7 +538,7 @@ void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
       weight_params);
 
   // looping through all of the style indices
-  for (size_t i : style_idx) {
+  for (flex_int i : style_idx) {
     // check whether the style indices are valid
     check_style_index(i, num_styles);
 
@@ -564,7 +566,7 @@ void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
       shared_float_array out_shared_float_array = result_batch.at("output");
 
       // populate gl_sframe_writer
-      std::vector<std::pair<flex_int, flex_image>> processed_batch =
+      std::vector<std::pair<flex_int, flex_image> > processed_batch =
           process_output(out_shared_float_array, i, actual_batch_size,
                          batch.front().content_image.m_width,
                          batch.front().content_image.m_height);
