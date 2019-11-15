@@ -26,7 +26,7 @@ macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFI
   else()
     message(STATUS "Adding Executable: ${NAME}")
     # default dependencies
-    target_link_libraries(${NAME} boost pthread)
+    target_link_libraries(${NAME} PUBLIC boost pthread)
   endif()
 
   set_property(TARGET ${NAME} PROPERTY IS_LIBRARY ${IS_LIBRARY})
@@ -61,14 +61,12 @@ macro(make_target_impl NAME FLAGS REQUIREMENTS IS_LIBRARY SHARED SHARED_ALL_DEFI
       target_link_libraries(${NAME} PUBLIC ${REQUIREMENTS})
     endif()
   else()
-    target_link_libraries(${NAME} ${REQUIREMENTS})
+    target_link_libraries(${NAME} PUBLIC ${REQUIREMENTS})
   endif()
     
   # Ensure dependencies are tracked in order to make sure compilation order matters.
   add_dependencies(${NAME} "${REQUIREMENTS}")
     
-  target_link_libraries(${NAME} PUBLIC ${_TC_COMMON_REQUIREMENTS})
-
   # make sure dependencies are always built first
   add_dependencies(${NAME} "${_TC_EXTERNAL_DEPENDENCIES}")
   add_dependencies(${NAME} external_dependencies)

@@ -3,7 +3,7 @@ function (make_boost_test NAME)
   set (SOURCES ${NAME})
   set(args ${ARGN})
   make_executable(${NAME}test SOURCES ${SOURCES} ${args})
-  target_link_libraries(${NAME}test unity_shared_for_testing boost_test ${_TC_COMMON_REQUIREMENTS})
+  target_link_libraries(${NAME}test PUBLIC unity_shared_for_testing boost_test ${_TC_COMMON_REQUIREMENTS})
 
   add_test(${NAME} ${NAME}test)
 endfunction()
