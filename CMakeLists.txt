@@ -336,7 +336,9 @@ foreach(package ${packages})
         add_dependencies(external_dependencies ex_${depname})
 endforeach()
 
-set(_TC_EXTERNAL_DEPENDENCIES openssl libxml2 curl)
+set(_TC_EXTERNAL_DEPENDENCIES openssl libxml2 curl
+  Threads::Threads
+  ${CMAKE_DLIBS})
 
 
 # Collate all the object targets shared among static and shared library targets
@@ -431,8 +433,6 @@ set(_TC_COMMON_REQUIREMENTS
   # External dependencies (from deps)
   ${_TC_EXTERNAL_DEPENDENCIES}
   nanomsg
-  Threads::Threads
-  ${CMAKE_DLIBS}
   boost
   libbz2
   z
