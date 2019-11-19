@@ -235,7 +235,7 @@ build_cpp_linux_no_remotefs:
     - apt-get -y install cmake
     - ./configure --no-remotefs --no-python --no-visualization
     - cd debug/src
-    - bash -c -e -o pipefail "make -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access' "
+    - bash -c -e -o pipefail "make -k -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access' "
   artifacts:
     expire_in: 1 day
     paths:
@@ -271,7 +271,7 @@ test_cpp_mac_10_13:
     - export VIRTUALENV="/Library/Frameworks/Python.framework/Versions/2.7/bin/virtualenv"
     - (test -d debug && test -d release) || ./configure --no-python
     - cd debug/test
-    - bash -c -e -o pipefail "make -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access'"
+    - bash -c -e -o pipefail "make -k -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access'"
     - export LD_LIBRARY_PATH=`pwd`/deps/local/lib:`pwd`/deps/local/lib64:$LD_LIBRARY_PATH
     - export PATH=`pwd`/deps/local/bin:$PATH
     - export LD_LIBRARY_PATH=`pwd`/src/unity:`pwd`/src/python/turicreate:$LD_LIBRARY_PATH
@@ -290,7 +290,7 @@ test_cpp_mac_10_14:
     - export VIRTUALENV="/Library/Frameworks/Python.framework/Versions/2.7/bin/virtualenv"
     - (test -d debug && test -d release) || ./configure --no-python
     - cd debug/test
-    - bash -c -e -o pipefail "make -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access'"
+    - bash -c -e -o pipefail "make -k -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access'"
     - export LD_LIBRARY_PATH=`pwd`/deps/local/lib:`pwd`/deps/local/lib64:$LD_LIBRARY_PATH
     - export PATH=`pwd`/deps/local/bin:$PATH
     - export LD_LIBRARY_PATH=`pwd`/src/unity:`pwd`/src/python/turicreate:$LD_LIBRARY_PATH
@@ -306,7 +306,7 @@ test_cpp_mac_no_remotefs:
   script:
     - ./configure --no-remotefs --no-python --no-visualization
     - cd debug/test
-    - bash -c -e -o pipefail "make -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access'"
+    - bash -c -e -o pipefail "make -k -j8 2>&1 | grep -v -E '^ld[^a-z]*warning[^a-z]*direct access'"
     - export LD_LIBRARY_PATH=`pwd`/deps/local/lib:`pwd`/deps/local/lib64:$LD_LIBRARY_PATH
     - export PATH=`pwd`/deps/local/bin:$PATH
     - export LD_LIBRARY_PATH=`pwd`/src/unity:`pwd`/src/python/turicreate:$LD_LIBRARY_PATH
