@@ -6,14 +6,53 @@
 #ifndef TURI_UNITY_REGSTRATION_HPP_
 #define TURI_UNITY_REGSTRATION_HPP_
 
-#include <model_server/lib/toolkit_class_registry.hpp>
-#include <model_server/lib/toolkit_function_registry.hpp>
+#define TC_MAX_REGISTERED_CALLBACKS 512
+
+#include <atomic>
+#include <mutex>
+#include <array>
 
 namespace turi {
 
-  void register_functions(toolkit_function_registry& registry);
-  void register_models(toolkit_class_registry& registry);
 
+  void process_registered_callbacks_internal();
+
+  typedef void (*class_registration_callback)(void); 
+
+  extern std::array<class_registration_callback, TC_MAX_REGISTERED_CALLBACKS> registration_callback_list; 
+  extern std::atomic<size_t> _callback_pushback_index;
+  extern std::atomic<size_t> _callback_last_processed_index;
+
+  // Register the callbacks if need be.
+  static inline void process_registered_callbacks() { 
+    if(_callback_last_processed_index < _callback_pushback_index) { 
+      process_registered_callbacks_internal(); 
+    }
+  }
+
+
+  static inline void _add_registration_callback(class_registration_callback callback) {
+
+    size_t insert_index_raw = (_callback_pushback_index++);
+    
+    do {
+      // Check to make sure this can be safely inserted.
+      size_t processed_index_raw = _callback_last_processed_index;
+
+      if(processed_index_raw + TC_MAX_REGISTERED_CALLBACKS > insert_index_raw) { 
+        break; 
+      } else {
+        // This will process the next block of insertions.
+        process_registered_callbacks();
+      }
+
+    } while(true);
+
+    size_t insert_index = insert_index_raw % TC_MAX_REGISTERED_CALLBACKS;
+
+    ASSERT_TRUE(registration_callback_list[insert_index] == nullptr);
+    registration_callback_list[insert_index] = callback;
+  } 
 }
 
 #endif
