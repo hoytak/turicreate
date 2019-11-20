@@ -5,6 +5,106 @@
  */
 #include <model_server/server/registration.hpp>
 
+
+
+namespace turi {
+
+
+ EXPORT std::array<class_registration_callback, TC_MAX_REGISTERED_CALLBACKS> registration_callback_list; 
+ EXPORT std::atomic<size_t> _callback_pushback_index;
+ EXPORT std::atomic<size_t> _callback_last_processed_index;
+
+
+ EXPORT void process_registered_callbacks_internal() {
+    
+    static std::mutex process_guard; 
+
+    std::lock_guard<std::mutex> process_guard_lg(process_guard); 
+
+    // We can do at most this many before we wrap around and let the functions 
+    // blocked on us catch up.
+    for(size_t i = 0; i < TC_MAX_REGISTERED_CALLBACKS; ++i) {  
+      size_t next_index = _callback_last_processed_index + 1;
+      DASSERT_LE(next_index, size_t(_callback_pushback_index));
+
+      size_t lookup_index = next_index % TC_MAX_REGISTERED_CALLBACKS;
+
+      if(next_index == _callback_pushback_index) { 
+        break; 
+      }
+
+      if(registration_callback_list[lookup_index] == nullptr) {
+        break; 
+      }
+
+      // Call the function.
+      (*registration_callback_list[lookup_index])(); 
+      registration_callback_list[lookup_index] = nullptr;
+
+      ++_callback_last_processed_index;
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+    
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include <model_server/lib/simple_model.hpp>
 #include <core/storage/sframe_interface/unity_sarray.hpp>
 #include <core/storage/sframe_interface/unity_sarray_builder.hpp>
