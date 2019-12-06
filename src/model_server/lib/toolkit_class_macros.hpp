@@ -403,29 +403,10 @@ namespace docstring_macro_impl {
                               return to_variant(0); \
                             });
 
-/**
- * Begins a class registration block.
- * Basic usage:
- *
- * \code
- * BEGIN_CLASS_REGISTRATION
- * REGISTER_CLASS(example)
- * END_CLASS_REGISTRATION
- * \endcode
- *
- */
-#define BEGIN_CLASS_REGISTRATION \
-   __attribute__((visibility("default"))) std::vector<::turi::toolkit_class_specification> get_toolkit_class_registration() { \
-     std::vector<::turi::toolkit_class_specification> specs;
+#define BEGIN_CLASS_REGISTRATION 
 
 
-
-/**
- * Ends a class member registration block.
- * See BEGIN_CLASS_MEMBER_REGISTRATION
- */
-#define END_CLASS_MEMBER_REGISTRATION \
-     set_registered(); }
+#define END_CLASS_MEMBER_REGISTRATION 
 
 
 /**
@@ -439,8 +420,8 @@ namespace docstring_macro_impl {
  * \endcode
  *
  */
-#define REGISTER_CLASS(class_name) \
-    { \
+#define REGISTER_CLASS(class_name)        \
+    void register_class_##class_name() {  \
        ::turi::toolkit_class_specification spec;  \
        class_name c; \
        spec.name = c.name(); \
@@ -454,8 +435,12 @@ namespace docstring_macro_impl {
           flexible_type_converter<std::vector<std::string>>().set(c.list_set_properties());  \
        spec.description["uid"] =  \
           flexible_type_converter<std::string>().set(c.uid());  \
-       specs.push_back(spec); \
-    }
+      \
+       global_unity_server().register_model_class(std::move(spec)); \
+    } \
+      \
+    static _static_registration_hook _registration_hook_##class_name(register_class_##class_name); 
+    
 /**
  * Ends a class registration block.
  *
