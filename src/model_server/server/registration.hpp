@@ -53,6 +53,19 @@ namespace turi {
     ASSERT_TRUE(registration_callback_list[insert_index] == nullptr);
     registration_callback_list[insert_index] = callback;
   } 
+
+
+  // A helper class to use a static initializer to do a lightweight registration 
+  // of class loading at library load time.
+  class _static_registration_hook {
+    public: 
+      inline _static_registration_hook(class_registration_callback* f) { 
+        f(); 
+      }
+  };
+
+
+
 }
 
 #endif
