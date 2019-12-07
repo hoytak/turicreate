@@ -8,13 +8,11 @@ from __future__ import print_function as _
 from __future__ import division as _
 from __future__ import absolute_import as _
 
+import numpy as _np
+from .._tf_model import TensorFlowModel
+import turicreate.toolkits._tf_utils as _utils
 import tensorflow.compat.v1 as _tf
 _tf.disable_v2_behavior()
-_tf.logging.set_verbosity(_tf.logging.ERROR)
-import turicreate.toolkits._tf_utils as _utils
-import numpy as _np
-
-from .._tf_model import TensorFlowModel
 
 def define_tensorflow_variables(net_params, trainable=True):
     """
@@ -466,6 +464,9 @@ def define_style_transfer_network(content_image,
 
 class StyleTransferTensorFlowModel(TensorFlowModel):
     def __init__(self, config, net_params):
+
+        self.gpu_policy = _utils.TensorFlowGPUPolicy()
+        self.gpu_policy.start()
         
         _tf.reset_default_graph()
 
@@ -490,6 +491,10 @@ class StyleTransferTensorFlowModel(TensorFlowModel):
         self.sess = _tf.Session()
         init = _tf.global_variables_initializer()
         self.sess.run(init)
+
+    def __del__(self):
+        self.sess.close()
+        self.gpu_policy.stop()
 
     def __define_graph(self):
         self.optimizer, self.loss, self.output = define_style_transfer_network(self.tf_input,
@@ -516,8 +521,22 @@ class StyleTransferTensorFlowModel(TensorFlowModel):
     def predict(self, feed_dict):
         for key in feed_dict.keys():
             feed_dict[key] = _utils.convert_shared_float_array_to_numpy(feed_dict[key])
-        stylized_image = self.sess.run([self.output], feed_dict={self.tf_input : feed_dict['input'], self.tf_index: feed_dict['index']})
-        return { "output": _np.array(stylized_image) }
+
+        tf_input_shape = [None] + list(feed_dict['input'].shape)[1:]
+        self.tf_input = _tf.placeholder(dtype = _tf.float32, shape = tf_input_shape)
+        self._define_training_graph = False
+        self.__define_graph()
+
+        stylized_image = self.sess.run([self.output], feed_dict={self.tf_input : feed_dict['input'], self.tf_index: feed_dict['index']})        
+        stylized_raw = _np.array(stylized_image)
+
+        expected_height = feed_dict['input'].shape[1]
+        expected_width = feed_dict['input'].shape[2]
+
+        # Crop to remove added padding
+        stylized_cropped = stylized_raw[:,:,0:expected_height,0:expected_width,:][0]
+
+        return { "output":  _np.array(stylized_cropped) }
 
     def export_weights(self):
         tf_export_params = {}

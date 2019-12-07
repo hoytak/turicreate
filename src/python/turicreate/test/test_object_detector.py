@@ -22,7 +22,6 @@ import coremltools
 
 _CLASSES = ['person', 'cat', 'dog', 'chair']
 USE_CPP = _read_env_var_cpp('TURI_OD_USE_CPP_PATH')
-IS_PRE_6_0_RC = float(tc.__version__) < 6.0
 
 
 def _get_data(feature, annotations):
@@ -152,7 +151,6 @@ class ObjectDetectorTest(unittest.TestCase):
             self.get_ans['random_seed'] = lambda x: True
             del self.get_ans['_model']
             del self.get_ans['_class_to_index']
-            del self.get_ans['_training_time_as_string']
             del self.get_ans['_grid_shape']
             del self.get_ans['anchors']
             del self.get_ans['non_maximum_suppression_threshold']
@@ -193,6 +191,7 @@ class ObjectDetectorTest(unittest.TestCase):
         with self.assertRaises(_ToolkitError):
             tc.object_detector.create(self.sf[:0])
 
+
     def test_dict_annotations(self):
         sf_copy = self.sf[:]
         sf_copy[self.annotations] = sf_copy[self.annotations].apply(lambda x: x[0] if len(x) > 0 else None)
@@ -215,6 +214,13 @@ class ObjectDetectorTest(unittest.TestCase):
         # Evaluate while the data has extra classes
         ret = model.evaluate(self.sf.head())
         self.assertEqual(len(ret['average_precision_50']), 2)
+
+    def test_different_grip_shape(self):
+        #should able to givre different input grip shape
+        shapes = [[1,1], [5,5], [13,13], [26,26]]
+        for shape in shapes:
+            model = tc.object_detector.create(self.sf, max_iterations=1, grid_shape=shape)
+            pred = model.predict(self.sf)
 
     def test_predict(self):
         sf = self.sf.head()
@@ -275,6 +281,24 @@ class ObjectDetectorTest(unittest.TestCase):
         ret = self.model.evaluate(self.sf[:0])
         self.assertEqual(ret['mean_average_precision_50'], 0.0)
 
+    def test_predict_invalid_threshold(self):
+        with self.assertRaises(_ToolkitError):
+            self.model.predict(self.sf.head(), confidence_threshold=-1)
+        with self.assertRaises(_ToolkitError):
+            self.model.predict(self.sf.head(), iou_threshold  =-1)
+
+    def test_evaluate_invalid_threshold(self):
+        with self.assertRaises(_ToolkitError):
+            self.model.evaluate(self.sf.head(), confidence_threshold=-1)
+        with self.assertRaises(_ToolkitError):
+            self.model.evaluate(self.sf.head(), iou_threshold  =-1)
+
+    def test_evaluate_sframe_format(self):
+        metrics = ["mean_average_precision_50","mean_average_precision"]
+        for metric in metrics:
+            pred = self.model.evaluate(self.sf.head(), metric=metric, output_type="sframe")
+            self.assertEqual(pred.column_names(), ["label"])
+
     def test_evaluate_invalid_metric(self):
         with self.assertRaises(_ToolkitError):
             self.model.evaluate(self.sf.head(), metric='not-supported-metric')
@@ -292,11 +316,30 @@ class ObjectDetectorTest(unittest.TestCase):
     def test_export_coreml(self):
         from PIL import Image
         import coremltools
+        import platform
         filename = tempfile.mkstemp('bingo.mlmodel')[1]
         self.model.export_coreml(filename,
             include_non_maximum_suppression=False)
 
         coreml_model = coremltools.models.MLModel(filename)
+        self.assertDictEqual({
+            'com.github.apple.turicreate.version': tc.__version__,
+            'com.github.apple.os.platform': platform.platform(),
+            'annotations': self.annotations,
+            'type': 'object_detector',
+            'classes': ','.join(sorted(_CLASSES)),
+            'feature': self.feature,
+            'include_non_maximum_suppression': 'False',
+            'max_iterations': '1',
+            'model': 'darknet-yolo',
+            'training_iterations': '1',
+            'version': '1',
+            }, dict(coreml_model.user_defined_metadata)
+        )
+        expected_result = 'Object detector created by Turi Create (version %s)' \
+                                    % (tc.__version__)
+        self.assertEquals(expected_result, coreml_model.short_description)
+
         img = self.sf[0:1][self.feature][0]
         img_fixed = tc.image_analysis.resize(img, 416, 416, 3)
         pil_img = Image.fromarray(img_fixed.pixel_data)

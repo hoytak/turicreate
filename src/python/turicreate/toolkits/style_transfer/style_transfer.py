@@ -231,7 +231,7 @@ def create(style_dataset, content_dataset, style_feature=None,
         options['vgg_mlmodel_path'] = pretrained_vgg16_model.get_model_path('coreml')
 
         model.train(style_dataset[style_feature], content_dataset[content_feature], options)
-        return StyleTransfer_beta(model_proxy=model, name=name)
+        return StyleTransfer(model_proxy=model, name=name)
 
     from ._sframe_loader import SFrameSTIter as _SFrameSTIter
     import mxnet as _mx
@@ -482,7 +482,7 @@ def create(style_dataset, content_dataset, style_feature=None,
             'training_loss': smoothed_loss,
         }
 
-        return StyleTransfer(state)
+        return StyleTransfer_legacy(state)
 
     num_layers = len(params['style_loss_mult'])
     gram_chunks = [[] for _ in range(num_layers)]
@@ -665,7 +665,7 @@ def _raise_error_if_not_training_sframe(dataset, context_column):
     if dataset[context_column].dtype != _tc.Image:
         raise _ToolkitError("Context Image column must contain images")
 
-class StyleTransfer_beta(_Model):
+class StyleTransfer(_Model):
     """
     A trained model using C++ implementation that is ready to use for classification or export to
     CoreML.
@@ -691,22 +691,20 @@ class StyleTransfer_beta(_Model):
         Returns
         -------
         out : string
-            A description of the model.
+            A description of the StyleTransfer.
         """
-        return self.__class__.__name__
+        return self.__repr__()
 
     def __repr__(self):
         """
-        Returns a string description of the model, including (where relevant)
-        the schema of the training data, description of the training data,
-        training statistics, and model hyperparameters.
-
-        Returns
-        -------
-        out : string
-            A description of the model.
+        Print a string description of the model when the model name is entered
+        in the terminal.
         """
-        return self.__class__.__name__
+        width = 40
+        sections, section_titles = self._get_summary_struct()
+        out = _tkutl._toolkit_repr_print(self, sections, section_titles,
+                                         width=width)
+        return out
 
     def _get_version(self):
         return self._CPP_ACTIVITY_CLASSIFIER_VERSION
@@ -741,8 +739,11 @@ class StyleTransfer_beta(_Model):
         options['image_width'] = image_shape[1]
         options['image_height'] = image_shape[0]
         options['include_flexible_shape'] = include_flexible_shape
+        additional_user_defined_metadata = _coreml_utils._get_tc_version_info()
+        short_description = _coreml_utils._mlmodel_short_description('Style Transfer')
 
-        self.__proxy__.export_to_coreml(filename, options)
+        self.__proxy__.export_to_coreml(filename, short_description,
+                additional_user_defined_metadata, options)
 
 
     def stylize(self, images, style=None, verbose=True, max_size=800, batch_size = 4):
@@ -881,7 +882,42 @@ class StyleTransfer_beta(_Model):
         """
         return self.__proxy__.get_styles(style)
 
-class StyleTransfer(_CustomModel):
+    def _get_summary_struct(self):
+        """
+        Returns a structured description of the model, including (where
+        relevant) the schema of the training data, description of the training
+        data, training statistics, and model hyperparameters.
+
+        Returns
+        -------
+        sections : list (of list of tuples)
+            A list of summary sections.
+              Each section is a list.
+                Each item in a section list is a tuple of the form:
+                  ('<label>','<field>')
+        section_titles: list
+            A list of section titles.
+              The order matches that of the 'sections' object.
+        """
+        model_fields = [
+            ('Model', 'model'),
+            ('Number of unique styles', 'num_styles'),
+        ]
+
+        training_fields = [
+            ('Training time', '_training_time_as_string'),
+            ('Training epochs', 'training_epochs'),
+            ('Training iterations', 'training_iterations'),
+            ('Number of style images', 'num_styles'),
+            ('Number of content images', 'num_content_images'),
+            ('Final loss', 'training_loss'),
+        ]
+
+        section_titles = ['Schema', 'Training summary']
+        return([model_fields, training_fields], section_titles)
+
+
+class StyleTransfer_legacy(_CustomModel):
     """
     An trained model that is ready to use for style transfer, exported to
     Core ML.

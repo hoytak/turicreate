@@ -10,6 +10,8 @@
 #include <map>
 #include <random>
 #include <string>
+#include <sstream>
+#include <timer/timer.hpp>
 
 #include <core/data/image/image_type.hpp>
 #include <model_server/lib/image_util.hpp>
@@ -17,9 +19,9 @@
 #include <toolkits/style_transfer/style_transfer_model_definition.hpp>
 #include <toolkits/util/training_utils.hpp>
 
-#ifdef __APPLE__
+#ifdef HAS_MPS
 #import <ml/neural_net/mps_compute_context.hpp>
-#endif  // __APPLE__
+#endif  // HAS_MPS
 
 namespace turi {
 namespace style_transfer {
@@ -83,7 +85,7 @@ const std::map<std::string, std::string>& get_custom_model_naming_map() {
            {"transformer_instancenorm0_beta",
             "transformer_encode_1_inst_beta_weight"},
            {"transformer_instancenorm4_beta",
-            "transformer_decoding_1_inst_beta_weight"},
+            "transformer_decoding_2_inst_beta_weight"},
            {"transformer_conv0_weight", "transformer_encode_1_conv_weight"},
            {"transformer_instancenorm1_gamma",
             "transformer_encode_2_inst_gamma_weight"},
@@ -106,7 +108,7 @@ const std::map<std::string, std::string>& get_custom_model_naming_map() {
            {"transformer_residualblock1_conv0_weight",
             "transformer_residual_2_conv_1_weight"},
            {"transformer_instancenorm5_gamma",
-            "transformer_decoding_2_inst_gamma_weight"},
+            "transformer_instancenorm5_gamma_weight"},
            {"transformer_instancenorm1_beta",
             "transformer_encode_2_inst_beta_weight"},
            {"transformer_residualblock3_conv0_weight",
@@ -119,7 +121,7 @@ const std::map<std::string, std::string>& get_custom_model_naming_map() {
             "transformer_residual_1_inst_2_beta_weight"},
            {"transformer_conv3_weight", "transformer_decoding_1_conv_weight"},
            {"transformer_instancenorm5_beta",
-            "transformer_decoding_2_inst_beta_weight"},
+            "transformer_instancenorm5_beta_weight"},
            {"transformer_residualblock2_conv0_weight",
             "transformer_residual_3_conv_1_weight"},
            {"transformer_residualblock4_conv1_weight",
@@ -129,7 +131,7 @@ const std::map<std::string, std::string>& get_custom_model_naming_map() {
            {"transformer_residualblock1_instancenorm0_gamma",
             "transformer_residual_2_inst_1_gamma_weight"},
            {"transformer_instancenorm4_gamma",
-            "transformer_decoding_1_inst_gamma_weight"},
+            "transformer_decoding_2_inst_gamma_weight"},
            {"transformer_residualblock2_instancenorm0_beta",
             "transformer_residual_3_inst_1_beta_weight"},
            {"transformer_residualblock3_conv1_weight",
@@ -156,14 +158,24 @@ void prepare_images(const image_type& image,
 }
 
 std::vector<std::pair<flex_int, flex_image>> process_output(
-    const shared_float_array& contents, size_t index, size_t batch_size,
-    size_t width, size_t height) {
-  constexpr size_t channels = 3;
+    const shared_float_array& contents, size_t index) {
+  size_t image_dim = contents.dim();
+
+  ASSERT_EQ(image_dim, 4);
+
+  const size_t* content_ptr = contents.shape();
+
+  // Note: the float array from each context's predict is expected to be in the
+  // format {batch_size, height, width, channels}.
+  size_t batch_size = content_ptr[0];
+  size_t height = content_ptr[1];
+  size_t width = content_ptr[2];
+  size_t channels = content_ptr[3];
+
+  size_t image_size = contents.size() / batch_size;
 
   std::vector<std::pair<flex_int, flex_image>> result;
   result.reserve(batch_size);
-
-  size_t image_size = height * width * channels;
 
   ASSERT_EQ(contents.size(), image_size * batch_size);
 
@@ -240,14 +252,12 @@ float_array_map prepare_batch(std::vector<st_example>& batch, size_t width,
 // takes exactly one st_example as an argument.
 float_array_map prepare_predict(const st_example& example) {
   ASSERT_EQ(3, example.content_image.m_channels);
-  
+
   size_t image_width = example.content_image.m_width;
   size_t image_height = example.content_image.m_height;
-  std::vector<st_example> batch = { example };
+  std::vector<st_example> batch = {example};
 
-  return prepare_batch(batch,
-                       image_width,
-                       image_height,
+  return prepare_batch(batch, image_width, image_height,
                        /* train */ false);
 }
 
@@ -321,16 +331,16 @@ void style_transfer::load_version(iarchive& iarc, size_t version) {
 
 std::unique_ptr<compute_context> style_transfer::create_compute_context()
     const {
-// Since the tcmps library isn't compiled if the system isn't Apple. We have an
-// if_def to check for an apple system. If it is an apple system then a check
-// for MacOS greater than 10.15 is performed. If it is then the Style Transfer
-// MPS implementation is used. On all other systems currently the TensorFlow
-// implementation is used.
-#ifdef __APPLE__
+// Since the tcmps library isn't compiled if the system doesn't have MPS. We
+// have an if_def to check for an mps enabled system system. If it is an mps
+// enabled system system then a check for MacOS greater than 10.15 is performed.
+// If it is then the Style Transfer MPS implementation is used. On all other
+// systems currently the TensorFlow implementation is used.
+#ifdef HAS_MPS
   if (neural_net::mps_compute_context::has_style_transfer()) {
     return compute_context::create();
   }
-#endif  // __APPLE__
+#endif  // HAS_MPS
 
   return compute_context::create_tf();
 }
@@ -368,6 +378,8 @@ void style_transfer::infer_derived_options() {
     flex_int max_iterations = estimate_max_iterations(
         read_state<flex_int>("num_styles"), read_state<flex_int>("batch_size"));
 
+    logprogress_stream << "Setting max_iterations to be " << max_iterations << std::endl;
+    
     add_or_update_state({{"max_iterations", max_iterations}});
   }
 
@@ -529,6 +541,7 @@ void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
                                      const std::vector<flex_int>& style_idx) {
   if (data.size() == 0) return;
 
+  // TODO: if logging enabled
   flex_int batch_size = read_state<flex_int>("batch_size");
   flex_int num_styles = read_state<flex_int>("num_styles");
 
@@ -552,6 +565,12 @@ void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
       {{"st_num_styles", st_num_styles}, {"st_training", st_train}},
       weight_params);
 
+  // Style Printer
+  size_t idx = 0;
+  table_printer table(
+        { {"Images Processed", 0}, {"Elapsed Time", 0}, {"Percent Complete", 0} }, 0);
+  table.print_header();
+
   // looping through all of the style indices
   for (flex_int i : style_idx) {
     // check whether the style indices are valid
@@ -559,13 +578,10 @@ void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
 
     std::vector<st_example> batch = data_iter->next_batch(batch_size);
     while (!batch.empty()) {
-      // getting actual batch size
-      size_t actual_batch_size = batch.size();
-
       // setting the style index for each batch
       std::for_each(batch.begin(), batch.end(),
                     [i](st_example& example) { example.style_index = i; });
-      
+
       // predict only works with a batch size of one now. This is because images
       // have varied width and height and since the style transfer network
       // is size invariant, resizing the inputs isn't an option.
@@ -581,15 +597,23 @@ void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
       shared_float_array out_shared_float_array = result_batch.at("output");
 
       // populate gl_sframe_writer
-      std::vector<std::pair<flex_int, flex_image> > processed_batch =
-          process_output(out_shared_float_array, i, actual_batch_size,
-                         batch.front().content_image.m_width,
-                         batch.front().content_image.m_height);
+      std::vector<std::pair<flex_int, flex_image>> processed_batch =
+          process_output(out_shared_float_array, i);
 
       // Write result to gl_sframe_writer
       for (const auto& row : processed_batch) {
         result.write({row.first, row.second}, 0);
       }
+
+      // progress printing for stylization
+      idx++;
+      std::ostringstream formatted_percentage;
+      formatted_percentage.precision(2);
+      formatted_percentage << std::fixed
+                           << (idx * 100.0 / (data.size() * style_idx.size()));
+      formatted_percentage << "%";
+      table.print_progress_row(idx, idx, progress_time(),
+                               formatted_percentage.str());
 
       // get next batch
       batch = data_iter->next_batch(batch_size);
@@ -597,6 +621,9 @@ void style_transfer::perform_predict(gl_sarray data, gl_sframe_writer& result,
 
     data_iter->reset();
   }
+
+  table.print_row(idx, progress_time(), "100%");
+  table.print_footer();
 }
 
 gl_sarray style_transfer::convert_types_to_sarray(const variant_type& data) {
@@ -659,6 +686,7 @@ void style_transfer::init_train(gl_sarray style, gl_sarray content,
   add_or_update_state({
       {"model", "resnet-16"},
       {"styles", style_sframe_with_index(style)},
+      {"num_content_images", content.size()}
   });
 
   m_resnet_spec = init_resnet(resnet_mlmodel_path, num_styles);
@@ -722,6 +750,16 @@ void style_transfer::iterate_training() {
       loss_batch.data(), loss_batch.data() + loss_batch_size, 0.f,
       [loss_batch_size](float a, float b) { return a + b / loss_batch_size; });
 
+  // Update our rolling average (smoothed) loss.
+  auto loss_it = state.find("training_loss");
+  if (loss_it == state.end()) {
+    loss_it = state.emplace("training_loss", variant_type(batch_loss)).first;
+  } else {
+    float smoothed_loss = variant_get_value<flex_float>(loss_it->second);
+    smoothed_loss = 0.9f * smoothed_loss + 0.1f * batch_loss;
+    loss_it->second = smoothed_loss;
+  }
+
   if (training_table_printer_) {
     training_table_printer_->print_progress_row(
         iteration_idx, iteration_idx + 1, batch_loss, progress_time());
@@ -735,6 +773,10 @@ void style_transfer::finalize_training() {
 
 void style_transfer::train(gl_sarray style, gl_sarray content,
                            std::map<std::string, flexible_type> opts) {
+
+  turi::timer time_object;
+  time_object.start();
+
   training_table_printer_.reset(new table_printer(
       {{"Iteration", 12}, {"Loss", 12}, {"Elapsed Time", 12}}));
 
@@ -748,14 +790,32 @@ void style_transfer::train(gl_sarray style, gl_sarray content,
 
   training_table_printer_->print_footer();
   training_table_printer_.reset();
+
+  // Using training_epochs * data_size = training_iterations * batch_size
+  size_t training_epochs = ((read_state<flex_int>("batch_size") * read_state<flex_int>("training_iterations")) / read_state<flex_int>("num_content_images"));
+  double current_time = time_object.current_time();
+
+  std::stringstream ss;
+  table_internal::_format_time(ss, current_time);
+
+  add_or_update_state({
+    {"training_epochs", training_epochs},
+    {"training_time", current_time},
+    {"_training_time_as_string", ss.str()}
+  });
 }
 
 std::shared_ptr<MLModelWrapper> style_transfer::export_to_coreml(
-    std::string filename, std::map<std::string, flexible_type> opts) {
+    std::string filename, std::string short_desc,
+    std::map<std::string, flexible_type> additional_user_defined,
+    std::map<std::string, flexible_type> opts) {
+
   const flex_int image_width = read_opts<flex_int>(opts, "image_width");
   const flex_int image_height = read_opts<flex_int>(opts, "image_height");
-  const flex_int include_flexible_shape = read_opts<flex_int>(opts, "include_flexible_shape");
-  const flex_string content_feature = read_state<flex_string>("content_feature");
+  const flex_int include_flexible_shape =
+      read_opts<flex_int>(opts, "include_flexible_shape");
+  const flex_string content_feature =
+      read_state<flex_string>("content_feature");
   const flex_string style_feature = read_state<flex_string>("style_feature");
   const flex_int num_styles = read_state<flex_int>("num_styles");
 
@@ -763,19 +823,28 @@ std::shared_ptr<MLModelWrapper> style_transfer::export_to_coreml(
       {"model", read_state<flex_string>("model")},
       {"max_iterations", read_state<flex_int>("max_iterations")},
       {"training_iterations", read_state<flex_int>("training_iterations")},
-      {"type", "StyleTransfer"},
+      {"type", "style_transfer"},
       {"content_feature", content_feature},  // TODO: refactor to take content name and style name
       {"style_feature", style_feature},
       {"num_styles", num_styles},
       {"version", get_version()},
   };
+  for(const auto& kvp : additional_user_defined) {
+       user_defined_metadata.emplace_back(kvp.first, kvp.second);
+  }
 
   std::shared_ptr<MLModelWrapper> model_wrapper = export_style_transfer_model(
       *m_resnet_spec, image_width, image_height, include_flexible_shape,
-      std::move(user_defined_metadata), content_feature, style_feature, num_styles);
+      content_feature, style_feature, num_styles);
 
-  if (!filename.empty()) model_wrapper->save(filename);
+  model_wrapper->add_metadata({
+      {"user_defined", std::move(user_defined_metadata)},
+      {"short_description", short_desc}
+  });
 
+  if (!filename.empty()) {
+    model_wrapper->save(filename);
+  }
   return model_wrapper;
 }
 
@@ -784,12 +853,14 @@ void style_transfer::import_from_custom_model(variant_map_type model_data,
   // Get relevant values from variant_map_type
   const flex_dict& model = read_opts<flex_dict>(model_data, "_model");
   const flex_int num_styles = read_opts<flex_int>(model_data, "num_styles");
-  const flex_int max_iterations = read_opts<flex_int>(model_data, "max_iterations");
+  const flex_int max_iterations =
+      read_opts<flex_int>(model_data, "max_iterations");
   const flex_string model_type = read_opts<flex_string>(model_data, "model");
 
   add_or_update_state({{"model", model_type},
                        {"num_styles", num_styles},
-                       {"max_iterations", max_iterations}});
+                       {"max_iterations", max_iterations},
+                       {"batch_size", DEFAULT_BATCH_SIZE}});
 
   // Extract the weights and shapes
   flex_dict mxnet_data_dict;

@@ -12,6 +12,7 @@ from turicreate.toolkits._model import PythonProxy as _PythonProxy
 from turicreate.toolkits.object_detector.object_detector import ObjectDetector as _ObjectDetector
 from turicreate.toolkits.one_shot_object_detector.util._augmentation import preview_synthetic_training_data as _preview_synthetic_training_data
 import turicreate.toolkits._internal_utils as _tkutl
+from turicreate.toolkits import _coreml_utils
 
 USE_CPP = _tkutl._read_env_var_cpp('TURI_OD_USE_CPP_PATH')
 
@@ -74,7 +75,7 @@ def create(data, target, backgrounds=None, batch_size=0, max_iterations=0, verbo
         "target": target,
         "num_classes": model.num_classes,
         "num_starter_images": num_starter_images,
-        "_detector_version": _ObjectDetector._PYTHON_OBJECT_DETECTOR_VERSION,
+        "_detector_version": _ObjectDetector._CPP_OBJECT_DETECTOR_VERSION,
     }
     return OneShotObjectDetector(state)
 
@@ -92,7 +93,7 @@ class OneShotObjectDetector(_CustomModel):
         # We use PythonProxy here so that we get tab completion
         self.__proxy__ = _PythonProxy(state)
 
-    def predict(self, dataset, confidence_threshold=0.25, iou_threshold=None, verbose=True):
+    def predict(self, dataset, confidence_threshold=0.25, iou_threshold=0.45, verbose=True):
         """
         Predict object instances in an SFrame of images.
 
@@ -207,21 +208,27 @@ class OneShotObjectDetector(_CustomModel):
         --------
         >>> model.export_coreml('one_shot.mlmodel')
         """
-        from coremltools.models.utils import save_spec as _save_spec
         import coremltools
+        additional_user_defined_metadata = _coreml_utils._get_tc_version_info()
+        short_description = _coreml_utils._mlmodel_short_description('Object Detector')
         if USE_CPP:
-            self.__proxy__['detector'].export_coreml(
-                filename, include_non_maximum_suppression, iou_threshold, confidence_threshold)
-            model = coremltools.models.MLModel(filename).get_spec()
+            options = {
+                    'include_non_maximum_suppression': include_non_maximum_suppression,
+                    'confidence_threshold': confidence_threshold,
+                    'iou_threshold': iou_threshold,
+            }
+            additional_user_defined_metadata = _coreml_utils._get_tc_version_info()
+            short_description = _coreml_utils._mlmodel_short_description('One Shot Object Detector')
+            self.__proxy__['detector'].__proxy__.export_to_coreml(filename,
+                short_description, additional_user_defined_metadata, options)
         else:
+            from coremltools.models.utils import save_spec as _save_spec
             model = self.__proxy__['detector']._create_coreml_model(
                 include_non_maximum_suppression=include_non_maximum_suppression,
                 iou_threshold=iou_threshold,
                 confidence_threshold=confidence_threshold)
-        model.description.metadata.shortDescription = 'One Shot ' + \
-            model.description.metadata.shortDescription
-        model.description.metadata.userDefined["type"] = 'OneShotObjectDetector'
-        _save_spec(model, filename)
+            model.description.metadata.shortDescription = short_description
+            _save_spec(model, filename)
 
     def _get_version(self):
         return self._PYTHON_ONE_SHOT_OBJECT_DETECTOR_VERSION
@@ -238,7 +245,7 @@ class OneShotObjectDetector(_CustomModel):
         # We don't know how to serialize a Python class, hence we need to
         # reduce the detector to the proxy object before saving it.
         if USE_CPP:
-            pass
+            state['detector'] = {'detector_model':state['detector'].__proxy__}
         else:
             state['detector'] = state['detector']._get_native_state()
         return state

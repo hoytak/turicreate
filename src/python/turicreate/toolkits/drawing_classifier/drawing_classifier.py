@@ -10,6 +10,7 @@ from __future__ import absolute_import as _
 import turicreate as _tc
 import numpy as _np
 import time as _time
+from turicreate.toolkits import _coreml_utils
 from turicreate.toolkits._model import CustomModel as _CustomModel
 from turicreate.toolkits._model import Model as _Model
 from turicreate.toolkits._model import PythonProxy as _PythonProxy
@@ -133,6 +134,17 @@ def create(input_dataset, target, feature=None, validation_set='auto',
     """
 
     accepted_values_for_warm_start = ["auto", "quickdraw_245_v0", None]
+    if warm_start is not None:
+        if type(warm_start) is not str:
+            raise TypeError("'warm_start' must be a string or None. "
+                + "'warm_start' can take in the following values: "
+                + str(accepted_values_for_warm_start))
+        if warm_start not in accepted_values_for_warm_start:
+            raise _ToolkitError("Unrecognized value for 'warm_start': "
+                + warm_start + ". 'warm_start' can take in the following "
+                + "values: " + str(accepted_values_for_warm_start))
+        # Replace 'auto' with name of current default Warm Start model.
+        warm_start = warm_start.replace("auto", "quickdraw_245_v0")
 
     if '_advanced_parameters' in kwargs:
         # Make sure no additional parameters are provided
@@ -171,10 +183,15 @@ def create(input_dataset, target, feature=None, validation_set='auto',
         options = dict()
         options["batch_size"] = batch_size
         options["max_iterations"] = max_iterations
-        # Enable the following line when #2524 is merged
-        # options["warm_start"] = warm_start
+        if validation_set is None:
+            validation_set = _tc.SFrame()
+        if warm_start:
+            # Load CoreML warmstart model
+            pretrained_mlmodel = _pre_trained_models.DrawingClassifierPreTrainedMLModel()
+            options["mlmodel_path"] = pretrained_mlmodel.get_model_path()
+        options["warm_start"] = "" if warm_start is None else warm_start
         model.train(input_dataset, target, feature, validation_set, options)
-        return DrawingClassifier_beta(model_proxy=model, name="drawing_classifier")
+        return DrawingClassifier(model_proxy=model, name="drawing_classifier")
 
     # Old MXNet Implementation
 
@@ -377,9 +394,9 @@ def create(input_dataset, target, feature=None, validation_set='auto',
         'num_examples': len(input_dataset)
     }
 
-    return DrawingClassifier(state)
+    return DrawingClassifier_legacy(state)
 
-class DrawingClassifier(_CustomModel):
+class DrawingClassifier_legacy(_CustomModel):
     """
     A trained model that is ready to use for classification, and to be
     exported to Core ML.
@@ -944,7 +961,7 @@ class DrawingClassifier(_CustomModel):
             return predicted["probability"]
 
 
-class DrawingClassifier_beta(_Model):
+class DrawingClassifier(_Model):
     """
     A trained model using C++ implementation that is ready to use for classification or export to
     CoreML.
@@ -970,9 +987,9 @@ class DrawingClassifier_beta(_Model):
         Returns
         -------
         out : string
-            A description of the model.
+            A description of the DrawingClassifier.
         """
-        return self.__class__.__name__
+        return self.__repr__()
 
     def __repr__(self):
         """
@@ -985,7 +1002,12 @@ class DrawingClassifier_beta(_Model):
         out : string
             A description of the model.
         """
-        return self.__class__.__name__
+
+        width = 40
+        sections, section_titles = self._get_summary_struct()
+        out = _tkutl._toolkit_repr_print(self, sections, section_titles,
+                                         width=width)
+        return out
 
     def _get_version(self):
         return self._CPP_DRAWING_CLASSIFIER_VERSION
@@ -1003,7 +1025,10 @@ class DrawingClassifier_beta(_Model):
         --------
         >>> model.export_coreml("MyModel.mlmodel")
         """
-        return self.__proxy__.export_to_coreml(filename)
+        additional_user_defined_metadata = _coreml_utils._get_tc_version_info()
+        short_description = _coreml_utils._mlmodel_short_description('Drawing Classifier')
+        self.__proxy__.export_to_coreml(filename, short_description,
+                additional_user_defined_metadata)
 
     def predict(self, dataset, output_type='class'):
         """
@@ -1070,7 +1095,7 @@ class DrawingClassifier_beta(_Model):
             dataset = _tc.SFrame({self.feature: dataset})
         return self.__proxy__.predict(dataset, output_type)
 
-    def predict_topk(self, dataset, k=3, output_type='class'):
+    def predict_topk(self, dataset, output_type='probability', k=3):
         """
         Return top-k predictions for the ``dataset``, using the trained model.
         Predictions are returned as an SFrame with three columns: `id`,
@@ -1179,4 +1204,101 @@ class DrawingClassifier_beta(_Model):
           >>> results = model.evaluate(data)
           >>> print results['accuracy']
         """
-        return self.__proxy__.evaluate(dataset, metric)
+
+        evaluation_result = self.__proxy__.evaluate(dataset, metric)
+
+        # TODO: fix the three passes through the data.
+        class_label = self.__proxy__.predict(dataset, "class")
+        probability_vector = self.__proxy__.predict(dataset, "probability_vector")
+
+        predicted  = _tc.SFrame({"label": class_label, "probability": probability_vector})
+        labels = self.classes
+
+        from .._evaluate_utils import  (
+            entropy,
+            confidence,
+            relative_confidence,
+            get_confusion_matrix,
+            hclusterSort,
+            l2Dist
+        )
+
+        evaluation_result['num_test_examples'] = len(dataset)
+        for k in ['num_classes', 'num_examples', 'training_time', 'max_iterations']:
+            evaluation_result[k] = getattr(self, k)
+
+        #evaluation_result['input_image_shape'] = getattr(self, 'input_image_shape')
+
+        evaluation_result["model_name"] = "Drawing Classifier"
+        extended_test = dataset.add_column(predicted["probability"], 'probs')
+        extended_test['label'] = dataset[self.target]
+
+        extended_test = extended_test.add_columns( [extended_test.apply(lambda d: labels[d['probs'].index(confidence(d['probs']))]),
+            extended_test.apply(lambda d: entropy(d['probs'])),
+            extended_test.apply(lambda d: confidence(d['probs'])),
+            extended_test.apply(lambda d: relative_confidence(d['probs']))],
+            ['predicted_label', 'entropy', 'confidence', 'relative_confidence'])
+
+        extended_test = extended_test.add_column(extended_test.apply(lambda d: d['label'] == d['predicted_label']), 'correct')
+
+        sf_conf_mat = get_confusion_matrix(extended_test, labels)
+        confidence_threshold = 0.5
+        hesitant_threshold = 0.2
+        evaluation_result['confidence_threshold'] = confidence_threshold
+        evaluation_result['hesitant_threshold'] = hesitant_threshold
+        evaluation_result['confidence_metric_for_threshold'] = 'relative_confidence'
+
+        evaluation_result['conf_mat'] = list(sf_conf_mat)
+
+        vectors = map(lambda l: {'name': l, 'pos':list(sf_conf_mat[sf_conf_mat['target_label']==l].sort('predicted_label')['norm_prob'])},
+                    labels)
+        evaluation_result['sorted_labels'] = hclusterSort(vectors, l2Dist)[0]['name'].split("|")
+
+        per_l = extended_test.groupby(['label'], {'count': _tc.aggregate.COUNT, 'correct_count': _tc.aggregate.SUM('correct') })
+        per_l['recall'] = per_l.apply(lambda l: l['correct_count']*1.0 / l['count'])
+
+        per_pl = extended_test.groupby(['predicted_label'], {'predicted_count': _tc.aggregate.COUNT, 'correct_count': _tc.aggregate.SUM('correct') })
+        per_pl['precision'] = per_pl.apply(lambda l: l['correct_count']*1.0 / l['predicted_count'])
+        per_pl = per_pl.rename({'predicted_label': 'label'})
+        evaluation_result['label_metrics'] = list(per_l.join(per_pl, on='label', how='outer').select_columns(['label', 'count', 'correct_count', 'predicted_count', 'recall', 'precision']))
+        evaluation_result['labels'] = labels
+
+        extended_test = extended_test.add_row_number('__idx').rename({'label': 'target_label'})
+
+        evaluation_result['test_data'] = extended_test
+        evaluation_result['feature'] = self.feature
+
+        return _Evaluation(evaluation_result)
+
+    def _get_summary_struct(self):
+        """
+        Returns a structured description of the model, including (where
+        relevant) the schema of the training data, description of the training
+        data, training statistics, and model hyperparameters.
+
+        Returns
+        -------
+        sections : list (of list of tuples)
+            A list of summary sections.
+              Each section is a list.
+                Each item in a section list is a tuple of the form:
+                  ('<label>','<field>')
+        section_titles: list
+            A list of section titles.
+              The order matches that of the 'sections' object.
+        """
+        model_fields = [
+            ('Number of classes', 'num_classes'),
+            ('Feature column', 'feature'),
+            ('Target column', 'target')
+        ]
+        training_fields = [
+            ('Training Iterations', 'max_iterations'),
+            ('Training Accuracy', 'training_accuracy'),
+            ('Validation Accuracy', 'validation_accuracy'),
+            ('Training Time', 'training_time'),
+            ('Number of Examples', 'num_examples')
+        ]
+
+        section_titles = ['Schema', 'Training summary']
+        return([model_fields, training_fields], section_titles)

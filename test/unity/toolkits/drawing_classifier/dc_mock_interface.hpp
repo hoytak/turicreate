@@ -71,20 +71,14 @@ class mock_data_iterator : public data_iterator {
     return expected_call();
   }
 
-  const std::unordered_map<std::string, int>& class_to_index_map()
-      const override {
-    return class_to_index_map_;
-  }
-
-  const std::vector<std::string>& class_labels() const override {
+  const flex_list& class_labels() const override {
     return class_labels_;
   }
 
   std::deque<has_next_batch_call> has_next_batch_calls_;
   std::deque<next_batch_call> next_batch_calls_;
   std::deque<reset_call> reset_calls_;
-  std::vector<std::string> class_labels_;
-  std::unordered_map<std::string, int> class_to_index_map_;
+  flex_list class_labels_;
 };
 
 /**
@@ -139,7 +133,7 @@ class test_drawing_classifier : public drawing_classifier {
     return expected_call();
   }
 
-  std::unique_ptr<model_spec> init_model() const override {
+  std::unique_ptr<model_spec> init_model(bool use_random_init) const override {
     TS_ASSERT(!init_model_calls_.empty());
     init_model_call expected_call = std::move(init_model_calls_.front());
     init_model_calls_.pop_front();

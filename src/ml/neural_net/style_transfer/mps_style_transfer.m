@@ -41,6 +41,14 @@
 
 @property (nonatomic) id<MTLDevice> dev;
 @property (nonatomic) id<MTLCommandQueue> commandQueue;
+
++ (NSData *) topLeftCropImage:(NSData *) data
+                  inputHeight:(NSUInteger) inputHeight
+                   inputWidth:(NSUInteger) inputWidth
+                 outputHeight:(NSUInteger) outputHeight
+                  outputWidth:(NSUInteger) outputWidth 
+                  numChannels:(NSUInteger) numChannels;
+
 @end
 
 @implementation TCMPSStyleTransfer
@@ -251,12 +259,29 @@
   return self;
 }
 
-- (NSDictionary<NSString *, NSData *> *) exportWeights {
++ (NSData *) topLeftCropImage:(NSData *) data
+                  inputHeight:(NSUInteger) inputHeight
+                   inputWidth:(NSUInteger) inputWidth
+                 outputHeight:(NSUInteger) outputHeight
+                  outputWidth:(NSUInteger) outputWidth 
+                  numChannels:(NSUInteger) numChannels {
+  NSUInteger dataSize = sizeof(float) * numChannels * outputWidth * outputHeight;
+  NSMutableData *mutableData = [NSMutableData dataWithLength:dataSize];
+  NSUInteger outputRowStride = sizeof(float) * numChannels * outputWidth;
+  NSUInteger inputRowStride = sizeof(float) * numChannels * inputWidth;
+  for (NSUInteger idx = 0; idx < outputHeight; idx = idx + 1) {
+    NSRange range = NSMakeRange(inputRowStride * idx, outputRowStride);
+    [data getBytes:mutableData.mutableBytes + outputRowStride * idx range:range];
+  }
+  return mutableData;
+}
+
+- (NSDictionary<NSString *, TCMPSStyleTransferWeights *> *) exportWeights {
   [self checkpoint];
   return [_model exportWeights:@"transformer_"];
 }
 
-- (NSDictionary<NSString *, NSData *> *) predict:(NSDictionary<NSString *, NSData *> *)inputs {
+- (NSDictionary<NSString *, TCMPSStyleTransferWeights *> *) predict:(NSDictionary<NSString *, NSData *> *)inputs {
   // TODO: Change for testing
   _batchSize = 1;
 
@@ -269,6 +294,15 @@
   float imageHeight;
   [imageHeightData getBytes:&imageHeight length:sizeof(float)];
   _imgHeight = (NSInteger) imageHeight;
+
+  NSString* indexKey = @"index";
+
+  float styleIndex;
+  [inputs[indexKey] getBytes:&styleIndex length:sizeof(float)];
+
+  _model.styleIndex = styleIndex;
+
+  [_inferenceGraph reloadFromDataSources];
 
   MPSImageDescriptor *imgDesc = [MPSImageDescriptor
     imageDescriptorWithChannelFormat:MPSImageFeatureChannelFormatFloat32
@@ -311,20 +345,30 @@
   [cb commit];
   [cb waitUntilCompleted];
 
-  NSMutableDictionary<NSString *, NSData *> *imagesOut = [[NSMutableDictionary alloc] init];;
+  TCMPSStyleTransferWeights *imagesOut = [[TCMPSStyleTransferWeights alloc] init];
 
   /**
-  * TODO: write what needs to be done for batching
+  * TODO: Implement batching for multiple images
   **/
-  for (MPSImage *image in stylizedImages) {
-    // NSString* key = [NSString stringWithFormat:@"%@%lu", @"stylizedImage", [stylizedImages indexOfObject:image]];
-    NSString* key = @"output";
-    NSMutableData* styleData = [NSMutableData dataWithLength:(NSUInteger)sizeof(float) * _imgWidth * _imgHeight * 3];
-    [image readBytes:styleData.mutableBytes dataLayout:(MPSDataLayoutHeightxWidthxFeatureChannels)imageIndex:0];
-    imagesOut[key] = styleData;
-  }
+  MPSImage *image = [stylizedImages firstObject];
 
-  return [imagesOut copy];
+  NSUInteger outImageWidth = image.width;
+  NSUInteger outImageHeight = image.height;
+  NSUInteger outImageChannels = image.featureChannels;
+
+  NSMutableData* styleData = [NSMutableData dataWithLength:(NSUInteger)sizeof(float) * outImageWidth * outImageHeight * outImageChannels];
+  [image readBytes:styleData.mutableBytes dataLayout:(MPSDataLayoutHeightxWidthxFeatureChannels)imageIndex:0];
+
+  imagesOut.data = [TCMPSStyleTransfer topLeftCropImage:styleData
+                                            inputHeight:outImageHeight
+                                             inputWidth:outImageWidth
+                                           outputHeight:_imgHeight
+                                            outputWidth:_imgWidth
+                                            numChannels:outImageChannels];
+
+  imagesOut.shape = @[@(_batchSize), @(_imgHeight), @(_imgWidth), @(outImageChannels)];
+
+  return @{@"output": imagesOut};
 }
 
 - (void) setLearningRate:(float)lr {
@@ -334,7 +378,7 @@
   [_contentVggLoss setLearningRate:lr];
 }
 
-- (NSDictionary<NSString *, NSData *> *) train:(NSDictionary<NSString *, NSData *> *)inputs {
+- (NSDictionary<NSString *, TCMPSStyleTransferWeights *> *) train:(NSDictionary<NSString *, NSData *> *)inputs {
   _batchSize = 1;
 
   NSData* imageWidthData = inputs[@"width"];
@@ -452,10 +496,12 @@
   NSMutableData * lossData = [NSMutableData data];
   [lossData appendBytes:&lossValue length:sizeof(float)];
 
-  NSMutableDictionary<NSString *, NSData *> *lossDict = [[NSMutableDictionary alloc] init];
-  lossDict[@"loss"] = [NSData dataWithData:lossData];
+  TCMPSStyleTransferWeights *lossWrapper = [[TCMPSStyleTransferWeights alloc] init];
 
-  return [lossDict copy];
+  lossWrapper.data = lossData;
+  lossWrapper.shape = @[@(1)];
+
+  return @{@"loss": lossWrapper};
 }
 
 /**

@@ -11,6 +11,7 @@ from __future__ import division as _
 from __future__ import absolute_import as _
 
 import logging as _logging
+from math import ceil as _ceil
 import numpy as _np
 
 import turicreate as _tc
@@ -18,6 +19,7 @@ import turicreate.toolkits._internal_utils as _tk_utils
 from turicreate.toolkits._main import ToolkitError as _ToolkitError
 from turicreate.toolkits._model import CustomModel as _CustomModel
 from turicreate.toolkits._model import PythonProxy as _PythonProxy
+from turicreate.toolkits import _coreml_utils
 
 USE_TF = _tk_utils._read_env_var_cpp('TURI_SC_USE_TF_PATH')
 
@@ -105,9 +107,40 @@ class _TFDataIterator(_DataIterator):
         # instance itself.
         pass
 
+class _NumPyDataIterator(_DataIterator):
+    def __init__(self, data, label=None, batch_size=1, shuffle=False):
+
+        # Always pass a tuple, so that the impl's built-in iterator returns a
+        # tuple.
+        self.data_slices = (data, label) if label is not None else (data,)
+        self.batch_size = batch_size
+        self.batch_idx = 0
+        self.num_batches = int(_ceil(len(data) / float(self.batch_size)))
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.batch_idx < self.num_batches:
+            data = self.data_slices[0][self.batch_size*self.batch_idx:self.batch_size*(self.batch_idx+1)]
+            label = None
+            if len(self.data_slices)>1:
+                label = self.data_slices[1][self.batch_size*self.batch_idx:self.batch_size*(self.batch_idx+1)]
+            self.batch_idx += 1
+            return (data, label) if label is not None else (data,)
+        else:
+            raise StopIteration
+
+    def next(self):
+        return self.__next__()
+
+    def reset(self):
+        self.batch_idx = 0
+
 def _create_data_iterator(data, label=None, batch_size=1, shuffle=False):
+
     if USE_TF:
-        return _TFDataIterator(data, label=label, batch_size=batch_size,
+        return _NumPyDataIterator(data, label=label, batch_size=batch_size,
                                shuffle=shuffle)
     else:
         return _MXNetDataIterator(data, label=label, batch_size=batch_size,
@@ -174,9 +207,27 @@ class _TFAccuracy(_Accuracy):
     def get(self):
         return self.impl.result()
 
+class _NumPyAccuracy(_Accuracy):
+
+    def __init__(self):
+        self.cumulative_acc = 0.0
+        self.num_examples = 0.0
+
+    def update(self, ground_truth, predicted):
+        self.num_examples += len(predicted)
+        predicted = _np.argmax(predicted, axis=-1)
+        self.cumulative_acc += sum([1 for x,y in zip(ground_truth, predicted) if x==y])
+
+    def reset(self):
+        self.cumulative_acc = 0.0
+        self.num_examples = 0.0
+
+    def get(self):
+        return self.cumulative_acc/self.num_examples
+
 def _get_accuracy_metric():
     if USE_TF:
-        return _TFAccuracy()
+        return _NumPyAccuracy()
     else:
         return _MXNetAccuracy()
 
@@ -288,8 +339,6 @@ def create(dataset, target, feature, max_iterations=10,
         have a powerful computer, increasing this value may improve performance.
     '''
     import time
-    from .._mxnet import _mxnet_utils
-    import mxnet as mx
 
     from ._audio_feature_extractor import _get_feature_extractor
 
@@ -347,6 +396,13 @@ def create(dataset, target, feature, max_iterations=10,
     train_data = train_data.stack('deep features', new_column_name='deep features')
     train_data, missing_ids = train_data.dropna_split(columns=['deep features'])
 
+    training_batch_size = min(len(train_data), batch_size)
+
+    train_data = _create_data_iterator(train_data['deep features'].to_numpy(),
+                                       train_data['labels'].to_numpy(),
+                                       batch_size=training_batch_size,
+                                       shuffle=True)
+
     if len(missing_ids) > 0:
         _logging.warning("Dropping %d examples which are less than 975ms in length." % len(missing_ids))
 
@@ -371,17 +427,21 @@ def create(dataset, target, feature, max_iterations=10,
     else:
         validation_data = []
 
+    train_metric = _get_accuracy_metric()
+    if validation_data:
+        validation_metric = _get_accuracy_metric()
+
     if verbose:
         print("\nTraining a custom neural network -")
 
-    training_batch_size = min(len(train_data), batch_size)
-    train_data = _create_data_iterator(train_data['deep features'].to_numpy(),
-                                       train_data['labels'].to_numpy(),
-                                       batch_size=training_batch_size,
-                                       shuffle=True)
 
-    from ._mx_sound_classifier import MultiLayerPerceptronMXNetModel
-    custom_NN = MultiLayerPerceptronMXNetModel(feature_extractor.output_length, num_labels, custom_layer_sizes, verbose)
+    if USE_TF:
+        from ._tf_sound_classifier import SoundClassifierTensorFlowModel
+        custom_NN = SoundClassifierTensorFlowModel(feature_extractor.output_length, num_labels, custom_layer_sizes)
+    else:
+        from ._mx_sound_classifier import MultiLayerPerceptronMXNetModel
+        custom_NN = MultiLayerPerceptronMXNetModel(feature_extractor.output_length, num_labels, custom_layer_sizes, verbose)
+
 
     if verbose:
         # Setup progress table
@@ -391,10 +451,6 @@ def create(dataset, target, feature, max_iterations=10,
             row_ids.insert(2, 'validation_accuracy')
             row_display_names.insert(2, 'Validation Accuracy (%)')
         table_printer = _tc.util._ProgressTablePrinter(row_ids, row_display_names)
-
-    train_metric = _get_accuracy_metric()
-    if validation_data:
-        validation_metric = _get_accuracy_metric()
 
     for i in range(max_iterations):
         # TODO: early stopping
@@ -409,7 +465,6 @@ def create(dataset, target, feature, max_iterations=10,
             train_metric.update(label, outputs)
         train_data.reset()
 
-        # Calculate validation metric
         for data, label in validation_data:
             outputs = custom_NN.predict(data)
             validation_metric.update(label, outputs)
@@ -474,7 +529,6 @@ class SoundClassifier(_CustomModel):
         Save the model as a dictionary, which can be loaded with the
         :py:func:`~turicreate.load_model` method.
         """
-        from .._mxnet import _mxnet_utils
         state = self.__proxy__.get_state()
 
         del state['_feature_extractor']
@@ -489,7 +543,6 @@ class SoundClassifier(_CustomModel):
         A function to load a previously saved SoundClassifier instance.
         """
         from ._audio_feature_extractor import _get_feature_extractor
-        from .._mxnet import _mxnet_utils
 
         state['_feature_extractor'] = _get_feature_extractor(state['feature_extractor_name'])
 
@@ -504,10 +557,14 @@ class SoundClassifier(_CustomModel):
             custom_layer_sizes = [100, 100]
         state['custom_layer_sizes'] = custom_layer_sizes
 
-        from ._mx_sound_classifier import MultiLayerPerceptronMXNetModel
-        model_obj = MultiLayerPerceptronMXNetModel(num_inputs, num_classes, custom_layer_sizes, 1)
-        model_obj.load_weights(state['_custom_classifier'])
-        state['_custom_classifier'] = model_obj
+        if USE_TF:
+            from ._tf_sound_classifier import SoundClassifierTensorFlowModel
+            custom_NN = SoundClassifierTensorFlowModel(num_inputs, num_classes, custom_layer_sizes)
+        else:
+            from ._mx_sound_classifier import MultiLayerPerceptronMXNetModel
+            custom_NN = MultiLayerPerceptronMXNetModel(num_inputs, num_classes, custom_layer_sizes, 1)
+        custom_NN.load_weights(state['_custom_classifier'])
+        state['_custom_classifier'] = custom_NN
 
         return SoundClassifier(state)
 
@@ -737,7 +794,6 @@ class SoundClassifier(_CustomModel):
         """
         import coremltools
         from coremltools.proto.FeatureTypes_pb2 import ArrayFeatureType
-        from .._mxnet import _mxnet_utils
 
         prob_name = self.target + 'Probability'
 
@@ -775,7 +831,7 @@ class SoundClassifier(_CustomModel):
             last_output = builder.spec.neuralNetworkClassifier.layers[-1].output[0]
             builder.add_softmax('softmax', last_output, self.target)
 
-            builder.set_class_labels(self.classes)
+            builder.set_class_labels(self.classes, predicted_feature_name = self.target)
             builder.set_input([input_name], [(input_length,)])
             builder.set_output([self.target], [(self.num_classes,)])
 
@@ -796,8 +852,8 @@ class SoundClassifier(_CustomModel):
         prob_output = desc.output.add()
         prob_output.name = prob_name
         label_output = desc.output.add()
-        label_output.name = 'classLabel'
-        desc.predictedFeatureName = 'classLabel'
+        label_output.name = self.target
+        desc.predictedFeatureName = self.target
         desc.predictedProbabilitiesName = prob_name
         if type(self.classes[0]) == int:
             # Class labels are ints
@@ -844,6 +900,21 @@ class SoundClassifier(_CustomModel):
             prob_output_type.stringKeyType.MergeFromString(b'')
 
         mlmodel = coremltools.models.MLModel(top_level_spec)
+        model_type = 'sound classifier'
+        mlmodel.short_description = _coreml_utils._mlmodel_short_description(model_type)
+        mlmodel.input_description[self.feature] = u'Input audio features'
+        mlmodel.output_description[prob_name] = 'Prediction probabilities'
+        mlmodel.output_description[self.target] = 'Class label of top prediction'
+        model_metadata = {
+          'target': self.target,
+          'feature': self.feature,
+        }
+        user_defined_metadata = model_metadata.update(
+                _coreml_utils._get_tc_version_info())
+        _coreml_utils._set_model_metadata(mlmodel,
+                self.__class__.__name__,
+                user_defined_metadata,
+                version=SoundClassifier._PYTHON_SOUND_CLASSIFIER_VERSION)
         mlmodel.save(filename)
 
     def predict(self, dataset, output_type='class', verbose=True, batch_size=64):
@@ -893,8 +964,6 @@ class SoundClassifier(_CustomModel):
         >>> class_predictions = model.predict(data, output_type='class')
 
         """
-        from .._mxnet import _mxnet_utils
-        import mxnet as mx
 
         if not isinstance(dataset, (_tc.SFrame, _tc.SArray, dict)):
             raise TypeError('\'dataset\' parameter must be either an SFrame, SArray or dictionary')

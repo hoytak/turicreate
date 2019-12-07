@@ -7,10 +7,10 @@ from __future__ import print_function as _
 from __future__ import division as _
 from __future__ import absolute_import as _
 
+import turicreate.toolkits._tf_utils as _utils
 import tensorflow.compat.v1 as _tf
 _tf.disable_v2_behavior()
 from .._tf_model import TensorFlowModel
-import turicreate.toolkits._tf_utils as _utils
 
 import numpy as _np
 
@@ -23,12 +23,11 @@ class ActivityTensorFlowModel(TensorFlowModel):
 
     def __init__(self, net_params, batch_size, num_features, num_classes, prediction_window, seq_len):
 
+        self.gpu_policy = _utils.TensorFlowGPUPolicy()
+        self.gpu_policy.start()
+
         for key in net_params.keys():
             net_params[key] = _utils.convert_shared_float_array_to_numpy(net_params[key])
-
-         # Suppresses verbosity to only errors
-        _tf.logging.set_verbosity(_tf.logging.ERROR)
-        _tf.debugging.set_log_device_placement(False)
 
         _tf.reset_default_graph()
 
@@ -116,6 +115,10 @@ class ActivityTensorFlowModel(TensorFlowModel):
         self.sess.run(_tf.local_variables_initializer())
 
         self.load_weights(net_params)
+
+    def __del__(self):
+        self.sess.close()
+        self.gpu_policy.stop()
 
     def load_lstm_weights_params(self, net_params):
         """
@@ -279,7 +282,7 @@ class ActivityTensorFlowModel(TensorFlowModel):
             else:
                 tf_export_params[var.name.split(':')[0]] = _np.array(val)
 
-        tvars = _tf.all_variables()
+        tvars = _tf.global_variables()
         tvars_vals = self.sess.run(tvars)
         for var, val in zip(tvars, tvars_vals):
             if 'moving_mean' in var.name:

@@ -14,6 +14,7 @@
 #include <limits>
 #include <queue>
 #include <random>
+#include <sstream>
 #include <utility>
 #include <vector>
 
@@ -341,28 +342,8 @@ void object_detector::import_from_custom_model(variant_map_type model_data,
   if (model_iter == model_data.end()) {
     log_and_throw("The loaded turicreate model must contain '_model'!\n");
   }
+
   const flex_dict& model = variant_get_value<flex_dict>(model_iter->second);
-  auto shape_iter = model_data.find("_grid_shape");
-  size_t height, width;
-  if (shape_iter == model_data.end()) {
-    height = 13;
-    width = 13;
-  } else {
-    std::vector<size_t> shape =
-        variant_get_value<std::vector<size_t>>(shape_iter->second);
-    height = shape[0];
-    width = shape[1];
-  }
-  model_data.emplace("grid_height", height);
-  model_data.emplace("grid_width", width);
-
-  model_data.emplace("annotation_scale", "pixel");
-  model_data.emplace("annotation_origin", "top_left");
-  model_data.emplace("annotation_position", "center");
-
-  state.clear();
-  state.insert(model_data.begin(), model_data.end());
-
   flex_dict mxnet_data_dict;
   flex_dict mxnet_shape_dict;
 
@@ -375,9 +356,20 @@ void object_detector::import_from_custom_model(variant_map_type model_data,
     }
   }
 
-  auto cmp = [](const flex_dict::value_type& a, const flex_dict::value_type& b) {
-    return (a.first < b.first);
-  };
+  auto shape_iter = model_data.find("_grid_shape");
+  size_t height, width;
+  if (shape_iter == model_data.end()) {
+    height = 13;
+    width = 13;
+  } else {
+    std::vector<size_t> shape =
+        variant_get_value<std::vector<size_t>>(shape_iter->second);
+    height = shape[0];
+    width = shape[1];
+  }
+
+  auto cmp = [](const flex_dict::value_type& a,
+                const flex_dict::value_type& b) { return (a.first < b.first); };
 
   std::sort(mxnet_data_dict.begin(), mxnet_data_dict.end(), cmp);
   std::sort(mxnet_shape_dict.begin(), mxnet_shape_dict.end(), cmp);
@@ -398,12 +390,24 @@ void object_detector::import_from_custom_model(variant_map_type model_data,
     nn_params[layer_name] = shared_float_array::wrap(std::move(layer_weight),
                                                      std::move(layer_shape));
   }
+
+  // adding meta data
+  model_data.emplace("grid_height", height);
+  model_data.emplace("grid_width", width);
+  model_data.emplace("annotation_scale", "pixel");
+  model_data.emplace("annotation_origin", "top_left");
+  model_data.emplace("annotation_position", "center");
+  model_data.erase(model_iter);
+  model_data.erase(shape_iter);
+
+  state = std::move(model_data);
+
   nn_spec_.reset(new model_spec);
   init_darknet_yolo(*nn_spec_,
                     variant_get_value<size_t>(state.at("num_classes")),
                     anchor_boxes());
   nn_spec_->update_params(nn_params);
-  model_data.erase(model_iter);
+
   return;
 }
 
@@ -436,8 +440,14 @@ void object_detector::train(gl_sframe data,
   // Wait for any outstanding batches to finish.
   finalize_training(compute_final_metrics);
 
+  double current_time = time_object.current_time();
+
+  std::stringstream ss;
+  table_internal::_format_time(ss, current_time);
+
   add_or_update_state({
-      {"training_time", time_object.current_time()},
+    {"training_time", current_time},
+    {"_training_time_as_string", ss.str()}
   });
 }
 
@@ -529,7 +539,8 @@ variant_type object_detector::evaluate(gl_sframe data, std::string metric,
   average_precision_calculator calculator(class_labels);
 
   auto consumer = [&](const std::vector<image_annotation>& predicted_row,
-                      const std::vector<image_annotation>& groundtruth_row) {
+                      const std::vector<image_annotation>& groundtruth_row,
+                      const std::pair<float, float>& image_dimension) {
     calculator.add_row(predicted_row, groundtruth_row);
   };
 
@@ -554,11 +565,13 @@ variant_type object_detector::evaluate(gl_sframe data, std::string metric,
     result_map.erase(MAP);
   }
 
-  return convert_map_to_types(result_map, output_type);
+  return convert_map_to_types(result_map, output_type,
+                              read_state<flex_list>("classes"));
 }
 
 variant_type object_detector::convert_map_to_types(
-    const variant_map_type& result_map, const std::string& output_type) {
+    const variant_map_type& result_map, const std::string& output_type,
+    const flex_list& class_labels) {
   // Handle different output types here
   // If output_type = "dict", just return the result_map.
   // If output_type = "sframe", construct a sframe,
@@ -572,18 +585,15 @@ variant_type object_detector::convert_map_to_types(
   if (output_type == "dict") {
     final_result = to_variant(result_map);
   } else if (output_type == "sframe") {
-    gl_sframe sframe_result;
+    gl_sframe sframe_result({{"label", gl_sarray(class_labels)}});
     auto add_score_list = [&](std::string& metric_name) {
       flex_list score_list;
-      flex_list label_list;
       auto it = result_map.find(metric_name);
       if (it != result_map.end()) {
         const flex_dict& dict = variant_get_value<flex_dict>(it->second);
         for (const auto& label_score_pair : dict) {
-          label_list.push_back(label_score_pair.first);
           score_list.push_back(label_score_pair.second);
         }
-        sframe_result.replace_add_column(gl_sarray(label_list), "label");
         sframe_result.add_column(gl_sarray(score_list), metric_name);
       }
     };
@@ -604,19 +614,29 @@ variant_type object_detector::predict(
   gl_sarray_writer result(flex_type_enum::LIST, 1);
 
   auto consumer = [&](const std::vector<image_annotation>& predicted_row,
-                      const std::vector<image_annotation>& groundtruth_row) {
-
+                      const std::vector<image_annotation>& groundtruth_row,
+                      const std::pair<float, float>& image_dimension) {
     // Convert predicted_row to flex_type list to call gl_sarray_writer
     flex_list predicted_row_ft;
-    for (const image_annotation& each_row : predicted_row) {
-      flex_dict bb_dict = {{"x", each_row.bounding_box.x}, {"y", each_row.bounding_box.y},
-                      {"width", each_row.bounding_box.width},
-                      {"height", each_row.bounding_box.height}};
-      flex_dict each_annotation = {{"identifier", each_row.identifier},
-                                   {"type", "rectangle"},
-                                   {"coordinates", std::move(bb_dict)},
-                                   {"confidence", each_row.confidence}
-                                   };
+    flex_list class_labels = read_state<flex_list>("classes");
+    float height_scale = image_dimension.first;
+    float width_scale = image_dimension.second;
+    for (size_t i = 0; i < predicted_row.size(); i++) {
+      const image_annotation& each_row = predicted_row[i];
+
+      flex_dict bb_dict = {
+          {"x", (each_row.bounding_box.x + each_row.bounding_box.width / 2.) *
+                    width_scale},
+          {"y", (each_row.bounding_box.y + each_row.bounding_box.height / 2.) *
+                    height_scale},
+          {"width", each_row.bounding_box.width * width_scale},
+          {"height", each_row.bounding_box.height * height_scale}};
+
+      flex_dict each_annotation = {
+          {"label", class_labels[each_row.identifier].to<flex_string>()},
+          {"type", "rectangle"},
+          {"coordinates", std::move(bb_dict)},
+          {"confidence", each_row.confidence}};
       predicted_row_ft.push_back(std::move(each_annotation));
     }
     result.write(predicted_row_ft, 0);
@@ -676,10 +696,13 @@ gl_sframe object_detector::convert_types_to_sframe(
   return sframe_data;
 }
 
-void object_detector::perform_predict(gl_sframe data,
+void object_detector::perform_predict(
+    gl_sframe data,
     std::function<void(const std::vector<image_annotation>&,
-    const std::vector<image_annotation>&)> consumer, float confidence_threshold,
-    float iou_threshold) {
+                       const std::vector<image_annotation>&,
+                       const std::pair<float, float>&)>
+        consumer,
+    float confidence_threshold, float iou_threshold) {
   std::string image_column_name = read_state<flex_string>("feature");
   std::string annotations_column_name = read_state<flex_string>("annotations");
   flex_list class_labels = read_state<flex_list>("classes");
@@ -733,14 +756,15 @@ void object_detector::perform_predict(gl_sframe data,
       /* weights */ get_model_params());
 
   // To support double buffering, use a queue of pending inference results.
-  std::queue<image_augmenter::result> pending_batches;
+  std::queue<inference_batch> pending_batches;
 
   // Helper function to process results until the queue reaches a given size.
   auto pop_until_size = [&](size_t remaining) {
     while (pending_batches.size() > remaining) {
 
       // Pop one batch from the queue.
-      image_augmenter::result batch = pending_batches.front();
+      inference_batch batch = pending_batches.front();
+
       pending_batches.pop();
       for (size_t i = 0; i < batch.annotations_batch.size(); ++i) {
         // For this row (corresponding to one image), extract the prediction.
@@ -750,31 +774,35 @@ void object_detector::perform_predict(gl_sframe data,
         std::vector<image_annotation> predicted_annotations =
             convert_yolo_to_annotations(raw_prediction, anchor_boxes(),
                                         confidence_threshold);
-
         // Remove overlapping predictions.
         predicted_annotations = apply_non_maximum_suppression(
             std::move(predicted_annotations), iou_threshold);
 
-        consumer(predicted_annotations, batch.annotations_batch[i]);
+        consumer(predicted_annotations, batch.annotations_batch[i],
+                 batch.image_dimensions_batch[i]);
       }
     }
   };
 
   // Iterate through the data once.
   std::vector<labeled_image> input_batch = data_iter->next_batch(batch_size);
+
   while (!input_batch.empty()) {
     // Wait until we have just one asynchronous batch outstanding. The work
     // below should be concurrent with the neural net inference for that batch.
     pop_until_size(1);
 
-    image_augmenter::result result_batch;
+    inference_batch result_batch;
 
     // Instead of giving the ground truth data to the image augmenter and the
     // neural net, instead save them for later, pairing them with the future
     // predictions.
     result_batch.annotations_batch.resize(input_batch.size());
+    result_batch.image_dimensions_batch.resize(input_batch.size());
     for (size_t i = 0; i < input_batch.size(); ++i) {
       result_batch.annotations_batch[i] = std::move(input_batch[i].annotations);
+      result_batch.image_dimensions_batch[i] = std::make_pair(
+          input_batch[i].image.m_height, input_batch[i].image.m_width);
       input_batch[i].annotations.clear();
     }
 
@@ -903,7 +931,10 @@ std::unique_ptr<model_spec> object_detector::init_model(
 }
 
 std::shared_ptr<MLModelWrapper> object_detector::export_to_coreml(
-    std::string filename, std::map<std::string, flexible_type> opts) {
+    std::string filename, std::string short_desc,
+    std::map<std::string, flexible_type> additional_user_defined,
+    std::map<std::string, flexible_type> opts)
+{
   // If called during training, synchronize the model first.
   if (training_model_) {
     synchronize_training();
@@ -963,6 +994,9 @@ std::shared_ptr<MLModelWrapper> object_detector::export_to_coreml(
       {"type", "object_detector"},
     };
 
+  for(const auto& kvp : additional_user_defined) {
+       user_defined_metadata.emplace_back(kvp.first, kvp.second);
+  }
 
   if (opts["include_non_maximum_suppression"].to<bool>()){
     user_defined_metadata.emplace_back("include_non_maximum_suppression", "True");
@@ -970,15 +1004,18 @@ std::shared_ptr<MLModelWrapper> object_detector::export_to_coreml(
     user_defined_metadata.emplace_back("iou_threshold", opts["iou_threshold"]);
   }
 
-  // TODO: Should we also be adding the non-user-defined keys, such as
-  // "version" and "shortDescription", or is that up to the frontend?
+  user_defined_metadata.emplace_back("version", opts["version"]);
 
   std::shared_ptr<MLModelWrapper> model_wrapper = export_object_detector_model(
       yolo_nn_spec, grid_width * SPATIAL_REDUCTION,
       grid_height * SPATIAL_REDUCTION, class_labels.size(),
       grid_height * grid_width * anchor_boxes().size(),
-      std::move(user_defined_metadata), std::move(class_labels),
-      read_state<flex_string>("feature"), std::move(opts));
+      std::move(class_labels), read_state<flex_string>("feature"), std::move(opts));
+
+  model_wrapper->add_metadata({
+      {"user_defined", std::move(user_defined_metadata)},
+      {"short_description", short_desc}
+  });
 
   if (!filename.empty()) {
     model_wrapper->save(filename);

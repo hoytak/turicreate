@@ -46,7 +46,9 @@ class EXPORT object_detector: public ml_model_base {
   variant_type predict(variant_type data,
                        std::map<std::string, flexible_type> opts);
   std::shared_ptr<coreml::MLModelWrapper> export_to_coreml(
-      std::string filename, std::map<std::string, flexible_type> opts);
+      std::string filename, std::string short_description,
+      std::map<std::string, flexible_type> additional_user_defined,
+      std::map<std::string, flexible_type> opts);
   void import_from_custom_model(variant_map_type model_data, size_t version);
 
   // Support for iterative training.
@@ -118,8 +120,11 @@ class EXPORT object_detector: public ml_model_base {
   register_defaults("predict",{});
 
   REGISTER_CLASS_MEMBER_FUNCTION(object_detector::export_to_coreml, "filename",
-    "options");
-  register_defaults("export_to_coreml", {{"options", to_variant(std::map<std::string, flexible_type>())}});
+    "short_description", "additional_user_defined", "options");
+  register_defaults("export_to_coreml",
+         {{"short_description", ""},
+          {"additional_user_defined", to_variant(std::map<std::string, flexible_type>())},
+          {"options", to_variant(std::map<std::string, flexible_type>())}});
 
   REGISTER_CLASS_MEMBER_DOCSTRING(
       object_detector::export_to_coreml,
@@ -196,7 +201,8 @@ class EXPORT object_detector: public ml_model_base {
   void perform_predict(
       gl_sframe data,
       std::function<void(const std::vector<neural_net::image_annotation>&,
-                         const std::vector<neural_net::image_annotation>&)>
+                         const std::vector<neural_net::image_annotation>&,
+                         const std::pair<float, float>&)>
           consumer,
       float confidence_threshold, float iou_threshold);
 
@@ -219,7 +225,8 @@ class EXPORT object_detector: public ml_model_base {
   flex_int get_num_classes() const;
 
   static variant_type convert_map_to_types(const variant_map_type& result_map,
-                                           const std::string& output_type);
+                                           const std::string& output_type,
+                                           const flex_list& class_labels);
   static gl_sframe convert_types_to_sframe(const variant_type& data,
                                            const std::string& column_name);
 
@@ -253,6 +260,10 @@ class EXPORT object_detector: public ml_model_base {
 
   // Map from iteration index to the loss future.
   std::map<size_t, neural_net::shared_float_array> pending_training_batches_;
+
+  struct inference_batch : neural_net::image_augmenter::result {
+    std::vector<std::pair<float, float>> image_dimensions_batch;
+  };
 };
 
 }  // object_detection

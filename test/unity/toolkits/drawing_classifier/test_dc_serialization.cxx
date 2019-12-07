@@ -31,7 +31,7 @@ class drawing_classifier_mock
   }
 
   std::unique_ptr<neural_net::model_spec> get_model_spec() const {
-    return init_model();
+    return init_model(true);
   }
 
 };
@@ -150,19 +150,20 @@ BOOST_AUTO_TEST_CASE(test_export_coreml) {
   // drawing_classifier enforces the input feature to be 1,
   // in case someday we want more
   TS_ASSERT_EQUALS(features.size(), 1);
-  const std::vector<std::string> labels = {"0", "1"};
+  const flex_list labels = {"0", "1"};
 
   turi::drawing_classifier::drawing_classifier dc;
   dc.add_or_update_state(
       {{"target", target},
        {"num_classes", labels.size()},
-       {"classes", flex_list(labels.begin(), labels.end())},
+       {"classes", labels},
        {"max_iterations", 300},
        {"random_seed", 11},
-       {"warm_start", false},
+       {"warm_start", ""},
        {"feature", features[0]}});
 
-  auto ml_model_wrapper = dc.export_to_coreml("", /* debug no throw */ true);
+  auto ml_model_wrapper = dc.export_to_coreml("", "", {},
+                                              /* debug no throw */ true);
   TS_ASSERT(ml_model_wrapper != nullptr);
 
   const auto& my_model_spec = ml_model_wrapper->coreml_model()->getProto();

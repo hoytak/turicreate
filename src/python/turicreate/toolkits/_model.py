@@ -36,6 +36,9 @@ AC_USE_CPP = _read_env_var_cpp('TURI_AC_USE_CPP_PATH')
 # Style Transfer use C++ codepath
 ST_USE_CPP = _read_env_var_cpp('TURI_ST_USE_CPP_PATH')
 
+# Drawing Classifier use C++ codepath
+DC_USE_CPP = _read_env_var_cpp('TURI_DC_USE_CPP_PATH')
+
 def load_model(location):
     """
     Load any Turi Create model that was previously saved.
@@ -93,6 +96,8 @@ def load_model(location):
         if name in MODEL_NAME_MAP:
             cls = MODEL_NAME_MAP[name]
             if 'model' in saved_state:
+                if name in ['activity_classifier', 'object_detector', 'style_transfer', 'drawing_classifier']:
+                    import turicreate.toolkits.libtctensorflow
                 # this is a native model
                 return cls(saved_state['model'])
             else:
@@ -102,20 +107,39 @@ def load_model(location):
                 del model_data['model_version']
 
                 if name=='activity_classifier' and AC_USE_CPP:
+                    import turicreate.toolkits.libtctensorflow
                     model = _extensions.activity_classifier()
                     model.import_from_custom_model(model_data, model_version)
                     return cls(model)
 
                 if name=='object_detector' and OD_USE_CPP:
+                    import turicreate.toolkits.libtctensorflow
                     model = _extensions.object_detector()
                     model.import_from_custom_model(model_data, model_version)
                     return cls(model)
 
                 if name=='style_transfer' and ST_USE_CPP:
+                    import turicreate.toolkits.libtctensorflow
                     model = _extensions.style_transfer()
                     model.import_from_custom_model(model_data, model_version)
                     return cls(model)
-                    
+
+                if name=='drawing_classifier' and DC_USE_CPP:
+                    import turicreate.toolkits.libtctensorflow
+                    model = _extensions.drawing_classifier()
+                    model.import_from_custom_model(model_data, model_version)
+                    return cls(model)
+
+                if name=='one_shot_object_detector' and OD_USE_CPP:
+                    od_cls = MODEL_NAME_MAP['object_detector']
+                    if 'detector_model' in model_data['detector']:
+                        model_data['detector'] = od_cls(model_data['detector']['detector_model'])
+                    else:
+                        model = _extensions.object_detector()
+                        model.import_from_custom_model(model_data['detector'], model_data['_detector_version'])
+                        model_data['detector'] = od_cls(model)
+                    return cls(model_data)
+
                 return cls._load_version(model_data, model_version)
 
         elif hasattr(_extensions, name):
@@ -438,8 +462,8 @@ class Model(ExposeAttributesFromProxy):
         if field in self._list_fields():
             return self.__proxy__.get_value(field)
         else:
-            raise KeyError('Field \"%s\" not in model. Available fields are'
-                         '%s.') % (field, ', '.join(self.list_fields()))
+            raise KeyError(('Field \"%s\" not in model. Available fields are '
+                         '%s.') % (field, ', '.join(self._list_fields())))
 
     @classmethod
     def _native_name(cls):
@@ -501,7 +525,6 @@ class Model(ExposeAttributesFromProxy):
             print(self.__repr__())
         except:
             return self.__class__.__name__
-
 
     def __repr__(self):
         raise NotImplementedError

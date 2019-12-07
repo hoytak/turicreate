@@ -14,21 +14,18 @@ from .util import TempDirectory
 from copy import copy
 import math
 from os import mkdir
-import pytest
 import unittest
 
 import coremltools
 from coremltools.proto import FeatureTypes_pb2
 import numpy as np
 from scipy.io import wavfile
+import sys as _sys
 
 import turicreate as tc
 from turicreate.toolkits._internal_utils import _raise_error_if_not_sarray
 from turicreate.toolkits._main import ToolkitError
 from turicreate.toolkits._internal_utils import _mac_ver
-
-
-IS_PRE_6_0_RC = float(tc.__version__) < 6.0
 
 
 class ReadAudioTest(unittest.TestCase):
@@ -153,14 +150,13 @@ def _generate_binary_test_data():
 binary_test_data = _generate_binary_test_data()
 
 
-@pytest.mark.xfail(IS_PRE_6_0_RC, reason='Requires MXNet')
 class ClassifierTestTwoClassesStringLabels(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
         self.data = copy(binary_test_data)
         self.is_binary_classification = True
-        self.model = tc.sound_classifier.create(self.data, 'labels', feature='audio')
+        self.model = tc.sound_classifier.create(self.data, 'labels', feature='audio', max_iterations=100)
 
     def test_predict(self):
         # default ('class') output_type
@@ -254,8 +250,8 @@ class ClassifierTestTwoClassesStringLabels(unittest.TestCase):
         self.assertTrue('sampleRate' in metadata.userDefined)
         self.assertEqual(metadata.userDefined['sampleRate'], '16000')
 
-    @unittest.skipIf(_mac_ver() >= (10,14), 'Already testing export to Core ML with predictions')
     def test_export_core_ml_no_prediction(self):
+        import platform
         with TempDirectory() as temp_dir:
             file_name = temp_dir + '/model.mlmodel'
             self.model.export_coreml(file_name)
@@ -265,6 +261,17 @@ class ClassifierTestTwoClassesStringLabels(unittest.TestCase):
         metadata = core_ml_model.get_spec().description.metadata
         self.assertTrue('sampleRate' in metadata.userDefined)
         self.assertEqual(metadata.userDefined['sampleRate'], '16000')
+        self.assertDictEqual({
+            'com.github.apple.turicreate.version': tc.__version__,
+            'com.github.apple.os.platform': platform.platform(),
+            'type': 'SoundClassifier',
+            'sampleRate': '16000',
+            'version': '1'
+            }, dict(core_ml_model.user_defined_metadata)
+        )
+        expected_result = 'Sound classifier created by Turi Create (version %s)' % (
+                tc.__version__)
+        self.assertEquals(expected_result, core_ml_model.short_description)
 
     def test_evaluate(self):
         evaluation = self.model.evaluate(self.data)
@@ -304,7 +311,6 @@ class ClassifierTestTwoClassesStringLabels(unittest.TestCase):
         self.assertTrue(self.model.validation_accuracy is None)
 
 
-@pytest.mark.xfail(IS_PRE_6_0_RC, reason='Requires MXNet')
 class ClassifierTestTwoClassesIntLabels(ClassifierTestTwoClassesStringLabels):
     @classmethod
     def setUpClass(self):
@@ -318,7 +324,6 @@ class ClassifierTestTwoClassesIntLabels(ClassifierTestTwoClassesStringLabels):
         assert(self.model.custom_layer_sizes == layer_sizes)
 
 
-@pytest.mark.xfail(IS_PRE_6_0_RC, reason='Requires MXNet')
 class ClassifierTestThreeClassesStringLabels(ClassifierTestTwoClassesStringLabels):
     @classmethod
     def setUpClass(self):
@@ -336,7 +341,7 @@ class ClassifierTestThreeClassesStringLabels(ClassifierTestTwoClassesStringLabel
         layer_sizes = [75, 100, 20]
         self.model = tc.sound_classifier.create(self.data, 'labels', feature='audio',
                                                 custom_layer_sizes = layer_sizes,
-                                                validation_set=self.data)
+                                                validation_set=self.data, max_iterations=100)
         assert(self.model.custom_layer_sizes == layer_sizes)
 
     def test_validation_set(self):
@@ -360,7 +365,6 @@ class ClassifierTestWithShortClip(unittest.TestCase):
         self.assertEqual(len(deep_features), len(self.data))
         self.assertEqual(deep_features[-1], [])
 
-    @pytest.mark.xfail(IS_PRE_6_0_RC, reason='Requires MXNet')
     def test_model(self):
         model = tc.sound_classifier.create(self.data, 'labels', feature='audio',
                                                 validation_set=self.data)
@@ -434,7 +438,6 @@ class CoreMlCustomModelPreprocessingTest(unittest.TestCase):
         self.assertTrue(np.isclose(y1, y2, atol=1e-04).all())
 
 
-@pytest.mark.xfail(IS_PRE_6_0_RC, reason='Requires MXNet')
 class ReuseDeepFeatures(unittest.TestCase):
     def test_simple_case(self):
         data = copy(binary_test_data)
