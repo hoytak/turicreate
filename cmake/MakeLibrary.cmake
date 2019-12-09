@@ -131,6 +131,18 @@ macro(make_library NAME)
     set(make_library_OBJECT 0)
   endif()
 
+  if(TC_LIST_SOURCE_FILES)
+    foreach(_src ${make_library_SOURCES})
+      if(${_src} MATCHES "<TARGET_OBJECTS:")
+        # Do nothing
+      elseif(${_src} MATCHES "^${CMAKE_SOURCE_DIR}")
+        message(STATUS "[SOURCE:${_src}]")
+      else()
+        message(STATUS "[SOURCE:${CMAKE_CURRENT_SOURCE_DIR}/${_src}]")
+      endif()
+    endforeach()
+  endif()
+
   if (APPLE)
     if (make_library_MAC_REQUIRES)
       set(make_library_REQUIRES ${make_library_REQUIRES} ${make_library_MAC_REQUIRES})

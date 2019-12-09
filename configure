@@ -65,10 +65,14 @@ function print_help {
   echo 
   echo "  --min-ios-version                 Override the minimum iOS version (default ${IOS_DEFAULT_MIN_VERSION})"
   echo "  --min-macos-version               Override the minimum MacOS version (default ${MACOS_DEFAULT_MIN_VERSION})"
-  ech
+  echo
   echo "  --codesign                        Enable code signing for OSX projects.  If enabled, the "
   echo "                                    proper CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_**** parameters "
   echo                                      denoting the signing variables should be passed in. 
+  echo
+  echo "  --list-source-files               If given, a list of all the source files compiled using "
+  echo "                                    the given options is printed as part of the configuration, "
+  echo "                                    using the [SOURCE:<source_file>] format. "
   echo
   echo "  -D var=value                      Specify FLAGS definitions to be passed on to cmake."
   echo
@@ -153,6 +157,7 @@ builder="make"
 min_ios_version=${IOS_DEFAULT_MIN_VERSION}
 min_macos_version=${MACOS_DEFAULT_MIN_VERSION}
 enable_codesign=0
+list_source_files=0
 
 DEBUG_DIR="${TURI_HOME}/debug"
 RELEASE_DIR="$TURI_HOME/release"
@@ -225,6 +230,8 @@ while [ $# -gt 0 ]
     --min-macos-version=*)  min_macos_version=${1##--min-macos-version=};; 
     --min-macos-version)    min_macos_version=${2}; shift ;;
 
+    --list-source-files)    list_source_files=1 ;;
+
     *) unknown_option $1 ;;
   esac
   shift
@@ -267,6 +274,9 @@ CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DRELEASE_OPT_FOR_SIZE=${release_opt_for
 
 # Debug Opt for size
 CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DDEBUG_OPT_FOR_SIZE=${debug_opt_for_size}"
+
+# Tell CMake whether we need to build the remote FS stuff.
+CMAKE_CONFIG_FLAGS="$CMAKE_CONFIG_FLAGS -DTC_LIST_SOURCE_FILES=${list_source_files}"
 
 # Check what is needed with the remote_fs stuff
 if [[ $with_capi == 1 ]]; then
