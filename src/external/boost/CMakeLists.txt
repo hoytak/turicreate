@@ -45,11 +45,12 @@ file(GLOB_RECURSE boost_test_src_files
   CONFIGURE_DEPENDS
   ${__boost_lib_dir}/test/src/*.cpp
 )
+list(FILTER boost_test_src_files EXCLUDE REGEX ".*/cpp_main.cpp")
 
 make_library(boost_test
   SOURCES
-  ${boost_test_src_files}
-  REQUIRES
-  z libjpeg libpng libbz2)
+  ${boost_test_src_files} 
+  REQUIRES 
+  boost)
 
-
+target_compile_definitions(boost_test PUBLIC "-Dcpp_main=123")

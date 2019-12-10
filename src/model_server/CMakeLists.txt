@@ -84,7 +84,7 @@ make_library(unity_shared_for_testing
     ${_TC_COMMON_REQUIREMENTS}
     ${unity_shared_deps}
     libbz2
-    z
+    visualization
   SHARED 
   SHARED_ALL_DEFINED 
   EXTERNAL_VISIBILITY

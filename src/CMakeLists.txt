@@ -5,9 +5,9 @@ subdirs(
   core
   deployment
   ml
-  model_server
   toolkits
-  visualization)
+  visualization
+  model_server)
 
 
 if(TC_BUILD_PYTHON)

@@ -15,7 +15,6 @@ ${libpng_src_dir}/pngrio.c
 ${libpng_src_dir}/pngrtran.c
 ${libpng_src_dir}/pngrutil.c
 ${libpng_src_dir}/pngset.c
-${libpng_src_dir}/pngtest.c
 ${libpng_src_dir}/pngtrans.c
 ${libpng_src_dir}/pngwio.c
 ${libpng_src_dir}/pngwrite.c

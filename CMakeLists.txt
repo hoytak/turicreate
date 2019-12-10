@@ -197,6 +197,9 @@ if (APPLE)
   find_library(CORE_VIDEO CoreVideo)
   find_library(METAL NAMES Metal)
   find_library(METAL_PERFORMANCE_SHADERS NAMES MetalPerformanceShaders)
+  set(_TC_APPLE_DEPENDENCIES 
+    ${ACCELERATE} ${APPKIT} ${CORE_GRAPHICS} ${JAVASCRIPT_CORE} ${FOUNDATION} 
+    ${CORE_IMAGE} ${CORE_ML} ${CORE_VIDEO} ${METAL} ${METAL_PERFORMANCE_SHADERS})
 endif()
 
 
@@ -437,6 +440,13 @@ set(_TC_COMMON_REQUIREMENTS
   libbz2
   z
 )
+
+if(APPLE)
+  set(_TC_COMMON_REQUIREMENTS
+    # External dependencies (from deps)
+    ${_TC_COMMON_REQUIREMENTS}
+    ${_TC_APPLE_DEPENDENCIES})
+endif()
   
   set(_TC_COMMON_OBJECTS
     ${_TC_COMMON_OBJECTS}
