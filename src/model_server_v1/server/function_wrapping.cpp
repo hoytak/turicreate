@@ -72,42 +72,45 @@ template <typename Class, typename RetType, typename... FuncParams>
   }
   
   ///////////////////////////////////
-  
+ 
+  struct call_info { 
+    const ArgumentResolver* res; 
+    Class* inst;
+    std::array<const variant_type*, N> arg_list; 
+  }; 
+
   template <int arg_idx, typename... ExpandedArgs>
     struct __caller {
     typedef typename nth_param_type<arg_idx>::type arg_type;
 
       static inline variant_type call(
-        const ArgumentResolver* res, Class* inst, 
-        const std::array<const variant_type*, N>& arg_list, 
-        const ExpandedArgs&... args) {
+          const call_info& ci, const ExpandedArgs&... args) {
 
       // TODO: add intelligent error messages here on failure
-      arg_type next_arg = from_variant<arg_type>(*(arg_list[arg_idx]));
+      arg_type next_arg = from_variant<arg_type>(*(ci.arg_list[arg_idx]));
       
-      return __caller<arg_idx+1, ExpandedArgs..., arg_type>::call(res, inst, arg_list, args..., next_arg);
+      return __caller<arg_idx+1, ExpandedArgs..., arg_type>::call(ci, args..., next_arg);
     }
   }; 
 
   template <typename... ExpandedArgs> struct __caller<N, ExpandedArgs...> {
     static inline variant_type call(
-        const ArgumentResolver* res, Class* inst, 
-        const std::array<const variant_type*, N>&, 
-        const ExpandedArgs&... args) {
+        const call_info& ci, const ExpandedArgs&... args) {
       
-       method_type method = res->method; 
-       return to_variant( (inst->*method)(args...) );
+       return to_variant( (ci.inst->*(ci.res->method))(args...) );
     }
-  }; 
+  };
 
   /**  Main calling function.
    */
   variant_type call(Class* inst, const argument_pack& args) const { 
-    std::array<const variant_type*, N> arg_list;
+    call_info ci; 
+    ci.res = this; 
+    ci.inst = inst; 
 
     size_t n_ordered = args.ordered_arguments.size();
     for(size_t i = 0; i < n_ordered; ++i) { 
-      arg_list[i] = &args.ordered_arguments[i];
+      ci.arg_list[i] = &args.ordered_arguments[i];
     }
 
     // TODO: check if more ordered arguments given than are 
@@ -119,7 +122,7 @@ template <typename Class, typename RetType, typename... FuncParams>
         // TODO: intelligent error message.
         throw std::string("Missing argument.");
       } else {
-        arg_list[i] = &(it->second);
+        ci.arg_list[i] = &(it->second);
         ++used_counter; 
       }
     }
@@ -130,7 +133,7 @@ template <typename Class, typename RetType, typename... FuncParams>
     
     // Okay, now that the argument list is filled out, we can call the 
     // function with it and return the value.
-    return __caller<0>::call(this, inst, arg_list);
+    return __caller<0>::call(ci);
   }
 }; 
 
