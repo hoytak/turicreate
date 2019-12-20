@@ -3,20 +3,25 @@
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
-#ifndef TURI_FUNCTION_CALL_WRAPPER_HPP_
-#define TURI_FUNCTION_CALL_WRAPPER_HPP_
+#ifndef TURI_METHOD_WRAPPER_HPP_
+#define TURI_METHOD_WRAPPER_HPP_
 
 #include <core/export.hpp>
 #include <variant.hpp>
 
+
 namespace turi {
 
-namespace function_wrapper {
+// Helper for enable if in templates. 
+// TODO: move this to a common location
+template <bool B> using enable_if_ = typename std::enable_if<B,int>::type;
+
+namespace v2 { 
 
 // How the arguments are bundled up and packaged.
 struct argument_pack {
   std::vector<variant_type> ordered_arguments; 
-  std::unordered_map<std::string, variant_type> named_arguments; 
+  variant_map_type named_arguments; 
 };
 
 // This can become more later on.
@@ -34,9 +39,11 @@ struct Parameter {
 
 /** Call the function call 
  */
-template <typename BaseClass> class function_call_wrapper { 
+template <typename BaseClass> class method_wrapper { 
 
   public:
+   
+   virtual ~method_wrapper(){}
 
    /** The type of the Class on which our method rests.
     *  
@@ -67,19 +74,18 @@ template <typename BaseClass> class function_call_wrapper {
     *
     */
    template <typename Class, typename RetType, typename... FuncParams> 
-   static std::shared_ptr<function_call_wrapper> 
-   create((RetType)(*Class::method)(FuncArgs...), 
+   static std::shared_ptr<method_wrapper> 
+   create(RetType(*Class::method)(FuncArgs...), 
           const std::vector<Parameter>& param_defs);
 
 
   protected:
 
    // To be called only from the instantiating class
-   function_call_wrapper(const std::vector<Parameter>& _parameter_list) 
+   method_wrapper(const std::vector<Parameter>& _parameter_list) 
      : m_parameter_list(_parameter_list)
    {}
    
-   virtual ~function_call_wrapper(){}
 
    // Information about the function / method 
    std::vector<Parameter> m_parameter_list;
@@ -87,75 +93,8 @@ template <typename BaseClass> class function_call_wrapper {
 
 
 
-/** Manager all the methods in a given class / model. 
- *
- *  This class exists mainly to manage 
- *
- *  The main function of this class is to provide wrappers around the 
- *  calling functions.  These wrappers mainly provide helpful error messages 
- *  that give the right context for the calling.
- *
- */
-template <typename BaseClass>
-class function_manager {
-  public:
 
-   function_manager()
-     : m_class_name()
-    {}
-
-   function_manager(const std::string& _name)
-     : m_class_name(_name)
-    {}
-
-   // TODO: overload for const.
-   template <typename Class, typename RetType, typename... FuncParams>
-    void register_method(
-        const std::string& name, 
-        (RetType)(*Class::method)(FuncArgs...),
-        const std::vector<Parameter>& parameter_list) {
-
-      try { 
-
-        auto wrapper = function_call_wrapper<BaseClass>::create(method, parameter_list);
-      
-        m_method_lookup[name] = wrapper; 
-      } catch(std::exception e) {
-        // TODO: Expand these exceptions to make them informative.
-        std::rethrow_exception(e); 
-      }
-    }
-
-   // Lookup a call function information.
-   std::shared_ptr<function_call_wrapper<BaseClass> > lookup(const std::string& name) const { 
-
-     // TODO: proper error message here
-     return m_method_lookup.at(name);
-   }
-
-   variant_type call_method(const BaseClass* inst, const std::string& name, 
-       const argument_list& arguments) const { 
-
-      try { 
-         return lookup(name)->call(inst, arguments); 
-
-      } catch(std::exception e) {
-        // TODO: Expand these exceptions to make them informative.
-        std::rethrow_exception(e); 
-      }
-   }
-
-  private:
-
-   std::string m_class_name; 
-
-   std::unordered_map<std::string, std::shared_ptr<function_call_wrapper<BaseClass> > >
-     m_method_lookup;
-};
-
-
-
-
+namespace function_call_impl { 
 
 /////////////////////////////////////////////////////////////////////////////////
 //
@@ -170,7 +109,7 @@ class function_manager {
  */ 
 template <typename Class, typename BaseClass, 
           typename RetType, typename... FuncParams> 
-  class function_call_wrapper_impl :: public function_call_wrapper<Class> {
+  class method_wrapper_impl :: public method_wrapper<Class> {
 
  private:
 
@@ -185,11 +124,11 @@ template <typename Class, typename BaseClass,
   
   /** Constructor.  
    */
-  function_call_wrapper_impl(
+  method_wrapper_impl(
       const std::string& _name, 
       const std::vector<Parameter>& _parameter_list,
       method_type method)
-    : function_call_wrapper(_name, _parameter_list)
+    : method_wrapper(_name, _parameter_list)
     , m_method(method)
   {
     if(param_defs.size() != N) {
@@ -201,59 +140,56 @@ template <typename Class, typename BaseClass,
   }
   
   //////////////////////////////////////////////////////////////////////////////
+  //
+  //  Calling methods
 
-  // A simple helper struct to carry the information about a particular call. 
-  struct call_info { 
-    const function_call_wrapper* res; 
-    Class* inst;
-    std::array<const variant_type*, N> arg_list; 
-  }; 
-  
-  // A handy way to refer to the type of the nth argument.
+  /** A handy way to refer to the type of the nth argument.
+   */
   template <int idx>
   struct nth_param_type { 
     typedef typename std::tuple_element<idx, std::tuple<FuncParams...> >::type raw_type;
     typedef typename std::decay<raw_type>::type type;
   };
+  
+  /// Container for passing the calling arguments around after unpacking from argument_list
+  typedef std::array<const variant_type*, N> arg_v_type;
 
-  // Recursively expand the arguments.
-  template <int arg_idx, typename... ExpandedArgs>
-    struct __caller {
-    typedef typename nth_param_type<arg_idx>::type arg_type;
+  /// Recursively case for argument expansion.
+  template <int arg_idx, typename... Expanded, enable_if_<arg_idx != N> = 0>
+    variant_type _call(Class* inst, const arg_v_type& arg_v, const Expanded&... args) {
 
-      // TODO: Separate out the cases where the unpacking can be done by 
+      // TODO: Separate out the case where the unpacking can be done by 
       // reference.
-      static inline variant_type call(
-          const call_info& ci, const ExpandedArgs&... args) {
+      typedef typename nth_param_type<arg_idx>::type arg_type;
 
       // TODO: Add intelligent error messages here on failure
-      arg_type next_arg = from_variant<arg_type>(*(ci.arg_list[arg_idx]));
+      arg_type next_arg = from_variant<arg_type>(*(arg_v[arg_idx]));
      
       // Call the next unpacking routine. 
-      return __caller<arg_idx+1, ExpandedArgs..., arg_type>::call(ci, args..., next_arg);
+      return _call<arg_idx+1, ExpandedArgs..., arg_type>(inst, arg_set, args..., next_arg);
     }
   }; 
-
+  
   // Stopping case of expansion -- we've unpacked and translated all the 
   // arguments, now it's time to actually call the method. 
-  template <typename... ExpandedArgs> struct __caller<N, ExpandedArgs...> {
-    static inline variant_type call(
-        const call_info& ci, const ExpandedArgs&... args) {
+  template <int arg_idx, typename... Expanded, enable_if_<arg_idx == N> = 0>
+    variant_type _call(Class* inst, const arg_v_type& arg_v, const Expanded&... args) {
       
-       return to_variant( (ci.inst->*(ci.res->method))(args...) );
+       return to_variant( (inst->*m_method)(args...) );
     }
   };
 
   /**  Main calling function.
    */
-  variant_type _call(Class* inst, const argument_pack& args) const { 
-    call_info ci; 
-    ci.res = this; 
-    ci.inst = inst; 
+  variant_type call(BaseClass* _inst, const argument_pack& args) const override { 
+    
+    Class* inst = std::dynamic_cast<Class*>(_inst);
+    
+    arg_v_type arg_v; 
 
     size_t n_ordered = args.ordered_arguments.size();
     for(size_t i = 0; i < n_ordered; ++i) { 
-      ci.arg_list[i] = &args.ordered_arguments[i];
+      arg_v[i] = &args.ordered_arguments[i];
     }
 
     // TODO: check if more ordered arguments given than are 
@@ -265,23 +201,18 @@ template <typename Class, typename BaseClass,
         // TODO: intelligent error message.
         throw std::string("Missing argument.");
       } else {
-        ci.arg_list[i] = &(it->second);
+        arg_v[i] = &(it->second);
         ++used_counter; 
       }
     }
 
-    // TODO: check that all the arguments have been used up.  If not, go
-    // back and generate a good error message.
+    // TODO: check that all the arguments have been used up.  If not,
+    // generate a good error message.
    
     
-    // Okay, now that the argument list is filled out, we can call the 
-    // function with it and return the value.
-    return __caller<0>::call(ci);
-  }
-
-  // Because the base class is not present for many of the interfaces in the 
-  variant_type call(BaseClass* inst, const argument_pack& args) const override {
-    return _call(std::dynamic_cast<Class*>(inst), args);
+    // Now that the argument list arg_v is filled out, we can call the 
+    // recursive calling function and return the value.
+    return _call<0>(inst, arg_v);
   }
 
 }; 
@@ -291,14 +222,15 @@ template <typename Class, typename BaseClass,
  */
 template <typename BaseClass>
 template <typename Class, typename RetType, typename... FuncParams>
-std::shared_ptr<function_call_wrapper<BaseClass> > function_call_wrapper<BaseClass>::create(
+std::shared_ptr<method_wrapper<BaseClass> > method_wrapper<BaseClass>::create(
     const std::string& method_name,
     (RetType)(*Class::method)(FuncArgs...), 
     const std::vector<Parameter>& param_defs) {
 
-  return std::make_shared<function_call_wrapper_impl<Class, BaseClass, RetType, FuncParams...> >
+  return std::make_shared<method_wrapper_impl<Class, BaseClass, RetType, FuncParams...> >
         (method_name, param_defs, method);
- }; 
+ };
 
 }
-
+}
+}

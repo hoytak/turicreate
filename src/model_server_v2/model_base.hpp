@@ -30,6 +30,8 @@ namespace turi {
  */
 class EXPORT model_base { 
  public:
+ 
+  model_base();
 
   virtual ~model_base();
 
@@ -46,12 +48,6 @@ class EXPORT model_base {
   virtual const char* name() = 0;
   
   
-  /**
-   * Returns the current version of the toolkit class for this instance, for
-   * serialization purposes.
-   */
-  virtual size_t get_version() const { return 0; }
-
   /** Initialize base configuration of class.
    *
    *  This is called by the model server to create the method 
@@ -61,19 +57,20 @@ class EXPORT model_base {
    */
   virtual void configure() = 0;
 
-
   /** Sets up the class given the options present.  
-   *
+   *  
+   *  TODO: implement all of this. 
    */
   virtual void setup(const variant_map_type& options) {
-    option_manager.update(options); 
+  //   option_manager.update(options); 
   } 
+
 
   /** Call one of the methods registered using the configure() method above.  
    *
    */
   // TODO: Overload const
-  variant_type call_method(const std::string& name, const argument_pack& args); 
+  variant_type call_method(const std::string& name, const argument_pack& args);
 
   /** Call one of the methods here.  
    */
@@ -88,14 +85,38 @@ class EXPORT model_base {
    template <typename Class, typename RetType, typename... FuncParams>
     void register_method(
         const std::string& name, 
-        (RetType)(*Class::method)(FuncArgs...),
+        RetType (*Class::method)(FuncArgs...),
         const std::vector<Parameter>& parameter_list);
 
 
    // TODO: add back in load and save routines.
 
  private: 
-
    std::shared_ptr<method_registry<model_base> > m_registry;
 
-}; 
+};
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Implementations of above functions.
+
+template <typename Args...> 
+  variant_type model_base::call_method(const std::string& name, const Args&... args) {
+
+    return m_registry->call_method(this, name, args...);
+}
+
+template <typename Class, typename RetType, typename... FuncParams>
+void model_base::register_method(
+    const std::string& name, 
+    RetType (*Class::method)(FuncArgs...),
+    const std::vector<Parameter>& parameter_list) { 
+
+  m_registry->register_method(name, method, parameter_list);
+}
+
+
+
+
+
+}}
