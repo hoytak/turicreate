@@ -14,10 +14,9 @@
 #include <core/export.hpp>
 #include <variant.hpp>
 
-namespace turi {
+namespace turi { 
+  namespace v2 {  
 
-  // Forward declare the method registry
-  template <typename C> method_registry; 
 
 /**
  * The base class from which all new models must inherit.
@@ -44,7 +43,7 @@ class EXPORT model_base {
    * name.
    *
    */
-  virtual const std::string& name() = 0;
+  virtual const char* name() = 0;
   
   
   /**

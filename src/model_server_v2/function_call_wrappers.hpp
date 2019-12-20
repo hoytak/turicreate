@@ -21,7 +21,14 @@ struct argument_pack {
 
 // This can become more later on.
 struct Parameter {
-  std::string name; 
+
+  Parameter() {}
+
+  // Allow implicit here.
+  Parameter(const std::string& n) : name(n) {}
+
+  // Name 
+  const std::string name;
 }; 
 
 
@@ -66,7 +73,6 @@ template <typename BaseClass> class function_call_wrapper {
 
 
   protected:
-
 
    // To be called only from the instantiating class
    function_call_wrapper(const std::vector<Parameter>& _parameter_list) 
@@ -115,7 +121,7 @@ class function_manager {
       
         m_method_lookup[name] = wrapper; 
       } catch(std::exception e) {
-        // TODO: Expand these exceptions to make them coherant.
+        // TODO: Expand these exceptions to make them informative.
         std::rethrow_exception(e); 
       }
     }
@@ -134,7 +140,7 @@ class function_manager {
          return lookup(name)->call(inst, arguments); 
 
       } catch(std::exception e) {
-        // TODO: Expand these exceptions to make them coherant.
+        // TODO: Expand these exceptions to make them informative.
         std::rethrow_exception(e); 
       }
    }
@@ -145,8 +151,6 @@ class function_manager {
 
    std::unordered_map<std::string, std::shared_ptr<function_call_wrapper<BaseClass> > >
      m_method_lookup;
-
-
 };
 
 
