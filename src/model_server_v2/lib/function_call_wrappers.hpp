@@ -91,14 +91,14 @@ template <typename BaseClass> class function_call_wrapper {
  *
  */
 template <typename BaseClass>
-class method_registry {
+class function_manager {
   public:
 
-   method_registry()
+   function_manager()
      : m_class_name()
     {}
 
-   method_registry(const std::string& _name)
+   function_manager(const std::string& _name)
      : m_class_name(_name)
     {}
 

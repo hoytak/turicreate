@@ -16,22 +16,37 @@ EXPORT model_server_impl& model_server() {
 
 /** Does the work of registering things with the callbacks. 
  */
-void model_server_impl::_process_registered_callbacks_internal();
+void model_server_impl::_process_registered_callbacks_internal() {
+
+  std::lock_guard<std::mutex> _lg(m_model_registration_lock);
+
+  size_t cur_idx; 
+
+  while( (cur_idx = m_callback_last_processed_index) != m_callback_pushback_index) { 
+
+    
+    // Call the callback function to perform the registration, simultaneously 
+    // zeroing out the pointer. 
+    class_registration_callback reg_f = nullptr;
+    std::swap(reg_f, m_registration_callback_list[cur_idx % max_registered_callbacks()]);
+    reg_f(*this);
+
+    // We're done here; advance.
+    ++m_callback_last_processed_index;  
+  }
+}
 
 
-/** The internal registration of the new model.  
- */ 
-void model_server_impl::_register_new_model_internal(
-    std::shared_ptr<model_base> new_model) {
-
-  // Get the name of the model.  NOTE: these are 
-  // supposed to be 
-  const std::string& name = new_model->name();
 
 
-  // TODO: Add alias names for model load back-compat. 
-  //
-  m_
+
+
+
+
+
+
+
+
 
 
 
