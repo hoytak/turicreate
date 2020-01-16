@@ -135,7 +135,7 @@ class TensorFlowFeatureExtractor(ImageFeatureExtractor):
             batch[:] = 0
 
             # Resize and load the images.
-            future = tc.extensions.sframe_load_to_numpy.run_background(
+            future = tc.extensions.sframe_load_to_numpy(
                                                image_sf, batch.ctypes.data,
                                                batch.strides, batch.shape,
                                                start_index, end_index)
@@ -146,7 +146,7 @@ class TensorFlowFeatureExtractor(ImageFeatureExtractor):
             assert batch_info is not None
 
             batch_future, batch = batch_info
-            batch_future.result()
+            #batch_future.result()
 
             # TODO: Converge to NCHW everywhere.
             batch = batch.transpose(0, 2, 3, 1)  # NCHW -> NHWC
