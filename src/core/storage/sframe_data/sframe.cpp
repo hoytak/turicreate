@@ -246,6 +246,9 @@ void sframe::create_arrays_for_writing(const std::vector<std::string>& column_na
   index_info.ncolumns = column_names.size();
   index_info.nrows = 0;
 
+  ASSERT_EQ(column_types.size(), column_names.size());
+
+
   // Add column names, in the case there are lots of columns, the check for contains_column
   // is very slow, we try to avoid checking that if we know up front all names already
   std::unordered_set<std::string> unique_names(column_names.begin(), column_names.end());
