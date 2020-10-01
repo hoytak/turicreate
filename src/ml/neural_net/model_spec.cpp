@@ -18,7 +18,7 @@
 #include <ml/coreml_export/mlmodel_include.hpp>
 #include <core/util/Span.hpp>
 #include <ml/neural_net/quantization_utils.hpp>
-#include <toolkits/coreml_export/mlmodel_include.hpp>
+#include <ml/coreml_export/mlmodel_include.hpp>
 
 namespace turi {
 namespace neural_net {

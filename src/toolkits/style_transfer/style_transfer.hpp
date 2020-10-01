@@ -18,14 +18,10 @@
 #include <ml/neural_net/model_backend.hpp>
 #include <ml/neural_net/model_spec.hpp>
 #include <model_server/lib/extensions/ml_model.hpp>
-<<<<<<< HEAD
 #include <ml/coreml_export/mlmodel_wrapper.hpp>
 #include <ml/coreml_export/neural_net_models_exporter.hpp>
-=======
-#include <toolkits/coreml_export/mlmodel_wrapper.hpp>
 #include <toolkits/coreml_export/neural_net_models_exporter.hpp>
 #include <toolkits/style_transfer/st_model_trainer.hpp>
->>>>>>> master
 #include <toolkits/style_transfer/style_transfer_data_iterator.hpp>
 
 namespace turi {

@@ -15,8 +15,8 @@
 #include <core/data/flexible_type/flexible_type.hpp>
 #include <ml/neural_net/model_spec.hpp>
 #include <ml/coreml_export/mlmodel_wrapper.hpp>
-#include <toolkits/coreml_export/mlmodel_include.hpp>
-#include <toolkits/coreml_export/mlmodel_wrapper.hpp>
+#include <ml/coreml_export/mlmodel_include.hpp>
+#include <ml/coreml_export/mlmodel_wrapper.hpp>
 
 namespace turi {
 

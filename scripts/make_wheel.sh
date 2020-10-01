@@ -44,11 +44,13 @@ print_help() {
   echo
   echo "  --docker-python3.7       Use docker to build for Python 3.7 in CentOS 6 with Clang 8."
   echo
+  echo "  --docker-python3.8       Use docker to build for Python 3.8 in CentOS 6 with Clang 8."
+  echo
   echo "  --num_procs=n            Specify the number of proceses to run in parallel."
   echo
   echo "  --target-dir=[dir]       The directory where the wheel and associated files are put."
   echo
-  echo "Produce a local wheel and skip test and doc generation"
+  echo "Produce a local wheel and skip test"
   echo "Example: ./make_wheel.sh --skip_test"
   exit 1
 } # end of print help
@@ -70,6 +72,7 @@ while [ $# -gt 0 ]
     --docker-python3.5)     USE_DOCKER=1;DOCKER_PYTHON=3.5;;
     --docker-python3.6)     USE_DOCKER=1;DOCKER_PYTHON=3.6;;
     --docker-python3.7)     USE_DOCKER=1;DOCKER_PYTHON=3.7;;
+    --docker-python3.8)     USE_DOCKER=1;DOCKER_PYTHON=3.8;;
     --help)                 print_help ;;
     *) unknown_option $1 ;;
   esac
@@ -220,7 +223,6 @@ unit_test() {
 
 
 ### Package the release folder into a wheel, and strip the binaries ###
-<<<<<<< HEAD
 package_wheel() {
   cd ${WORKSPACE}/src/python
 
@@ -231,47 +233,6 @@ package_wheel() {
   wheel_name=`${PYTHON_EXECUTABLE} setup.py -q bdist_wheel_name`
   old_platform_tag=`${PYTHON_EXECUTABLE} -c "import distutils; print(distutils.util.get_platform())"`
   LD_LIBRARY_PATH='${WORKSPACE}/targets/lib' CPATH='${WORKSPACE}/targets/include' ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-
-=======
-function package_wheel() {
-  if [[ $OSTYPE == darwin* ]]; then
-    mac_patch_rpath
-  fi
-  echo -e "\n\n\n================= Packaging Wheel  ================\n\n\n"
-  cd ${WORKSPACE}/${build_type}/src/python
-
-  # strip binaries
-  if [[ ! $OSTYPE == darwin* ]]; then
-    cd ${WORKSPACE}/${build_type}/src/python/turicreate
-    BINARY_LIST=`find . -type f -exec file {} \; | grep x86 | cut -d: -f 1`
-    echo "Stripping binaries: $BINARY_LIST"
-
-    # make newline the separator for items in for loop - default is whitespace
-    OLD_IFS=${IFS}
-    IFS=$'\n'
-
-    for f in $BINARY_LIST; do
-      if [ $OSTYPE == "msys" ] && [ $f == "./pylambda_worker.exe" ]; then
-        echo "Skipping pylambda_worker"
-      else
-        echo "Stripping $f"
-        strip -Sx $f;
-      fi
-    done
-
-    # set IFS back to default
-    IFS=${OLD_IFS}
-    cd ..
-  fi
-
-  # helper function defined within function package_wheel
-  function package_wheel_helper {
-    local is_minimal=$1
-    local version_modifier=$2
-    local dist_type="bdist_wheel"
-
-    cd ${WORKSPACE}/${build_type}/src/python
->>>>>>> master
 
     if [[ "$is_minimal" -eq 1 ]] ; then
       local pkg_patch_ver=$(grep VERSION_STRING setup.py | cut -d " " -f3)
@@ -338,7 +299,7 @@ function package_wheel() {
 set_build_number() {
   # set the build number
   cd "${WORKSPACE}/${build_type}/src/python/"
-  sed -i -e "s/'.*'#{{BUILD_NUMBER}}/'${BUILD_NUMBER}'#{{BUILD_NUMBER}}/g" turicreate/version_info.py
+  sed -i -e "s/\".*\"  # {{BUILD_NUMBER}}/\"${BUILD_NUMBER}\"  # {{BUILD_NUMBER}}/g" turicreate/version_info.py
 }
 
 set_git_SHA() {
@@ -350,7 +311,7 @@ set_git_SHA() {
   fi
 
   cd "${WORKSPACE}/${build_type}/src/python/"
-  sed -i -e "s/'.*'#{{GIT_SHA}}/'${GIT_SHA}'#{{GIT_SHA}}/g" turicreate/version_info.py
+  sed -i -e "s/\".*\"  # {{GIT_SHA}}/\"${GIT_SHA}\"  # {{GIT_SHA}}/g" turicreate/version_info.py
 }
 
 # Here is the main function()

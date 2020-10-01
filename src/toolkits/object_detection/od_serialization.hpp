@@ -12,7 +12,7 @@
 #include <ml/neural_net/model_spec.hpp>
 #include <model_server/lib/extensions/ml_model.hpp>
 #include <model_server/lib/variant_deep_serialize.hpp>
-#include <toolkits/coreml_export/mlmodel_include.hpp>
+#include <ml/coreml_export/mlmodel_include.hpp>
 
 namespace turi {
 namespace object_detection {
