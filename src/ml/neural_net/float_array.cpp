@@ -4,7 +4,6 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 
-#include <turi_common.h>
 #include <ml/neural_net/float_array.hpp>
 
 #include <algorithm>

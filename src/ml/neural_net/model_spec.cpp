@@ -4,7 +4,6 @@
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 
-#include <turi_common.h>
 #include <ml/neural_net/model_spec.hpp>
 
 #include <algorithm>
@@ -15,7 +14,6 @@
 
 #include <core/logging/assertions.hpp>
 #include <core/logging/logger.hpp>
-#include <ml/coreml_export/mlmodel_include.hpp>
 #include <core/util/Span.hpp>
 #include <ml/neural_net/quantization_utils.hpp>
 #include <ml/coreml_export/mlmodel_include.hpp>

@@ -43,4 +43,3 @@ API_AVAILABLE(macos(10.15))
 #endif // #ifdef HAS_MACOS_10_15
 
 NS_ASSUME_NONNULL_END
-#include <turi_common.h>

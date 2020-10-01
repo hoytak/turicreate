@@ -35,6 +35,7 @@ function linux_patch_sigfpe_handler {
 }
 
 $PIP install --upgrade "pip"
+
 if [[ "$USE_MINIMAL" -eq 1  ]]; then
   $PIP install -r scripts/requirements-minimal.txt --prefer-binary  --use-feature=2020-resolver
 else
@@ -63,7 +64,7 @@ fi
 
 echo "run 'ln -Ffs' files from ${SRC_INCLUDE_DIR}"
 for f in $SRC_INCLUDE_DIR/*; do
-  ln -Ffs "$f" "$(basename "$f")"
+  ln -Ffs "$f" "$(basename "$f")" || echo "Warning: softlink not set for $f
 done
 
 popd
@@ -73,7 +74,7 @@ pushd deps/local/bin
 
 echo "run 'ln -Ffs' on files from ../../env/bin/"
 for f in ../../env/bin/*; do
-  ln -Ffs "$f" "$(basename "$f")"
+  ln -Ffs "$f" "$(basename "$f")" || echo "Warning: softlink not set for $f
 done
 
 popd

@@ -9,7 +9,6 @@
 
 #include <memory>
 
-#include <turi_common.h>
 #include <core/export.hpp>
 #include <core/system/exceptions/TuriException.hpp>
 #include <ml/neural_net/image_augmentation.hpp>

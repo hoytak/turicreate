@@ -1,36 +1,34 @@
-/* Copyright © 2018 Apple Inc. All rights reserved.
+/* Copyright © 2019 Apple Inc. All rights reserved.
  *
  * Use of this source code is governed by a BSD-3-clause license that can
  * be found in the LICENSE.txt file or at https://opensource.org/licenses/BSD-3-Clause
  */
 
-#ifndef UNITY_TOOLKITS_NEURAL_NET_MPS_COMPUTE_CONTEXT_HPP_
-#define UNITY_TOOLKITS_NEURAL_NET_MPS_COMPUTE_CONTEXT_HPP_
+#ifndef UNITY_TOOLKITS_NEURAL_NET_TF_COMPUTE_CONTEXT_HPP_
+#define UNITY_TOOLKITS_NEURAL_NET_TF_COMPUTE_CONTEXT_HPP_
 
-#include <memory>
-
+#include <core/export.hpp>
 #include <ml/neural_net/compute_context.hpp>
-#include <ml/neural_net/mps_command_queue.hpp>
 
 namespace turi {
 namespace neural_net {
 
-std::unique_ptr<compute_context> create_mps_compute_context();
+
 
 /**
- * A compute_context implementation backed by Apple frameworks: Metal
- * Performance Shaders for neural network computation and Core Image for data
+ * A compute_context implementation backed by TensorFlow
+ * for neural network computation and for data
  * augmentation.
  */
-class mps_compute_context: public compute_context {
- public:
+EXPORT class tf_compute_context: public compute_context {
+public:
 
   /**
-   * Constructs a context wrapping the given Metal command queue.
+   * Constructs a context wrapping devices.
    */
-  mps_compute_context(std::unique_ptr<mps_command_queue> command_queue);
+  tf_compute_context();
 
-  ~mps_compute_context();
+  virtual ~tf_compute_context();
 
   void print_training_device_info() const override;
   size_t memory_budget() const override;
@@ -42,8 +40,6 @@ class mps_compute_context: public compute_context {
   std::unique_ptr<model_backend> create_activity_classifier(
       const ac_parameters& ac_params) override;
 
-  static bool has_style_transfer();
-
   std::unique_ptr<model_backend> create_style_transfer(
       const float_array_map& config, const float_array_map& weights) override;
 
@@ -54,20 +50,10 @@ class mps_compute_context: public compute_context {
 
   std::unique_ptr<image_augmenter> create_image_augmenter(
       const image_augmenter::options &opts) override;
-
-  /**
-   * Alternate implementation of create_image_augmenter supporting injection of
-   * the random number generator, for test purposes.
-   */
-  static std::unique_ptr<image_augmenter> create_image_augmenter_for_testing(
-      const image_augmenter::options& opts,
-      std::function<float(float lower, float upper)> rng);
-
- private:
-  std::shared_ptr<mps_command_queue> command_queue_;
+  
 };
 
 }  // namespace neural_net
 }  // namespace turi
 
-#endif  // UNITY_TOOLKITS_NEURAL_NET_MPS_COMPUTE_CONTEXT_HPP_
+#endif  // UNITY_TOOLKITS_NEURAL_NET_TF_COMPUTE_CONTEXT_HPP_

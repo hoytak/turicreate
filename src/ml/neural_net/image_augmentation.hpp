@@ -11,8 +11,6 @@
 #include <ostream>
 #include <vector>
 
-#include <turi_common.h>
-#include <core/data/image/image_type.hpp>
 #include <ml/neural_net/Image.hpp>
 #include <ml/neural_net/float_array.hpp>
 

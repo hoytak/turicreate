@@ -473,10 +473,6 @@ set(TC_DEPENDENCIES
   lz4 uuid xgboost coremltools_mlmodel boost nanomsg)
 
 
-if(${TC_BUILD_REMOTEFS})
-  set(TC_DEPENDENCIES ${TC_DEPENDENCIES} aws-sdk-cpp) 
-endif()
-
 ###############################################################################
 # Also set up the visualization.  This contains a lot of custom scripts, 
 # so we preserve it.

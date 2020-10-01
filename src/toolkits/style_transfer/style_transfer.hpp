@@ -20,7 +20,7 @@
 #include <model_server/lib/extensions/ml_model.hpp>
 #include <ml/coreml_export/mlmodel_wrapper.hpp>
 #include <ml/coreml_export/neural_net_models_exporter.hpp>
-#include <toolkits/coreml_export/neural_net_models_exporter.hpp>
+#include <ml/coreml_export/neural_net_models_exporter.hpp>
 #include <toolkits/style_transfer/st_model_trainer.hpp>
 #include <toolkits/style_transfer/style_transfer_data_iterator.hpp>
 

@@ -320,4 +320,3 @@ struct SingleLstmNetwork : public MPSNetwork {
 
 }  // namespace neural_net
 }  // namespace turi
-

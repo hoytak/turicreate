@@ -10,4 +10,3 @@
 @property (nonatomic) NSData *data;
 @property (nonatomic) NSArray<NSNumber *> *shape;
 @end
-#include <turi_common.h>

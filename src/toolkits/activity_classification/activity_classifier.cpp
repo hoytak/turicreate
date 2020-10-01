@@ -21,8 +21,8 @@
 #include <ml/coreml_export/neural_net_models_exporter.hpp>
 #include <ml/evaluation/metrics.hpp>
 #include <ml/util/training_utils.hpp>
-#include <timer/timer.hpp>
-#include <toolkits/evaluation/metrics.hpp>
+#include <core/system/platform/timer/timer.hpp>
+#include <ml/evaluation/metrics.hpp>
 #include <toolkits/util/float_array_serialization.hpp>
 
 namespace turi {

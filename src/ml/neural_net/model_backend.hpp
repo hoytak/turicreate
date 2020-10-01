@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 
-#include <turi_common.h>
 #include <ml/neural_net/float_array.hpp>
 
 namespace turi {

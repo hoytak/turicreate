@@ -193,6 +193,4 @@ API_AVAILABLE(macos(10.14))
 
 @end  // TCMPSBatchNormWeights
 
-
-#endif /* MPS_WEIGHT_H_ */
 NS_ASSUME_NONNULL_END

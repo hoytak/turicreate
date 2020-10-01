@@ -21,11 +21,11 @@
 #include <ml/evaluation/metrics.hpp>
 #include <ml/supervised_learning/automatic_model_creation.hpp>
 #include <ml/util/training_utils.hpp>
-#include <toolkits/coreml_export/neural_net_models_exporter.hpp>
-#include <toolkits/evaluation/metrics.hpp>
-#include <toolkits/supervised_learning/automatic_model_creation.hpp>
+#include <ml/coreml_export/neural_net_models_exporter.hpp>
+#include <ml/evaluation/metrics.hpp>
+#include <ml/supervised_learning/automatic_model_creation.hpp>
 #include <toolkits/util/float_array_serialization.hpp>
-#include <toolkits/util/training_utils.hpp>
+#include <ml/util/training_utils.hpp>
 
 #include <toolkits/drawing_classifier/data_preparation.hpp>
 #include <toolkits/drawing_classifier/drawing_classifier.hpp>

@@ -7,7 +7,6 @@
 #import <Metal/Metal.h>
 #import <MetalPerformanceShaders/MetalPerformanceShaders.h>
 
-#include <turi_common.h>
 #include <ml/neural_net/float_array.hpp>
 
 #import "mps_layers.h"

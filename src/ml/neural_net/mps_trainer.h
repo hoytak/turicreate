@@ -72,4 +72,3 @@ EXPORT int TCMPSTrain(MPSHandle handle, TCMPSFloatArrayRef inputs,
 #endif // __cplusplus
 
 #endif
-#include <turi_common.h>
