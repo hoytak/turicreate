@@ -22,8 +22,8 @@ project(Turi)
 enable_language(C)
 enable_language(CXX)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED 1)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED 17)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # ##############################################################################
@@ -148,6 +148,7 @@ check_and_set_compiler_flag(-Wno-unknown-pragmas)
 check_and_set_compiler_flag(-Wno-unused-local-typedefs)
 check_and_set_compiler_flag(-Wno-attributes)
 check_and_set_compiler_flag(-Wno-tautological-compare)
+check_and_set_compiler_flag(-faligned-allocation)
 
 check_and_set_compiler_flag(-fpeel-loops RELEASE)
 check_and_set_compiler_flag(-funswitch-loops RELEASE)

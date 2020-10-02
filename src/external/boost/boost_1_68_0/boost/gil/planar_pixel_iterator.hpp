@@ -117,7 +117,7 @@ private:
 #ifdef BOOST_NO_CXX98_BINDERS
     void advance(std::ptrdiff_t d){ static_transform(*this,*this,std::bind(detail::plus_asymmetric<ChannelPtr,std::ptrdiff_t>(),std::placeholders::_1,d)); }
 #else
-    void advance(std::ptrdiff_t d){ static_transform(*this,*this,std::bind2nd(detail::plus_asymmetric<ChannelPtr,std::ptrdiff_t>(),d)); }
+    void advance(std::ptrdiff_t d){ static_transform(*this,*this,std::bind(detail::plus_asymmetric<ChannelPtr,std::ptrdiff_t>(),std::positional::_1,d)); }
 #endif
     reference dereference() const { return this->template deref<reference>(); }
 

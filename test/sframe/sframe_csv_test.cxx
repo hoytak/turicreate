@@ -826,7 +826,7 @@ struct sframe_test  {
        srand(12345);
        std::vector<std::string> colnames;
        for (auto& entry: data.types) colnames.push_back(entry.first);
-       std::random_shuffle(colnames.begin(), colnames.end());
+       random::shuffle(colnames);
        if (colnames.size() > 1) colnames.resize(colnames.size() / 2);
        csv_test subset_test = make_csv_test_subset(data, colnames);
        validate_file(subset_test, filename);
