@@ -18,3 +18,5 @@ make_library(libjson
     Source/JSONAllocator.cpp
     Source/JSONIterators.cpp
 )
+
+target_compile_options(libjson PRIVATE -Wno-dynamic-exception-spec)
